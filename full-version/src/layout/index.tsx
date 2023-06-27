@@ -92,8 +92,8 @@ export default function Layout({ variant = 'main', children }: Props) {
   }
 
   return (
-    <AuthGuard>
-      <MainLayout>{children}</MainLayout>
-    </AuthGuard>
+    // <AuthGuard>
+    <MainLayout>{children}</MainLayout>
+    // </AuthGuard>
   );
 }
