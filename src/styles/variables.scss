@@ -1,0 +1,89 @@
+// COLORS
+
+// Primary color - light to dark
+$primary-200:#C3F5E8;
+$primary-300:#5BDCC6;
+$primary-400: #038C8C;
+$primary-500:#026E78;
+
+// Gray colors - light to dark
+$gray-100:#dcedfd;
+$gray-200:#bdd4eb;
+$gray-300:#9bb5cb;
+$gray-400:#809db8;
+$gray-500:#6887a3;
+// darker grays
+$gray-600:#506d86;
+$gray-700:#49637a;
+$gray-800:#3c5166;
+$gray-900:#283747;
+$gray-1000:#1f2a38;
+
+
+// backgrounds
+$bg-dark:#0c0b1b;
+
+// status colors
+$error:#FF3932;
+$success:#04BF84;
+$warning:#F79009;
+
+// status borders
+$error-border:#FF7765;
+$success-border:#39D89C;
+$warning-border:#FDB022;
+$primary-border:#5BDCC6;
+
+// common
+$white:#fff;
+$black:#000;
+
+
+// SPACING
+$sp-xs: 6px;
+$sp-sm: 8px;
+$sp-md: 12px;
+$sp-lg: 16px;
+$sp-xl: 24px;
+$sp-xxl: 36px;
+$sp-xxxl: 48px;
+
+// FONT SIZES
+$font-xs: 10px;
+$font-sm: 12px;
+$font-md: 14px;
+$font-lg: 16px;
+
+// BREAKPOINTS
+$bp-laptop:1376px;
+$bp-desktop:1440px;
+$bp-xl:1920px;
+
+
+
+:export{
+    primary200:$primary-200;
+    primary300:$primary-300;
+    primary400:$primary-400;
+    primary500:$primary-500;
+    // grays
+    gray100:$gray-100;
+    gray200:$gray-200;
+    gray300:$gray-300;
+    gray400:$gray-400;
+    gray500:$gray-500;
+    gray600:$gray-600;
+    gray700:$gray-700;
+    gray800:$gray-800;
+    gray900:$gray-900;
+    gray1000:$gray-1000;
+    // status
+    errorColor:$error;
+    successColor:$success;
+    warningColor:$warning;
+    // common
+    whiteColor:$white;
+    blackColor:$black;
+}
+
+

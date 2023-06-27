@@ -6,8 +6,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 // apex-chart
-import 'styles/apex-chart.css';
-import 'styles/react-table.css';
+import 'styles/apex-chart.scss';
+import 'styles/react-table.scss';
 
 // next
 import { NextPage } from 'next';
