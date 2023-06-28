@@ -1,4 +1,3 @@
-import { ChildrenType } from "utils/types";
 import styles from "./AuthLayout.module.scss";
 
 interface AuthLayoutProps {

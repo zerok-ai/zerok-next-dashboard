@@ -1,8 +1,8 @@
 import AuthLayout from "components/layouts/AuthLayout";
 import styles from "./ForgotPassword.module.scss";
-import AuthFormCard from "components/AuthFormCard";
+import AuthFormCard from "components/forms/AuthFormCard";
 import { Fragment } from "react";
-import ForgotPasswordForm from "components/ForgotPasswordForm";
+import ForgotPasswordForm from "components/forms/ForgotPasswordForm";
 import Head from "next/head";
 
 const ForgotPassword = () => {

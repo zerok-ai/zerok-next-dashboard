@@ -3,7 +3,7 @@ import { z } from "zod";
 import cx from "classnames";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./ForgotPasswordForm.module.scss";
-import TextFormField from "components/TextFormField";
+import TextFormField from "components/forms/TextFormField";
 import { Button } from "@mui/material";
 import Link from "next/link";
 

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import cx from "classnames";
 import styles from "./LoginForm.module.scss";
 import { InputAdornment } from "@mui/material";
-import TextFormField from "components/TextFormField";
+import TextFormField from "components/forms/TextFormField";
 import VisibilityToggleButton from "components/VisibilityToggleButton";
 import { useEffect, useState } from "react";
 import Link from "next/link";

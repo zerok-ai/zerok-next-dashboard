@@ -2,8 +2,8 @@
 import { Fragment } from "react";
 import AuthLayout from "components/layouts/AuthLayout";
 import Head from "next/head";
-import LoginForm from "components/LoginForm";
-import AuthFormCard from "components/AuthFormCard";
+import LoginForm from "components/forms/LoginForm";
+import AuthFormCard from "components/forms/AuthFormCard";
 
 const Login = () => {
   return (
@@ -14,6 +14,7 @@ const Login = () => {
           <title>ZeroK Dashboard | Login</title>
         </Head>
       </Fragment>
+      {/* Auth login form */}
       <AuthFormCard title="Login">
         <LoginForm />
       </AuthFormCard>
