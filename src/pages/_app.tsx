@@ -17,7 +17,7 @@ import type { AppProps } from "next/app";
 // third-party
 import { Provider } from "react-redux";
 
-import { store } from "store";
+import store from "redux/store";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 
