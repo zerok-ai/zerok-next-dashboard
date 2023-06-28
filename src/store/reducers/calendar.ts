@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { EventInput } from '@fullcalendar/common';
 
 // project import
-import axios from 'utils/axios';
+import axios from "utils/mantis/axios";
 import { dispatch } from 'store';
 
 // types

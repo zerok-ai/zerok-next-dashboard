@@ -3,8 +3,8 @@ import { Theme } from '@mui/material/styles';
 import { ColorProps } from 'types/extended';
 
 // project import
-import getColors from 'utils/getColors';
-import getShadow from 'utils/getShadow';
+import getColors from "utils/mantis/getColors";
+import getShadow from "utils/mantis/getShadow";
 
 // types
 import { ThemeMode } from 'types/config';

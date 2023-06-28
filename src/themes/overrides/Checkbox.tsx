@@ -3,7 +3,7 @@ import { Theme } from '@mui/material/styles';
 import { Box, CheckboxProps } from '@mui/material';
 
 // project import
-import getColors from 'utils/getColors';
+import getColors from 'utils/mantis/getColors';
 
 // assets
 import { CheckSquareFilled, MinusSquareFilled } from '@ant-design/icons';

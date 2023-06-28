@@ -3,7 +3,7 @@ import { Theme } from '@mui/material/styles';
 import { PaginationProps } from '@mui/material';
 
 // project import
-import getColors from 'utils/getColors';
+import getColors from "utils/mantis/getColors";
 
 // types
 import { ExtendedStyleProps } from 'types/extended';

@@ -9,7 +9,7 @@ import { Container, Toolbar } from '@mui/material';
 // project import
 import ComponentLayout from './ComponentLayout';
 import MainLayout from './MainLayout';
-import GuestGuard from 'utils/route-guard/GuestGuard';
+import GuestGuard from 'utils/mantis/route-guard/GuestGuard';
 
 // project import - store
 import { openComponentDrawer } from 'store/reducers/menu';

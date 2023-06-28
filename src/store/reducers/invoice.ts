@@ -1,5 +1,5 @@
 // project import
-import axios from 'utils/axios';
+import axios from "utils/mantis/axios";
 import { dispatch } from 'store';
 
 // third-party

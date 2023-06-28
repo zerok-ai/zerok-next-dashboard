@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // project import
-import axios from 'utils/axios';
+import axios from "utils/mantis/axios";
 
 // types
 import { MenuProps } from 'types/menu';
