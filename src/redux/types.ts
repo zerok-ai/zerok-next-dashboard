@@ -9,6 +9,6 @@ interface AuthType {
   user: null | UserProfileType;
   token: null | string;
   isLoggedIn: boolean;
-  loading: false;
+  loading: boolean;
   error: null | string;
 }
