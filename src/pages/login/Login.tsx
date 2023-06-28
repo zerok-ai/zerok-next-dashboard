@@ -4,6 +4,7 @@ import styles from "./Login.module.scss";
 import AuthLayout from "components/layouts/AuthLayout";
 import Head from "next/head";
 import LoginForm from "components/LoginForm";
+import AuthFormCard from "components/AuthFormCard";
 
 const Login = () => {
   return (
@@ -14,9 +15,9 @@ const Login = () => {
           <title>ZeroK Dashboard | Login</title>
         </Head>
       </Fragment>
-      <main className={styles['form-container']}>
+      <AuthFormCard title="Login">
         <LoginForm />
-      </main>
+      </AuthFormCard>
     </div>
   );
 };

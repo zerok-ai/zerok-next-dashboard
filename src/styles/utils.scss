@@ -2,7 +2,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  row-gap: $sp-xxl;
+  row-gap: $sp-xl;
   
 }
 
@@ -11,11 +11,13 @@
   flex-direction: column;
   row-gap: $sp-sm;
   align-items: flex-start;
-  > input {
-    width:1000px;
-  }
 }
 
 .form-label {
   color: $primary-400;
+}
+
+.form-end-link {
+  margin-top: $sp-lg;
+  font-weight: 500;
 }

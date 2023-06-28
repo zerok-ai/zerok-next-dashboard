@@ -7,6 +7,7 @@ import { Button, InputAdornment } from "@mui/material";
 import TextFormField from "components/TextFormField";
 import VisibilityToggleButton from "components/VisibilityToggleButton";
 import { useState } from "react";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email().min(1, "Email cannot be empty"),
@@ -32,13 +33,11 @@ const LoginForm = () => {
 
   return (
     <div className={styles["container"]}>
-      <div className={styles["logo-container"]}>
-        <img src="/images/brand/zerok_logo_light.svg" alt="zerok_logo" />
-      </div>
       <form
         className={cx("form", styles["form"])}
         onSubmit={handleSubmit(onSubmit)}
       >
+        {/* Email field */}
         <TextFormField
           name="email"
           placeholder="Your ZeroK email"
@@ -48,6 +47,7 @@ const LoginForm = () => {
           error={!!errors.email}
           errorText={errors.email?.message}
         />
+        {/* Password field */}
         <TextFormField
           name="password"
           type={isPasswordVisible ? "text" : "password"}
@@ -67,10 +67,16 @@ const LoginForm = () => {
             </InputAdornment>
           }
         />
+
+        {/* Submit button */}
         <Button variant="contained" color="primary" type="submit">
           Submit
         </Button>
       </form>
+      {/* Forgot password link */}
+      <Link href="/forgot-password" className={cx("form-end-link")}>
+        Forgot password?
+      </Link>
     </div>
   );
 };

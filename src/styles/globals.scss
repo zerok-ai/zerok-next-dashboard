@@ -4,3 +4,23 @@ html {
   font-family: "Inter", sans-serif;
   background-color: $bg-dark;
 }
+
+
+// custom styles for HTML elements 
+
+a {
+  text-decoration: none;
+  color:$primary-500;
+  transition: all 0.1s ease;
+  display:inline-block;
+  &:hover {
+    color:$primary-400;
+  }
+}
+
+
+// Material ui overrides
+.MuiFormHelperText-root {
+  margin-left: 0;
+  margin-right: 0;
+}
