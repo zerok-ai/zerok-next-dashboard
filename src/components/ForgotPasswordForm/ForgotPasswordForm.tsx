@@ -21,7 +21,7 @@ const ForgotPasswordForm = () => {
   });
 
   const onSubmit:SubmitHandler<ForgotPasswordSchemaType> = (values) => {
-    console.log({ values });
+    
   };
 
   return (
