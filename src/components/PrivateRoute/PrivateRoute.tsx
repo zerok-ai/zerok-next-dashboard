@@ -1,10 +1,9 @@
 import { useDispatch, useSelector } from "redux/store";
 import styles from "./PrivateRoute.module.scss";
 import { useEffect, useState } from "react";
-import Loader from "components/mantis/Loader";
 import { CircularProgress } from "@mui/material";
 import { getLocalToken } from "utils/functions";
-import { loginUser, logoutUser, tokenLogin } from "redux/authSlice";
+import { tokenLogin } from "redux/authSlice";
 import { useRouter } from "next/router";
 
 interface PrivateRouteProps {
@@ -31,18 +30,17 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     }
 
     // if not logged in AND no local token, push user to login screen.
-    console.log({ token, localToken, auth });
     if (!token && !localToken) {
       router.push("/login");
     }
-  }, [auth.isLoggedIn, auth.token, auth.loading]);
+  }, [auth.isLoggedIn, auth.token, auth.loading, router]);
 
   useEffect(() => {
     if (auth.error) {
       router.push("/");
     }
   }, [auth.error]);
-  console.log({ auth });
+
   if (!isAuthorized) {
     return <CircularProgress color="primary" />;
   }
