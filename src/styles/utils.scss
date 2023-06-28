@@ -21,3 +21,9 @@
   margin-top: $sp-lg;
   font-weight: 500;
 }
+
+.form-error {
+  color:lighten($error, 8%);
+  font-weight: 300;
+  margin-top: $sp-md;
+}

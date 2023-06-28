@@ -8,6 +8,13 @@ import TextFormField from "components/TextFormField";
 import VisibilityToggleButton from "components/VisibilityToggleButton";
 import { useState } from "react";
 import Link from "next/link";
+import { maskPassword } from "utils/functions";
+import raxios from "utils/raxios";
+import { LOGIN_ENDPOINT } from "utils/endpoints";
+import { useDispatch } from "redux/store";
+import { loginUser, logoutUser } from "redux/authSlice";
+import { useSelector } from "redux/store";
+import { LoadingButton } from "@mui/lab";
 
 const loginSchema = z.object({
   email: z.string().email().min(1, "Email cannot be empty"),
@@ -24,12 +31,36 @@ const LoginForm = () => {
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
-
-  const onSubmit: SubmitHandler<LoginSchemaType> = (values) => {
-    console.log({ values });
+  const [status, setStatus] = useState({ loading: false, error: false });
+  const dispatch = useDispatch();
+  const onSubmit: SubmitHandler<LoginSchemaType> = async ({
+    password,
+    email,
+  }) => {
+    try {
+      setStatus({ loading: true, error: false });
+      const encrypted = maskPassword(password);
+      const rdata = await raxios.post(LOGIN_ENDPOINT, {
+        email,
+        password: encrypted,
+      });
+      const token = rdata.headers.token;
+      if (token) {
+        dispatch(loginUser({ token }));
+      } else {
+        dispatch(logoutUser());
+        throw "Could not login user";
+      }
+    } catch (err) {
+      setStatus((old) => ({ ...old, error: true }));
+    } finally {
+      setStatus((old) => ({ ...old, loading: false }));
+    }
   };
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const { auth } = useSelector((state) => state);
 
   return (
     <div className={styles["container"]}>
@@ -69,10 +100,16 @@ const LoginForm = () => {
         />
 
         {/* Submit button */}
-        <Button variant="contained" color="primary" type="submit">
-          Submit
-        </Button>
+        <LoadingButton variant="contained" color="primary" type="submit" loading={status.loading}>
+          Login
+        </LoadingButton>
       </form>
+      {/* Form error - Login issue */}
+      {status.error && (
+        <p className="form-error">
+          Could not log in user, please try again.
+        </p>
+      )}
       {/* Forgot password link */}
       <Link href="/forgot-password" className={cx("form-end-link")}>
         Forgot password?
