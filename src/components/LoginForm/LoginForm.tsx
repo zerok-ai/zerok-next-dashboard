@@ -44,6 +44,8 @@ const LoginForm = () => {
       router.push("/");
     }
   }, [auth.token, auth.isLoggedIn]);
+
+  return (
     <div className={styles["container"]}>
       <form
         className={cx("form", styles["form"])}
