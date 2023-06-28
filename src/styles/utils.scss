@@ -1,0 +1,21 @@
+@import "./variables.module.scss";
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-xxl;
+  
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-sm;
+  align-items: flex-start;
+  > input {
+    width:1000px;
+  }
+}
+
+.form-label {
+  color: $primary-400;
+}

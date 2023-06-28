@@ -18,7 +18,6 @@ import cssColors from "../styles/variables.module.scss";
 // ==============================|| DEFAULT THEME - PALETTE  ||============================== //
 
 const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
-  console.log(cssColors);
   const colors: PalettesProps =
     mode === ThemeMode.DARK ? presetDarkPalettes : presetPalettes;
 
@@ -40,19 +39,17 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
 
   if (mode === ThemeMode.DARK) {
     greyPrimary = [
-      cssColors.gray1000,
-      cssColors.gray900,
-      // zero-k dark background
-      cssColors.backgroundDark,
-      cssColors.backgroundDark,
-      cssColors.gray1000,
-      // text color - gray 50 from figma
-      "#9bb4cc",
-      "#d9d9d9",
-      "#f0f0f0",
+      cssColors.white,
+      cssColors.gray100,
       "#f5f5f5",
-      "#fafafa",
-      "#ffffff",
+      cssColors.gray500,
+      "#d9d9d9",
+      "#bfbfbf",
+      "#8c8c8c",
+      "#595959",
+      "#262626",
+      "#141414",
+      "#000000",
     ];
     // greyPrimary.reverse();
     greyAscent = ["#fafafa", "#bfbfbf", "#434343", "#1f1f1f"];
@@ -161,9 +158,9 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
       },
       ...paletteColor,
       text: {
-        primary: alpha(paletteColor.grey[900]!, 0.87),
-        secondary: alpha(paletteColor.grey[900]!, 0.45),
-        disabled: alpha(paletteColor.grey[900]!, 0.1),
+        primary: cssColors.gray300,
+        secondary: cssColors.gray300,
+        disabled: cssColors.gray600,
       },
       action: {
         disabled: paletteColor.grey[300],

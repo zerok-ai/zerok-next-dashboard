@@ -4,35 +4,40 @@ const prettier = require("prettier");
 const objectPath = require("object-path");
 const log = console.log;
 
+
 const generateComponent = () => {
   const args = minimist(process.argv.slice(2));
   const name = objectPath.get(args, "n", null);
-  if (!name) throw new Error("No name specified");
+  const type = objectPath.get(args, "t", null);
+  if (!name || !type) throw new Error("No name or type specified");
   else {
-    const path = `src/Components/${name}`;
+    const formattedName =  name.charAt(0).toUpperCase() + name.slice(1)
+    const path = `src/${type === "component" ? "components" : "pages"}/${
+      type === "component" ? formattedName : name
+    }`;
     fs.mkdirSync(path, true);
     const files = [
       {
-        name: `${name}.tsx`,
+        name: `${formattedName}.tsx`,
         parser: "typescript",
         content: `
-        import styles from './${name}.module.scss'; \n
-        const ${name} = () => {
+        import styles from './${formattedName}.module.scss'; \n
+        const ${formattedName} = () => {
          return (
-           <div>${name}</div>
+           <div>${formattedName}</div>
          )
        }\n
-       export default ${name}`,
+       export default ${formattedName}`,
       },
       {
         name: `index.tsx`,
         parser: "typescript",
-        content: `import ${name} from "./${name}";
+        content: `import ${formattedName} from "./${formattedName}";
 
-      export default ${name};`,
+      export default ${formattedName};`,
       },
       {
-        name: `${name}.module.scss`,
+        name: `${formattedName}.module.scss`,
         content: `@import "styles/variables.module.scss";
          .container {}`,
         parser: "scss",
