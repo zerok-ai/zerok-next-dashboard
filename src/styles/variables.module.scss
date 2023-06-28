@@ -82,8 +82,10 @@ $bp-xl:1920px;
     successColor:$success;
     warningColor:$warning;
     // common
-    whiteColor:$white;
-    blackColor:$black;
+    white:$white;
+    black:$black;
+    // backgrounds
+    backgroundDark:$bg-dark;
 }
 
 

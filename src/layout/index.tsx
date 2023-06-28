@@ -9,7 +9,6 @@ import { Container, Toolbar } from '@mui/material';
 // project import
 import ComponentLayout from './ComponentLayout';
 import MainLayout from './MainLayout';
-import AuthGuard from 'utils/route-guard/AuthGuard';
 import GuestGuard from 'utils/route-guard/GuestGuard';
 
 // project import - store
