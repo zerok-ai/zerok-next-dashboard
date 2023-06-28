@@ -38,6 +38,7 @@ const TextFormField = ({
         {label}
       </InputLabel>
       <TextField
+        id={name}
         fullWidth
         variant="outlined"
         type={type || "text"}
