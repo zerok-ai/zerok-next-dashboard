@@ -1,6 +1,5 @@
 "use client";
-import { Fragment, ReactElement } from "react";
-import styles from "./Login.module.scss";
+import { Fragment } from "react";
 import AuthLayout from "components/layouts/AuthLayout";
 import Head from "next/head";
 import LoginForm from "components/LoginForm";
