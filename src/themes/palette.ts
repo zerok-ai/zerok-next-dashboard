@@ -1,13 +1,6 @@
 // material-ui
 import { PaletteColorOptions, alpha, createTheme } from "@mui/material/styles";
 
-// third-party
-import {
-  presetDarkPalettes,
-  presetPalettes,
-  PalettesProps,
-} from "@ant-design/colors";
-
 // types
 import { PaletteThemeProps } from "types/theme";
 import { PresetColor, ThemeMode } from "types/config";
@@ -18,84 +11,41 @@ import cssColors from "../styles/variables.module.scss";
 // ==============================|| DEFAULT THEME - PALETTE  ||============================== //
 
 const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
-  const colors: PalettesProps =
-    mode === ThemeMode.DARK ? presetDarkPalettes : presetPalettes;
-
-  let greyPrimary = [
-    "#ffffff",
-    cssColors.grey100,
-    cssColors.grey200,
-    cssColors.grey300,
-    cssColors.grey400,
-    cssColors.grey500,
-    cssColors.grey600,
-    cssColors.grey700,
-    cssColors.grey800,
-    cssColors.grey900,
-    "#000000",
-  ];
-  let greyAscent = ["#fafafa", "#bfbfbf", "#434343", "#1f1f1f"];
-  let greyConstant = ["#fafafb", "#e6ebf1"];
-
-  if (mode === ThemeMode.DARK) {
-    greyPrimary = [
-      cssColors.white,
-      cssColors.grey100,
-      "#f5f5f5",
-      cssColors.grey500,
-      "#d9d9d9",
-      "#bfbfbf",
-      "#8c8c8c",
-      "#595959",
-      "#262626",
-      "#141414",
-      "#000000",
-    ];
-    // greyPrimary.reverse();
-    greyAscent = ["#fafafa", "#bfbfbf", "#434343", "#1f1f1f"];
-    greyConstant = [cssColors.backgroundDark, "#d3d8db"];
-  }
-  colors.grey = [...greyPrimary, ...greyAscent, ...greyConstant];
-  const { grey } = colors;
   const greyColors: PaletteColorOptions = {
-    0: grey[0],
-    50: grey[1],
-    100: grey[2],
-    200: grey[3],
-    300: grey[4],
-    400: grey[5],
-    500: grey[6],
-    600: grey[7],
-    700: grey[8],
-    800: grey[9],
-    900: grey[10],
-    A50: grey[15],
-    A100: grey[11],
-    A200: grey[12],
-    A400: grey[13],
-    A700: grey[14],
-    A800: grey[16],
+    0: cssColors.grey25,
+    50: cssColors.grey50,
+    100: cssColors.grey100,
+    200: cssColors.grey200,
+    300: cssColors.grey300,
+    400: cssColors.grey400,
+    500: cssColors.grey500,
+    600: cssColors.grey600,
+    700: cssColors.grey700,
+    800: cssColors.grey800,
+    900: cssColors.grey900,
+    A50: cssColors.grey50,
+    A100: cssColors.grey100,
+    A200: cssColors.grey200,
+    A400: cssColors.grey400,
+    A700: cssColors.grey700,
+    A800: cssColors.grey200,
   };
 
   const contrastText = "#fff";
-
-  let errorColors = ["#FDE8E7", "#F25E52", "#F04134", "#EE3B2F", "#E92A21"];
-  let warningColors = ["#FFF7E0", "#FFC926", "#FFBF00", "#FFB900", "#FFA900"];
   let infoColors = ["#E0F4F5", "#26B0BA", "#00A2AE", "#009AA7", "#008694"];
-  let successColors = ["#E0F5EA", "#26B56E", "#00A854", "#00A04D", "#008D3A"];
 
   const paletteColor: PaletteThemeProps = {
     primary: {
-      lighter: "ff00000",
-      100: cssColors.primary200,
-      200: cssColors.primary300,
-      light: cssColors.primary400,
+      lighter: cssColors.primary100,
+      100: cssColors.primary100,
+      200: cssColors.primary200,
+      light: cssColors.primary300,
       400: cssColors.primary400,
-      main: cssColors.primary400,
-      dark: cssColors.primary500,
-      700: cssColors.primary500,
-      darker: cssColors.primary500,
-      900: cssColors.primary600,
+      main: cssColors.primary500,
+      dark: cssColors.primary600,
+      700: cssColors.primary600,
+      darker: cssColors.primary700,
+      900: cssColors.primary800,
       contrastText,
     },
     secondary: {
@@ -115,19 +65,19 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
       contrastText: greyColors[0],
     },
     error: {
-      lighter: errorColors[0],
-      light: errorColors[1],
-      main: errorColors[2],
-      dark: errorColors[3],
-      darker: errorColors[4],
+      lighter: cssColors.error100,
+      light: cssColors.error300,
+      main: cssColors.error500,
+      dark: cssColors.error700,
+      darker: cssColors.error900,
       contrastText,
     },
     warning: {
-      lighter: warningColors[0],
-      light: warningColors[1],
-      main: warningColors[2],
-      dark: warningColors[3],
-      darker: warningColors[4],
+      lighter: cssColors.warning100,
+      light: cssColors.warning300,
+      main: cssColors.warning500,
+      dark: cssColors.warning700,
+      darker: cssColors.warning900,
       contrastText: greyColors[100],
     },
     info: {
@@ -139,11 +89,11 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
       contrastText,
     },
     success: {
-      lighter: successColors[0],
-      light: successColors[1],
-      main: successColors[2],
-      dark: successColors[3],
-      darker: successColors[4],
+      lighter: cssColors.success100,
+      light: cssColors.success300,
+      main: cssColors.success500,
+      dark: cssColors.success700,
+      darker: cssColors.success900,
       contrastText,
     },
     grey: greyColors,

@@ -37,7 +37,7 @@ const LoginForm = () => {
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const { auth } = useSelector((state) => state);
+  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (auth.token && auth.isLoggedIn) {

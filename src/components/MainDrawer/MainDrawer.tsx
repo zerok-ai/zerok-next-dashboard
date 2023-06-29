@@ -10,7 +10,7 @@ import NavigationItem from "components/NavigationItem";
 import { useRouter } from "next/router";
 
 const MainDrawer = () => {
-  const { drawer } = useSelector((state) => state);
+  const drawer = useSelector((state) => state.drawer);
   const dispatch = useDispatch();
   const { isDrawerMinimized } = drawer;
 

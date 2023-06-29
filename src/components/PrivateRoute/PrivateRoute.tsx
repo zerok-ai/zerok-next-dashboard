@@ -11,7 +11,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const { auth } = useSelector((state) => state);
+  const auth = useSelector((state) => state.auth);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const { isLoggedIn, token } = auth;
   const dispatch = useDispatch();
