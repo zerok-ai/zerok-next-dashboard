@@ -5,11 +5,16 @@ import { Drawer } from "@mui/material";
 import cssVars from "styles/variables.module.scss";
 import { ZEROK_LOGO_LIGHT } from "utils/images";
 import { useMemo } from "react";
+import { NAV_LINKS_1 } from "utils/navigation";
+import NavigationItem from "components/NavigationItem";
+import { useRouter } from "next/router";
 
 const MainDrawer = () => {
   const { drawer } = useSelector((state) => state);
   const dispatch = useDispatch();
   const { isDrawerMinimized } = drawer;
+
+  const router = useRouter();
 
   const DrawerHeader = () => {
     return (
@@ -30,7 +35,12 @@ const MainDrawer = () => {
     >
       <div>
         {drawerHeader}
-        <h1>hey!</h1>
+        <div className={styles['navigation-container']}>
+        {NAV_LINKS_1.map((nav)=>{
+          const activeLink = router.asPath === nav.path;
+          return <NavigationItem nav={nav} key={nav.path} active={activeLink} />
+        })}
+        </div>
       </div>
     </Drawer>
   );

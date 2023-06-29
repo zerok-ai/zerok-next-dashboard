@@ -15,7 +15,7 @@ const PageLayout = ({children}:PageLayout) => {
         <h1>Header</h1>
       </div>
       <div className={styles['page-content']}>
-        <h1>content</h1>
+        <h1>{children}</h1>
       </div>
     </div>
   </div>;

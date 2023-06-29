@@ -10,8 +10,15 @@
     width:100%;
     // height:70px;
     padding:4 * $sp-xs;
+    border-bottom: 1px solid $grey-800;
     > img {
         width:auto;
         height:30px;
     }
+}
+
+.navigation-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 2;
 }
