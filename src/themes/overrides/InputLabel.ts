@@ -5,13 +5,12 @@ import css from "styles/variables.module.scss";
 // ==============================|| OVERRIDES - INPUT LABEL ||============================== //
 
 export default function InputLabel(theme: Theme) {
-  console.log(css.inputLabelLineHeight);
   return {
     MuiInputLabel: {
       styleOverrides: {
         root: {
           color: css.grey100,
-          lineHeight: css.inputLabelLineHeight,
+          lineHeight: css.defaultLineHeight,
           paddingBottom: css.spXS,
         },
         outlined: {

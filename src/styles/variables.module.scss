@@ -68,7 +68,7 @@ $sp-xxxl: 48px;
 
 // component specific widths and heights
 $input-height: 40px;
-$input-label-line-height:24px;
+$default-line-height:24px;
 $button-height-default:40px;
 
 // BORDER RADIUS
@@ -129,7 +129,7 @@ $header-width:60px;
     backgroundDark:$bg-dark;
     // component heights
     inputHeight:$input-height;
-    inputLabelLineHeight:$input-label-line-height;
+    defaultLineHeight:$default-line-height;
     buttonHeightDefault:$button-height-default;
     // spacing
     spXS:$sp-xs;

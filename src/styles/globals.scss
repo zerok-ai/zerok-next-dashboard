@@ -5,7 +5,52 @@ html {
   background-color: $bg-dark;
 }
 
+h1,h2,h3,h4,h5,h6 {
+  color:$grey-200;
+  font-weight:400;
+}
 
+h3,h5 {
+  font-weight: 500;
+}
+
+div, p, span, a {
+  line-height: $default-line-height;
+}
+
+div,p,span {
+  color:$grey-300;
+}
+
+h1 {
+  font-size: 40px;
+  line-height: 54px;
+}
+
+h2 {
+  font-size: 32px;
+  line-height: 44px;
+}
+
+h3 {
+  font-size: 28px;
+  line-height: 38px;
+}
+
+h4 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+h5 {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+h6 {
+  font-size: 16px;
+  line-height: 22px;
+}
 // custom styles for HTML elements 
 
 a {

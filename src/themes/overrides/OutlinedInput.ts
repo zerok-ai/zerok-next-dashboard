@@ -42,7 +42,7 @@ export default function OutlinedInput(theme: Theme) {
       styleOverrides: {
         input: {
           padding: `${SPACE_TOKEN * 2}px ${SPACE_TOKEN * 3}px`,
-          lineHeight: css.inputLabelLineHeight,
+          lineHeight: css.defaultLineHeight,
           height: "auto",
         },
         notchedOutline: {

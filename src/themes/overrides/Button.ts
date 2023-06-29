@@ -121,7 +121,7 @@ export default function Button(theme: Theme) {
       styleOverrides: {
         root: {
           fontWeight: 500,
-          lineHeight: css.inputLabelLineHeight,
+          lineHeight: css.defaultLineHeight,
           "&::after": {
             content: '""',
             display: "block",
