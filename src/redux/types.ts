@@ -12,3 +12,8 @@ interface AuthType {
   loading: boolean;
   error: null | string;
 }
+
+interface DrawerReduxType {
+  isDrawerMinimized: boolean;
+  activeLink: string | null;
+}
