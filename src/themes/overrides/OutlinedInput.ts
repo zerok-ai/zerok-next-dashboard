@@ -6,9 +6,8 @@ import { ColorProps } from 'types/extended';
 import getColors from "utils/mantis/getColors";
 import getShadow from "utils/mantis/getShadow";
 
-// types
-import { ThemeMode } from 'types/config';
-
+import css from "styles/variables.module.scss";
+import { SPACE_TOKEN } from "utils/constants";
 interface Props {
   variant: ColorProps;
   theme: Theme;
@@ -23,15 +22,15 @@ function getColor({ variant, theme }: Props) {
   const shadows = getShadow(theme, `${variant}`);
 
   return {
-    '&:hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: light
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: light,
     },
-    '&.Mui-focused': {
+    "&.Mui-focused": {
       boxShadow: shadows,
-      '& .MuiOutlinedInput-notchedOutline': {
-        border: `1px solid ${light}`
-      }
-    }
+      "& .MuiOutlinedInput-notchedOutline": {
+        border: `1px solid ${light}`,
+      },
+    },
   };
 }
 
@@ -42,29 +41,38 @@ export default function OutlinedInput(theme: Theme) {
     MuiOutlinedInput: {
       styleOverrides: {
         input: {
-          padding: '10.5px 14px 10.5px 12px'
+          padding: `${SPACE_TOKEN * 2}px ${SPACE_TOKEN * 3}px`,
+          lineHeight: css.inputLabelLineHeight,
+          height: "auto",
         },
         notchedOutline: {
-          borderColor: theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[200] : theme.palette.grey[300]
+          borderColor: css.grey600,
         },
         root: {
-          ...getColor({ variant: 'primary', theme }),
-          '&.Mui-error': {
-            ...getColor({ variant: 'error', theme })
-          }
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: css.grey50,
+          },
+          "&.Mui-focused": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: `1px solid ${css.grey50}`,
+            },
+          },
+          "&.Mui-error": {
+            ...getColor({ variant: "error", theme }),
+          },
         },
         inputSizeSmall: {
-          padding: '7.5px 8px 7.5px 12px'
+          padding: "7.5px 8px 7.5px 12px",
         },
         inputMultiline: {
-          padding: 0
+          padding: 0,
         },
-        colorSecondary: getColor({ variant: 'secondary', theme }),
-        colorError: getColor({ variant: 'error', theme }),
-        colorWarning: getColor({ variant: 'warning', theme }),
-        colorInfo: getColor({ variant: 'info', theme }),
-        colorSuccess: getColor({ variant: 'success', theme })
-      }
-    }
+        colorSecondary: getColor({ variant: "secondary", theme }),
+        colorError: getColor({ variant: "error", theme }),
+        colorWarning: getColor({ variant: "warning", theme }),
+        colorInfo: getColor({ variant: "info", theme }),
+        colorSuccess: getColor({ variant: "success", theme }),
+      },
+    },
   };
 }

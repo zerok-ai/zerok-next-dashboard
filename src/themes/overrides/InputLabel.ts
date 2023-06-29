@@ -1,17 +1,21 @@
 // material-ui
 import { Theme } from '@mui/material/styles';
+import css from "styles/variables.module.scss";
 
 // ==============================|| OVERRIDES - INPUT LABEL ||============================== //
 
 export default function InputLabel(theme: Theme) {
+  console.log(css.inputLabelLineHeight);
   return {
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          color: theme.palette.grey[600],
+          color: css.grey100,
+          lineHeight: css.inputLabelLineHeight,
+          paddingBottom: css.spXS,
         },
         outlined: {
-          lineHeight: "2.4rem",
+          // unused below
           "&.MuiInputLabel-sizeSmall": {
             lineHeight: "2rem",
           },

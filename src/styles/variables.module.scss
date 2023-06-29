@@ -65,6 +65,12 @@ $sp-xxl: 24px;
 $sp-xxxl: 32px;
 $sp-xxxl: 48px;
 
+
+// component specific widths and heights
+$input-height: 40px;
+$input-label-line-height:24px;
+$button-height-default:40px;
+
 // BORDER RADIUS
 $br-xs:2px;
 $br-sm:4px;
@@ -99,6 +105,8 @@ $header-width:60px;
     primary400:$primary-400;
     primary500:$primary-500;
     // greys
+    grey25:$grey-25;
+    grey50:$grey-50;
     grey100:$grey-100;
     grey200:$grey-200;
     grey300:$grey-300;
@@ -108,7 +116,8 @@ $header-width:60px;
     grey700:$grey-700;
     grey800:$grey-800;
     grey900:$grey-900;
-    grey1000:$grey-1000;
+    grey925:$grey-925;
+    grey950:$grey-950;
     // status
     errorColor:$error;
     successColor:$success;
@@ -118,6 +127,12 @@ $header-width:60px;
     black:$black;
     // backgrounds
     backgroundDark:$bg-dark;
+    // component heights
+    inputHeight:$input-height;
+    inputLabelLineHeight:$input-label-line-height;
+    buttonHeightDefault:$button-height-default;
+    // spacing
+    spXS:$sp-xs;
 }
 
 

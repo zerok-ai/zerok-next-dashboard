@@ -45,10 +45,11 @@ import TableHead from './TableHead';
 import TablePagination from './TablePagination';
 import TableRow from './TableRow';
 import Tabs from './Tabs';
-import ToggleButton from './ToggleButton';
-import Tooltip from './Tooltip';
-import TreeItem from './TreeItem';
-import Typography from './Typography';
+import TextField from "./TextField";
+import ToggleButton from "./ToggleButton";
+import Tooltip from "./Tooltip";
+import TreeItem from "./TreeItem";
+import Typography from "./Typography";
 
 // ==============================|| OVERRIDES - MAIN ||============================== //
 
@@ -94,6 +95,7 @@ export default function ComponentsOverrides(theme: Theme) {
     TablePagination(),
     TableRow(),
     Tabs(),
+    TextField(theme),
     ToggleButton(theme),
     Tooltip(theme),
     TreeItem(),

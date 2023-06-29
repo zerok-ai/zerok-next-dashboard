@@ -7,16 +7,8 @@
 }
 
 .form-item {
-  display: flex;
-  flex-direction: column;
-  row-gap: $sp-sm;
-  align-items: flex-start;
-}
 
-.form-label {
-  color: $grey-100;
 }
-
 .form-end-link {
   margin-top: $sp-lg;
   font-weight: 500;
@@ -27,3 +19,4 @@
   font-weight: 300;
   margin-top: $sp-md;
 }
+

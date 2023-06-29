@@ -14,14 +14,14 @@ export const DRAWER_WIDTH = 260;
 // ==============================|| THEME CONFIG  ||============================== //
 
 const config: DefaultConfigProps = {
-  fontFamily: `'Public Sans', sans-serif`,
-  i18n: 'en',
+  fontFamily: `'Inter', sans-serif`,
+  i18n: "en",
   menuOrientation: MenuOrientation.VERTICAL,
   miniDrawer: false,
   container: true,
   mode: ThemeMode.DARK,
-  presetColor: 'default',
-  themeDirection: ThemeDirection.LTR
+  presetColor: "default",
+  themeDirection: ThemeDirection.LTR,
 };
 
 export default config;

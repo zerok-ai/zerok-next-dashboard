@@ -16,3 +16,6 @@ export const HTTP_ERROR_CODES = {
   FORBIDDEN: 403,
   THROTTLED: 429,
 };
+
+// used for calculating space in js
+export const SPACE_TOKEN = 4;
