@@ -6,24 +6,40 @@ $primary-300:#5BDCC6;
 $primary-400: #038C8C;
 $primary-500:#026E78;
 
-// Gray colors - light to dark
-$gray-100:#dcedfd;
-$gray-200:#bdd4eb;
-$gray-300:#9bb5cb;
-$gray-400:#809db8;
-$gray-500:#6887a3;
-// darker grays
-$gray-600:#506d86;
-$gray-700:#49637a;
-$gray-800:#3c5166;
-$gray-900:#283747;
-$gray-1000:#1f2a38;
+// grey colors - light to dark
+$grey-25:#DCEDFD;
+$grey-50:#BCD4EB;
+$grey-100:#9BB4CC;
+$grey-200:#819DB8;
+$grey-300:#6887A3;
+$grey-400:#506D86;
+$grey-500:#49637A;
+$grey-600:#3B5166;
+$grey-700:#283747;
+$grey-800:#1F2B38;
+$grey-900:#171F29;
+$grey-925:#121522;
+$grey-950:#0C0B1B;
 
 
 // backgrounds
 $bg-dark:#0c0b1b;
 
 // status colors
+
+$error-500:#ff3932;
+$error-400:#ff7765;
+$error-300:#ff9d83;
+$error-200:#ffc4ad;
+$error-100:#ffc4ad;
+
+$success-500:#02A480;
+$success-400:#04Bf84;
+$success-300:#39d896;
+$success-200:#97f8ba;
+$success-100:#cafbd4;
+
+
 $error:#FF3932;
 $success:#04BF84;
 $warning:#F79009;
@@ -40,12 +56,13 @@ $black:#000;
 
 
 // SPACING
-$sp-xs: 6px;
+$sp-xs: 4px;
 $sp-sm: 8px;
 $sp-md: 12px;
 $sp-lg: 16px;
-$sp-xl: 24px;
-$sp-xxl: 36px;
+$sp-xl: 20px;
+$sp-xxl: 24px;
+$sp-xxxl: 32px;
 $sp-xxxl: 48px;
 
 // BORDER RADIUS
@@ -70,23 +87,28 @@ $bp-xl:1920px;
 $max-form-width:500px;
 
 
+// component widths
+$main-drawer-width-full:260px;
+$main-drawer-width-mini:60px;
+$header-width:60px;
+
 
 :export{
     primary200:$primary-200;
     primary300:$primary-300;
     primary400:$primary-400;
     primary500:$primary-500;
-    // grays
-    gray100:$gray-100;
-    gray200:$gray-200;
-    gray300:$gray-300;
-    gray400:$gray-400;
-    gray500:$gray-500;
-    gray600:$gray-600;
-    gray700:$gray-700;
-    gray800:$gray-800;
-    gray900:$gray-900;
-    gray1000:$gray-1000;
+    // greys
+    grey100:$grey-100;
+    grey200:$grey-200;
+    grey300:$grey-300;
+    grey400:$grey-400;
+    grey500:$grey-500;
+    grey600:$grey-600;
+    grey700:$grey-700;
+    grey800:$grey-800;
+    grey900:$grey-900;
+    grey1000:$grey-1000;
     // status
     errorColor:$error;
     successColor:$success;

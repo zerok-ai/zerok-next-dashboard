@@ -23,15 +23,15 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
 
   let greyPrimary = [
     "#ffffff",
-    cssColors.gray100,
-    cssColors.gray200,
-    cssColors.gray300,
-    cssColors.gray400,
-    cssColors.gray500,
-    cssColors.gray600,
-    cssColors.gray700,
-    cssColors.gray800,
-    cssColors.gray900,
+    cssColors.grey100,
+    cssColors.grey200,
+    cssColors.grey300,
+    cssColors.grey400,
+    cssColors.grey500,
+    cssColors.grey600,
+    cssColors.grey700,
+    cssColors.grey800,
+    cssColors.grey900,
     "#000000",
   ];
   let greyAscent = ["#fafafa", "#bfbfbf", "#434343", "#1f1f1f"];
@@ -40,9 +40,9 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
   if (mode === ThemeMode.DARK) {
     greyPrimary = [
       cssColors.white,
-      cssColors.gray100,
+      cssColors.grey100,
       "#f5f5f5",
-      cssColors.gray500,
+      cssColors.grey500,
       "#d9d9d9",
       "#bfbfbf",
       "#8c8c8c",
@@ -158,9 +158,9 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
       },
       ...paletteColor,
       text: {
-        primary: cssColors.gray300,
-        secondary: cssColors.gray300,
-        disabled: cssColors.gray600,
+        primary: cssColors.grey300,
+        secondary: cssColors.grey300,
+        disabled: cssColors.grey600,
       },
       action: {
         disabled: paletteColor.grey[300],

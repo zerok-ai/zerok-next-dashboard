@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "redux/store";
 import styles from "./PrivateRoute.module.scss";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { getLocalToken } from "utils/functions";
 import { tokenLogin } from "redux/authSlice";
@@ -45,7 +45,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     return <CircularProgress color="primary" />;
   }
 
-  return children;
+  return <Fragment>{children}</Fragment>;
 };
 
 export default PrivateRoute;

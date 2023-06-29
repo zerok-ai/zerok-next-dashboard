@@ -504,7 +504,7 @@ export const CSVExport = ({ data, filename, headers }: CSVExportProps) => {
   return (
     <CSVLink data={data} filename={filename} headers={headers}>
       <Tooltip title="CSV Export">
-        <DownloadOutlined style={{ fontSize: '24px', color: 'gray', marginTop: 4, marginRight: 4, marginLeft: 4 }} />
+        <DownloadOutlined style={{ fontSize: '24px', color: 'grey', marginTop: 4, marginRight: 4, marginLeft: 4 }} />
       </Tooltip>
     </CSVLink>
   );
