@@ -1,6 +1,6 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-import { ColorProps } from 'types/extended';
+import { Theme } from "@mui/material/styles";
+import { ColorProps } from "types/extended";
 
 // project import
 import getColors from "utils/mantis/getColors";
@@ -58,7 +58,14 @@ export default function OutlinedInput(theme: Theme) {
             },
           },
           "&.Mui-error": {
-            ...getColor({ variant: "error", theme }),
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: css.error500,
+            },
+            "&.Mui-focused": {
+              "& .MuiOutlinedInput-notchedOutline": {
+                border: `1px solid ${css.error500}`,
+              },
+            },
           },
         },
         inputSizeSmall: {
