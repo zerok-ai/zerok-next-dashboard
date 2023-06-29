@@ -1,20 +1,29 @@
-export type FontFamily = `'Inter', sans-serif` | `'Poppins', sans-serif` | `'Roboto', sans-serif` | `'Public Sans', sans-serif`;
-export type PresetColor = 'default' | 'theme1' | 'theme2' | 'theme3' | 'theme4' | 'theme5' | 'theme6' | 'theme7' | 'theme8';
-export type I18n = 'en' | 'fr' | 'ro' | 'zh'; // 'en' - English, 'fr' - French, 'ro' - Romanian, 'zh' - Chinese
+export type FontFamily = `'Karla', sans-serif` | `'Public Sans', sans-serif`;
+export type PresetColor =
+  | "default"
+  | "theme1"
+  | "theme2"
+  | "theme3"
+  | "theme4"
+  | "theme5"
+  | "theme6"
+  | "theme7"
+  | "theme8";
+export type I18n = "en" | "fr" | "ro" | "zh"; // 'en' - English, 'fr' - French, 'ro' - Romanian, 'zh' - Chinese
 
 export enum ThemeMode {
-  LIGHT = 'light',
-  DARK = 'dark'
+  LIGHT = "light",
+  DARK = "dark",
 }
 
 export enum MenuOrientation {
-  VERTICAL = 'vertical',
-  HORIZONTAL = 'horizontal'
+  VERTICAL = "vertical",
+  HORIZONTAL = "horizontal",
 }
 
 export enum ThemeDirection {
-  LTR = 'ltr',
-  RTL = 'rtl'
+  LTR = "ltr",
+  RTL = "rtl",
 }
 
 // ==============================|| CONFIG TYPES  ||============================== //

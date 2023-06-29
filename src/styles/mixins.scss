@@ -1,0 +1,7 @@
+@import 'styles/variables.module.scss';
+@mixin label-large {
+    font-weight: 500;
+    line-height: $default-line-height;
+    letter-spacing: 0.2px;
+    font-size: 14px;
+}

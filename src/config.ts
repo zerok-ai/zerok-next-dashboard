@@ -14,7 +14,7 @@ export const DRAWER_WIDTH = 260;
 // ==============================|| THEME CONFIG  ||============================== //
 
 const config: DefaultConfigProps = {
-  fontFamily: `'Inter', sans-serif`,
+  fontFamily: `'Karla', sans-serif`,
   i18n: "en",
   menuOrientation: MenuOrientation.VERTICAL,
   miniDrawer: false,

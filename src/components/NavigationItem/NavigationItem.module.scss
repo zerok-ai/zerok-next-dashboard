@@ -1,4 +1,5 @@
 @import "styles/variables.module.scss";
+@import "styles/mixins";
 .container {
     display: flex;
     padding: $sp-xs * 2.5 $sp-xs * 5;
@@ -25,13 +26,13 @@
 }
 
 .link-label {
-    font-weight: 500;
+    @include label-large;
 }
 
 .active {
-    box-shadow: -2px 0px 0px 0px $primary-400 inset;
+    box-shadow: -2px 0px 0px 0px $primary-500 inset;
     background-color: $grey-900;
     .link-label {
-        color:$primary-400;
+        color:$primary-500;
     }
 }
