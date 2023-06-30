@@ -1,7 +1,20 @@
-@import 'styles/variables.module.scss';
+@import "styles/variables.module.scss";
 @mixin label-large {
-    font-weight: 500;
-    line-height: $default-line-height;
-    letter-spacing: 0.2px;
-    font-size: 14px;
+  font-weight: 500;
+  line-height: $default-line-height;
+  letter-spacing: 0.2px;
+  font-size: 14px;
+}
+
+@mixin logo-md {
+  width: 6 * $sp-base;
+  height: 6 * $sp-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  > img {
+    width: 4 * $sp-base;
+    height: 4 * $sp-base;
+  }
 }

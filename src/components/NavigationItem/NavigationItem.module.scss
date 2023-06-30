@@ -8,21 +8,10 @@
     &:hover {
         background-color: $grey-900;
     }
-
-   
 }
 
 .icon-container {
-    margin:0;
-    width:24px;
-    height:24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    > img {
-        width: 16px;
-        height: 16px;
-    }
+    @include logo-md;
 }
 
 .link-label {

@@ -16,11 +16,16 @@ export const drawerSlice = createSlice({
     maximizeDrawer: (state) => {
       state.isDrawerMinimized = false;
     },
+    toggleDrawer: (state) => {
+      const old = state.isDrawerMinimized;
+      state.isDrawerMinimized = !old;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { minimizeDrawer, maximizeDrawer } = drawerSlice.actions;
+export const { minimizeDrawer, maximizeDrawer, toggleDrawer } =
+  drawerSlice.actions;
 export const drawerSelector = (state: RootState) => state.drawer;
 
 export default drawerSlice.reducer;

@@ -35,12 +35,12 @@ const MainDrawer = () => {
     >
       <div>
         {drawerHeader}
-        <div className={styles['navigation-container']}>
+        <nav className={styles['navigation-container']}>
         {NAV_LINKS_1.map((nav)=>{
           const activeLink = router.asPath === nav.path;
           return <NavigationItem nav={nav} key={nav.path} active={activeLink} />
         })}
-        </div>
+        </nav>
       </div>
     </Drawer>
   );
