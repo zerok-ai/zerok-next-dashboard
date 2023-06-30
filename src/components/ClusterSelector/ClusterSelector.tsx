@@ -8,6 +8,7 @@ import { useSelector } from "redux/store";
 import cx from "classnames";
 import { clusterSelector } from "redux/cluster";
 import { useEffect, useState } from "react";
+import ClusterCreateModal from "components/ClusterCreateModal";
 
 const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -16,6 +17,10 @@ const ClusterSelector = () => {
   const [selectedCluster, setSelectedCluster] = useState(
     clusters.length > 0 ? clusters[0].id : ""
   );
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => setIsModalVisible((old) => !old);
+
   useEffect(() => {
     if (!selectedCluster && !!clusters.length) {
       setSelectedCluster(clusters[0].id);
@@ -49,12 +54,18 @@ const ClusterSelector = () => {
             );
           })}
         <Divider />
-        <MenuItem className={styles["new-cluster-item"]} onClick={()=>console.log('clicked')}>
+        <MenuItem
+          className={styles["new-cluster-item"]}
+          onClick={toggleModal}
+        >
           {" "}
           <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Add a
           new cluster
         </MenuItem>
       </Select>
+
+      {/* Modal */}
+      <ClusterCreateModal isOpen={isModalVisible} onClose={toggleModal} />
     </div>
   );
 };

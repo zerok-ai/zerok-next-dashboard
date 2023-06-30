@@ -18,3 +18,11 @@
     height: 4 * $sp-base;
   }
 }
+
+@mixin remove-icon-btn-styles {
+  border: none;
+  background-color: rgba(0,0,0,0);
+  &:hover {
+    border: none;
+  }
+}

@@ -77,6 +77,11 @@ function getColorStyle({ variant, color, theme }: ButtonStyleProps) {
         ...commonShadow,
       };
     case "text":
+      return {
+        "&:hover": {
+          backgroundColor: css.grey800,
+        },
+      };
     default:
       return {
         "&:hover": {
