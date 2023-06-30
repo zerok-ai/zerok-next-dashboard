@@ -1,26 +1,17 @@
 @import "styles/variables.module.scss";
-.container {
-    
-}
-
-.step-label {
-    
-}
 
 .step-content {
-
-    display:flex;
-    flex-direction: column;
-    row-gap:$sp-base *  4;
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-base * 4;
 }
 
 .step-2 {
-    display: flex;
-    flex-direction: column;
-    row-gap: $sp-base * 2;
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-base * 2;
 }
 .step-buttons {
-    display: flex;
-    column-gap: $sp-base * 2;
-    
+  display: flex;
+  column-gap: $sp-base * 2;
 }

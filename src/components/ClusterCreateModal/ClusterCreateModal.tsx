@@ -9,6 +9,9 @@ interface ClusterCreateModalProps {
 }
 
 const ClusterCreateModal = ({ isOpen, onClose }: ClusterCreateModalProps) => {
+  if(!isOpen) {
+    return null;
+  }
   return (
     <Modal
       open={isOpen}

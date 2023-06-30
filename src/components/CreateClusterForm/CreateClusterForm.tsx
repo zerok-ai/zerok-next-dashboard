@@ -31,7 +31,9 @@ const CreateClusterForm = () => {
         setStatus((old) => ({ ...old, loading: false }));
       }
     };
-    fetchKey();
+    if(!apiKey) {
+      fetchKey();
+    }
   }, []);
 
   const FORM_STEPS = useMemo(() => {
