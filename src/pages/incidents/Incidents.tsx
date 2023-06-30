@@ -1,6 +1,6 @@
 import PrivateRoute from "components/PrivateRoute";
 import styles from "./Home.module.scss";
-import PageLayout from "components/PageLayout";
+import PageLayout from "components/layouts/PageLayout";
 import { Fragment } from "react";
 import Head from "next/head";
 

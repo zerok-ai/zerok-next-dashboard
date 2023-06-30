@@ -23,7 +23,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
     700: cssColors.grey700,
     800: cssColors.grey800,
     900: cssColors.grey900,
-    A50: cssColors.grey50,
+    A50: cssColors.backgroundDark,
     A100: cssColors.grey100,
     A200: cssColors.grey200,
     A400: cssColors.grey400,
