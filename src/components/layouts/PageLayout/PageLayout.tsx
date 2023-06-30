@@ -1,10 +1,10 @@
 import MainDrawer from "components/MainDrawer";
 import styles from "./PageLayout.module.scss";
 import DrawerToggleButton from "components/DrawerToggleButton";
-import { useSelector } from "redux/store";
-import { clusterSelector } from "redux/cluster";
-import Loader from "components/mantis/Loader";
+import { useDispatch, useSelector } from "redux/store";
+import { clusterSelector, getClusters } from "redux/cluster";
 import { CircularProgress } from "@mui/material";
+import { useEffect } from "react";
 
 interface PageLayout {
   children: React.ReactNode;
@@ -12,6 +12,7 @@ interface PageLayout {
 
 const PageLayout = ({ children }: PageLayout) => {
   const clusters = useSelector(clusterSelector);
+  const dispatch = useDispatch();
   return (
     <div className={styles["container"]}>
       <div className={styles["drawer-container"]}>

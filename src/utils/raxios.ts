@@ -17,21 +17,31 @@ raxios.interceptors.response.use(
   (response) => response,
   (error) => {
     const errResponse = error.response;
-    console.log("HERE", error);
-    // if (
-    //   errResponse.status === HTTP_ERROR_CODES.EXPIRED ||
-    //   errResponse.data.error?.kind === "SESSION_EXPIRED"
-    // ) {
-    //   store.dispatch(logoutUser());
-    // }
-    Promise.reject(error);
+    if (
+      (errResponse.status === HTTP_ERROR_CODES.EXPIRED ||
+        errResponse.data.error?.kind === "SESSION_EXPIRED") &&
+      !errResponse.request.responseURL.includes("logout")
+    ) {
+      store.dispatch(logoutUser());
+      Promise.resolve();
+      return;
+    }
+    // @TODO - fix this jugaad
+    if (
+      (errResponse.status === HTTP_ERROR_CODES.EXPIRED ||
+        errResponse.data.error?.kind === "SESSION_EXPIRED") &&
+      errResponse.request.responseURL.includes("logout")
+    ) {
+      Promise.resolve();
+      return;
+    }
+    return Promise.reject(error);
   }
 );
 
 export default raxios;
 
 export const setRaxiosHeader = (token: string) => {
-  console.log("SET SET SET");
   raxios.defaults.headers.common["Token"] = token;
   return true;
 };

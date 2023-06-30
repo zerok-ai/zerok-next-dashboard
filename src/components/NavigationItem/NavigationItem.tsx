@@ -13,7 +13,6 @@ type NavigationItemType = {
 const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const drawer = useSelector((state) => state.drawer);
   const { isDrawerMinimized } = drawer;
-  console.log({ isDrawerMinimized });
   return (
     <Link href={nav.path}>
       <div

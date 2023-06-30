@@ -13,6 +13,7 @@ import { loginUser } from "redux/authSlice";
 import { useSelector } from "redux/store";
 import { LoadingButton } from "@mui/lab";
 import { useRouter } from "next/router";
+import { getClusters } from "redux/cluster";
 
 const loginSchema = z.object({
   email: z.string().email().min(1, "Email cannot be empty"),

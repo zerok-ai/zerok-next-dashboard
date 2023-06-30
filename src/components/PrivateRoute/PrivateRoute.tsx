@@ -21,13 +21,13 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // check if token exists and user is logged in
     if (isLoggedIn && token) {
       setIsAuthorized(true);
+      dispatch(getClusters())
       return;
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();
     if (localToken) {
       dispatch(tokenLogin({ token: localToken }));
-      dispatch(getClusters())
       return;
     }
 
