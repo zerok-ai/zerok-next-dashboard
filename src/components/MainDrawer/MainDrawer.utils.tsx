@@ -28,11 +28,11 @@ export const openedMixin = (theme: Theme): CSSObject => ({
       flexShrink: 0,
       whiteSpace: 'nowrap',
       boxSizing: 'border-box',
-      ...(open && {
+      ...(!open && {
         ...openedMixin(theme),
         '& .MuiDrawer-paper': openedMixin(theme),
       }),
-      ...(!open && {
+      ...(open && {
         ...closedMixin(theme),
         '& .MuiDrawer-paper': closedMixin(theme),
       }),

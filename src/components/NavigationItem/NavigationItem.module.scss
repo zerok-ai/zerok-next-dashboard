@@ -25,3 +25,9 @@
         color:$primary-500;
     }
 }
+
+.minimized {
+   .link-label {
+    opacity: 0;
+   }
+}

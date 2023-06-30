@@ -8,7 +8,6 @@ const DrawerToggleButton = () => {
   const drawer = useSelector((state) => state.drawer);
   const { isDrawerMinimized } = drawer;
   const dispatch = useDispatch();
-  console.log({ isDrawerMinimized });
   return (
     <div className={styles["container"]}>
       <IconButton
@@ -16,8 +15,6 @@ const DrawerToggleButton = () => {
         className={styles["icon-button"]}
         onClick={() => {
           dispatch(toggleDrawer());
-          console.log("here");
-          console.log({ isDrawerMinimized });
         }}
       >
         {!isDrawerMinimized ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}

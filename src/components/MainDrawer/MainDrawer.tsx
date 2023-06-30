@@ -1,9 +1,8 @@
-import { useSelector, useDispatch } from "redux/store";
+import { useSelector } from "redux/store";
 import styles from "./MainDrawer.module.scss";
-import { Drawer } from "@mui/material";
 
 import cssVars from "styles/variables.module.scss";
-import { ZEROK_LOGO_LIGHT } from "utils/images";
+import { ZEROK_LOGO_LIGHT, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import { useMemo } from "react";
 import { NAV_LINKS_1 } from "utils/navigation";
 import NavigationItem from "components/NavigationItem";
@@ -12,15 +11,15 @@ import { StyledMainDrawer } from "./MainDrawer.utils";
 
 const MainDrawer = () => {
   const drawer = useSelector((state) => state.drawer);
-  const dispatch = useDispatch();
   const { isDrawerMinimized } = drawer;
 
   const router = useRouter();
 
   const DrawerHeader = () => {
+
     return (
       <div className={styles["header-container"]}>
-        <img src={ZEROK_LOGO_LIGHT} alt="zerok_logo" />
+        <img src={isDrawerMinimized ? ZEROK_MINIMAL_LOGO_LIGHT : ZEROK_LOGO_LIGHT} alt="zerok_logo" />
       </div>
     );
   };
