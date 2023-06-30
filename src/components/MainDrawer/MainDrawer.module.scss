@@ -1,7 +1,6 @@
 @import "styles/variables.module.scss";
 .container {
    :global(.MuiDrawer-paper){
-    width:$main-drawer-width-full;
     border-right: 1px solid $grey-700;
    }
 }

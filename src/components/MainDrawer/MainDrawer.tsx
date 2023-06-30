@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { NAV_LINKS_1 } from "utils/navigation";
 import NavigationItem from "components/NavigationItem";
 import { useRouter } from "next/router";
+import { StyledMainDrawer } from "./MainDrawer.utils";
 
 const MainDrawer = () => {
   const drawer = useSelector((state) => state.drawer);
@@ -26,8 +27,8 @@ const MainDrawer = () => {
 
   const drawerHeader = useMemo(()=><DrawerHeader />,[isDrawerMinimized]);
   return (
-    <Drawer
-      open={true}
+    <StyledMainDrawer
+      open={isDrawerMinimized}
       variant="permanent"
       anchor="left"
       className={styles["container"]}
@@ -42,7 +43,7 @@ const MainDrawer = () => {
         })}
         </nav>
       </div>
-    </Drawer>
+    </StyledMainDrawer>
   );
 };
 

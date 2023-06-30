@@ -6,7 +6,8 @@
 }
 
 .drawer-container {
-  width: $main-drawer-width-full;
+  min-width:$main-drawer-width-mini;
+  max-width: $main-drawer-width-full;
   height: 100vh;
   background-color: $grey-400;
 }
