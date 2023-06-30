@@ -1,3 +1,12 @@
 @import "styles/variables.module.scss";
 .container {
 }
+
+.icon-button {
+  border: none;
+  color: $white;
+  background-color: rgba(0,0,0,0);
+  &:hover {
+    border: none;
+  }
+}
