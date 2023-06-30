@@ -5,6 +5,7 @@
     padding: $sp-xs * 2.5 $sp-xs * 5;
     align-items: center;
     column-gap: $sp-xs * 2.5;
+    transition: all 0.8s ease;
     &:hover {
         background-color: $grey-900;
     }

@@ -20,6 +20,8 @@ const ClusterSelector = () => {
       setSelectedCluster(clusters[0].id);
     }
   }, [clusters]);
+
+  const StyleIcon = () => <BsChevronDown className={styles["select-icon"]} />;
   return (
     <div
       className={cx(
@@ -32,7 +34,7 @@ const ClusterSelector = () => {
         id="cluster-list"
         value={selectedCluster}
         className={styles["select"]}
-        IconComponent={BsChevronDown}
+        IconComponent={StyleIcon}
       >
         <MenuItem value="" disabled>
           Target cluster
