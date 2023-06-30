@@ -1,5 +1,6 @@
-import { InputLabel, MenuItem, Select } from "@mui/material";
+import { Button, Divider, InputLabel, MenuItem, Select } from "@mui/material";
 import { BsChevronDown } from "react-icons/bs";
+import { AiOutlinePlus } from "react-icons/ai";
 import styles from "./ClusterSelector.module.scss";
 import { drawerSelector } from "redux/drawer";
 import { useSelector } from "redux/store";
@@ -41,8 +42,18 @@ const ClusterSelector = () => {
         </MenuItem>
         {!!clusters.length &&
           clusters.map((cl) => {
-            return <MenuItem value={cl.id}>{cl.name}</MenuItem>;
+            return (
+              <MenuItem value={cl.id} key={cl.id}>
+                {cl.nickname}
+              </MenuItem>
+            );
           })}
+        <Divider />
+        <MenuItem className={styles["new-cluster-item"]} onClick={()=>console.log('clicked')}>
+          {" "}
+          <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Add a
+          new cluster
+        </MenuItem>
       </Select>
     </div>
   );

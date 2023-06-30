@@ -7,13 +7,12 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
-  :global(.MuiSelect-outlined){
+  :global(.MuiSelect-outlined) {
     padding-left: 0;
-    
   }
   :global(.Mui-focused) {
-    :global(.MuiOutlinedInput-notchedOutline){
-        border:none !important;
+    :global(.MuiOutlinedInput-notchedOutline) {
+      border: none !important;
     }
   }
 }
@@ -25,11 +24,17 @@
 }
 
 .minimized {
-    padding: $sp-base;
+  padding: $sp-base;
 }
 
 .select-icon {
   color: $white;
   font-size: $font-lg;
   font-weight: 500;
+}
+
+.new-cluster-item {
+  display: flex;
+  column-gap: $sp-base * 2;
+  color: $grey-100;
 }
