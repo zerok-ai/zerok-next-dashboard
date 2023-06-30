@@ -5,19 +5,20 @@ import { Fragment } from "react";
 import Head from "next/head";
 
 const Home = () => {
-  return <div>
-    <Fragment>
-      <Head>
-        <title>ZeroK Dashboard | Home page</title>
-        </Head>
-      </Fragment>
+  return (
+    <div>
+      <Fragment></Fragment>
       <h1>hey</h1>
-    </div>;
+    </div>
+  );
 };
 
 Home.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
+      <Head>
+        <title>ZeroK Dashboard | Home page</title>
+      </Head>
       <PageLayout>{page}</PageLayout>
     </PrivateRoute>
   );

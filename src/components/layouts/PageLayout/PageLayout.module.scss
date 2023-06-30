@@ -20,6 +20,9 @@
 .header-container {
   width: 100%;
   padding: 2 * $sp-base 6 * $sp-base;
+  display: flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .page-content {

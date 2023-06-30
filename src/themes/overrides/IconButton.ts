@@ -1,5 +1,7 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
+import { Theme } from "@mui/material/styles";
+import cssVars from "styles/variables.module.scss";
+import { SPACE_TOKEN } from "utils/constants";
 
 // ==============================|| OVERRIDES - ICON BUTTON ||============================== //
 
@@ -8,24 +10,31 @@ export default function IconButton(theme: Theme) {
     MuiIconButton: {
       styleOverrides: {
         root: {
-          borderRadius: 4
+          backgroundColor: cssVars.grey900,
+          borderRadius: 4,
+          border: `1px solid ${cssVars.grey700}`,
+          padding: `${2 * SPACE_TOKEN}px ${3 * SPACE_TOKEN}`,
+          "&:hover": {
+            backgroundColor: cssVars.grey900,
+            border: `1px solid ${cssVars.primary500}`,
+          },
         },
         sizeLarge: {
-          width: theme.spacing(5.5),
-          height: theme.spacing(5.5),
-          fontSize: '1.25rem'
+          width: `${10 * SPACE_TOKEN}px`,
+          height: `${10 * SPACE_TOKEN}px`,
+          fontSize: "1.25rem",
         },
         sizeMedium: {
-          width: theme.spacing(4.5),
-          height: theme.spacing(4.5),
-          fontSize: '1rem'
+          width: `${9 * SPACE_TOKEN}px`,
+          height: `${9 * SPACE_TOKEN}px`,
+          fontSize: "1rem",
         },
         sizeSmall: {
-          width: theme.spacing(3.75),
-          height: theme.spacing(3.75),
-          fontSize: '0.75rem'
-        }
-      }
-    }
+          width: `${6.5 * SPACE_TOKEN}px`,
+          height: `${6.5 * SPACE_TOKEN}px`,
+          fontSize: "0.75rem",
+        },
+      },
+    },
   };
 }

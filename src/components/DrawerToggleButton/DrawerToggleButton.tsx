@@ -13,6 +13,7 @@ const DrawerToggleButton = () => {
       <IconButton
         aria-label="toggle-drawer"
         className={styles["icon-button"]}
+        size="large"
         onClick={() => {
           dispatch(toggleDrawer());
         }}

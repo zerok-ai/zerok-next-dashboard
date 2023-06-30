@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "redux/store";
 import { clusterSelector, getClusters } from "redux/cluster";
 import { CircularProgress } from "@mui/material";
 import { useEffect } from "react";
+import ClusterRefreshButton from "components/ClusterRefreshButton";
 
 interface PageLayout {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ const PageLayout = ({ children }: PageLayout) => {
       <div className={styles["page-container"]}>
         <div className={styles["header-container"]}>
           <DrawerToggleButton />
+          <ClusterRefreshButton />
         </div>
         <div className={styles["page-content"]}>
           {clusters.loading ? <CircularProgress /> : children}
