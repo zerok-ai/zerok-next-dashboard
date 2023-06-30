@@ -9,10 +9,12 @@ import {
 // slices
 import authReducer from "./authSlice";
 import drawerReducer from "./drawer";
+import clusterReducer from "./cluster";
 
 const reducers = {
   auth: authReducer,
   drawer: drawerReducer,
+  cluster: clusterReducer,
 };
 
 const store = configureStore({

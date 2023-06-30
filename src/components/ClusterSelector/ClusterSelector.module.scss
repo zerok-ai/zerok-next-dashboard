@@ -1,3 +1,29 @@
 @import "styles/variables.module.scss";
 .container {
+  padding: 2 * $sp-base 5 * $sp-base;
+  :global(.MuiOutlinedInput-notchedOutline) {
+    border: none;
+    padding-left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  :global(.MuiSelect-outlined){
+    padding-left: 0;
+    
+  }
+  :global(.Mui-focused) {
+    :global(.MuiOutlinedInput-notchedOutline){
+        border:none !important;
+    }
+  }
+}
+
+.select {
+  width: 100%;
+  border: none;
+  margin-top: -$sp-base;
+}
+
+.minimized {
+    padding: $sp-base;
 }

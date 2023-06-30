@@ -13,16 +13,17 @@ const raxios = axios.create({
   },
 });
 
-axios.interceptors.response.use(
+raxios.interceptors.response.use(
   (response) => response,
   (error) => {
     const errResponse = error.response;
-    if (
-      errResponse.status === HTTP_ERROR_CODES.EXPIRED ||
-      errResponse.data.error?.kind === "SESSION_EXPIRED"
-    ) {
-      store.dispatch(logoutUser());
-    }
+    console.log("HERE", error);
+    // if (
+    //   errResponse.status === HTTP_ERROR_CODES.EXPIRED ||
+    //   errResponse.data.error?.kind === "SESSION_EXPIRED"
+    // ) {
+    //   store.dispatch(logoutUser());
+    // }
     Promise.reject(error);
   }
 );
@@ -30,7 +31,8 @@ axios.interceptors.response.use(
 export default raxios;
 
 export const setRaxiosHeader = (token: string) => {
-  raxios.defaults.headers.common["Authorization"] = token;
+  console.log("SET SET SET");
+  raxios.defaults.headers.common["Token"] = token;
   return true;
 };
 

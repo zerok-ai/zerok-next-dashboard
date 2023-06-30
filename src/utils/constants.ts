@@ -19,3 +19,7 @@ export const HTTP_ERROR_CODES = {
 
 // used for calculating space in js
 export const SPACE_TOKEN = 4;
+
+export const CLUSTER_STATES = {
+  HEALTHY: "CS_HEALTHY",
+};

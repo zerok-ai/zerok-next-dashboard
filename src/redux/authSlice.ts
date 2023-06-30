@@ -53,6 +53,7 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
       state.user = DEFAULT_USER_PROFILE;
       state.loading = false;
+      setToken(payload.token);
     },
   },
   extraReducers: (builder) => {

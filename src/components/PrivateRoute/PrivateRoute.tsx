@@ -5,6 +5,7 @@ import { CircularProgress } from "@mui/material";
 import { getLocalToken } from "utils/functions";
 import { tokenLogin } from "redux/authSlice";
 import { useRouter } from "next/router";
+import { getClusters } from "redux/cluster";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -26,6 +27,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     const localToken = getLocalToken();
     if (localToken) {
       dispatch(tokenLogin({ token: localToken }));
+      dispatch(getClusters())
       return;
     }
 
