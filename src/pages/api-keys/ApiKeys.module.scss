@@ -1,3 +1,43 @@
 @import "styles/variables.module.scss";
+@import "styles/mixins";
 .container {
+    h2 {
+
+    }
+}
+
+.header {
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom: $sp-base * 6;
+}
+.key-button {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+.key-icon {
+    font-size: $sp-base * 4;
+}
+
+.dialog-container {
+  :global(.MuiPaper-root) {
+    width: 600px;
+  }
+}
+
+.api-icons-container {
+  display: flex;
+  column-gap: $sp-base * 4;
+}
+
+.delete-button {
+  @include remove-icon-btn-styles;
+  color: $grey-500;
+}
+
+.dialog-content {
+  border-top: 1px solid $grey-500;
+  padding: $sp-base * 4 $sp-base * 6;
+  color: $grey-50;
 }
