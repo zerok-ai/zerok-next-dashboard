@@ -10,11 +10,13 @@ import {
 import authReducer from "./authSlice";
 import drawerReducer from "./drawer";
 import clusterReducer from "./cluster";
+import apiKeysReducer from "./apiKeys";
 
 const reducers = {
   auth: authReducer,
   drawer: drawerReducer,
   cluster: clusterReducer,
+  apiKeys: apiKeysReducer,
 };
 
 const store = configureStore({

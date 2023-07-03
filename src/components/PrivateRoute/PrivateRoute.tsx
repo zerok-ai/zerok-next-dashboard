@@ -6,6 +6,7 @@ import { getLocalToken } from "utils/functions";
 import { tokenLogin } from "redux/authSlice";
 import { useRouter } from "next/router";
 import { getClusters } from "redux/cluster";
+import { getApiKeys } from "redux/apiKeys";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -21,7 +22,8 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // check if token exists and user is logged in
     if (isLoggedIn && token) {
       setIsAuthorized(true);
-      dispatch(getClusters())
+      dispatch(getClusters());
+      dispatch(getApiKeys())
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();

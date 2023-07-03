@@ -5,7 +5,7 @@ interface UserProfileType {
   role: string;
 }
 
-interface AuthType {
+export interface AuthType {
   user: null | UserProfileType;
   token: null | string;
   isLoggedIn: boolean;
@@ -18,14 +18,26 @@ interface DrawerReduxType {
   activeLink: string | null;
 }
 
-interface ClusterType {
+export interface ClusterType {
   name: string;
   id: string;
   nickname: string;
   status: string;
 }
-interface ClusterReduxType {
+export interface ClusterReduxType {
   loading: boolean;
   error: boolean;
   clusters: ClusterType[];
+}
+
+export interface ApiKeyType {
+  id: string;
+  key: string;
+  createdAtMs: number;
+}
+
+export interface ApiKeyReduxType {
+  loading: boolean;
+  error: boolean;
+  apiKeys: ApiKeyType[];
 }

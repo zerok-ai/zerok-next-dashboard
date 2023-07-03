@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { CLUSTER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
+import { ClusterReduxType } from "./types";
 
 const initialState: ClusterReduxType = {
   loading: false,
@@ -14,7 +15,7 @@ export const getClusters = createAsyncThunk("cluster/getClusters", async () => {
     const rdata = await raxios.get(CLUSTER_ENDPOINT);
     return rdata.data.payload.clusters;
   } catch (err) {
-    throw "Could not log in";
+    throw "Could not get cluster list";
   }
 });
 

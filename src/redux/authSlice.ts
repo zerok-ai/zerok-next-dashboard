@@ -4,6 +4,7 @@ import { deleteLocalToken, maskPassword, setLocalToken } from "utils/functions";
 import { RootState } from "./store";
 import raxios, { removeRaxiosHeader, setRaxiosHeader } from "utils/raxios";
 import { LOGIN_ENDPOINT, LOGOUT_ENDPOINT } from "utils/endpoints";
+import { AuthType } from "./types";
 
 const initialState: AuthType = {
   token: null,

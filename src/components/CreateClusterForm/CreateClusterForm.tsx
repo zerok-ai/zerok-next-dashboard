@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./CreateClusterForm.module.scss";
-import { ApiKeyType } from "utils/types";
-import useStatus from "hooks/useStatus";
-import raxios from "utils/raxios";
-import { APIKEY_ENDPOINT } from "utils/endpoints";
 
 import cx from "classnames";
 import CodeBlock from "components/CodeBlock";
 import { Button, Step, StepContent, StepLabel, Stepper } from "@mui/material";
+import { apiKeySelector } from "redux/apiKeys";
+import { useSelector } from "redux/store";
+import useStatus from "hooks/useStatus";
+import { ApiKeyType } from "redux/types";
+import raxios from "utils/raxios";
+import { APIKEY_ENDPOINT } from "utils/endpoints";
 
 const INSTALL_STEP = 0;
 const RESTART_STEP = 1;
@@ -35,7 +37,6 @@ const CreateClusterForm = () => {
       fetchKey();
     }
   }, []);
-
   const FORM_STEPS = useMemo(() => {
     return [
       {
