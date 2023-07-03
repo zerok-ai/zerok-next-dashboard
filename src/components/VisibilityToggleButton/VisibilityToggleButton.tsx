@@ -31,7 +31,7 @@ const VisibilityToggleButton = ({
       edge="end"
       color="secondary"
       onClick={toggleVisibility}
-      className={cx(customClassName)}
+      className={cx(customClassName, styles['container'])}
     >
       {isVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
     </IconButton>

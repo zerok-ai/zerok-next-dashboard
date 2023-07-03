@@ -15,10 +15,21 @@ export interface DrawerNavItemType {
 export interface ApiKeyType {
   id: string;
   key: string;
-  createdAt: number;
+  createdAtMs: number;
 }
 
 export interface useStatusType {
   loading: boolean;
   error: null | string;
+}
+
+export interface ApiKeyHidden {
+  id: string;
+  createdAtMs: number;
+}
+
+export interface ApiKeyDetail {
+  id: string;
+  createdAtMs: number;
+  key: null | string;
 }

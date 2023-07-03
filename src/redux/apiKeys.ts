@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { ApiKeyReduxType, ApiKeyType } from "./types";
 import raxios from "utils/raxios";
-import { APIKEY_ENDPOINT } from "utils/endpoints";
+import { APIKEYS_ENDPOINT } from "utils/endpoints";
 
 const initialState: ApiKeyReduxType = {
   loading: false,
@@ -12,7 +12,7 @@ const initialState: ApiKeyReduxType = {
 
 export const getApiKeys = createAsyncThunk("apiKeys/getApiKeys", async () => {
   try {
-    const rdata = await raxios.get(APIKEY_ENDPOINT);
+    const rdata = await raxios.get(APIKEYS_ENDPOINT);
     return rdata.data.payload.apikeys;
   } catch (err) {
     throw "Could not get API keys";
@@ -30,7 +30,6 @@ export const apiKeySlice = createSlice({
         state.error = false;
       })
       .addCase(getApiKeys.fulfilled, (state, action) => {
-        console.log({ action });
         state.apiKeys = action.payload;
         state.loading = false;
       })

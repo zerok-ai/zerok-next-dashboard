@@ -1,0 +1,25 @@
+@import "./variables.module.scss";
+.table {
+  width: 100%;
+  border-spacing: 0;
+  border: 1px solid $grey-900;
+}
+
+.table-thead {
+  background-color: $grey-900;
+  font-size: $sp-base * 3;
+  th {
+    line-height: $line-height-small;
+    padding: $sp-base * 3;
+    text-align: start;
+
+    box-shadow: -18px 0px 0px -17px rgba(0, 0, 0, 0.06);
+    font-weight: 500;
+  }
+}
+
+.table-body-td {
+    padding:$sp-base * 3;
+    color:$grey-25;
+    border-bottom: 1px solid $grey-900;
+}

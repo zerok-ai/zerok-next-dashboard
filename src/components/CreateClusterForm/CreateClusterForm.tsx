@@ -9,7 +9,7 @@ import { useSelector } from "redux/store";
 import useStatus from "hooks/useStatus";
 import { ApiKeyType } from "redux/types";
 import raxios from "utils/raxios";
-import { APIKEY_ENDPOINT } from "utils/endpoints";
+import { TOP_APIKEY_ENDPOINT } from "utils/endpoints";
 
 const INSTALL_STEP = 0;
 const RESTART_STEP = 1;
@@ -22,7 +22,7 @@ const CreateClusterForm = () => {
     const fetchKey = async () => {
       try {
         setStatus({ loading: true, error: null });
-        const rdata = await raxios.get(APIKEY_ENDPOINT);
+        const rdata = await raxios.get(TOP_APIKEY_ENDPOINT);
         setApiKey(rdata.data.payload.apikey);
       } catch (err) {
         setStatus({

@@ -1,17 +1,28 @@
 @import "styles/variables.module.scss";
 .container {
-    background-color: $grey-950;
-    padding:$sp-base * 2 $sp-base * 4;
+
+    padding:$sp-base $sp-base * 2;
     border-radius: $sp-base;
-    pre {
-        margin:$sp-base;
-    }
     .code {
         width:90%;
+        display: flex;
+        align-items: center;
+        
     }
     code {
         display: flex;
-        justify-content:space-between;
+        justify-content:space-between;column-gap: $sp-base * 2;
+    }
+    pre {
+        margin:0;
     }
 }
 
+
+.dark {
+    background-color: $bg-dark;
+}
+
+.light {
+    background-color: $grey-900;
+}

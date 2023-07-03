@@ -10,6 +10,7 @@ import "styles/react-table.scss";
 // custom styles
 import "styles/globals.scss";
 import "styles/utils.scss"
+import 'styles/tables.scss'
 
 import ThemeCustomization from "themes";
 import type { AppProps } from "next/app";

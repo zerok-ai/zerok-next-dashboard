@@ -6,4 +6,8 @@ export const LOGOUT_ENDPOINT = `/v1/u/auth/logout`;
 
 export const CLUSTER_ENDPOINT = `v1/u/org/cluster`;
 
-export const APIKEY_ENDPOINT = `/v1/u/apikey/top`;
+export const TOP_APIKEY_ENDPOINT = `/v1/u/apikey/top`;
+
+export const APIKEYS_ENDPOINT = `/v1/u/apikey`;
+
+export const APIKEY_ID_ENDPOINT = `/v1/u/apikey/{id}`;
