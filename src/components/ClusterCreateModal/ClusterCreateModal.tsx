@@ -18,6 +18,7 @@ const ClusterCreateModal = ({ isOpen, onClose }: ClusterCreateModalProps) => {
       onClose={onClose}
       className={styles["modal"]}
       keepMounted
+      sx={{minHeight: 300}}
     >
       <div className={styles["container"]}>
         <div className={styles["modal-header"]}>

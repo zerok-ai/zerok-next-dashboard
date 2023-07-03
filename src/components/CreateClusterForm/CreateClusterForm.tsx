@@ -79,7 +79,7 @@ const CreateClusterForm = () => {
       },
     ];
   }, [apiKey]);
-  
+
   return (
     <div className={styles["container"]}>
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -110,10 +110,14 @@ const CreateClusterForm = () => {
                   </div>
                 </div>
               </StepContent>
+              
             </Step>
           );
         })}
       </Stepper>
+      {activeStep === FORM_STEPS.length && <div className={styles['step-final']}>
+                      <h6>You're all set! You should be able to see your cluster on the dashboard now.</h6>
+                      </div>}
     </div>
   );
 };

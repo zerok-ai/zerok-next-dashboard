@@ -3,14 +3,18 @@ import { useState } from "react";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { IconButton } from "@mui/material";
 
+import cx from 'classnames';
+
 interface VisibilityToggleProps {
   name: string;
   onChange: (isVisible: boolean) => void;
   isVisibleDefault?: boolean;
+  customClassName?: string;
 }
 
 const VisibilityToggleButton = ({
   name,
+  customClassName,
   onChange,
   isVisibleDefault = false,
 }: VisibilityToggleProps) => {
@@ -27,6 +31,7 @@ const VisibilityToggleButton = ({
       edge="end"
       color="secondary"
       onClick={toggleVisibility}
+      className={cx(customClassName)}
     >
       {isVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
     </IconButton>

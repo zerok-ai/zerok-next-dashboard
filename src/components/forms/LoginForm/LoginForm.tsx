@@ -78,6 +78,7 @@ const LoginForm = () => {
               <VisibilityToggleButton
                 name="password"
                 onChange={(val) => setIsPasswordVisible(val)}
+                customClassName={styles['remove-icon-styles']}
               />
             </InputAdornment>
           }

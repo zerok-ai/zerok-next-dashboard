@@ -22,7 +22,6 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     if (isLoggedIn && token) {
       setIsAuthorized(true);
       dispatch(getClusters())
-      return;
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();
@@ -35,7 +34,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     if (!token && !localToken) {
       router.push("/login");
     }
-  }, [auth.isLoggedIn, auth.token, auth.loading, router]);
+  }, [auth.isLoggedIn, auth.token, auth.loading]);
 
   useEffect(() => {
     if (auth.error) {

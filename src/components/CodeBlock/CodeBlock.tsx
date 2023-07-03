@@ -9,7 +9,6 @@ interface CodeBlockProps {
 }
 
 const CodeBlock = ({ code, allowCopy }: CodeBlockProps) => {
-  console.log({ code });
   return (
     <div className={styles["container"]}>
       <pre>
