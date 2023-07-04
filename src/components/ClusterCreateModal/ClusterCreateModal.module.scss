@@ -1,7 +1,7 @@
 @import "styles/variables.module.scss";
 @import "styles/mixins";
 .container {
-  width: 800px;
+  width: fit-content;
   height:fit-content;
   background-color: $grey-900;
   border-radius: $sp-base * 2;
@@ -21,7 +21,7 @@
   display: flex;
   justify-content: space-between;
   padding: $sp-base * 4 $sp-base * 6;
-  border-bottom: 1px solid $grey-500;
+  border-bottom: 1px solid $grey-700;
   align-items: center;
 }
 

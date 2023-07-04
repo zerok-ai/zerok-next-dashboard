@@ -1,7 +1,6 @@
-import { IconButton, Modal } from "@mui/material";
 import styles from "./ClusterCreateModal.module.scss";
-import { AiOutlineClose } from "react-icons/ai";
 import CreateClusterForm from "components/CreateClusterForm";
+import ModalX from "components/themeX/ModalX";
 
 interface ClusterCreateModalProps {
   isOpen: boolean;
@@ -9,29 +8,19 @@ interface ClusterCreateModalProps {
 }
 
 const ClusterCreateModal = ({ isOpen, onClose }: ClusterCreateModalProps) => {
-  if(!isOpen) {
+  if (!isOpen) {
     return null;
   }
   return (
-    <Modal
-      open={isOpen}
+    <ModalX
+      isOpen={isOpen}
       onClose={onClose}
-      className={styles["modal"]}
-      keepMounted
-      sx={{minHeight: 300}}
+      keepMounted={true}
+      title="Create a new cluster"
     >
-      <div className={styles["container"]}>
-        <div className={styles["modal-header"]}>
-          <h5>Create a new cluster</h5>
-          <IconButton className={styles["modal-close-icon"]} onClick={onClose}>
-            <AiOutlineClose />
-          </IconButton>
-        </div>
-        <div className={styles["modal-content"]}>
-          <CreateClusterForm />
-        </div>
-      </div>
-    </Modal>
+      {" "}
+      <CreateClusterForm />
+    </ModalX>
   );
 };
 

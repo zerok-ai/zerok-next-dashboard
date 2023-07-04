@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table";
 import UserProfilePicture from "components/UserProfilePicture";
 import { IconButton } from "@mui/material";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
 import TableX from "components/themeX/TableX";
 
 const Users = () => {
@@ -84,7 +84,9 @@ const Users = () => {
     <div className={styles["container"]}>
       <div className={styles["header"]}>
         <h2>Users</h2>
-        <Button variant="contained">Add a new user</Button>
+        <Button variant="contained" className={styles["user-button"]}>
+          <AiOutlineUserAdd className={styles["user-icon"]} /> Add a new user
+        </Button>
       </div>
       <div className={styles["table-container"]}>
         <TableX table={table} />

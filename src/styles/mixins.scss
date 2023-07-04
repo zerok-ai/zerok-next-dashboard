@@ -26,3 +26,9 @@
     border: none;
   }
 }
+
+@mixin button-icon {
+  display: flex;
+  align-items: center;
+  column-gap: $sp-base * 2;
+}

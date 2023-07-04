@@ -1,4 +1,4 @@
-import { Button, Divider, InputLabel, MenuItem, Select } from "@mui/material";
+import { Divider, InputLabel, MenuItem, Select } from "@mui/material";
 import { BsChevronDown } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import styles from "./ClusterSelector.module.scss";
@@ -54,10 +54,7 @@ const ClusterSelector = () => {
             );
           })}
         <Divider />
-        <MenuItem
-          className={styles["new-cluster-item"]}
-          onClick={toggleModal}
-        >
+        <MenuItem className={styles["new-cluster-item"]} onClick={toggleModal}>
           {" "}
           <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Add a
           new cluster
