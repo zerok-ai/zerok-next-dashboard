@@ -33,3 +33,9 @@ export interface ApiKeyDetail {
   createdAtMs: number;
   key: null | string;
 }
+
+export interface UserDetail {
+  name: string;
+  email: string;
+  id: string;
+}

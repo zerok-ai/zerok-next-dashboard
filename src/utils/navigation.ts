@@ -20,7 +20,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
     icon: `${ICONS.code}`,
     label: "Raw Traces",
-    path: "/raw-traces",
+    path: "/users",
   },
 ];
 

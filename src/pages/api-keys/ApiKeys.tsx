@@ -36,7 +36,7 @@ import { DEFAULT_COL_WIDTH } from "utils/constants";
 type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
 const ApiKeys = () => {
-  const { loading, error, data, fetchData } = useFetch<ApiKeyHidden[]>(
+  const { loading, error, data, fetchData } = useFetch<ApiKeyHidden>(
     APIKEYS_ENDPOINT,
     "apikeys"
   );
@@ -46,6 +46,7 @@ const ApiKeys = () => {
   );
 
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
+
   useEffect(() => {
     if (!loading && !error && data?.length) {
       setDetailedKeys(

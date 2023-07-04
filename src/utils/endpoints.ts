@@ -13,3 +13,5 @@ export const APIKEYS_ENDPOINT = `/v1/u/apikey`;
 export const APIKEY_ID_ENDPOINT = `/v1/u/apikey/{id}`;
 
 export const APIKEY_CREATE_ENDPOINT = `/v1/u/apikey/create`;
+
+export const GET_USERS_ENDPOINT = `/v1/u/user`;

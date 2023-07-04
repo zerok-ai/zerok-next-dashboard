@@ -5,7 +5,7 @@ import { GenericObject } from "utils/types";
 
 export const useFetch = <T>(url: string, accessor: string) => {
   // @TODO - add generics here to get  better type detection
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
