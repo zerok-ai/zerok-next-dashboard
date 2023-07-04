@@ -22,3 +22,8 @@
 .user-button {
     @include button-icon;
 }
+
+.form-container {
+    min-width: 450px;
+    padding-bottom: $sp-base * 6;
+}

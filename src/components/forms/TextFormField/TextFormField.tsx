@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 interface TextFormFieldProps {
   type?: string;
   name: string;
-  customClassName: string;
+  customClassName?: string;
   placeholder: string;
   label: string;
   // @TODO - add generics for these kinds of types

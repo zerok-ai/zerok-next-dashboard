@@ -1,0 +1,16 @@
+@import "styles/variables.module.scss";
+.container {
+    :global(.MuiPaper-root) {
+        width: 400px;
+      }
+}
+
+
+.dialog-content {
+    border-top: 1px solid $grey-500;
+    padding: $sp-base * 4 $sp-base * 6;
+    color: $grey-50;
+  }
+.dialog-actions {
+  padding-bottom: $sp-base * 4;;
+}

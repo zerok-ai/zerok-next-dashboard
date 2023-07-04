@@ -32,6 +32,7 @@ import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
 
 import cx from "classnames";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
+import DialogX from "components/themeX/DialogX";
 
 type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
@@ -183,26 +184,17 @@ const ApiKeys = () => {
         {/* API keys table */}
         <TableX table={table} />
         {/* Delete key dialog */}
-        <Dialog
-          open={!!deletingKey}
+        <DialogX
+          title="Delete API Key"
+          isOpen={!!deletingKey}
+          onCancel={() => setDeletingKey(null)}
           onClose={() => setDeletingKey(null)}
-          className={styles["dialog-container"]}
+          onSuccess={deleteApiKey}
         >
-          <DialogTitle>Delete API Key</DialogTitle>
-          <DialogContentText className={styles["dialog-content"]}>
-            Are you sure you want to delete the API key with id -{" "}
-            <strong>{deletingKey}</strong> ? <br />
-            <em>This action cannot be undone.</em>
-          </DialogContentText>
-          <DialogActions>
-            <Button color="primary" onClick={deleteApiKey} variant="contained">
-              Delete
-            </Button>
-            <Button color="secondary" onClick={() => setDeletingKey(null)}>
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
+          Are you sure you want to delete the API key with id -{" "}
+          <strong>{deletingKey}</strong> ? <br />
+          <em>This action cannot be undone.</em>
+        </DialogX>
       </div>
     </div>
   );
