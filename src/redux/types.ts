@@ -28,6 +28,7 @@ export interface ClusterReduxType {
   loading: boolean;
   error: boolean;
   clusters: ClusterType[];
+  selectedCluster: null | string;
 }
 
 export interface ApiKeyType {

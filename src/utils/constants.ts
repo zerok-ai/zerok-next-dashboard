@@ -27,3 +27,5 @@ export const CLUSTER_STATES = {
 };
 
 export const DEFAULT_COL_WIDTH = 80;
+
+export const IGNORED_SERVICES_PREFIXES = ["pl", "pl, pl", "px-operator", "plc"];

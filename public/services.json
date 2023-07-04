@@ -1,0 +1,1898 @@
+{
+    "debug": {
+        "rawResponse": {
+            "stats": {
+                "AcceptedBytes": 4179,
+                "TotalBytes": 4179,
+                "ExecutionTime": 175622000,
+                "CompilationTime": 44518223,
+                "BytesProcessed": 4005406,
+                "RecordsProcessed": 164301
+            },
+            "results": [
+                {
+                    "service": "sofa-shop/product",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": 22147405,
+                        "p10": 22147405,
+                        "p25": 25316799.75,
+                        "p50": 34824984,
+                        "p75": 198538719,
+                        "p90": 253109964,
+                        "p99": 253109964
+                    },
+                    "http_req_throughput_in": 3e-12,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 4.5843e-8,
+                    "outbound_conns": 5.2781e-8
+                },
+                {
+                    "service": "sofa-shop/inventory",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": 70419641,
+                        "p10": 70419641,
+                        "p25": 70419641,
+                        "p50": 75893017.5,
+                        "p75": 81366394,
+                        "p90": 81366394,
+                        "p99": 81366394
+                    },
+                    "http_req_throughput_in": 2e-12,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 1.6286e-8,
+                    "outbound_conns": 1.7056e-8
+                },
+                {
+                    "service": "plc/auth-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 8.58009e-7,
+                    "outbound_conns": 1.67063e-7
+                },
+                {
+                    "service": "cert-manager/cert-manager",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 2.96119e-7
+                },
+                {
+                    "service": "kube-system/default-http-backend",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 2.4722e-8,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "[\"kube-system/prom-kube-prometheus-stack-coredns\",\"kube-system/kube-dns\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000005069057,
+                    "outbound_conns": 0.000002927848
+                },
+                {
+                    "service": "plc/api-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000003341781,
+                    "outbound_conns": 0.000004493336
+                },
+                {
+                    "service": "mysql/mysql-svc",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 7.869e-8,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "emojivoto/web-svc",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000005077766,
+                    "outbound_conns": 0.00000273437
+                },
+                {
+                    "service": "emojivoto/jaeger",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/cloud-proxy-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000003763111,
+                    "outbound_conns": 0.000001938603
+                },
+                {
+                    "service": "zk-client/redis",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 1.14162e-7,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "sofa-shop/order",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 1.7449e-8
+                },
+                {
+                    "service": "px-operator/pixie-operator-index",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 6.6997e-8,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/postgres",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000001607783,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "[\"plc/kratos\",\"plc/kratos-service\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 9.521e-9,
+                    "outbound_conns": 8.5268e-8
+                },
+                {
+                    "service": "[\"kube-system/kube-dns\",\"kube-system/prom-kube-prometheus-stack-coredns\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000004995493,
+                    "outbound_conns": 0.000002909678
+                },
+                {
+                    "service": "zkcloud/zk-wsp-server-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/vzconn-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000001286536,
+                    "outbound_conns": 0.00000180711
+                },
+                {
+                    "service": "plc/profile-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 7.15098e-7,
+                    "outbound_conns": 4.29193e-7
+                },
+                {
+                    "service": "zkcloud/zk-auth",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 2.09908e-7,
+                    "outbound_conns": 5.48024e-7
+                },
+                {
+                    "service": "pl/kelvin-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000012169146,
+                    "outbound_conns": 7.30966e-7
+                },
+                {
+                    "service": "plc/hydra",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 1.2153e-8,
+                    "outbound_conns": 1.41823e-7
+                },
+                {
+                    "service": "plc/artifact-tracker-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 6.43591e-7,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "emojivoto/emoji-svc",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000002515848,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "[\"zk-client/postgres-postgresql\",\"zk-client/postgres-postgresql-hl\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "elastic-system/elastic-webhook-server",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0.000003233641
+                },
+                {
+                    "service": "zk-client/zk-wsp-client-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0.000003171778
+                },
+                {
+                    "service": "zkcloud/react-app",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 1.5823e-8,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "istio-system/istiod",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 6.6222e-8,
+                    "outbound_conns": 0.000002957281
+                },
+                {
+                    "service": "cert-manager/cert-manager-webhook",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 5.9504e-8,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "pl/vizier-metadata-svc",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 7.85394e-7,
+                    "outbound_conns": 0.000002728912
+                },
+                {
+                    "service": "kube-system/metrics-server",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000001716754,
+                    "outbound_conns": 0.000011836866
+                },
+                {
+                    "service": "pl/vizier-query-broker-svc",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 8.25546e-7,
+                    "outbound_conns": 5.2727e-7
+                },
+                {
+                    "service": "redis/redis",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 7.4361e-8,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/cron-script-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 5.67583e-7,
+                    "outbound_conns": 1.2674e-8
+                },
+                {
+                    "service": "plc/project-manager-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 5.69294e-7,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "zkcloud/api-server",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 1.62712e-7,
+                    "outbound_conns": 0.000004250784
+                },
+                {
+                    "service": "[\"ingress-nginx/ingress-nginx-controller\",\"ingress-nginx/ingress-nginx-controller-admission\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000004919208,
+                    "outbound_conns": 0.000004514292
+                },
+                {
+                    "service": "emojivoto/voting-svc",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 2.18503e-7,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/plugin-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 5.7135e-7,
+                    "outbound_conns": 1.2709e-8
+                },
+                {
+                    "service": "[\"pl/pl-nats\",\"pl/pl-nats-mgmt\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.00000383007,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/config-manager-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 5.69751e-7,
+                    "outbound_conns": 2.5473e-8
+                },
+                {
+                    "service": "plc/pl-nats",
+                    "pod_count": 3,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000012743588,
+                    "outbound_conns": 0.000008617812
+                },
+                {
+                    "service": "pl/vizier-cloud-connector-svc",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 3.09332e-7,
+                    "outbound_conns": 0.000014406771
+                },
+                {
+                    "service": "zk-client/zk-axon",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 5.2906e-8,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/scriptmgr-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 8.18214e-7,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "plc/vzmgr-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 9.42479e-7,
+                    "outbound_conns": 0.000001474523
+                },
+                {
+                    "service": "[\"plc/pl-elastic-es-transport\",\"plc/pl-elastic-es-master\",\"plc/pl-elastic-es-http\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000001875384,
+                    "outbound_conns": 7.33056e-7
+                },
+                {
+                    "service": "[\"plc/pl-elastic-es-http\",\"plc/pl-elastic-es-transport\",\"plc/pl-elastic-es-master\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000002158211,
+                    "outbound_conns": 0.000002051394
+                },
+                {
+                    "service": "[\"plc/pl-elastic-es-http\",\"plc/pl-elastic-es-data\",\"plc/pl-elastic-es-transport\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0.000001724389,
+                    "outbound_conns": 7.29967e-7
+                },
+                {
+                    "service": "[\"zk-client/zk-operator-inject\",\"zk-client/zk-operator-metrics-service\",\"zk-client/zk-operator-service\"]",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 4.1441e-8,
+                    "outbound_conns": 0.000001263962
+                },
+                {
+                    "service": "sofa-shop/demo-shop-service",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "k6/svc-k6-k6",
+                    "pod_count": 1,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0
+                },
+                {
+                    "service": "grpc-test/grpc-service",
+                    "pod_count": 3,
+                    "http_latency_in": {
+                        "p01": null,
+                        "p10": null,
+                        "p25": null,
+                        "p50": null,
+                        "p75": null,
+                        "p90": null,
+                        "p99": null
+                    },
+                    "http_req_throughput_in": 0,
+                    "http_error_rate_in": 0,
+                    "inbound_conns": 0,
+                    "outbound_conns": 0
+                }
+            ]
+        }
+    },
+    "payload": {
+        "stats": {
+            "AcceptedBytes": 4179,
+            "TotalBytes": 4179,
+            "ExecutionTime": 175622000,
+            "CompilationTime": 44518223,
+            "BytesProcessed": 4005406,
+            "RecordsProcessed": 164301
+        },
+        "results": [
+            {
+                "service": "sofa-shop/product",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": 22147405,
+                    "p10": 22147405,
+                    "p25": 25316799.75,
+                    "p50": 34824984,
+                    "p75": 198538719,
+                    "p90": 253109964,
+                    "p99": 253109964
+                },
+                "http_req_throughput_in": 3e-12,
+                "http_error_rate_in": 0,
+                "inbound_conns": 4.5843e-8,
+                "outbound_conns": 5.2781e-8
+            },
+            {
+                "service": "sofa-shop/inventory",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": 70419641,
+                    "p10": 70419641,
+                    "p25": 70419641,
+                    "p50": 75893017.5,
+                    "p75": 81366394,
+                    "p90": 81366394,
+                    "p99": 81366394
+                },
+                "http_req_throughput_in": 2e-12,
+                "http_error_rate_in": 0,
+                "inbound_conns": 1.6286e-8,
+                "outbound_conns": 1.7056e-8
+            },
+            {
+                "service": "plc/auth-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 8.58009e-7,
+                "outbound_conns": 1.67063e-7
+            },
+            {
+                "service": "cert-manager/cert-manager",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 2.96119e-7
+            },
+            {
+                "service": "kube-system/default-http-backend",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 2.4722e-8,
+                "outbound_conns": 0
+            },
+            {
+                "service": "[\"kube-system/prom-kube-prometheus-stack-coredns\",\"kube-system/kube-dns\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000005069057,
+                "outbound_conns": 0.000002927848
+            },
+            {
+                "service": "plc/api-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000003341781,
+                "outbound_conns": 0.000004493336
+            },
+            {
+                "service": "mysql/mysql-svc",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 7.869e-8,
+                "outbound_conns": 0
+            },
+            {
+                "service": "emojivoto/web-svc",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000005077766,
+                "outbound_conns": 0.00000273437
+            },
+            {
+                "service": "emojivoto/jaeger",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/cloud-proxy-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000003763111,
+                "outbound_conns": 0.000001938603
+            },
+            {
+                "service": "zk-client/redis",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 1.14162e-7,
+                "outbound_conns": 0
+            },
+            {
+                "service": "sofa-shop/order",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 1.7449e-8
+            },
+            {
+                "service": "px-operator/pixie-operator-index",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 6.6997e-8,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/postgres",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000001607783,
+                "outbound_conns": 0
+            },
+            {
+                "service": "[\"plc/kratos\",\"plc/kratos-service\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 9.521e-9,
+                "outbound_conns": 8.5268e-8
+            },
+            {
+                "service": "[\"kube-system/kube-dns\",\"kube-system/prom-kube-prometheus-stack-coredns\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000004995493,
+                "outbound_conns": 0.000002909678
+            },
+            {
+                "service": "zkcloud/zk-wsp-server-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/vzconn-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000001286536,
+                "outbound_conns": 0.00000180711
+            },
+            {
+                "service": "plc/profile-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 7.15098e-7,
+                "outbound_conns": 4.29193e-7
+            },
+            {
+                "service": "zkcloud/zk-auth",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 2.09908e-7,
+                "outbound_conns": 5.48024e-7
+            },
+            {
+                "service": "pl/kelvin-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000012169146,
+                "outbound_conns": 7.30966e-7
+            },
+            {
+                "service": "plc/hydra",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 1.2153e-8,
+                "outbound_conns": 1.41823e-7
+            },
+            {
+                "service": "plc/artifact-tracker-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 6.43591e-7,
+                "outbound_conns": 0
+            },
+            {
+                "service": "emojivoto/emoji-svc",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000002515848,
+                "outbound_conns": 0
+            },
+            {
+                "service": "[\"zk-client/postgres-postgresql\",\"zk-client/postgres-postgresql-hl\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0
+            },
+            {
+                "service": "elastic-system/elastic-webhook-server",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0.000003233641
+            },
+            {
+                "service": "zk-client/zk-wsp-client-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0.000003171778
+            },
+            {
+                "service": "zkcloud/react-app",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 1.5823e-8,
+                "outbound_conns": 0
+            },
+            {
+                "service": "istio-system/istiod",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 6.6222e-8,
+                "outbound_conns": 0.000002957281
+            },
+            {
+                "service": "cert-manager/cert-manager-webhook",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 5.9504e-8,
+                "outbound_conns": 0
+            },
+            {
+                "service": "pl/vizier-metadata-svc",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 7.85394e-7,
+                "outbound_conns": 0.000002728912
+            },
+            {
+                "service": "kube-system/metrics-server",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000001716754,
+                "outbound_conns": 0.000011836866
+            },
+            {
+                "service": "pl/vizier-query-broker-svc",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 8.25546e-7,
+                "outbound_conns": 5.2727e-7
+            },
+            {
+                "service": "redis/redis",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 7.4361e-8,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/cron-script-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 5.67583e-7,
+                "outbound_conns": 1.2674e-8
+            },
+            {
+                "service": "plc/project-manager-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 5.69294e-7,
+                "outbound_conns": 0
+            },
+            {
+                "service": "zkcloud/api-server",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 1.62712e-7,
+                "outbound_conns": 0.000004250784
+            },
+            {
+                "service": "[\"ingress-nginx/ingress-nginx-controller\",\"ingress-nginx/ingress-nginx-controller-admission\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000004919208,
+                "outbound_conns": 0.000004514292
+            },
+            {
+                "service": "emojivoto/voting-svc",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 2.18503e-7,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/plugin-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 5.7135e-7,
+                "outbound_conns": 1.2709e-8
+            },
+            {
+                "service": "[\"pl/pl-nats\",\"pl/pl-nats-mgmt\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.00000383007,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/config-manager-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 5.69751e-7,
+                "outbound_conns": 2.5473e-8
+            },
+            {
+                "service": "plc/pl-nats",
+                "pod_count": 3,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000012743588,
+                "outbound_conns": 0.000008617812
+            },
+            {
+                "service": "pl/vizier-cloud-connector-svc",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 3.09332e-7,
+                "outbound_conns": 0.000014406771
+            },
+            {
+                "service": "zk-client/zk-axon",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 5.2906e-8,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/scriptmgr-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 8.18214e-7,
+                "outbound_conns": 0
+            },
+            {
+                "service": "plc/vzmgr-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 9.42479e-7,
+                "outbound_conns": 0.000001474523
+            },
+            {
+                "service": "[\"plc/pl-elastic-es-transport\",\"plc/pl-elastic-es-master\",\"plc/pl-elastic-es-http\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000001875384,
+                "outbound_conns": 7.33056e-7
+            },
+            {
+                "service": "[\"plc/pl-elastic-es-http\",\"plc/pl-elastic-es-transport\",\"plc/pl-elastic-es-master\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000002158211,
+                "outbound_conns": 0.000002051394
+            },
+            {
+                "service": "[\"plc/pl-elastic-es-http\",\"plc/pl-elastic-es-data\",\"plc/pl-elastic-es-transport\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0.000001724389,
+                "outbound_conns": 7.29967e-7
+            },
+            {
+                "service": "[\"zk-client/zk-operator-inject\",\"zk-client/zk-operator-metrics-service\",\"zk-client/zk-operator-service\"]",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 4.1441e-8,
+                "outbound_conns": 0.000001263962
+            },
+            {
+                "service": "sofa-shop/demo-shop-service",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0
+            },
+            {
+                "service": "k6/svc-k6-k6",
+                "pod_count": 1,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0
+            },
+            {
+                "service": "grpc-test/grpc-service",
+                "pod_count": 3,
+                "http_latency_in": {
+                    "p01": null,
+                    "p10": null,
+                    "p25": null,
+                    "p50": null,
+                    "p75": null,
+                    "p90": null,
+                    "p99": null
+                },
+                "http_req_throughput_in": 0,
+                "http_error_rate_in": 0,
+                "inbound_conns": 0,
+                "outbound_conns": 0
+            }
+        ]
+    }
+}

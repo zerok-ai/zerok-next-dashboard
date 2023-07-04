@@ -1,6 +1,7 @@
-import { TOKEN_NAME } from "./constants";
+import { IGNORED_SERVICES_PREFIXES, TOKEN_NAME } from "./constants";
 
 import CryptoJS from "crypto-js";
+import { ServiceDetail } from "./types";
 
 export const capitalizeFirstLetter = (str: string) => {
   if (str.length) {
@@ -27,4 +28,47 @@ export function maskPassword(password: string) {
   let shaArray = CryptoJS.SHA256(password);
   let hexPass = shaArray.toString(CryptoJS.enc.Hex);
   return hexPass;
+}
+
+export const getNamespace = (nameStr: string) => {
+  function getName(str: string) {
+    return str.toString().split("/")[0];
+  }
+  try {
+    let namesObj = JSON.parse(nameStr);
+    return getName(namesObj[0]);
+  } catch (err) {}
+
+  if (Array.isArray(nameStr)) {
+    return getName(nameStr[0]);
+  }
+  return nameStr.split("/")[0];
+};
+
+export const filterByIgnoredService = (services: ServiceDetail[]) => {
+  return services.filter((service) => {
+    return IGNORED_SERVICES_PREFIXES.includes(getNamespace(service.service));
+  });
+};
+
+export const stripNS = (nameStr: string) => {
+  return nameStr.split("/")[1];
+};
+
+export const getFormattedServiceName = (nameStr: string) => {
+  try {
+    let namesObj = JSON.parse(nameStr);
+    console.log({ namesObj, nameStr });
+    nameStr = stripNS(namesObj[0]);
+    return nameStr;
+  } catch (err) {}
+  return stripNS(nameStr);
+};
+
+export function convertNanoToMilliSeconds(value: number | null) {
+  if (value != null) {
+    let millis = parseFloat((value / 1000000).toFixed(2));
+    return `${millis}ms`;
+  }
+  return "NA";
 }

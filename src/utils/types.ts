@@ -39,3 +39,36 @@ export interface UserDetail {
   email: string;
   id: string;
 }
+// {
+//   "service": "zkcloud/zk-auth",
+//   "pod_count": 1,
+//   "http_latency_in": {
+//       "p01": null,
+//       "p10": null,
+//       "p25": null,
+//       "p50": null,
+//       "p75": null,
+//       "p90": null,
+//       "p99": null
+//   },
+//   "http_req_throughput_in": 0,
+//   "http_error_rate_in": 0,
+//   "inbound_conns": 7.08163e-7,
+//   "outbound_conns": 0.000001277693
+// },
+export interface ServiceDetail {
+  service: string;
+  pod_count: number;
+  http_latency_in:{
+    p01: null | number,
+    p10: null | number,
+    p25: null | number,
+    p50: null | number,
+    p75: null | number,
+    p90: null | number,
+  },
+  http_req_throughput_in: number;
+  http_error_rate_in: number;
+  inbound_conns: number;
+  outerHeight: number;
+}

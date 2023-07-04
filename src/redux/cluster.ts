@@ -8,6 +8,7 @@ const initialState: ClusterReduxType = {
   loading: false,
   clusters: [],
   error: false,
+  selectedCluster: "",
 };
 
 export const getClusters = createAsyncThunk("cluster/getClusters", async () => {
@@ -22,7 +23,11 @@ export const getClusters = createAsyncThunk("cluster/getClusters", async () => {
 export const clusterSlice = createSlice({
   name: "cluster",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedCluster: (state, { payload: { id } }) => {
+      state.selectedCluster = id;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getClusters.pending, (state) => {
@@ -32,6 +37,9 @@ export const clusterSlice = createSlice({
       .addCase(getClusters.fulfilled, (state, action) => {
         state.clusters = action.payload;
         state.loading = false;
+        if (action.payload.length) {
+          state.selectedCluster = action.payload[0].id;
+        }
       })
       .addCase(getClusters.rejected, (state, action) => {
         state.loading = false;
@@ -42,5 +50,7 @@ export const clusterSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const clusterSelector = (state: RootState) => state.cluster;
+
+export const { setSelectedCluster } = clusterSlice.actions; 
 
 export default clusterSlice.reducer;
