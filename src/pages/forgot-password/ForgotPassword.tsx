@@ -7,18 +7,18 @@ import Head from "next/head";
 
 const ForgotPassword = () => {
    return (
-    <div>
-      {/* Head / Meta tags */}
-      <Fragment>
-        <Head>
-          <title>ZeroK Dashboard | Forgot Password</title>
-        </Head>
-      </Fragment>
-      <AuthFormCard title="Reset password">
-        <ForgotPasswordForm />
-      </AuthFormCard>
-    </div>
-  );;
+     <div>
+       {/* Head / Meta tags */}
+       <Fragment>
+         <Head>
+           <title>ZeroK Dashboard | Forgot Password</title>
+         </Head>
+       </Fragment>
+       <AuthFormCard title="Forgot password">
+         <ForgotPasswordForm />
+       </AuthFormCard>
+     </div>
+   );;
 };
 
 

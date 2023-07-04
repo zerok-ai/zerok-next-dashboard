@@ -26,7 +26,10 @@ const ForgotPasswordForm = () => {
 
   return (
     <div className={styles["container"]}>
-      <form className={cx("form", styles["form"])} onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className={cx("form", styles["form"])}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {/* Email field */}
         <TextFormField
           name="email"
@@ -39,7 +42,7 @@ const ForgotPasswordForm = () => {
         />
         {/* Submit button */}
         <Button variant="contained" color="primary" type="submit">
-          Reset password
+          Send recovery email
         </Button>
       </form>
       {/* Login link */}
