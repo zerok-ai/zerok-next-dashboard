@@ -28,6 +28,7 @@ const Users = () => {
     loading: usersLoading,
     error,
     data: users,
+    fetchData,
   } = useFetch<UserDetail>(GET_USERS_ENDPOINT, "users");
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -158,7 +159,12 @@ const Users = () => {
         title="Invite a new team member"
       >
         <div className={styles["form-container"]}>
-          <InviteUserForm onFinish={toggleForm} />
+          <InviteUserForm
+            onFinish={() => {
+              toggleForm();
+              fetchData();
+            }}
+          />
         </div>
       </ModalX>
       <DialogX

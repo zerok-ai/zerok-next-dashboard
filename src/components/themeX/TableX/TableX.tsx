@@ -51,7 +51,6 @@ const TableX = <T extends object>({table}:TableXProps<T>) => {
           })}
         </tbody>
       </table>
-      ;
     </div>
   );
 };

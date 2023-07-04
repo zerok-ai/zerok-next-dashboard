@@ -2,16 +2,18 @@
 .table {
   max-width: 100%;
   overflow-x:auto;
+  border-radius: $sp-base * 2;
   table {
     width:100%;
     border-spacing: 0;
-  border: 1px solid $grey-900;
+    border: 1px solid $grey-900;
   }
 }
 
 .table-thead {
   background-color: $grey-900;
   font-size: $sp-base * 3;
+  
   th {
     line-height: $line-height-small;
     padding: $sp-base * 3;

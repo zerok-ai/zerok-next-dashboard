@@ -7,7 +7,7 @@ import TextFormField from "../TextFormField";
 import { Button } from "@mui/material";
 import useStatus from "hooks/useStatus";
 import raxios from "utils/raxios";
-import { GET_USERS_ENDPOINT } from "utils/endpoints";
+import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
 import { useStatusType } from "utils/types";
 import { LoadingButton } from "@mui/lab";
 
@@ -52,11 +52,12 @@ const InviteUserForm = ({ onFinish }: InviteUserFormProps) => {
   const onSubmit = async (values: InviteUserFormSchemaType) => {
     try {
       setStatus({ loading: true, error: null });
-      await raxios.post(GET_USERS_ENDPOINT, {
+      await raxios.post(INVITE_USER_ENDPOINT, {
         name: values.firstName,
         familyName: values.lastName,
         email: values.email,
       });
+      onFinish();
     } catch (error) {
       setStatus({
         loading: false,
