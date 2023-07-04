@@ -1,6 +1,7 @@
 import { Table, flexRender } from "@tanstack/react-table";
 import cx from 'classnames';
 import styles from "./TableX.module.scss";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
 
 interface TableXProps<T extends object> {
  table: Table<T>;
@@ -10,13 +11,27 @@ const TableX = <T extends object>({table}:TableXProps<T>) => {
   return <table className={cx('table')}>
   <thead className={cx('table-thead')}>
     {table.getHeaderGroups().map((gr)=>{
-      return<tr key={gr.id}>
-      {gr.headers.map((header) => (
-        <th key={header.id} className={cx('table-th')}>
-         {flexRender(header.column.columnDef.header,header.getContext())}
-        </th>
-      ))}
-    </tr>
+      return (
+        <tr key={gr.id}>
+          {gr.headers.map((header) => {
+            const width = header.getSize() || DEFAULT_COL_WIDTH;
+            return (
+              <th
+                key={header.id}
+                className={cx("table-th")}
+                style={{
+                  width,
+                }}
+              >
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext()
+                )}
+              </th>
+            );
+          })}
+        </tr>
+      );
     })}
   </thead>
   <tbody>

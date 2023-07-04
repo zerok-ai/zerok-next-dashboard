@@ -23,3 +23,8 @@
     color:$grey-25;
     border-bottom: 1px solid $grey-900;
 }
+
+.table-td-center-item {
+  display: flex;
+  justify-content: center;
+}

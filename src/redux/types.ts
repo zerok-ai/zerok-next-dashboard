@@ -1,4 +1,4 @@
-interface UserProfileType {
+export interface UserProfileType {
   id: string;
   email: string;
   name: string;
@@ -13,7 +13,7 @@ export interface AuthType {
   error: null | string;
 }
 
-interface DrawerReduxType {
+export interface DrawerReduxType {
   isDrawerMinimized: boolean;
   activeLink: string | null;
 }

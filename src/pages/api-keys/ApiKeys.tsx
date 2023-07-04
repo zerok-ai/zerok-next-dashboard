@@ -30,6 +30,9 @@ import {
 } from "@mui/material";
 import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
 
+import cx from "classnames";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
+
 type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
 const ApiKeys = () => {
@@ -101,9 +104,11 @@ const ApiKeys = () => {
     return [
       colHelper.accessor("id", {
         header: "ID",
+        size: DEFAULT_COL_WIDTH * 3,
       }),
       colHelper.accessor("key", {
         header: "API Key",
+        size: DEFAULT_COL_WIDTH * 4,
         cell: (info) => {
           const key = info.getValue();
           return (

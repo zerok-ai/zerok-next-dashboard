@@ -1,3 +1,5 @@
+import { UserProfileType } from "redux/types";
+
 export const TOKEN_NAME = "token";
 
 export const DEFAULT_USER_PROFILE: UserProfileType = {
@@ -23,3 +25,5 @@ export const SPACE_TOKEN = 4;
 export const CLUSTER_STATES = {
   HEALTHY: "CS_HEALTHY",
 };
+
+export const DEFAULT_COL_WIDTH = 80;

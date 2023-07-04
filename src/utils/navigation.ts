@@ -15,7 +15,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
     icon: `${ICONS.plate}`,
     label: "Live Traces",
-    path: "/live-traces",
+    path: "/api-keys",
   },
   {
     icon: `${ICONS.code}`,
