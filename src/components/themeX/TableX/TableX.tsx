@@ -15,12 +15,13 @@ const TableX = <T extends object>({table}:TableXProps<T>) => {
         <tr key={gr.id}>
           {gr.headers.map((header) => {
             const width = header.getSize() || DEFAULT_COL_WIDTH;
+
             return (
               <th
                 key={header.id}
                 className={cx("table-th")}
                 style={{
-                  width,
+                  width: `${width}px`,
                 }}
               >
                 {flexRender(

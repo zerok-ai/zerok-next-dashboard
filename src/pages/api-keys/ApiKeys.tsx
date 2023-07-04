@@ -108,7 +108,7 @@ const ApiKeys = () => {
       }),
       colHelper.accessor("key", {
         header: "API Key",
-        size: DEFAULT_COL_WIDTH * 4,
+        size: DEFAULT_COL_WIDTH * 3,
         cell: (info) => {
           const key = info.getValue();
           return (
@@ -123,11 +123,17 @@ const ApiKeys = () => {
       }),
       colHelper.accessor("visible", {
         header: "Actions",
+        size: DEFAULT_COL_WIDTH * 1.5,
         cell: (info) => {
           const isVisible = info.getValue();
           const keyId = info.row.original.id;
           return (
-            <div className={styles["api-icons-container"]}>
+            <div
+              className={cx(
+                styles["api-icons-container"],
+                "table-td-center-item"
+              )}
+            >
               <VisibilityToggleButton
                 isVisibleDefault={isVisible}
                 name="toggle API key visibility"
