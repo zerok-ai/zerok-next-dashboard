@@ -1,0 +1,11 @@
+@import "styles/variables.module.scss";
+.container {
+    background-color: $grey-900;
+    width:fit-content;
+    padding:$sp-base;
+    border-radius: $sp-base;
+    font-weight: 500;
+    font-size: $font-xs + 1;
+    color:$grey-200;
+    text-transform: uppercase;
+}

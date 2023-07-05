@@ -5,6 +5,7 @@ import { DEFAULT_COL_WIDTH } from "utils/constants";
 
 interface TableXProps<T extends object> {
  table: Table<T>;
+ data: T[];
 }
 
 const TableX = <T extends object>({table}:TableXProps<T>) => {

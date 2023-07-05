@@ -3,7 +3,6 @@
 }
 
 .content-container {
-    margin-top: $sp-base * 5;
 }
 
 .services-btn {
@@ -13,7 +12,7 @@
 }
 
 .services-container {
-    padding-top: $sp-base * 10;
+    padding-top: $sp-base * 2;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     column-gap: $sp-base * 5;

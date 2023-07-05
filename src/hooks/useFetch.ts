@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import raxios from "utils/raxios";
 import { GenericObject } from "utils/types";
@@ -9,11 +9,11 @@ export const useFetch = <T>(url: string, accessor: string) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = async (endpoint: string = url) => {
     try {
       setLoading(true);
       setError(false);
-      const rdata = await raxios.get(url);
+      const rdata = await axios.get(url);
       setData(rdata.data.payload[accessor]);
     } catch {
     } finally {

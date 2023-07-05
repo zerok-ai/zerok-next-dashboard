@@ -11,7 +11,7 @@ const AuthFormCard = ({ children, title }: AuthFormCardProps) => {
       <div className={styles["logo-container"]}>
         <img src="/images/brand/zerok_logo_light.svg" alt="zerok_logo" />
       </div>
-      <h3>{title}</h3>
+      <h4>{title}</h4>
       {children}
     </main>
   );

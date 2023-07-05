@@ -182,7 +182,7 @@ const ApiKeys = () => {
       </div>
       <div className={styles["table-container"]}>
         {/* API keys table */}
-        <TableX table={table} />
+        <TableX table={table} data={detailedKeys} />
         {/* Delete key dialog */}
         <DialogX
           title="Delete API Key"
