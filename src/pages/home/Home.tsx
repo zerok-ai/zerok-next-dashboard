@@ -1,11 +1,10 @@
 import PrivateRoute from "components/PrivateRoute";
 import styles from "./Home.module.scss";
 import PageLayout from "components/layouts/PageLayout";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import useStatus from "hooks/useStatus";
-import raxios from "utils/raxios";
 import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
@@ -50,9 +49,9 @@ const Home = () => {
     <div>
       <h3 className="page-title">Health</h3>
       <div className={styles["content-container"]}>
-        <Button variant="contained" className={styles["services-btn"]}>
+        {/* <Button variant="contained" className={styles["services-btn"]}>
           All services
-        </Button>
+        </Button> */}
         <div className={styles["services-container"]}>
           {!!services.length ? (
             services.map((sv) => {

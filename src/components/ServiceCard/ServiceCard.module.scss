@@ -9,7 +9,9 @@
     flex-direction: column;
     row-gap: $sp-base * 5;
     position: relative;
-  
+    a {
+       width: fit-content;
+    }
 }
 
 .item-label {
@@ -19,6 +21,11 @@
 }
 
 .namespace {}
+
+.service-name-container {
+    display: inline-block;
+    width:fit-content;
+}
 
 .service-name, .service-namespace {
     color:$white;

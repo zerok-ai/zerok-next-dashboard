@@ -45,7 +45,8 @@ const MainDrawer = () => {
         {drawerHeader}
         <nav className={styles["navigation-container"]}>
           {NAV_LINKS_1.map((nav) => {
-            const activeLink = router.asPath === nav.path;
+            console.log(router);
+            const activeLink = router.pathname === nav.path;
             return (
               <NavigationItem nav={nav} key={nav.path} active={activeLink} />
             );
