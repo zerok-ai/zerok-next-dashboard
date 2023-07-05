@@ -1,4 +1,4 @@
-export const ICON_BASE_PATH = "images/icons/";
+export const ICON_BASE_PATH = "/images/icons";
 export const ICONS = {
   "chart-up": "chart-up.svg",
   bell: "bell.svg",

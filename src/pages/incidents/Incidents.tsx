@@ -17,6 +17,8 @@ import { getRelativeTime } from "utils/dateHelpers";
 import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
+import Link from "next/link";
+import { trimString } from "utils/functions";
 
 const IncidentsPage = () => {
   const [page, setPage] = useState(1);
@@ -39,18 +41,15 @@ const IncidentsPage = () => {
             first_seen,
             last_seen,
             issue_id,
-            source,
-            destination,
           } = info.row.original;
           return (
             <div className={styles["incident-container"]}>
-              <div className={styles['incident-title-container']}>
-                <p className={styles["incident-title"]}>{issue_title}</p>
-                <div className={styles["incident-path-container"]}>
-                  <ChipX label={source} />
-                  <span> ———&gt; </span>
-                  <ChipX label={destination} />
-                </div>
+              <div className={styles["incident-title-container"]}>
+                <Link href={`/incidents/${issue_id}`} className={"hover-link"}>
+                  <p className={styles["incident-title"]}>
+                    {trimString(issue_title, 100)}
+                  </p>
+                </Link>
               </div>
               <p className={styles["incident-description"]}>
                 <em>Error description</em>
@@ -76,18 +75,38 @@ const IncidentsPage = () => {
           );
         },
       }),
+      helper.accessor("source", {
+        header: "Path",
+        size: DEFAULT_COL_WIDTH,
+        cell: (info) => {
+          const { source, destination } = info.row.original;
+          return (
+            <div className={styles["incident-path-container"]}>
+              <ChipX label={source} />
+              <span> ———&gt; </span>
+              <ChipX label={destination} />
+            </div>
+          );
+        },
+      }),
       // Velocity
       helper.accessor("velocity", {
         header: "Velocity",
+        size: DEFAULT_COL_WIDTH / 2,
       }),
       // Total events
       helper.accessor("total_count", {
         header: "Total events",
+        size: DEFAULT_COL_WIDTH / 2,
       }),
       // Source / destination
-      helper.accessor("source", { header: "Source" }),
+      helper.accessor("source", {
+        header: "Source",
+        size: DEFAULT_COL_WIDTH / 2,
+      }),
       helper.accessor("destination", {
         header: "Destination",
+        size: DEFAULT_COL_WIDTH / 2,
       }),
     ];
   }, [incidents]);

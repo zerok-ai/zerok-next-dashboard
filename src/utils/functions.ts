@@ -72,3 +72,10 @@ export function convertNanoToMilliSeconds(value: number | null) {
   }
   return "NA";
 }
+
+
+export const trimString = (str: string, length: number) => {
+  if (str.length > length) {
+    return str.substring(0, length) + "...";
+  } else return str;
+};
