@@ -68,7 +68,7 @@ export const getFormattedServiceName = (nameStr: string) => {
 export function convertNanoToMilliSeconds(value: number | null) {
   if (value != null) {
     let millis = parseFloat((value / 1000000).toFixed(2));
-    return `${millis}ms`;
+    return `${millis} ms`;
   }
   return "NA";
 }

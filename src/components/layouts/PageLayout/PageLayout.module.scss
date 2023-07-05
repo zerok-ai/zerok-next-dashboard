@@ -1,8 +1,8 @@
 @import "styles/variables.module.scss";
 .container {
   min-height: 100vh;
-  width: 100vw;
   display: flex;
+
 }
 
 .drawer-container {
@@ -29,4 +29,5 @@
 .page-content {
   flex: 1;
   padding:6 * $sp-base;
+  max-width: calc(100vw - $main-drawer-width-mini);
 }

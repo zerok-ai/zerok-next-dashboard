@@ -988,7 +988,7 @@
                     "p99": 81366394
                 },
                 "http_req_throughput_in": 2e-12,
-                "http_error_rate_in": 0,
+                "http_error_rate_in": 4,
                 "inbound_conns": 1.6286e-8,
                 "outbound_conns": 1.7056e-8
             },

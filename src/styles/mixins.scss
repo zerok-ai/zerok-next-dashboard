@@ -19,9 +19,22 @@
   }
 }
 
+@mixin icon-xs {
+  width: 5 * $sp-base;
+  height: 5 * $sp-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  > img {
+    width: 3 * $sp-base;
+    height: 3 * $sp-base;
+  }
+}
+
 @mixin remove-icon-btn-styles {
   border: none;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   &:hover {
     border: none;
   }

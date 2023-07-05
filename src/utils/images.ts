@@ -8,6 +8,8 @@ export const ICONS = {
   puzzle: "puzzle.svg",
   code: "code.svg",
   refresh: "refresh.svg",
+  minus: "minus.svg",
+  world: "world.svg",
 };
 
 export const ZEROK_MINIMAL_LOGO_LIGHT =
