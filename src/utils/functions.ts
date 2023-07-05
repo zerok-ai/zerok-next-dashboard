@@ -78,3 +78,10 @@ export const trimString = (str: string, length: number) => {
     return str.substring(0, length) + "...";
   } else return str;
 };
+
+export function roundToTwoDecimals(value: number) {
+  if (value != null) {
+    return parseFloat(value.toFixed(2));
+  }
+  return "NA";
+}

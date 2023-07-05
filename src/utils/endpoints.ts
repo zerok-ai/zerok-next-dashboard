@@ -20,6 +20,8 @@ export const INVITE_USER_ENDPOINT = `/v1/u/user/invite`;
 
 export const SET_USER_PASSWORD_ENDPOINT = `/v1/u/user/invite/set`;
 
+export const LIST_SERVICES_ENDPOINT_V2 = `/v1/u/cluster/{id}/service/list?st=-5m`;
+
 export const LIST_SERVICES_ENDPOINT = `/services.json`;
 
 export const LIST_INCIDENTS_ENDPOINT = `/incidents.json`;

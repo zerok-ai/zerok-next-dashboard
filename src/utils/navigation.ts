@@ -41,3 +41,8 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
     path: "/alerts",
   },
 ];
+
+
+export const PATH_TO_LABEL = {
+  incidents: "Incidents",
+};

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";
 import useStatus from "hooks/useStatus";
-import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
+import { LIST_SERVICES_ENDPOINT, LIST_SERVICES_ENDPOINT_V2 } from "utils/endpoints";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import axios from "axios";
@@ -14,6 +14,7 @@ import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import ServiceCard from "components/ServiceCard";
 import { nanoid } from "@reduxjs/toolkit";
 import { getNamespace } from "utils/functions";
+import raxios from "utils/raxios";
 
 const Home = () => {
   const [services, setServices] = useState<ServiceDetail[]>([]);
@@ -24,7 +25,9 @@ const Home = () => {
     if (!selectedCluster) return;
     try {
       setStatus({ loading: true, error: null });
-      const rdata = await axios.get(LIST_SERVICES_ENDPOINT);
+      const rdata = await axios.get(
+        LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster)
+      );
       const totalServices = rdata.data.payload.results as ServiceDetail[];
       if (!!totalServices.length) {
         setServices(

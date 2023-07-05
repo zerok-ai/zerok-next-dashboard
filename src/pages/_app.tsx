@@ -7,6 +7,10 @@ import "slick-carousel/slick/slick-theme.css";
 import "styles/apex-chart.scss";
 import "styles/react-table.scss";
 
+// react-flow
+import 'reactflow/dist/style.css';
+import 'styles/react-flow.scss'
+
 // custom styles
 import "styles/globals.scss";
 import "styles/utils.scss"

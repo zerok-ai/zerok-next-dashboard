@@ -2,10 +2,10 @@ import MainDrawer from "components/MainDrawer";
 import styles from "./PageLayout.module.scss";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import { useDispatch, useSelector } from "redux/store";
-import { clusterSelector, getClusters } from "redux/cluster";
+import { clusterSelector } from "redux/cluster";
 import { CircularProgress } from "@mui/material";
-import { useEffect } from "react";
 import ClusterRefreshButton from "components/ClusterRefreshButton";
+// import BreadcrumbX from "components/themeX/BreadcrumbX";
 
 interface PageLayout {
   children: React.ReactNode;
@@ -25,6 +25,7 @@ const PageLayout = ({ children }: PageLayout) => {
           <ClusterRefreshButton />
         </div>
         <div className={styles["page-content"]}>
+          {/* <BreadcrumbX /> */}
           {clusters.loading ? <CircularProgress /> : children}
         </div>
       </div>

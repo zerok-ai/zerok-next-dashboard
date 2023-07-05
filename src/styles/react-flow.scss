@@ -1,0 +1,32 @@
+@import "variables.module.scss";
+
+.react-flow__node-default {
+  background-color: $grey-950;
+  border: 1px solid $grey-600;
+  color: $grey-25;
+}
+
+.react-flow__panel {
+  display: flex;
+  column-gap: $sp-base;
+  button {
+    background-color: $grey-900;
+    color: $grey-600;
+    border: 1px solid $grey-600;
+  }
+}
+
+.react-flow__edge {
+  path {
+    stroke: $grey-600;
+  }
+}
+
+.react-flow__edge-path {
+    stroke-width:2px;
+}
+
+.react-flow__handle {
+    background-color:$grey-600;
+    border:none;
+}
