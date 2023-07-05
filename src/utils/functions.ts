@@ -58,7 +58,6 @@ export const stripNS = (nameStr: string) => {
 export const getFormattedServiceName = (nameStr: string) => {
   try {
     let namesObj = JSON.parse(nameStr);
-    console.log({ namesObj, nameStr });
     nameStr = stripNS(namesObj[0]);
     return nameStr;
   } catch (err) {}

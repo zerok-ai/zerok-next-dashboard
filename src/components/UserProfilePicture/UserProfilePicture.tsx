@@ -9,7 +9,6 @@ const UserProfilePicture = ({ name }: UserProfilePictureProps) => {
     ? name
         .split(" ")
         .map((word) => {
-          console.log({ word });
           return word[0];
         })
         .join("")

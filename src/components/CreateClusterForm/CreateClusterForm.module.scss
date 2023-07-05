@@ -1,9 +1,15 @@
 @import "styles/variables.module.scss";
 
+.container {
+  padding-bottom: $sp-base * 4;
+  width: 700px;
+}
+
 .step-content {
   display: flex;
   flex-direction: column;
   row-gap: $sp-base * 4;
+  
 }
 
 .step-2 {

@@ -4,11 +4,13 @@ import styles from "./MainDrawer.module.scss";
 import cssVars from "styles/variables.module.scss";
 import { ZEROK_LOGO_LIGHT, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import { useMemo } from "react";
-import { NAV_LINKS_1 } from "utils/navigation";
+import { NAV_LINKS_1, NAV_LINKS_2 } from "utils/navigation";
 import NavigationItem from "components/NavigationItem";
 import { useRouter } from "next/router";
 import { StyledMainDrawer } from "./MainDrawer.utils";
 import ClusterSelector from "components/ClusterSelector";
+import { Divider } from "@mui/material";
+import { DrawerNavItemType } from "utils/types";
 
 const MainDrawer = () => {
   const drawer = useSelector((state) => state.drawer);
@@ -33,6 +35,16 @@ const MainDrawer = () => {
   };
 
   const drawerHeader = useMemo(() => <DrawerHeader />, [isDrawerMinimized]);
+
+  const renderLinks = (links:DrawerNavItemType[])=>{
+    return links.map((nav) => {
+      const isHomeRoute = router.asPath === "/";
+      const activeLink = isHomeRoute ? nav.path === router.asPath : nav.path.includes(router.asPath.split('/')[1]);
+      return (
+        <NavigationItem nav={nav} key={nav.path} active={activeLink} />
+      );
+    })
+  }
   return (
     <StyledMainDrawer
       open={isDrawerMinimized}
@@ -44,14 +56,9 @@ const MainDrawer = () => {
       <div>
         {drawerHeader}
         <nav className={styles["navigation-container"]}>
-          {NAV_LINKS_1.map((nav) => {
-            const isHomeRoute = router.asPath === "/";
-            console.log(router.asPath.split('/')[1])
-            const activeLink = isHomeRoute ? nav.path === router.asPath : nav.path.includes(router.asPath.split('/')[1]);
-            return (
-              <NavigationItem nav={nav} key={nav.path} active={activeLink} />
-            );
-          })}
+          {renderLinks(NAV_LINKS_1)}
+          <Divider />
+          {renderLinks(NAV_LINKS_2)}
         </nav>
       </div>
     </StyledMainDrawer>

@@ -19,6 +19,7 @@ import { DEFAULT_COL_WIDTH } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
 import { trimString } from "utils/functions";
+import { nanoid } from "@reduxjs/toolkit";
 
 const IncidentsPage = () => {
   const [page, setPage] = useState(1);
@@ -103,6 +104,7 @@ const IncidentsPage = () => {
       helper.accessor("source", {
         header: "Source",
         size: DEFAULT_COL_WIDTH / 2,
+        id:nanoid()
       }),
       helper.accessor("destination", {
         header: "Destination",

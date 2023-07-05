@@ -9,7 +9,7 @@ const IncidentDetailPage = () => {
     <div>
       <Fragment>
         <Head>
-          <title>ZeroK Dashboard | Incidents Page</title>
+          <title>ZeroK Dashboard | Incident Detail</title>
         </Head>
       </Fragment>
       <h3 className="page-title">Exception checkout</h3>
