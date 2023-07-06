@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
+import { DrawerReduxType } from "./types";
 
 const initialState: DrawerReduxType = {
   isDrawerMinimized: false,

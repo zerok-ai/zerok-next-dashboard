@@ -151,7 +151,7 @@ const Users = () => {
         </Button>
       </div>
       <div className={styles["table-container"]}>
-        <TableX table={table} />
+        <TableX table={table} data={users} />
       </div>
       <ModalX
         isOpen={isFormOpen}
