@@ -91,6 +91,7 @@ $default-line-height:24px;
 $line-height-small:16px;
 $button-height-default:40px;
 $header-height:60px;
+$incident-drawer-width:320px;
 
 // BORDER RADIUS
 $br-xs:2px;
@@ -104,6 +105,7 @@ $font-xs: 10px;
 $font-sm: 12px;
 $font-md: 14px;
 $font-lg: 16px;
+$font-xl: 18px;
 
 // BREAKPOINTS
 $bp-laptop:1376px;
@@ -176,8 +178,13 @@ $header-width:60px;
     buttonHeightDefault:$button-height-default;
     mainDrawerWidthFull:$main-drawer-width-full;
     mainDrawerWidthMini:$main-drawer-width-mini;
+    incidentDrawerWidth:$incident-drawer-width;
     // spacing
     spXS:$sp-xs;
+    // font sizes
+    fontXS:$font-xs;
+    fontLG:$font-lg;
+    fontXL:$font-xl;
 }
 
 

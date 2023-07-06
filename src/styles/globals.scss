@@ -82,3 +82,8 @@ a {
   border-color:$grey-800;
 }
 
+
+.MuiTabs-indicator {
+  display: "none";
+  height: 0;
+}
