@@ -19,21 +19,24 @@ import {
   SpanDetailDrawer,
   SpanDrawerButton,
 } from "./IncidentDetails.utils";
+import { LIST_INCIDENTS_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
 
 const IncidentDetailPage = () => {
   const {
     loading: incidentLoading,
     error: incidentError,
     data: incidentData,
-  } = useFetch<IncidentDetail>("/incident.json", "issues");
+    fetchData: fetchIncidentData,
+  } = useFetch<IncidentDetail>("issues");
 
   const {
     loading: spanLoading,
     error: spanError,
     data: spanData,
-  } = useFetch<SpanDetail>("/spans.json", "spans");
+    fetchData: fetchSpanData,
+  } = useFetch<SpanDetail>("spans");
+
   const router = useRouter();
-  const incident = incidentData[0];
   const incidentId = router.query.id;
 
   const [isMapMinimized, setIsMapMinimized] = useState(true);
@@ -42,14 +45,27 @@ const IncidentDetailPage = () => {
   const [isSpanDrawerOpen, setIsSpanDrawerOpen] = useState(false);
   const toggleSpanDrawer = () => setIsSpanDrawerOpen(!isSpanDrawerOpen);
 
+  const [spans, setSpans] = useState<SpanDetail[]>([]);
+
   useEffect(() => {
     if (router.isReady && !incidentId) {
       router.push("/incidents");
+    } else {
+      fetchIncidentData(LIST_INCIDENTS_ENDPOINT);
+      fetchSpanData(LIST_SPANS_ENDPOINT);
     }
   }, [incidentId, router]);
 
-  console.log({ spanData });
-
+  const getSpans = (): SpanDetail[] => {
+    if (!Object.keys(spanData)) return [];
+    console.log({ spanData });
+    // const parentSpan =
+    return spanData;
+  };
+  useEffect(() => {
+    getSpans();
+  }, [spanData]);
+  const incident = incidentData[0];
   return (
     <div>
       <Fragment>

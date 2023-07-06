@@ -25,3 +25,9 @@ export const LIST_SERVICES_ENDPOINT_V2 = `/v1/u/cluster/{id}/service/list?st=-5m
 export const LIST_SERVICES_ENDPOINT = `/services.json`;
 
 export const LIST_INCIDENTS_ENDPOINT = `/incidents.json`;
+
+export const GET_INCIDENT_ENDPOINT = `/incident.json`;
+
+export const LIST_SPANS_ENDPOINT = `/spans.json`;
+
+export const GET_SPAN_ENDPOINT = `/span.json`;

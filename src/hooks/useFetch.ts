@@ -3,17 +3,17 @@ import { useEffect, useState } from "react";
 import raxios from "utils/raxios";
 import { GenericObject } from "utils/types";
 
-export const useFetch = <T>(url: string, accessor: string) => {
+export const useFetch = <T>(accessor: string, url?: string) => {
   // @TODO - add generics here to get  better type detection
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const fetchData = async (endpoint: string = url) => {
+  const fetchData = async (endpoint: string) => {
     try {
       setLoading(true);
       setError(false);
-      const rdata = await axios.get(url);
+      const rdata = await axios.get(endpoint);
       setData(rdata.data.payload[accessor]);
     } catch {
     } finally {
@@ -22,7 +22,7 @@ export const useFetch = <T>(url: string, accessor: string) => {
   };
 
   useEffect(() => {
-    fetchData();
+    if (url) fetchData(url);
   }, [url]);
   return { data, loading, error, fetchData };
 };
