@@ -27,7 +27,7 @@ const IncidentsPage = () => {
     loading,
     error,
     data: incidents,
-  } = useFetch<IncidentDetail>(LIST_INCIDENTS_ENDPOINT, "issues");
+  } = useFetch<IncidentDetail>("issues", LIST_INCIDENTS_ENDPOINT);
 
   const helper = createColumnHelper<IncidentDetail>();
 

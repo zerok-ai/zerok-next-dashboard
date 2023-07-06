@@ -20,14 +20,7 @@ import VisibilityToggleButton from "components/VisibilityToggleButton";
 import CodeBlock from "components/CodeBlock";
 import raxios from "utils/raxios";
 import TableX from "components/themeX/TableX";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
 
 import cx from "classnames";
@@ -38,8 +31,8 @@ type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
 const ApiKeys = () => {
   const { loading, error, data, fetchData } = useFetch<ApiKeyHidden>(
-    APIKEYS_ENDPOINT,
-    "apikeys"
+    "apikeys",
+    APIKEYS_ENDPOINT
   );
 
   const [detailedKeys, setDetailedKeys] = useState<ApiKeyDetailWithToggle[]>(
@@ -96,7 +89,7 @@ const ApiKeys = () => {
   const createApiKey = async () => {
     try {
       await raxios.get(APIKEY_CREATE_ENDPOINT);
-      fetchData();
+      fetchData(APIKEYS_ENDPOINT);
     } catch (err) {}
   };
 
@@ -110,7 +103,7 @@ const ApiKeys = () => {
       }),
       colHelper.accessor("key", {
         header: "API Key",
-        size: DEFAULT_COL_WIDTH * 3,
+        size: DEFAULT_COL_WIDTH * 2.5,
         cell: (info) => {
           const key = info.getValue();
           return (
@@ -125,17 +118,12 @@ const ApiKeys = () => {
       }),
       colHelper.accessor("visible", {
         header: "Actions",
-        size: DEFAULT_COL_WIDTH * 1.5,
+        size: DEFAULT_COL_WIDTH * 1,
         cell: (info) => {
           const isVisible = info.getValue();
           const keyId = info.row.original.id;
           return (
-            <div
-              className={cx(
-                styles["api-icons-container"],
-                "table-td-center-item"
-              )}
-            >
+            <div className={cx(styles["api-icons-container"])}>
               <VisibilityToggleButton
                 isVisibleDefault={isVisible}
                 name="toggle API key visibility"

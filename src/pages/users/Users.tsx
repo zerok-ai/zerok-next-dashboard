@@ -29,7 +29,7 @@ const Users = () => {
     error,
     data: users,
     fetchData,
-  } = useFetch<UserDetail>(GET_USERS_ENDPOINT, "users");
+  } = useFetch<UserDetail>("users", GET_USERS_ENDPOINT);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
@@ -162,7 +162,7 @@ const Users = () => {
           <InviteUserForm
             onFinish={() => {
               toggleForm();
-              fetchData();
+              fetchData(GET_USERS_ENDPOINT);
             }}
           />
         </div>
