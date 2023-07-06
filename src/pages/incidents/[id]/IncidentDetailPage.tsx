@@ -19,7 +19,12 @@ import {
   SpanDetailDrawer,
   SpanDrawerButton,
 } from "./IncidentDetails.utils";
-import { LIST_INCIDENTS_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
+import {
+  GET_SPAN_ENDPOINT,
+  LIST_INCIDENTS_ENDPOINT,
+  LIST_SPANS_ENDPOINT,
+} from "utils/endpoints";
+import SpanCard from "components/SpanCard";
 
 const IncidentDetailPage = () => {
   const {
@@ -36,6 +41,15 @@ const IncidentDetailPage = () => {
     fetchData: fetchSpanData,
   } = useFetch<SpanResponse>("spans");
 
+  const {
+    loading: singleSpanLoading,
+    error: singleSpanError,
+    data: singleSpan,
+    fetchData: fetchSingleSpan,
+  } = useFetch<SpanDetail>("spans");
+
+  const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
+
   const router = useRouter();
   const incidentId = router.query.id;
 
@@ -45,7 +59,7 @@ const IncidentDetailPage = () => {
   const [isSpanDrawerOpen, setIsSpanDrawerOpen] = useState(false);
   const toggleSpanDrawer = () => setIsSpanDrawerOpen(!isSpanDrawerOpen);
 
-  const [spans, setSpans] = useState<SpanDetail[]>([]);
+  const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
   useEffect(() => {
     if (router.isReady && !incidentId) {
@@ -71,28 +85,54 @@ const IncidentDetailPage = () => {
       formattedSpans.push(span);
     }
 
-    const sortedSpans = (spans: SpanDetail[], parentSpan: SpanDetail) => {
+    const buildSpanTree = (spans: SpanDetail[], parentSpan: SpanDetail) => {
       count++;
-      if (!spans.length) return;
+      if (!spans.length) return parentSpan;
       const childrenSpan = spans.filter(
         (span) => span.parent_span_id === parentSpan.span_id
       );
       if (childrenSpan.length) {
         parentSpan.children = childrenSpan;
         childrenSpan.map((span) => {
-          sortedSpans(spans, span);
+          buildSpanTree(spans, span);
         });
       }
       return parentSpan;
     };
 
-    if (rootNode) console.log({ count }, sortedSpans(formattedSpans, rootNode));
-    return spanData;
+    if (rootNode) {
+      setSpanTree(buildSpanTree(formattedSpans, rootNode));
+    }
   };
   useEffect(() => {
     getSpans();
   }, [spanData]);
+
+  useEffect(() => {
+    if (spanTree) {
+      setSelectedSpan(spanTree.span_id as string);
+      fetchSingleSpan(GET_SPAN_ENDPOINT);
+    }
+  }, [spanTree]);
   const incident = !!incidentData ? incidentData[0] : null;
+
+  const renderSpanTree = (parentSpan: SpanDetail) => {
+    const active = selectedSpan === parentSpan.span_id;
+    return (
+      <div className={styles["span-tree-container"]}>
+        <SpanCard
+          span={parentSpan}
+          active={active}
+          onClick={(id) => setSelectedSpan(id)}
+        />
+        {!!parentSpan.children?.length &&
+          parentSpan.children.map((span) => renderSpanTree(span))}
+      </div>
+    );
+  };
+
+  console.log({ singleSpan, spanData, incidentData });
+
   return (
     <div>
       <Fragment>
@@ -124,12 +164,13 @@ const IncidentDetailPage = () => {
             toggleDrawer={toggleSpanDrawer}
           />
           {/* Drawer for spans */}
-          <SpanDetailDrawer isOpen={isSpanDrawerOpen}>
-            <h4>Draweeeeer</h4>
-            <div className={styles["drawer-container"]}>
-              <h1>wheeee</h1>
-            </div>
-          </SpanDetailDrawer>
+          {spanTree && (
+            <SpanDetailDrawer isOpen={isSpanDrawerOpen}>
+              <div className={styles["span-tree-container"]}>
+                {renderSpanTree(spanTree)}
+              </div>
+            </SpanDetailDrawer>
+          )}
           <IncidentDetailMap
             isMinimized={isMapMinimized}
             toggleSize={toggleMapMinimized}

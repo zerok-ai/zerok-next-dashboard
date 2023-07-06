@@ -10,7 +10,20 @@
                 "protocol": "HTTP",
                 "status": "200",
                 "parent_span_id": "9204ee3ea7976e31",
-                "workload_id_list": []
+                "workload_id_list": [],
+                "timestamp": "2023-06-25T02:50:15.572639Z"
+            },
+            "a799204ee3e76e32": {
+                "source": "sofa-shop/product",
+                "destination": "sofa-shop/analytics",
+                "error": false,
+                "metadata": "",
+                "latency_ms": 542.5754,
+                "protocol": "HTTP",
+                "status": "200",
+                "parent_span_id": "a799204ee3e76e31",
+                "workload_id_list": [],
+                "timestamp": "2023-06-25T02:50:15.572639Z"
             },
             "9204ee3ea7976e31": {
                 "source": "sofa-shop/frontend",
@@ -33,6 +46,18 @@
                 "protocol": "HTTP",
                 "status": "200",
                 "parent_span_id": "9204ee3ea7976e31",
+                "workload_id_list": [],
+                "collection_ts": "TBD"
+            },
+            "9204ee3ea7976e33": {
+                "source": "sofa-shop/backend",
+                "destination": "sofa-shop/database",
+                "error": false,
+                "metadata": "",
+                "latency_ms": 542.5754,
+                "protocol": "HTTP",
+                "status": "200",
+                "parent_span_id": "9204ee3ea7976e32",
                 "workload_id_list": [],
                 "collection_ts": "TBD"
             },
