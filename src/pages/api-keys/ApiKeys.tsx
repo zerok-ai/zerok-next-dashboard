@@ -30,7 +30,7 @@ import DialogX from "components/themeX/DialogX";
 type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
 const ApiKeys = () => {
-  const { loading, error, data, fetchData } = useFetch<ApiKeyHidden>(
+  const { loading, error, data, fetchData } = useFetch<ApiKeyHidden[]>(
     "apikeys",
     APIKEYS_ENDPOINT
   );

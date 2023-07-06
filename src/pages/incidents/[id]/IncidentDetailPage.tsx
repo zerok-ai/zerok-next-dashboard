@@ -4,7 +4,7 @@ import PageLayout from "components/layouts/PageLayout";
 import { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
-import { IncidentDetail, SpanDetail } from "utils/types";
+import { IncidentDetail, SpanDetail, SpanResponse } from "utils/types";
 import { Skeleton } from "@mui/material";
 import IncidentDetailMap from "components/IncidentDetailMap";
 
@@ -27,14 +27,14 @@ const IncidentDetailPage = () => {
     error: incidentError,
     data: incidentData,
     fetchData: fetchIncidentData,
-  } = useFetch<IncidentDetail>("issues");
+  } = useFetch<IncidentDetail[]>("issues");
 
   const {
     loading: spanLoading,
     error: spanError,
     data: spanData,
     fetchData: fetchSpanData,
-  } = useFetch<SpanDetail>("spans");
+  } = useFetch<SpanResponse>("spans");
 
   const router = useRouter();
   const incidentId = router.query.id;
@@ -55,17 +55,44 @@ const IncidentDetailPage = () => {
       fetchSpanData(LIST_SPANS_ENDPOINT);
     }
   }, [incidentId, router]);
+  let count = 0;
+  const getSpans = () => {
+    if (!spanData) return [];
+    const topKeys = Object.keys(spanData);
+    let rootNode: null | SpanDetail = null;
+    let formattedSpans: SpanDetail[] = [];
+    for (let i = 0; i < topKeys.length; i++) {
+      count++;
+      const key = topKeys[i];
+      const span = { ...spanData[key], span_id: key, children: [] };
+      if (!topKeys.includes(span.parent_span_id)) {
+        rootNode = span;
+      }
+      formattedSpans.push(span);
+    }
 
-  const getSpans = (): SpanDetail[] => {
-    if (!Object.keys(spanData)) return [];
-    console.log({ spanData });
-    // const parentSpan =
+    const sortedSpans = (spans: SpanDetail[], parentSpan: SpanDetail) => {
+      count++;
+      if (!spans.length) return;
+      const childrenSpan = spans.filter(
+        (span) => span.parent_span_id === parentSpan.span_id
+      );
+      if (childrenSpan.length) {
+        parentSpan.children = childrenSpan;
+        childrenSpan.map((span) => {
+          sortedSpans(spans, span);
+        });
+      }
+      return parentSpan;
+    };
+
+    if (rootNode) console.log({ count }, sortedSpans(formattedSpans, rootNode));
     return spanData;
   };
   useEffect(() => {
     getSpans();
   }, [spanData]);
-  const incident = incidentData[0];
+  const incident = !!incidentData ? incidentData[0] : null;
   return (
     <div>
       <Fragment>
