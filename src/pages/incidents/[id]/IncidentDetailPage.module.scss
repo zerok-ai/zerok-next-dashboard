@@ -1,16 +1,89 @@
 @import "styles/variables.module.scss";
+
+.header {
+    h3 {
+        color:$white;
+    }
+}
 .container {
     display: flex;
     flex-direction: column;
-    height:calc(100vh - $header-height - $sp-base * 26);
+    min-height:calc(100vh - $header-height - $sp-base * 30);  
+}
+
+.drawer-container {
+    height:900px;
 }
 
 .map-container {
-    height:50%;
+    height:300px;
+    position: relative;
+    border:1px solid $grey-900;
+    border-radius: $sp-base * 2;
+    transition: all 0.2s ease;
 }
 
 .max-map-container {
     .map-container {
-        height:100%;
+        height:calc(100vh - $header-height - $sp-base * 30);  
     }
+}
+
+
+.incident-metadata-container {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+    span {
+        font-size: $font-sm;
+        color:$grey-200;
+        display: flex;
+        align-items: center;
+        column-gap: $sp-base;
+    }
+}
+
+.drawer-btn {
+    position: absolute;
+    top: $sp-base * 2;
+    left: 0;
+    z-index: 10000;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
+    height:44px;
+    width:24px;
+    padding:$sp-base * 3 $sp-base;
+    transition:all 0.2s ease-in-out;
+    border:1px solid $grey-700;
+    border-left: none;
+    &:hover,&:focus {
+        border-left: none;
+    }
+}
+.drawer-btn-open {
+    left:$incident-drawer-width;
+    
+}
+.drawer-btn-icon {
+    // font-size: $sp-base * 10;
+    color:$grey-50;
+}
+
+.drawer {
+    :global(.MuiDrawer-paper) {
+        border-right: 1px solid $grey-700;
+        width:$incident-drawer-width;
+        background-color: $bg-dark;
+        position: absolute;
+        overflow: auto;
+      }
+}
+
+.incident-info-container {
+    border-radius: 2 * $sp-base;
+    border: 1px solid  $grey-900;
+    margin-top: $sp-base * 4;
+    height: 600px;
+    padding:$sp-base * 5;
+    transition: all 0.2s ease;
 }

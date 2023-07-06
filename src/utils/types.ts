@@ -1,3 +1,5 @@
+import { HTTP_METHODS, SPAN_PROTOCOLS } from "./constants";
+
 export interface ChildrenType {
   children: React.ReactNode;
 }
@@ -49,30 +51,6 @@ export interface ServiceDetail {
   inbound_conns: number;
   outerHeight: number;
 }
-
-// {
-// 	"payload": {
-// 		"issues": [
-// 				{
-// 						"issue_id": "",
-// 						"issue_title": "Test1",
-// 						"scenario_id": "1",
-//             "scenario_version": "v1",
-
-//             "velocity": 2,
-//             "total_count": 2,
-
-//             "source": "source1",
-//             "destination": "destination1",
-//             "first_seen": "2023-06-20T17:50:15.572639Z",
-//             "last_seen": "2023-06-20T17:50:15.572639Z",
-//             "incidents": [
-//             	/* list of latest 5 incident_ids */
-//             ]
-//         }
-//     ]
-// }
-
 export interface IncidentDetail {
   issue_id: string;
   issue_title: string;
@@ -85,4 +63,35 @@ export interface IncidentDetail {
   first_seen: string;
   last_seen: string;
   incidents: string[];
+}
+export interface SpanDetail {
+  source: string;
+  destination: string;
+  error: boolean;
+  metadata: string;
+  latency_ms: number;
+  protocol: string;
+  status: string;
+  parent_span_id: string;
+  workload_id_list: string[];
+}
+
+export interface HttpRequestDetail {
+  req_path: string;
+  req_method: (typeof HTTP_METHODS)[number];
+  req_headers: GenericObject | string;
+  req_body: GenericObject | null;
+}
+
+export interface HttpResponseDetail {
+  resp_path: string;
+  resp_method: (typeof HTTP_METHODS)[number];
+  resp_headers: GenericObject | string;
+  resp_body: GenericObject | null;
+}
+
+export interface SpanMetadata {
+  protocol: (typeof SPAN_PROTOCOLS)[number];
+  request_payload: HttpRequestDetail;
+  response_payload: HttpRequestDetail;
 }
