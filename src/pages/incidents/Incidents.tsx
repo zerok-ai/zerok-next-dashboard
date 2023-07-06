@@ -27,7 +27,7 @@ const IncidentsPage = () => {
     loading,
     error,
     data: incidents,
-  } = useFetch<IncidentDetail>("issues", LIST_INCIDENTS_ENDPOINT);
+  } = useFetch<IncidentDetail[]>("issues", LIST_INCIDENTS_ENDPOINT);
 
   const helper = createColumnHelper<IncidentDetail>();
 
@@ -37,12 +37,8 @@ const IncidentsPage = () => {
         header: "Incident",
         size: DEFAULT_COL_WIDTH * 6,
         cell: (info) => {
-          const {
-            issue_title,
-            first_seen,
-            last_seen,
-            issue_id,
-          } = info.row.original;
+          const { issue_title, first_seen, last_seen, issue_id } =
+            info.row.original;
           return (
             <div className={styles["incident-container"]}>
               <div className={styles["incident-title-container"]}>
@@ -104,7 +100,7 @@ const IncidentsPage = () => {
       helper.accessor("source", {
         header: "Source",
         size: DEFAULT_COL_WIDTH / 2,
-        id:nanoid()
+        id: nanoid(),
       }),
       helper.accessor("destination", {
         header: "Destination",
@@ -115,7 +111,7 @@ const IncidentsPage = () => {
 
   const table = useReactTable<IncidentDetail>({
     columns,
-    data: incidents,
+    data: incidents || [],
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -128,7 +124,7 @@ const IncidentsPage = () => {
       </Fragment>
       <h3 className="page-title">Incidents</h3>
       <div className="page-content">
-        <TableX table={table} data={incidents} />
+        <TableX table={table} data={incidents || []} />
       </div>
     </div>
   );

@@ -74,7 +74,14 @@ export interface SpanDetail {
   status: string;
   parent_span_id: string;
   workload_id_list: string[];
+  span_id?: string;
+  children?: SpanDetail[];
 }
+
+export interface SpanResponse {
+  [x: string]: SpanDetail;
+}
+[];
 
 export interface HttpRequestDetail {
   req_path: string;

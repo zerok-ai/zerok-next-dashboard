@@ -29,7 +29,7 @@ const Users = () => {
     error,
     data: users,
     fetchData,
-  } = useFetch<UserDetail>("users", GET_USERS_ENDPOINT);
+  } = useFetch<UserDetail[]>("users", GET_USERS_ENDPOINT);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
@@ -133,7 +133,7 @@ const Users = () => {
   ];
 
   const table = useReactTable({
-    data: users,
+    data: users || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -151,7 +151,7 @@ const Users = () => {
         </Button>
       </div>
       <div className={styles["table-container"]}>
-        <TableX table={table} data={users} />
+        <TableX table={table} data={users || []} />
       </div>
       <ModalX
         isOpen={isFormOpen}

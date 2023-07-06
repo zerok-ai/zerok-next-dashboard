@@ -1,0 +1,48 @@
+{
+    "a799204ee3e76e31": {
+        "source": "sofa-shop/inventory",
+        "destination": "sofa-shop/product",
+        "error": false,
+        "metadata": "",
+        "latency_ms": 542.5754,
+        "protocol": "HTTP",
+        "status": "200",
+        "parent_span_id": "9204ee3ea7976e31",
+        "workload_id_list": []
+    },
+    "9204ee3ea7976e31": {
+        "source": "sofa-shop/frontend",
+        "destination": "sofa-shop/inventory",
+        "error": false,
+        "metadata": "",
+        "latency_ms": 542.5754,
+        "protocol": "HTTP",
+        "status": "200",
+        "parent_span_id": "e0e842d1b1a0c975",
+        "workload_id_list": [],
+        "collection_ts": "TBD"
+    },
+    "9204ee3ea7976e32": {
+        "source": "sofa-shop/frontend",
+        "destination": "sofa-shop/backend",
+        "error": false,
+        "metadata": "",
+        "latency_ms": 542.5754,
+        "protocol": "HTTP",
+        "status": "200",
+        "parent_span_id": "9204ee3ea7976e31",
+        "workload_id_list": [],
+        "collection_ts": "TBD"
+    },
+    "1a0c975e0e842d1b": {
+        "source": "sofa-shop/product",
+        "destination": "sofa-shop/cart",
+        "error": false,
+        "metadata": "",
+        "latency_ms": 542.5754,
+        "protocol": "HTTP",
+        "status": "200",
+        "parent_span_id": "a799204ee3e76e31",
+        "workload_id_list": []
+    }
+}
