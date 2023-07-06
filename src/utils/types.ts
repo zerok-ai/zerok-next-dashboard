@@ -76,6 +76,7 @@ export interface SpanDetail {
   workload_id_list: string[];
   span_id?: string;
   children?: SpanDetail[];
+  timestamp?: string;
 }
 
 export interface SpanResponse {

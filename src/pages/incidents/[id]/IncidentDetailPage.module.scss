@@ -76,6 +76,8 @@
         background-color: $bg-dark;
         position: absolute;
         overflow: auto;
+      padding:$sp-base * 3;
+
       }
 }
 
@@ -86,4 +88,10 @@
     height: 600px;
     padding:$sp-base * 5;
     transition: all 0.2s ease;
+}
+
+.span-tree-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 3;
 }
