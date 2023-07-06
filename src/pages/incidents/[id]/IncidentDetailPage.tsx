@@ -114,6 +114,12 @@ const IncidentDetailPage = () => {
       fetchSingleSpan(GET_SPAN_ENDPOINT);
     }
   }, [spanTree]);
+
+  useEffect(() => {
+    if (selectedSpan) {
+      fetchSingleSpan(GET_SPAN_ENDPOINT);
+    }
+  }, [selectedSpan]);
   const incident = !!incidentData ? incidentData[0] : null;
 
   const renderSpanTree = (parentSpan: SpanDetail) => {
