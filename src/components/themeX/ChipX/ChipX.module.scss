@@ -2,7 +2,7 @@
 .container {
     background-color: $grey-900;
     width:fit-content;
-    padding:$sp-base;
+    padding:$sp-base / 2 $sp-base * 3;
     border-radius: $sp-base;
     font-weight: 500;
     font-size: $font-xs + 1;

@@ -1,3 +1,4 @@
+"use client";
 import PrivateRoute from "components/PrivateRoute";
 import styles from "./IncidentDetailPage.module.scss";
 import PageLayout from "components/layouts/PageLayout";
@@ -9,9 +10,6 @@ import { Skeleton } from "@mui/material";
 import IncidentDetailMap from "components/IncidentDetailMap";
 
 import cx from "classnames";
-import { BsCodeSlash } from "react-icons/bs";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { getRelativeTime } from "utils/dateHelpers";
 import { useRouter } from "next/router";
 import {
   IncidentMetadata,
@@ -25,8 +23,13 @@ import {
   LIST_SPANS_ENDPOINT,
 } from "utils/endpoints";
 import SpanCard from "components/SpanCard";
+import { nanoid } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "redux/store";
+import { drawerSelector, minimizeDrawer } from "redux/drawer";
 
 const IncidentDetailPage = () => {
+  const { isDrawerMinimized } = useSelector(drawerSelector);
+  const dispatch = useDispatch();
   const {
     loading: incidentLoading,
     error: incidentError,
@@ -48,7 +51,7 @@ const IncidentDetailPage = () => {
     fetchData: fetchSingleSpan,
   } = useFetch<SpanDetail>("spans");
 
-  const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
+  const [selectedSpan, setSelectedSpan] = useState<SpanDetail | null>(null);
 
   const router = useRouter();
   const incidentId = router.query.id;
@@ -69,6 +72,13 @@ const IncidentDetailPage = () => {
       fetchSpanData(LIST_SPANS_ENDPOINT);
     }
   }, [incidentId, router]);
+
+  useEffect(() => {
+    if (isSpanDrawerOpen && !isDrawerMinimized) {
+      dispatch(minimizeDrawer());
+    }
+  }, [isSpanDrawerOpen]);
+
   let count = 0;
   const getSpans = () => {
     if (!spanData) return [];
@@ -110,7 +120,7 @@ const IncidentDetailPage = () => {
 
   useEffect(() => {
     if (spanTree) {
-      setSelectedSpan(spanTree.span_id as string);
+      setSelectedSpan(spanTree);
       fetchSingleSpan(GET_SPAN_ENDPOINT);
     }
   }, [spanTree]);
@@ -123,22 +133,19 @@ const IncidentDetailPage = () => {
   const incident = !!incidentData ? incidentData[0] : null;
 
   const renderSpanTree = (parentSpan: SpanDetail) => {
-    const active = selectedSpan === parentSpan.span_id;
+    const active = selectedSpan?.span_id === parentSpan.span_id;
     return (
-      <div className={styles["span-tree-container"]}>
+      <div className={styles["span-tree-container"]} key={nanoid()}>
         <SpanCard
           span={parentSpan}
           active={active}
-          onClick={(id) => setSelectedSpan(id)}
+          onClick={(selectedSpan) => setSelectedSpan(selectedSpan)}
         />
         {!!parentSpan.children?.length &&
           parentSpan.children.map((span) => renderSpanTree(span))}
       </div>
     );
   };
-
-  console.log({ singleSpan, spanData, incidentData });
-
   return (
     <div>
       <Fragment>
@@ -184,7 +191,7 @@ const IncidentDetailPage = () => {
         </div>
         {isMapMinimized && (
           <div className={styles["incident-info-container"]}>
-            <IncidentTabs />
+            <IncidentTabs selectedSpan={selectedSpan} />
           </div>
         )}
       </div>
