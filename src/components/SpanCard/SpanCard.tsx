@@ -9,7 +9,7 @@ import cx from "classnames";
 interface SpanCardProps {
   span: SpanDetail;
   active: boolean;
-  onClick: (spanId: string) => void;
+  onClick: (span: SpanDetail) => void;
 }
 
 const SpanCard = ({ span, active, onClick }: SpanCardProps) => {
@@ -17,7 +17,7 @@ const SpanCard = ({ span, active, onClick }: SpanCardProps) => {
     <div
       className={cx(styles["container"], active && styles["active"])}
       role="button"
-      onClick={() => onClick(span.span_id as string)}
+      onClick={() => onClick(span)}
     >
       <div className={styles["span-info"]}>
         <div className={styles["connector-container"]}>

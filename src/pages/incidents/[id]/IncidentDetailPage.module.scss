@@ -85,7 +85,7 @@
     border-radius: 2 * $sp-base;
     border: 1px solid  $grey-900;
     margin-top: $sp-base * 4;
-    height: 600px;
+    min-height: 320px;
     padding:$sp-base * 5;
     transition: all 0.2s ease;
 }
@@ -94,4 +94,24 @@
     display: flex;
     flex-direction: column;
     row-gap: $sp-base * 3;
+}
+
+.tabs-container {
+    margin-top: $sp-base * 4;
+}
+
+.tab-row {
+    display: flex;
+    column-gap: $sp-base * 8;
+    padding:$sp-base * 3 0;
+    border-bottom: 1px solid $grey-900;
+}
+
+.tab-row-label {
+    width:120px;
+    color:$grey-100;
+}
+
+.tab-row-value {
+    color:$white;
 }

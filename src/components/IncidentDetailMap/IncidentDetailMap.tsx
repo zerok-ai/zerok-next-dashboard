@@ -27,8 +27,8 @@ const IncidentDetailMap = ({
   toggleSize,
 }: IncidentDetailMapProps) => {
   const initialNodes = [
-    { id: "1", position: { x: 100, y: 50 }, data: { label: "1" } },
-    { id: "2", position: { x: 150, y: 100 }, data: { label: "2" } },
+    { id: "1", position: { x: 350, y: 50 }, data: { label: "1" } },
+    { id: "2", position: { x: 400, y: 100 }, data: { label: "2" } },
   ];
   const initialEdges = [
     {

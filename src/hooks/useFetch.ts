@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import objectPath from "object-path";
 import raxios from "utils/raxios";
 import { GenericObject } from "utils/types";
 
@@ -17,8 +18,10 @@ export const useFetch = <T>(
     try {
       setLoading(true);
       setError(false);
-      const rdata = await axios.get(endpoint);
-      setData(rdata.data.payload[accessor]);
+      const resp = await axios.get(endpoint);
+      const rdata = objectPath.get(resp.data.payload, accessor);
+      // console.log({ rdata });
+      setData(rdata);
     } catch {
     } finally {
       setLoading(false);

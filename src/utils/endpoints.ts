@@ -31,3 +31,5 @@ export const GET_INCIDENT_ENDPOINT = `/incident.json`;
 export const LIST_SPANS_ENDPOINT = `/spans.json`;
 
 export const GET_SPAN_ENDPOINT = `/span.json`;
+
+export const GET_SPAN_METADTA_ENDPOINT = `/rawdata.json`;

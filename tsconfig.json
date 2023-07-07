@@ -19,7 +19,7 @@
     "allowSyntheticDefaultImports": true,
     // custom config
     "noUnusedLocals": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "typeRoots": [
