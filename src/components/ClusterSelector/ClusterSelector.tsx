@@ -30,14 +30,14 @@ const ClusterSelector = () => {
         isDrawerMinimized && styles["minimized"]
       )}
     >
-      <InputLabel htmlFor="cluster-list">Cluster</InputLabel>
+      {/* <InputLabel htmlFor="cluster-list">Cluster</InputLabel> */}
       <Select
         id="cluster-list"
         value={selectedCluster}
         className={styles["select"]}
-        IconComponent={StyleIcon}
+        // IconComponent={StyleIcon}
         onChange={(val) => {
-          if (val.length) {
+          if (val && val.target && val.target.value) {
             dispatch(setSelectedCluster(val));
           }
         }}
