@@ -1,9 +1,8 @@
 @import "styles/variables.module.scss";
 .container {
-  width: 80%;
-  max-width: $max-form-width;
+  width: 450px;
   border-radius: $br-lg;
-  border: 1px solid rgba($primary-500, 0.5);
+  border: 1px solid rgba($primary-700, 0.3);
   margin: 0 auto;
   margin-top: 10vh;
   padding: $sp-xxl;
@@ -16,7 +15,7 @@
 }
 
 .logo-container {
-  width: 80%;
+  width: 50%;
   margin: $sp-xl auto;
   > img {
     width: 100%;
