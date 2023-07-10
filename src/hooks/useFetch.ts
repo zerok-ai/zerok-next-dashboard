@@ -18,7 +18,7 @@ export const useFetch = <T>(
     try {
       setLoading(true);
       setError(false);
-      const resp = await axios.get(endpoint);
+      const resp = await raxios.get(endpoint);
       const rdata = objectPath.get(resp.data.payload, accessor);
       // console.log({ rdata });
       setData(rdata);
