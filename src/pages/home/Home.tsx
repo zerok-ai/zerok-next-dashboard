@@ -28,7 +28,6 @@ const Home = () => {
       const rdata = await axios.get(
         LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster)
       );
-      console.log({ rdata });
       const totalServices = rdata.data.payload.results as ServiceDetail[];
       if (!!totalServices.length) {
         setServices(

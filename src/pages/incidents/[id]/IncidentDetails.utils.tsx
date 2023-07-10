@@ -168,7 +168,12 @@ const REQUEST_KEYS = [
     render: (val: string | null) => {
       const json = val ? JSON.parse(val) : null;
       return (
-        <DynamicReactJson src={json} name={false} displayDataTypes={false} />
+        <DynamicReactJson
+          src={json}
+          name={false}
+          displayDataTypes={false}
+          enableClipboard={false}
+        />
       );
     },
   },
@@ -177,7 +182,11 @@ const REQUEST_KEYS = [
     key: "request_payload.req_body",
     render: (val: string | null) => {
       const json = val ? JSON.parse(val) : null;
-      return json ? <DynamicReactJson src={json} enableClipboard /> : "null";
+      return json ? (
+        <DynamicReactJson src={json} enableClipboard={false} />
+      ) : (
+        "null"
+      );
     },
   },
 ];
@@ -199,7 +208,12 @@ const RESPONSE_KEYS = [
     render: (val: string | null) => {
       const json = val ? JSON.parse(val) : null;
       return (
-        <DynamicReactJson src={json} name={false} displayDataTypes={false} />
+        <DynamicReactJson
+          src={json}
+          name={false}
+          displayDataTypes={false}
+          enableClipboard={false}
+        />
       );
     },
   },
@@ -211,7 +225,7 @@ const RESPONSE_KEYS = [
       return json ? (
         <DynamicReactJson
           src={json}
-          enableClipboard
+          enableClipboard={false}
           name={false}
           displayDataTypes={false}
         />

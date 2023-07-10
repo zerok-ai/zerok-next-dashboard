@@ -23,7 +23,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   return (
     <div className={styles["container"]}>
       <ServiceCardStatusIcon status={isHealthy ? "healthy" : "error"} />
-      <Link href={`/incidents?service=${getFormattedServiceName(service.service)}`}>
+      <Link href={`/incidents?service=${encodeURIComponent(service.service)}`}>
         <div className={styles["service-name-container"]}>
           <p className={styles["service-name"]}>{formattedServiceName}</p>
           <p className={cx("label-medium", styles["service-namespace"])}>
@@ -41,7 +41,9 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           <span className={cx("label-small", styles["item-label"])}>
             Errors
           </span>
-          <p>{roundToTwoDecimals(toNumber(service.http_error_rate_in)) || "0"}</p>
+          <p>
+            {roundToTwoDecimals(toNumber(service.http_error_rate_in)) || "0"}
+          </p>
         </div>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>

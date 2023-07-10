@@ -24,6 +24,7 @@ interface IncidentDetailMapProps {
   toggleSize: () => void;
   spanData: SpanResponse | null;
   spanTree: SpanDetail | null;
+  onNodeClick: (span: SpanDetail) => void;
 }
 
 const IncidentDetailMap = ({
@@ -31,6 +32,7 @@ const IncidentDetailMap = ({
   toggleSize,
   spanData,
   spanTree,
+  onNodeClick,
 }: IncidentDetailMapProps) => {
   if (!spanData || !spanTree) {
     return (
@@ -62,6 +64,7 @@ const IncidentDetailMap = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         proOptions={proOptions}
+        onNodeClick={(event, node) => onNodeClick(node.data as SpanDetail)}
       >
         <Controls />
         <Background gap={12} size={1} />

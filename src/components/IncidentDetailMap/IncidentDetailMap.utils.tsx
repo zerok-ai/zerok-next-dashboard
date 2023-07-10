@@ -2,10 +2,15 @@ import { Edge, MarkerType, Node, Position } from "reactflow";
 import { GenericObject, SpanDetail, SpanResponse } from "utils/types";
 import cssVars from "styles/variables.module.scss";
 
-const getNodeFromSpan = (id: string, x: number, y: number): Node => {
+const getNodeFromSpan = (
+  id: string,
+  x: number,
+  y: number,
+  span: SpanDetail
+): Node => {
   return {
     id,
-    data: { label: id },
+    data: { label: id, ...span },
     position: { x, y },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
@@ -59,12 +64,12 @@ export const getNodesFromSpanTree = (
   const { source, destination } = span;
   if (!memo[source]) {
     memo[source] = true;
-    nodes.push(getNodeFromSpan(source, x, y));
+    nodes.push(getNodeFromSpan(source, x, y, span));
     x += 200;
   }
   if (!memo[destination]) {
     memo[destination] = true;
-    nodes.push(getNodeFromSpan(destination, x, y));
+    nodes.push(getNodeFromSpan(destination, x, y, span));
   }
   if (span.children) {
     const {
