@@ -16,19 +16,7 @@
     color:$grey-25;
 }
 
-.services-select-container {
-    margin-top: $sp-base * 4;
-    margin-bottom: $sp-base * 3;
-    display: flex;
-    flex-direction: column;
-    width:fit-content;
-    label {
-        color:$grey-100;
-        font-size: $font-sm;
-        line-height: $line-height-small;
-        margin:0;
-    }
-}
+
 
 .issue-description {
     color:$error-300;
@@ -56,4 +44,67 @@
     display: flex;
     align-items: center;
     column-gap: $sp-base * 4;
+}
+
+.services-menu-btn {
+    margin-top: $sp-base * 4;
+    margin-bottom: $sp-base * 3;
+    background-color: $grey-900;
+    border:1px solid $grey-700;
+    color:$white;
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+    &:hover {
+        background-color: $grey-900;
+    border:1px solid $grey-700;
+    color:$white;
+    }
+    
+}
+
+.services-select-icon {
+    width:12px;
+    height:12px;
+    display: flex;
+    align-items: center;
+    > img {
+        width:10px;
+        height: 8px;
+    }
+}
+
+.services-select-container {
+    :global(.MuiMenu-paper){
+        max-height: 400px;
+        overflow: auto;
+    }
+}
+
+.services-menu-item {
+    padding:$sp-base * 2 $sp-base * 3;
+    color:$grey-25;
+}
+
+.services-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.services-list {
+    height: 80%;
+    overflow: auto;
+}
+
+.services-action-container {
+    flex:1;
+    // display: flex;
+    padding:$sp-base * 3;
+    height:fit-content;
+}
+
+.active-filters {
+    display: flex;
+    column-gap: $sp-base * 2;
 }

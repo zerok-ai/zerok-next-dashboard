@@ -30,6 +30,7 @@ import TagX from "components/themeX/TagX";
 import { InputLabel, Menu, MenuItem, Select } from "@mui/material";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
+import { ServicesMenu } from "./IssuesPage.utils";
 
 const IssuesPage = () => {
   const [page, setPage] = useState(1);
@@ -40,23 +41,13 @@ const IssuesPage = () => {
     data: incidents,
   } = useFetch<IncidentDetail[]>("issues", LIST_INCIDENTS_ENDPOINT);
 
-  const {
-    loading: servicesLoading,
-    error: servicesError,
-    data: servicesList,
-  } = useFetch<ServiceDetail[]>(
-    "results",
-    LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster as string)
-  );
-
   const router = useRouter();
 
   const { query } = router;
   // @TODO - add types for filters here
+
   const services = query.services
-    ? (query.services as string).split(",").map((sv) => {
-        return decodeURIComponent(sv);
-      })
+    ? decodeURIComponent(query.services as string).split(",")
     : null;
 
   const helper = createColumnHelper<IncidentDetail>();
@@ -153,17 +144,21 @@ const IssuesPage = () => {
 
   const removeService = (label: string) => {
     if (services) {
-      const newServices = services.filter((sv) => sv !== label);
+      const filtered = services.filter((sv) => sv !== label);
+      const newQuery = { ...query };
+      if (filtered.length) {
+        newQuery.services = filtered.join(",");
+      } else delete newQuery.services;
       router.push({
         pathname: "/issues",
         query: {
-          services: newServices.join(","),
+          ...newQuery,
         },
       });
     }
   };
 
-  console.log(servicesList);
+  console.log({ services });
 
   return (
     <div>
@@ -175,23 +170,18 @@ const IssuesPage = () => {
       <div className="page-title">
         <h3>Issues</h3>
         <div className={styles["services-select-container"]}>
-          <InputLabel htmlFor="services-select">Filter by service</InputLabel>
-          <Select
-            placeholder="Filter by services"
-            value={services}
-            labelId="services-select"
-            multiple
-          >
-            {servicesList?.map((sv) => {
-              return <MenuItem value={sv.service}>{sv.service}</MenuItem>;
-            })}
-          </Select>
+          <ServicesMenu />
         </div>
         <div className={styles["active-filters"]}>
           {!!services?.length &&
             services.map((sv) => {
               return (
-                <TagX label={sv} onClose={removeService} closable={true} />
+                <TagX
+                  label={sv}
+                  onClose={removeService}
+                  closable={true}
+                  key={nanoid()}
+                />
               );
             })}
         </div>

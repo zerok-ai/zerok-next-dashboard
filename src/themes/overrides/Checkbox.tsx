@@ -11,6 +11,8 @@ import { CheckSquareFilled, MinusSquareFilled } from '@ant-design/icons';
 // types
 import { ExtendedStyleProps } from 'types/extended';
 
+import cssVars from "styles/variables.module.scss";
+
 // ==============================|| RADIO - COLORS ||============================== //
 
 function getColorStyle({ color, theme }: ExtendedStyleProps) {
@@ -18,16 +20,16 @@ function getColorStyle({ color, theme }: ExtendedStyleProps) {
   const { lighter, main, dark } = colors;
 
   return {
-    '&:hover': {
-      backgroundColor: lighter,
-      '& .icon': {
-        borderColor: main
-      }
+    "&:hover": {
+      backgroundColor: "transparent",
+      "& .icon": {
+        borderColor: main,
+      },
     },
-    '&.Mui-focusVisible': {
-      outline: `2px solid ${dark}`,
-      outlineOffset: -4
-    }
+    "&.Mui-focusVisible": {
+      outline: `none`,
+      outlineOffset: -4,
+    },
   };
 }
 
@@ -39,13 +41,13 @@ interface CheckboxSizeProps {
   position: number;
 }
 
-function getSizeStyle(size?: CheckboxProps['size']): CheckboxSizeProps {
+function getSizeStyle(size?: CheckboxProps["size"]): CheckboxSizeProps {
   switch (size) {
-    case 'small':
+    case "small":
       return { size: 16, fontSize: 1, position: 1 };
-    case 'large':
+    case "large":
       return { size: 24, fontSize: 1.6, position: 2 };
-    case 'medium':
+    case "medium":
     default:
       return { size: 20, fontSize: 1.35, position: 2 };
   }
@@ -53,19 +55,19 @@ function getSizeStyle(size?: CheckboxProps['size']): CheckboxSizeProps {
 
 // ==============================|| CHECKBOX - STYLE ||============================== //
 
-function checkboxStyle(size?: CheckboxProps['size']) {
+function checkboxStyle(size?: CheckboxProps["size"]) {
   const sizes: CheckboxSizeProps = getSizeStyle(size);
 
   return {
-    '& .icon': {
+    "& .icon": {
       width: sizes.size,
       height: sizes.size,
-      '& .filled': {
+      "& .filled": {
         fontSize: `${sizes.fontSize}rem`,
         top: -sizes.position,
-        left: -sizes.position
-      }
-    }
+        left: -sizes.position,
+      },
+    },
   };
 }
 
@@ -77,21 +79,35 @@ export default function Checkbox(theme: Theme) {
   return {
     MuiCheckbox: {
       defaultProps: {
-        className: 'size-small',
-        icon: <Box className="icon" sx={{ width: 16, height: 16, border: '1px solid', borderColor: 'inherit', borderRadius: 0.25 }} />,
+        className: "size-small",
+        icon: (
+          <Box
+            className="icon"
+            sx={{
+              width: 16,
+              height: 16,
+              border: "1px solid",
+              borderColor: "inherit",
+              borderRadius: 0.25,
+            }}
+          />
+        ),
         checkedIcon: (
           <Box
             className="icon"
             sx={{
               width: 16,
               height: 16,
-              border: '1px solid',
-              borderColor: 'inherit',
+              border: "1px solid",
+              borderColor: "inherit",
               borderRadius: 0.25,
-              position: 'relative'
+              position: "relative",
             }}
           >
-            <CheckSquareFilled className="filled" style={{ position: 'absolute' }} />
+            <CheckSquareFilled
+              className="filled"
+              style={{ position: "absolute" }}
+            />
           </Box>
         ),
         indeterminateIcon: (
@@ -100,37 +116,40 @@ export default function Checkbox(theme: Theme) {
             sx={{
               width: 16,
               height: 16,
-              border: '1px solid',
-              borderColor: 'inherit',
+              border: "1px solid",
+              borderColor: "inherit",
               borderRadius: 0.25,
-              position: 'relative'
+              position: "relative",
             }}
           >
-            <MinusSquareFilled className="filled" style={{ position: 'absolute' }} />
+            <MinusSquareFilled
+              className="filled"
+              style={{ position: "absolute" }}
+            />
           </Box>
-        )
+        ),
       },
       styleOverrides: {
         root: {
           borderRadius: 0,
           color: palette.secondary[300],
-          '&.size-small': {
-            ...checkboxStyle('small')
+          "&.size-small": {
+            ...checkboxStyle("small"),
           },
-          '&.size-medium': {
-            ...checkboxStyle('medium')
+          "&.size-medium": {
+            ...checkboxStyle("medium"),
           },
-          '&.size-large': {
-            ...checkboxStyle('large')
-          }
+          "&.size-large": {
+            ...checkboxStyle("large"),
+          },
         },
-        colorPrimary: getColorStyle({ color: 'primary', theme }),
-        colorSecondary: getColorStyle({ color: 'secondary', theme }),
-        colorSuccess: getColorStyle({ color: 'success', theme }),
-        colorWarning: getColorStyle({ color: 'warning', theme }),
-        colorInfo: getColorStyle({ color: 'info', theme }),
-        colorError: getColorStyle({ color: 'error', theme })
-      }
-    }
+        colorPrimary: cssVars.primary500,
+        colorSecondary: getColorStyle({ color: "secondary", theme }),
+        colorSuccess: getColorStyle({ color: "success", theme }),
+        colorWarning: getColorStyle({ color: "warning", theme }),
+        colorInfo: getColorStyle({ color: "info", theme }),
+        colorError: getColorStyle({ color: "error", theme }),
+      },
+    },
   };
 }

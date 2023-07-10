@@ -7,7 +7,7 @@ import { GenericObject } from "utils/types";
 export const useFetch = <T>(
   accessor: string,
   url?: string,
-  nullValue?: null
+  transformer?: (data: T) => T
 ) => {
   // @TODO - add generics here to get  better type detection
   const [data, setData] = useState<T | null>(null);
@@ -21,7 +21,8 @@ export const useFetch = <T>(
       const resp = await raxios.get(endpoint);
       const rdata = objectPath.get(resp.data.payload, accessor);
       // console.log({ rdata });
-      setData(rdata);
+      if (transformer) setData(transformer(rdata));
+      else setData(rdata);
     } catch {
     } finally {
       setLoading(false);
