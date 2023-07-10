@@ -3,9 +3,7 @@ import styles from "./PageLayout.module.scss";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import { useDispatch, useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
-import { CircularProgress } from "@mui/material";
-import ClusterRefreshButton from "components/ClusterRefreshButton";
-// import BreadcrumbX from "components/themeX/BreadcrumbX";
+import ClusterSelector from "components/ClusterSelector";
 
 interface PageLayout {
   children: React.ReactNode;
@@ -21,8 +19,10 @@ const PageLayout = ({ children }: PageLayout) => {
       </div>
       <div className={styles["page-container"]}>
         <div className={styles["header-container"]}>
-          <DrawerToggleButton />
-          <ClusterRefreshButton />
+          <div className={styles["header-left"]}>
+            <DrawerToggleButton />
+            <ClusterSelector />
+          </div>
         </div>
         <div className={styles["page-content"]}>
           {/* <BreadcrumbX /> */}

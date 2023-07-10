@@ -8,7 +8,6 @@ import { NAV_LINKS_1, NAV_LINKS_2 } from "utils/navigation";
 import NavigationItem from "components/NavigationItem";
 import { useRouter } from "next/router";
 import { StyledMainDrawer } from "./MainDrawer.utils";
-import ClusterSelector from "components/ClusterSelector";
 import { Divider } from "@mui/material";
 import { DrawerNavItemType } from "utils/types";
 
@@ -29,24 +28,21 @@ const MainDrawer = () => {
             alt="zerok_logo"
           />
         </div>
-        <ClusterSelector />
       </div>
     );
   };
 
   const drawerHeader = useMemo(() => <DrawerHeader />, [isDrawerMinimized]);
 
-  const renderLinks = (links:DrawerNavItemType[])=>{
+  const renderLinks = (links: DrawerNavItemType[]) => {
     return links.map((nav) => {
       const isHomeRoute = router.asPath === "/";
       const activeLink = isHomeRoute
         ? nav.path === router.asPath
         : nav.path.includes(router.pathname.split("/")[1]);
-      return (
-        <NavigationItem nav={nav} key={nav.path} active={activeLink} />
-      );
-    })
-  }
+      return <NavigationItem nav={nav} key={nav.path} active={activeLink} />;
+    });
+  };
   return (
     <StyledMainDrawer
       open={isDrawerMinimized}
