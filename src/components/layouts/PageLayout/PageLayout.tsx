@@ -4,6 +4,7 @@ import DrawerToggleButton from "components/DrawerToggleButton";
 import { useDispatch, useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import ClusterSelector from "components/ClusterSelector";
+import { CircularProgress } from "@mui/material";
 
 interface PageLayout {
   children: React.ReactNode;
@@ -26,8 +27,8 @@ const PageLayout = ({ children }: PageLayout) => {
         </div>
         <div className={styles["page-content"]}>
           {/* <BreadcrumbX /> */}
-          {/* {clusters.loading ? <CircularProgress /> : children} */}
-          {children}
+          {clusters.loading ? <CircularProgress /> : children}
+          {/* {children} */}
         </div>
       </div>
     </div>

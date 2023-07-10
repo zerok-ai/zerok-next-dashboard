@@ -102,9 +102,19 @@ const Users = () => {
         return (
           <div className={styles["role-container"]}>
             {isAdmin ? (
-              <Chip label="Admin" color="info" variant="outlined" />
+              <Chip
+                label="Admin"
+                color="info"
+                variant="outlined"
+                size="small"
+              />
             ) : (
-              <Chip label="Developer" color="warning" variant="outlined" />
+              <Chip
+                label="Developer"
+                color="warning"
+                variant="outlined"
+                size="small"
+              />
             )}
           </div>
         );

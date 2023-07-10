@@ -3,9 +3,12 @@ import styles from "./Home.module.scss";
 import PageLayout from "components/layouts/PageLayout";
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import useStatus from "hooks/useStatus";
-import { LIST_SERVICES_ENDPOINT, LIST_SERVICES_ENDPOINT_V2 } from "utils/endpoints";
+import {
+  LIST_SERVICES_ENDPOINT,
+  LIST_SERVICES_ENDPOINT_V2,
+} from "utils/endpoints";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import axios from "axios";
@@ -48,6 +51,9 @@ const Home = () => {
   useEffect(() => {
     fetchServices();
   }, [selectedCluster]);
+
+  const skeletons = new Array(8).fill("skeleton");
+
   return (
     <div>
       <h3 className="page-title">Health</h3>
@@ -56,17 +62,23 @@ const Home = () => {
           All services
         </Button> */}
         <div className={styles["services-container"]}>
-          {!!services.length ? (
-            services.map((sv) => {
-              return (
-                <div className={styles["service"]} key={nanoid()}>
-                  <ServiceCard service={sv} />
-                </div>
-              );
-            })
-          ) : (
-            <CircularProgress />
-          )}
+          {!!services.length
+            ? services.map((sv) => {
+                return (
+                  <div className={styles["service"]} key={nanoid()}>
+                    <ServiceCard service={sv} />
+                  </div>
+                );
+              })
+            : skeletons.map((sk) => {
+                return (
+                  <Skeleton
+                    key={nanoid()}
+                    variant="rectangular"
+                    className={styles["skeleton"]}
+                  />
+                );
+              })}
         </div>
       </div>
     </div>

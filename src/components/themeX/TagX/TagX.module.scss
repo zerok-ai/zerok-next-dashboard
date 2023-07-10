@@ -1,0 +1,20 @@
+@import "styles/variables.module.scss";
+.container {
+    font-size: $font-sm;
+    line-height: $line-height-small;
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2.5;
+    width: fit-content;
+    cursor: pointer;
+    border:1px solid $grey-900;
+    padding:$sp-base $sp-base * 2;
+    color:$grey-25;
+    border-radius: $sp-base;
+}
+
+.close-icon {
+    // font-size: $font-xl;
+    color:$grey-300;
+    font-size: $font-lg;
+}

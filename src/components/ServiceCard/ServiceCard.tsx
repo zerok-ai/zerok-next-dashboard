@@ -23,7 +23,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   return (
     <div className={styles["container"]}>
       <ServiceCardStatusIcon status={isHealthy ? "healthy" : "error"} />
-      <Link href={`/issues?service=${encodeURIComponent(service.service)}`}>
+      <Link href={`/issues?services=${encodeURIComponent(service.service)}`}>
         <div className={styles["service-name-container"]}>
           <p className={styles["service-name"]}>{formattedServiceName}</p>
           <p className={cx("label-medium", styles["service-namespace"])}>

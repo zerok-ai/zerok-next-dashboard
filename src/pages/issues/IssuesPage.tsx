@@ -4,8 +4,12 @@ import PageLayout from "components/layouts/PageLayout";
 import { Fragment, useMemo, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
-import { LIST_INCIDENTS_ENDPOINT } from "utils/endpoints";
-import { IncidentDetail } from "utils/types";
+import {
+  LIST_INCIDENTS_ENDPOINT,
+  LIST_SERVICES_ENDPOINT,
+  LIST_SERVICES_ENDPOINT_V2,
+} from "utils/endpoints";
+import { IncidentDetail, ServiceDetail } from "utils/types";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -21,14 +25,39 @@ import Link from "next/link";
 import { trimString } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 import { ICONS, ICON_BASE_PATH } from "utils/images";
+import { useRouter } from "next/router";
+import TagX from "components/themeX/TagX";
+import { InputLabel, Menu, MenuItem, Select } from "@mui/material";
+import { useSelector } from "redux/store";
+import { clusterSelector } from "redux/cluster";
 
 const IssuesPage = () => {
   const [page, setPage] = useState(1);
+  const { selectedCluster } = useSelector(clusterSelector);
   const {
     loading,
     error,
     data: incidents,
   } = useFetch<IncidentDetail[]>("issues", LIST_INCIDENTS_ENDPOINT);
+
+  const {
+    loading: servicesLoading,
+    error: servicesError,
+    data: servicesList,
+  } = useFetch<ServiceDetail[]>(
+    "results",
+    LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster as string)
+  );
+
+  const router = useRouter();
+
+  const { query } = router;
+  // @TODO - add types for filters here
+  const services = query.services
+    ? (query.services as string).split(",").map((sv) => {
+        return decodeURIComponent(sv);
+      })
+    : null;
 
   const helper = createColumnHelper<IncidentDetail>();
 
@@ -101,7 +130,7 @@ const IssuesPage = () => {
       // Total events
       helper.accessor("total_count", {
         header: "Total events",
-        size: DEFAULT_COL_WIDTH,
+        size: DEFAULT_COL_WIDTH * 1.2,
       }),
       // Source / destination
       // helper.accessor("source", {
@@ -122,6 +151,20 @@ const IssuesPage = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const removeService = (label: string) => {
+    if (services) {
+      const newServices = services.filter((sv) => sv !== label);
+      router.push({
+        pathname: "/issues",
+        query: {
+          services: newServices.join(","),
+        },
+      });
+    }
+  };
+
+  console.log(servicesList);
+
   return (
     <div>
       <Fragment>
@@ -129,7 +172,30 @@ const IssuesPage = () => {
           <title>ZeroK Dashboard | Issues</title>
         </Head>
       </Fragment>
-      <h3 className="page-title">Issues</h3>
+      <div className="page-title">
+        <h3>Issues</h3>
+        <div className={styles["services-select-container"]}>
+          <InputLabel htmlFor="services-select">Filter by service</InputLabel>
+          <Select
+            placeholder="Filter by services"
+            value={services}
+            labelId="services-select"
+            multiple
+          >
+            {servicesList?.map((sv) => {
+              return <MenuItem value={sv.service}>{sv.service}</MenuItem>;
+            })}
+          </Select>
+        </div>
+        <div className={styles["active-filters"]}>
+          {!!services?.length &&
+            services.map((sv) => {
+              return (
+                <TagX label={sv} onClose={removeService} closable={true} />
+              );
+            })}
+        </div>
+      </div>
       <div className="page-content">
         <TableX table={table} data={incidents || []} />
       </div>

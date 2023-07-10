@@ -19,6 +19,18 @@
     row-gap: $sp-base * 7;
 }
 
+.skeleton-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: $sp-base * 5;
+    row-gap: $sp-base * 7;
+    width:100%;
+}
+.skeleton {
+    height:210px;
+    width:100%;
+}
+
 .service {
 
 }
