@@ -9,28 +9,25 @@ import {
   LIST_SERVICES_ENDPOINT,
   LIST_SERVICES_ENDPOINT_V2,
 } from "utils/endpoints";
-import { IncidentDetail, ServiceDetail } from "utils/types";
+import { IncidentDetail } from "utils/types";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { BsCodeSlash } from "react-icons/bs";
-import { AiOutlineArrowRight, AiOutlineClockCircle } from "react-icons/ai";
-import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import { getFormattedTime } from "utils/dateHelpers";
 import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
 import { trimString } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
 import { useRouter } from "next/router";
 import TagX from "components/themeX/TagX";
-import { InputLabel, Menu, MenuItem, Select } from "@mui/material";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
-import { ServicesMenu } from "./IssuesPage.utils";
+import ServicesMenu from "./IssuesPage.utils";
 
 const IssuesPage = () => {
   const [page, setPage] = useState(1);

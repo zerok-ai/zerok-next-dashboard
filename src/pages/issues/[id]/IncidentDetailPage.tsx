@@ -11,9 +11,8 @@ import IncidentDetailMap from "components/IncidentDetailMap";
 
 import cx from "classnames";
 import { useRouter } from "next/router";
-import {
+import IncidentTabs, {
   IncidentMetadata,
-  IncidentTabs,
   SpanDetailDrawer,
   SpanDrawerButton,
 } from "./IncidentDetails.utils";

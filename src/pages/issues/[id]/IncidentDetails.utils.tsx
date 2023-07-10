@@ -1,4 +1,3 @@
-"use client";
 import {
   HttpRequestDetail,
   HttpResponseDetail,
@@ -236,7 +235,7 @@ const RESPONSE_KEYS = [
   },
 ];
 
-export const IncidentTabs = ({
+const IncidentTabs = ({
   selectedSpan,
 }: {
   selectedSpan: null | SpanDetail;
@@ -316,3 +315,5 @@ export const IncidentTabs = ({
     </div>
   );
 };
+
+export default IncidentTabs;
