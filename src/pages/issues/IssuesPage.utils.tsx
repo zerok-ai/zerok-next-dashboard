@@ -28,7 +28,7 @@ const filterServices = (services: ServiceDetail[]) => {
   );
 };
 
-export const ServicesMenu = () => {
+const ServicesMenu = () => {
   const router = useRouter();
   const { query } = router;
   const { services } = query;
@@ -156,3 +156,5 @@ export const ServicesMenu = () => {
     </Fragment>
   );
 };
+
+export default ServicesMenu;
