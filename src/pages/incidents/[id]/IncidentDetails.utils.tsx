@@ -25,6 +25,7 @@ import { SPAN_PROTOCOLS } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 import objectPath from "object-path";
+import { nanoid } from "@reduxjs/toolkit";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
@@ -273,6 +274,7 @@ export const IncidentTabs = ({
                   className={cx(styles["tab-content"], styles["response-tab"])}
                   role="tabpanel"
                   hidden={activeTab !== INCIDENT_TAB_KEYS[index]}
+                  key={nanoid()}
                 >
                   {tab.list.map((obj) => {
                     const val = objectPath.get(

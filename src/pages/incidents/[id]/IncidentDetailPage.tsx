@@ -79,14 +79,12 @@ const IncidentDetailPage = () => {
     }
   }, [isSpanDrawerOpen]);
 
-  let count = 0;
   const getSpans = () => {
     if (!spanData) return [];
     const topKeys = Object.keys(spanData);
     let rootNode: null | SpanDetail = null;
     let formattedSpans: SpanDetail[] = [];
     for (let i = 0; i < topKeys.length; i++) {
-      count++;
       const key = topKeys[i];
       const span = { ...spanData[key], span_id: key, children: [] };
       if (!topKeys.includes(span.parent_span_id)) {
@@ -95,19 +93,26 @@ const IncidentDetailPage = () => {
       formattedSpans.push(span);
     }
 
-    const buildSpanTree = (spans: SpanDetail[], parentSpan: SpanDetail) => {
-      count++;
-      if (!spans.length) return parentSpan;
+    const buildSpanTree = (
+      spans: SpanDetail[],
+      parentSpan: SpanDetail,
+      level: number = 0
+    ) => {
+      if (!spans.length) {
+        return parentSpan;
+      }
       const childrenSpan = spans.filter(
         (span) => span.parent_span_id === parentSpan.span_id
       );
       if (childrenSpan.length) {
         parentSpan.children = childrenSpan;
+        ++level;
         childrenSpan.map((span) => {
-          buildSpanTree(spans, span);
+          span.level = level;
+          return buildSpanTree(spans, span, level);
         });
       }
-      return parentSpan;
+      return { ...parentSpan };
     };
 
     if (rootNode) {
@@ -131,6 +136,8 @@ const IncidentDetailPage = () => {
     }
   }, [selectedSpan]);
   const incident = !!incidentData ? incidentData[0] : null;
+
+  console.log({ spanTree });
 
   const renderSpanTree = (parentSpan: SpanDetail) => {
     const active = selectedSpan?.span_id === parentSpan.span_id;
@@ -187,6 +194,8 @@ const IncidentDetailPage = () => {
           <IncidentDetailMap
             isMinimized={isMapMinimized}
             toggleSize={toggleMapMinimized}
+            spanData={spanData}
+            spanTree={spanTree}
           />
         </div>
         {isMapMinimized && (
