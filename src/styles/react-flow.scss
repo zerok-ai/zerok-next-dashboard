@@ -4,6 +4,7 @@
   background-color: $grey-950;
   border: 1px solid $grey-600;
   color: $grey-25;
+  width:150px;
 }
 
 .react-flow__panel {
@@ -29,4 +30,9 @@
 .react-flow__handle {
     background-color:$grey-600;
     border:none;
+}
+
+.react-flow__handle-left {
+  opacity: 0;
+  left:0;
 }

@@ -26,7 +26,8 @@ const PageLayout = ({ children }: PageLayout) => {
         </div>
         <div className={styles["page-content"]}>
           {/* <BreadcrumbX /> */}
-          {clusters.loading ? <CircularProgress /> : children}
+          {/* {clusters.loading ? <CircularProgress /> : children} */}
+          {children}
         </div>
       </div>
     </div>

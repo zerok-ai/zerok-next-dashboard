@@ -13,6 +13,30 @@
                 "workload_id_list": [],
                 "timestamp": "2023-06-25T02:50:15.572639Z"
             },
+            "a799204ee3f76e31": {
+                "source": "sofa-shop/inventory",
+                "destination": "sofa-shop/twitter",
+                "error": false,
+                "metadata": "",
+                "latency_ms": 542.5754,
+                "protocol": "HTTP",
+                "status": "200",
+                "parent_span_id": "9204ee3ea7976e31",
+                "workload_id_list": [],
+                "timestamp": "2023-06-25T02:50:15.572639Z"
+            },
+            "a799204ee3f76e32": {
+                "source": "sofa-shop/inventory",
+                "destination": "sofa-shop/insta",
+                "error": false,
+                "metadata": "",
+                "latency_ms": 542.5754,
+                "protocol": "HTTP",
+                "status": "200",
+                "parent_span_id": "9204ee3ea7976e31",
+                "workload_id_list": [],
+                "timestamp": "2023-06-25T02:50:15.572639Z"
+            },
             "a799204ee3e76e32": {
                 "source": "sofa-shop/product",
                 "destination": "sofa-shop/analytics",
@@ -37,6 +61,7 @@
                 "workload_id_list": [],
                 "collection_ts": "TBD"
             },
+            
             "9204ee3ea7976e32": {
                 "source": "sofa-shop/inventory",
                 "destination": "sofa-shop/backend",
@@ -52,6 +77,18 @@
             "9204ee3ea7976e33": {
                 "source": "sofa-shop/backend",
                 "destination": "sofa-shop/database",
+                "error": false,
+                "metadata": "",
+                "latency_ms": 542.5754,
+                "protocol": "HTTP",
+                "status": "200",
+                "parent_span_id": "9204ee3ea7976e32",
+                "workload_id_list": [],
+                "collection_ts": "TBD"
+            },
+            "9204ee3ea7976e34": {
+                "source": "sofa-shop/backend",
+                "destination": "sofa-shop/google",
                 "error": false,
                 "metadata": "",
                 "latency_ms": 542.5754,

@@ -1,46 +1,52 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import styles from "./IncidentDetailMap.module.scss";
 import ReactFlow, {
   Background,
   Controls,
-  Edge,
-  MarkerType,
-  MiniMap,
   addEdge,
   useEdgesState,
   useNodesState,
 } from "reactflow";
 import { CiMinimize1, CiMaximize1 } from "react-icons/ci";
-import { IconButton } from "@mui/material";
+import { IconButton, Skeleton } from "@mui/material";
 
 import cx from "classnames";
+import { SpanDetail, SpanResponse } from "utils/types";
+import {
+  getEdgesFromSpanTree,
+  getNodesFromSpanTree,
+} from "./IncidentDetailMap.utils";
 
 const proOptions = { hideAttribution: true };
 
 interface IncidentDetailMapProps {
   isMinimized: boolean;
   toggleSize: () => void;
+  spanData: SpanResponse | null;
+  spanTree: SpanDetail | null;
 }
 
 const IncidentDetailMap = ({
   isMinimized,
   toggleSize,
+  spanData,
+  spanTree,
 }: IncidentDetailMapProps) => {
-  const initialNodes = [
-    { id: "1", position: { x: 350, y: 50 }, data: { label: "1" } },
-    { id: "2", position: { x: 400, y: 100 }, data: { label: "2" } },
-  ];
-  const initialEdges = [
-    {
-      id: "e1-2",
-      source: "1",
-      target: "2",
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: "red",
-      },
-    },
-  ];
+  if (!spanData || !spanTree) {
+    return (
+      <Skeleton
+        variant="rectangular"
+        className={styles["skeleton-container"]}
+      />
+    );
+  }
+  const initialNodes = useMemo(
+    () => getNodesFromSpanTree(spanTree),
+    [spanTree]
+  );
+  const initialEdges = useMemo(() => {
+    return getEdgesFromSpanTree(spanData);
+  }, [spanData]);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect = useCallback(
