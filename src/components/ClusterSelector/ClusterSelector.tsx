@@ -36,7 +36,11 @@ const ClusterSelector = () => {
         value={selectedCluster}
         className={styles["select"]}
         IconComponent={StyleIcon}
-        onChange={(val) => dispatch(setSelectedCluster(val))}
+        onChange={(val) => {
+          if (val.length) {
+            dispatch(setSelectedCluster(val));
+          }
+        }}
       >
         <MenuItem value="" disabled>
           Target cluster
@@ -50,7 +54,11 @@ const ClusterSelector = () => {
             );
           })}
         <Divider />
-        <MenuItem className={styles["new-cluster-item"]} onClick={toggleModal}>
+        <MenuItem
+          className={styles["new-cluster-item"]}
+          onClick={toggleModal}
+          value={""}
+        >
           {" "}
           <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Add a
           new cluster

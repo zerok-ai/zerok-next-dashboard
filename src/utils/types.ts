@@ -77,6 +77,7 @@ export interface SpanDetail {
   span_id?: string;
   children?: SpanDetail[];
   timestamp?: string;
+  level?: number;
 }
 
 export interface SpanResponse {

@@ -196,6 +196,7 @@ const IncidentDetailPage = () => {
             toggleSize={toggleMapMinimized}
             spanData={spanData}
             spanTree={spanTree}
+            onNodeClick={(span: SpanDetail) => setSelectedSpan(span)}
           />
         </div>
         {isMapMinimized && (
