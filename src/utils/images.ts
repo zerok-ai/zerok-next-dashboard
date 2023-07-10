@@ -10,6 +10,7 @@ export const ICONS = {
   refresh: "refresh.svg",
   minus: "minus.svg",
   world: "world.svg",
+  "arrow-right": "right_arrow.svg",
 };
 
 export const ZEROK_MINIMAL_LOGO_LIGHT =

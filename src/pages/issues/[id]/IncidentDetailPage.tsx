@@ -66,7 +66,7 @@ const IncidentDetailPage = () => {
 
   useEffect(() => {
     if (router.isReady && !incidentId) {
-      router.push("/incidents");
+      router.push("/issues");
     } else {
       fetchIncidentData(LIST_INCIDENTS_ENDPOINT);
       fetchSpanData(LIST_SPANS_ENDPOINT);

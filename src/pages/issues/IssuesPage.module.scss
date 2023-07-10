@@ -5,8 +5,11 @@
     }
 }
 
-.issue-container {
-
+.issue-path {
+    display: flex;
+    column-gap: $sp-base * 2;
+    margin:$sp-base * 2 0;
+    align-items: center;
 }
 
 .issue-title {

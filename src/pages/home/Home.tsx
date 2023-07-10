@@ -25,8 +25,8 @@ const Home = () => {
     if (!selectedCluster) return;
     try {
       setStatus({ loading: true, error: null });
-      const rdata = await axios.get(
-        LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster)
+      const rdata = await raxios.get(
+        LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster)
       );
       const totalServices = rdata.data.payload.results as ServiceDetail[];
       if (!!totalServices.length) {
