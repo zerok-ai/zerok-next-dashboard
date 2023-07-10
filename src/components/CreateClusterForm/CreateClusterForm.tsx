@@ -4,8 +4,6 @@ import styles from "./CreateClusterForm.module.scss";
 import cx from "classnames";
 import CodeBlock from "components/CodeBlock";
 import { Button, Step, StepContent, StepLabel, Stepper } from "@mui/material";
-import { apiKeySelector } from "redux/apiKeys";
-import { useSelector } from "redux/store";
 import useStatus from "hooks/useStatus";
 import { ApiKeyType } from "redux/types";
 import raxios from "utils/raxios";
