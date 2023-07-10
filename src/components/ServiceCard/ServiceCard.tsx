@@ -47,7 +47,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
         </div>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>
-            Average latency
+            Avg. latency
           </span>
           <p>
             {convertNanoToMilliSeconds(service.http_latency_in.p50) || "NA ms"}

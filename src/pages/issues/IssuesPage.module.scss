@@ -5,19 +5,19 @@
     }
 }
 
-.incident-container {
+.issue-container {
 
 }
 
-.incident-title {
+.issue-title {
     color:$grey-25;
 }
 
-.incident-description {
+.issue-description {
     color:$error-300;
 }
 
-.incident-info-container {
+.issue-info-container {
     display: flex;
     align-items: center;
     column-gap: $sp-base * 2;
@@ -30,12 +30,12 @@
     }
 }
 
-.incident-path-container {
+.issue-path-container {
     display: flex;
     column-gap: $sp-base * 2;
 }
 
-.incident-title-container {
+.issue-title-container {
     display: flex;
     align-items: center;
     column-gap: $sp-base * 4;

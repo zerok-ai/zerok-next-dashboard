@@ -1,5 +1,5 @@
 import PrivateRoute from "components/PrivateRoute";
-import styles from "./Incidents.module.scss";
+import styles from "./IssuesPage.module.scss";
 import PageLayout from "components/layouts/PageLayout";
 import { Fragment, useMemo, useState } from "react";
 import Head from "next/head";
@@ -21,7 +21,7 @@ import Link from "next/link";
 import { trimString } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 
-const IncidentsPage = () => {
+const IssuesPage = () => {
   const [page, setPage] = useState(1);
   const {
     loading,
@@ -40,31 +40,31 @@ const IncidentsPage = () => {
           const { issue_title, first_seen, last_seen, issue_id } =
             info.row.original;
           return (
-            <div className={styles["incident-container"]}>
-              <div className={styles["incident-title-container"]}>
-                <Link href={`/incidents/${issue_id}`} className={"hover-link"}>
-                  <p className={styles["incident-title"]}>
+            <div className={styles["issue-container"]}>
+              <div className={styles["issue-title-container"]}>
+                <Link href={`/issues/${issue_id}`} className={"hover-link"}>
+                  <p className={styles["issue-title"]}>
                     {trimString(issue_title, 100)}
                   </p>
                 </Link>
               </div>
-              <p className={styles["incident-description"]}>
+              <p className={styles["issue-description"]}>
                 <em>Error description</em>
               </p>
-              <div className={styles["incident-info-container"]}>
-                <span className={styles["incident-language-container"]}>
+              <div className={styles["issue-info-container"]}>
+                <span className={styles["issue-language-container"]}>
                   <BsCodeSlash /> Java
                 </span>
-                <span className={styles["incident-time-container"]}>
+                <span className={styles["issue-time-container"]}>
                   <AiOutlineClockCircle />{" "}
                   <span>{getRelativeTime(first_seen)}</span>
                 </span>{" "}
                 |
-                <span className={styles["incident-time-container"]}>
+                <span className={styles["issue-time-container"]}>
                   <AiOutlineClockCircle />{" "}
                   <span>{getRelativeTime(last_seen)}</span>
                 </span>
-                <span className={styles["incident-id-container"]}>
+                <span className={styles["issue-id-container"]}>
                   <span>#{issue_id}</span>
                 </span>
               </div>
@@ -78,7 +78,7 @@ const IncidentsPage = () => {
         cell: (info) => {
           const { source, destination } = info.row.original;
           return (
-            <div className={styles["incident-path-container"]}>
+            <div className={styles["issue-path-container"]}>
               <ChipX label={source} />
               <span> ———&gt; </span>
               <ChipX label={destination} />
@@ -119,10 +119,10 @@ const IncidentsPage = () => {
     <div>
       <Fragment>
         <Head>
-          <title>ZeroK Dashboard | Incidents Page</title>
+          <title>ZeroK Dashboard | Issues</title>
         </Head>
       </Fragment>
-      <h3 className="page-title">Incidents</h3>
+      <h3 className="page-title">Issues</h3>
       <div className="page-content">
         <TableX table={table} data={incidents || []} />
       </div>
@@ -130,7 +130,7 @@ const IncidentsPage = () => {
   );
 };
 
-IncidentsPage.getLayout = function getLayout(page: React.ReactNode) {
+IssuesPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
       <PageLayout>{page}</PageLayout>
@@ -138,4 +138,4 @@ IncidentsPage.getLayout = function getLayout(page: React.ReactNode) {
   );
 };
 
-export default IncidentsPage;
+export default IssuesPage;
