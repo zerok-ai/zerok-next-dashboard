@@ -13,6 +13,9 @@ type NavigationItemType = {
 const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const drawer = useSelector((state) => state.drawer);
   const { isDrawerMinimized } = drawer;
+  const iconKey = active
+    ? nav.icon.replace(".svg", "_highlight.svg")
+    : nav.icon;
   return (
     <Link href={nav.path}>
       <div
@@ -23,10 +26,7 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
         )}
       >
         <div className={styles["icon-container"]}>
-          <img
-            src={`${ICON_BASE_PATH}/${nav.icon}`}
-            alt={`${nav.label}_icon`}
-          />
+          <img src={`${ICON_BASE_PATH}/${iconKey}`} alt={`${nav.label}_icon`} />
         </div>
         <p className={styles["link-label"]}>{nav.label}</p>
       </div>

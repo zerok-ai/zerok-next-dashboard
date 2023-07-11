@@ -24,6 +24,12 @@
     background-color: $grey-900;
     .link-label {
         color:$primary-500;
+        
+    }.icon-container {
+        > img {
+            height: $sp-base * 6;
+            width: $sp-base * 6;
+        }
     }
 }
 
