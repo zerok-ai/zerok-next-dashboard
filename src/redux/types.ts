@@ -42,3 +42,11 @@ export interface ApiKeyReduxType {
   error: boolean;
   apiKeys: ApiKeyType[];
 }
+
+
+export interface IncidentIDReduxType {
+  incidentList: string[];
+  activeIndex: number;
+  loading: boolean;
+  error: boolean;
+}

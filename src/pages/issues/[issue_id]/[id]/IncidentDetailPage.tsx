@@ -5,7 +5,7 @@ import PageLayout from "components/layouts/PageLayout";
 import { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
-import { IncidentDetail, SpanDetail, SpanResponse } from "utils/types";
+import { IssueDetail, SpanDetail, SpanResponse } from "utils/types";
 import { Skeleton } from "@mui/material";
 import IncidentDetailMap from "components/IncidentDetailMap";
 
@@ -18,6 +18,8 @@ import IncidentTabs, {
   SpanDrawerButton,
 } from "./IncidentDetails.utils";
 import {
+  GET_ISSUES_ENDPOINT,
+  GET_ISSUE_ENDPOINT,
   GET_SPAN_ENDPOINT,
   LIST_INCIDENTS_ENDPOINT,
   LIST_SPANS_ENDPOINT,
@@ -27,16 +29,17 @@ import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "redux/store";
 import { drawerSelector, minimizeDrawer } from "redux/drawer";
 import { ReactFlowProvider } from "reactflow";
+import { setIncidentList } from "redux/incidentList";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const dispatch = useDispatch();
   const {
-    loading: incidentLoading,
+    loading: issueLoading,
     error: incidentError,
-    data: incidentData,
-    fetchData: fetchIncidentData,
-  } = useFetch<IncidentDetail[]>("issues");
+    data: issue,
+    fetchData: fetchIssueData,
+  } = useFetch<IssueDetail>("issue");
 
   const {
     loading: spanLoading,
@@ -56,6 +59,7 @@ const IncidentDetailPage = () => {
 
   const router = useRouter();
   const incidentId = router.query.id;
+  const issueId = router.query.issue_id;
 
   const [isMapMinimized, setIsMapMinimized] = useState(true);
   const toggleMapMinimized = () => setIsMapMinimized(!isMapMinimized);
@@ -66,10 +70,13 @@ const IncidentDetailPage = () => {
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
   useEffect(() => {
+    fetchIssueData(GET_ISSUE_ENDPOINT);
+  }, [issueId]);
+
+  useEffect(() => {
     if (router.isReady && !incidentId) {
       router.push("/issues");
     } else {
-      fetchIncidentData(LIST_INCIDENTS_ENDPOINT);
       fetchSpanData(LIST_SPANS_ENDPOINT);
     }
   }, [incidentId, router]);
@@ -120,6 +127,7 @@ const IncidentDetailPage = () => {
       setSpanTree(buildSpanTree(formattedSpans, rootNode));
     }
   };
+
   useEffect(() => {
     getSpans();
   }, [spanData]);
@@ -136,7 +144,12 @@ const IncidentDetailPage = () => {
       fetchSingleSpan(GET_SPAN_ENDPOINT);
     }
   }, [selectedSpan]);
-  const incident = !!incidentData ? incidentData[0] : null;
+
+  useEffect(() => {
+    if (issue) {
+      dispatch(setIncidentList(issue.incidents));
+    }
+  }, [issue]);
 
   const renderSpanTree = (parentSpan: SpanDetail) => {
     const active = selectedSpan?.span_id === parentSpan.span_id;
@@ -152,6 +165,7 @@ const IncidentDetailPage = () => {
       </div>
     );
   };
+  console.log({ issue });
   return (
     <div>
       <Fragment>
@@ -160,14 +174,14 @@ const IncidentDetailPage = () => {
         </Head>
       </Fragment>
       <div className="page-title">
-        {incidentLoading || !incident ? (
+        {issueLoading || !issue ? (
           <Skeleton className={"page-title-loader"} />
         ) : (
           <div className={styles["header"]}>
             <div className={styles["header-left"]}>
               {" "}
-              <h3>{incident.issue_title}</h3>
-              <IncidentMetadata incident={incident} />
+              <h3>{issue.issue_title}</h3>
+              <IncidentMetadata incident={issue} />
             </div>
             <div className={styles["header-right"]}>
               <IncidentNavButtons />
@@ -205,11 +219,10 @@ const IncidentDetailPage = () => {
             />
           </ReactFlowProvider>
         </div>
-        {isMapMinimized && (
-          <div className={styles["incident-info-container"]}>
-            <IncidentTabs selectedSpan={selectedSpan} />
-          </div>
-        )}
+
+        <div className={styles["incident-info-container"]}>
+          <IncidentTabs selectedSpan={selectedSpan} />
+        </div>
       </div>
     </div>
   );

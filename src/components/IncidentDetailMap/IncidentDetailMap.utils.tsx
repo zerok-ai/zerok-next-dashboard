@@ -9,7 +9,7 @@ import {
 import dagre from "dagre";
 import { GenericObject, SpanDetail, SpanResponse } from "utils/types";
 import cssVars from "styles/variables.module.scss";
-
+import cx from "classnames";
 import styles from "./IncidentDetailMap.module.scss";
 import { ICONS, ICON_BASE_PATH } from "utils/images";
 
@@ -147,11 +147,18 @@ export const MapControls = ({
   const { zoomIn, zoomOut, fitView } = useReactFlow();
   return (
     <div className={styles["map-controls"]}>
-      <button onClick={() => toggleSize()}>
+      <button
+        onClick={() => toggleSize()}
+        className={cx(!isMinimized && styles["active"])}
+      >
         <span className={styles["map-btn-icon-container"]}>
           <img
-            src={`${ICON_BASE_PATH}/${ICONS["expand-map"]}`}
-            alt="expand map"
+            src={
+              !isMinimized
+                ? `${ICON_BASE_PATH}/${ICONS["expand-map"]}`
+                : `${ICON_BASE_PATH}/${ICONS["collapse-map"]}`
+            }
+            alt="expand/collapse map"
           />
         </span>
       </button>

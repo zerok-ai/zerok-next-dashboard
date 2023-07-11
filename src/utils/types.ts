@@ -51,7 +51,7 @@ export interface ServiceDetail {
   inbound_conns: number;
   outerHeight: number;
 }
-export interface IncidentDetail {
+export interface IssueDetail {
   issue_id: string;
   issue_title: string;
   scenario_id: string;
