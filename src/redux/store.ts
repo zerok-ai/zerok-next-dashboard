@@ -11,12 +11,14 @@ import authReducer from "./authSlice";
 import drawerReducer from "./drawer";
 import clusterReducer from "./cluster";
 import apiKeysReducer from "./apiKeys";
+import incidentListReducer from "./incidentList";
 
 const reducers = {
   auth: authReducer,
   drawer: drawerReducer,
   cluster: clusterReducer,
   apiKeys: apiKeysReducer,
+  incidentList: incidentListReducer,
 };
 
 const store = configureStore({

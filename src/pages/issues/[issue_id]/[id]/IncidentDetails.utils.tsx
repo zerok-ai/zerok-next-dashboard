@@ -1,7 +1,7 @@
 import {
   HttpRequestDetail,
   HttpResponseDetail,
-  IncidentDetail,
+  IssueDetail,
   SpanDetail,
   SpanMetadata,
 } from "utils/types";
@@ -20,21 +20,19 @@ import cssVars from "styles/variables.module.scss";
 import React, { useEffect, useMemo, useState } from "react";
 import { useFetch } from "hooks/useFetch";
 import { GET_SPAN_METADTA_ENDPOINT } from "utils/endpoints";
-import { SPAN_PROTOCOLS } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 import objectPath from "object-path";
 import { nanoid } from "@reduxjs/toolkit";
 import { useRouter } from "next/router";
 import { ICONS, ICON_BASE_PATH } from "utils/images";
+import { useDispatch, useSelector } from "redux/store";
+import { incidentListSelector, setIncidentList } from "redux/incidentList";
+import axios from "axios";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
-export const IncidentMetadata = ({
-  incident,
-}: {
-  incident: IncidentDetail;
-}) => {
+export const IncidentMetadata = ({ incident }: { incident: IssueDetail }) => {
   return (
     <div className={styles["incident-metadata-container"]}>
       <span className={styles["incident-language-container"]}>
@@ -331,14 +329,44 @@ const IncidentTabs = ({
   );
 };
 
-export const IncidentNavButtons = ({
-  initialIncidentList,
-}: {
-  initialIncidentList: string[];
-}) => {
-  // const [incidents, setIncidents] = useState(initialIncidentList);
-  // const [activeIncident, setActiveIncident] = useState(incidents[0]);
-  // const router = useRouter();
+export const IncidentNavButtons = () => {
+  const { incidentList } = useSelector(incidentListSelector);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  if (!incidentList) return null;
+  const { issue_id, id } = router.query;
+  const basePath = `/issues/${issue_id}`;
+  const activeIndex = incidentList.findIndex((incident) => incident === id);
+
+  const fetchIncidentList = async () => {
+    try {
+      const rdata = await axios.get("/incident_ids.json");
+      const list = rdata.data.payload.incidents;
+      console.log({ list });
+      router.push(`${basePath}/${list[0]}`);
+      dispatch(setIncidentList([...incidentList, ...list]));
+    } catch (err) {
+      console.log({ err });
+    }
+  };
+
+  const getNewer = () => {
+    if (activeIndex > 0) {
+      const newIndex = activeIndex - 1;
+      router.push(`${basePath}/${incidentList[newIndex]}`);
+    }
+  };
+
+  const getOlder = () => {
+    if (activeIndex < incidentList.length - 1) {
+      const newIndex = activeIndex + 1;
+      router.push(`${basePath}/${incidentList[newIndex]}`);
+    } else {
+      fetchIncidentList();
+    }
+  };
+  console.log({ activeIndex, incidentList });
+
   return (
     <div className={styles["incident-nav-buttons-container"]}>
       {/* Newest */}
@@ -351,6 +379,8 @@ export const IncidentNavButtons = ({
         variant="outlined"
         color="secondary"
         size="medium"
+        disabled={activeIndex === 0}
+        onClick={() => getNewer()}
       >
         Newer{" "}
         <span className={styles["incident-nav-button-icon"]}>
@@ -363,6 +393,7 @@ export const IncidentNavButtons = ({
         variant="outlined"
         size="medium"
         className={styles["incident-nav-button"]}
+        onClick={() => getOlder()}
       >
         Older{" "}
         <span className={styles["incident-nav-button-icon"]}>

@@ -26,7 +26,7 @@ export const LIST_SERVICES_ENDPOINT = `/services.json`;
 
 export const LIST_INCIDENTS_ENDPOINT = `/incidents.json`;
 
-export const GET_INCIDENT_ENDPOINT = `/incident.json`;
+export const GET_ISSUE_ENDPOINT = `/incident.json`;
 
 export const LIST_SPANS_ENDPOINT = `/spans.json`;
 
@@ -35,3 +35,5 @@ export const GET_SPAN_ENDPOINT = `/span.json`;
 export const GET_SPAN_METADTA_ENDPOINT = `/rawdata.json`;
 
 export const GET_ISSUES_ENDPOINT = `/v1/c/issue?source=sofa-shop/product&destination=sofa-shop/product`;
+
+export const GET_INCIDENTS_ENDPOINT = `/incident_ids.json`;

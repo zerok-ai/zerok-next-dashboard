@@ -41,7 +41,13 @@
         padding:0;
         cursor: pointer;
     }
+    .active {
+        background-color: $primary-500;
+        border:1px solid $primary-500;
+    }
+    
 }
+
 
 .map-btn-icon-container {
     height: 100%;

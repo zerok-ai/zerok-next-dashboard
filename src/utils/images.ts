@@ -14,6 +14,7 @@ export const ICONS = {
   "plus-map": "plus_map.svg",
   "move-map": "move_map.svg",
   "expand-map": "expand_map.svg",
+  "collapse-map": "collapse_map.svg",
   "arrow-right": "right_arrow.svg",
   "caret-down": "caret-down.svg",
   "chevron-right": "chevron-right.svg",

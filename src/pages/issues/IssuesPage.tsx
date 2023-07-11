@@ -10,7 +10,7 @@ import {
   LIST_SERVICES_ENDPOINT,
   LIST_SERVICES_ENDPOINT_V2,
 } from "utils/endpoints";
-import { IncidentDetail } from "utils/types";
+import { IssueDetail } from "utils/types";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -38,13 +38,7 @@ const IssuesPage = () => {
     loading,
     error,
     data: incidents,
-  } = useFetch<IncidentDetail[]>("issues", LIST_INCIDENTS_ENDPOINT);
-
-  const {
-    loading: servicesLoading,
-    error: servicesError,
-    data: issues,
-  } = useFetch<string[]>("issues", GET_ISSUES_ENDPOINT);
+  } = useFetch<IssueDetail[]>("issues", LIST_INCIDENTS_ENDPOINT);
 
   const router = useRouter();
 
@@ -55,7 +49,7 @@ const IssuesPage = () => {
     ? decodeURIComponent(query.services as string).split(",")
     : null;
 
-  const helper = createColumnHelper<IncidentDetail>();
+  const helper = createColumnHelper<IssueDetail>();
 
   const columns = useMemo(() => {
     return [
@@ -63,12 +57,15 @@ const IssuesPage = () => {
         header: "Incident",
         size: DEFAULT_COL_WIDTH * 6,
         cell: (info) => {
-          const { issue_title, issue_id, source, destination } =
+          const { issue_title, issue_id, source, destination, incidents } =
             info.row.original;
           return (
             <div className={styles["issue-container"]}>
               <div className={styles["issue-title-container"]}>
-                <Link href={`/issues/${issue_id}`} className={"hover-link"}>
+                <Link
+                  href={`/issues/${issue_id}/${incidents[0]}`}
+                  className={"hover-link"}
+                >
                   <p className={styles["issue-title"]}>
                     {trimString(issue_title, 100)}
                   </p>
@@ -135,7 +132,7 @@ const IssuesPage = () => {
     ];
   }, [incidents]);
 
-  const table = useReactTable<IncidentDetail>({
+  const table = useReactTable<IssueDetail>({
     columns,
     data: incidents || [],
     getCoreRowModel: getCoreRowModel(),
@@ -201,9 +198,9 @@ const IssuesPage = () => {
 
 IssuesPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <PrivateRoute>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
+    // <PrivateRoute>
+    <PageLayout>{page}</PageLayout>
+    // </PrivateRoute>
   );
 };
 
