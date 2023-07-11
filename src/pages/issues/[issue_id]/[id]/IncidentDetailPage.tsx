@@ -17,22 +17,18 @@ import IncidentTabs, {
   SpanDetailDrawer,
   SpanDrawerButton,
 } from "./IncidentDetails.utils";
-import {
-  GET_ISSUES_ENDPOINT,
-  GET_ISSUE_ENDPOINT,
-  GET_SPAN_ENDPOINT,
-  LIST_INCIDENTS_ENDPOINT,
-  LIST_SPANS_ENDPOINT,
-} from "utils/endpoints";
+import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import SpanCard from "components/SpanCard";
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "redux/store";
 import { drawerSelector, minimizeDrawer } from "redux/drawer";
 import { ReactFlowProvider } from "reactflow";
 import { setIncidentList } from "redux/incidentList";
+import { clusterSelector } from "redux/cluster";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
+  const { selectedCluster } = useSelector(clusterSelector);
   const dispatch = useDispatch();
   const {
     loading: issueLoading,
@@ -47,13 +43,6 @@ const IncidentDetailPage = () => {
     data: spanData,
     fetchData: fetchSpanData,
   } = useFetch<SpanResponse>("spans");
-
-  const {
-    loading: singleSpanLoading,
-    error: singleSpanError,
-    data: singleSpan,
-    fetchData: fetchSingleSpan,
-  } = useFetch<SpanDetail>("spans");
 
   const [selectedSpan, setSelectedSpan] = useState<SpanDetail | null>(null);
 
@@ -70,16 +59,28 @@ const IncidentDetailPage = () => {
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
   useEffect(() => {
-    fetchIssueData(GET_ISSUE_ENDPOINT);
-  }, [issueId]);
+    if (issueId && selectedCluster) {
+      fetchIssueData(
+        GET_ISSUE_ENDPOINT.replace(
+          "{cluster_id}",
+          selectedCluster as string
+        ).replace("{issue_id}", issueId as string)
+      );
+    }
+  }, [issueId, selectedCluster]);
 
   useEffect(() => {
     if (router.isReady && !incidentId) {
       router.push("/issues");
-    } else {
-      fetchSpanData(LIST_SPANS_ENDPOINT);
     }
-  }, [incidentId, router]);
+    if (selectedCluster) {
+      fetchSpanData(
+        LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
+          .replace("{cluster_id}", selectedCluster as string)
+          .replace("{issue_id}", issueId as string)
+      );
+    }
+  }, [incidentId, router, selectedCluster]);
 
   useEffect(() => {
     if (isSpanDrawerOpen && !isDrawerMinimized) {
@@ -135,15 +136,8 @@ const IncidentDetailPage = () => {
   useEffect(() => {
     if (spanTree) {
       setSelectedSpan(spanTree);
-      fetchSingleSpan(GET_SPAN_ENDPOINT);
     }
   }, [spanTree]);
-
-  useEffect(() => {
-    if (selectedSpan) {
-      fetchSingleSpan(GET_SPAN_ENDPOINT);
-    }
-  }, [selectedSpan]);
 
   useEffect(() => {
     if (issue) {
@@ -165,7 +159,7 @@ const IncidentDetailPage = () => {
       </div>
     );
   };
-  console.log({ issue });
+
   return (
     <div>
       <Fragment>
@@ -221,7 +215,7 @@ const IncidentDetailPage = () => {
         </div>
 
         <div className={styles["incident-info-container"]}>
-          <IncidentTabs selectedSpan={selectedSpan} />
+          {selectedSpan && <IncidentTabs selectedSpan={selectedSpan} />}
         </div>
       </div>
     </div>
@@ -229,7 +223,11 @@ const IncidentDetailPage = () => {
 };
 
 IncidentDetailPage.getLayout = function getLayout(page: React.ReactNode) {
-  return <PageLayout>{page}</PageLayout>;
+  return (
+    <PrivateRoute>
+      <PageLayout>{page}</PageLayout>
+    </PrivateRoute>
+  );
 };
 
 export default IncidentDetailPage;

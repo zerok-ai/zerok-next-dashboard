@@ -65,6 +65,10 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           <span className={cx("label-small", styles["item-label"])}>P90</span>
           <p>{convertNanoToMilliSeconds(service.http_latency_in.p90)}</p>
         </div>
+        <div className={styles["stat-item"]}>
+          <span className={cx("label-small", styles["item-label"])}>P99</span>
+          <p>{convertNanoToMilliSeconds(service.http_latency_in.p99)}</p>
+        </div>
         {/* <div className={styles["stat-item"]}>
     <span className={cx("label-small",styles['item-label'])}>P99</span>
     <p>{convertNanoToMilliSeconds(service.http_latency_in.p90)}</p>

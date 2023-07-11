@@ -45,6 +45,7 @@ export interface ServiceDetail {
     p50: null | number;
     p75: null | number;
     p90: null | number;
+    p99: null | number;
   };
   http_req_throughput_in: number;
   http_error_rate_in: number;
@@ -52,7 +53,7 @@ export interface ServiceDetail {
   outerHeight: number;
 }
 export interface IssueDetail {
-  issue_id: string;
+  issue_hash: string;
   issue_title: string;
   scenario_id: string;
   scenario_version: string;
@@ -99,8 +100,12 @@ export interface HttpResponseDetail {
   resp_body: GenericObject | null;
 }
 
-export interface SpanMetadata {
+export interface SpanRawData {
   protocol: (typeof SPAN_PROTOCOLS)[number];
-  request_payload: HttpRequestDetail;
-  response_payload: HttpRequestDetail;
+  request_payload: string | HttpRequestDetail;
+  response_payload: string | HttpRequestDetail;
+}
+
+export interface SpanRawDataResponse {
+  [x: string]: SpanRawData;
 }

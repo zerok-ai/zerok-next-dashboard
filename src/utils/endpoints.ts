@@ -4,7 +4,7 @@ export const FORGOT_PASSWORD_ENDPOINT = `/v1/p/user/password/recover/{email}`;
 
 export const LOGOUT_ENDPOINT = `/v1/u/auth/logout`;
 
-export const CLUSTER_ENDPOINT = `v1/u/org/cluster`;
+export const CLUSTER_ENDPOINT = `/v1/u/org/cluster`;
 
 export const TOP_APIKEY_ENDPOINT = `/v1/u/apikey/top`;
 
@@ -24,15 +24,13 @@ export const LIST_SERVICES_ENDPOINT_V2 = `/v1/u/cluster/{id}/service/list?st=-5m
 
 export const LIST_SERVICES_ENDPOINT = `/services.json`;
 
-export const LIST_INCIDENTS_ENDPOINT = `/incidents.json`;
+export const LIST_INCIDENTS_ENDPOINT = `/v1/c/{id}/issue?source=sofa-shop/inventory-77b5bbd8d5-ccr8k&destination=sofa-shop/product-585c9685f4-sg8lm`;
 
-export const GET_ISSUE_ENDPOINT = `/incident.json`;
+export const GET_ISSUE_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}`;
 
-export const LIST_SPANS_ENDPOINT = `/spans.json`;
+export const LIST_SPANS_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident/{incident_id}`;
 
-export const GET_SPAN_ENDPOINT = `/span.json`;
-
-export const GET_SPAN_METADTA_ENDPOINT = `/rawdata.json`;
+export const GET_SPAN_RAWDATA_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident/{incident_id}/span/{span_id}`;
 
 export const GET_ISSUES_ENDPOINT = `/v1/c/issue?source=sofa-shop/product&destination=sofa-shop/product`;
 

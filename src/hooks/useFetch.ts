@@ -6,7 +6,7 @@ import { GenericObject } from "utils/types";
 
 export const useFetch = <T>(
   accessor: string,
-  url?: string,
+  url?: string | null,
   transformer?: (newData: T, oldData: T) => T
 ) => {
   // @TODO - add generics here to get  better type detection

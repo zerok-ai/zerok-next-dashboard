@@ -37,14 +37,10 @@ const ServicesMenu = () => {
     loading,
     error,
     data: servicesList,
-  } = useFetch<ServiceDetail[]>(
-    "results",
-    LIST_SERVICES_ENDPOINT,
-    filterServices
-  );
+    fetchData: fetchServices,
+  } = useFetch<ServiceDetail[]>("results");
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -75,6 +71,12 @@ const ServicesMenu = () => {
     });
     closeMenu();
   };
+
+  useEffect(() => {
+    if (selectedCluster) {
+      fetchServices(LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster));
+    }
+  }, [selectedCluster]);
 
   useEffect(() => {
     if (services) {
