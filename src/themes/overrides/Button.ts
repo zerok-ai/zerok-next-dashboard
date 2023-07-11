@@ -8,6 +8,10 @@ import getShadow from "utils/mantis/getShadow";
 // types
 import { ButtonVariantProps, ExtendedStyleProps } from 'types/extended';
 
+
+// custom cssvars
+import cssVars from 'styles/variables.module.scss';
+
 // ==============================|| BUTTON - COLORS ||============================== //
 
 interface ButtonStyleProps extends ExtendedStyleProps {
@@ -15,6 +19,7 @@ interface ButtonStyleProps extends ExtendedStyleProps {
 }
 
 import css from "styles/variables.module.scss";
+import { SPACE_TOKEN } from "utils/constants";
 
 function getColorStyle({ variant, color, theme }: ButtonStyleProps) {
   const colors = getColors(theme, color);
@@ -109,12 +114,31 @@ export default function Button(theme: Theme) {
 
   const disabledStyle = {
     "&.Mui-disabled": {
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: cssVars.grey600,
+      borderColor: cssVars.grey600,
+      color: cssVars.grey300,
     },
   };
   const iconStyle = {
     "&>*:nth-of-type(1)": {
       fontSize: "inherit",
+    },
+  };
+  const secondaryContainedButtonOverrides = {
+    backgroundColor: cssVars.grey900,
+    border: `1px solid ${cssVars.grey600}`,
+    color: cssVars.grey25,
+    boxShadow: `0px 2px 0px 0px rgba(0, 0, 0, 0.02)`,
+  };
+
+  const secondaryOutlineButtonOverrides = {
+    backgroundColor: "transparent",
+    border: `1px solid ${cssVars.grey600}`,
+    color: cssVars.grey25,
+    boxShadow: `0px 2px 0px 0px rgba(0, 0, 0, 0.02)`,
+    "&:hover": {
+      borderColor: cssVars.primary500,
+      color: cssVars.primary500,
     },
   };
 
@@ -249,11 +273,14 @@ export default function Button(theme: Theme) {
           color: "primary",
           theme,
         }),
-        containedSecondary: getColorStyle({
-          variant: "contained",
-          color: "secondary",
-          theme,
-        }),
+        containedSecondary: {
+          ...getColorStyle({
+            variant: "contained",
+            color: "secondary",
+            theme,
+          }),
+          ...secondaryContainedButtonOverrides,
+        },
         containedError: getColorStyle({
           variant: "contained",
           color: "error",
@@ -279,11 +306,14 @@ export default function Button(theme: Theme) {
           color: "primary",
           theme,
         }),
-        outlinedSecondary: getColorStyle({
-          variant: "outlined",
-          color: "secondary",
-          theme,
-        }),
+        outlinedSecondary: {
+          ...getColorStyle({
+            variant: "outlined",
+            color: "secondary",
+            theme,
+          }),
+          ...secondaryOutlineButtonOverrides,
+        },
         outlinedError: getColorStyle({
           variant: "outlined",
           color: "error",
@@ -333,6 +363,7 @@ export default function Button(theme: Theme) {
         },
         sizeMedium: {
           height: css.buttonHeightDefault,
+          padding: `${2 * SPACE_TOKEN}px ${4 * SPACE_TOKEN}px`,
         },
       },
     },

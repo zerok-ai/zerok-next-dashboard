@@ -115,3 +115,34 @@
 .tab-row-value {
     color:$white;
 }
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.incident-nav-buttons-container {
+    display: flex;
+    column-gap: $sp-base * 2;
+    align-items: center;
+}
+.incident-nav-iconbutton {
+    background-color: transparent;
+}
+
+.incident-nav-button {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+}
+
+.incident-nav-button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:16px;
+    height:16px;
+    > img {
+        width:100%;
+        height:100%;
+    }
+}

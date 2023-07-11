@@ -114,6 +114,7 @@ const ServicesMenu = () => {
           "& .MuiMenu-list": {
             height: "280px",
             overflowY: "scroll",
+            background: cssVars.grey900,
             borderRadius: `${SPACE_TOKEN}px}`,
             border: `1px solid ${cssVars.grey700}`,
           },
@@ -148,7 +149,7 @@ const ServicesMenu = () => {
               onClick={handleApply}
               disabled={selectedServices.length === 0}
             >
-              Apply filter
+              Apply
             </Button>
           </div>
         </div>

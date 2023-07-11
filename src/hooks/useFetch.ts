@@ -20,7 +20,7 @@ export const useFetch = <T>(
       setError(false);
       const resp = await raxios.get(endpoint);
       const rdata = objectPath.get(resp.data.payload, accessor);
-      // console.log({ rdata });
+      console.log({ rdata });
       if (transformer) setData(transformer(rdata));
       else setData(rdata);
     } catch {

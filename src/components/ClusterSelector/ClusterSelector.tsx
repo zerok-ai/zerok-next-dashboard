@@ -18,8 +18,6 @@ const ClusterSelector = () => {
 
   const dispatch = useDispatch();
 
-  console.log({ selectedCluster });
-
   const toggleModal = () => setIsModalVisible((old) => !old);
 
   const StyleIcon = () => <BsChevronDown className={styles["select-icon"]} />;

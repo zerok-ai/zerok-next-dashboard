@@ -18,10 +18,12 @@ import ServiceCard from "components/ServiceCard";
 import { nanoid } from "@reduxjs/toolkit";
 import { getNamespace } from "utils/functions";
 import raxios from "utils/raxios";
+import { useRouter } from "next/router";
 
 const Home = () => {
   const [services, setServices] = useState<ServiceDetail[]>([]);
   const { selectedCluster } = useSelector(clusterSelector);
+  const router = useRouter();
 
   const { status, setStatus } = useStatus();
   const fetchServices = useCallback(async () => {
@@ -50,7 +52,7 @@ const Home = () => {
   }, []);
   useEffect(() => {
     fetchServices();
-  }, [selectedCluster]);
+  }, [selectedCluster, router]);
 
   const skeletons = new Array(8).fill("skeleton");
 
