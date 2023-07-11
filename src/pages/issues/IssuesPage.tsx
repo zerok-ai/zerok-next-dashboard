@@ -1,7 +1,7 @@
 import PrivateRoute from "components/PrivateRoute";
 import styles from "./IssuesPage.module.scss";
 import PageLayout from "components/layouts/PageLayout";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
 import {
@@ -38,7 +38,8 @@ const IssuesPage = () => {
     loading,
     error,
     data: incidents,
-  } = useFetch<IssueDetail[]>("issues", LIST_INCIDENTS_ENDPOINT);
+    fetchData: fetchIncidents,
+  } = useFetch<IssueDetail[]>("issues");
 
   const router = useRouter();
 
@@ -57,13 +58,13 @@ const IssuesPage = () => {
         header: "Incident",
         size: DEFAULT_COL_WIDTH * 6,
         cell: (info) => {
-          const { issue_title, issue_id, source, destination, incidents } =
+          const { issue_title, issue_hash, source, destination, incidents } =
             info.row.original;
           return (
             <div className={styles["issue-container"]}>
               <div className={styles["issue-title-container"]}>
                 <Link
-                  href={`/issues/${issue_id}/${incidents[0]}`}
+                  href={`/issues/${issue_hash}/${incidents[0]}`}
                   className={"hover-link"}
                 >
                   <p className={styles["issue-title"]}>
@@ -119,16 +120,6 @@ const IssuesPage = () => {
         header: "Total events",
         size: DEFAULT_COL_WIDTH * 1.2,
       }),
-      // Source / destination
-      // helper.accessor("source", {
-      //   header: "Source",
-      //   size: DEFAULT_COL_WIDTH / 2,
-      //   id: nanoid(),
-      // }),
-      // helper.accessor("destination", {
-      //   header: "Destination",
-      //   size: DEFAULT_COL_WIDTH / 2,
-      // }),
     ];
   }, [incidents]);
 
@@ -139,6 +130,7 @@ const IssuesPage = () => {
   });
 
   const removeService = (label: string) => {
+    console.log("issues page");
     if (services) {
       const filtered = services.filter((sv) => sv !== label);
       const newQuery = { ...query };
@@ -153,6 +145,13 @@ const IssuesPage = () => {
       });
     }
   };
+  useEffect(() => {
+    if (selectedCluster) {
+      fetchIncidents(
+        LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster as string)
+      );
+    }
+  }, [selectedCluster]);
 
   return (
     <div>
@@ -198,9 +197,9 @@ const IssuesPage = () => {
 
 IssuesPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    // <PrivateRoute>
-    <PageLayout>{page}</PageLayout>
-    // </PrivateRoute>
+    <PrivateRoute>
+      <PageLayout>{page}</PageLayout>
+    </PrivateRoute>
   );
 };
 

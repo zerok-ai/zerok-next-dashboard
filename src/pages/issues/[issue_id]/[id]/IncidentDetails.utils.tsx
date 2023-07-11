@@ -3,7 +3,8 @@ import {
   HttpResponseDetail,
   IssueDetail,
   SpanDetail,
-  SpanMetadata,
+  SpanRawData,
+  SpanRawDataResponse,
 } from "utils/types";
 import styles from "./IncidentDetailPage.module.scss";
 import {
@@ -12,14 +13,21 @@ import {
   AiOutlineClockCircle,
 } from "react-icons/ai";
 import { BsCodeSlash } from "react-icons/bs";
-import { getRelativeTime } from "utils/dateHelpers";
-import { Button, Drawer, IconButton, Tab, Tabs } from "@mui/material";
+import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
+import {
+  Button,
+  CircularProgress,
+  Drawer,
+  IconButton,
+  Tab,
+  Tabs,
+} from "@mui/material";
 
 import cx from "classnames";
 import cssVars from "styles/variables.module.scss";
 import React, { useEffect, useMemo, useState } from "react";
 import { useFetch } from "hooks/useFetch";
-import { GET_SPAN_METADTA_ENDPOINT } from "utils/endpoints";
+import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 import objectPath from "object-path";
@@ -29,18 +37,18 @@ import { ICONS, ICON_BASE_PATH } from "utils/images";
 import { useDispatch, useSelector } from "redux/store";
 import { incidentListSelector, setIncidentList } from "redux/incidentList";
 import axios from "axios";
+import { clusterSelector } from "redux/cluster";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
 export const IncidentMetadata = ({ incident }: { incident: IssueDetail }) => {
   return (
     <div className={styles["incident-metadata-container"]}>
-      <span className={styles["incident-language-container"]}>
+      {/* <span className={styles["incident-language-container"]}>
         <BsCodeSlash /> Java
-      </span>
+      </span> */}
       <span className={styles["incident-time-container"]}>
-        <AiOutlineClockCircle />{" "}
-        <span>{getRelativeTime(incident.first_seen)}</span>
+        <span>{getFormattedTime(incident.first_seen)}</span>
       </span>{" "}
       |
       <span className={styles["incident-time-container"]}>
@@ -174,8 +182,8 @@ const REQUEST_HEADER_KEYS = [
   {
     label: "Request headers",
     key: "request_payload.req_headers",
-    render: (val: string | null) => {
-      const json = val ? JSON.parse(val) : null;
+    render: (val: Object | null) => {
+      const json = val || {};
       return (
         <DynamicReactJson
           src={json}
@@ -198,7 +206,7 @@ const REQUEST_BODY_KEYS = [
     label: "Request body",
     key: "request_payload.req_body",
     render: (val: string | null) => {
-      const json = val ? JSON.parse(val) : null;
+      const json = val || {};
       return json ? (
         <DynamicReactJson src={json} enableClipboard={false} />
       ) : (
@@ -213,7 +221,7 @@ const RESPONSE_HEADER_KEYS = [
     label: "Response headers",
     key: "response_payload.resp_headers",
     render: (val: string | null) => {
-      const json = val ? JSON.parse(val) : null;
+      const json = val || {};
       return (
         <DynamicReactJson
           src={json}
@@ -231,7 +239,7 @@ const RESPONSE_BODY_KEYS = [
     label: "Response body",
     key: "response_payload.resp_body",
     render: (val: string | null) => {
-      const json = val ? JSON.parse(val) : null;
+      const json = val || {};
       return json ? (
         <DynamicReactJson
           src={json}
@@ -251,19 +259,42 @@ const IncidentTabs = ({
 }: {
   selectedSpan: null | SpanDetail;
 }) => {
+  const router = useRouter();
+  const { issue_id, id: incidentId } = router.query;
   const [activeTab, setActiveTab] = useState(INCIDENT_TABS[0].key);
+  const { selectedCluster } = useSelector(clusterSelector);
+  const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
+    "{cluster_id}",
+    selectedCluster as string
+  )
+    .replace("{span_id}", selectedSpan?.span_id as string)
+    .replace("{incident_id}", incidentId as string)
+    .replace("{issue_id}", issue_id as string);
+
   const {
     loading,
     error,
-    data: rawSpanData,
+    data: rawSpanResponse,
     fetchData: fetchRawData,
-  } = useFetch<SpanMetadata>(`spans.a799204ee3e76e31`);
-  useEffect(() => {
-    if (selectedSpan) {
-      fetchRawData(GET_SPAN_METADTA_ENDPOINT);
-    }
-  }, [selectedSpan]);
+  } = useFetch<SpanRawDataResponse>(`span_raw_data_details`);
 
+  useEffect(() => {
+    if (selectedSpan && selectedCluster && incidentId) {
+      fetchRawData(endpoint);
+    }
+  }, [selectedSpan, endpoint]);
+
+  const rawSpanData = rawSpanResponse
+    ? rawSpanResponse[selectedSpan?.span_id as string]
+    : ({} as SpanRawData);
+  if (rawSpanData.protocol === "http") {
+    // console.log("console", JSON.parse(rawSpanData.request_payload as string));
+    // rawSpanData.request_payload = JSON.parse(
+    //   rawSpanData.request_payload as string
+    // );
+  }
+
+  console.log({ rawSpanData });
   const TAB_CONTENT = useMemo(() => {
     return [
       {
@@ -281,7 +312,11 @@ const IncidentTabs = ({
       },
       { list: RESPONSE_BODY_KEYS, valueObj: rawSpanData },
     ];
-  }, [selectedSpan, rawSpanData]);
+  }, [selectedSpan, rawSpanResponse]);
+
+  if (!rawSpanResponse) {
+    return <CircularProgress />;
+  }
 
   return (
     <div className={styles["tabs-container"]}>

@@ -8,7 +8,7 @@ interface TableXProps<T extends object> {
  data: T[];
 }
 
-const TableX = <T extends object>({table}:TableXProps<T>) => {
+const TableX = <T extends object>({ table, data }: TableXProps<T>) => {
   return (
     <div className="table">
       <table className={cx("table")}>
@@ -39,17 +39,26 @@ const TableX = <T extends object>({table}:TableXProps<T>) => {
           })}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <tr key={row.id} className={cx("table-body-tr table-tr")}>
-                {row.getVisibleCells().map((cell) => (
-                  <td className={cx("table-td table-body-td")} key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
+          {data.length ? (
+            table.getRowModel().rows.map((row) => {
+              return (
+                <tr key={row.id} className={cx("table-body-tr table-tr")}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td className={cx("table-td table-body-td")} key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td className={styles["no-data"]}>No data</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
