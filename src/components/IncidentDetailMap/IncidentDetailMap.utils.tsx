@@ -1,13 +1,17 @@
-import { Edge, MarkerType, Node, Position } from "reactflow";
+import { Edge, MarkerType, Node, Position, SmoothStepEdge } from "reactflow";
+import dagre from "dagre";
 import { GenericObject, SpanDetail, SpanResponse } from "utils/types";
 import cssVars from "styles/variables.module.scss";
 
-const getNodeFromSpan = (
-  id: string,
-  x: number,
-  y: number,
-  span: SpanDetail
-): Node => {
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+const nodeWidth = 180;
+const nodeHeight = 41;
+
+const getNodeFromSpan = (id: string, span: SpanDetail): Node => {
+  let x = 0;
+  let y = 0;
   return {
     id,
     data: { label: id, ...span },
@@ -17,76 +21,58 @@ const getNodeFromSpan = (
   };
 };
 
-export const getNodePositions = (x: number, y: number, length: number) => {
-  const positions = [];
-  let odd = 1;
-  let even = 1;
-  if (length === 1) return { positions: [{ x: x + 200, y }], x: x + 200, y };
+// export const getNodePositions = (x: number, y: number, length: number) => {
+//   const positions = [];
+//   let odd = 1;
+//   let even = 1;
+//   if (length === 1) return { positions: [{ x: x + 200, y }], x: x + 200, y };
 
-  if (length === 2) {
-    x += 200;
-    return {
-      positions: [
-        { x, y: y + 100 },
-        { x, y: y - 100 },
-      ],
-      x,
-      y,
-    };
-  }
+//   if (length === 2) {
+//     x += 200;
+//     return {
+//       positions: [
+//         { x, y: y + 100 },
+//         { x, y: y - 100 },
+//       ],
+//       x,
+//       y,
+//     };
+//   }
 
-  for (let i = 0; i < length; i++) {
-    if (i === 0) {
-      positions.push({ x: x + 200 });
-      continue;
-    }
-    if (i % 2 === 0) {
-      positions.push({ x: x + 200, y: y + even * 70 });
-      ++even;
-    } else {
-      positions.push({ x: x + 200, y: y - odd * 70 });
-      ++odd;
-    }
-  }
+//   for (let i = 0; i < length; i++) {
+//     if (i === 0) {
+//       positions.push({ x: x + 200 });
+//       continue;
+//     }
+//     if (i % 2 === 0) {
+//       positions.push({ x: x + 200, y: y + even * 70 });
+//       ++even;
+//     } else {
+//       positions.push({ x: x + 200, y: y - odd * 70 });
+//       ++odd;
+//     }
+//   }
 
-  return { positions, x, y };
-};
+//   return { positions, x, y };
+// };
 
 export const getNodesFromSpanTree = (
   span: SpanDetail,
-  x: number = 25,
-  y: number = 160,
   memo: GenericObject = {},
-  nodes: Node[] = [],
-  yGap: number = 140
+  nodes: Node[] = []
 ) => {
-  const edges: Edge[] = [];
   const { source, destination } = span;
   if (!memo[source]) {
     memo[source] = true;
-    nodes.push(getNodeFromSpan(source, x, y, span));
-    x += 200;
+    nodes.push(getNodeFromSpan(source, span));
   }
   if (!memo[destination]) {
     memo[destination] = true;
-    nodes.push(getNodeFromSpan(destination, x, y, span));
+    nodes.push(getNodeFromSpan(destination, span));
   }
   if (span.children) {
-    const {
-      positions,
-      x: newX,
-      y: newY,
-    } = getNodePositions(x, y, span.children.length);
-
     span.children.forEach((child, idx) => {
-      return getNodesFromSpanTree(
-        child,
-        positions[idx].x,
-        positions[idx].y,
-        { ...memo },
-        nodes,
-        yGap - 30
-      );
+      return getNodesFromSpanTree(child, { ...memo }, nodes);
     });
   }
   return nodes;
@@ -100,6 +86,7 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
       id: `e-${span.source}-${span.destination}`,
       source: span.source,
       target: span.destination,
+      edgeType: SmoothStepEdge,
       markerEnd: {
         type: MarkerType.ArrowClosed,
         color: cssVars.grey600,
@@ -107,4 +94,36 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
     });
   });
   return edges;
+};
+
+export const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
+  const isHorizontal = true;
+  dagreGraph.setGraph({ rankdir: "LR" });
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  nodes.forEach((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    node.targetPosition = isHorizontal ? Position.Left : Position.Top;
+    node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
+
+    // We are shifting the dagre node position (anchor=center center) to the top left
+    // so it matches the React Flow node anchor point (top left).
+    node.position = {
+      x: nodeWithPosition.x - nodeWidth / 2,
+      y: nodeWithPosition.y - nodeHeight / 2,
+    };
+
+    return node;
+  });
+
+  return { nodes, edges };
 };

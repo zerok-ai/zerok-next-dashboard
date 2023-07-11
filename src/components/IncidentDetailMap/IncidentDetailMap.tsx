@@ -14,6 +14,7 @@ import cx from "classnames";
 import { SpanDetail, SpanResponse } from "utils/types";
 import {
   getEdgesFromSpanTree,
+  getLayoutedElements,
   getNodesFromSpanTree,
 } from "./IncidentDetailMap.utils";
 
@@ -49,8 +50,12 @@ const IncidentDetailMap = ({
   const initialEdges = useMemo(() => {
     return getEdgesFromSpanTree(spanData);
   }, [spanData]);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
+    return getLayoutedElements(initialNodes, initialEdges);
+  }, [initialNodes, initialEdges]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
