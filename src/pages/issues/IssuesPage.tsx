@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { getFormattedTime } from "utils/dateHelpers";
+import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
@@ -29,6 +29,7 @@ import TagX from "components/themeX/TagX";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import ServicesMenu from "./IssuesPage.utils";
+import { Button } from "@mui/material";
 
 const IssuesPage = () => {
   const [page, setPage] = useState(1);
@@ -62,14 +63,8 @@ const IssuesPage = () => {
         header: "Incident",
         size: DEFAULT_COL_WIDTH * 6,
         cell: (info) => {
-          const {
-            issue_title,
-            first_seen,
-            last_seen,
-            issue_id,
-            source,
-            destination,
-          } = info.row.original;
+          const { issue_title, issue_id, source, destination } =
+            info.row.original;
           return (
             <div className={styles["issue-container"]}>
               <div className={styles["issue-title-container"]}>
@@ -107,12 +102,12 @@ const IssuesPage = () => {
       }),
       helper.accessor("first_seen", {
         header: "First seen",
-        size: DEFAULT_COL_WIDTH * 2.4,
+        size: DEFAULT_COL_WIDTH * 1.5,
         cell: (info) => {
           const { first_seen } = info.row.original;
           return (
             <div className={styles["issue-time-container"]}>
-              {getFormattedTime(first_seen)}
+              {getRelativeTime(first_seen)}
             </div>
           );
         },
@@ -170,22 +165,31 @@ const IssuesPage = () => {
         </Head>
       </Fragment>
       <div className="page-title">
-        <h3>Issues</h3>
-        <div className={styles["services-select-container"]}>
-          <ServicesMenu />
-        </div>
-        <div className={styles["active-filters"]}>
-          {!!services?.length &&
-            services.map((sv) => {
-              return (
-                <TagX
-                  label={sv}
-                  onClose={removeService}
-                  closable={true}
-                  key={nanoid()}
-                />
-              );
-            })}
+        <div className={styles["header"]}>
+          <div className={styles["header-left"]}>
+            <h3>Issues</h3>
+            <div className={styles["services-select-container"]}>
+              <ServicesMenu />
+            </div>
+            <div className={styles["active-filters"]}>
+              {!!services?.length &&
+                services.map((sv) => {
+                  return (
+                    <TagX
+                      label={sv}
+                      onClose={removeService}
+                      closable={true}
+                      key={nanoid()}
+                    />
+                  );
+                })}
+            </div>
+          </div>
+          <div className={styles["header-right"]}>
+            <Button variant="contained" color="primary">
+              Create incident
+            </Button>
+          </div>
         </div>
       </div>
       <div className="page-content">
