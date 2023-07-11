@@ -33,3 +33,5 @@ export const LIST_SPANS_ENDPOINT = `/spans.json`;
 export const GET_SPAN_ENDPOINT = `/span.json`;
 
 export const GET_SPAN_METADTA_ENDPOINT = `/rawdata.json`;
+
+export const GET_ISSUES_ENDPOINT = `/v1/c/issue?source=sofa-shop/product&destination=sofa-shop/product`;

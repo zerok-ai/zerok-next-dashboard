@@ -13,7 +13,7 @@ import {
 } from "react-icons/ai";
 import { BsCodeSlash } from "react-icons/bs";
 import { getRelativeTime } from "utils/dateHelpers";
-import { Drawer, IconButton, Tab, Tabs } from "@mui/material";
+import { Button, Drawer, IconButton, Tab, Tabs } from "@mui/material";
 
 import cx from "classnames";
 import cssVars from "styles/variables.module.scss";
@@ -25,6 +25,8 @@ import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 import objectPath from "object-path";
 import { nanoid } from "@reduxjs/toolkit";
+import { useRouter } from "next/router";
+import { ICONS, ICON_BASE_PATH } from "utils/images";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
@@ -312,6 +314,56 @@ const IncidentTabs = ({
           })}
         </div>
       )}
+    </div>
+  );
+};
+
+export const IncidentNavButtons = ({
+  initialIncidentList,
+}: {
+  initialIncidentList: string[];
+}) => {
+  // const [incidents, setIncidents] = useState(initialIncidentList);
+  // const [activeIncident, setActiveIncident] = useState(incidents[0]);
+  // const router = useRouter();
+  return (
+    <div className={styles["incident-nav-buttons-container"]}>
+      {/* Newest */}
+      <IconButton className={styles["incident-nav-iconbutton"]}>
+        <img src={`${ICON_BASE_PATH}/${ICONS["two-arrows-left"]}`} />
+      </IconButton>
+      {/* Newer */}
+      <Button
+        className={styles["incident-nav-button"]}
+        variant="outlined"
+        color="secondary"
+        size="medium"
+      >
+        Newer{" "}
+        <span className={styles["incident-nav-button-icon"]}>
+          <img src={`${ICON_BASE_PATH}/${ICONS["chevron-left"]}`} />
+        </span>
+      </Button>
+      {/* Older */}
+      <Button
+        color="secondary"
+        variant="outlined"
+        size="medium"
+        className={styles["incident-nav-button"]}
+      >
+        Older{" "}
+        <span className={styles["incident-nav-button-icon"]}>
+          <img src={`${ICON_BASE_PATH}/${ICONS["chevron-right"]}`} />
+        </span>
+      </Button>
+      {/* Oldest */}
+      <IconButton
+        color="secondary"
+        className={styles["incident-nav-iconbutton"]}
+        size="large"
+      >
+        <img src={`${ICON_BASE_PATH}/${ICONS["two-arrows-right"]}`} />
+      </IconButton>
     </div>
   );
 };

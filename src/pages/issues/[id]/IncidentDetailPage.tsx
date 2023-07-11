@@ -13,6 +13,7 @@ import cx from "classnames";
 import { useRouter } from "next/router";
 import IncidentTabs, {
   IncidentMetadata,
+  IncidentNavButtons,
   SpanDetailDrawer,
   SpanDrawerButton,
 } from "./IncidentDetails.utils";
@@ -136,8 +137,6 @@ const IncidentDetailPage = () => {
   }, [selectedSpan]);
   const incident = !!incidentData ? incidentData[0] : null;
 
-  console.log({ spanTree });
-
   const renderSpanTree = (parentSpan: SpanDetail) => {
     const active = selectedSpan?.span_id === parentSpan.span_id;
     return (
@@ -164,9 +163,14 @@ const IncidentDetailPage = () => {
           <Skeleton className={"page-title-loader"} />
         ) : (
           <div className={styles["header"]}>
-            {" "}
-            <h3>{incident.issue_title}</h3>
-            <IncidentMetadata incident={incident} />
+            <div className={styles["header-left"]}>
+              {" "}
+              <h3>{incident.issue_title}</h3>
+              <IncidentMetadata incident={incident} />
+            </div>
+            <div className={styles["header-right"]}>
+              <IncidentNavButtons />
+            </div>
           </div>
         )}
       </div>

@@ -12,6 +12,10 @@ export const ICONS = {
   world: "world.svg",
   "arrow-right": "right_arrow.svg",
   "caret-down": "caret-down.svg",
+  "chevron-right": "chevron-right.svg",
+  "chevron-left": "chevron-left.svg",
+  "two-arrows-left": "two-arrows-left.svg",
+  "two-arrows-right": "two-arrows-right.svg",
 };
 
 export const ZEROK_MINIMAL_LOGO_LIGHT =

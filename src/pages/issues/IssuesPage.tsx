@@ -5,6 +5,7 @@ import { Fragment, useMemo, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
 import {
+  GET_ISSUES_ENDPOINT,
   LIST_INCIDENTS_ENDPOINT,
   LIST_SERVICES_ENDPOINT,
   LIST_SERVICES_ENDPOINT_V2,
@@ -37,6 +38,12 @@ const IssuesPage = () => {
     error,
     data: incidents,
   } = useFetch<IncidentDetail[]>("issues", LIST_INCIDENTS_ENDPOINT);
+
+  const {
+    loading: servicesLoading,
+    error: servicesError,
+    data: issues,
+  } = useFetch<string[]>("issues", GET_ISSUES_ENDPOINT);
 
   const router = useRouter();
 
@@ -154,8 +161,6 @@ const IssuesPage = () => {
       });
     }
   };
-
-  console.log({ services });
 
   return (
     <div>
