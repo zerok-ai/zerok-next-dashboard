@@ -2,17 +2,15 @@ import { useCallback, useMemo } from "react";
 import styles from "./IncidentDetailMap.module.scss";
 import ReactFlow, {
   Background,
-  Controls,
   addEdge,
   useEdgesState,
   useNodesState,
 } from "reactflow";
-import { CiMinimize1, CiMaximize1 } from "react-icons/ci";
-import { IconButton, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 
-import cx from "classnames";
 import { SpanDetail, SpanResponse } from "utils/types";
 import {
+  MapControls,
   getEdgesFromSpanTree,
   getLayoutedElements,
   getNodesFromSpanTree,
@@ -71,17 +69,8 @@ const IncidentDetailMap = ({
         proOptions={proOptions}
         onNodeClick={(event, node) => onNodeClick(node.data as SpanDetail)}
       >
-        <Controls />
+        <MapControls isMinimized={isMinimized} toggleSize={toggleSize} />
         <Background gap={12} size={1} />
-        <IconButton
-          onClick={toggleSize}
-          className={cx(
-            styles["size-btn"],
-            !isMinimized && styles["size-btn-active"]
-          )}
-        >
-          {isMinimized ? <CiMaximize1 /> : <CiMinimize1 />}
-        </IconButton>
       </ReactFlow>
     </div>
   );

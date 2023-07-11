@@ -1,6 +1,12 @@
 @import "styles/variables.module.scss";
 
 .header {
+    // position: sticky;
+    // width: calc(100vw - $main-drawer-width-mini - $sp-base * 12);
+    // // max-width: calc(100vh - $main-drawer-width-mini);
+    // top: 0;
+    // background-color: $bg-dark;
+    // z-index: 50000;
     h3 {
         color:$white;
     }
@@ -75,7 +81,6 @@
         width:$incident-drawer-width;
         background-color: $bg-dark;
         position: absolute;
-        overflow: auto;
       padding:$sp-base * 3;
 
       }

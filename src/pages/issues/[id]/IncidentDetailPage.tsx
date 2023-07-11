@@ -26,6 +26,7 @@ import SpanCard from "components/SpanCard";
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "redux/store";
 import { drawerSelector, minimizeDrawer } from "redux/drawer";
+import { ReactFlowProvider } from "reactflow";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -194,13 +195,15 @@ const IncidentDetailPage = () => {
               </div>
             </SpanDetailDrawer>
           )}
-          <IncidentDetailMap
-            isMinimized={isMapMinimized}
-            toggleSize={toggleMapMinimized}
-            spanData={spanData}
-            spanTree={spanTree}
-            onNodeClick={(span: SpanDetail) => setSelectedSpan(span)}
-          />
+          <ReactFlowProvider>
+            <IncidentDetailMap
+              isMinimized={isMapMinimized}
+              toggleSize={toggleMapMinimized}
+              spanData={spanData}
+              spanTree={spanTree}
+              onNodeClick={(span: SpanDetail) => setSelectedSpan(span)}
+            />
+          </ReactFlowProvider>
         </div>
         {isMapMinimized && (
           <div className={styles["incident-info-container"]}>
@@ -213,11 +216,7 @@ const IncidentDetailPage = () => {
 };
 
 IncidentDetailPage.getLayout = function getLayout(page: React.ReactNode) {
-  return (
-    <PrivateRoute>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
-  );
+  return <PageLayout>{page}</PageLayout>;
 };
 
 export default IncidentDetailPage;
