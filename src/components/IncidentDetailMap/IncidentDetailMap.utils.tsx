@@ -1,7 +1,17 @@
-import { Edge, MarkerType, Node, Position, SmoothStepEdge } from "reactflow";
+import {
+  Edge,
+  MarkerType,
+  Node,
+  Position,
+  SmoothStepEdge,
+  useReactFlow,
+} from "reactflow";
 import dagre from "dagre";
 import { GenericObject, SpanDetail, SpanResponse } from "utils/types";
 import cssVars from "styles/variables.module.scss";
+
+import styles from "./IncidentDetailMap.module.scss";
+import { ICONS, ICON_BASE_PATH } from "utils/images";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -86,7 +96,6 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
       id: `e-${span.source}-${span.destination}`,
       source: span.source,
       target: span.destination,
-      edgeType: SmoothStepEdge,
       markerEnd: {
         type: MarkerType.ArrowClosed,
         color: cssVars.grey600,
@@ -126,4 +135,47 @@ export const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
   });
 
   return { nodes, edges };
+};
+
+export const MapControls = ({
+  isMinimized,
+  toggleSize,
+}: {
+  isMinimized: boolean;
+  toggleSize: () => void;
+}) => {
+  const { zoomIn, zoomOut, fitView } = useReactFlow();
+  return (
+    <div className={styles["map-controls"]}>
+      <button onClick={() => toggleSize()}>
+        <span className={styles["map-btn-icon-container"]}>
+          <img
+            src={`${ICON_BASE_PATH}/${ICONS["expand-map"]}`}
+            alt="expand map"
+          />
+        </span>
+      </button>
+      <button onClick={() => fitView()}>
+        <span className={styles["map-btn-icon-container"]}>
+          <img src={`${ICON_BASE_PATH}/${ICONS["move-map"]}`} alt="fit map" />
+        </span>
+      </button>
+      <button onClick={() => zoomIn()}>
+        <span className={styles["map-btn-icon-container"]}>
+          <img
+            src={`${ICON_BASE_PATH}/${ICONS["plus-map"]}`}
+            alt="zoom in map"
+          />
+        </span>
+      </button>
+      <button onClick={() => zoomOut()}>
+        <span className={styles["map-btn-icon-container"]}>
+          <img
+            src={`${ICON_BASE_PATH}/${ICONS["minus-map"]}`}
+            alt="zoom out map"
+          />
+        </span>
+      </button>
+    </div>
+  );
 };

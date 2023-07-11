@@ -112,7 +112,13 @@ export const SpanDetailDrawer = ({
   );
 };
 
-export const INCIDENT_TAB_KEYS = ["overview", "request", "response"] as const;
+export const INCIDENT_TAB_KEYS = [
+  "overview",
+  "request_headers",
+  "request_body",
+  "response_headers",
+  "response_body",
+] as const;
 
 export const INCIDENT_TABS: {
   label: string;
@@ -123,12 +129,20 @@ export const INCIDENT_TABS: {
     key: "overview",
   },
   {
-    label: "Request",
-    key: "request",
+    label: "Request Headers",
+    key: "request_headers",
   },
   {
-    label: "Response",
-    key: "response",
+    label: "Request Body",
+    key: "request_body",
+  },
+  {
+    label: "Response Headers",
+    key: "response_headers",
+  },
+  {
+    label: "Response Body",
+    key: "response_body",
   },
 ];
 
@@ -152,11 +166,7 @@ export const OVERVIEW_KEYS: {
   { label: "Status", key: "status" },
 ];
 
-const REQUEST_KEYS = [
-  {
-    label: "Protocol",
-    key: "protocol",
-  },
+const REQUEST_HEADER_KEYS = [
   {
     label: "Method",
     key: "request_payload.req_method",
@@ -178,6 +188,14 @@ const REQUEST_KEYS = [
       );
     },
   },
+];
+
+const REQUEST_BODY_KEYS = [
+  {
+    label: "Method",
+    key: "request_payload.req_method",
+    render: (val: string) => <ChipX label={val} />,
+  },
   {
     label: "Request body",
     key: "request_payload.req_body",
@@ -192,17 +210,7 @@ const REQUEST_KEYS = [
   },
 ];
 
-const RESPONSE_KEYS = [
-  {
-    label: "Protocol",
-    key: "protocol",
-  },
-  {
-    label: "Method",
-    key: "request_payload.req_method",
-    render: (val: string) => <ChipX label={val} />,
-  },
-  { label: "Endpoint", key: "request_payload.req_path" },
+const RESPONSE_HEADER_KEYS = [
   {
     label: "Response headers",
     key: "response_payload.resp_headers",
@@ -218,6 +226,9 @@ const RESPONSE_KEYS = [
       );
     },
   },
+];
+
+const RESPONSE_BODY_KEYS = [
   {
     label: "Response body",
     key: "response_payload.resp_body",
@@ -262,13 +273,15 @@ const IncidentTabs = ({
         valueObj: selectedSpan,
       },
       {
-        list: REQUEST_KEYS,
+        list: REQUEST_HEADER_KEYS,
         valueObj: rawSpanData,
       },
+      { list: REQUEST_BODY_KEYS, valueObj: rawSpanData },
       {
-        list: RESPONSE_KEYS,
+        list: RESPONSE_HEADER_KEYS,
         valueObj: rawSpanData,
       },
+      { list: RESPONSE_BODY_KEYS, valueObj: rawSpanData },
     ];
   }, [selectedSpan, rawSpanData]);
 
@@ -329,9 +342,9 @@ export const IncidentNavButtons = ({
   return (
     <div className={styles["incident-nav-buttons-container"]}>
       {/* Newest */}
-      <IconButton className={styles["incident-nav-iconbutton"]}>
+      {/* <IconButton className={styles["incident-nav-iconbutton"]} size="large">
         <img src={`${ICON_BASE_PATH}/${ICONS["two-arrows-left"]}`} />
-      </IconButton>
+      </IconButton> */}
       {/* Newer */}
       <Button
         className={styles["incident-nav-button"]}
@@ -357,13 +370,13 @@ export const IncidentNavButtons = ({
         </span>
       </Button>
       {/* Oldest */}
-      <IconButton
+      {/* <IconButton
         color="secondary"
         className={styles["incident-nav-iconbutton"]}
         size="large"
       >
         <img src={`${ICON_BASE_PATH}/${ICONS["two-arrows-right"]}`} />
-      </IconButton>
+      </IconButton> */}
     </div>
   );
 };
