@@ -29,7 +29,7 @@ import TagX from "components/themeX/TagX";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import ServicesMenu from "./IssuesPage.utils";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 
 const IssuesPage = () => {
   const [page, setPage] = useState(1);
@@ -189,7 +189,32 @@ const IssuesPage = () => {
         </div>
       </div>
       <div className="page-content">
-        <TableX table={table} data={incidents || []} />
+        {selectedCluster && !loading && incidents ? (
+          <TableX table={table} data={incidents} />
+        ) : (
+          <div className={styles["skeleton-container"]}>
+            <Skeleton
+              variant="rectangular"
+              className={styles["skeleton-header"]}
+            />
+            <Skeleton
+              variant="rectangular"
+              className={styles["skeleton-row"]}
+            />
+            <Skeleton
+              variant="rectangular"
+              className={styles["skeleton-row"]}
+            />
+            <Skeleton
+              variant="rectangular"
+              className={styles["skeleton-row"]}
+            />
+            <Skeleton
+              variant="rectangular"
+              className={styles["skeleton-row"]}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

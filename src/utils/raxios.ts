@@ -6,7 +6,7 @@ import { logoutUser } from "redux/authSlice";
 // use this client for any API requests with the BASE_URL
 
 const raxios = axios.create({
-  timeout: 8000,
+  timeout: 15000,
   headers: {
     Accept: "application/json",
   },

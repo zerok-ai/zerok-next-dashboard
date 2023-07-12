@@ -49,7 +49,7 @@ const Home = () => {
     } finally {
       setStatus((old) => ({ ...old, loading: false }));
     }
-  }, []);
+  }, [selectedCluster]);
   useEffect(() => {
     fetchServices();
   }, [selectedCluster, router]);

@@ -39,6 +39,11 @@ const ClusterSelector = () => {
             dispatch(setSelectedCluster(val));
           }
         }}
+        sx={{
+          "& .MuiMenu-list": {
+            height: "100px!important",
+          },
+        }}
       >
         <MenuItem value="" disabled>
           Target cluster
