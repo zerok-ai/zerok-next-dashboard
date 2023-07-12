@@ -49,26 +49,39 @@ const ServicesMenu = () => {
 
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
-  const handleCheckBox = (e: ChangeEvent<HTMLInputElement>, name: string) => {
-    const { checked } = e.target;
+  const handleCheckBox = (name: string) => {
+    const checked = selectedServices.includes(name);
     if (checked) {
-      setSelectedServices((prev) => [...prev, name]);
-    } else {
       setSelectedServices((old) => old.filter((sv) => sv !== name));
+    } else {
+      setSelectedServices((prev) => [...prev, name]);
     }
   };
 
+  console.log({ selectedServices });
+
   const handleApply = () => {
-    const selectedServicesString = encodeURIComponent(
-      selectedServices.join(",")
-    );
-    router.push({
-      pathname: "/issues",
-      query: {
-        ...query,
-        services: selectedServicesString,
-      },
-    });
+    if (selectedServices.length) {
+      const selectedServicesString = encodeURIComponent(
+        selectedServices.join(",")
+      );
+      router.push({
+        pathname: "/issues",
+        query: {
+          ...query,
+          services: selectedServicesString,
+        },
+      });
+    } else {
+      const newQuery = { ...query };
+      delete newQuery.services;
+      router.push({
+        pathname: "/issues",
+        query: {
+          ...newQuery,
+        },
+      });
+    }
     closeMenu();
   };
 
@@ -132,9 +145,10 @@ const ServicesMenu = () => {
                     className={styles["services-menu-item"]}
                     key={nanoid()}
                     id={service.service}
+                    onClick={() => handleCheckBox(service.service)}
                   >
                     <Checkbox
-                      onChange={(e) => handleCheckBox(e, service.service)}
+                      // onChange={(e) => handleCheckBox(service.service)}
                       defaultChecked={selectedServices.includes(
                         service.service
                       )}
@@ -166,7 +180,7 @@ const ServicesMenu = () => {
               fullWidth
               className={styles["services-action-btn"]}
               onClick={handleApply}
-              disabled={selectedServices.length === 0}
+              disabled={!selectedServices.length && !servicesList?.length}
             >
               Apply
             </Button>

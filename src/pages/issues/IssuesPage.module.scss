@@ -71,6 +71,7 @@
 .services-menu {
     :global(.MuiMenu-list){
         height:280px !important;
+        background-color: $grey-900;
     }
 }
 .services-select-icon {
