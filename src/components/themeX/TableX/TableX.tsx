@@ -4,8 +4,9 @@ import styles from "./TableX.module.scss";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 
 interface TableXProps<T extends object> {
- table: Table<T>;
- data: T[];
+  table: Table<T>;
+  data: T[];
+  loading?: boolean;
 }
 
 const TableX = <T extends object>({ table, data }: TableXProps<T>) => {

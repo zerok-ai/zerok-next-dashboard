@@ -1,4 +1,4 @@
-import { Button, Checkbox, Menu, MenuItem } from "@mui/material";
+import { Button, Checkbox, Menu, MenuItem, Skeleton } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { ChangeEvent, Fragment, useEffect, useState } from "react";
@@ -84,6 +84,8 @@ const ServicesMenu = () => {
     } else setSelectedServices([]);
   }, [services]);
 
+  const skeletons = new Array(8).fill("skeleton");
+
   return (
     <Fragment>
       <Button
@@ -104,17 +106,16 @@ const ServicesMenu = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         id="service-select-menu"
+        className={styles["services-menu"]}
         onClose={closeMenu}
         sx={{
           "& .MuiMenu-paper": {
             width: "300px",
-            maxHeight: "300px",
             background: cssVars.grey900,
             marginTop: `${1 * SPACE_TOKEN}px`,
             borderRadius: `${SPACE_TOKEN}px}`,
           },
           "& .MuiMenu-list": {
-            height: "280px",
             overflowY: "scroll",
             background: cssVars.grey900,
             borderRadius: `${SPACE_TOKEN}px}`,
@@ -124,22 +125,38 @@ const ServicesMenu = () => {
       >
         <div className={styles["services-container"]}>
           <div className={styles["services-list"]}>
-            {servicesList?.map((service) => {
-              return (
-                <MenuItem
-                  className={styles["services-menu-item"]}
-                  key={nanoid()}
-                  id={service.service}
-                >
-                  <Checkbox
-                    onChange={(e) => handleCheckBox(e, service.service)}
-                    defaultChecked={selectedServices.includes(service.service)}
-                  />{" "}
-                  {getNamespace(service.service)}/
-                  {getFormattedServiceName(service.service)}
-                </MenuItem>
-              );
-            })}
+            {servicesList ? (
+              servicesList.map((service) => {
+                return (
+                  <MenuItem
+                    className={styles["services-menu-item"]}
+                    key={nanoid()}
+                    id={service.service}
+                  >
+                    <Checkbox
+                      onChange={(e) => handleCheckBox(e, service.service)}
+                      defaultChecked={selectedServices.includes(
+                        service.service
+                      )}
+                    />{" "}
+                    {getNamespace(service.service)}/
+                    {getFormattedServiceName(service.service)}
+                  </MenuItem>
+                );
+              })
+            ) : (
+              <div className={styles["services-skeleton-container"]}>
+                {skeletons.map((sk) => {
+                  return (
+                    <Skeleton
+                      key={nanoid()}
+                      variant="rectangular"
+                      className={styles["services-skeleton"]}
+                    />
+                  );
+                })}
+              </div>
+            )}
           </div>
           <div className={styles["services-action-container"]}>
             <Button
