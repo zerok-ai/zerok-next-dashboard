@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import objectPath from "object-path";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import sjson from "secure-json-parse";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
@@ -38,7 +38,8 @@ const IncidentTabs = ({
   const { issue_id, id: incidentId } = router.query;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
   const { selectedCluster } = useSelector(clusterSelector);
-  const endpoint = `/mysql.json`
+  const type = "mysql";
+  const endpoint = (type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`)
     .replace("{cluster_id}", selectedCluster as string)
     .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
@@ -62,31 +63,37 @@ const IncidentTabs = ({
   useEffect(() => {
     setActiveTab(DEFAULT_TAB);
   }, [router]);
-
+  let accessor = type === "http" ? selectedSpan : "something";
   let rawSpanData = rawSpanResponse
-    ? (rawSpanResponse["something"] as SpanResponse)
+    ? (rawSpanResponse[accessor] as SpanResponse)
     : null;
+  const parsedSpanData = useMemo(() => {
+    if (!rawSpanData) return null;
+    const parsedSpanData = rawSpanData as SpanDetail;
+    if (rawSpanData.protocol === "http") {
+      try {
+        parsedSpanData.request_payload = JSON.parse(
+          rawSpanData.request_payload as string
+        );
+        parsedSpanData.response_payload = JSON.parse(
+          rawSpanData.response_payload as string
+        );
+      } catch (err) {
+        console.log({ err });
+      }
+    }
+    return parsedSpanData;
+  }, [rawSpanData]);
   if (!rawSpanData || !spanData || !selectedSpan) {
     return <TabSkeleton />;
   }
 
-  if (rawSpanData.protocol === "http") {
-    try {
-      rawSpanData.response_payload = sjson.parse(
-        rawSpanData.response_payload as string
-      );
-      rawSpanData.request_payload = JSON.parse(
-        rawSpanData.request_payload as string
-      );
-    } catch (er) {
-      console.log({ er });
-    }
-  }
+  console.log({ rawSpanData, parsedSpanData });
 
   const { keys: TAB_KEYS, content: TAB_CONTENT } = getTabByProtocol(
-    rawSpanData.protocol,
+    parsedSpanData.protocol,
     spanData[selectedSpan],
-    rawSpanData
+    parsedSpanData
   );
   return (
     <div className={styles["tabs-container"]}>
@@ -97,7 +104,7 @@ const IncidentTabs = ({
         ))}
       </Tabs>
       {/* tab content */}
-      {selectedSpan && rawSpanData && (
+      {selectedSpan && parsedSpanData && (
         <div className={styles["tab-content-container"]}>
           {TAB_CONTENT.map((tab, index) => {
             if (tab.valueObj) {
