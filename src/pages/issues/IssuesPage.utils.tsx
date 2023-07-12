@@ -22,23 +22,27 @@ import {
 } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 
-const filterServices = (services: ServiceDetail[]) => {
-  return services.filter(
-    (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
-  );
-};
+
 
 const ServicesMenu = () => {
   const router = useRouter();
   const { query } = router;
   const { services } = query;
   const { selectedCluster } = useSelector(clusterSelector);
+  const filterAndSortServices = (newData: ServiceDetail[]) => {
+    return newData.filter(
+      (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
+    );
+    // .sort((a, b) => {
+    //   return services?.includes(a.service) ? -1 : 1;
+    // });
+  };
   const {
     loading,
     error,
     data: servicesList,
     fetchData: fetchServices,
-  } = useFetch<ServiceDetail[]>("results");
+  } = useFetch<ServiceDetail[]>("results", null, filterAndSortServices);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
