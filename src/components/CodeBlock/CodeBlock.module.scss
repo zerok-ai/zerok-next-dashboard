@@ -3,17 +3,22 @@
 
     padding:$sp-base $sp-base * 2;
     border-radius: $sp-base;
+    
     .code {
         width:90%;
         display: flex;
         align-items: center;
-        
+        max-width: 800px;
     }
     code {
         display: flex;
+       
         justify-content:space-between;column-gap: $sp-base * 2;
     }
     pre {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
         margin:0;
     }
 }

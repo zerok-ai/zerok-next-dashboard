@@ -1,0 +1,24 @@
+@import "styles/variables.module.scss";
+.container {
+    background-color: $grey-900;
+    padding:$sp-base * 3 $sp-base * 5;
+    border-radius: $sp-base;
+    width:100%;
+    border-spacing: 0;
+    height:80px;
+    max-height:200px;
+    overflow:auto;
+    td {
+        border-bottom: 1px solid $grey-800;
+        padding:$sp-base * 2 $sp-base * 2;
+        color:$grey-50;
+        
+    } tr {
+       
+    }
+}
+
+.sql-table-container {
+    max-height: 300px;
+    overflow-y: auto;
+}

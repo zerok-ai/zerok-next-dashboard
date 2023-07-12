@@ -6,13 +6,19 @@
     column-gap: $sp-base * 8;
     padding:$sp-base * 3 0;
     border-bottom: 1px solid $grey-900;
+   
+    .sql-table-container {
+        max-height:500px !important;
+        overflow-y: auto;
+    }
 }
 
 .tab-row-label {
-    width:120px;
+    width:10%;
     color:$grey-100;
 }
 
 .tab-row-value {
     color:$white;
+    width:80%;
 }

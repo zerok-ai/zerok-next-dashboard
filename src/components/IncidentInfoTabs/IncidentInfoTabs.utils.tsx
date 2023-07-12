@@ -10,6 +10,13 @@ import {
   HTTP_TAB_KEYS,
 } from "./IncidentInfoTabs.http";
 import { SpanDetail, SpanRawData } from "utils/types";
+import {
+  MYSQL_OVERVIEW_KEYS,
+  MYSQL_QUERY_KEYS,
+  MYSQL_RESULT_KEYS,
+  MYSQL_TABS,
+  MYSQL_TAB_KEYS,
+} from "./IncidentInfoTabs.mysql";
 export const DEFAULT_TAB = "overview";
 
 export const TabSkeleton = () => {
@@ -59,6 +66,24 @@ export const getTabByProtocol = (
           },
           {
             list: HTTP_RESPONSE_BODY_KEYS,
+            valueObj: rawSpanData,
+          },
+        ],
+      };
+    case "MYSQL":
+      return {
+        keys: MYSQL_TABS,
+        content: [
+          {
+            list: MYSQL_OVERVIEW_KEYS,
+            valueObj: currentSpan,
+          },
+          {
+            list: MYSQL_QUERY_KEYS,
+            valueObj: rawSpanData,
+          },
+          {
+            list: MYSQL_RESULT_KEYS,
             valueObj: rawSpanData,
           },
         ],
