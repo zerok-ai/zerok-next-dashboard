@@ -85,3 +85,25 @@ export function roundToTwoDecimals(value: number) {
   }
   return "NA";
 }
+
+export const stringWithoutComments = (s: string) => {
+  return s.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, "");
+};
+
+export const decodeLengthEncodedHexString = (hexStr: any): string[] => {
+  const buffer = Buffer.from(hexStr, "binary");
+  let offset = 0;
+
+  const fields = [];
+
+  while (offset < buffer.length) {
+    const fieldLength = buffer.readUInt8(offset);
+    offset += 1;
+
+    const fieldData = buffer.slice(offset, offset + fieldLength);
+    offset += fieldLength;
+
+    fields.push(fieldData.toString("utf-8"));
+  }
+  return fields;
+};

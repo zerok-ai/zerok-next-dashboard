@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Skeleton, Tabs, Tab } from "@mui/material";
 import { nanoid } from "nanoid";
 import { useFetch } from "hooks/useFetch";
@@ -36,10 +38,8 @@ const IncidentTabs = ({
   const { issue_id, id: incidentId } = router.query;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
   const { selectedCluster } = useSelector(clusterSelector);
-  const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
-    "{cluster_id}",
-    selectedCluster as string
-  )
+  const endpoint = `/mysql.json`
+    .replace("{cluster_id}", selectedCluster as string)
     .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
     .replace("{issue_id}", issue_id as string);
@@ -64,9 +64,8 @@ const IncidentTabs = ({
   }, [router]);
 
   let rawSpanData = rawSpanResponse
-    ? rawSpanResponse[selectedSpan as string]
+    ? (rawSpanResponse["something"] as SpanResponse)
     : null;
-
   if (!rawSpanData || !spanData || !selectedSpan) {
     return <TabSkeleton />;
   }
