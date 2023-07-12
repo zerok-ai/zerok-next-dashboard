@@ -130,7 +130,6 @@ const IssuesPage = () => {
   });
 
   const removeService = (label: string) => {
-    console.log("issues page");
     if (services) {
       const filtered = services.filter((sv) => sv !== label);
       const newQuery = { ...query };

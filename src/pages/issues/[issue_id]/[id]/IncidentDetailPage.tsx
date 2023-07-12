@@ -44,7 +44,7 @@ const IncidentDetailPage = () => {
     fetchData: fetchSpanData,
   } = useFetch<SpanResponse>("spans");
 
-  const [selectedSpan, setSelectedSpan] = useState<SpanDetail | null>(null);
+  const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
   const router = useRouter();
   const incidentId = router.query.id;
@@ -74,11 +74,13 @@ const IncidentDetailPage = () => {
       router.push("/issues");
     }
     if (selectedCluster) {
+      // fetchSpanData("/spans.json");
       fetchSpanData(
         LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
           .replace("{cluster_id}", selectedCluster as string)
           .replace("{issue_id}", issueId as string)
       );
+      setSelectedSpan(null);
     }
   }, [incidentId, router, selectedCluster]);
 
@@ -134,10 +136,10 @@ const IncidentDetailPage = () => {
   }, [spanData]);
 
   useEffect(() => {
-    if (spanTree) {
-      setSelectedSpan(spanTree);
+    if (spanData) {
+      setSelectedSpan(Object.keys(spanData)[0]);
     }
-  }, [spanTree]);
+  }, [spanData]);
 
   useEffect(() => {
     if (issue) {
@@ -146,13 +148,15 @@ const IncidentDetailPage = () => {
   }, [issue]);
 
   const renderSpanTree = (parentSpan: SpanDetail) => {
-    const active = selectedSpan?.span_id === parentSpan.span_id;
+    const active = selectedSpan === parentSpan.span_id;
     return (
       <div className={styles["span-tree-container"]} key={nanoid()}>
         <SpanCard
           span={parentSpan}
           active={active}
-          onClick={(selectedSpan) => setSelectedSpan(selectedSpan)}
+          onClick={(selectedSpan) =>
+            setSelectedSpan(selectedSpan.span_id as string)
+          }
         />
         {!!parentSpan.children?.length &&
           parentSpan.children.map((span) => renderSpanTree(span))}
@@ -209,13 +213,15 @@ const IncidentDetailPage = () => {
               toggleSize={toggleMapMinimized}
               spanData={spanData}
               spanTree={spanTree}
-              onNodeClick={(span: SpanDetail) => setSelectedSpan(span)}
+              onNodeClick={(span: SpanDetail) =>
+                setSelectedSpan(span.span_id as string)
+              }
             />
           </ReactFlowProvider>
         </div>
 
         <div className={styles["incident-info-container"]}>
-          {selectedSpan && <IncidentTabs selectedSpan={selectedSpan} />}
+          <IncidentTabs selectedSpan={selectedSpan} spanData={spanData} />
         </div>
       </div>
     </div>

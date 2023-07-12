@@ -12,6 +12,8 @@ import cssVars from "styles/variables.module.scss";
 import cx from "classnames";
 import styles from "./IncidentDetailMap.module.scss";
 import { ICONS, ICON_BASE_PATH } from "utils/images";
+import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
+import { getNamespace } from "utils/functions";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -31,52 +33,23 @@ const getNodeFromSpan = (id: string, span: SpanDetail): Node => {
   };
 };
 
-// export const getNodePositions = (x: number, y: number, length: number) => {
-//   const positions = [];
-//   let odd = 1;
-//   let even = 1;
-//   if (length === 1) return { positions: [{ x: x + 200, y }], x: x + 200, y };
-
-//   if (length === 2) {
-//     x += 200;
-//     return {
-//       positions: [
-//         { x, y: y + 100 },
-//         { x, y: y - 100 },
-//       ],
-//       x,
-//       y,
-//     };
-//   }
-
-//   for (let i = 0; i < length; i++) {
-//     if (i === 0) {
-//       positions.push({ x: x + 200 });
-//       continue;
-//     }
-//     if (i % 2 === 0) {
-//       positions.push({ x: x + 200, y: y + even * 70 });
-//       ++even;
-//     } else {
-//       positions.push({ x: x + 200, y: y - odd * 70 });
-//       ++odd;
-//     }
-//   }
-
-//   return { positions, x, y };
-// };
-
 export const getNodesFromSpanTree = (
   span: SpanDetail,
   memo: GenericObject = {},
   nodes: Node[] = []
 ) => {
   const { source, destination } = span;
-  if (!memo[source]) {
+  if (
+    !memo[source] &&
+    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source))
+  ) {
     memo[source] = true;
     nodes.push(getNodeFromSpan(source, span));
   }
-  if (!memo[destination]) {
+  if (
+    !memo[destination] &&
+    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(destination))
+  ) {
     memo[destination] = true;
     nodes.push(getNodeFromSpan(destination, span));
   }
@@ -92,15 +65,20 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
   const edges: Edge[] = [];
   Object.keys(spanData).map((key) => {
     const span = spanData[key];
-    edges.push({
-      id: `e-${span.source}-${span.destination}`,
-      source: span.source,
-      target: span.destination,
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: cssVars.grey600,
-      },
-    });
+    if (
+      !IGNORED_SERVICES_PREFIXES.includes(getNamespace(span.source)) &&
+      !IGNORED_SERVICES_PREFIXES.includes(getNamespace(span.destination))
+    ) {
+      edges.push({
+        id: `e-${span.source}-${span.destination}`,
+        source: span.source,
+        target: span.destination,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: cssVars.grey600,
+        },
+      });
+    }
   });
   return edges;
 };
@@ -108,7 +86,8 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
 export const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
   const isHorizontal = true;
   dagreGraph.setGraph({ rankdir: "LR" });
-
+  const leftPadding = 80;
+  const topPadding = 100;
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
   });
@@ -119,16 +98,17 @@ export const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
 
   dagre.layout(dagreGraph);
 
-  nodes.forEach((node) => {
+  nodes.forEach((node, idx) => {
     const nodeWithPosition = dagreGraph.node(node.id);
     node.targetPosition = isHorizontal ? Position.Left : Position.Top;
     node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
 
     // We are shifting the dagre node position (anchor=center center) to the top left
     // so it matches the React Flow node anchor point (top left).
+
     node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2,
+      x: nodeWithPosition.x - nodeWidth / 2 + leftPadding,
+      y: nodeWithPosition.y - nodeHeight / 2 + topPadding,
     };
 
     return node;
