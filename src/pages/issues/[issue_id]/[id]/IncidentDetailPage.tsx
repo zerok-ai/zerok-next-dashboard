@@ -25,6 +25,7 @@ import { drawerSelector, minimizeDrawer } from "redux/drawer";
 import { ReactFlowProvider } from "reactflow";
 import { setIncidentList } from "redux/incidentList";
 import { clusterSelector } from "redux/cluster";
+import IncidentInfoTabs from "components/IncidentInfoTabs";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -42,6 +43,7 @@ const IncidentDetailPage = () => {
     error: spanError,
     data: spanData,
     fetchData: fetchSpanData,
+    setData: setSpanData,
   } = useFetch<SpanResponse>("spans");
 
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
@@ -70,17 +72,19 @@ const IncidentDetailPage = () => {
   }, [issueId, selectedCluster]);
 
   useEffect(() => {
+    setSelectedSpan(null);
+  }, [incidentId]);
+
+  useEffect(() => {
     if (router.isReady && !incidentId) {
       router.push("/issues");
     }
-    if (selectedCluster) {
-      // fetchSpanData("/spans.json");
+    if (selectedCluster && incidentId) {
       fetchSpanData(
         LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
           .replace("{cluster_id}", selectedCluster as string)
           .replace("{issue_id}", issueId as string)
       );
-      setSelectedSpan(null);
     }
   }, [incidentId, router, selectedCluster]);
 
@@ -133,9 +137,6 @@ const IncidentDetailPage = () => {
 
   useEffect(() => {
     getSpans();
-  }, [spanData]);
-
-  useEffect(() => {
     if (spanData) {
       setSelectedSpan(Object.keys(spanData)[0]);
     }
@@ -213,15 +214,17 @@ const IncidentDetailPage = () => {
               toggleSize={toggleMapMinimized}
               spanData={spanData}
               spanTree={spanTree}
-              onNodeClick={(span: SpanDetail) =>
-                setSelectedSpan(span.span_id as string)
-              }
+              onNodeClick={(spanId: string) => {
+                if (spanId !== selectedSpan) {
+                  setSelectedSpan(spanId as string);
+                }
+              }}
             />
           </ReactFlowProvider>
         </div>
 
         <div className={styles["incident-info-container"]}>
-          <IncidentTabs selectedSpan={selectedSpan} spanData={spanData} />
+          <IncidentInfoTabs selectedSpan={selectedSpan} spanData={spanData} />
         </div>
       </div>
     </div>

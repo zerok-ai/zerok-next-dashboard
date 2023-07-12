@@ -32,6 +32,4 @@ export const LIST_SPANS_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident
 
 export const GET_SPAN_RAWDATA_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident/{incident_id}/span/{span_id}`;
 
-export const GET_ISSUES_ENDPOINT = `/v1/c/issue?source=sofa-shop/product&destination=sofa-shop/product`;
-
-export const GET_INCIDENTS_ENDPOINT = `/incident_ids.json`;
+export const GET_INCIDENTS_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident?limit=10&offset={offset}`;

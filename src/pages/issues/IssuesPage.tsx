@@ -4,12 +4,7 @@ import PageLayout from "components/layouts/PageLayout";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
-import {
-  GET_ISSUES_ENDPOINT,
-  LIST_INCIDENTS_ENDPOINT,
-  LIST_SERVICES_ENDPOINT,
-  LIST_SERVICES_ENDPOINT_V2,
-} from "utils/endpoints";
+import { LIST_INCIDENTS_ENDPOINT } from "utils/endpoints";
 import { IssueDetail } from "utils/types";
 import {
   createColumnHelper,
