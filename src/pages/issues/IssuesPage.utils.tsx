@@ -58,8 +58,6 @@ const ServicesMenu = () => {
     }
   };
 
-  console.log({ selectedServices });
-
   const handleApply = () => {
     if (selectedServices.length) {
       const selectedServicesString = encodeURIComponent(

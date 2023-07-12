@@ -31,5 +31,5 @@ export const useFetch = <T>(
   useEffect(() => {
     if (url) fetchData(url);
   }, [url]);
-  return { data, loading, error, fetchData };
+  return { data, loading, error, fetchData, setData };
 };
