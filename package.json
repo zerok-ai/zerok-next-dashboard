@@ -115,6 +115,7 @@
     "remark": "^14.0.2",
     "remark-html": "^15.0.2",
     "sass": "^1.63.6",
+    "secure-json-parse": "^2.7.0",
     "simplebar": "^6.2.5",
     "simplebar-react": "^3.2.4",
     "slick-carousel": "^1.8.1",

@@ -5,6 +5,7 @@ import {
   SpanDetail,
   SpanRawData,
   SpanRawDataResponse,
+  SpanResponse,
 } from "utils/types";
 import styles from "./IncidentDetailPage.module.scss";
 import {
@@ -19,9 +20,11 @@ import {
   CircularProgress,
   Drawer,
   IconButton,
+  Skeleton,
   Tab,
   Tabs,
 } from "@mui/material";
+import sjson from "secure-json-parse";
 
 import cx from "classnames";
 import cssVars from "styles/variables.module.scss";
@@ -175,13 +178,13 @@ export const OVERVIEW_KEYS: {
 const REQUEST_HEADER_KEYS = [
   {
     label: "Method",
-    key: "request_payload.req_method",
+    key: "request_payload",
     render: (val: string) => <ChipX label={val} />,
   },
-  { label: "Endpoint", key: "request_payload.req_path" },
+  { label: "Endpoint", key: "request_payload" },
   {
     label: "Request headers",
-    key: "request_payload.req_headers",
+    key: "request_payload",
     render: (val: Object | null) => {
       const json = val || {};
       return (
@@ -199,65 +202,89 @@ const REQUEST_HEADER_KEYS = [
 const REQUEST_BODY_KEYS = [
   {
     label: "Method",
-    key: "request_payload.req_method",
+    // key: "request_payload.req_method",
+    key: "request_payload",
     render: (val: string) => <ChipX label={val} />,
   },
   {
     label: "Request body",
-    key: "request_payload.req_body",
-    render: (val: string | null) => {
-      const json = val || {};
-      return json ? (
-        <DynamicReactJson src={json} enableClipboard={false} />
-      ) : (
-        "null"
-      );
-    },
+    // key: "request_payload.req_body",
+    key: "request_payload",
+    // render: (val: string | null) => {
+    //   const json = val || {};
+    //   return json ? (
+    //     <DynamicReactJson src={json} enableClipboard={false} />
+    //   ) : (
+    //     "null"
+    //   );
+    // },
   },
 ];
 
 const RESPONSE_HEADER_KEYS = [
   {
     label: "Response headers",
-    key: "response_payload.resp_headers",
-    render: (val: string | null) => {
-      const json = val || {};
-      return (
-        <DynamicReactJson
-          src={json}
-          name={false}
-          displayDataTypes={false}
-          enableClipboard={false}
-        />
-      );
-    },
+    // key: "response_payload.resp_headers",
+    key: "response_payload",
+    // render: (val: string | null) => {
+    //   const json = val || {};
+    //   return (
+    //     <DynamicReactJson
+    //       src={json}
+    //       name={false}
+    //       displayDataTypes={false}
+    //       enableClipboard={false}
+    //     />
+    //   );
+    // },
   },
 ];
 
 const RESPONSE_BODY_KEYS = [
   {
     label: "Response body",
-    key: "response_payload.resp_body",
-    render: (val: string | null) => {
-      const json = val || {};
-      return json ? (
-        <DynamicReactJson
-          src={json}
-          enableClipboard={false}
-          name={false}
-          displayDataTypes={false}
-        />
-      ) : (
-        "null"
-      );
-    },
+    key: "response_payload",
+    // render: (val: string | null) => {
+    //   const json = val || {};
+    //   return json ? (
+    //     <DynamicReactJson
+    //       src={json}
+    //       enableClipboard={false}
+    //       name={false}
+    //       displayDataTypes={false}
+    //     />
+    //   ) : (
+    //     "null"
+    //   );
+    // },
   },
 ];
 
+const TabsSkeleton = () => {
+  const headers = new Array(5).fill("header");
+  const rows = new Array(5).fill("row");
+  return (
+    <div className={styles["tabs-skeleton-container"]}>
+      <div className={styles["tabs-skeleton-header"]}>
+        {headers.map((_) => {
+          return <Skeleton className={styles["tabs-skeleton-header-item"]} />;
+        })}
+      </div>
+      <div className={styles["tabs-skeleton-content"]}>
+        {rows.map((_) => {
+          return <Skeleton className={styles["tabs-skeleton-content-item"]} />;
+        })}
+      </div>
+    </div>
+  );
+};
+
 const IncidentTabs = ({
   selectedSpan,
+  spanData,
 }: {
-  selectedSpan: null | SpanDetail;
+  selectedSpan: null | string;
+  spanData: null | SpanResponse;
 }) => {
   const router = useRouter();
   const { issue_id, id: incidentId } = router.query;
@@ -267,7 +294,7 @@ const IncidentTabs = ({
     "{cluster_id}",
     selectedCluster as string
   )
-    .replace("{span_id}", selectedSpan?.span_id as string)
+    .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
     .replace("{issue_id}", issue_id as string);
 
@@ -283,40 +310,60 @@ const IncidentTabs = ({
       fetchRawData(endpoint);
     }
   }, [selectedSpan, endpoint]);
-
   const rawSpanData = rawSpanResponse
-    ? rawSpanResponse[selectedSpan?.span_id as string]
-    : ({} as SpanRawData);
+    ? rawSpanResponse[selectedSpan as string]
+    : null;
+  if (!selectedSpan || !rawSpanData || !spanData) {
+    const headers = new Array(5).fill("header");
+    const rows = new Array(5).fill("row");
+    return (
+      <div className={styles["tabs-skeleton-container"]}>
+        <div className={styles["tabs-skeleton-header"]}>
+          {headers.map((_) => {
+            return <Skeleton className={styles["tabs-skeleton-header-item"]} />;
+          })}
+        </div>
+        <div className={styles["tabs-skeleton-content"]}>
+          {rows.map((_) => {
+            return (
+              <Skeleton className={styles["tabs-skeleton-content-item"]} />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  console.log({ rawSpanData, spanData });
+
   if (rawSpanData.protocol === "http") {
-    // console.log("console", JSON.parse(rawSpanData.request_payload as string));
-    // rawSpanData.request_payload = JSON.parse(
-    //   rawSpanData.request_payload as string
-    // );
+    // try {
+    //   rawSpanData.request_payload = sjson.parse(
+    //     rawSpanData.request_payload as string
+    //   );
+    //   rawSpanData.response_payload = JSON.parse(
+    //     rawSpanData.response_payload as string
+    //   );
+    // } catch (er) {
+    //   console.log({ er });
+    // }
   }
-
-  console.log({ rawSpanData });
-  const TAB_CONTENT = useMemo(() => {
-    return [
-      {
-        list: OVERVIEW_KEYS,
-        valueObj: selectedSpan,
-      },
-      {
-        list: REQUEST_HEADER_KEYS,
-        valueObj: rawSpanData,
-      },
-      { list: REQUEST_BODY_KEYS, valueObj: rawSpanData },
-      {
-        list: RESPONSE_HEADER_KEYS,
-        valueObj: rawSpanData,
-      },
-      { list: RESPONSE_BODY_KEYS, valueObj: rawSpanData },
-    ];
-  }, [selectedSpan, rawSpanResponse]);
-
-  if (!rawSpanResponse) {
-    return <CircularProgress />;
-  }
+  const TAB_CONTENT = [
+    {
+      list: OVERVIEW_KEYS,
+      valueObj: spanData[selectedSpan as string],
+    },
+    {
+      list: REQUEST_HEADER_KEYS,
+      valueObj: rawSpanData,
+    },
+    { list: REQUEST_BODY_KEYS, valueObj: rawSpanData },
+    {
+      list: RESPONSE_HEADER_KEYS,
+      valueObj: rawSpanData,
+    },
+    { list: RESPONSE_BODY_KEYS, valueObj: rawSpanData },
+  ];
 
   return (
     <div className={styles["tabs-container"]}>
@@ -400,7 +447,6 @@ export const IncidentNavButtons = () => {
       fetchIncidentList();
     }
   };
-  console.log({ activeIndex, incidentList });
 
   return (
     <div className={styles["incident-nav-buttons-container"]}>
