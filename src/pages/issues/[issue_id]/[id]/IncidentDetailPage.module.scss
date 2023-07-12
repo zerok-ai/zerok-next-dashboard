@@ -138,15 +138,3 @@
     }
 }
 
-.tabs-skeleton-header {
-    display: flex;
-    column-gap: $sp-base * 2;
-    .tabs-skeleton-header-item {
-        width:140px;
-        height:60px;
-    }
-}
-
-.tabs-skeleton-content-item {
-    height:40px;
-}

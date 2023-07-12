@@ -14,11 +14,24 @@
 }
 
 .tab-row-label {
-    width:10%;
+    width:15%;
     color:$grey-100;
 }
 
 .tab-row-value {
     color:$white;
     width:80%;
+}
+
+.tabs-skeleton-header {
+    display: flex;
+    column-gap: $sp-base * 2;
+    .tabs-skeleton-header-item {
+        width:140px;
+        height:60px;
+    }
+}
+
+.tabs-skeleton-content-item {
+    height:40px;
 }

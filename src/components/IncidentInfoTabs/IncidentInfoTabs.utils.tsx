@@ -17,6 +17,7 @@ import {
   MYSQL_TABS,
   MYSQL_TAB_KEYS,
 } from "./IncidentInfoTabs.mysql";
+import { nanoid } from "nanoid";
 export const DEFAULT_TAB = "overview";
 
 export const TabSkeleton = () => {
@@ -26,12 +27,22 @@ export const TabSkeleton = () => {
     <div className={styles["tabs-skeleton-container"]}>
       <div className={styles["tabs-skeleton-header"]}>
         {headers.map((_) => {
-          return <Skeleton className={styles["tabs-skeleton-header-item"]} />;
+          return (
+            <Skeleton
+              className={styles["tabs-skeleton-header-item"]}
+              key={nanoid()}
+            />
+          );
         })}
       </div>
       <div className={styles["tabs-skeleton-content"]}>
         {rows.map((_) => {
-          return <Skeleton className={styles["tabs-skeleton-content-item"]} />;
+          return (
+            <Skeleton
+              className={styles["tabs-skeleton-content-item"]}
+              key={nanoid()}
+            />
+          );
         })}
       </div>
     </div>

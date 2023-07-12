@@ -87,3 +87,9 @@ a {
   display: "none";
   height: 0;
 }
+
+
+// JSON viwer
+.object-key-val, .variable-row {
+  border-color: $grey-300 !important;
+}
