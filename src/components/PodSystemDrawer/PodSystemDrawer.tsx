@@ -45,8 +45,7 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
   useEffect(() => {
     if (pod && selectedCluster) {
       fetchData(
-        `/stats.json`
-          .replace("{cluster_id}", selectedCluster)
+        GET_POD_DETAILS_ENDPOINT.replace("{cluster_id}", selectedCluster)
           .replace("{namespace}", namespace)
           .replace("{pod_name}", pod)
       );
