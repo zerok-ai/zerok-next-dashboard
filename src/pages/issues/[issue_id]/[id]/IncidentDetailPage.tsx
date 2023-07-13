@@ -198,7 +198,11 @@ const IncidentDetailPage = () => {
           <Skeleton className={"page-title-loader"} />
         ) : (
           <div
-            className={cx(styles["header"], isHeaderSticky && styles["sticky"])}
+            className={cx(
+              styles["header"],
+              isHeaderSticky && styles["sticky"],
+              isDrawerMinimized && styles["drawer-minimized"]
+            )}
             id="incident-header"
             ref={stickyHeader}
           >
