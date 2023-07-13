@@ -89,10 +89,10 @@ export const getTabByProtocol = (
       let defaultContent = [...DEFAULT_TAB_CONTENT];
       if (currentSpan.destination.includes("zk-client")) {
         defaultKeys.push(...ERROR_TAB_KEYS);
-        defaultContent.push({
-          list: ERROR_TAB_KEYS,
-          valueObj: rawSpanData,
-        });
+        // defaultContent.push({
+        //   list: ERROR_TAB_KEYS,
+        //   valueObj: rawSpanData,
+        // });
       }
       return {
         keys: [...defaultKeys, ...HTTP_TABS],
