@@ -1,3 +1,6 @@
+set -x #echo on
+
+yarn
 yarn build
 yarn export
 
