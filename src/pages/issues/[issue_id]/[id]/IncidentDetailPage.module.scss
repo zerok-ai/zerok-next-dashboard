@@ -5,12 +5,31 @@
     // width: calc(100vw - $main-drawer-width-mini - $sp-base * 12);
     // // max-width: calc(100vh - $main-drawer-width-mini);
     // top: 0;
-    // background-color: $bg-dark;
-    // z-index: 50000;
+    background-color: $bg-dark;
+    z-index: 50000;
+    transition:all 0.3s ease;
     h3 {
         color:$white;
     }
 }
+.sticky {
+    width: 100%;
+  position: fixed;
+  top: 0;
+  transition:all 0.3s ease;
+}
+
+.header.sticky {
+    animation: slideDown 0.2s ease-out;
+}
+@keyframes slideDown {
+    from {
+      transform: translateY(-150%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 .container {
     display: flex;
     flex-direction: column;
