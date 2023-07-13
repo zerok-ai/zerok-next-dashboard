@@ -27,6 +27,7 @@ import { setIncidentList } from "redux/incidentList";
 import { clusterSelector } from "redux/cluster";
 import IncidentInfoTabs from "components/IncidentInfoTabs";
 import { isNumber } from "lodash";
+import { getTitleFromIssue } from "utils/functions";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -208,11 +209,7 @@ const IncidentDetailPage = () => {
           >
             <div className={styles["header-left"]}>
               {" "}
-              <h3>
-                {issue.issue_title.includes("¦")
-                  ? issue.issue_title
-                  : issue.issue_title.split("¦")[0]}
-              </h3>
+              <h3>{getTitleFromIssue(issue.issue_title)}</h3>
               <IncidentMetadata incident={issue} />
             </div>
             <div className={styles["header-right"]}>

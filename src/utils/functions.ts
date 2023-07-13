@@ -115,3 +115,7 @@ export function convertNanoToMilliSecondsNumber(value: number) {
   }
   return 0;
 }
+
+export const getTitleFromIssue = (title: string) => {
+  return title.includes("¦") ? title.split("¦")[0] : title;
+};

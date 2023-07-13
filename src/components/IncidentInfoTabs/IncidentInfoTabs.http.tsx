@@ -137,17 +137,22 @@ export const HTTP_RESPONSE_BODY_KEYS = [
     label: "Response body",
     key: "response_payload.resp_body",
     render: (val: string | null) => {
-      const json = JSON.parse(val as string) || null;
-      return json ? (
-        <DynamicReactJson
-          src={json}
-          enableClipboard={false}
-          name={false}
-          displayDataTypes={false}
-        />
-      ) : (
-        "null"
-      );
+      
+      try {
+        let json = JSON.parse(val as string) || null;
+        return json ? (
+          <DynamicReactJson
+            src={json}
+            enableClipboard={false}
+            name={false}
+            displayDataTypes={false}
+          />
+        ) : (
+          "null"
+        );
+      } catch (err) {
+        return val;
+      }
     },
   },
 ];

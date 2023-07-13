@@ -1,7 +1,7 @@
 @import "styles/variables.module.scss";
 .drawer {
     :global(.MuiDrawer-paper) {
-        width:500px;
+        width:600px;
         border-left: 1px solid $grey-500;
         background: $grey-950;
       }
@@ -65,15 +65,22 @@
     }
 }
 
+.conditions-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 5;
+}
+
 .condition-row {
     display: grid;
     column-gap: $sp-base * 2;
-    grid-template-columns: 3fr 1fr 3fr;
+    align-items:center;
+    grid-template-columns: 0.8fr 3fr 1fr 3fr 0.5fr;
 }
-.first-row {
-     grid-template-columns: 0.6fr 3fr 1fr 3fr;;
+.start-row {
+     grid-template-columns: 3fr 1fr 3fr;
 }
-.protocol-select, .equal-select, .service-select, .condition {
+.protocol-select, .equal-select, .service-select, .condition-select {
     width:100%;
     
 }
@@ -92,3 +99,19 @@
     }
 }
 
+.service-select-item {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.service-select-paper {
+    max-height:300px;
+    width:200px;
+    background-color: $grey-950;
+}
+
+.delete-row-icon {
+    font-size: $font-xl;
+    color:$primary-500;
+    cursor: pointer;
+}

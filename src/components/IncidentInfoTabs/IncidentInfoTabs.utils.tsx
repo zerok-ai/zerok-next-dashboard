@@ -144,8 +144,9 @@ export const getTabByProtocol = (
       };
     default:
       return {
-        keys: HTTP_TABS,
+        keys: [...defaultKeys, ...HTTP_TABS],
         content: [
+          ...defaultContent,
           {
             list: HTTP_REQUEST_HEADER_KEYS,
             valueObj: rawSpanData,
@@ -159,7 +160,7 @@ export const getTabByProtocol = (
             valueObj: rawSpanData,
           },
           {
-            list: HTTP_REQUEST_BODY_KEYS,
+            list: HTTP_RESPONSE_BODY_KEYS,
             valueObj: rawSpanData,
           },
         ],

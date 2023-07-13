@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import TextFormField from "components/forms/TextFormField";
 import {
   CONDITIONS,
+  CUSTOM_TYPES,
   EQUALS,
   PROTOCOLS,
   TIME_FRAMES,
@@ -18,6 +19,8 @@ import { getFormattedServiceName } from "utils/functions";
 import { InputLabel } from "@mui/material";
 
 import cssVars from "styles/variables.module.scss";
+import { nanoid } from "nanoid";
+import { AiOutlineDelete } from "react-icons/ai";
 
 interface CreateNewIssueDrawerProps {
   services: ServiceDetail[] | null;
@@ -37,7 +40,14 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
     formState: { errors },
   } = useForm();
 
+  const [rows, setRows] = useState(0);
+
+  const addRow = () => setRows((old) => old + 1);
+
+  const removeRow = () => setRows((old) => old - 1);
+
   const ConditionRow = ({ start = false }: { start?: boolean }) => {
+    const [type, setType] = useState("service");
     return (
       <div
         className={cx(styles["condition-row"], start && styles["start-row"])}
@@ -59,27 +69,29 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
             </Select>
           </div>
         )}
-
         {/* protocol */}
         <div className={styles["select-container"]}>
-          {start && <InputLabel htmlFor="protocol">protocol</InputLabel>}
+          {/* {start && <InputLabel htmlFor="protocol">protocol</InputLabel>} */}
           <Select
             placeholder="Choose protocol"
             {...register("protocol")}
             variant="standard"
             id="protocol"
+            defaultValue=""
             labelId="protocol"
             className={styles["protocol-select"]}
+            onChange={(va) => setType(va.target.value as string)}
           >
             {PROTOCOLS.map((protocol) => (
-              <MenuItem value={protocol.value}>{protocol.label}</MenuItem>
+              <MenuItem value={protocol.value} key={nanoid()}>
+                {protocol.label}
+              </MenuItem>
             ))}
           </Select>
         </div>
-
         {/* equals */}
         <div className={styles["select-container"]}>
-          {start && <InputLabel htmlFor="equals">equals</InputLabel>}
+          {/* {start && <InputLabel htmlFor="equals">equals</InputLabel>} */}
           <Select
             defaultValue={"equals"}
             {...register("equals")}
@@ -93,34 +105,59 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
             ))}
           </Select>
         </div>
-
         {/* service */}
         {!!services?.length && (
           <div className={styles["select-container"]}>
-            {start && <InputLabel htmlFor="service">service</InputLabel>}
+            {/* {start && <InputLabel htmlFor="service">service</InputLabel>} */}
             <Select
               placeholder="Choose service"
               {...register("service")}
+              defaultValue={""}
               variant="standard"
               id="service"
               labelId="service"
               className={styles["service-select"]}
-              sx={{
-                "& .MuiMenu-paper": {
-                  background: cssVars.grey950,
+              MenuProps={{
+                classes: {
+                  paper: styles["service-select-paper"],
                 },
               }}
             >
-              {services.map((sv) => {
-                return (
-                  <MenuItem value={sv.service}>
-                    {getFormattedServiceName(sv.service)}
-                  </MenuItem>
-                );
-              })}
+              {type === "service"
+                ? services.map((sv) => {
+                    return (
+                      <MenuItem
+                        value={sv.service}
+                        key={nanoid()}
+                        className={styles["service-select-item"]}
+                      >
+                        {getFormattedServiceName(sv.service)}
+                      </MenuItem>
+                    );
+                  })
+                : CUSTOM_TYPES.map((ct) => {
+                    return (
+                      <MenuItem
+                        value={ct.value}
+                        key={nanoid()}
+                        className={styles["service-select-item"]}
+                      >
+                        {ct.label}
+                      </MenuItem>
+                    );
+                  })}
             </Select>
           </div>
         )}
+        {!start && (
+          <span
+            role="button"
+            className={styles["delete-row-btn"]}
+            onClick={removeRow}
+          >
+            <AiOutlineDelete className={styles["delete-row-icon"]} />
+          </span>
+        )}{" "}
       </div>
     );
   };
@@ -187,8 +224,15 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
               </div>
               <div className={styles["conditions-container"]}>
                 <ConditionRow start={true} />
+                {[...Array(rows)].map((_, i) => {
+                  return <ConditionRow key={nanoid()} start={false} />;
+                })}
               </div>
-              <p className={styles["add-condition-btn"]} role="button">
+              <p
+                className={styles["add-condition-btn"]}
+                role="button"
+                onClick={addRow}
+              >
                 + Add condition
               </p>
             </div>
