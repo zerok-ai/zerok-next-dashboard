@@ -24,7 +24,7 @@ export const LIST_SERVICES_ENDPOINT_V2 = `/v1/u/cluster/{id}/service/list?st=-5m
 
 export const LIST_SERVICES_ENDPOINT = `/services.json`;
 
-export const LIST_INCIDENTS_ENDPOINT = `/v1/c/{id}/issue?services=sofa-shop-mysql/inventory`;
+export const LIST_INCIDENTS_ENDPOINT = `/v1/c/{id}/issue`;
 
 export const GET_ISSUE_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}`;
 
