@@ -19,7 +19,11 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   const namespace = getNamespace(sname);
   const formattedServiceName = getFormattedServiceName(sname);
   const isHealthy = service.http_error_rate_in === 0;
-
+  const reqPerSecond = roundToTwoDecimals(
+    toNumber(service.http_req_throughput_in)
+  );
+  const displayReqPerSecond =
+    Number(reqPerSecond) > 0.1 ? reqPerSecond : "< 0.1";
   return (
     <div className={styles["container"]}>
       <ServiceCardStatusIcon status={isHealthy ? "healthy" : "error"} />
@@ -35,7 +39,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
       <div className={styles["stat-container"]}>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>Req/s</span>
-          <p>{roundToTwoDecimals(toNumber(service.http_req_throughput_in))}</p>
+          <p>{displayReqPerSecond}</p>
         </div>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>

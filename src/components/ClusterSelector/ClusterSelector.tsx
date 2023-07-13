@@ -19,7 +19,7 @@ const ClusterSelector = () => {
   const dispatch = useDispatch();
 
   const toggleModal = () => setIsModalVisible((old) => !old);
-
+  console.log({ selectedCluster });
   const StyleIcon = () => <BsChevronDown className={styles["select-icon"]} />;
   return (
     <div
@@ -36,7 +36,7 @@ const ClusterSelector = () => {
         // IconComponent={StyleIcon}
         onChange={(val) => {
           if (val && val.target && val.target.value) {
-            dispatch(setSelectedCluster(val));
+            dispatch(setSelectedCluster({ id: val.target.value }));
           }
         }}
         sx={{
