@@ -208,7 +208,11 @@ const IncidentDetailPage = () => {
           >
             <div className={styles["header-left"]}>
               {" "}
-              <h3>{issue.issue_title}</h3>
+              <h3>
+                {issue.issue_title.includes("¦")
+                  ? issue.issue_title
+                  : issue.issue_title.split("¦")[0]}
+              </h3>
               <IncidentMetadata incident={issue} />
             </div>
             <div className={styles["header-right"]}>

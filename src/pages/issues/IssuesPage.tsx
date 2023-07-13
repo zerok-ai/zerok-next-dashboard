@@ -4,8 +4,11 @@ import PageLayout from "components/layouts/PageLayout";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
-import { LIST_INCIDENTS_ENDPOINT } from "utils/endpoints";
-import { IssueDetail } from "utils/types";
+import {
+  LIST_INCIDENTS_ENDPOINT,
+  LIST_SERVICES_ENDPOINT_V2,
+} from "utils/endpoints";
+import { IssueDetail, ServiceDetail } from "utils/types";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -14,10 +17,10 @@ import {
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import TableX from "components/themeX/TableX";
-import { DEFAULT_COL_WIDTH } from "utils/constants";
+import { DEFAULT_COL_WIDTH, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
-import { trimString } from "utils/functions";
+import { getNamespace, trimString } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 import { useRouter } from "next/router";
 import TagX from "components/themeX/TagX";
@@ -28,6 +31,12 @@ import ServicesMenu from "./IssuesPage.utils";
 import { Button, Skeleton } from "@mui/material";
 import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
 
+const filterAndSortServices = (newData: ServiceDetail[]) => {
+  return newData.filter(
+    (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
+  );
+};
+
 const IssuesPage = () => {
   const [page, setPage] = useState(1);
   const { selectedCluster } = useSelector(clusterSelector);
@@ -37,6 +46,13 @@ const IssuesPage = () => {
     data: incidents,
     fetchData: fetchIncidents,
   } = useFetch<IssueDetail[]>("issues");
+
+  const {
+    loading: serviceListLoading,
+    error: serviceListError,
+    data: serviceList,
+    fetchData: fetchServices,
+  } = useFetch<ServiceDetail[]>("results", null, filterAndSortServices);
 
   const router = useRouter();
 
@@ -143,6 +159,7 @@ const IssuesPage = () => {
       fetchIncidents(
         LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster as string)
       );
+      fetchServices(LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster));
     }
   }, [selectedCluster]);
 
@@ -158,7 +175,7 @@ const IssuesPage = () => {
           <div className={styles["header-left"]}>
             <h3>Issues</h3>
             <div className={styles["services-select-container"]}>
-              <ServicesMenu />
+              <ServicesMenu serviceList={serviceList} />
             </div>
             <div className={styles["active-filters"]}>
               {!!services?.length &&
@@ -175,7 +192,7 @@ const IssuesPage = () => {
             </div>
           </div>
           <div className={styles["header-right"]}>
-            <CreateNewIssueDrawer />
+            <CreateNewIssueDrawer services={serviceList} />
           </div>
         </div>
       </div>

@@ -19,27 +19,15 @@ import {
 } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 
-
-
-const ServicesMenu = () => {
+const ServicesMenu = ({
+  serviceList,
+}: {
+  serviceList: ServiceDetail[] | null;
+}) => {
   const router = useRouter();
   const { query } = router;
   const { services } = query;
   const { selectedCluster } = useSelector(clusterSelector);
-  const filterAndSortServices = (newData: ServiceDetail[]) => {
-    return newData.filter(
-      (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
-    );
-    // .sort((a, b) => {
-    //   return services?.includes(a.service) ? -1 : 1;
-    // });
-  };
-  const {
-    loading,
-    error,
-    data: servicesList,
-    fetchData: fetchServices,
-  } = useFetch<ServiceDetail[]>("results", null, filterAndSortServices);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -96,12 +84,6 @@ const ServicesMenu = () => {
   };
 
   useEffect(() => {
-    if (selectedCluster) {
-      fetchServices(LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster));
-    }
-  }, [selectedCluster]);
-
-  useEffect(() => {
     if (services) {
       setSelectedServices(decodeURIComponent(services as string).split(","));
     } else setSelectedServices([]);
@@ -148,8 +130,8 @@ const ServicesMenu = () => {
       >
         <div className={styles["services-container"]}>
           <div className={styles["services-list"]}>
-            {servicesList ? (
-              servicesList.map((service) => {
+            {serviceList ? (
+              serviceList.map((service) => {
                 return (
                   <MenuItem
                     className={styles["services-menu-item"]}
@@ -190,7 +172,7 @@ const ServicesMenu = () => {
               fullWidth
               className={styles["services-action-btn"]}
               onClick={handleApply}
-              disabled={!selectedServices.length && !servicesList?.length}
+              disabled={!selectedServices.length && !serviceList?.length}
             >
               Apply
             </Button>
