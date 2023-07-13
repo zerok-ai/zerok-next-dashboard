@@ -20,7 +20,7 @@ import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
-import { getNamespace, trimString } from "utils/functions";
+import { getNamespace, getTitleFromIssue, trimString } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 import { useRouter } from "next/router";
 import TagX from "components/themeX/TagX";
@@ -81,7 +81,7 @@ const IssuesPage = () => {
                   className={"hover-link"}
                 >
                   <a className={styles["issue-title"]}>
-                    {trimString(issue_title, 100)}
+                    {getTitleFromIssue(issue_title)}
                   </a>
                 </Link>
               </div>

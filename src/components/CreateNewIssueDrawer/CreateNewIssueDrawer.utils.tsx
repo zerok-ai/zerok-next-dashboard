@@ -23,12 +23,48 @@ export const TIME_FRAMES = [
 
 export const PROTOCOLS = [
   {
-    label: "HTTP",
-    value: "http",
+    label: "Service",
+    value: "service",
   },
   {
-    label: "Database",
-    value: "db",
+    label: "Payload",
+    value: "payload",
+  },
+  {
+    label: "Span ID",
+    value: "span_id",
+  },
+  {
+    label: "Trace ID",
+    value: "trace_id",
+  },
+  {
+    label: "HTTP host",
+    value: "http_host",
+  },
+  {
+    label: "HTTP method",
+    value: "http_method",
+  },
+  {
+    label: "HTTP target",
+    value: "http_target",
+  },
+  {
+    label: "DB System",
+    value: "db_system",
+  },
+  {
+    label: "DB Name",
+    value: "db_name",
+  },
+  {
+    label: "DB Statement",
+    value: "db_statement",
+  },
+  {
+    label: "DB User",
+    value: "db_user",
   },
 ];
 
@@ -55,5 +91,32 @@ export const EQUALS = [
   {
     label: "is not equal to",
     value: "not_equals",
+  },
+  {
+    label: "exists",
+    value: "exists",
+  },
+  {
+    label: "does not exist",
+    value: "not_exists",
+  },
+  {
+    label: "in",
+    value: "in",
+  },
+  {
+    label: "not in",
+    value: "not_in",
+  },
+];
+
+export const CUSTOM_TYPES = [
+  {
+    label: "Null",
+    value: "null",
+  },
+  {
+    label: "Custom",
+    value: "custom",
   },
 ];
