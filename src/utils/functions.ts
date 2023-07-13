@@ -107,3 +107,11 @@ export const decodeLengthEncodedHexString = (hexStr: any): string[] => {
   }
   return fields;
 };
+
+export function convertNanoToMilliSecondsNumber(value: number) {
+  if (value != null) {
+    let millis = parseFloat((value / 1000000).toFixed(2));
+    return millis;
+  }
+  return 0;
+}

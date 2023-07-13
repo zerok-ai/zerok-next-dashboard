@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import objectPath from "object-path";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, memo, useRef } from "react";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
@@ -94,11 +94,15 @@ const IncidentTabs = ({
   if (!rawSpanData || !spanData || !selectedSpan || !TAB_KEYS) {
     return <TabSkeleton />;
   }
-
   return (
     <div className={styles["tabs-container"]}>
       {/*  */}
-      <Tabs value={activeTab} onChange={(_, key) => setActiveTab(key)}>
+      <Tabs
+        value={activeTab}
+        onChange={(_, key) => {
+          setActiveTab(key);
+        }}
+      >
         {TAB_KEYS.map((tab: GenericObject) => (
           <Tab key={tab.key} label={tab.label} value={tab.key} />
         ))}
@@ -153,4 +157,4 @@ const IncidentTabs = ({
   );
 };
 
-export default IncidentTabs;
+export default memo(IncidentTabs);
