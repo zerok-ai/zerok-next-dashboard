@@ -84,9 +84,10 @@ const IncidentDetailPage = () => {
   useEffect(() => {
     if (issueId && selectedCluster) {
       fetchIssueData(
-        "/incident.json"
-          .replace("{cluster_id}", selectedCluster as string)
-          .replace("{issue_id}", issueId as string)
+        GET_ISSUE_ENDPOINT.replace(
+          "{cluster_id}",
+          selectedCluster as string
+        ).replace("{issue_id}", issueId as string)
       );
     }
   }, [issueId, selectedCluster]);
@@ -101,8 +102,7 @@ const IncidentDetailPage = () => {
     }
     if (selectedCluster && incidentId) {
       fetchSpanData(
-        `/spans.json`
-          .replace("{incident_id}", incidentId as string)
+        LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
           .replace("{cluster_id}", selectedCluster as string)
           .replace("{issue_id}", issueId as string)
       );

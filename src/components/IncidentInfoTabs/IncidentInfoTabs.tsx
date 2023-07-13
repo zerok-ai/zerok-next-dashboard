@@ -44,7 +44,9 @@ const IncidentTabs = ({
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const type = "http";
-  const spanEndpoint = (type === "http" ? "/errors.json" : `/mysql.json`)
+  const spanEndpoint = (
+    type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`
+  )
     .replace("{cluster_id}", selectedCluster as string)
     .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
