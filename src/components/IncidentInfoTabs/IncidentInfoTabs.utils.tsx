@@ -10,7 +10,7 @@ import {
   HTTP_TAB_KEYS,
   POD_KEYS,
 } from "./IncidentInfoTabs.http";
-import { SpanDetail, SpanRawData } from "utils/types";
+import { PodDetail, SpanDetail, SpanRawData } from "utils/types";
 import {
   MYSQL_OVERVIEW_KEYS,
   MYSQL_QUERY_KEYS,
@@ -58,7 +58,8 @@ export const TabSkeleton = () => {
 export const getTabByProtocol = (
   protocol: string,
   currentSpan: SpanDetail,
-  rawSpanData: SpanRawData
+  rawSpanData: SpanRawData,
+  podData: PodDetail[]
 ) => {
   const DEFAULT_TAB_CONTENT = [
     {
@@ -67,7 +68,7 @@ export const getTabByProtocol = (
     },
     {
       list: POD_KEYS,
-      component: <PodTable service={currentSpan.source} />,
+      component: <PodTable pods={podData} service={currentSpan.source} />,
     },
   ];
   switch (protocol) {

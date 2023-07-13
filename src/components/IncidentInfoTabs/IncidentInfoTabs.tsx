@@ -8,7 +8,10 @@ import objectPath from "object-path";
 import { useState, useEffect, useMemo, useCallback, memo, useRef } from "react";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
-import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
+import {
+  GET_SERVICE_PODS_ENDPOINT,
+  GET_SPAN_RAWDATA_ENDPOINT,
+} from "utils/endpoints";
 import {
   SpanResponse,
   SpanRawDataResponse,
@@ -16,6 +19,7 @@ import {
   HttpRequestDetail,
   HttpResponseDetail,
   GenericObject,
+  PodDetail,
 } from "utils/types";
 import cx from "classnames";
 import styles from "./IncidentInfoTabs.module.scss";
@@ -26,6 +30,7 @@ import {
   TabSkeleton,
   getTabByProtocol,
 } from "./IncidentInfoTabs.utils";
+import { getFormattedServiceName, getNamespace } from "utils/functions";
 
 const IncidentTabs = ({
   selectedSpan,
@@ -39,7 +44,9 @@ const IncidentTabs = ({
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const type = "http";
-  const endpoint = (type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`)
+  const spanEndpoint = (
+    type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`
+  )
     .replace("{cluster_id}", selectedCluster as string)
     .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
@@ -53,16 +60,43 @@ const IncidentTabs = ({
     setData: setRawSpanResponse,
   } = useFetch<SpanRawDataResponse>(`span_raw_data_details`);
 
+  const {
+    loading: podLoading,
+    error: podError,
+    data: podData,
+    fetchData: fetchPodData,
+    setData: setPodData,
+  } = useFetch<PodDetail[]>(`results`);
+
   useEffect(() => {
     if (selectedSpan && selectedCluster && incidentId) {
       setRawSpanResponse(null);
-      fetchRawData(endpoint);
+      fetchRawData(spanEndpoint);
     }
   }, [selectedSpan, incidentId, selectedCluster]);
 
   useEffect(() => {
     setActiveTab(DEFAULT_TAB_KEYS[0].key);
   }, [router]);
+
+  useEffect(() => {
+    if (selectedCluster && selectedSpan && spanData) {
+      const currentSpan = spanData[selectedSpan];
+      const service = currentSpan.source;
+      const namespace = getNamespace(service);
+      const serviceName = getFormattedServiceName(service).split("-")[0];
+      const podEndpoint = GET_SERVICE_PODS_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster
+      )
+        .replace("{namespace}", namespace)
+        .replace("{service_name}", serviceName);
+      fetchPodData(podEndpoint);
+    }
+  }, [selectedSpan, selectedCluster, spanData]);
+
+  console.log("podData", podData);
+
   let accessor = type === "http" ? selectedSpan : "something";
   let rawSpanData = rawSpanResponse
     ? (rawSpanResponse[accessor] as SpanResponse)
@@ -87,7 +121,8 @@ const IncidentTabs = ({
     ? getTabByProtocol(
         parsedSpanData.protocol,
         spanData[selectedSpan],
-        parsedSpanData
+        parsedSpanData,
+        podData
       )
     : { keys: null, content: null };
 
