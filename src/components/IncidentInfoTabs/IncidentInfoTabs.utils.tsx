@@ -7,16 +7,13 @@ import {
   HTTP_RESPONSE_BODY_KEYS,
   HTTP_RESPONSE_HEADER_KEYS,
   HTTP_TABS,
-  HTTP_TAB_KEYS,
   POD_KEYS,
 } from "./IncidentInfoTabs.http";
 import { PodDetail, SpanDetail, SpanRawData } from "utils/types";
 import {
-  MYSQL_OVERVIEW_KEYS,
   MYSQL_QUERY_KEYS,
   MYSQL_RESULT_KEYS,
   MYSQL_TABS,
-  MYSQL_TAB_KEYS,
 } from "./IncidentInfoTabs.mysql";
 import { nanoid } from "nanoid";
 import PodTable from "components/PodTable";
@@ -24,6 +21,13 @@ import PodTable from "components/PodTable";
 export const DEFAULT_TAB_KEYS = [
   { label: "Overview", key: "overview" },
   { label: "Pods", key: "pods" },
+];
+
+export const ERROR_TAB_KEYS = [
+  {
+    label: "Exception",
+    key: "exception",
+  },
 ];
 
 export const TabSkeleton = () => {
@@ -71,12 +75,29 @@ export const getTabByProtocol = (
       component: <PodTable pods={podData} service={currentSpan.source} />,
     },
   ];
+
+  const ERROR_TAB_CONTENT = [
+    {
+      list: ERROR_TAB_KEYS,
+      valueObj: rawSpanData,
+    },
+  ];
+
   switch (protocol) {
     case "http":
+      let defaultKeys = [...DEFAULT_TAB_KEYS];
+      let defaultContent = [...DEFAULT_TAB_CONTENT];
+      if (currentSpan.destination.includes("zk-client")) {
+        defaultKeys.push(...ERROR_TAB_KEYS);
+        defaultContent.push({
+          list: ERROR_TAB_KEYS,
+          valueObj: rawSpanData,
+        });
+      }
       return {
-        keys: [...DEFAULT_TAB_KEYS, ...HTTP_TABS],
+        keys: [...defaultKeys, ...HTTP_TABS],
         content: [
-          ...DEFAULT_TAB_CONTENT,
+          ...defaultContent,
           {
             list: HTTP_REQUEST_HEADER_KEYS,
             valueObj: rawSpanData,

@@ -1,13 +1,10 @@
 import { Button, Checkbox, Menu, MenuItem, Skeleton } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
-import {
-  LIST_SERVICES_ENDPOINT,
-  LIST_SERVICES_ENDPOINT_V2,
-} from "utils/endpoints";
+import { LIST_SERVICES_ENDPOINT_V2 } from "utils/endpoints";
 import { ServiceDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
