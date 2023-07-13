@@ -52,6 +52,21 @@ export interface ServiceDetail {
   inbound_conns: number;
   outerHeight: number;
 }
+
+export interface PodStatusDetail {
+  message: string;
+  phase: string;
+  ready: boolean;
+  reason: string;
+}
+
+export interface PodDetail {
+  containers: number;
+  pod: string;
+  service: string;
+  status: PodStatusDetail;
+  start_time: string;
+}
 export interface IssueDetail {
   issue_hash: string;
   issue_title: string;

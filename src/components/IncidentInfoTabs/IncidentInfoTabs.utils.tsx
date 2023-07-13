@@ -1,13 +1,14 @@
 import { Skeleton } from "@mui/material";
 import styles from "./IncidentInfoTabs.module.scss";
 import {
-  HTTP_OVERVIEW_KEYS,
+  OVERVIEW_KEYS,
   HTTP_REQUEST_BODY_KEYS,
   HTTP_REQUEST_HEADER_KEYS,
   HTTP_RESPONSE_BODY_KEYS,
   HTTP_RESPONSE_HEADER_KEYS,
   HTTP_TABS,
   HTTP_TAB_KEYS,
+  POD_KEYS,
 } from "./IncidentInfoTabs.http";
 import { SpanDetail, SpanRawData } from "utils/types";
 import {
@@ -18,7 +19,12 @@ import {
   MYSQL_TAB_KEYS,
 } from "./IncidentInfoTabs.mysql";
 import { nanoid } from "nanoid";
-export const DEFAULT_TAB = "overview";
+import PodTable from "components/PodTable";
+
+export const DEFAULT_TAB_KEYS = [
+  { label: "Overview", key: "overview" },
+  { label: "Pods", key: "pods" },
+];
 
 export const TabSkeleton = () => {
   const headers = new Array(5).fill("header");
@@ -54,15 +60,22 @@ export const getTabByProtocol = (
   currentSpan: SpanDetail,
   rawSpanData: SpanRawData
 ) => {
+  const DEFAULT_TAB_CONTENT = [
+    {
+      list: OVERVIEW_KEYS,
+      valueObj: currentSpan,
+    },
+    {
+      list: POD_KEYS,
+      component: <PodTable service={currentSpan.source} />,
+    },
+  ];
   switch (protocol) {
     case "http":
       return {
-        keys: HTTP_TABS,
+        keys: [...DEFAULT_TAB_KEYS, ...HTTP_TABS],
         content: [
-          {
-            list: HTTP_OVERVIEW_KEYS,
-            valueObj: currentSpan,
-          },
+          ...DEFAULT_TAB_CONTENT,
           {
             list: HTTP_REQUEST_HEADER_KEYS,
             valueObj: rawSpanData,
@@ -83,12 +96,9 @@ export const getTabByProtocol = (
       };
     case "MYSQL":
       return {
-        keys: MYSQL_TABS,
+        keys: [...DEFAULT_TAB_KEYS, ...MYSQL_TABS],
         content: [
-          {
-            list: MYSQL_OVERVIEW_KEYS,
-            valueObj: currentSpan,
-          },
+          ...DEFAULT_TAB_CONTENT,
           {
             list: MYSQL_QUERY_KEYS,
             valueObj: rawSpanData,
@@ -103,10 +113,6 @@ export const getTabByProtocol = (
       return {
         keys: HTTP_TABS,
         content: [
-          {
-            list: HTTP_OVERVIEW_KEYS,
-            valueObj: currentSpan,
-          },
           {
             list: HTTP_REQUEST_HEADER_KEYS,
             valueObj: rawSpanData,

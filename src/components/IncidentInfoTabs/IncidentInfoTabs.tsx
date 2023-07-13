@@ -1,12 +1,11 @@
 // @ts-nocheck
 
-import { Skeleton, Tabs, Tab } from "@mui/material";
+import { Tabs, Tab } from "@mui/material";
 import { nanoid } from "nanoid";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import objectPath from "object-path";
-import { useState, useEffect, useMemo } from "react";
-import sjson from "secure-json-parse";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
@@ -20,9 +19,10 @@ import {
 } from "utils/types";
 import cx from "classnames";
 import styles from "./IncidentInfoTabs.module.scss";
-import { HTTP_TAB_KEYS } from "./IncidentInfoTabs.http";
+import { HTTP_OVERVIEW_KEYS, HTTP_TAB_KEYS } from "./IncidentInfoTabs.http";
 import {
   DEFAULT_TAB,
+  DEFAULT_TAB_KEYS,
   TabSkeleton,
   getTabByProtocol,
 } from "./IncidentInfoTabs.utils";
@@ -36,7 +36,7 @@ const IncidentTabs = ({
 }) => {
   const router = useRouter();
   const { issue_id, id: incidentId } = router.query;
-  const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
+  const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const type = "http";
   const endpoint = (type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`)
@@ -61,7 +61,7 @@ const IncidentTabs = ({
   }, [selectedSpan, incidentId, selectedCluster]);
 
   useEffect(() => {
-    setActiveTab(DEFAULT_TAB);
+    setActiveTab(DEFAULT_TAB_KEYS[0].key);
   }, [router]);
   let accessor = type === "http" ? selectedSpan : "something";
   let rawSpanData = rawSpanResponse
@@ -78,21 +78,23 @@ const IncidentTabs = ({
         parsedSpanData.response_payload = JSON.parse(
           rawSpanData.response_payload as string
         );
-      } catch (err) {
-        console.log({ err });
-      }
+      } catch (err) {}
     }
     return parsedSpanData;
   }, [rawSpanData]);
-  if (!rawSpanData || !spanData || !selectedSpan) {
+
+  const { keys: TAB_KEYS, content: TAB_CONTENT } = rawSpanData
+    ? getTabByProtocol(
+        parsedSpanData.protocol,
+        spanData[selectedSpan],
+        parsedSpanData
+      )
+    : { keys: null, content: null };
+
+  if (!rawSpanData || !spanData || !selectedSpan || !TAB_KEYS) {
     return <TabSkeleton />;
   }
 
-  const { keys: TAB_KEYS, content: TAB_CONTENT } = getTabByProtocol(
-    parsedSpanData.protocol,
-    spanData[selectedSpan],
-    parsedSpanData
-  );
   return (
     <div className={styles["tabs-container"]}>
       {/*  */}
@@ -105,7 +107,18 @@ const IncidentTabs = ({
       {selectedSpan && parsedSpanData && (
         <div className={styles["tab-content-container"]}>
           {TAB_CONTENT.map((tab, index) => {
-            if (tab.valueObj) {
+            if (tab.component) {
+              return (
+                <div
+                  className={cx(styles["tab-content"], styles["response-tab"])}
+                  role="tabpanel"
+                  hidden={activeTab !== TAB_KEYS[index].key}
+                  key={nanoid()}
+                >
+                  {tab.component}
+                </div>
+              );
+            } else if (tab.valueObj) {
               return (
                 <div
                   className={cx(styles["tab-content"], styles["response-tab"])}
