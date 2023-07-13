@@ -1,0 +1,17 @@
+@import "styles/variables.module.scss";
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column-reverse;
+    row-gap: $sp-base * 5;
+    margin-top: 20vh;
+    h3 {
+        font-weight: 300;
+    }
+}
+
+.icon {
+    color:$grey-700;
+    font-size: $sp-base * 20;
+}
