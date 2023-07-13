@@ -84,7 +84,7 @@ const IncidentTabs = ({
     if (selectedCluster && selectedSpan && spanData && currentSpan) {
       const service = currentSpan.source;
       const namespace = getNamespace(service);
-      const serviceName = getFormattedServiceName(service).split("-")[0];
+      const serviceName = getFormattedServiceName(service);
       const podEndpoint = GET_SERVICE_PODS_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster

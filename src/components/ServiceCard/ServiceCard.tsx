@@ -24,10 +24,21 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   );
   const displayReqPerSecond =
     Number(reqPerSecond) > 0.1 ? reqPerSecond : "< 0.1";
+
+  const serviceQuery = () => {
+    try {
+      const svc = JSON.parse(service.service);
+      if (Array.isArray(svc)) {
+        return svc.join(",");
+      } else return service.service;
+    } catch (err) {
+      return service.service;
+    }
+  };
   return (
     <div className={styles["container"]}>
       <ServiceCardStatusIcon status={isHealthy ? "healthy" : "error"} />
-      <Link href={`/issues?services=${encodeURIComponent(service.service)}`}>
+      <Link href={`/issues?services=${encodeURIComponent(serviceQuery())}`}>
         <div className={styles["service-name-container"]}>
           <p className={styles["service-name"]}>{formattedServiceName}</p>
           <p className={cx("label-medium", styles["service-namespace"])}>
