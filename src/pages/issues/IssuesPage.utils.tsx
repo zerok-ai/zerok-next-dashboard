@@ -71,7 +71,7 @@ const ServicesMenu = () => {
               const svc = JSON.parse(sv);
               if (Array.isArray(svc)) {
                 return [...svc];
-              }
+              } else return sv;
             } catch (err) {
               return sv;
             }
