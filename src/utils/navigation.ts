@@ -15,12 +15,12 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
     icon: `${ICONS.plate}`,
     label: "Live Traces",
-    path: "/api-keys",
+    path: "/live-traces",
   },
   {
     icon: `${ICONS.code}`,
     label: "Raw Traces",
-    path: "/users",
+    path: "/raw-traces",
   },
 ];
 
@@ -28,7 +28,7 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
   {
     icon: `${ICONS["data"]}`,
     label: "API Catalog",
-    path: "/api-catalog",
+    path: "/api-keys",
   },
   {
     icon: `${ICONS.dashboard}`,
