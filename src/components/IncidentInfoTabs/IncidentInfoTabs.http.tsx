@@ -2,7 +2,6 @@ import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 export const HTTP_TAB_KEYS = [
-  "overview",
   "request_headers",
   "request_body",
   "response_headers",
@@ -13,10 +12,6 @@ export const HTTP_TABS: {
   label: string;
   key: (typeof HTTP_TAB_KEYS)[number];
 }[] = [
-  {
-    label: "Overview",
-    key: "overview",
-  },
   {
     label: "Request Headers",
     key: "request_headers",
@@ -35,7 +30,27 @@ export const HTTP_TABS: {
   },
 ];
 
-export const HTTP_OVERVIEW_KEYS: {
+export const OVERVIEW_KEYS: {
+  label: string;
+  key: string;
+  render?: (val: any) => React.ReactNode;
+}[] = [
+  {
+    label: "Protocol",
+    key: "protocol",
+    render: (value) => <ChipX label={value} />,
+  },
+  { label: "Source", key: "source" },
+  { label: "Destination", key: "destination" },
+  {
+    label: "Latency",
+    key: "latency_ms",
+    render: (value) => `${value} ms`,
+  },
+  { label: "Status", key: "status" },
+];
+
+export const POD_KEYS: {
   label: string;
   key: string;
   render?: (val: any) => React.ReactNode;
