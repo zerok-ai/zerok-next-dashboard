@@ -6,7 +6,7 @@ import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import { GenericObject } from "utils/types";
 import { parseTimeseriesData } from "utils/timeSeries";
-import { Drawer } from "@mui/material";
+import { Drawer, Skeleton } from "@mui/material";
 import { ICONS, ICON_BASE_PATH } from "utils/images";
 import TimeSeriesChart from "components/TimeSeriesChart";
 
@@ -51,6 +51,7 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
       );
     }
   }, [pod, selectedCluster]);
+  console.log(data);
   return (
     <Drawer
       open={true}
@@ -68,6 +69,13 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
           />
         </span>
       </div>
+      {loading && (
+        <div className={styles["skeletons"]}>
+          <Skeleton variant="rectangular" height={100} />
+          <Skeleton variant="rectangular" height={100} />
+          <Skeleton variant="rectangular" height={100} />
+        </div>
+      )}
       {data && (
         <div className={styles["charts-container"]}>
           {!!data.cpu.time.length && (
@@ -97,9 +105,9 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
               />
             </div>
           )}
-          {!!data.latency.time.length &&
-            !!data.http.time.length &&
-            !!data.cpu.time.length && <h5>No data</h5>}
+          {!data.latency.time.length &&
+            !data.http.time.length &&
+            !data.cpu.time.length && <h5>No data</h5>}
         </div>
       )}
     </Drawer>
