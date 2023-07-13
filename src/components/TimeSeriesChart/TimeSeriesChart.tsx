@@ -4,10 +4,15 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 
 // third-party
-import ReactApexChart, { Props as ChartProps } from "react-apexcharts";
+import dynamic from "next/dynamic";
+
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 // project import
 import useConfig from "hooks/useConfig";
+import { GenericObject } from "utils/types";
 
 // chart options
 const areaChartOptions = {
@@ -47,7 +52,7 @@ const TimeSeriesChart = ({ series, timeStamps }: Props) => {
   const { primary, secondary } = theme.palette.text;
   const line = theme.palette.divider;
 
-  const [options, setOptions] = useState<ChartProps>(areaChartOptions);
+  const [options, setOptions] = useState<GenericObject>(areaChartOptions);
 
   useEffect(() => {
     setOptions((prevState) => ({

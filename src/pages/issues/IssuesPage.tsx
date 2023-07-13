@@ -64,14 +64,11 @@ const IssuesPage = () => {
                   href={`/issues/${issue_hash}/${incidents[0]}`}
                   className={"hover-link"}
                 >
-                  <p className={styles["issue-title"]}>
+                  <a className={styles["issue-title"]}>
                     {trimString(issue_title, 100)}
-                  </p>
+                  </a>
                 </Link>
               </div>
-              {/* <p className={styles["issue-description"]}>
-                <em>Error description</em>
-              </p> */}
               <div className={styles["issue-path"]}>
                 <ChipX label={source} />{" "}
                 <AiOutlineArrowRight
@@ -190,22 +187,22 @@ const IssuesPage = () => {
             <Skeleton
               variant="rectangular"
               className={styles["skeleton-header"]}
+              key={nanoid()}
             />
             <Skeleton
               variant="rectangular"
               className={styles["skeleton-row"]}
+              key={nanoid()}
             />
             <Skeleton
               variant="rectangular"
               className={styles["skeleton-row"]}
+              key={nanoid()}
             />
             <Skeleton
               variant="rectangular"
               className={styles["skeleton-row"]}
-            />
-            <Skeleton
-              variant="rectangular"
-              className={styles["skeleton-row"]}
+              key={nanoid()}
             />
           </div>
         )}

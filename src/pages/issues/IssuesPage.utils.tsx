@@ -65,7 +65,18 @@ const ServicesMenu = () => {
   const handleApply = () => {
     if (selectedServices.length) {
       const selectedServicesString = encodeURIComponent(
-        selectedServices.join(",")
+        selectedServices
+          .map((sv) => {
+            try {
+              const svc = JSON.parse(sv);
+              if (Array.isArray(svc)) {
+                return [...svc];
+              }
+            } catch (err) {
+              return sv;
+            }
+          })
+          .join(",")
       );
       router.push({
         pathname: "/issues",
