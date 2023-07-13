@@ -88,8 +88,6 @@ const IncidentTabs = ({
     return <TabSkeleton />;
   }
 
-  console.log({ rawSpanData, parsedSpanData });
-
   const { keys: TAB_KEYS, content: TAB_CONTENT } = getTabByProtocol(
     parsedSpanData.protocol,
     spanData[selectedSpan],

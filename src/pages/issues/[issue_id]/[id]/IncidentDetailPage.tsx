@@ -26,6 +26,7 @@ import { ReactFlowProvider } from "reactflow";
 import { setIncidentList } from "redux/incidentList";
 import { clusterSelector } from "redux/cluster";
 import IncidentInfoTabs from "components/IncidentInfoTabs";
+import { isNumber } from "lodash";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -61,21 +62,24 @@ const IncidentDetailPage = () => {
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const stickyHeader = useRef<HTMLDivElement>(null);
-  useLayoutEffect(() => {
+  const fixedHeader = () => {
     const mainHeader = document.getElementById("incident-header");
     let fixedTop = stickyHeader.current?.offsetTop;
-    const fixedHeader = () => {
-      if (mainHeader && stickyHeader.current && fixedTop) {
-        if (window.pageYOffset > fixedTop + mainHeader.offsetHeight) {
-          setIsHeaderSticky(true);
-        } else {
-          setIsHeaderSticky(false);
-        }
+    if (mainHeader && stickyHeader.current && isNumber(fixedTop)) {
+      if (window.pageYOffset > fixedTop + mainHeader.offsetHeight) {
+        setIsHeaderSticky(true);
+      } else {
+        setIsHeaderSticky(false);
       }
-    };
-    window.addEventListener("scroll", fixedHeader);
+    }
+  };
+  useEffect(() => {
     return () => window.removeEventListener("scroll", fixedHeader);
   }, []);
+
+  if (window !== undefined) {
+    window.addEventListener("scroll", fixedHeader);
+  }
 
   useEffect(() => {
     if (issueId && selectedCluster) {
