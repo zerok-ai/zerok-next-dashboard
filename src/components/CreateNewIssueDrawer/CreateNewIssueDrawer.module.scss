@@ -1,0 +1,49 @@
+@import "styles/variables.module.scss";
+.drawer {
+    :global(.MuiDrawer-paper) {
+        width:500px;
+        border-left: 1px solid $grey-500;
+        background: $grey-950;
+      }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: $sp-base * 4 $sp-base * 5;
+    border-bottom: 1px solid $grey-700;
+    h6 {
+        font-weight: 500;
+    color:$white;
+    }
+    .close-btn {
+        width:24px;
+        height:24px;
+        cursor: pointer;
+        > img {
+            width:100%;
+            height:100%;
+        }
+    }
+}
+
+.new-issue-btn {
+    display: flex;
+    column-gap: $sp-base;
+    
+}
+
+.form-content {
+    padding:$sp-base * 4 $sp-base * 5;
+    color:$grey-25;
+}
+
+.form {
+    label,p {
+        color:$grey-25;
+    }
+}
+
+.conditions-container {
+    margin-top: 6 * $sp-base;
+}
