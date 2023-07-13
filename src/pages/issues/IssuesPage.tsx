@@ -22,9 +22,11 @@ import { nanoid } from "@reduxjs/toolkit";
 import { useRouter } from "next/router";
 import TagX from "components/themeX/TagX";
 import { useSelector } from "redux/store";
+import { HiPlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import ServicesMenu from "./IssuesPage.utils";
 import { Button, Skeleton } from "@mui/material";
+import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
 
 const IssuesPage = () => {
   const [page, setPage] = useState(1);
@@ -176,9 +178,7 @@ const IssuesPage = () => {
             </div>
           </div>
           <div className={styles["header-right"]}>
-            <Button variant="contained" color="primary">
-              Create incident
-            </Button>
+            <CreateNewIssueDrawer />
           </div>
         </div>
       </div>
