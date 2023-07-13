@@ -41,14 +41,16 @@ export const getNodesFromSpanTree = (
   const { source, destination } = span;
   if (
     !memo[source] &&
-    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source))
+    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source)) &&
+    !source.includes("zk-client")
   ) {
     memo[source] = true;
     nodes.push(getNodeFromSpan(source, span));
   }
   if (
     !memo[destination] &&
-    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(destination))
+    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(destination)) &&
+    !destination.includes("zk-client")
   ) {
     memo[destination] = true;
     nodes.push(getNodeFromSpan(destination, span));
@@ -67,7 +69,9 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
     const span = spanData[key];
     if (
       !IGNORED_SERVICES_PREFIXES.includes(getNamespace(span.source)) &&
-      !IGNORED_SERVICES_PREFIXES.includes(getNamespace(span.destination))
+      !IGNORED_SERVICES_PREFIXES.includes(getNamespace(span.destination)) &&
+      !getNamespace(span.source).includes("zk-client") &&
+      !getNamespace(span.destination).includes("zk-client")
     ) {
       edges.push({
         id: `e-${span.source}-${span.destination}`,

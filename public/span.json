@@ -3,11 +3,11 @@
         "spans": {
             "a799204ee3e76e31": {
                 "source": "sofa-shop/inventory",
-                "destination": "sofa-shop/product",
+                "destination": "zk-client/whatever",
                 "error": false,
                 "metadata": "",
                 "latency_ms": 542.5754,
-                "protocol": "HTTP",
+                "protocol": "http",
                 "status": "200",
                 "parent_span_id": "9204ee3ea7976e31",
                 "workload_id_list": [],

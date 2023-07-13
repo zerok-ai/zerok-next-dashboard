@@ -44,9 +44,7 @@ const IncidentTabs = ({
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const type = "http";
-  const spanEndpoint = (
-    type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`
-  )
+  const spanEndpoint = (type === "http" ? "/errors.json" : `/mysql.json`)
     .replace("{cluster_id}", selectedCluster as string)
     .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
@@ -95,12 +93,11 @@ const IncidentTabs = ({
     }
   }, [selectedSpan, selectedCluster, spanData]);
 
-  console.log("podData", podData);
-
   let accessor = type === "http" ? selectedSpan : "something";
-  let rawSpanData = rawSpanResponse
-    ? (rawSpanResponse[accessor] as SpanResponse)
-    : null;
+  // let rawSpanData = rawSpanResponse
+  //   ? (rawSpanResponse[accessor] as SpanResponse)
+  //   : null;
+  let rawSpanData = rawSpanResponse;
   const parsedSpanData = useMemo(() => {
     if (!rawSpanData) return null;
     const parsedSpanData = rawSpanData as SpanDetail;
@@ -116,7 +113,7 @@ const IncidentTabs = ({
     }
     return parsedSpanData;
   }, [rawSpanData]);
-
+  console.log({ parsedSpanData });
   const { keys: TAB_KEYS, content: TAB_CONTENT } = rawSpanData
     ? getTabByProtocol(
         parsedSpanData.protocol,
@@ -129,6 +126,7 @@ const IncidentTabs = ({
   if (!rawSpanData || !spanData || !selectedSpan || !TAB_KEYS) {
     return <TabSkeleton />;
   }
+  console.log({ TAB_KEYS });
   return (
     <div className={styles["tabs-container"]}>
       {/*  */}

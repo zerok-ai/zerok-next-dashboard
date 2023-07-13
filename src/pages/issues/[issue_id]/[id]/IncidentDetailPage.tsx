@@ -84,10 +84,9 @@ const IncidentDetailPage = () => {
   useEffect(() => {
     if (issueId && selectedCluster) {
       fetchIssueData(
-        GET_ISSUE_ENDPOINT.replace(
-          "{cluster_id}",
-          selectedCluster as string
-        ).replace("{issue_id}", issueId as string)
+        "/incident.json"
+          .replace("{cluster_id}", selectedCluster as string)
+          .replace("{issue_id}", issueId as string)
       );
     }
   }, [issueId, selectedCluster]);
@@ -102,7 +101,8 @@ const IncidentDetailPage = () => {
     }
     if (selectedCluster && incidentId) {
       fetchSpanData(
-        LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
+        `/spans.json`
+          .replace("{incident_id}", incidentId as string)
           .replace("{cluster_id}", selectedCluster as string)
           .replace("{issue_id}", issueId as string)
       );
@@ -185,7 +185,7 @@ const IncidentDetailPage = () => {
       </div>
     );
   };
-  console.log({ isHeaderSticky });
+
   return (
     <div>
       <Fragment>
