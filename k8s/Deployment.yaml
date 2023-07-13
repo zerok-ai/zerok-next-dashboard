@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-app
+  name: zerok-next-dashboard
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: react-app
+      app: zerok-next-dashboard
   template:
     metadata:
       labels:
-        app: react-app
+        app: zerok-next-dashboard
     spec:
       containers:
-        - name: react-app
-          image: us-west1-docker.pkg.dev/zerok-dev/zerok-dashboard/zerok-dashboard:dev
+        - name: zerok-next-dashboard
+          image: us-west1-docker.pkg.dev/zerok-dev/zerok-dashboard/zerok-next-dashboard:dev
           imagePullPolicy: Always
           ports:
             - containerPort: 80
