@@ -1,6 +1,6 @@
 import { useFetch } from "hooks/useFetch";
 import styles from "./PodTable.module.scss";
-import { memo, useCallback, useEffect, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
@@ -16,6 +16,7 @@ import TagX from "components/themeX/TagX";
 import { getRelativeTime } from "utils/dateHelpers";
 import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
+import PodSystemDrawer from "components/PodSystemDrawer";
 
 interface PodTableProps {
   service: string;
@@ -24,13 +25,12 @@ interface PodTableProps {
 const PodTable = ({ service }: PodTableProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
   const { loading, error, data, fetchData } = useFetch<PodDetail[]>(`results`);
-  const memo = useMemo(() => {
-    return { service };
-  }, [service]);
+  const [selectedPod, setSelectedPod] = useState<string | null>(null);
+  const closeDetailDrawer = () => setSelectedPod(null);
   const fetchPodDetails = () => {
-    if (memo.service && selectedCluster) {
-      const namespace = getNamespace(memo.service);
-      const serviceName = getFormattedServiceName(memo.service).split("-")[0];
+    if (service && selectedCluster && !loading) {
+      const namespace = getNamespace(service);
+      const serviceName = getFormattedServiceName(service).split("-")[0];
       const endpoint = GET_SERVICE_PODS_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
@@ -42,7 +42,7 @@ const PodTable = ({ service }: PodTableProps) => {
   };
   useEffect(() => {
     fetchPodDetails();
-  }, [memo]);
+  }, [service]);
 
   const helper = createColumnHelper<PodDetail>();
 
@@ -52,7 +52,11 @@ const PodTable = ({ service }: PodTableProps) => {
       size: DEFAULT_COL_WIDTH * 3,
       cell: (row) => {
         return (
-          <p role="button" className={styles["service-pod"]}>
+          <p
+            role="button"
+            className={styles["service-pod"]}
+            onClick={() => setSelectedPod(row.row.original.pod)}
+          >
             {row.getValue()}
           </p>
         );
@@ -105,6 +109,13 @@ const PodTable = ({ service }: PodTableProps) => {
   return (
     <div className={styles["container"]}>
       {!data ? <TableSkeleton /> : <TableX data={data} table={table} />}
+      {selectedPod && data && (
+        <PodSystemDrawer
+          pod={selectedPod}
+          onClose={closeDetailDrawer}
+          namespace={getNamespace(service)}
+        ></PodSystemDrawer>
+      )}
     </div>
   );
 };
