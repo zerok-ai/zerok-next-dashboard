@@ -156,12 +156,15 @@ const IssuesPage = () => {
   };
   useEffect(() => {
     if (selectedCluster) {
-      fetchIncidents(
-        LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster as string)
-      );
+      const filter =
+        services && services.length ? `?services=${services.join(",")}` : "";
+      const endpoint =
+        LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster as string) +
+        filter;
+      fetchIncidents(endpoint);
       fetchServices(LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster));
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, router]);
 
   return (
     <div>
