@@ -2,7 +2,7 @@
 import PrivateRoute from "components/PrivateRoute";
 import styles from "./IncidentDetailPage.module.scss";
 import PageLayout from "components/layouts/PageLayout";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
 import { IssueDetail, SpanDetail, SpanResponse } from "utils/types";
@@ -59,6 +59,23 @@ const IncidentDetailPage = () => {
   const toggleSpanDrawer = () => setIsSpanDrawerOpen(!isSpanDrawerOpen);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
+  const [isHeaderSticky, setIsHeaderSticky] = useState(false);
+  const stickyHeader = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const mainHeader = document.getElementById("incident-header");
+    let fixedTop = stickyHeader.current?.offsetTop;
+    const fixedHeader = () => {
+      if (mainHeader && stickyHeader.current && fixedTop) {
+        if (window.pageYOffset > fixedTop + mainHeader.offsetHeight) {
+          setIsHeaderSticky(true);
+        } else {
+          setIsHeaderSticky(false);
+        }
+      }
+    };
+    window.addEventListener("scroll", fixedHeader);
+    return () => window.removeEventListener("scroll", fixedHeader);
+  }, []);
 
   useEffect(() => {
     if (issueId && selectedCluster) {
@@ -164,7 +181,7 @@ const IncidentDetailPage = () => {
       </div>
     );
   };
-
+  console.log({ isHeaderSticky });
   return (
     <div>
       <Fragment>
@@ -176,7 +193,11 @@ const IncidentDetailPage = () => {
         {issueLoading || !issue ? (
           <Skeleton className={"page-title-loader"} />
         ) : (
-          <div className={styles["header"]}>
+          <div
+            className={cx(styles["header"], isHeaderSticky && styles["sticky"])}
+            id="incident-header"
+            ref={stickyHeader}
+          >
             <div className={styles["header-left"]}>
               {" "}
               <h3>{issue.issue_title}</h3>

@@ -38,7 +38,7 @@ const IncidentTabs = ({
   const { issue_id, id: incidentId } = router.query;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
   const { selectedCluster } = useSelector(clusterSelector);
-  const type = "mysql";
+  const type = "http";
   const endpoint = (type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`)
     .replace("{cluster_id}", selectedCluster as string)
     .replace("{span_id}", selectedSpan as string)
