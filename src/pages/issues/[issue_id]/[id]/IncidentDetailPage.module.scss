@@ -13,10 +13,15 @@
     }
 }
 .sticky {
-    width: 100%;
+  width: calc(100vw - $main-drawer-width-full - $sp-base * 12);
   position: fixed;
   top: 0;
   transition:all 0.3s ease;
+}
+
+.drawer-minimized {
+    width: calc(100vw - $main-drawer-width-mini - $sp-base * 12);
+    transition:all 0.3s ease;
 }
 
 .header.sticky {
