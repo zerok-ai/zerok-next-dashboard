@@ -9,7 +9,9 @@ import {
   HTTP_TABS,
   POD_KEYS,
 } from "./IncidentInfoTabs.http";
-import { PodDetail, SpanDetail, SpanRawData } from "utils/types";
+import dynamic from "next/dynamic";
+const ReactJson = dynamic(import("react-json-view"), { ssr: false });
+import { GenericObject, PodDetail, SpanDetail, SpanRawData } from "utils/types";
 import {
   MYSQL_QUERY_KEYS,
   MYSQL_RESULT_KEYS,
@@ -17,6 +19,7 @@ import {
 } from "./IncidentInfoTabs.mysql";
 import { nanoid } from "nanoid";
 import PodTable from "components/PodTable";
+import CodeBlock from "components/CodeBlock";
 
 export const DEFAULT_TAB_KEYS = [
   { label: "Overview", key: "overview" },
@@ -26,7 +29,15 @@ export const DEFAULT_TAB_KEYS = [
 export const ERROR_TAB_KEYS = [
   {
     label: "Exception",
-    key: "exception",
+    key: "request_payload.req_body",
+    render: (value: string) => {
+      try {
+        const json = JSON.parse(value);
+        return <ReactJson src={json} />;
+      } catch (err) {
+        return <CodeBlock code={value} allowCopy color="light" />;
+      }
+    },
   },
 ];
 
@@ -82,17 +93,17 @@ export const getTabByProtocol = (
       valueObj: rawSpanData,
     },
   ];
-
+  let defaultKeys = [...DEFAULT_TAB_KEYS];
+  let defaultContent: GenericObject[] = [...DEFAULT_TAB_CONTENT];
   switch (protocol) {
     case "http":
-      let defaultKeys = [...DEFAULT_TAB_KEYS];
-      let defaultContent = [...DEFAULT_TAB_CONTENT];
+      console.log({ currentSpan });
       if (currentSpan.destination.includes("zk-client")) {
         defaultKeys.push(...ERROR_TAB_KEYS);
-        // defaultContent.push({
-        //   list: ERROR_TAB_KEYS,
-        //   valueObj: rawSpanData,
-        // });
+        defaultContent.push({
+          list: ERROR_TAB_KEYS,
+          valueObj: rawSpanData,
+        });
       }
       return {
         keys: [...defaultKeys, ...HTTP_TABS],
@@ -118,9 +129,9 @@ export const getTabByProtocol = (
       };
     case "MYSQL":
       return {
-        keys: [...DEFAULT_TAB_KEYS, ...MYSQL_TABS],
+        keys: [...defaultKeys, ...MYSQL_TABS],
         content: [
-          ...DEFAULT_TAB_CONTENT,
+          ...defaultContent,
           {
             list: MYSQL_QUERY_KEYS,
             valueObj: rawSpanData,

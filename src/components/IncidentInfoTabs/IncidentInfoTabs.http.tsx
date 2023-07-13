@@ -103,7 +103,6 @@ export const HTTP_REQUEST_BODY_KEYS = [
   },
   {
     label: "Request body",
-    // key: "request_payload.req_body",
     key: "request_payload.req_body",
     render: (val: string | null) => {
       const json = val || {};

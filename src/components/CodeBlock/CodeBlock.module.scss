@@ -9,6 +9,8 @@
         display: flex;
         align-items: center;
         max-width: 800px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
     code {
         display: flex;
