@@ -1,48 +1,26 @@
-import { useFetch } from "hooks/useFetch";
 import styles from "./PodTable.module.scss";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { useSelector } from "redux/store";
-import { clusterSelector } from "redux/cluster";
-import { getFormattedServiceName, getNamespace } from "utils/functions";
-import { GET_SERVICE_PODS_ENDPOINT } from "utils/endpoints";
+import { memo, useState } from "react";
+import { getNamespace } from "utils/functions";
 import { PodDetail } from "utils/types";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Button, Chip, Skeleton } from "@mui/material";
-import TagX from "components/themeX/TagX";
+import { Chip, Skeleton } from "@mui/material";
 import { getRelativeTime } from "utils/dateHelpers";
 import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import PodSystemDrawer from "components/PodSystemDrawer";
 
 interface PodTableProps {
+  pods: PodDetail[];
   service: string;
 }
 
-const PodTable = ({ service }: PodTableProps) => {
-  const { selectedCluster } = useSelector(clusterSelector);
-  const { loading, error, data, fetchData } = useFetch<PodDetail[]>(`results`);
+const PodTable = ({ pods, service }: PodTableProps) => {
   const [selectedPod, setSelectedPod] = useState<string | null>(null);
   const closeDetailDrawer = () => setSelectedPod(null);
-  const fetchPodDetails = () => {
-    if (service && selectedCluster && !loading) {
-      const namespace = getNamespace(service);
-      const serviceName = getFormattedServiceName(service).split("-")[0];
-      const endpoint = GET_SERVICE_PODS_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster
-      )
-        .replace("{namespace}", namespace)
-        .replace("{service_name}", serviceName);
-      fetchData(endpoint);
-    }
-  };
-  useEffect(() => {
-    fetchPodDetails();
-  }, [service]);
 
   const helper = createColumnHelper<PodDetail>();
 
@@ -102,14 +80,14 @@ const PodTable = ({ service }: PodTableProps) => {
 
   const table = useReactTable({
     columns,
-    data: data || [],
+    data: pods || [],
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <div className={styles["container"]}>
-      {!data ? <TableSkeleton /> : <TableX data={data} table={table} />}
-      {selectedPod && data && (
+      {!pods ? <TableSkeleton /> : <TableX data={pods} table={table} />}
+      {selectedPod && pods && (
         <PodSystemDrawer
           pod={selectedPod}
           onClose={closeDetailDrawer}
