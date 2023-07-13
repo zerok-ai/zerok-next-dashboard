@@ -1,5 +1,4 @@
 import ChipX from "components/themeX/ChipX";
-import { DEFAULT_TAB } from "./IncidentInfoTabs.utils";
 import CodeBlock from "components/CodeBlock";
 import { stringWithoutComments } from "utils/functions";
 import SQLRawTable from "components/SQLRawTable";

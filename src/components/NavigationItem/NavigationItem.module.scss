@@ -6,6 +6,7 @@
     align-items: center;
     column-gap: $sp-xs * 2.5;
     transition: all 0.2s ease;
+    cursor: pointer;
     &:hover {
         background-color: $grey-900;
     }
