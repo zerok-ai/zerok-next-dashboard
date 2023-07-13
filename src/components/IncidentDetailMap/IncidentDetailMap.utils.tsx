@@ -14,6 +14,7 @@ import styles from "./IncidentDetailMap.module.scss";
 import { ICONS, ICON_BASE_PATH } from "utils/images";
 import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { getNamespace } from "utils/functions";
+import { nanoid } from "nanoid";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -39,6 +40,7 @@ export const getNodesFromSpanTree = (
   nodes: Node[] = []
 ) => {
   const { source, destination } = span;
+  console.log({ source, destination, span });
   if (
     !memo[source] &&
     !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source)) &&
@@ -68,13 +70,15 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
   Object.keys(spanData).map((key) => {
     const span = spanData[key];
     if (
+      span.source &&
+      span.destination &&
       !IGNORED_SERVICES_PREFIXES.includes(getNamespace(span.source)) &&
       !IGNORED_SERVICES_PREFIXES.includes(getNamespace(span.destination)) &&
       !getNamespace(span.source).includes("zk-client") &&
       !getNamespace(span.destination).includes("zk-client")
     ) {
       edges.push({
-        id: `e-${span.source}-${span.destination}`,
+        id: `e-${span.source}-${span.destination}-${nanoid()}`,
         source: span.source,
         target: span.destination,
         markerEnd: {

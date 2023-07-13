@@ -49,6 +49,8 @@ const IncidentDetailMap = ({
     return getEdgesFromSpanTree(spanData);
   }, [spanData]);
 
+  console.log({ initialEdges, initialNodes });
+
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges);
   }, [initialNodes, initialEdges]);
