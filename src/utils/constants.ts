@@ -42,4 +42,4 @@ export const HTTP_METHODS = [
   "TRACE",
 ] as const;
 
-export const SPAN_PROTOCOLS = ["http"] as const;
+export const SPAN_PROTOCOLS = ["http", "mysql"] as const;

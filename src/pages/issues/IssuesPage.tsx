@@ -20,7 +20,12 @@ import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
-import { getNamespace, getTitleFromIssue, trimString } from "utils/functions";
+import {
+  filterServices,
+  getNamespace,
+  getTitleFromIssue,
+  trimString,
+} from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 import { useRouter } from "next/router";
 import TagX from "components/themeX/TagX";
@@ -31,11 +36,6 @@ import ServicesMenu from "./IssuesPage.utils";
 import { Button, Skeleton } from "@mui/material";
 import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
 
-const filterAndSortServices = (newData: ServiceDetail[]) => {
-  return newData.filter(
-    (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
-  );
-};
 
 const IssuesPage = () => {
   const [page, setPage] = useState(1);
@@ -52,7 +52,7 @@ const IssuesPage = () => {
     error: serviceListError,
     data: serviceList,
     fetchData: fetchServices,
-  } = useFetch<ServiceDetail[]>("results", null, filterAndSortServices);
+  } = useFetch<ServiceDetail[]>("results", null, filterServices);
 
   const router = useRouter();
 

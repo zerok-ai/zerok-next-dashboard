@@ -1,70 +1,58 @@
 import PrivateRoute from "components/PrivateRoute";
 import styles from "./Home.module.scss";
 import PageLayout from "components/layouts/PageLayout";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import Head from "next/head";
-import { CircularProgress, Skeleton } from "@mui/material";
-import useStatus from "hooks/useStatus";
-import {
-  LIST_SERVICES_ENDPOINT,
-  LIST_SERVICES_ENDPOINT_V2,
-} from "utils/endpoints";
+import { Skeleton } from "@mui/material";
+import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
-import axios from "axios";
 import { ServiceDetail } from "utils/types";
-import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import ServiceCard from "components/ServiceCard";
 import { nanoid } from "@reduxjs/toolkit";
-import { getNamespace } from "utils/functions";
-import raxios from "utils/raxios";
-import { useRouter } from "next/router";
+import { filterServices } from "utils/functions";
+import { useFetch } from "hooks/useFetch";
 
 const Home = () => {
-  const [services, setServices] = useState<ServiceDetail[]>([]);
+  const {
+    data: services,
+    fetchData: fetchServices,
+    loading,
+    error,
+  } = useFetch<ServiceDetail[]>("results", null, filterServices);
   const { selectedCluster } = useSelector(clusterSelector);
-  const router = useRouter();
-
-  const { status, setStatus } = useStatus();
-  const fetchServices = useCallback(async () => {
-    if (!selectedCluster) return;
-    try {
-      setStatus({ loading: true, error: null });
-      const rdata = await raxios.get(
-        LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster)
+  useEffect(() => {
+    if (selectedCluster) {
+      fetchServices(
+        LIST_SERVICES_ENDPOINT.replace("{cluster_id}", selectedCluster)
       );
-      const totalServices = rdata.data.payload.results as ServiceDetail[];
-      if (!!totalServices.length) {
-        setServices(
-          totalServices.filter(
-            (sv) =>
-              !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
-          )
-        );
-      } else {
-        setServices([]);
-      }
-    } catch (err) {
-      setStatus((old) => ({ ...old, loading: false }));
-    } finally {
-      setStatus((old) => ({ ...old, loading: false }));
     }
   }, [selectedCluster]);
-  useEffect(() => {
-    fetchServices();
-  }, [selectedCluster, router]);
 
   const skeletons = new Array(8).fill("skeleton");
+
+  if (!loading && services && services.length === 0) {
+    return (
+      <div className={styles["no-services"]}>
+        <h3>No services found.</h3>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles["no-services"]}>
+        <h3>Could not fetch services, please try again.</h3>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h3 className="page-title">Health</h3>
       <div className={styles["content-container"]}>
-        {/* <Button variant="contained" className={styles["services-btn"]}>
-          All services
-        </Button> */}
         <div className={styles["services-container"]}>
-          {!!services.length
+          {!loading && services
             ? services.map((sv) => {
                 return (
                   <div className={styles["service"]} key={nanoid()}>
