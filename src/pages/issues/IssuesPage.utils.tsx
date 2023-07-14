@@ -1,23 +1,24 @@
 import { Button, Checkbox, Menu, MenuItem, Skeleton } from "@mui/material";
-import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
-import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
-import { LIST_SERVICES_ENDPOINT_V2 } from "utils/endpoints";
-import { ServiceDetail } from "utils/types";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { IssueDetail, ServiceDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
 
 import cssVars from "styles/variables.module.scss";
 import { ICONS, ICON_BASE_PATH } from "utils/images";
-import { IGNORED_SERVICES_PREFIXES, SPACE_TOKEN } from "utils/constants";
+import { DEFAULT_COL_WIDTH, SPACE_TOKEN } from "utils/constants";
 import {
-  filterByIgnoredService,
   getFormattedServiceName,
   getNamespace,
+  getTitleFromIssue,
 } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
+import { createColumnHelper } from "@tanstack/react-table";
+import Link from "next/link";
+import ChipX from "components/themeX/ChipX";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 
 const ServicesMenu = ({
   serviceList,
@@ -27,7 +28,6 @@ const ServicesMenu = ({
   const router = useRouter();
   const { query } = router;
   const { services } = query;
-  const { selectedCluster } = useSelector(clusterSelector);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -184,3 +184,73 @@ const ServicesMenu = ({
 };
 
 export default ServicesMenu;
+
+const helper = createColumnHelper<IssueDetail>();
+
+export const getIssueColumns = () => {
+  return [
+    helper.accessor("issue_title", {
+      header: "Incident",
+      size: DEFAULT_COL_WIDTH * 6,
+      cell: (info) => {
+        const { issue_title, issue_hash, source, destination, incidents } =
+          info.row.original;
+        return (
+          <div className={styles["issue-container"]}>
+            <div className={styles["issue-title-container"]}>
+              <Link
+                href={`/issues/${issue_hash}/${incidents[0]}`}
+                className={"hover-link"}
+              >
+                <a className={styles["issue-title"]}>
+                  {getTitleFromIssue(issue_title)}
+                </a>
+              </Link>
+            </div>
+            <div className={styles["issue-path"]}>
+              <ChipX label={source} />{" "}
+              <AiOutlineArrowRight
+                className={styles["issue-path-arrow-icon"]}
+              />{" "}
+              <ChipX label={destination} />
+            </div>
+          </div>
+        );
+      },
+    }),
+    helper.accessor("last_seen", {
+      header: "Last seen",
+      size: DEFAULT_COL_WIDTH * 2.4,
+      cell: (info) => {
+        const { last_seen } = info.row.original;
+        return (
+          <div className={styles["issue-time-container"]}>
+            {getFormattedTime(last_seen)}
+          </div>
+        );
+      },
+    }),
+    helper.accessor("first_seen", {
+      header: "First seen",
+      size: DEFAULT_COL_WIDTH * 1.5,
+      cell: (info) => {
+        const { first_seen } = info.row.original;
+        return (
+          <div className={styles["issue-time-container"]}>
+            {getRelativeTime(first_seen)}
+          </div>
+        );
+      },
+    }),
+    // Velocity
+    helper.accessor("velocity", {
+      header: "Velocity",
+      size: DEFAULT_COL_WIDTH / 2,
+    }),
+    // Total events
+    helper.accessor("total_count", {
+      header: "Total events",
+      size: DEFAULT_COL_WIDTH * 1.2,
+    }),
+  ];
+};

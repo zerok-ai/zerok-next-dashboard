@@ -20,31 +20,24 @@ import TableX from "components/themeX/TableX";
 import { DEFAULT_COL_WIDTH, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
-import {
-  filterServices,
-  getNamespace,
-  getTitleFromIssue,
-  trimString,
-} from "utils/functions";
+import { filterServices, getTitleFromIssue } from "utils/functions";
 import { nanoid } from "@reduxjs/toolkit";
 import { useRouter } from "next/router";
 import TagX from "components/themeX/TagX";
 import { useSelector } from "redux/store";
-import { HiPlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
-import ServicesMenu from "./IssuesPage.utils";
-import { Button, Skeleton } from "@mui/material";
+import ServicesMenu, { getIssueColumns } from "./IssuesPage.utils";
+import { Skeleton } from "@mui/material";
 import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
-
+import CustomSkeleton from "components/CustomSkeleton";
 
 const IssuesPage = () => {
-  const [page, setPage] = useState(1);
   const { selectedCluster } = useSelector(clusterSelector);
   const {
     loading,
     error,
-    data: incidents,
-    fetchData: fetchIncidents,
+    data: issues,
+    fetchData: fetchIssues,
   } = useFetch<IssueDetail[]>("issues");
 
   const {
@@ -63,79 +56,13 @@ const IssuesPage = () => {
     ? decodeURIComponent(query.services as string).split(",")
     : null;
 
-  const helper = createColumnHelper<IssueDetail>();
-
   const columns = useMemo(() => {
-    return [
-      helper.accessor("issue_title", {
-        header: "Incident",
-        size: DEFAULT_COL_WIDTH * 6,
-        cell: (info) => {
-          const { issue_title, issue_hash, source, destination, incidents } =
-            info.row.original;
-          return (
-            <div className={styles["issue-container"]}>
-              <div className={styles["issue-title-container"]}>
-                <Link
-                  href={`/issues/${issue_hash}/${incidents[0]}`}
-                  className={"hover-link"}
-                >
-                  <a className={styles["issue-title"]}>
-                    {getTitleFromIssue(issue_title)}
-                  </a>
-                </Link>
-              </div>
-              <div className={styles["issue-path"]}>
-                <ChipX label={source} />{" "}
-                <AiOutlineArrowRight
-                  className={styles["issue-path-arrow-icon"]}
-                />{" "}
-                <ChipX label={destination} />
-              </div>
-            </div>
-          );
-        },
-      }),
-      helper.accessor("last_seen", {
-        header: "Last seen",
-        size: DEFAULT_COL_WIDTH * 2.4,
-        cell: (info) => {
-          const { last_seen } = info.row.original;
-          return (
-            <div className={styles["issue-time-container"]}>
-              {getFormattedTime(last_seen)}
-            </div>
-          );
-        },
-      }),
-      helper.accessor("first_seen", {
-        header: "First seen",
-        size: DEFAULT_COL_WIDTH * 1.5,
-        cell: (info) => {
-          const { first_seen } = info.row.original;
-          return (
-            <div className={styles["issue-time-container"]}>
-              {getRelativeTime(first_seen)}
-            </div>
-          );
-        },
-      }),
-      // Velocity
-      helper.accessor("velocity", {
-        header: "Velocity",
-        size: DEFAULT_COL_WIDTH / 2,
-      }),
-      // Total events
-      helper.accessor("total_count", {
-        header: "Total events",
-        size: DEFAULT_COL_WIDTH * 1.2,
-      }),
-    ];
-  }, [incidents]);
+    return getIssueColumns();
+  }, [issues]);
 
   const table = useReactTable<IssueDetail>({
     columns,
-    data: incidents || [],
+    data: issues || [],
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -154,14 +81,16 @@ const IssuesPage = () => {
       });
     }
   };
+
   useEffect(() => {
     if (selectedCluster) {
       const filter =
         services && services.length ? `?services=${services.join(",")}` : "";
+      // @TODO - better handling of endpoints
       const endpoint =
         LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster as string) +
         filter;
-      fetchIncidents(endpoint);
+      fetchIssues(endpoint);
       fetchServices(LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster));
     }
   }, [selectedCluster, router]);
@@ -200,31 +129,15 @@ const IssuesPage = () => {
         </div>
       </div>
       <div className="page-content">
-        {selectedCluster && !loading && incidents ? (
-          <TableX table={table} data={incidents} />
+        {/* @TODO - add error state here */}
+        {selectedCluster && !loading && issues ? (
+          <TableX table={table} data={issues} />
         ) : (
-          <div className={styles["skeleton-container"]}>
-            <Skeleton
-              variant="rectangular"
-              className={styles["skeleton-header"]}
-              key={nanoid()}
-            />
-            <Skeleton
-              variant="rectangular"
-              className={styles["skeleton-row"]}
-              key={nanoid()}
-            />
-            <Skeleton
-              variant="rectangular"
-              className={styles["skeleton-row"]}
-              key={nanoid()}
-            />
-            <Skeleton
-              variant="rectangular"
-              className={styles["skeleton-row"]}
-              key={nanoid()}
-            />
-          </div>
+          <CustomSkeleton
+            containerClass={styles["skeleton-container"]}
+            skeletonClass={styles["skeleton"]}
+            len={10}
+          />
         )}
       </div>
     </div>
