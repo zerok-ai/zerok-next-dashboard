@@ -23,6 +23,7 @@ export const useFetch = <T>(
       if (transformer) setData(transformer(rdata, data as T));
       else setData(rdata);
     } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }

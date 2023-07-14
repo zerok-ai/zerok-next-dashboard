@@ -1,15 +1,4 @@
 @import "styles/variables.module.scss";
-.container {
-}
-
-.content-container {
-}
-
-.services-btn {
-    width:150px;
-    display: flex;
-    justify-content: flex-start;
-}
 
 .services-container {
     padding-top: $sp-base * 2;
@@ -29,8 +18,4 @@
 .skeleton {
     height:210px;
     width:100%;
-}
-
-.service {
-
 }
