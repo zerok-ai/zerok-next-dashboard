@@ -1,5 +1,6 @@
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
+import { convertNanoToMilliSeconds } from "utils/functions";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 export const HTTP_TAB_KEYS = [
   "request_headers",
@@ -45,7 +46,7 @@ export const OVERVIEW_KEYS: {
   {
     label: "Latency",
     key: "latency_ms",
-    render: (value) => `${value} ms`,
+    render: (value) => `${convertNanoToMilliSeconds(value)}`,
   },
   { label: "Status", key: "status" },
 ];
