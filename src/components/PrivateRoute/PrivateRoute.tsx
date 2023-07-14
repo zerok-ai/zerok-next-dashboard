@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "redux/store";
-import styles from "./PrivateRoute.module.scss";
 import { Fragment, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { getLocalToken } from "utils/functions";
@@ -23,7 +22,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     if (isLoggedIn && token) {
       setIsAuthorized(true);
       dispatch(getClusters());
-      dispatch(getApiKeys())
+      dispatch(getApiKeys());
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();
@@ -40,11 +39,12 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   useEffect(() => {
     if (auth.error) {
-      router.push("/");
+      router.push("/login");
     }
   }, [auth.error]);
 
   if (!isAuthorized) {
+    // @TODO - make skeletons for these
     return <CircularProgress color="primary" />;
   }
 
