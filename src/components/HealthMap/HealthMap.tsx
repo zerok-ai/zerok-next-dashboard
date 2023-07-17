@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import styles from "./IncidentDetailMap.module.scss";
+import styles from "./HealthMap.module.scss";
 import ReactFlow, {
   Background,
   addEdge,
@@ -8,32 +8,23 @@ import ReactFlow, {
 } from "reactflow";
 import { Skeleton } from "@mui/material";
 
-import { SpanDetail, SpanResponse } from "utils/types";
-import {
-  getEdgesFromSpanTree,
-  getNodesFromSpanTree,
-} from "./IncidentDetailMap.utils";
-import MapControls from "components/MapControls";
 import { getLayoutedElements } from "utils/mapHelpers";
+import MapControls from "components/MapControls";
+import { ServiceMapDetail } from "utils/health/types";
+import {
+  HEALTHMAP_EDGETYPES,
+  getEdgesFromServiceMap,
+  getNodesFromServiceMap,
+} from "./HealthMap.utils";
 
 const proOptions = { hideAttribution: true };
 
-interface IncidentDetailMapProps {
-  isMinimized: boolean;
-  toggleSize: () => void;
-  spanData: SpanResponse | null;
-  spanTree: SpanDetail | null;
-  onNodeClick: (spanId: string) => void;
+interface HealthMapProps {
+  serviceMap: ServiceMapDetail[] | null;
 }
 
-const IncidentDetailMap = ({
-  isMinimized,
-  toggleSize,
-  spanData,
-  spanTree,
-  onNodeClick,
-}: IncidentDetailMapProps) => {
-  if (!spanData || !spanTree) {
+const HealthMap = ({ serviceMap }: HealthMapProps) => {
+  if (!serviceMap || !serviceMap.length) {
     return (
       <Skeleton
         variant="rectangular"
@@ -41,13 +32,14 @@ const IncidentDetailMap = ({
       />
     );
   }
-  const initialNodes = useMemo(
-    () => getNodesFromSpanTree(spanTree),
-    [spanTree]
-  );
+
+  const initialNodes = useMemo(() => {
+    return getNodesFromServiceMap(serviceMap);
+  }, [serviceMap]);
+
   const initialEdges = useMemo(() => {
-    return getEdgesFromSpanTree(spanData);
-  }, [spanData]);
+    return getEdgesFromServiceMap(serviceMap);
+  }, [serviceMap]);
 
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges);
@@ -58,6 +50,7 @@ const IncidentDetailMap = ({
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+  console.log(nodes, edges);
   return (
     <div className={styles["container"]}>
       <ReactFlow
@@ -67,13 +60,13 @@ const IncidentDetailMap = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         proOptions={proOptions}
-        onNodeClick={(event, node) => onNodeClick(node.data.span_id)}
+        edgeTypes={HEALTHMAP_EDGETYPES}
       >
-        <MapControls isMinimized={isMinimized} toggleSize={toggleSize} />
+        <MapControls isMinimized={false} toggleSize={() => console.log("")} />
         <Background gap={12} size={1} />
       </ReactFlow>
     </div>
   );
 };
 
-export default IncidentDetailMap;
+export default HealthMap;
