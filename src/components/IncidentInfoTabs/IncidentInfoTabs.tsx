@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { Tabs, Tab } from "@mui/material";
 import { nanoid } from "nanoid";
 import { useFetch } from "hooks/useFetch";
@@ -20,12 +18,11 @@ import {
   HttpResponseDetail,
   GenericObject,
   PodDetail,
+  SpanRawData,
 } from "utils/types";
 import cx from "classnames";
 import styles from "./IncidentInfoTabs.module.scss";
-import { HTTP_OVERVIEW_KEYS, HTTP_TAB_KEYS } from "./IncidentInfoTabs.http";
 import {
-  DEFAULT_TAB,
   DEFAULT_TAB_KEYS,
   TabSkeleton,
   getTabByProtocol,
@@ -43,11 +40,10 @@ const IncidentTabs = ({
   const { issue_id, id: incidentId } = router.query;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
-  const type = "http";
-  const spanEndpoint = (
-    type === "http" ? GET_SPAN_RAWDATA_ENDPOINT : `/mysql.json`
+  const spanEndpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
+    "{cluster_id}",
+    selectedCluster as string
   )
-    .replace("{cluster_id}", selectedCluster as string)
     .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
     .replace("{issue_id}", issue_id as string);
@@ -80,7 +76,8 @@ const IncidentTabs = ({
   }, [router]);
 
   useEffect(() => {
-    const currentSpan = spanData ? spanData[selectedSpan] : null;
+    const currentSpan =
+      spanData && selectedSpan ? spanData[selectedSpan] : null;
     if (selectedCluster && selectedSpan && spanData && currentSpan) {
       const service = currentSpan.source;
       const namespace = getNamespace(service);
@@ -94,14 +91,13 @@ const IncidentTabs = ({
       fetchPodData(podEndpoint);
     }
   }, [selectedSpan, selectedCluster, spanData]);
-
-  let accessor = type === "http" ? selectedSpan : "something";
-  let rawSpanData = rawSpanResponse
-    ? (rawSpanResponse[accessor] as SpanResponse)
-    : null;
+  let rawSpanData =
+    rawSpanResponse && selectedSpan
+      ? (rawSpanResponse[selectedSpan] as SpanRawData)
+      : null;
   const parsedSpanData = useMemo(() => {
     if (!rawSpanData) return null;
-    const parsedSpanData = rawSpanData as SpanDetail;
+    const parsedSpanData = rawSpanData as SpanRawData;
     if (rawSpanData.protocol === "http") {
       try {
         parsedSpanData.request_payload = JSON.parse(
@@ -116,7 +112,7 @@ const IncidentTabs = ({
   }, [rawSpanData]);
 
   const { keys: TAB_KEYS, content: TAB_CONTENT } =
-    rawSpanData && selectedSpan
+    spanData && podData && parsedSpanData && selectedSpan
       ? getTabByProtocol(
           parsedSpanData.protocol,
           spanData[selectedSpan],
@@ -165,7 +161,7 @@ const IncidentTabs = ({
                   hidden={activeTab !== TAB_KEYS[index].key}
                   key={nanoid()}
                 >
-                  {tab.list.map((obj) => {
+                  {tab.list.map((obj: GenericObject) => {
                     const val = objectPath.get(
                       tab.valueObj as
                         | SpanDetail

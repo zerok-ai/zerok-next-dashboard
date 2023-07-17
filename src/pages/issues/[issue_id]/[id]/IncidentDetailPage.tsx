@@ -2,7 +2,7 @@
 import PrivateRoute from "components/PrivateRoute";
 import styles from "./IncidentDetailPage.module.scss";
 import PageLayout from "components/layouts/PageLayout";
-import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import { useFetch } from "hooks/useFetch";
 import { IssueDetail, SpanDetail, SpanResponse } from "utils/types";
@@ -11,11 +11,12 @@ import IncidentDetailMap from "components/IncidentDetailMap";
 
 import cx from "classnames";
 import { useRouter } from "next/router";
-import IncidentTabs, {
+import {
   IncidentMetadata,
   IncidentNavButtons,
   SpanDetailDrawer,
   SpanDrawerButton,
+  buildSpanTree,
 } from "./IncidentDetails.utils";
 import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import SpanCard from "components/SpanCard";
@@ -28,11 +29,14 @@ import { clusterSelector } from "redux/cluster";
 import IncidentInfoTabs from "components/IncidentInfoTabs";
 import { isNumber } from "lodash";
 import { getTitleFromIssue } from "utils/functions";
+import { useSticky } from "hooks/useSticky";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const { selectedCluster } = useSelector(clusterSelector);
   const dispatch = useDispatch();
+
+  // Issue metadata - title,description,time etc
   const {
     loading: issueLoading,
     error: incidentError,
@@ -40,6 +44,7 @@ const IncidentDetailPage = () => {
     fetchData: fetchIssueData,
   } = useFetch<IssueDetail>("issue");
 
+  // Span data - overviews of each of the spans for this incident ID
   const {
     loading: spanLoading,
     error: spanError,
@@ -48,9 +53,11 @@ const IncidentDetailPage = () => {
     setData: setSpanData,
   } = useFetch<SpanResponse>("spans");
 
+  // Selected span - which span is currently selected, used for fetching raw data to show in the infotabs
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
   const router = useRouter();
+
   const incidentId = router.query.id;
   const issueId = router.query.issue_id;
 
@@ -61,27 +68,11 @@ const IncidentDetailPage = () => {
   const toggleSpanDrawer = () => setIsSpanDrawerOpen(!isSpanDrawerOpen);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
-  const [isHeaderSticky, setIsHeaderSticky] = useState(false);
-  const stickyHeader = useRef<HTMLDivElement>(null);
-  const fixedHeader = () => {
-    const mainHeader = document.getElementById("incident-header");
-    let fixedTop = stickyHeader.current?.offsetTop;
-    if (mainHeader && stickyHeader.current && isNumber(fixedTop)) {
-      if (window.pageYOffset > fixedTop + mainHeader.offsetHeight) {
-        setIsHeaderSticky(true);
-      } else {
-        setIsHeaderSticky(false);
-      }
-    }
-  };
-  useEffect(() => {
-    return () => window.removeEventListener("scroll", fixedHeader);
-  }, []);
 
-  if (window !== undefined) {
-    window.addEventListener("scroll", fixedHeader);
-  }
+  // Sticky header boolean and ref
+  const { isSticky, stickyRef } = useSticky();
 
+  // Fetch issue data on mount
   useEffect(() => {
     if (issueId && selectedCluster) {
       fetchIssueData(
@@ -93,10 +84,12 @@ const IncidentDetailPage = () => {
     }
   }, [issueId, selectedCluster]);
 
+  // Reset selected span on incident change
   useEffect(() => {
     setSelectedSpan(null);
   }, [incidentId]);
 
+  // Fetch span data for the incident on mount
   useEffect(() => {
     if (router.isReady && !incidentId) {
       router.push("/issues");
@@ -110,12 +103,15 @@ const IncidentDetailPage = () => {
     }
   }, [incidentId, router, selectedCluster]);
 
+  // Minimize main drawer when span drawer is open
   useEffect(() => {
     if (isSpanDrawerOpen && !isDrawerMinimized) {
       dispatch(minimizeDrawer());
     }
   }, [isSpanDrawerOpen]);
 
+  // Build and set the span tree on span change
+  // Span tree is used to render the span drawer and has the entire router of the trace from the parent to the children
   const getSpans = () => {
     if (!spanData) return [];
     const topKeys = Object.keys(spanData);
@@ -129,41 +125,20 @@ const IncidentDetailPage = () => {
       }
       formattedSpans.push(span);
     }
-
-    const buildSpanTree = (
-      spans: SpanDetail[],
-      parentSpan: SpanDetail,
-      level: number = 0
-    ) => {
-      if (!spans.length) {
-        return parentSpan;
-      }
-      const childrenSpan = spans.filter(
-        (span) => span.parent_span_id === parentSpan.span_id
-      );
-      if (childrenSpan.length) {
-        parentSpan.children = childrenSpan;
-        ++level;
-        childrenSpan.map((span) => {
-          span.level = level;
-          return buildSpanTree(spans, span, level);
-        });
-      }
-      return { ...parentSpan };
-    };
-
     if (rootNode) {
       setSpanTree(buildSpanTree(formattedSpans, rootNode));
     }
   };
 
+  // Build the span tree on span data change
   useEffect(() => {
-    getSpans();
     if (spanData) {
+      getSpans();
       setSelectedSpan(Object.keys(spanData)[0]);
     }
   }, [spanData]);
 
+  // Set the incident list on issue change
   useEffect(() => {
     if (issue) {
       dispatch(setIncidentList(issue.incidents));
@@ -201,11 +176,11 @@ const IncidentDetailPage = () => {
           <div
             className={cx(
               styles["header"],
-              isHeaderSticky && styles["sticky"],
+              isSticky && styles["sticky"],
               isDrawerMinimized && styles["drawer-minimized"]
             )}
             id="incident-header"
-            ref={stickyHeader}
+            ref={stickyRef}
           >
             <div className={styles["header-left"]}>
               {" "}
