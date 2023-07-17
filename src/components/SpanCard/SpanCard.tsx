@@ -5,6 +5,7 @@ import { AiOutlineCheck } from "react-icons/ai";
 import dayjs from "dayjs";
 
 import cx from "classnames";
+import { convertNanoToMilliSeconds } from "utils/functions";
 
 interface SpanCardProps {
   span: SpanDetail;
@@ -30,7 +31,9 @@ const SpanCard = ({ span, active, onClick }: SpanCardProps) => {
       </div>
       <span className={styles["bottom-row-container"]}>
         <small className={styles["span-latency-time-container"]}>
-          <span className={styles["span-latency"]}>{span.latency_ms} ms</span>
+          <span className={styles["span-latency"]}>
+            {convertNanoToMilliSeconds(span.latency_ns)}
+          </span>
           {span.timestamp &&
             dayjs(span.timestamp).format("DD MMM YYYY hh:mm:ss A")}
         </small>

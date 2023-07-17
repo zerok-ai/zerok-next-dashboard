@@ -7,8 +7,8 @@ import styles from "./MapControls.module.scss";
 
 interface MapControlProps {
   showToggle?: boolean;
-  isMinimized: boolean;
-  toggleSize: () => void;
+  isMinimized?: boolean;
+  toggleSize?: () => void;
 }
 
 const MapControls = ({
@@ -19,7 +19,7 @@ const MapControls = ({
   const { zoomIn, zoomOut, fitView } = useReactFlow();
   return (
     <div className={styles["map-controls"]}>
-      {showToggle && (
+      {showToggle && toggleSize && (
         <button
           onClick={() => toggleSize()}
           className={cx(!isMinimized && styles["active"])}

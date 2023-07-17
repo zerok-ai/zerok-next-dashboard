@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { Edge, MarkerType, Node } from "reactflow";
+import { Edge, MarkerType, Node, Position } from "reactflow";
 import { SmartBezierEdge } from "@tisoap/react-flow-smart-edge";
 import { ServiceMapDetail } from "utils/health/types";
 import { GenericObject } from "utils/types";
@@ -14,23 +14,35 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   const nodes: Node[] = [];
   const memo: GenericObject = {};
   serviceMap.forEach((service) => {
-    if (!memo[service.requestor_service]) {
+    const reqname =
+      service.requestor_service ||
+      service.requestor_pod ||
+      service.requestor_ip;
+    const resname =
+      service.responder_service ||
+      service.responder_pod ||
+      service.responder_ip;
+
+    const isCallingItself = reqname === resname;
+    if (!memo[reqname]) {
       nodes.push({
-        id: service.requestor_service,
-        data: { label: service.requestor_service },
+        id: reqname,
+        data: { label: reqname, ...service, isCallingItself },
         position: { x: 0, y: 0 },
       });
-      memo[service.requestor_service] = true;
+      memo[reqname] = true;
     }
-    if (!memo[service.responder_service]) {
+
+    if (!memo[resname]) {
       nodes.push({
-        id: service.responder_service,
-        data: { label: service.responder_service },
+        id: resname,
+        data: { label: resname, ...service, isCallingItself },
         position: { x: 0, y: 0 },
       });
-      memo[service.responder_service] = true;
+      memo[resname] = true;
     }
   });
+
   return nodes;
 };
 
