@@ -31,19 +31,6 @@ export interface ClusterReduxType {
   selectedCluster: null | string;
 }
 
-export interface ApiKeyType {
-  id: string;
-  key: string;
-  createdAtMs: number;
-}
-
-export interface ApiKeyReduxType {
-  loading: boolean;
-  error: boolean;
-  apiKeys: ApiKeyType[];
-}
-
-
 export interface IncidentIDReduxType {
   incidentList: string[];
   activeIndex: number;
