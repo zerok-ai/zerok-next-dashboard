@@ -61,8 +61,9 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         onConnect={onConnect}
         proOptions={proOptions}
         edgeTypes={HEALTHMAP_EDGETYPES}
+        className={styles["react-flow"]}
       >
-        <MapControls isMinimized={false} toggleSize={() => console.log("")} />
+        <MapControls showToggle={false} />
         <Background gap={12} size={1} />
       </ReactFlow>
     </div>

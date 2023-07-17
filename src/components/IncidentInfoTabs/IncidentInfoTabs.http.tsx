@@ -45,7 +45,7 @@ export const OVERVIEW_KEYS: {
   { label: "Destination", key: "destination" },
   {
     label: "Latency",
-    key: "latency_ms",
+    key: "latency_ns",
     render: (value) => `${convertNanoToMilliSeconds(value)}`,
   },
   { label: "Status", key: "status" },

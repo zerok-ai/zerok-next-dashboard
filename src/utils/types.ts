@@ -85,7 +85,7 @@ export interface SpanDetail {
   destination: string;
   error: boolean;
   metadata: string;
-  latency_ms: number;
+  latency_ns: number;
   protocol: string;
   status: string;
   parent_span_id: string;

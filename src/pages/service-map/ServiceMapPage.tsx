@@ -10,13 +10,34 @@ import Head from "next/head";
 import PageLayout from "components/layouts/PageLayout";
 import { filterEmptyServiceMapNodes } from "utils/health/functions";
 import HealthMap from "components/HealthMap";
+import { getServiceString } from "utils/services/functions";
+import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
+
+const formatServiceMapData = (smap: ServiceMapDetail[]) => {
+  const filteredServices = smap.filter((service) => {
+    return !IGNORED_SERVICES_PREFIXES.includes(
+      service.requestor_service || service.responder_service
+    );
+  });
+  const nonEmptyServices = filterEmptyServiceMapNodes(filteredServices);
+  const formattedServices = nonEmptyServices.map((service) => {
+    if (service.requestor_service) {
+      service.requestor_service = getServiceString(service.requestor_service);
+    }
+    if (service.responder_service) {
+      service.responder_service = getServiceString(service.responder_service);
+    }
+    return service;
+  });
+  return formattedServices;
+};
 
 const ServiceMap = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const { loading, error, data, fetchData } = useFetch<ServiceMapDetail[]>(
     "results",
     null,
-    filterEmptyServiceMapNodes
+    formatServiceMapData
   );
 
   useEffect(() => {
@@ -26,8 +47,6 @@ const ServiceMap = () => {
       );
     }
   }, [selectedCluster]);
-
-  console.log({ data });
 
   return (
     <div className={styles["container"]}>
