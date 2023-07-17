@@ -124,3 +124,9 @@ export interface SpanRawData {
 export interface SpanRawDataResponse {
   [x: string]: SpanRawData;
 }
+
+export interface ApiKeyType {
+  id: string;
+  key: string;
+  createdAtMs: number;
+}
