@@ -10,17 +10,17 @@ interface PageLayout {
 const PageLayout = ({ children }: PageLayout) => {
   return (
     <div className={styles["container"]}>
-      <div className={styles["drawer-container"]}>
+      <aside className={styles["drawer-container"]}>
         <MainDrawer />
-      </div>
+      </aside>
       <div className={styles["page-container"]}>
-        <div className={styles["header-container"]}>
+        <header className={styles["header-container"]}>
           <div className={styles["header-left"]}>
             <DrawerToggleButton />
             <ClusterSelector />
           </div>
-        </div>
-        <div className={styles["page-content"]}>{children}</div>
+        </header>
+        <main className={styles["page-content"]}>{children}</main>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { IssueDetail } from "utils/types";
+import { IssueDetail, SpanDetail } from "utils/types";
 import styles from "./IncidentDetailPage.module.scss";
 import {
   AiFillCaretLeft,
@@ -183,3 +183,25 @@ export const IncidentNavButtons = () => {
 };
 
 export default IncidentNavButtons;
+
+export const buildSpanTree = (
+  spans: SpanDetail[],
+  parentSpan: SpanDetail,
+  level: number = 0
+) => {
+  if (!spans.length) {
+    return parentSpan;
+  }
+  const childrenSpan = spans.filter(
+    (span) => span.parent_span_id === parentSpan.span_id
+  );
+  if (childrenSpan.length) {
+    parentSpan.children = childrenSpan;
+    ++level;
+    childrenSpan.map((span) => {
+      span.level = level;
+      return buildSpanTree(spans, span, level);
+    });
+  }
+  return { ...parentSpan };
+};
