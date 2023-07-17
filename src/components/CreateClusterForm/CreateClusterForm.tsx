@@ -5,7 +5,7 @@ import cx from "classnames";
 import CodeBlock from "components/CodeBlock";
 import { Button, Step, StepContent, StepLabel, Stepper } from "@mui/material";
 import useStatus from "hooks/useStatus";
-import { ApiKeyType } from "redux/types";
+import { ApiKeyType } from "utils/types";
 import raxios from "utils/raxios";
 import { TOP_APIKEY_ENDPOINT } from "utils/endpoints";
 
