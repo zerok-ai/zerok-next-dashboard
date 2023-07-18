@@ -17,6 +17,10 @@ import { Button } from "@mui/material";
 import DrawerX from "components/themeX/DrawerX";
 import HealthMapFilterForm from "components/HealthMapFilterForm";
 import { ReactFlowProvider, useReactFlow } from "reactflow";
+import { useRouter } from "next/router";
+import ChipX from "components/themeX/ChipX";
+import TagX from "components/themeX/TagX";
+import ServiceMapFilterDisplay from "components/ServiceMapFilterDisplay";
 
 const formatServiceMapData = (smap: ServiceMapDetail[]) => {
   const filteredServices = smap.filter((service) => {
@@ -46,6 +50,7 @@ const ServiceMap = () => {
   );
 
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+
   const toggleFilterDrawer = () => setIsFilterDrawerOpen(!isFilterDrawerOpen);
   useEffect(() => {
     if (selectedCluster) {
@@ -58,14 +63,19 @@ const ServiceMap = () => {
   return (
     <div className={styles["container"]}>
       <div className={styles["header"]}>
-        <Button
-          variant="contained"
-          color="secondary"
-          className={styles["filters-btn"]}
-          onClick={toggleFilterDrawer}
-        >
-          <HiPlus /> Filters
-        </Button>
+        <div className={styles["header-left"]}>
+          <ServiceMapFilterDisplay />
+        </div>
+        <div className={styles["header-right"]}>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={styles["filters-btn"]}
+            onClick={toggleFilterDrawer}
+          >
+            <HiPlus /> Filters
+          </Button>
+        </div>
       </div>
       <div className={styles["content"]}>
         <ReactFlowProvider>

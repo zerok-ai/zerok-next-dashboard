@@ -9,7 +9,12 @@
 }
 .header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    width:80%;
 }
 .filters-btn {
     display: flex;
