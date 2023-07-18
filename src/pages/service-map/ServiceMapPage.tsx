@@ -16,6 +16,7 @@ import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { Button } from "@mui/material";
 import DrawerX from "components/themeX/DrawerX";
 import HealthMapFilterForm from "components/HealthMapFilterForm";
+import { ReactFlowProvider, useReactFlow } from "reactflow";
 
 const formatServiceMapData = (smap: ServiceMapDetail[]) => {
   const filteredServices = smap.filter((service) => {
@@ -67,11 +68,16 @@ const ServiceMap = () => {
         </Button>
       </div>
       <div className={styles["content"]}>
-        <HealthMap serviceMap={data} />
+        <ReactFlowProvider>
+          <HealthMap serviceMap={data} />
+        </ReactFlowProvider>
       </div>
       {isFilterDrawerOpen && data && (
         <DrawerX title="Filter" onClose={toggleFilterDrawer}>
-          <HealthMapFilterForm serviceList={data} />
+          <HealthMapFilterForm
+            serviceList={data}
+            onFinish={toggleFilterDrawer}
+          />
         </DrawerX>
       )}
     </div>

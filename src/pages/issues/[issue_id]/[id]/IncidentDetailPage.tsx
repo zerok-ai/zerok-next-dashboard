@@ -27,7 +27,6 @@ import { ReactFlowProvider } from "reactflow";
 import { setIncidentList } from "redux/incidentList";
 import { clusterSelector } from "redux/cluster";
 import IncidentInfoTabs from "components/IncidentInfoTabs";
-import { isNumber } from "lodash";
 import { getTitleFromIssue } from "utils/functions";
 import { useSticky } from "hooks/useSticky";
 

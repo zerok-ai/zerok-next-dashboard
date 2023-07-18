@@ -4,10 +4,13 @@
 
 .form {
     height:100%;
-    padding:$sp-base * 4 0;
     display: flex;
     flex-direction: column;
     row-gap: $sp-base * 2;
+}
+
+.form-search-container {
+    padding:$sp-base * 5;
 }
 
 .form-group-title {
@@ -44,4 +47,8 @@
     padding:$sp-base * 3 $sp-base * 5;
     display: flex;
     column-gap: $sp-base * 2;
+}
+
+.empty-text {
+    padding:$sp-base * 4 $sp-base * 5;
 }

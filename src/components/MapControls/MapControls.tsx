@@ -1,4 +1,4 @@
-import { useReactFlow } from "reactflow";
+import { ReactFlowInstance, useReactFlow } from "reactflow";
 import cx from "classnames";
 
 import { ICONS, ICON_BASE_PATH } from "utils/images";
@@ -16,7 +16,8 @@ const MapControls = ({
   isMinimized,
   toggleSize,
 }: MapControlProps) => {
-  const { zoomIn, zoomOut, fitView } = useReactFlow();
+  const reactFlow = useReactFlow();
+  const { zoomIn, zoomOut, fitView } = reactFlow;
   return (
     <div className={styles["map-controls"]}>
       {showToggle && toggleSize && (

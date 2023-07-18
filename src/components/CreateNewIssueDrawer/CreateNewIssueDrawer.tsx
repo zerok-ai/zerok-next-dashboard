@@ -171,75 +171,77 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
       >
         New Issues Type <HiPlus className={styles["plus-icon"]} />
       </Button>
-      <Drawer
-        anchor="right"
-        open={isOpen}
-        onClose={closeDrawer}
-        hideBackdrop
-        className={styles["drawer"]}
-      >
-        <div className={styles["header"]}>
-          <h6>Define New Issue Type</h6>
-          <span
-            className={styles["close-btn"]}
-            onClick={closeDrawer}
-            role="button"
-          >
-            <img
-              src={`${ICON_BASE_PATH}/${ICONS["close-circle"]}`}
-              alt="close"
-            />
-          </span>
-        </div>
-
-        <div className={styles["form-content"]}>
-          <form className={styles["form"]}>
-            <div className={cx(styles["form-item"], styles["name-item"])}>
-              <TextFormField
-                name="name"
-                label="Name this incident type"
-                placeholder="Give a unique name"
-                register={register}
-                error={!!errors.name}
-                errorText={errors.name?.message as string}
+      {isOpen && (
+        <Drawer
+          anchor="right"
+          open={isOpen}
+          onClose={closeDrawer}
+          hideBackdrop
+          className={styles["drawer"]}
+        >
+          <div className={styles["header"]}>
+            <h6>Define New Issue Type</h6>
+            <span
+              className={styles["close-btn"]}
+              onClick={closeDrawer}
+              role="button"
+            >
+              <img
+                src={`${ICON_BASE_PATH}/${ICONS["close-circle"]}`}
+                alt="close"
               />
-            </div>
-            <div className={cx(styles["conditions-container"])}>
-              <p>Define outlier conditions</p>
+            </span>
+          </div>
 
-              <div className={styles["time-select"]}>
-                <label>For the next:</label>
-                <Select
-                  placeholder="Choose a timeframe"
-                  defaultValue={"5m"}
-                  variant="standard"
-                  {...register("time")}
+          <div className={styles["form-content"]}>
+            <form className={styles["form"]}>
+              <div className={cx(styles["form-item"], styles["name-item"])}>
+                <TextFormField
+                  name="name"
+                  label="Name this incident type"
+                  placeholder="Give a unique name"
+                  register={register}
+                  error={!!errors.name}
+                  errorText={errors.name?.message as string}
+                />
+              </div>
+              <div className={cx(styles["conditions-container"])}>
+                <p>Define outlier conditions</p>
+
+                <div className={styles["time-select"]}>
+                  <label>For the next:</label>
+                  <Select
+                    placeholder="Choose a timeframe"
+                    defaultValue={"5m"}
+                    variant="standard"
+                    {...register("time")}
+                  >
+                    {TIME_FRAMES.map((timeFrame) => (
+                      <MenuItem value={timeFrame.value} key={nanoid()}>
+                        {timeFrame.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className={styles["conditions-container"]}>
+                  <ConditionRow start={true} />
+                  {[...Array(rows)].map((_, i) => {
+                    return <ConditionRow key={nanoid()} start={false} />;
+                  })}
+                </div>
+                <p
+                  className={styles["add-condition-btn"]}
+                  role="button"
+                  onClick={addRow}
                 >
-                  {TIME_FRAMES.map((timeFrame) => (
-                    <MenuItem value={timeFrame.value}>
-                      {timeFrame.label}
-                    </MenuItem>
-                  ))}
-                </Select>
+                  + Add condition
+                </p>
               </div>
-              <div className={styles["conditions-container"]}>
-                <ConditionRow start={true} />
-                {[...Array(rows)].map((_, i) => {
-                  return <ConditionRow key={nanoid()} start={false} />;
-                })}
-              </div>
-              <p
-                className={styles["add-condition-btn"]}
-                role="button"
-                onClick={addRow}
-              >
-                + Add condition
-              </p>
-            </div>
-            <Button variant="contained"> Apply and save</Button>
-          </form>
-        </div>
-      </Drawer>
+              <Button variant="contained"> Apply and save</Button>
+            </form>
+          </div>
+        </Drawer>
+      )}
     </div>
   );
 };
