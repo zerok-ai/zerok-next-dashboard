@@ -3,7 +3,7 @@ import styles from "./ServiceMap.module.scss";
 import { ServiceMapDetail } from "utils/health/types";
 import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GET_SERVICE_MAP_ENDPOINT } from "utils/health/endpoints";
 import PrivateRoute from "components/PrivateRoute";
 import Head from "next/head";
@@ -11,7 +11,11 @@ import PageLayout from "components/layouts/PageLayout";
 import { filterEmptyServiceMapNodes } from "utils/health/functions";
 import HealthMap from "components/HealthMap";
 import { getServiceString } from "utils/services/functions";
+import { HiPlus } from "react-icons/hi";
 import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
+import { Button } from "@mui/material";
+import DrawerX from "components/themeX/DrawerX";
+import HealthMapFilterForm from "components/HealthMapFilterForm";
 
 const formatServiceMapData = (smap: ServiceMapDetail[]) => {
   const filteredServices = smap.filter((service) => {
@@ -40,6 +44,8 @@ const ServiceMap = () => {
     formatServiceMapData
   );
 
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const toggleFilterDrawer = () => setIsFilterDrawerOpen(!isFilterDrawerOpen);
   useEffect(() => {
     if (selectedCluster) {
       fetchData(
@@ -50,7 +56,24 @@ const ServiceMap = () => {
 
   return (
     <div className={styles["container"]}>
-      <HealthMap serviceMap={data} />
+      <div className={styles["header"]}>
+        <Button
+          variant="contained"
+          color="secondary"
+          className={styles["filters-btn"]}
+          onClick={toggleFilterDrawer}
+        >
+          <HiPlus /> Filters
+        </Button>
+      </div>
+      <div className={styles["content"]}>
+        <HealthMap serviceMap={data} />
+      </div>
+      {isFilterDrawerOpen && data && (
+        <DrawerX title="Filter" onClose={toggleFilterDrawer}>
+          <HealthMapFilterForm serviceList={data} />
+        </DrawerX>
+      )}
     </div>
   );
 };

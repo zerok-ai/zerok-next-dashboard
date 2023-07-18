@@ -2,6 +2,24 @@
 .container {
     width:100%;
     height:calc(100vh - $header-height - $sp-base * 12);
+    
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 2;
+}
+.header {
+    display: flex;
+    justify-content: flex-end;
+}
+.filters-btn {
+    display: flex;
+    column-gap: $sp-base;
+    padding: $sp-base * 2.5 $sp-base * 3; 
+}
+
+.content {
     border-radius: $sp-base * 2;
     border:1px solid $grey-900;
+    width:100%;
+    height:calc(100vh - $header-height - $sp-base * 12);
 }

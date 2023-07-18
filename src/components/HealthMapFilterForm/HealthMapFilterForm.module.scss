@@ -1,0 +1,47 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.form {
+    height:100%;
+    padding:$sp-base * 4 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 2;
+}
+
+.form-group-title {
+    background-color: $grey-700;
+    color:$grey-50;
+    padding:$sp-base $sp-base * 5;
+    line-height: $default-line-height;
+}
+
+.form-group-items {
+    display: flex;
+    flex-direction: column;
+    padding:$sp-base 0; 
+}
+
+.form-group-item {
+    display: flex;
+    column-gap: $sp-base;
+    align-items: center;
+    padding: $sp-base $sp-base * 3;
+    color:$grey-25;
+    cursor: pointer;
+    &:hover {
+        background-color: $grey-900;
+    }
+}
+.form-items {
+    height:78vh;
+    overflow: auto;
+}
+
+.form-actions {
+    flex: 1;
+    padding:$sp-base * 3 $sp-base * 5;
+    display: flex;
+    column-gap: $sp-base * 2;
+}

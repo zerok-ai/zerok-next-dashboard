@@ -50,7 +50,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-  console.log(nodes, edges);
+
   return (
     <div className={styles["container"]}>
       <ReactFlow
