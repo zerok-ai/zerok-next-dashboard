@@ -97,7 +97,6 @@ export const getTabByProtocol = (
   let defaultContent: GenericObject[] = [...DEFAULT_TAB_CONTENT];
   switch (protocol) {
     case "http":
-      console.log({ currentSpan });
       if (currentSpan.destination.includes("zk-client")) {
         defaultKeys.push(...ERROR_TAB_KEYS);
         defaultContent.push({

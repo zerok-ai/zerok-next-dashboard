@@ -22,7 +22,6 @@ export const getNodesFromSpanTree = (
   nodes: Node[] = []
 ) => {
   const { source, destination } = span;
-  console.log({ source, destination, span });
   if (
     !memo[source] &&
     !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source)) &&

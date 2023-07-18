@@ -51,7 +51,6 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
       );
     }
   }, [pod, selectedCluster]);
-  console.log(data);
   return (
     <Drawer
       open={true}

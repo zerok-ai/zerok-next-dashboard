@@ -1,3 +1,3 @@
 import Home from './home';
-
-export default Home;
+import ServiceMap from "./service-map";
+export default ServiceMap;
