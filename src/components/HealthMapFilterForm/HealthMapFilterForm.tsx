@@ -1,13 +1,28 @@
 import { ServiceMapDetail } from "utils/health/types";
 import styles from "./HealthMapFilterForm.module.scss";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
-import { Button, Checkbox } from "@mui/material";
+import { Button, Checkbox, MenuItem } from "@mui/material";
+import SearchBar from "components/SearchBar";
+import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { GenericObject } from "utils/types";
+
+const FILTER_TYPES = ["namespaces", "serviceNames"] as const;
 
 interface HealthMapFilterForm {
   serviceList: ServiceMapDetail[];
+  onFinish: () => void;
 }
 
-const HealthMapFilterForm = ({ serviceList }: HealthMapFilterForm) => {
+interface FilterType {
+  serviceNames: string[];
+  namespaces: string[];
+}
+
+const HealthMapFilterForm = ({
+  serviceList,
+  onFinish,
+}: HealthMapFilterForm) => {
   let serviceNameMap: Set<string> = new Set();
   let namespaceMap: Set<string> = new Set();
   serviceList.forEach((service) => {
@@ -32,48 +47,152 @@ const HealthMapFilterForm = ({ serviceList }: HealthMapFilterForm) => {
       }
     }
   });
-  const serviceNames = Array.from(serviceNameMap);
-  const namespaces = Array.from(namespaceMap);
+
+  const [searchValue, setSearchValue] = useState("");
+  const serviceNames = Array.from(serviceNameMap).filter((sn) =>
+    sn.includes(searchValue)
+  );
+  const namespaces = Array.from(namespaceMap).filter((ns) =>
+    ns.includes(searchValue)
+  );
+
+  const [filters, setFilters] = useState<FilterType>({
+    namespaces: [],
+    serviceNames: [],
+  });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const { namespaces, serviceNames } = router.query;
+    if (namespaces) {
+      setFilters((prev) => ({
+        ...prev,
+        namespaces: (namespaces as string).split(","),
+      }));
+    }
+    if (serviceNames) {
+      setFilters((prev) => ({
+        ...prev,
+        serviceNames: (serviceNames as string).split(","),
+      }));
+    }
+  }, [router.query]);
+
+  const handleClick = (key: "namespaces" | "serviceNames", value: string) => {
+    const checked = !filters[key].includes(value);
+    if (checked) {
+      setFilters((prev) => ({
+        ...prev,
+        [key]: [...prev[key], value],
+      }));
+    } else {
+      setFilters((prev) => ({
+        ...prev,
+        [key]: prev[key].filter((v) => v !== value),
+      }));
+    }
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { namespaces, serviceNames } = filters;
+    let query: GenericObject = {};
+    if (namespaces.length) {
+      query["namespaces"] = namespaces.join(",");
+    }
+    if (serviceNames.length) {
+      query["serviceNames"] = serviceNames.join(",");
+    }
+    router.push({
+      pathname: router.pathname,
+      query,
+    });
+    onFinish();
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      namespaces: [],
+      serviceNames: [],
+    });
+    router.push({
+      pathname: router.pathname,
+      query: {},
+    });
+    onFinish();
+  };
+
+  // @TODO - better type checking for filter groups
+
+  const FILTER_GROUPS: {
+    list: string[];
+    title: string;
+    key: "namespaces" | "serviceNames";
+  }[] = [
+    {
+      list: namespaces,
+      title: "Namespace",
+      key: "namespaces",
+    },
+    {
+      list: serviceNames,
+      title: "Service Name",
+      key: "serviceNames",
+    },
+  ];
 
   return (
-    <form className={styles["form"]}>
+    <form className={styles["form"]} onSubmit={(e) => handleSubmit(e)}>
       <div className={styles["form-items"]}>
-        {/* Namespaces */}
-        <div className={styles["form-group"]}>
-          <p className={styles["form-group-title"]}>Namespace</p>
-          <div className={styles["form-group-items"]}>
-            {namespaces.map((nm) => {
-              return (
-                <div className={styles["form-group-item"]} key={nm}>
-                  <Checkbox />
-                  <label>{nm}</label>
-                </div>
-              );
-            })}
-          </div>
+        <div className={styles["form-search-container"]}>
+          <SearchBar
+            onChange={(s) => setSearchValue(s)}
+            inputState={searchValue}
+          />
         </div>
-
-        {/* Service names */}
-        <div className={styles["form-group"]}>
-          <p className={styles["form-group-title"]}>Service Name</p>
-          <div className={styles["form-group-items"]}>
-            {serviceNames.map((sn) => {
-              return (
-                <div className={styles["form-group-item"]} key={sn}>
-                  <Checkbox />
-                  <label>{sn}</label>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        {FILTER_GROUPS.map((fg) => {
+          return (
+            <div className={styles["form-group"]}>
+              <p className={styles["form-group-title"]}>{fg.title}</p>
+              <div className={styles["form-group-items"]}>
+                {fg.list.length ? (
+                  fg.list.map((nm) => {
+                    return (
+                      <MenuItem
+                        className={styles["form-group-item"]}
+                        key={nm}
+                        role="menuitem"
+                        onClick={() => handleClick(fg.key, nm)}
+                      >
+                        <Checkbox checked={filters[fg.key].includes(nm)} />
+                        <label>{nm}</label>
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <p className={styles["empty-text"]}>
+                    No {fg.key} found for this search.
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className={styles["form-actions"]}>
         <Button variant="contained" color="primary" type="submit" fullWidth>
-          Apply filters
+          Apply filters (
+          {filters["namespaces"].length + filters["serviceNames"].length})
         </Button>
-        <Button variant="contained" color="secondary" type="submit" fullWidth>
+        <Button
+          variant="contained"
+          color="secondary"
+          type="submit"
+          fullWidth
+          onClick={clearFilters}
+        >
           Clear all
         </Button>
       </div>

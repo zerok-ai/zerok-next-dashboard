@@ -5,6 +5,7 @@ import ReactFlow, {
   addEdge,
   useEdgesState,
   useNodesState,
+  useReactFlow,
 } from "reactflow";
 import { Skeleton } from "@mui/material";
 
@@ -52,7 +53,6 @@ const IncidentDetailMap = ({
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges);
   }, [initialNodes, initialEdges]);
-
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
   const onConnect = useCallback(
