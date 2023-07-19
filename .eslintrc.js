@@ -29,5 +29,8 @@ module.exports = {
     "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/semi": "off",
     "@typescript-eslint/member-delimiter-style": "off",
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
   },
 };

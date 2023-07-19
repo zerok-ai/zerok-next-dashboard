@@ -1,16 +1,20 @@
 // material-ui
-import { PaletteColorOptions, alpha, createTheme } from "@mui/material/styles";
-
+import { type Theme } from "@mui/material";
+import {
+  alpha,
+  createTheme,
+  type PaletteColorOptions,
+} from "@mui/material/styles";
+import { type PresetColor, type ThemeMode } from "types/config";
 // types
-import { PaletteThemeProps } from "types/theme";
-import { PresetColor, ThemeMode } from "types/config";
+import { type PaletteThemeProps } from "types/theme";
 
 // colors
 import cssColors from "../styles/variables.module.scss";
 
 // ==============================|| DEFAULT THEME - PALETTE  ||============================== //
 
-const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
+const Palette = (mode: ThemeMode, presetColor: PresetColor): Theme => {
   const greyColors: PaletteColorOptions = {
     0: cssColors.grey25,
     50: cssColors.grey50,
@@ -32,7 +36,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
   };
 
   const contrastText = "#fff";
-  let infoColors = ["#E0F4F5", "#26B0BA", "#00A2AE", "#009AA7", "#008694"];
+  const infoColors = ["#E0F4F5", "#26B0BA", "#00A2AE", "#009AA7", "#008694"];
 
   const paletteColor: PaletteThemeProps = {
     primary: {
@@ -98,8 +102,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
     },
     grey: greyColors,
   };
-
-  return createTheme({
+  const returnTheme = createTheme({
     palette: {
       mode,
       common: {
@@ -122,6 +125,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
       },
     },
   });
+  return returnTheme;
 };
 
 export default Palette;

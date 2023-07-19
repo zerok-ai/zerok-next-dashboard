@@ -1,4 +1,4 @@
-export const getServiceString = (name: string) => {
+export const getServiceString = (name: string): string => {
   if (name.includes("[") && name.includes("]")) {
     try {
       const svc = JSON.parse(name);

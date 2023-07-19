@@ -1,5 +1,3 @@
-import { GenericObject } from "./types";
-
 export const ICON_BASE_PATH = "/images/icons";
 export const ICONS = {
   "chart-up": "chart-up.svg",

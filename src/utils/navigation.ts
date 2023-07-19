@@ -1,5 +1,5 @@
 import { ICONS } from "./images";
-import { DrawerNavItemType } from "./types";
+import { type DrawerNavItemType } from "./types";
 
 export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
@@ -26,7 +26,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
 
 export const NAV_LINKS_2: DrawerNavItemType[] = [
   {
-    icon: `${ICONS["data"]}`,
+    icon: `${ICONS.data}`,
     label: "API Catalog",
     path: "/api-keys",
   },
@@ -41,7 +41,6 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
     path: "/alerts",
   },
 ];
-
 
 export const PATH_TO_LABEL = {
   incidents: "Incidents",

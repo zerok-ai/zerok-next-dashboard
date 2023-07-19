@@ -1,6 +1,8 @@
-import { ServiceMapDetail } from "./types";
+import { type ServiceMapDetail } from "./types";
 
-export const filterEmptyServiceMapNodes = (smap: ServiceMapDetail[]) => {
+export const filterEmptyServiceMapNodes = (
+  smap: ServiceMapDetail[]
+): ServiceMapDetail[] => {
   return smap.filter((node) => {
     return (
       node.responder_service !== "" &&

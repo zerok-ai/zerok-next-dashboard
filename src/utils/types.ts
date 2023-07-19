@@ -1,12 +1,10 @@
-import { HTTP_METHODS, SPAN_PROTOCOLS } from "./constants";
+import { type HTTP_METHODS, type SPAN_PROTOCOLS } from "./constants";
 
 export interface ChildrenType {
   children: React.ReactNode;
 }
 
-export interface GenericObject {
-  [key: string]: any;
-}
+export type GenericObject = Record<string, any>;
 
 export interface DrawerNavItemType {
   icon: string;
@@ -96,10 +94,7 @@ export interface SpanDetail {
   level?: number;
 }
 
-export interface SpanResponse {
-  [x: string]: SpanDetail;
-}
-[];
+export type SpanResponse = Record<string, SpanDetail>;
 
 export interface HttpRequestDetail {
   req_path: string;
@@ -121,9 +116,7 @@ export interface SpanRawData {
   response_payload: string | HttpRequestDetail;
 }
 
-export interface SpanRawDataResponse {
-  [x: string]: SpanRawData;
-}
+export type SpanRawDataResponse = Record<string, SpanRawData>;
 
 export interface ApiKeyType {
   id: string;

@@ -1,9 +1,15 @@
 import { convertNanoToMilliSecondsNumber } from "./functions";
+import { type GenericObject } from "./types";
 
-export const parseTimeseriesData = (detailsArr: any[]) => {
+interface GenericTimeSeriesDataType {
+  name: string;
+  data: number[];
+}
+
+export const parseTimeseriesData = (detailsArr: any[]): GenericObject => {
   const detailsMap = new Map();
-  for (var i = 0; i < detailsArr.length; i++) {
-    var obj = detailsArr[i];
+  for (let i = 0; i < detailsArr.length; i++) {
+    const obj = detailsArr[i];
     detailsMap.set(obj.time, obj);
   }
   const detailsMapSorted = new Map(
@@ -18,10 +24,7 @@ export const parseTimeseriesData = (detailsArr: any[]) => {
     })
   );
 
-  var latencyValues: {
-    name: string;
-    data: number[];
-  }[] = [
+  const latencyValues: GenericTimeSeriesDataType[] = [
     {
       name: "p50",
       data: [],
@@ -35,10 +38,7 @@ export const parseTimeseriesData = (detailsArr: any[]) => {
       data: [],
     },
   ];
-  var connsValues: {
-    name: string;
-    data: number[];
-  }[] = [
+  const connsValues: GenericTimeSeriesDataType[] = [
     {
       name: "in",
       data: [],
@@ -48,10 +48,7 @@ export const parseTimeseriesData = (detailsArr: any[]) => {
       data: [],
     },
   ];
-  var httpValues: {
-    name: string;
-    data: number[];
-  }[] = [
+  const httpValues: GenericTimeSeriesDataType[] = [
     {
       name: "throughput",
       data: [],
@@ -62,16 +59,14 @@ export const parseTimeseriesData = (detailsArr: any[]) => {
     },
   ];
 
-  var cpuUsage: {
-    name: string;
-    data: number[];
-  }[] = [
+  const cpuUsage: GenericTimeSeriesDataType[] = [
     {
       name: "cpu_usage",
       data: [],
     },
   ];
-  var timeStamps = [] as string[];
+
+  const timeStamps = [] as string[];
   detailsMapSorted.forEach((value, key) => {
     latencyValues[0].data.push(
       convertNanoToMilliSecondsNumber(value.latency_p50)
