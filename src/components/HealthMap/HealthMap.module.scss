@@ -1,4 +1,5 @@
 @import "styles/variables.module.scss";
+@import "styles/mixins";
 .container {
     position: relative;
     width:100%;
@@ -13,4 +14,79 @@
 
 .react-flow {
     border-radius: $sp-base * 2;
+}
+
+.selected-service {
+    position: absolute;
+    z-index:1000;
+    background-color: $grey-900;
+    border-radius: 2 * $sp-base;
+    width:$node-width + $sp-base * 10;
+    cursor: pointer;
+    opacity: 1;
+}
+
+// service card
+.service-card-container {
+    border:1px solid $grey-600;
+    background-color: $grey-900;
+    border-radius: $sp-base;
+    padding:$sp-base * 4;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 5;
+    position: relative;
+    a {
+       width: fit-content;
+    }
+}
+
+.service-card-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: $sp-base * 4;
+    row-gap: $sp-base * 3;
+}
+
+.service-card-item-label {
+    font-size: $font-sm - 1;
+    color:$grey-100;
+    font-weight: 500;
+}
+
+.service-card-item-value,.service-name, .service-namespace  {
+    color:$white;
+}
+
+// icons
+
+.status-icon {
+  position: absolute;  
+  right:$sp-base * 2;
+  top:- $sp-base;
+}
+
+.healthy-status {
+    display: flex;
+    column-gap: $sp-base + 1;
+    align-items: center;
+}
+.healthy-status-connected-icon {
+  @include icon-xs;
+  background-color: $white;
+  border-radius: $sp-base * 5; 
+}
+
+.healthy-status-green-dot-icon {
+    display: inline-block;
+    height:9px;
+    width:9px;
+    border-radius: 50%;
+    background-color:$success-500;
+}
+
+.error-status {
+    @include icon-xs;
+    border-radius: 50%;
+    background-color: $error-700;
 }

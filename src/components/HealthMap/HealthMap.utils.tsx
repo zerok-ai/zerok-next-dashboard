@@ -4,7 +4,16 @@ import { SmartBezierEdge } from "@tisoap/react-flow-smart-edge";
 import { ServiceMapDetail } from "utils/health/types";
 import { GenericObject } from "utils/types";
 
+import cx from "classnames";
+
+import styles from "./HealthMap.module.scss";
+
 import cssVars from "styles/variables.module.scss";
+import {
+  convertNanoToMilliSeconds,
+  getFormattedServiceName,
+  getNamespace,
+} from "utils/functions";
 
 export const HEALTHMAP_EDGETYPES = {
   smart: SmartBezierEdge,
@@ -64,4 +73,58 @@ export const getEdgesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
     });
   });
   return edges;
+};
+
+export const ServiceMapCard = ({ service }: { service: ServiceMapDetail }) => {
+  const namespace = getNamespace(service.requestor_service);
+  const formattedServiceName = getFormattedServiceName(
+    service.requestor_service
+  );
+  const ITEMS = [
+    {
+      label: "Req./s",
+      value: service.request_throughput,
+    },
+    {
+      label: "Errors",
+      value: service.error_rate,
+    },
+    {
+      label: "Avg. Latency",
+      value: convertNanoToMilliSeconds(service.latency_p50),
+    },
+    {
+      label: "P50",
+      value: convertNanoToMilliSeconds(service.latency_p50),
+    },
+    {
+      label: "P90",
+      value: convertNanoToMilliSeconds(service.latency_p90),
+    },
+    {
+      label: "P99",
+      value: convertNanoToMilliSeconds(service.latency_p99),
+    },
+  ];
+  return (
+    <div className={styles["service-card-container"]}>
+      <div className={styles["service-name-container"]}>
+        <p className={styles["service-name"]}>{formattedServiceName}</p>
+        <p className={cx("label-medium", styles["service-namespace"])}>
+          {namespace}
+        </p>
+      </div>
+      {/* row 1 */}
+      <div className={styles["service-card-items"]}>
+        {ITEMS.map((item) => {
+          return (
+            <div className={styles["service-card-item"]}>
+              <p className={styles["service-card-item-label"]}>{item.label}</p>
+              <p className={styles["service-card-item-value"]}>{item.value}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
