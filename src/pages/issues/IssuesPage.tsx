@@ -14,6 +14,7 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import {
   LIST_INCIDENTS_ENDPOINT,
+  LIST_SERVICES_ENDPOINT,
   LIST_SERVICES_ENDPOINT_V2,
 } from "utils/endpoints";
 import { filterServices } from "utils/functions";
@@ -44,7 +45,7 @@ const IssuesPage = () => {
   // @TODO - add types for filters here
 
   const services =
-    (query.services as string).length > 0
+    query.services && query.services?.length > 0
       ? decodeURIComponent(query.services as string).split(",")
       : null;
 
@@ -75,7 +76,7 @@ const IssuesPage = () => {
   };
 
   useEffect(() => {
-    if (selectedCluster !== null) {
+    if (selectedCluster) {
       const filter =
         services != null && services.length > 0
           ? `?services=${services.join(",")}`
@@ -84,7 +85,7 @@ const IssuesPage = () => {
       const endpoint =
         LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster) + filter;
       fetchIssues(endpoint);
-      fetchServices(LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster));
+      fetchServices(LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster));
     }
   }, [selectedCluster, router]);
 
