@@ -40,7 +40,7 @@ const ClusterSelector = () => {
         <MenuItem value="" disabled>
           Target cluster
         </MenuItem>
-        {!(clusters.length === 0) &&
+        {clusters &&
           clusters.map((cl) => {
             return (
               <MenuItem value={cl.id} key={cl.id}>

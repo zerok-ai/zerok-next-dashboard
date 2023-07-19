@@ -29,33 +29,35 @@ import styles from "./ApiKeys.module.scss";
 
 type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
-const ApiKeys = () => {
-  const { loading, error, data, fetchData } = useFetch<ApiKeyHidden[]>(
-    "apikeys",
-    APIKEYS_ENDPOINT
-  );
+const addToggle = (
+  data: ApiKeyDetailWithToggle[]
+): ApiKeyDetailWithToggle[] => {
+  return data.map((hid) => {
+    return { ...hid, key: null, visible: false };
+  });
+};
 
-  const [detailedKeys, setDetailedKeys] = useState<ApiKeyDetailWithToggle[]>(
-    []
+const ApiKeys = () => {
+  const {
+    loading,
+    error,
+    data: apiKeys,
+    fetchData,
+    setData: setApiKeys,
+  } = useFetch<ApiKeyDetailWithToggle[]>(
+    "apikeys",
+    APIKEYS_ENDPOINT,
+    addToggle
   );
 
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!loading && !error && data !== null && data.length > 0) {
-      setDetailedKeys(
-        data.map((hid) => {
-          return { ...hid, key: null, visible: false };
-        })
-      );
-    }
-  }, [data]);
-
   const getApiKeyFromId = async (id: string, visibility: boolean) => {
+    if (!apiKeys) return;
     try {
-      const selectedKey = detailedKeys.find((key) => key.id === id);
+      const selectedKey = apiKeys.find((key) => key.id === id);
       if (selectedKey == null) throw { err: "Missing key" };
-      if (selectedKey.key !== undefined) {
+      if (selectedKey.key !== null) {
         selectedKey.visible = visibility;
       } else {
         const keyFromId = await raxios.get(
@@ -64,8 +66,8 @@ const ApiKeys = () => {
         selectedKey.key = keyFromId.data.payload.apikey.id;
         selectedKey.visible = visibility;
       }
-      setDetailedKeys((old) =>
-        old.map((key) => {
+      setApiKeys(
+        apiKeys.map((key) => {
           if (key.id === id) return selectedKey;
           return key;
         })
@@ -103,15 +105,13 @@ const ApiKeys = () => {
       }),
       colHelper.accessor("key", {
         header: "API Key",
-        size: DEFAULT_COL_WIDTH * 2.5,
+        size: DEFAULT_COL_WIDTH * 3.5,
         cell: (info) => {
           const key = info.getValue();
           return (
             <CodeBlock
               allowCopy={key !== null}
-              code={
-                key !== null && info.row.original.visible ? key : "*".repeat(36)
-              }
+              code={key && info.row.original.visible ? key : "*".repeat(36)}
               copyText={key as string}
               color="light"
             />
@@ -152,10 +152,10 @@ const ApiKeys = () => {
         },
       }),
     ];
-  }, [detailedKeys]);
+  }, [apiKeys]);
 
   const table = useReactTable({
-    data: detailedKeys,
+    data: apiKeys ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -174,7 +174,7 @@ const ApiKeys = () => {
       </div>
       <div className={styles["table-container"]}>
         {/* API keys table */}
-        <TableX table={table} data={detailedKeys} />
+        <TableX table={table} data={apiKeys ?? []} />
         {/* Delete key dialog */}
         <DialogX
           title="Delete API Key"
