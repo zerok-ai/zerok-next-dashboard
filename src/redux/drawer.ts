@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
-import { DrawerReduxType } from "./types";
+
+import { type RootState } from "./store";
+import { type DrawerReduxType } from "./types";
 
 const initialState: DrawerReduxType = {
   isDrawerMinimized: false,
@@ -27,6 +28,8 @@ export const drawerSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { minimizeDrawer, maximizeDrawer, toggleDrawer } =
   drawerSlice.actions;
-export const drawerSelector = (state: RootState) => state.drawer;
+
+export const drawerSelector = (state: RootState): DrawerReduxType =>
+  state.drawer;
 
 export default drawerSlice.reducer;

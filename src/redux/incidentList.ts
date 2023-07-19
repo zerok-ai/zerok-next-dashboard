@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
-import { IncidentIDReduxType } from "./types";
-import raxios from "utils/raxios";
+import { createSlice } from "@reduxjs/toolkit";
+
+import type { RootState } from "./store";
+import type { IncidentIDReduxType } from "./types";
 
 const initialState: IncidentIDReduxType = {
   loading: false,
@@ -9,18 +9,6 @@ const initialState: IncidentIDReduxType = {
   error: false,
   activeIndex: -1,
 };
-
-// export const getNextIncidents = createAsyncThunk(
-//   "incident/getNextIncidents",
-//   async (endpoint: string) => {
-//     try {
-//       const rdata = await raxios.get(endpoint);
-//       return rdata.data.payload.incidents;
-//     } catch (err) {
-//       throw "Could not get Incidents";
-//     }
-//   }
-// );
 
 export const incidentListSlice = createSlice({
   name: "incidentList",
@@ -32,6 +20,9 @@ export const incidentListSlice = createSlice({
   },
 });
 
-export const incidentListSelector = (state: RootState) => state.incidentList;
+export const incidentListSelector = (state: RootState): IncidentIDReduxType =>
+  state.incidentList;
+
 export const { setIncidentList } = incidentListSlice.actions;
+
 export default incidentListSlice.reducer;

@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { DEFAULT_USER_PROFILE } from "utils/constants";
-import { deleteLocalToken, maskPassword, setLocalToken } from "utils/functions";
-import { RootState } from "./store";
-import raxios, { removeRaxiosHeader, setRaxiosHeader } from "utils/raxios";
 import { LOGIN_ENDPOINT, LOGOUT_ENDPOINT } from "utils/endpoints";
-import { AuthType } from "./types";
+import { deleteLocalToken, maskPassword, setLocalToken } from "utils/functions";
+import raxios, { removeRaxiosHeader, setRaxiosHeader } from "utils/raxios";
+import { type GenericObject } from "utils/types";
+
+import { type RootState } from "./store";
+import { type AuthType } from "./types";
 
 const initialState: AuthType = {
   token: null,
@@ -14,12 +16,12 @@ const initialState: AuthType = {
   error: null,
 };
 
-const setToken = (token: string) => {
+const setToken = (token: string): void => {
   setLocalToken(token);
   setRaxiosHeader(token);
 };
 
-const removeToken = () => {
+const removeToken = (): void => {
   deleteLocalToken();
   removeRaxiosHeader();
 };
@@ -36,13 +38,13 @@ export const loginUser = createAsyncThunk(
       });
       return rdata;
     } catch (err) {
-      throw "Could not log in";
+      return err;
     }
   }
 );
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
-  return raxios.get(LOGOUT_ENDPOINT);
+  return await raxios.get(LOGOUT_ENDPOINT);
 });
 
 export const authSlice = createSlice({
@@ -65,7 +67,7 @@ export const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state, action: GenericObject) => {
         const token = action.payload.headers.token;
         state.token = token;
         state.loading = false;
@@ -99,6 +101,6 @@ export const authSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { tokenLogin } = authSlice.actions;
-export const authSelector = (state: RootState) => state.auth;
+export const authSelector = (state: RootState): AuthType => state.auth;
 
 export default authSlice.reducer;

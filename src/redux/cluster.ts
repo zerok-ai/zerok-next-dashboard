@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
 import { CLUSTER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
-import { ClusterReduxType } from "./types";
+
+import { type RootState } from "./store";
+import { type ClusterReduxType } from "./types";
 
 const initialState: ClusterReduxType = {
   loading: false,
@@ -15,8 +16,8 @@ export const getClusters = createAsyncThunk("cluster/getClusters", async () => {
   try {
     const rdata = await raxios.get(CLUSTER_ENDPOINT);
     return rdata.data.payload.clusters;
-  } catch (err) {
-    throw "Could not get cluster list";
+  } catch (err: unknown) {
+    return { error: true, message: err };
   }
 });
 
@@ -37,7 +38,7 @@ export const clusterSlice = createSlice({
       .addCase(getClusters.fulfilled, (state, action) => {
         state.clusters = action.payload;
         state.loading = false;
-        if (action.payload.length) {
+        if (action.payload.length > 0) {
           state.selectedCluster = action.payload[0].id;
         }
       })
@@ -49,8 +50,9 @@ export const clusterSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const clusterSelector = (state: RootState) => state.cluster;
+export const clusterSelector = (state: RootState): ClusterReduxType =>
+  state.cluster;
 
-export const { setSelectedCluster } = clusterSlice.actions; 
+export const { setSelectedCluster } = clusterSlice.actions;
 
 export default clusterSlice.reducer;
