@@ -1,21 +1,20 @@
+import { Skeleton } from "@mui/material";
+import MapControls from "components/MapControls";
 import { useCallback, useEffect, useMemo } from "react";
-import styles from "./IncidentDetailMap.module.scss";
 import ReactFlow, {
-  Background,
   addEdge,
+  Background,
   useEdgesState,
   useNodesState,
-  useReactFlow,
 } from "reactflow";
-import { Skeleton } from "@mui/material";
+import { getLayoutedElements } from "utils/mapHelpers";
+import { type SpanDetail, type SpanResponse } from "utils/types";
 
-import { SpanDetail, SpanResponse } from "utils/types";
+import styles from "./IncidentDetailMap.module.scss";
 import {
   getEdgesFromSpanTree,
   getNodesFromSpanTree,
 } from "./IncidentDetailMap.utils";
-import MapControls from "components/MapControls";
-import { getLayoutedElements } from "utils/mapHelpers";
 
 const proOptions = { hideAttribution: true };
 
@@ -56,7 +55,9 @@ const IncidentDetailMap = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
   const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    (params: any) => {
+      setEdges((eds) => addEdge(params, eds));
+    },
     [setEdges]
   );
   useEffect(() => {
@@ -64,7 +65,7 @@ const IncidentDetailMap = ({
     setEdges(layoutedEdges);
   }, [layoutedEdges, layoutedNodes]);
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -72,7 +73,9 @@ const IncidentDetailMap = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         proOptions={proOptions}
-        onNodeClick={(event, node) => onNodeClick(node.data.span_id)}
+        onNodeClick={(event, node) => {
+          onNodeClick(node.data.span_id);
+        }}
       >
         <MapControls isMinimized={isMinimized} toggleSize={toggleSize} />
         <Background gap={12} size={1} />

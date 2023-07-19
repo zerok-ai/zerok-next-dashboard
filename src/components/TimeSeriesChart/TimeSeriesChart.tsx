@@ -1,18 +1,15 @@
-import { useState, useEffect } from "react";
-
 // material-ui
 import { useTheme } from "@mui/material/styles";
-
-// third-party
-import dynamic from "next/dynamic";
-
-const ReactApexChart = dynamic(() => import("react-apexcharts"), {
-  ssr: false,
-});
-
 // project import
 import useConfig from "hooks/useConfig";
-import { GenericObject } from "utils/types";
+// third-party
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { type GenericObject } from "utils/types";
+
+const ReactApexChart = dynamic(async () => await import("react-apexcharts"), {
+  ssr: false,
+});
 
 // chart options
 const areaChartOptions = {
@@ -38,10 +35,10 @@ const areaChartOptions = {
 // ==============================|| INCOME AREA CHART ||============================== //
 
 interface Props {
-  series: {
+  series: Array<{
     name: string;
     data: number[];
-  }[];
+  }>;
   timeStamps: string[];
 }
 

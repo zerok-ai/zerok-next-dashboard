@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import cx from "classnames";
-import { SubmitHandler, useForm } from "react-hook-form";
-import styles from "./ForgotPasswordForm.module.scss";
-import TextFormField from "components/forms/TextFormField";
 import { Button } from "@mui/material";
+import cx from "classnames";
+import TextFormField from "components/forms/TextFormField";
 import Link from "next/link";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+
+import styles from "./ForgotPasswordForm.module.scss";
 
 const ForgotPasswordForm = () => {
   const ForgotPasswordSchema = z.object({
@@ -20,14 +21,12 @@ const ForgotPasswordForm = () => {
     resolver: zodResolver(ForgotPasswordSchema),
   });
 
-  const onSubmit:SubmitHandler<ForgotPasswordSchemaType> = (values) => {
-    
-  };
+  const onSubmit: SubmitHandler<ForgotPasswordSchemaType> = (values) => {};
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <form
-        className={cx("form", styles["form"])}
+        className={cx("form", styles.form)}
         onSubmit={handleSubmit(onSubmit)}
       >
         {/* Email field */}

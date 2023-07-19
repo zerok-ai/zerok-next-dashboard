@@ -1,6 +1,7 @@
-import { nanoid } from "nanoid";
-import styles from "./CustomSkeleton.module.scss";
 import { Skeleton } from "@mui/material";
+import { nanoid } from "nanoid";
+
+import styles from "./CustomSkeleton.module.scss";
 
 interface CustomSkeletonProps {
   containerClass: string;

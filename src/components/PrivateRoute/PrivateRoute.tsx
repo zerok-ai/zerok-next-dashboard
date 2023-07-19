@@ -1,10 +1,10 @@
-import { useDispatch, useSelector } from "redux/store";
-import { Fragment, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { getLocalToken } from "utils/functions";
-import { tokenLogin } from "redux/authSlice";
 import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
+import { tokenLogin } from "redux/authSlice";
 import { getClusters } from "redux/cluster";
+import { useDispatch, useSelector } from "redux/store";
+import { getLocalToken } from "utils/functions";
 
 interface PrivateRouteProps {
   children: React.ReactNode;

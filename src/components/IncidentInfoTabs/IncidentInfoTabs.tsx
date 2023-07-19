@@ -1,33 +1,33 @@
-import { Tabs, Tab } from "@mui/material";
-import { nanoid } from "nanoid";
+import { Tab, Tabs } from "@mui/material";
+import cx from "classnames";
 import { useFetch } from "hooks/useFetch";
+import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import objectPath from "object-path";
-import { useState, useEffect, useMemo, useCallback, memo, useRef } from "react";
-import { useSelector } from "redux/store";
+import { memo, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
 import {
   GET_SERVICE_PODS_ENDPOINT,
   GET_SPAN_RAWDATA_ENDPOINT,
 } from "utils/endpoints";
+import { getFormattedServiceName, getNamespace } from "utils/functions";
 import {
-  SpanResponse,
-  SpanRawDataResponse,
-  SpanDetail,
-  HttpRequestDetail,
-  HttpResponseDetail,
-  GenericObject,
-  PodDetail,
-  SpanRawData,
+  type GenericObject,
+  type HttpRequestDetail,
+  type HttpResponseDetail,
+  type PodDetail,
+  type SpanDetail,
+  type SpanRawDataResponse,
+  type SpanResponse,
 } from "utils/types";
-import cx from "classnames";
+
 import styles from "./IncidentInfoTabs.module.scss";
 import {
   DEFAULT_TAB_KEYS,
-  TabSkeleton,
   getTabByProtocol,
+  TabSkeleton,
 } from "./IncidentInfoTabs.utils";
-import { getFormattedServiceName, getNamespace } from "utils/functions";
 
 const IncidentTabs = ({
   selectedSpan,
@@ -91,13 +91,11 @@ const IncidentTabs = ({
       fetchPodData(podEndpoint);
     }
   }, [selectedSpan, selectedCluster, spanData]);
-  let rawSpanData =
-    rawSpanResponse && selectedSpan
-      ? (rawSpanResponse[selectedSpan] as SpanRawData)
-      : null;
+  const rawSpanData =
+    rawSpanResponse && selectedSpan ? rawSpanResponse[selectedSpan] : null;
   const parsedSpanData = useMemo(() => {
     if (!rawSpanData) return null;
-    const parsedSpanData = rawSpanData as SpanRawData;
+    const parsedSpanData = rawSpanData;
     if (rawSpanData.protocol === "http") {
       try {
         parsedSpanData.request_payload = JSON.parse(
@@ -153,7 +151,7 @@ const IncidentTabs = ({
                   {tab.component}
                 </div>
               );
-            } else if (tab.valueObj) {
+            } else {
               return (
                 <div
                   className={cx(styles["tab-content"], styles["response-tab"])}
@@ -168,7 +166,7 @@ const IncidentTabs = ({
                         | HttpRequestDetail
                         | HttpResponseDetail,
                       obj.key
-                    ) as any;
+                    );
                     return (
                       <div className={styles["tab-row"]} key={obj.key}>
                         <p className={styles["tab-row-label"]}>{obj.label}:</p>

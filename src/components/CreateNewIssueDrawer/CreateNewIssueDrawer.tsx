@@ -1,12 +1,16 @@
 import { Button, Drawer, MenuItem, Select } from "@mui/material";
-import styles from "./CreateNewIssueDrawer.module.scss";
-import { HiPlus } from "react-icons/hi";
-import { useState } from "react";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
-
 import cx from "classnames";
-import { useForm } from "react-hook-form";
 import TextFormField from "components/forms/TextFormField";
+import { nanoid } from "nanoid";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineDelete } from "react-icons/ai";
+import { HiPlus } from "react-icons/hi";
+import { getFormattedServiceName } from "utils/functions";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
+import { type ServiceDetail } from "utils/types";
+
+import styles from "./CreateNewIssueDrawer.module.scss";
 import {
   CONDITIONS,
   CUSTOM_TYPES,
@@ -14,13 +18,6 @@ import {
   PROTOCOLS,
   TIME_FRAMES,
 } from "./CreateNewIssueDrawer.utils";
-import { ServiceDetail } from "utils/types";
-import { getFormattedServiceName } from "utils/functions";
-import { InputLabel } from "@mui/material";
-
-import cssVars from "styles/variables.module.scss";
-import { nanoid } from "nanoid";
-import { AiOutlineDelete } from "react-icons/ai";
 
 interface CreateNewIssueDrawerProps {
   services: ServiceDetail[] | null;
@@ -42,9 +39,13 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
 
   const [rows, setRows] = useState(0);
 
-  const addRow = () => setRows((old) => old + 1);
+  const addRow = () => {
+    setRows((old) => old + 1);
+  };
 
-  const removeRow = () => setRows((old) => old - 1);
+  const removeRow = () => {
+    setRows((old) => old - 1);
+  };
 
   const ConditionRow = ({ start = false }: { start?: boolean }) => {
     const [type, setType] = useState("service");
@@ -64,7 +65,9 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
               )}
             >
               {CONDITIONS.map((condition) => (
-                <MenuItem value={condition.value}>{condition.label}</MenuItem>
+                <MenuItem value={condition.value} key={nanoid()}>
+                  {condition.label}
+                </MenuItem>
               ))}
             </Select>
           </div>
@@ -80,7 +83,9 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
             defaultValue=""
             labelId="protocol"
             className={styles["protocol-select"]}
-            onChange={(va) => setType(va.target.value as string)}
+            onChange={(va) => {
+              setType(va.target.value);
+            }}
           >
             {PROTOCOLS.map((protocol) => (
               <MenuItem value={protocol.value} key={nanoid()}>
@@ -101,7 +106,9 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
             id="equals"
           >
             {EQUALS.map((equal) => (
-              <MenuItem value={equal.value}>{equal.label}</MenuItem>
+              <MenuItem value={equal.value} key={nanoid()}>
+                {equal.label}
+              </MenuItem>
             ))}
           </Select>
         </div>
@@ -162,7 +169,7 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
     );
   };
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <Button
         variant="contained"
         color="primary"
@@ -177,9 +184,9 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
           open={isOpen}
           onClose={closeDrawer}
           hideBackdrop
-          className={styles["drawer"]}
+          className={styles.drawer}
         >
-          <div className={styles["header"]}>
+          <div className={styles.header}>
             <h6>Define New Issue Type</h6>
             <span
               className={styles["close-btn"]}
@@ -194,7 +201,7 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
           </div>
 
           <div className={styles["form-content"]}>
-            <form className={styles["form"]}>
+            <form className={styles.form}>
               <div className={cx(styles["form-item"], styles["name-item"])}>
                 <TextFormField
                   name="name"

@@ -1,15 +1,15 @@
-import { useSelector } from "redux/store";
-import styles from "./MainDrawer.module.scss";
-
-import cssVars from "styles/variables.module.scss";
-import { ZEROK_LOGO_LIGHT, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
-import { useMemo } from "react";
-import { NAV_LINKS_1, NAV_LINKS_2 } from "utils/navigation";
+import { Divider } from "@mui/material";
 import NavigationItem from "components/NavigationItem";
 import { useRouter } from "next/router";
+import { useMemo } from "react";
+import { useSelector } from "redux/store";
+import cssVars from "styles/variables.module.scss";
+import { ZEROK_LOGO_LIGHT, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
+import { NAV_LINKS_1, NAV_LINKS_2 } from "utils/navigation";
+import { type DrawerNavItemType } from "utils/types";
+
+import styles from "./MainDrawer.module.scss";
 import { StyledMainDrawer } from "./MainDrawer.utils";
-import { Divider } from "@mui/material";
-import { DrawerNavItemType } from "utils/types";
 
 const MainDrawer = () => {
   const drawer = useSelector((state) => state.drawer);
@@ -48,7 +48,7 @@ const MainDrawer = () => {
       open={isDrawerMinimized}
       variant="permanent"
       anchor="left"
-      className={styles["container"]}
+      className={styles.container}
       sx={{ width: cssVars.mainDrawerWidth }}
     >
       <div>

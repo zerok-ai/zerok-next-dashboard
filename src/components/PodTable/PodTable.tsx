@@ -1,17 +1,19 @@
-import styles from "./PodTable.module.scss";
-import { memo, useState } from "react";
-import { getNamespace } from "utils/functions";
-import { PodDetail } from "utils/types";
+import { Chip, Skeleton } from "@mui/material";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Chip, Skeleton } from "@mui/material";
-import { getRelativeTime } from "utils/dateHelpers";
-import TableX from "components/themeX/TableX";
-import { DEFAULT_COL_WIDTH } from "utils/constants";
 import PodSystemDrawer from "components/PodSystemDrawer";
+import TableX from "components/themeX/TableX";
+import { nanoid } from "nanoid";
+import { memo, useState } from "react";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
+import { getRelativeTime } from "utils/dateHelpers";
+import { getNamespace } from "utils/functions";
+import { type PodDetail } from "utils/types";
+
+import styles from "./PodTable.module.scss";
 
 interface PodTableProps {
   pods: PodDetail[];
@@ -20,7 +22,9 @@ interface PodTableProps {
 
 const PodTable = ({ pods, service }: PodTableProps) => {
   const [selectedPod, setSelectedPod] = useState<string | null>(null);
-  const closeDetailDrawer = () => setSelectedPod(null);
+  const closeDetailDrawer = () => {
+    setSelectedPod(null);
+  };
 
   const helper = createColumnHelper<PodDetail>();
 
@@ -33,7 +37,9 @@ const PodTable = ({ pods, service }: PodTableProps) => {
           <p
             role="button"
             className={styles["service-pod"]}
-            onClick={() => setSelectedPod(row.row.original.pod)}
+            onClick={() => {
+              setSelectedPod(row.row.original.pod);
+            }}
           >
             {row.getValue()}
           </p>
@@ -73,7 +79,11 @@ const PodTable = ({ pods, service }: PodTableProps) => {
   const TableSkeleton = () => {
     return [1, 2, 3, 4, 5].map(() => {
       return (
-        <Skeleton variant="rectangular" className={styles["skeleton-row"]} />
+        <Skeleton
+          variant="rectangular"
+          className={styles["skeleton-row"]}
+          key={nanoid()}
+        />
       );
     });
   };
@@ -85,7 +95,7 @@ const PodTable = ({ pods, service }: PodTableProps) => {
   });
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       {!pods ? <TableSkeleton /> : <TableX data={pods} table={table} />}
       {selectedPod && pods && (
         <PodSystemDrawer

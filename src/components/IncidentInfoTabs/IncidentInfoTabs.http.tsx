@@ -1,6 +1,7 @@
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 import { convertNanoToMilliSeconds } from "utils/functions";
+import { type GenericObject } from "utils/types";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 export const HTTP_TAB_KEYS = [
   "request_headers",
@@ -9,10 +10,16 @@ export const HTTP_TAB_KEYS = [
   "response_body",
 ] as const;
 
-export const HTTP_TABS: {
+interface HttpTabKey {
+  label: string;
+  key: string;
+  render?: (val: any) => React.ReactNode;
+}
+
+export const HTTP_TABS: Array<{
   label: string;
   key: (typeof HTTP_TAB_KEYS)[number];
-}[] = [
+}> = [
   {
     label: "Request Headers",
     key: "request_headers",
@@ -31,11 +38,7 @@ export const HTTP_TABS: {
   },
 ];
 
-export const OVERVIEW_KEYS: {
-  label: string;
-  key: string;
-  render?: (val: any) => React.ReactNode;
-}[] = [
+export const OVERVIEW_KEYS: HttpTabKey[] = [
   {
     label: "Protocol",
     key: "protocol",
@@ -51,11 +54,7 @@ export const OVERVIEW_KEYS: {
   { label: "Status", key: "status" },
 ];
 
-export const POD_KEYS: {
-  label: string;
-  key: string;
-  render?: (val: any) => React.ReactNode;
-}[] = [
+export const POD_KEYS: HttpTabKey[] = [
   {
     label: "Protocol",
     key: "protocol",
@@ -66,7 +65,7 @@ export const POD_KEYS: {
   {
     label: "Latency",
     key: "latency_ms",
-    render: (value) => `${value} ms`,
+    render: (value) => `${value as string} ms`,
   },
   { label: "Status", key: "status" },
 ];
@@ -81,8 +80,8 @@ export const HTTP_REQUEST_HEADER_KEYS = [
   {
     label: "Request headers",
     key: "request_payload.req_headers",
-    render: (val: Object | null) => {
-      const json = val || {};
+    render: (val: GenericObject | null) => {
+      const json = val ?? {};
       return (
         <DynamicReactJson
           src={json}
@@ -106,7 +105,7 @@ export const HTTP_REQUEST_BODY_KEYS = [
     label: "Request body",
     key: "request_payload.req_body",
     render: (val: string | null) => {
-      const json = val || {};
+      const json = val ?? {};
       return json ? (
         <DynamicReactJson src={json} enableClipboard={false} />
       ) : null;
@@ -120,7 +119,7 @@ export const HTTP_RESPONSE_HEADER_KEYS = [
     // key: "response_payload.resp_headers",
     key: "response_payload.resp_headers",
     render: (val: string | null) => {
-      const json = val || {};
+      const json = val ?? {};
       return (
         <DynamicReactJson
           src={json}
@@ -138,9 +137,8 @@ export const HTTP_RESPONSE_BODY_KEYS = [
     label: "Response body",
     key: "response_payload.resp_body",
     render: (val: string | null) => {
-      
       try {
-        let json = JSON.parse(val as string) || null;
+        const json = JSON.parse(val as string) ?? null;
         return json ? (
           <DynamicReactJson
             src={json}

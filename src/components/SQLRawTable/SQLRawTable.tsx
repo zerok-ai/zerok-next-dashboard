@@ -1,6 +1,7 @@
-import { decodeLengthEncodedHexString } from "utils/functions";
-import styles from "./SQLRawTable.module.scss";
 import { nanoid } from "nanoid";
+import { decodeLengthEncodedHexString } from "utils/functions";
+
+import styles from "./SQLRawTable.module.scss";
 interface SQLRawTableProps {
   value: string;
 }
@@ -10,12 +11,12 @@ const SQLRawTable = ({ value }: SQLRawTableProps) => {
   // splitting on delimiter
   const rows = dataWithoutLabel.split(" | ");
   return (
-    <table className={styles["container"]}>
+    <table className={styles.container}>
       <tbody>
         {rows.map((row) => {
           const items = decodeLengthEncodedHexString(row);
           return (
-            <tr>
+            <tr key={nanoid()}>
               {items.map((it) => {
                 return <td key={nanoid()}>{it}</td>;
               })}

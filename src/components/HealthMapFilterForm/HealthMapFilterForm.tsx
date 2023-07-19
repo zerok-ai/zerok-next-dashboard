@@ -1,15 +1,17 @@
-import { ServiceMapDetail } from "utils/health/types";
-import styles from "./HealthMapFilterForm.module.scss";
-import { getFormattedServiceName, getNamespace } from "utils/functions";
 import { Button, Checkbox, MenuItem } from "@mui/material";
 import SearchBar from "components/SearchBar";
-import { FormEvent, useEffect, useState } from "react";
+import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { GenericObject } from "utils/types";
+import { type FormEvent, useEffect, useState } from "react";
+import { getFormattedServiceName, getNamespace } from "utils/functions";
+import { type ServiceMapDetail } from "utils/health/types";
+import { type GenericObject } from "utils/types";
+
+import styles from "./HealthMapFilterForm.module.scss";
 
 const FILTER_TYPES = ["namespaces", "serviceNames"] as const;
 
-interface HealthMapFilterForm {
+interface HealthMapFilterFormProps {
   serviceList: ServiceMapDetail[];
   onFinish: () => void;
 }
@@ -22,9 +24,9 @@ interface FilterType {
 const HealthMapFilterForm = ({
   serviceList,
   onFinish,
-}: HealthMapFilterForm) => {
-  let serviceNameMap: Set<string> = new Set();
-  let namespaceMap: Set<string> = new Set();
+}: HealthMapFilterFormProps) => {
+  const serviceNameMap = new Set<string>();
+  const namespaceMap = new Set<string>();
   serviceList.forEach((service) => {
     if (
       service.requestor_service &&
@@ -97,12 +99,12 @@ const HealthMapFilterForm = ({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { namespaces, serviceNames } = filters;
-    let query: GenericObject = {};
+    const query: GenericObject = {};
     if (namespaces.length) {
-      query["namespaces"] = namespaces.join(",");
+      query.namespaces = namespaces.join(",");
     }
     if (serviceNames.length) {
-      query["serviceNames"] = serviceNames.join(",");
+      query.serviceNames = serviceNames.join(",");
     }
     router.push({
       pathname: router.pathname,
@@ -125,11 +127,11 @@ const HealthMapFilterForm = ({
 
   // @TODO - better type checking for filter groups
 
-  const FILTER_GROUPS: {
+  const FILTER_GROUPS: Array<{
     list: string[];
     title: string;
     key: "namespaces" | "serviceNames";
-  }[] = [
+  }> = [
     {
       list: namespaces,
       title: "Namespace",
@@ -143,17 +145,24 @@ const HealthMapFilterForm = ({
   ];
 
   return (
-    <form className={styles["form"]} onSubmit={(e) => handleSubmit(e)}>
+    <form
+      className={styles.form}
+      onSubmit={(e) => {
+        handleSubmit(e);
+      }}
+    >
       <div className={styles["form-items"]}>
         <div className={styles["form-search-container"]}>
           <SearchBar
-            onChange={(s) => setSearchValue(s)}
+            onChange={(s) => {
+              setSearchValue(s);
+            }}
             inputState={searchValue}
           />
         </div>
         {FILTER_GROUPS.map((fg) => {
           return (
-            <div className={styles["form-group"]}>
+            <div className={styles["form-group"]} key={nanoid()}>
               <p className={styles["form-group-title"]}>{fg.title}</p>
               <div className={styles["form-group-items"]}>
                 {fg.list.length ? (
@@ -163,7 +172,9 @@ const HealthMapFilterForm = ({
                         className={styles["form-group-item"]}
                         key={nm}
                         role="menuitem"
-                        onClick={() => handleClick(fg.key, nm)}
+                        onClick={() => {
+                          handleClick(fg.key, nm);
+                        }}
                       >
                         <Checkbox checked={filters[fg.key].includes(nm)} />
                         <label>{nm}</label>
@@ -184,7 +195,7 @@ const HealthMapFilterForm = ({
       <div className={styles["form-actions"]}>
         <Button variant="contained" color="primary" type="submit" fullWidth>
           Apply filters (
-          {filters["namespaces"].length + filters["serviceNames"].length})
+          {filters.namespaces.length + filters.serviceNames.length})
         </Button>
         <Button
           variant="contained"

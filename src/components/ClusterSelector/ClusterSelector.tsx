@@ -1,14 +1,14 @@
-import { Divider, InputLabel, MenuItem, Select } from "@mui/material";
-import { BsChevronDown } from "react-icons/bs";
+import { Divider, MenuItem, Select } from "@mui/material";
+import cx from "classnames";
+import ClusterCreateModal from "components/ClusterCreateModal";
+import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import styles from "./ClusterSelector.module.scss";
+import { BsChevronDown } from "react-icons/bs";
+import { clusterSelector, setSelectedCluster } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
 
-import cx from "classnames";
-import { clusterSelector, setSelectedCluster } from "redux/cluster";
-import { useEffect, useState } from "react";
-import ClusterCreateModal from "components/ClusterCreateModal";
+import styles from "./ClusterSelector.module.scss";
 
 const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -18,23 +18,21 @@ const ClusterSelector = () => {
 
   const dispatch = useDispatch();
 
-  const toggleModal = () => setIsModalVisible((old) => !old);
-  const StyleIcon = () => <BsChevronDown className={styles["select-icon"]} />;
+  const toggleModal = () => {
+    setIsModalVisible((old) => !old);
+  };
   return (
     <div
-      className={cx(
-        styles["container"],
-        isDrawerMinimized && styles["minimized"]
-      )}
+      className={cx(styles.container, isDrawerMinimized && styles.minimized)}
     >
       {/* <InputLabel htmlFor="cluster-list">Cluster</InputLabel> */}
       <Select
         id="cluster-list"
         value={selectedCluster}
-        className={styles["select"]}
+        className={styles.select}
         // IconComponent={StyleIcon}
         onChange={(val) => {
-          if (val && val.target && val.target.value) {
+          if (val !== null && val.target && val.target.value) {
             dispatch(setSelectedCluster({ id: val.target.value }));
           }
         }}
@@ -42,7 +40,7 @@ const ClusterSelector = () => {
         <MenuItem value="" disabled>
           Target cluster
         </MenuItem>
-        {!!clusters.length &&
+        {!(clusters.length === 0) &&
           clusters.map((cl) => {
             return (
               <MenuItem value={cl.id} key={cl.id}>

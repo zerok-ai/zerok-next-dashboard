@@ -1,16 +1,16 @@
-import { ServiceDetail } from "utils/types";
-import styles from "./ServiceCard.module.scss";
+import cx from "classnames";
+import { toNumber } from "lodash";
+import Link from "next/link";
 import {
   convertNanoToMilliSeconds,
   getFormattedServiceName,
   getNamespace,
   roundToTwoDecimals,
 } from "utils/functions";
+import { type ServiceDetail } from "utils/types";
 
-import cx from "classnames";
+import styles from "./ServiceCard.module.scss";
 import { ServiceCardStatusIcon } from "./ServiceCard.utils";
-import Link from "next/link";
-import { toNumber } from "lodash";
 interface ServiceCardProps {
   service: ServiceDetail;
 }
@@ -36,7 +36,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
     }
   };
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <ServiceCardStatusIcon status={isHealthy ? "healthy" : "error"} />
       <Link href={`/issues?services=${encodeURIComponent(serviceQuery())}`}>
         <div className={styles["service-name-container"]}>

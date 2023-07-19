@@ -1,16 +1,22 @@
-import ChipX from "components/themeX/ChipX";
 import CodeBlock from "components/CodeBlock";
-import { stringWithoutComments } from "utils/functions";
 import SQLRawTable from "components/SQLRawTable";
+import ChipX from "components/themeX/ChipX";
+import { stringWithoutComments } from "utils/functions";
 
 import styles from "./IncidentInfoTabs.module.scss";
 
 export const MYSQL_TAB_KEYS = ["overview", "query", "result"] as const;
 
-export const MYSQL_TABS: {
+interface MySqlTabKey {
+  label: string;
+  key: string;
+  render?: (val: any) => React.ReactNode;
+}
+
+export const MYSQL_TABS: Array<{
   label: string;
   key: (typeof MYSQL_TAB_KEYS)[number];
-}[] = [
+}> = [
   {
     label: "Overview",
     key: "overview",
@@ -25,11 +31,7 @@ export const MYSQL_TABS: {
   },
 ];
 
-export const MYSQL_OVERVIEW_KEYS: {
-  label: string;
-  key: string;
-  render?: (val: any) => React.ReactNode;
-}[] = [
+export const MYSQL_OVERVIEW_KEYS: MySqlTabKey[] = [
   {
     label: "Protocol",
     key: "protocol",
@@ -40,7 +42,7 @@ export const MYSQL_OVERVIEW_KEYS: {
   {
     label: "Latency",
     key: "latency_ms",
-    render: (value) => `${value} ms`,
+    render: (value) => `${value as string} ms`,
   },
   { label: "Status", key: "status" },
 ];

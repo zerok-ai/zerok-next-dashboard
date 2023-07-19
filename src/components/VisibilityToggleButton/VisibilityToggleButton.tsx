@@ -1,9 +1,9 @@
-import styles from "./VisibilityToggleButton.module.scss";
-import { useState } from "react";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { IconButton } from "@mui/material";
+import cx from "classnames";
+import { useState } from "react";
 
-import cx from 'classnames';
+import styles from "./VisibilityToggleButton.module.scss";
 
 interface VisibilityToggleProps {
   name: string;
@@ -31,7 +31,7 @@ const VisibilityToggleButton = ({
       edge="end"
       color="secondary"
       onClick={toggleVisibility}
-      className={cx(customClassName, styles['container'])}
+      className={cx(customClassName, styles.container)}
     >
       {isVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
     </IconButton>

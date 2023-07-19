@@ -1,9 +1,7 @@
-import { FieldError, FieldValues, UseFormRegister } from "react-hook-form";
-import cx from "classnames";
-
-import styles from "./TextFormField.module.scss";
 import { InputLabel, TextField } from "@mui/material";
-import { ReactNode } from "react";
+import cx from "classnames";
+import { type ReactNode } from "react";
+import { type UseFormRegister } from "react-hook-form";
 
 interface TextFormFieldProps {
   type?: string;
@@ -31,7 +29,6 @@ const TextFormField = ({
   register,
   endAdornment,
 }: TextFormFieldProps) => {
-
   return (
     <div className={cx("form-item", customClassName)}>
       <InputLabel htmlFor={name} className={cx("form-label")}>
@@ -41,12 +38,12 @@ const TextFormField = ({
         id={name}
         fullWidth
         variant="outlined"
-        type={type || "text"}
+        type={type ?? "text"}
         {...register(name)}
         placeholder={placeholder}
         error={error}
         helperText={errorText && error ? errorText : helperText}
-        InputProps={{ endAdornment: endAdornment || null }}
+        InputProps={{ endAdornment: endAdornment ?? null }}
       />
     </div>
   );

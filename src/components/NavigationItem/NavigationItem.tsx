@@ -1,15 +1,15 @@
-import { DrawerNavItemType } from "utils/types";
-import styles from "./NavigationItem.module.scss";
-import { ICON_BASE_PATH } from "utils/images";
-import Link from "next/link";
-
 import cx from "classnames";
+import Link from "next/link";
 import { useSelector } from "redux/store";
+import { ICON_BASE_PATH } from "utils/images";
+import { type DrawerNavItemType } from "utils/types";
 
-type NavigationItemType = {
+import styles from "./NavigationItem.module.scss";
+
+interface NavigationItemType {
   nav: DrawerNavItemType;
   active: boolean;
-};
+}
 const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const drawer = useSelector((state) => state.drawer);
   const { isDrawerMinimized } = drawer;
@@ -20,9 +20,9 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
     <Link href={nav.path}>
       <div
         className={cx(
-          styles["container"],
-          active && styles["active"],
-          isDrawerMinimized && styles["minimized"]
+          styles.container,
+          active && styles.active,
+          isDrawerMinimized && styles.minimized
         )}
       >
         <div className={styles["icon-container"]}>

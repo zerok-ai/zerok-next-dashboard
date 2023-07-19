@@ -1,4 +1,5 @@
-import { ICONS, ICON_BASE_PATH } from "utils/images";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
+
 import styles from "./ServiceCard.module.scss";
 type ServiceCardStatus = "healthy" | "error";
 export const ServiceCardStatusIcon = ({
@@ -26,7 +27,7 @@ export const ServiceCardStatusIcon = ({
   };
   return (
     <div className={styles["status-icon"]}>
-      {status === "healthy" ? <HealthyStatus /> : <ErrorStatus / >}
+      {status === "healthy" ? <HealthyStatus /> : <ErrorStatus />}
     </div>
   );
 };
