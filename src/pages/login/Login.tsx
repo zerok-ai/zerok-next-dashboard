@@ -1,9 +1,9 @@
 "use client";
-import { Fragment } from "react";
+import AuthFormCard from "components/forms/AuthFormCard";
+import LoginForm from "components/forms/LoginForm";
 import AuthLayout from "components/layouts/AuthLayout";
 import Head from "next/head";
-import LoginForm from "components/forms/LoginForm";
-import AuthFormCard from "components/forms/AuthFormCard";
+import { Fragment } from "react";
 
 const Login = () => {
   return (

@@ -1,35 +1,26 @@
-import PrivateRoute from "components/PrivateRoute";
-import styles from "./IssuesPage.module.scss";
+import { nanoid } from "@reduxjs/toolkit";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
+import CustomSkeleton from "components/CustomSkeleton";
 import PageLayout from "components/layouts/PageLayout";
-import { Fragment, useEffect, useMemo, useState } from "react";
-import Head from "next/head";
+import PrivateRoute from "components/PrivateRoute";
+import TableX from "components/themeX/TableX";
+import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { Fragment, useEffect, useMemo } from "react";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
 import {
   LIST_INCIDENTS_ENDPOINT,
   LIST_SERVICES_ENDPOINT_V2,
 } from "utils/endpoints";
-import { IssueDetail, ServiceDetail } from "utils/types";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { AiOutlineArrowRight } from "react-icons/ai";
-import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
-import TableX from "components/themeX/TableX";
-import { DEFAULT_COL_WIDTH, IGNORED_SERVICES_PREFIXES } from "utils/constants";
-import ChipX from "components/themeX/ChipX";
-import Link from "next/link";
-import { filterServices, getTitleFromIssue } from "utils/functions";
-import { nanoid } from "@reduxjs/toolkit";
-import { useRouter } from "next/router";
-import TagX from "components/themeX/TagX";
-import { useSelector } from "redux/store";
-import { clusterSelector } from "redux/cluster";
+import { filterServices } from "utils/functions";
+import { type IssueDetail, type ServiceDetail } from "utils/types";
+
+import styles from "./IssuesPage.module.scss";
 import ServicesMenu, { getIssueColumns } from "./IssuesPage.utils";
-import { Skeleton } from "@mui/material";
-import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
-import CustomSkeleton from "components/CustomSkeleton";
 
 const IssuesPage = () => {
   const { selectedCluster } = useSelector(clusterSelector);
@@ -52,9 +43,10 @@ const IssuesPage = () => {
   const { query } = router;
   // @TODO - add types for filters here
 
-  const services = query.services
-    ? decodeURIComponent(query.services as string).split(",")
-    : null;
+  const services =
+    (query.services as string).length > 0
+      ? decodeURIComponent(query.services as string).split(",")
+      : null;
 
   const columns = useMemo(() => {
     return getIssueColumns();
@@ -62,15 +54,15 @@ const IssuesPage = () => {
 
   const table = useReactTable<IssueDetail>({
     columns,
-    data: issues || [],
+    data: issues ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 
   const removeService = (label: string) => {
-    if (services) {
+    if (services != null) {
       const filtered = services.filter((sv) => sv !== label);
       const newQuery = { ...query };
-      if (filtered.length) {
+      if (filtered.length > 0) {
         newQuery.services = filtered.join(",");
       } else delete newQuery.services;
       router.push({
@@ -83,13 +75,14 @@ const IssuesPage = () => {
   };
 
   useEffect(() => {
-    if (selectedCluster) {
+    if (selectedCluster !== null) {
       const filter =
-        services && services.length ? `?services=${services.join(",")}` : "";
+        services != null && services.length > 0
+          ? `?services=${services.join(",")}`
+          : "";
       // @TODO - better handling of endpoints
       const endpoint =
-        LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster as string) +
-        filter;
+        LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster) + filter;
       fetchIssues(endpoint);
       fetchServices(LIST_SERVICES_ENDPOINT_V2.replace("{id}", selectedCluster));
     }
@@ -103,14 +96,15 @@ const IssuesPage = () => {
         </Head>
       </Fragment>
       <div className="page-title">
-        <div className={styles["header"]}>
+        <div className={styles.header}>
           <div className={styles["header-left"]}>
             <h3>Issues</h3>
             <div className={styles["services-select-container"]}>
               <ServicesMenu serviceList={serviceList} />
             </div>
             <div className={styles["active-filters"]}>
-              {!!services?.length &&
+              {services !== null &&
+                services.length > 0 &&
                 services.map((sv) => {
                   return (
                     <TagX
@@ -130,12 +124,12 @@ const IssuesPage = () => {
       </div>
       <div className="page-content">
         {/* @TODO - add error state here */}
-        {selectedCluster && !loading && issues ? (
+        {selectedCluster !== null && !loading && issues != null ? (
           <TableX table={table} data={issues} />
         ) : (
           <CustomSkeleton
             containerClass={styles["skeleton-container"]}
-            skeletonClass={styles["skeleton"]}
+            skeletonClass={styles.skeleton}
             len={10}
           />
         )}

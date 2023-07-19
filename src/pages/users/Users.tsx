@@ -1,27 +1,35 @@
-import PrivateRoute from "components/PrivateRoute";
-import PageLayout from "components/layouts/PageLayout";
-import  Head from "next/head";
-import styles from "./Users.module.scss";
-import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
-import { useFetch } from "hooks/useFetch";
-import { Button, Chip } from "@mui/material";
-import { UserDetail } from "utils/types";
+import { LoadingButton } from "@mui/lab";
+import { Button, Chip, IconButton } from "@mui/material";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import UserProfilePicture from "components/UserProfilePicture";
-import { IconButton } from "@mui/material";
-import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
-import TableX from "components/themeX/TableX";
-import { useState } from "react";
-import ModalX from "components/themeX/ModalX";
+// custom
 import InviteUserForm from "components/forms/InviteUserForm";
-import useStatus from "hooks/useStatus";
-import raxios from "utils/raxios";
+import PageLayout from "components/layouts/PageLayout";
+import PrivateRoute from "components/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
-import { LoadingButton } from "@mui/lab";
+import ModalX from "components/themeX/ModalX";
+import TableX from "components/themeX/TableX";
+import UserProfilePicture from "components/UserProfilePicture";
+// hooks
+import { useFetch } from "hooks/useFetch";
+import useStatus from "hooks/useStatus";
+// next
+import Head from "next/head";
+// react
+import { useState } from "react";
+// react-icons
+import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
+// utils
+import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
+import raxios from "utils/raxios";
+// types
+import { type UserDetail } from "utils/types";
+
+// styles
+import styles from "./Users.module.scss";
 
 const Users = () => {
   const {
@@ -33,13 +41,15 @@ const Users = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
-  const toggleForm = () => setIsFormOpen(!isFormOpen);
+  const toggleForm = () => {
+    setIsFormOpen(!isFormOpen);
+  };
   const colHelper = createColumnHelper<UserDetail>();
 
   const { status, setStatus } = useStatus();
 
   const deleteUser = async () => {
-    const endpoint = GET_USERS_ENDPOINT + `/${deletingUser?.id}`;
+    const endpoint = GET_USERS_ENDPOINT + `/${deletingUser!.id}`;
     try {
       setStatus({ loading: true, error: null });
       await raxios.delete(endpoint);
@@ -76,19 +86,22 @@ const Users = () => {
     }
   };
 
-  const clearDeletingUser = () => setDeletingUser(null);
+  const clearDeletingUser = () => {
+    setDeletingUser(null);
+  };
 
   const columns = [
     colHelper.accessor("name", {
       header: "Member",
       cell: (info) => {
+        const type = info.getValue().trim();
         return (
           <div className={styles["member-container"]}>
             <div className={styles["member-picture-container"]}>
               <UserProfilePicture name={info.getValue()} />
             </div>
             <div className={styles["member-info-container"]}>
-              <h6>{info.getValue().trim() || "Admin"}</h6>
+              <h6>{type.length > 0 ? type : "Admin"}</h6>
               <small>{info.row.original.email}</small>
             </div>
           </div>
@@ -128,12 +141,18 @@ const Users = () => {
             <LoadingButton
               variant="outlined"
               size="small"
-              onClick={() => inviteUser(info.row.original)}
+              onClick={async () => {
+                await inviteUser(info.row.original);
+              }}
               loading={status.loading}
             >
               Resend Invite
             </LoadingButton>
-            <IconButton onClick={() => setDeletingUser(info.row.original)}>
+            <IconButton
+              onClick={() => {
+                setDeletingUser(info.row.original);
+              }}
+            >
               <AiOutlineDelete />
             </IconButton>
           </div>
@@ -141,16 +160,15 @@ const Users = () => {
       },
     }),
   ];
-
   const table = useReactTable({
-    data: users || [],
+    data: users ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
-    <div className={styles["container"]}>
-      <div className={styles["header"]}>
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h2>Users</h2>
         <Button
           variant="contained"
@@ -161,7 +179,7 @@ const Users = () => {
         </Button>
       </div>
       <div className={styles["table-container"]}>
-        <TableX table={table} data={users || []} />
+        <TableX table={table} data={users ?? []} />
       </div>
       <ModalX
         isOpen={isFormOpen}
@@ -170,16 +188,16 @@ const Users = () => {
       >
         <div className={styles["form-container"]}>
           <InviteUserForm
-            onFinish={() => {
+            onFinish={async () => {
               toggleForm();
-              fetchData(GET_USERS_ENDPOINT);
+              await fetchData(GET_USERS_ENDPOINT);
             }}
           />
         </div>
       </ModalX>
       <DialogX
         title="Delete user"
-        isOpen={!!deletingUser}
+        isOpen={!(deletingUser == null)}
         onCancel={clearDeletingUser}
         onClose={clearDeletingUser}
         onSuccess={deleteUser}
@@ -204,6 +222,5 @@ Users.getLayout = function getLayout(page: React.ReactNode) {
     </PrivateRoute>
   );
 };
-
 
 export default Users;

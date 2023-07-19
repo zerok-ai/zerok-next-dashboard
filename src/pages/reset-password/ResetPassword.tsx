@@ -1,9 +1,8 @@
-import AuthLayout from "components/layouts/AuthLayout";
-import styles from "./ForgotPassword.module.scss";
 import AuthFormCard from "components/forms/AuthFormCard";
-import { Fragment } from "react";
-import Head from "next/head";
 import ResetPasswordForm from "components/forms/ResetPasswordForm";
+import AuthLayout from "components/layouts/AuthLayout";
+import Head from "next/head";
+import { Fragment } from "react";
 
 const ResetPassword = () => {
   return (

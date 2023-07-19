@@ -6,8 +6,12 @@ export const useSticky = () => {
   const stickyRef = useRef<HTMLDivElement>(null);
   const fixedHeader = () => {
     const mainHeader = document.getElementById("incident-header");
-    let fixedTop = stickyRef.current?.offsetTop;
-    if (mainHeader && stickyRef.current && isNumber(fixedTop)) {
+    const fixedTop = stickyRef.current?.offsetTop;
+    if (
+      mainHeader !== null &&
+      stickyRef.current !== null &&
+      isNumber(fixedTop)
+    ) {
       if (window.pageYOffset > fixedTop + mainHeader.offsetHeight) {
         setIsSticky(true);
       } else {
@@ -16,7 +20,9 @@ export const useSticky = () => {
     }
   };
   useEffect(() => {
-    return () => window.removeEventListener("scroll", fixedHeader);
+    return () => {
+      window.removeEventListener("scroll", fixedHeader);
+    };
   }, []);
 
   if (window !== undefined) {

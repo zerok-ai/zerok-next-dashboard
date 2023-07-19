@@ -2,29 +2,24 @@ import "styles/normalize.scss";
 import "simplebar/dist/simplebar.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 // apex-chart
 import "styles/apex-chart.scss";
 import "styles/react-table.scss";
-
 // react-flow
-import 'reactflow/dist/style.css';
-import 'styles/react-flow.scss'
-
+import "reactflow/dist/style.css";
+import "styles/react-flow.scss";
 // custom styles
 import "styles/globals.scss";
-import "styles/utils.scss"
-import 'styles/tables.scss'
+import "styles/utils.scss";
+import "styles/tables.scss";
 
-import ThemeCustomization from "themes";
+import { type NextPage } from "next";
 import type { AppProps } from "next/app";
-
+import { type ReactElement, type ReactNode } from "react";
 // third-party
 import { Provider } from "react-redux";
-
 import store from "redux/store";
-import { NextPage } from "next";
-import { ReactElement, ReactNode } from "react";
+import ThemeCustomization from "themes";
 
 // types
 type LayoutProps = NextPage & {
@@ -36,7 +31,7 @@ interface Props {
   pageProps: any;
 }
 
-export default function App({ Component, pageProps }: AppProps & Props) {
+const App = ({ Component, pageProps }: AppProps & Props) => {
   const getLayout = Component.getLayout ?? ((page: any) => page);
   return (
     <Provider store={store}>
@@ -45,4 +40,6 @@ export default function App({ Component, pageProps }: AppProps & Props) {
       </ThemeCustomization>
     </Provider>
   );
-}
+};
+
+export default App;

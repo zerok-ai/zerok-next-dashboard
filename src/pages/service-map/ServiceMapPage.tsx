@@ -1,39 +1,38 @@
-import { useFetch } from "hooks/useFetch";
-import styles from "./ServiceMap.module.scss";
-import { ServiceMapDetail } from "utils/health/types";
-import { useSelector } from "redux/store";
-import { clusterSelector } from "redux/cluster";
-import { useEffect, useState } from "react";
-import { GET_SERVICE_MAP_ENDPOINT } from "utils/health/endpoints";
-import PrivateRoute from "components/PrivateRoute";
-import Head from "next/head";
-import PageLayout from "components/layouts/PageLayout";
-import { filterEmptyServiceMapNodes } from "utils/health/functions";
-import HealthMap from "components/HealthMap";
-import { getServiceString } from "utils/services/functions";
-import { HiPlus } from "react-icons/hi";
-import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { Button } from "@mui/material";
-import DrawerX from "components/themeX/DrawerX";
+import HealthMap from "components/HealthMap";
 import HealthMapFilterForm from "components/HealthMapFilterForm";
-import { ReactFlowProvider, useReactFlow } from "reactflow";
-import { useRouter } from "next/router";
-import ChipX from "components/themeX/ChipX";
-import TagX from "components/themeX/TagX";
+import PageLayout from "components/layouts/PageLayout";
+import PrivateRoute from "components/PrivateRoute";
 import ServiceMapFilterDisplay from "components/ServiceMapFilterDisplay";
+import DrawerX from "components/themeX/DrawerX";
+import { useFetch } from "hooks/useFetch";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import { HiPlus } from "react-icons/hi";
+import { ReactFlowProvider } from "reactflow";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
+import { GET_SERVICE_MAP_ENDPOINT } from "utils/health/endpoints";
+import { filterEmptyServiceMapNodes } from "utils/health/functions";
+import { type ServiceMapDetail } from "utils/health/types";
+import { getServiceString } from "utils/services/functions";
+
+import styles from "./ServiceMap.module.scss";
 
 const formatServiceMapData = (smap: ServiceMapDetail[]) => {
   const filteredServices = smap.filter((service) => {
-    return !IGNORED_SERVICES_PREFIXES.includes(
-      service.requestor_service || service.responder_service
+    return (
+      !IGNORED_SERVICES_PREFIXES.includes(service.requestor_service) &&
+      !IGNORED_SERVICES_PREFIXES.includes(service.responder_service)
     );
   });
   const nonEmptyServices = filterEmptyServiceMapNodes(filteredServices);
   const formattedServices = nonEmptyServices.map((service) => {
-    if (service.requestor_service) {
+    if (service.requestor_service.length > 0) {
       service.requestor_service = getServiceString(service.requestor_service);
     }
-    if (service.responder_service) {
+    if (service.responder_service.length > 0) {
       service.responder_service = getServiceString(service.responder_service);
     }
     return service;
@@ -51,9 +50,11 @@ const ServiceMap = () => {
 
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
-  const toggleFilterDrawer = () => setIsFilterDrawerOpen(!isFilterDrawerOpen);
+  const toggleFilterDrawer = () => {
+    setIsFilterDrawerOpen(!isFilterDrawerOpen);
+  };
   useEffect(() => {
-    if (selectedCluster) {
+    if (selectedCluster !== null) {
       fetchData(
         GET_SERVICE_MAP_ENDPOINT.replace("{cluster_id}", selectedCluster)
       );
@@ -61,8 +62,8 @@ const ServiceMap = () => {
   }, [selectedCluster]);
 
   return (
-    <div className={styles["container"]}>
-      <div className={styles["header"]}>
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h3 className="page-title">Health</h3>
         <div className={styles["header-left"]}>
           <ServiceMapFilterDisplay />
@@ -78,12 +79,12 @@ const ServiceMap = () => {
           </Button>
         </div>
       </div>
-      <div className={styles["content"]}>
+      <div className={styles.content}>
         <ReactFlowProvider>
           <HealthMap serviceMap={data} />
         </ReactFlowProvider>
       </div>
-      {isFilterDrawerOpen && data && (
+      {isFilterDrawerOpen && data != null && (
         <DrawerX title="Filter" onClose={toggleFilterDrawer}>
           <HealthMapFilterForm
             serviceList={data}

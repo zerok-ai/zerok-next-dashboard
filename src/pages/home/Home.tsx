@@ -1,17 +1,18 @@
-import PrivateRoute from "components/PrivateRoute";
-import styles from "./Home.module.scss";
-import PageLayout from "components/layouts/PageLayout";
-import { useEffect } from "react";
-import Head from "next/head";
 import { Skeleton } from "@mui/material";
-import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
-import { useSelector } from "redux/store";
-import { clusterSelector } from "redux/cluster";
-import { ServiceDetail } from "utils/types";
-import ServiceCard from "components/ServiceCard";
 import { nanoid } from "@reduxjs/toolkit";
-import { filterServices } from "utils/functions";
+import PageLayout from "components/layouts/PageLayout";
+import PrivateRoute from "components/PrivateRoute";
+import ServiceCard from "components/ServiceCard";
 import { useFetch } from "hooks/useFetch";
+import Head from "next/head";
+import { useEffect } from "react";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
+import { filterServices } from "utils/functions";
+import { type ServiceDetail } from "utils/types";
+
+import styles from "./Home.module.scss";
 
 const Home = () => {
   const {
@@ -22,7 +23,7 @@ const Home = () => {
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
   const { selectedCluster } = useSelector(clusterSelector);
   useEffect(() => {
-    if (selectedCluster) {
+    if (selectedCluster !== null) {
       fetchServices(
         LIST_SERVICES_ENDPOINT.replace("{cluster_id}", selectedCluster)
       );
@@ -31,7 +32,7 @@ const Home = () => {
 
   const skeletons = new Array(8).fill("skeleton");
 
-  if (!loading && services && services.length === 0) {
+  if (!loading && services != null && services.length === 0) {
     return (
       <div className={styles["no-services"]}>
         <h3>No services found.</h3>
@@ -52,10 +53,10 @@ const Home = () => {
       <h3 className="page-title">Health</h3>
       <div className={styles["content-container"]}>
         <div className={styles["services-container"]}>
-          {!loading && services
+          {!loading && services != null
             ? services.map((sv) => {
                 return (
-                  <div className={styles["service"]} key={nanoid()}>
+                  <div className={styles.service} key={nanoid()}>
                     <ServiceCard service={sv} />
                   </div>
                 );
@@ -65,7 +66,7 @@ const Home = () => {
                   <Skeleton
                     key={nanoid()}
                     variant="rectangular"
-                    className={styles["skeleton"]}
+                    className={styles.skeleton}
                   />
                 );
               })}
