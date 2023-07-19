@@ -1,16 +1,17 @@
-import { useDispatch } from "redux/store";
-import styles from "./ClusterRefreshButton.module.scss";
 import { IconButton } from "@mui/material";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
 import { getClusters } from "redux/cluster";
+import { useDispatch } from "redux/store";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
+
+import styles from "./ClusterRefreshButton.module.scss";
 
 const ClusterRefreshButton = () => {
   const dispatch = useDispatch();
   return (
     <IconButton
-      className={styles["container"]}
+      className={styles.container}
       size="large"
-      onClick={() => dispatch(getClusters())}
+      onClick={async () => await dispatch(getClusters())}
     >
       <img src={`${ICON_BASE_PATH}/${ICONS.refresh}`} alt="refresh" />
     </IconButton>

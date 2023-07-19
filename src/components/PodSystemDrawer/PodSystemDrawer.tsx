@@ -1,14 +1,15 @@
-import { useEffect } from "react";
-import styles from "./PodSystemDrawer.module.scss";
-import { useFetch } from "hooks/useFetch";
-import { GET_POD_DETAILS_ENDPOINT } from "utils/endpoints";
-import { useSelector } from "redux/store";
-import { clusterSelector } from "redux/cluster";
-import { GenericObject } from "utils/types";
-import { parseTimeseriesData } from "utils/timeSeries";
 import { Drawer, Skeleton } from "@mui/material";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
 import TimeSeriesChart from "components/TimeSeriesChart";
+import { useFetch } from "hooks/useFetch";
+import { useEffect } from "react";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { GET_POD_DETAILS_ENDPOINT } from "utils/endpoints";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
+import { parseTimeseriesData } from "utils/timeSeries";
+import { type GenericObject } from "utils/types";
+
+import styles from "./PodSystemDrawer.module.scss";
 
 interface PodSystemDrawerProps {
   pod: string | null;
@@ -56,10 +57,10 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
       open={true}
       onClose={onClose}
       anchor="right"
-      className={styles["container"]}
+      className={styles.container}
       hideBackdrop
     >
-      <div className={styles["header"]}>
+      <div className={styles.header}>
         <h6>{pod}</h6>
         <span className={styles["close-btn"]} role="button" onClick={onClose}>
           <img
@@ -69,7 +70,7 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
         </span>
       </div>
       {loading && (
-        <div className={styles["skeletons"]}>
+        <div className={styles.skeletons}>
           <Skeleton variant="rectangular" height={100} />
           <Skeleton variant="rectangular" height={100} />
           <Skeleton variant="rectangular" height={100} />
@@ -78,7 +79,7 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
       {data && (
         <div className={styles["charts-container"]}>
           {!!data.cpu.time.length && (
-            <div className={styles["chart"]}>
+            <div className={styles.chart}>
               <h6>CPU Usage</h6>
               <TimeSeriesChart
                 series={data.cpu.data}
@@ -87,7 +88,7 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
             </div>
           )}
           {!!data.http.time.length && (
-            <div className={styles["chart"]}>
+            <div className={styles.chart}>
               <h6>HTTP Requests</h6>
               <TimeSeriesChart
                 series={data.http.data}
@@ -96,7 +97,7 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
             </div>
           )}
           {!!data.latency.time.length && (
-            <div className={styles["chart"]}>
+            <div className={styles.chart}>
               <h6>Latency</h6>
               <TimeSeriesChart
                 series={data.latency.data}

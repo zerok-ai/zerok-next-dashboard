@@ -1,11 +1,11 @@
-import { SpanDetail } from "utils/types";
-import styles from "./SpanCard.module.scss";
-import { ICON_BASE_PATH } from "utils/images";
-import { AiOutlineCheck } from "react-icons/ai";
-import dayjs from "dayjs";
-
 import cx from "classnames";
+import dayjs from "dayjs";
+import { AiOutlineCheck } from "react-icons/ai";
 import { convertNanoToMilliSeconds } from "utils/functions";
+import { ICON_BASE_PATH } from "utils/images";
+import { type SpanDetail } from "utils/types";
+
+import styles from "./SpanCard.module.scss";
 
 interface SpanCardProps {
   span: SpanDetail;
@@ -16,9 +16,11 @@ interface SpanCardProps {
 const SpanCard = ({ span, active, onClick }: SpanCardProps) => {
   return (
     <div
-      className={cx(styles["container"], active && styles["active"])}
+      className={cx(styles.container, active && styles.active)}
       role="button"
-      onClick={() => onClick(span)}
+      onClick={() => {
+        onClick(span);
+      }}
     >
       <div className={styles["span-info"]}>
         <div className={styles["connector-container"]}>

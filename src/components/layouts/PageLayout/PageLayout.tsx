@@ -1,15 +1,16 @@
-import MainDrawer from "components/MainDrawer";
-import styles from "./PageLayout.module.scss";
-import DrawerToggleButton from "components/DrawerToggleButton";
 import ClusterSelector from "components/ClusterSelector";
+import DrawerToggleButton from "components/DrawerToggleButton";
+import MainDrawer from "components/MainDrawer";
 
-interface PageLayout {
+import styles from "./PageLayout.module.scss";
+
+interface PageLayoutProps {
   children: React.ReactNode;
 }
 
-const PageLayout = ({ children }: PageLayout) => {
+const PageLayout = ({ children }: PageLayoutProps) => {
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <aside className={styles["drawer-container"]}>
         <MainDrawer />
       </aside>

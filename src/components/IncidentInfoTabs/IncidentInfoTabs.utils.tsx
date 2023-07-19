@@ -1,25 +1,31 @@
 import { Skeleton } from "@mui/material";
-import styles from "./IncidentInfoTabs.module.scss";
+import CodeBlock from "components/CodeBlock";
+import PodTable from "components/PodTable";
+import { nanoid } from "nanoid";
+import dynamic from "next/dynamic";
 import {
-  OVERVIEW_KEYS,
+  type GenericObject,
+  type PodDetail,
+  type SpanDetail,
+  type SpanRawData,
+} from "utils/types";
+
+import {
   HTTP_REQUEST_BODY_KEYS,
   HTTP_REQUEST_HEADER_KEYS,
   HTTP_RESPONSE_BODY_KEYS,
   HTTP_RESPONSE_HEADER_KEYS,
   HTTP_TABS,
+  OVERVIEW_KEYS,
   POD_KEYS,
 } from "./IncidentInfoTabs.http";
-import dynamic from "next/dynamic";
-const ReactJson = dynamic(import("react-json-view"), { ssr: false });
-import { GenericObject, PodDetail, SpanDetail, SpanRawData } from "utils/types";
+import styles from "./IncidentInfoTabs.module.scss";
 import {
   MYSQL_QUERY_KEYS,
   MYSQL_RESULT_KEYS,
   MYSQL_TABS,
 } from "./IncidentInfoTabs.mysql";
-import { nanoid } from "nanoid";
-import PodTable from "components/PodTable";
-import CodeBlock from "components/CodeBlock";
+const ReactJson = dynamic(import("react-json-view"), { ssr: false });
 
 export const DEFAULT_TAB_KEYS = [
   { label: "Overview", key: "overview" },
@@ -93,8 +99,8 @@ export const getTabByProtocol = (
       valueObj: rawSpanData,
     },
   ];
-  let defaultKeys = [...DEFAULT_TAB_KEYS];
-  let defaultContent: GenericObject[] = [...DEFAULT_TAB_CONTENT];
+  const defaultKeys = [...DEFAULT_TAB_KEYS];
+  const defaultContent: GenericObject[] = [...DEFAULT_TAB_CONTENT];
   switch (protocol) {
     case "http":
       if (currentSpan.destination.includes("zk-client")) {

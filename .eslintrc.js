@@ -40,5 +40,7 @@ module.exports = {
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/no-throw-literal": "off",
+    "@typescript-eslint/prefer-optional-chain": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
   },
 };

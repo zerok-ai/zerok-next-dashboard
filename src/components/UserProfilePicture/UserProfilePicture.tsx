@@ -13,7 +13,7 @@ const UserProfilePicture = ({ name }: UserProfilePictureProps) => {
         })
         .join("")
     : "AD";
-  return <div className={styles["container"]}>{displayString}</div>;
+  return <div className={styles.container}>{displayString}</div>;
 };
 
 export default UserProfilePicture;

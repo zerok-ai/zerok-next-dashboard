@@ -1,7 +1,6 @@
-import { ReactFlowInstance, useReactFlow } from "reactflow";
 import cx from "classnames";
-
-import { ICONS, ICON_BASE_PATH } from "utils/images";
+import { useReactFlow } from "reactflow";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./MapControls.module.scss";
 
@@ -22,8 +21,10 @@ const MapControls = ({
     <div className={styles["map-controls"]}>
       {showToggle && toggleSize && (
         <button
-          onClick={() => toggleSize()}
-          className={cx(!isMinimized && styles["active"])}
+          onClick={() => {
+            toggleSize();
+          }}
+          className={cx(!isMinimized && styles.active)}
         >
           <span className={styles["map-btn-icon-container"]}>
             <img
@@ -42,7 +43,11 @@ const MapControls = ({
           <img src={`${ICON_BASE_PATH}/${ICONS["move-map"]}`} alt="fit map" />
         </span>
       </button>
-      <button onClick={() => zoomIn()}>
+      <button
+        onClick={() => {
+          zoomIn();
+        }}
+      >
         <span className={styles["map-btn-icon-container"]}>
           <img
             src={`${ICON_BASE_PATH}/${ICONS["plus-map"]}`}
@@ -50,7 +55,11 @@ const MapControls = ({
           />
         </span>
       </button>
-      <button onClick={() => zoomOut()}>
+      <button
+        onClick={() => {
+          zoomOut();
+        }}
+      >
         <span className={styles["map-btn-icon-container"]}>
           <img
             src={`${ICON_BASE_PATH}/${ICONS["minus-map"]}`}

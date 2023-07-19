@@ -1,25 +1,23 @@
+import { Skeleton } from "@mui/material";
+import MapControls from "components/MapControls";
 import { useCallback, useMemo, useState } from "react";
-import styles from "./HealthMap.module.scss";
 import ReactFlow, {
-  Background,
-  ReactFlowProvider,
   addEdge,
+  Background,
   useEdgesState,
   useNodesState,
-  useReactFlow,
 } from "reactflow";
-import { Skeleton } from "@mui/material";
-
+import { SPACE_TOKEN } from "utils/constants";
+import { type ServiceMapDetail } from "utils/health/types";
 import { getLayoutedElements } from "utils/mapHelpers";
-import MapControls from "components/MapControls";
-import { ServiceMapDetail } from "utils/health/types";
+
+import styles from "./HealthMap.module.scss";
 import {
-  HEALTHMAP_EDGETYPES,
-  ServiceMapCard,
   getEdgesFromServiceMap,
   getNodesFromServiceMap,
+  HEALTHMAP_EDGETYPES,
+  ServiceMapCard,
 } from "./HealthMap.utils";
-import { SPACE_TOKEN } from "utils/constants";
 
 const proOptions = { hideAttribution: true };
 
@@ -54,12 +52,14 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
   const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    (params: any) => {
+      setEdges((eds) => addEdge(params, eds));
+    },
     [setEdges]
   );
   console.log("rerender");
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       {selectedService && (
         <div
           className={styles["selected-service"]}
@@ -82,7 +82,9 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         onNodeClick={(e, node) => {
           setSelectedService(node);
         }}
-        onPaneClick={() => setSelectedService(null)}
+        onPaneClick={() => {
+          setSelectedService(null);
+        }}
         className={styles["react-flow"]}
       >
         <MapControls showToggle={false} />

@@ -1,15 +1,12 @@
-import { useForm } from "react-hook-form";
-import styles from "./InviteUserForm.module.scss";
-
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TextFormField from "../TextFormField";
-import { Button } from "@mui/material";
-import useStatus from "hooks/useStatus";
-import raxios from "utils/raxios";
-import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
-import { useStatusType } from "utils/types";
 import { LoadingButton } from "@mui/lab";
+import useStatus from "hooks/useStatus";
+import { useForm } from "react-hook-form";
+import { INVITE_USER_ENDPOINT } from "utils/endpoints";
+import raxios from "utils/raxios";
+import z from "zod";
+
+import TextFormField from "../TextFormField";
 
 interface InviteUserFormProps {
   onFinish: () => void;
@@ -25,7 +22,7 @@ const InviteUserFormSchema = z.object({
 
 type InviteUserFormSchemaType = z.infer<typeof InviteUserFormSchema>;
 
-const FORM_ITEMS: { name: (typeof formKeys)[number]; label: string }[] = [
+const FORM_ITEMS: Array<{ name: (typeof formKeys)[number]; label: string }> = [
   {
     name: "firstName",
     label: "First Name",

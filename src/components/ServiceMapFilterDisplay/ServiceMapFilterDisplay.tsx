@@ -1,6 +1,8 @@
-import { useRouter } from "next/router";
-import styles from "./ServiceMapFilterDisplay.module.scss";
 import TagX from "components/themeX/TagX";
+import { nanoid } from "nanoid";
+import { useRouter } from "next/router";
+
+import styles from "./ServiceMapFilterDisplay.module.scss";
 
 const ServiceMapFilterDisplay = () => {
   const router = useRouter();
@@ -35,9 +37,11 @@ const ServiceMapFilterDisplay = () => {
     }
   };
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       {[...nameSpaceFilters, ...serviceNameFilters].map((fil) => {
-        return <TagX label={fil} closable onClose={filterRemoval} />;
+        return (
+          <TagX label={fil} closable onClose={filterRemoval} key={nanoid()} />
+        );
       })}
     </div>
   );

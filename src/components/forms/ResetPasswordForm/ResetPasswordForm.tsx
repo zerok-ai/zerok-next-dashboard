@@ -1,19 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { LoadingButton } from "@mui/lab";
+import { InputAdornment } from "@mui/material";
 import cx from "classnames";
-import { SubmitHandler, useForm } from "react-hook-form";
-import styles from "./ResetPasswordForm.module.scss";
 import TextFormField from "components/forms/TextFormField";
-import { Button, InputAdornment } from "@mui/material";
-import Link from "next/link";
 import VisibilityToggleButton from "components/VisibilityToggleButton";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import useStatus from "hooks/useStatus";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { SET_USER_PASSWORD_ENDPOINT } from "utils/endpoints";
 import { maskPassword } from "utils/functions";
 import raxios from "utils/raxios";
-import { LoadingButton } from "@mui/lab";
+import { z } from "zod";
+
+import styles from "./ResetPasswordForm.module.scss";
 
 const ResetPasswordForm = () => {
   const ResetPasswordSchema = z.object({
@@ -67,9 +68,9 @@ const ResetPasswordForm = () => {
   }, [router, query]);
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles.container}>
       <form
-        className={cx("form", styles["form"])}
+        className={cx("form", styles.form)}
         onSubmit={handleSubmit(onSubmit)}
       >
         {/* Password field */}
@@ -87,7 +88,9 @@ const ResetPasswordForm = () => {
               <VisibilityToggleButton
                 name="password"
                 isVisibleDefault={isPasswordVisible}
-                onChange={(val) => setIsPasswordVisible(val)}
+                onChange={(val) => {
+                  setIsPasswordVisible(val);
+                }}
                 customClassName={styles["remove-icon-styles"]}
               />
             </InputAdornment>

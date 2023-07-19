@@ -1,19 +1,17 @@
-import { nanoid } from "nanoid";
-import { Edge, MarkerType, Node, Position } from "reactflow";
 import { SmartBezierEdge } from "@tisoap/react-flow-smart-edge";
-import { ServiceMapDetail } from "utils/health/types";
-import { GenericObject } from "utils/types";
-
 import cx from "classnames";
-
-import styles from "./HealthMap.module.scss";
-
+import { nanoid } from "nanoid";
+import { type Edge, MarkerType, type Node, Position } from "reactflow";
 import cssVars from "styles/variables.module.scss";
 import {
   convertNanoToMilliSeconds,
   getFormattedServiceName,
   getNamespace,
 } from "utils/functions";
+import { type ServiceMapDetail } from "utils/health/types";
+import { type GenericObject } from "utils/types";
+
+import styles from "./HealthMap.module.scss";
 
 export const HEALTHMAP_EDGETYPES = {
   smart: SmartBezierEdge,
@@ -118,7 +116,7 @@ export const ServiceMapCard = ({ service }: { service: ServiceMapDetail }) => {
       <div className={styles["service-card-items"]}>
         {ITEMS.map((item) => {
           return (
-            <div className={styles["service-card-item"]}>
+            <div className={styles["service-card-item"]} key={nanoid()}>
               <p className={styles["service-card-item-label"]}>{item.label}</p>
               <p className={styles["service-card-item-value"]}>{item.value}</p>
             </div>
