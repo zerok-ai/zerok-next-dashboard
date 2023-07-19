@@ -1,7 +1,8 @@
 import axios from "axios";
-import { HTTP_ERROR_CODES } from "./constants";
-import store from "redux/store";
 import { logoutUser } from "redux/authSlice";
+import store from "redux/store";
+
+import { HTTP_ERROR_CODES } from "./constants";
 
 // use this client for any API requests with the BASE_URL
 
@@ -14,38 +15,39 @@ const raxios = axios.create({
 
 raxios.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     const errResponse = error.response;
+    const responseUrl = errResponse.request.responseURL as string;
     if (
       (errResponse.status === HTTP_ERROR_CODES.EXPIRED ||
         errResponse.data.error?.kind === "SESSION_EXPIRED") &&
-      !errResponse.request.responseURL.includes("logout")
+      !responseUrl.includes("logout")
     ) {
-      store.dispatch(logoutUser());
-      Promise.resolve();
+      await store.dispatch(logoutUser());
+      await Promise.resolve();
       return;
     }
     // @TODO - fix this jugaad
     if (
       (errResponse.status === HTTP_ERROR_CODES.EXPIRED ||
         errResponse.data.error?.kind === "SESSION_EXPIRED") &&
-      errResponse.request.responseURL.includes("logout")
+      responseUrl.includes("logout")
     ) {
-      Promise.resolve();
+      await Promise.resolve();
       return;
     }
-    return Promise.reject(error);
+    return await Promise.reject(error);
   }
 );
 
 export default raxios;
 
-export const setRaxiosHeader = (token: string) => {
-  raxios.defaults.headers.common["Token"] = token;
+export const setRaxiosHeader = (token: string): boolean => {
+  raxios.defaults.headers.common.Token = token;
   return true;
 };
 
-export const removeRaxiosHeader = () => {
-  delete raxios.defaults.headers.common["Authorization"];
+export const removeRaxiosHeader = (): boolean => {
+  delete raxios.defaults.headers.common.Authorization;
   return true;
 };

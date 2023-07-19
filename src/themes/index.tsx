@@ -1,37 +1,50 @@
-import { ReactNode, useMemo } from 'react';
-
 // material-ui
-import { CssBaseline, StyledEngineProvider } from '@mui/material';
-import { createTheme, ThemeOptions, ThemeProvider, Theme, TypographyVariantsOptions } from '@mui/material/styles';
-
+import { CssBaseline, StyledEngineProvider } from "@mui/material";
+import {
+  createTheme,
+  type Theme,
+  type ThemeOptions,
+  ThemeProvider,
+  type TypographyVariantsOptions,
+} from "@mui/material/styles";
 // project import
-import useConfig from 'hooks/useConfig';
-import Palette from './palette';
-import Typography from './typography';
-import CustomShadows from './shadows';
-import componentsOverride from './overrides';
+import useConfig from "hooks/useConfig";
+import { type ReactNode, useMemo } from "react";
+// types
+import { type CustomShadowProps } from "types/theme";
+
+import componentsOverride from "./overrides";
+import Palette from "./palette";
+import CustomShadows from "./shadows";
+import Typography from "./typography";
 
 // types
-import { CustomShadowProps } from 'types/theme';
-
-// types
-type ThemeCustomizationProps = {
+interface ThemeCustomizationProps {
   children: ReactNode;
-};
+}
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 
-export default function ThemeCustomization({ children }: ThemeCustomizationProps) {
+export default function ThemeCustomization({
+  children,
+}: ThemeCustomizationProps): ReactNode {
   const { themeDirection, mode, presetColor, fontFamily } = useConfig();
 
-  const theme: Theme = useMemo<Theme>(() => Palette(mode, presetColor), [mode, presetColor]);
-
-  const themeTypography: TypographyVariantsOptions = useMemo<TypographyVariantsOptions>(
-    () => Typography(mode, fontFamily, theme),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mode, fontFamily]
+  const theme: Theme = useMemo<Theme>(
+    () => Palette(mode, presetColor),
+    [mode, presetColor]
   );
-  const themeCustomShadows: CustomShadowProps = useMemo<CustomShadowProps>(() => CustomShadows(theme), [theme]);
+
+  const themeTypography: TypographyVariantsOptions =
+    useMemo<TypographyVariantsOptions>(
+      () => Typography(mode, fontFamily, theme),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [mode, fontFamily]
+    );
+  const themeCustomShadows: CustomShadowProps = useMemo<CustomShadowProps>(
+    () => CustomShadows(theme),
+    [theme]
+  );
 
   const themeOptions: ThemeOptions = useMemo(
     () => ({
@@ -41,20 +54,20 @@ export default function ThemeCustomization({ children }: ThemeCustomizationProps
           sm: 768,
           md: 1024,
           lg: 1266,
-          xl: 1440
-        }
+          xl: 1440,
+        },
       },
       direction: themeDirection,
       mixins: {
         toolbar: {
           minHeight: 60,
           paddingTop: 8,
-          paddingBottom: 8
-        }
+          paddingBottom: 8,
+        },
       },
       palette: theme.palette,
       customShadows: themeCustomShadows,
-      typography: themeTypography
+      typography: themeTypography,
     }),
     [themeDirection, theme, themeTypography, themeCustomShadows]
   );

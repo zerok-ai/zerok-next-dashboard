@@ -1,41 +1,42 @@
-import { IGNORED_SERVICES_PREFIXES, TOKEN_NAME } from "./constants";
-
 import CryptoJS from "crypto-js";
-import { ServiceDetail } from "./types";
 
-export const capitalizeFirstLetter = (str: string) => {
-  if (str.length) {
+import { IGNORED_SERVICES_PREFIXES, TOKEN_NAME } from "./constants";
+import { type ServiceDetail } from "./types";
+
+export const capitalizeFirstLetter = (str: string): string => {
+  if (str.length > 0) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
   return str;
 };
 
-export const setLocalToken = (token: string) => {
+export const setLocalToken = (token: string): boolean => {
   localStorage.setItem(TOKEN_NAME, token);
   return true;
 };
 
-export const getLocalToken = () => {
-  return localStorage.getItem(TOKEN_NAME) || null;
+export const getLocalToken = (): string | null => {
+  const token = localStorage.getItem(TOKEN_NAME);
+  return token;
 };
 
-export const deleteLocalToken = () => {
+export const deleteLocalToken = (): boolean => {
   localStorage.removeItem(TOKEN_NAME);
   return true;
 };
 
-export function maskPassword(password: string) {
-  let shaArray = CryptoJS.SHA256(password);
-  let hexPass = shaArray.toString(CryptoJS.enc.Hex);
+export const maskPassword = (password: string): string => {
+  const shaArray = CryptoJS.SHA256(password);
+  const hexPass = shaArray.toString(CryptoJS.enc.Hex);
   return hexPass;
-}
+};
 
-export const getNamespace = (nameStr: string) => {
-  function getName(str: string) {
+export const getNamespace = (nameStr: string): string => {
+  const getName = (str: string): string => {
     return str.toString().split("/")[0];
-  }
+  };
   try {
-    let namesObj = JSON.parse(nameStr);
+    const namesObj = JSON.parse(nameStr);
     return getName(namesObj[0]);
   } catch (err) {}
 
@@ -45,48 +46,49 @@ export const getNamespace = (nameStr: string) => {
   return nameStr.split("/")[0];
 };
 
-export const filterByIgnoredService = (services: ServiceDetail[]) => {
+export const filterByIgnoredService = (
+  services: ServiceDetail[]
+): ServiceDetail[] => {
   return services.filter((service) => {
     return IGNORED_SERVICES_PREFIXES.includes(getNamespace(service.service));
   });
 };
 
-export const stripNS = (nameStr: string) => {
+export const stripNS = (nameStr: string): string => {
   return nameStr.split("/")[1];
 };
 
-export const getFormattedServiceName = (nameStr: string) => {
+export const getFormattedServiceName = (nameStr: string): string => {
   try {
-    let namesObj = JSON.parse(nameStr);
+    const namesObj = JSON.parse(nameStr);
     nameStr = stripNS(namesObj[0]);
     return nameStr;
   } catch (err) {}
   return stripNS(nameStr);
 };
 
-export function convertNanoToMilliSeconds(value: number | null) {
+export const convertNanoToMilliSeconds = (value: number | null): string => {
   if (value != null) {
-    let millis = parseFloat((value / 1000000).toFixed(2));
+    const millis = parseFloat((value / 1000000).toFixed(2));
     return `${millis} ms`;
   }
   return "NA";
-}
+};
 
-
-export const trimString = (str: string, length: number) => {
+export const trimString = (str: string, length: number): string => {
   if (str.length > length) {
     return str.substring(0, length) + "...";
   } else return str;
 };
 
-export function roundToTwoDecimals(value: number) {
+export const roundToTwoDecimals = (value: number): number | string => {
   if (value != null) {
     return parseFloat(value.toFixed(2));
   }
   return "NA";
-}
+};
 
-export const stringWithoutComments = (s: string) => {
+export const stringWithoutComments = (s: string): string => {
   return s.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, "");
 };
 
@@ -108,20 +110,19 @@ export const decodeLengthEncodedHexString = (hexStr: any): string[] => {
   return fields;
 };
 
-export function convertNanoToMilliSecondsNumber(value: number) {
+export const convertNanoToMilliSecondsNumber = (value: number): number => {
   if (value != null) {
-    let millis = parseFloat((value / 1000000).toFixed(2));
+    const millis = parseFloat((value / 1000000).toFixed(2));
     return millis;
   }
   return 0;
-}
+};
 
-export const getTitleFromIssue = (title: string) => {
+export const getTitleFromIssue = (title: string): string => {
   return title.includes("¦") ? title.split("¦")[0] : title;
 };
 
-
-export const filterServices = (newData: ServiceDetail[]) => {
+export const filterServices = (newData: ServiceDetail[]): ServiceDetail[] => {
   return newData.filter(
     (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
   );

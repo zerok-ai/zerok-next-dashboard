@@ -1,4 +1,4 @@
-import { UserProfileType } from "redux/types";
+import { type UserProfileType } from "redux/types";
 
 export const TOKEN_NAME = "token";
 
