@@ -1,34 +1,38 @@
 "use client";
-import PrivateRoute from "components/PrivateRoute";
-import styles from "./IncidentDetailPage.module.scss";
-import PageLayout from "components/layouts/PageLayout";
-import { Fragment, useEffect, useState } from "react";
-import Head from "next/head";
-import { useFetch } from "hooks/useFetch";
-import { IssueDetail, SpanDetail, SpanResponse } from "utils/types";
 import { Skeleton } from "@mui/material";
-import IncidentDetailMap from "components/IncidentDetailMap";
-
+import { nanoid } from "@reduxjs/toolkit";
 import cx from "classnames";
+import IncidentDetailMap from "components/IncidentDetailMap";
+import IncidentInfoTabs from "components/IncidentInfoTabs";
+import PageLayout from "components/layouts/PageLayout";
+import PrivateRoute from "components/PrivateRoute";
+import SpanCard from "components/SpanCard";
+import { useFetch } from "hooks/useFetch";
+import { useSticky } from "hooks/useSticky";
+import Head from "next/head";
 import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
+import { ReactFlowProvider } from "reactflow";
+import { clusterSelector } from "redux/cluster";
+import { drawerSelector, minimizeDrawer } from "redux/drawer";
+import { setIncidentList } from "redux/incidentList";
+import { useDispatch, useSelector } from "redux/store";
+import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
+import { getTitleFromIssue } from "utils/functions";
 import {
+  type IssueDetail,
+  type SpanDetail,
+  type SpanResponse,
+} from "utils/types";
+
+import styles from "./IncidentDetailPage.module.scss";
+import {
+  buildSpanTree,
   IncidentMetadata,
   IncidentNavButtons,
   SpanDetailDrawer,
   SpanDrawerButton,
-  buildSpanTree,
 } from "./IncidentDetails.utils";
-import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
-import SpanCard from "components/SpanCard";
-import { nanoid } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "redux/store";
-import { drawerSelector, minimizeDrawer } from "redux/drawer";
-import { ReactFlowProvider } from "reactflow";
-import { setIncidentList } from "redux/incidentList";
-import { clusterSelector } from "redux/cluster";
-import IncidentInfoTabs from "components/IncidentInfoTabs";
-import { getTitleFromIssue } from "utils/functions";
-import { useSticky } from "hooks/useSticky";
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -61,10 +65,14 @@ const IncidentDetailPage = () => {
   const issueId = router.query.issue_id;
 
   const [isMapMinimized, setIsMapMinimized] = useState(true);
-  const toggleMapMinimized = () => setIsMapMinimized(!isMapMinimized);
+  const toggleMapMinimized = () => {
+    setIsMapMinimized(!isMapMinimized);
+  };
 
   const [isSpanDrawerOpen, setIsSpanDrawerOpen] = useState(false);
-  const toggleSpanDrawer = () => setIsSpanDrawerOpen(!isSpanDrawerOpen);
+  const toggleSpanDrawer = () => {
+    setIsSpanDrawerOpen(!isSpanDrawerOpen);
+  };
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
@@ -73,12 +81,12 @@ const IncidentDetailPage = () => {
 
   // Fetch issue data on mount
   useEffect(() => {
-    if (issueId && selectedCluster) {
+    if (issueId !== undefined && selectedCluster !== null) {
       fetchIssueData(
-        GET_ISSUE_ENDPOINT.replace(
-          "{cluster_id}",
-          selectedCluster as string
-        ).replace("{issue_id}", issueId as string)
+        GET_ISSUE_ENDPOINT.replace("{cluster_id}", selectedCluster).replace(
+          "{issue_id}",
+          issueId as string
+        )
       );
     }
   }, [issueId, selectedCluster]);
@@ -90,13 +98,13 @@ const IncidentDetailPage = () => {
 
   // Fetch span data for the incident on mount
   useEffect(() => {
-    if (router.isReady && !incidentId) {
+    if (router.isReady && incidentId === undefined) {
       router.push("/issues");
     }
-    if (selectedCluster && incidentId) {
+    if (selectedCluster !== null && incidentId !== undefined) {
       fetchSpanData(
         LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
-          .replace("{cluster_id}", selectedCluster as string)
+          .replace("{cluster_id}", selectedCluster)
           .replace("{issue_id}", issueId as string)
       );
     }
@@ -112,10 +120,10 @@ const IncidentDetailPage = () => {
   // Build and set the span tree on span change
   // Span tree is used to render the span drawer and has the entire router of the trace from the parent to the children
   const getSpans = () => {
-    if (!spanData) return [];
+    if (spanData == null) return [];
     const topKeys = Object.keys(spanData);
     let rootNode: null | SpanDetail = null;
-    let formattedSpans: SpanDetail[] = [];
+    const formattedSpans: SpanDetail[] = [];
     for (let i = 0; i < topKeys.length; i++) {
       const key = topKeys[i];
       const span = { ...spanData[key], span_id: key, children: [] };
@@ -124,14 +132,14 @@ const IncidentDetailPage = () => {
       }
       formattedSpans.push(span);
     }
-    if (rootNode) {
+    if (rootNode != null) {
       setSpanTree(buildSpanTree(formattedSpans, rootNode));
     }
   };
 
   // Build the span tree on span data change
   useEffect(() => {
-    if (spanData) {
+    if (spanData != null) {
       getSpans();
       setSelectedSpan(Object.keys(spanData)[0]);
     }
@@ -139,7 +147,7 @@ const IncidentDetailPage = () => {
 
   // Set the incident list on issue change
   useEffect(() => {
-    if (issue) {
+    if (issue != null) {
       dispatch(setIncidentList(issue.incidents));
     }
   }, [issue]);
@@ -151,11 +159,12 @@ const IncidentDetailPage = () => {
         <SpanCard
           span={parentSpan}
           active={active}
-          onClick={(selectedSpan) =>
-            setSelectedSpan(selectedSpan.span_id as string)
-          }
+          onClick={(selectedSpan) => {
+            setSelectedSpan(selectedSpan.span_id as string);
+          }}
         />
-        {!!parentSpan.children?.length &&
+        {parentSpan.children !== undefined &&
+          parentSpan.children.length > 0 &&
           parentSpan.children.map((span) => renderSpanTree(span))}
       </div>
     );
@@ -169,13 +178,13 @@ const IncidentDetailPage = () => {
         </Head>
       </Fragment>
       <div className="page-title">
-        {issueLoading || !issue ? (
+        {issueLoading || issue == null ? (
           <Skeleton className={"page-title-loader"} />
         ) : (
           <div
             className={cx(
-              styles["header"],
-              isSticky && styles["sticky"],
+              styles.header,
+              isSticky && styles.sticky,
               isDrawerMinimized && styles["drawer-minimized"]
             )}
             id="incident-header"
@@ -194,7 +203,7 @@ const IncidentDetailPage = () => {
       </div>
       <div
         className={cx(
-          styles["container"],
+          styles.container,
           !isMapMinimized && styles["max-map-container"]
         )}
       >
@@ -205,7 +214,7 @@ const IncidentDetailPage = () => {
             toggleDrawer={toggleSpanDrawer}
           />
           {/* Drawer for spans */}
-          {spanTree && (
+          {spanTree != null && (
             <SpanDetailDrawer isOpen={isSpanDrawerOpen}>
               <div className={styles["span-tree-container"]}>
                 {renderSpanTree(spanTree)}
@@ -220,7 +229,7 @@ const IncidentDetailPage = () => {
               spanTree={spanTree}
               onNodeClick={(spanId: string) => {
                 if (spanId !== selectedSpan) {
-                  setSelectedSpan(spanId as string);
+                  setSelectedSpan(spanId);
                 }
               }}
             />

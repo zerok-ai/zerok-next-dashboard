@@ -1,8 +1,6 @@
-import axios, { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
 import objectPath from "object-path";
+import { useEffect, useState } from "react";
 import raxios from "utils/raxios";
-import { GenericObject } from "utils/types";
 
 export const useFetch = <T>(
   accessor: string,
@@ -20,7 +18,7 @@ export const useFetch = <T>(
       setError(false);
       const resp = await raxios.get(endpoint);
       const rdata = objectPath.get(resp.data.payload, accessor);
-      if (transformer) setData(transformer(rdata, data as T));
+      if (transformer != null) setData(transformer(rdata, data as T));
       else setData(rdata);
     } catch {
       setError(true);
@@ -30,7 +28,7 @@ export const useFetch = <T>(
   };
 
   useEffect(() => {
-    if (url) fetchData(url);
+    if (url !== null && url !== undefined) fetchData(url);
   }, [url]);
   return { data, loading, error, fetchData, setData };
 };

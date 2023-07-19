@@ -1,8 +1,9 @@
-import PrivateRoute from "components/PrivateRoute";
-import styles from "./Alerts.module.scss";
-import Head from "next/head";
 import PageLayout from "components/layouts/PageLayout";
+import PrivateRoute from "components/PrivateRoute";
 import UnderConstruction from "components/UnderConstruction";
+import Head from "next/head";
+
+import styles from "./Alerts.module.scss";
 
 const Alerts = () => {
   return <div>Alerts</div>;

@@ -1,22 +1,22 @@
-import { IssueDetail, SpanDetail } from "utils/types";
-import styles from "./IncidentDetailPage.module.scss";
+import { Button, Drawer, IconButton } from "@mui/material";
+import cx from "classnames";
+import { useRouter } from "next/router";
 import {
   AiFillCaretLeft,
   AiFillCaretRight,
   AiOutlineClockCircle,
 } from "react-icons/ai";
-import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
-import { Button, Drawer, IconButton } from "@mui/material";
-
-import cx from "classnames";
-import cssVars from "styles/variables.module.scss";
-import { GET_INCIDENTS_ENDPOINT } from "utils/endpoints";
-import { useRouter } from "next/router";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
-import { useDispatch, useSelector } from "redux/store";
-import { incidentListSelector, setIncidentList } from "redux/incidentList";
 import { clusterSelector } from "redux/cluster";
+import { incidentListSelector, setIncidentList } from "redux/incidentList";
+import { useDispatch, useSelector } from "redux/store";
+import cssVars from "styles/variables.module.scss";
+import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
+import { GET_INCIDENTS_ENDPOINT } from "utils/endpoints";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
 import raxios from "utils/raxios";
+import { type IssueDetail, type SpanDetail } from "utils/types";
+
+import styles from "./IncidentDetailPage.module.scss";
 
 export const IncidentMetadata = ({ incident }: { incident: IssueDetail }) => {
   return (
@@ -69,7 +69,7 @@ export const SpanDetailDrawer = ({
     <Drawer
       open={isOpen}
       anchor="left"
-      className={styles["drawer"]}
+      className={styles.drawer}
       PaperProps={{
         style: {
           position: "absolute",
@@ -100,9 +100,9 @@ export const IncidentNavButtons = () => {
   const { incidentList } = useSelector(incidentListSelector);
   const dispatch = useDispatch();
   const router = useRouter();
-  if (!incidentList) return null;
   const { issue_id, id } = router.query;
-  const basePath = `/issues/${issue_id}`;
+  if (incidentList.length === 0 || issue_id === undefined) return null;
+  const basePath = `/issues/${issue_id as string}`;
   const activeIndex = incidentList.findIndex((incident) => incident === id);
   const fetchIncidentList = async () => {
     try {
@@ -115,7 +115,7 @@ export const IncidentNavButtons = () => {
       const rdata = await raxios.get(endpoint);
       const list = rdata.data.payload.trace_id_list;
       dispatch(setIncidentList([...incidentList, ...list]));
-      router.push(`${basePath}/${list[0]}`);
+      router.push(`${basePath}/${list[0] as string}`);
     } catch (err) {
       console.log({ err });
     }
@@ -150,7 +150,9 @@ export const IncidentNavButtons = () => {
         color="secondary"
         size="medium"
         disabled={activeIndex === 0}
-        onClick={() => getNewer()}
+        onClick={() => {
+          getNewer();
+        }}
       >
         Newer{" "}
         <span className={styles["incident-nav-button-icon"]}>
@@ -163,7 +165,9 @@ export const IncidentNavButtons = () => {
         variant="outlined"
         size="medium"
         className={styles["incident-nav-button"]}
-        onClick={() => getOlder()}
+        onClick={() => {
+          getOlder();
+        }}
       >
         Older{" "}
         <span className={styles["incident-nav-button-icon"]}>
@@ -189,13 +193,13 @@ export const buildSpanTree = (
   parentSpan: SpanDetail,
   level: number = 0
 ) => {
-  if (!spans.length) {
+  if (spans.length === 0) {
     return parentSpan;
   }
   const childrenSpan = spans.filter(
     (span) => span.parent_span_id === parentSpan.span_id
   );
-  if (childrenSpan.length) {
+  if (childrenSpan.length > 0) {
     parentSpan.children = childrenSpan;
     ++level;
     childrenSpan.map((span) => {

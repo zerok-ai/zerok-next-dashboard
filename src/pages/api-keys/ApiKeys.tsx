@@ -1,31 +1,31 @@
-import PrivateRoute from "components/PrivateRoute";
-import styles from "./ApiKeys.module.scss";
-import Head from "next/head";
-import PageLayout from "components/layouts/PageLayout";
-import { useEffect, useMemo, useState } from "react";
+import { Button, IconButton } from "@mui/material";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ApiKeyDetail, ApiKeyHidden } from "utils/types";
+import cx from "classnames";
+import CodeBlock from "components/CodeBlock";
+import PageLayout from "components/layouts/PageLayout";
+import PrivateRoute from "components/PrivateRoute";
+import DialogX from "components/themeX/DialogX";
+import TableX from "components/themeX/TableX";
+import VisibilityToggleButton from "components/VisibilityToggleButton";
+import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
+import Head from "next/head";
+import { useEffect, useMemo, useState } from "react";
+import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
-  APIKEYS_ENDPOINT,
   APIKEY_CREATE_ENDPOINT,
   APIKEY_ID_ENDPOINT,
+  APIKEYS_ENDPOINT,
 } from "utils/endpoints";
-import dayjs from "dayjs";
-import VisibilityToggleButton from "components/VisibilityToggleButton";
-import CodeBlock from "components/CodeBlock";
 import raxios from "utils/raxios";
-import TableX from "components/themeX/TableX";
-import { Button, IconButton } from "@mui/material";
-import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
+import { type ApiKeyDetail, type ApiKeyHidden } from "utils/types";
 
-import cx from "classnames";
-import { DEFAULT_COL_WIDTH } from "utils/constants";
-import DialogX from "components/themeX/DialogX";
+import styles from "./ApiKeys.module.scss";
 
 type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
@@ -42,7 +42,7 @@ const ApiKeys = () => {
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && !error && data?.length) {
+    if (!loading && !error && data !== null && data.length > 0) {
       setDetailedKeys(
         data.map((hid) => {
           return { ...hid, key: null, visible: false };
@@ -54,8 +54,8 @@ const ApiKeys = () => {
   const getApiKeyFromId = async (id: string, visibility: boolean) => {
     try {
       const selectedKey = detailedKeys.find((key) => key.id === id);
-      if (!selectedKey) throw "Missing key";
-      if (selectedKey.key) {
+      if (selectedKey == null) throw { err: "Missing key" };
+      if (selectedKey.key !== undefined) {
         selectedKey.visible = visibility;
       } else {
         const keyFromId = await raxios.get(
@@ -108,8 +108,10 @@ const ApiKeys = () => {
           const key = info.getValue();
           return (
             <CodeBlock
-              allowCopy={!!key}
-              code={key && info.row.original.visible ? key : "*".repeat(36)}
+              allowCopy={key !== null}
+              code={
+                key !== null && info.row.original.visible ? key : "*".repeat(36)
+              }
               copyText={key as string}
               color="light"
             />
@@ -132,7 +134,9 @@ const ApiKeys = () => {
                 }}
               />
               <IconButton
-                onClick={() => setDeletingKey(keyId)}
+                onClick={() => {
+                  setDeletingKey(keyId);
+                }}
                 className={styles["delete-button"]}
               >
                 <AiOutlineDelete />
@@ -156,8 +160,8 @@ const ApiKeys = () => {
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div className={styles["container"]}>
-      <div className={styles["header"]}>
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h2>API Keys</h2>
         <Button
           color="primary"
@@ -174,9 +178,13 @@ const ApiKeys = () => {
         {/* Delete key dialog */}
         <DialogX
           title="Delete API Key"
-          isOpen={!!deletingKey}
-          onCancel={() => setDeletingKey(null)}
-          onClose={() => setDeletingKey(null)}
+          isOpen={deletingKey !== null}
+          onCancel={() => {
+            setDeletingKey(null);
+          }}
+          onClose={() => {
+            setDeletingKey(null);
+          }}
           onSuccess={deleteApiKey}
         >
           Are you sure you want to delete the API key with id -{" "}

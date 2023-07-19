@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStatusType } from "utils/types";
+import { type useStatusType } from "utils/types";
 
 const useStatus = () => {
   // @TODO - make this a useFetch

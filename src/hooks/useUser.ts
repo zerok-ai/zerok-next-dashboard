@@ -1,5 +1,5 @@
-// next
-import { useSession } from 'next-auth/react';
+/* eslint-disable */
+import { useSession } from "next-auth/react";
 
 interface UserProps {
   name: string;
@@ -11,18 +11,18 @@ interface UserProps {
 
 const useUser = () => {
   const { data: session } = useSession();
-  if (session) {
-    const user = session?.user;
+  if (session !== null) {
+    const user = session.user;
     const provider = session?.provider;
     let thumb = user?.image!;
-    if (provider === 'cognito') {
-      const email = user?.email?.split('@');
-      user!.name = email ? email[0] : 'Jone Doe';
+    if (provider === "cognito") {
+      const email = user?.email?.split("@");
+      user!.name = email ? email[0] : "Jone Doe";
     }
 
     if (!user?.image) {
-      user!.image = '/assets/images/users/avatar-1.png';
-      thumb = '/assets/images/users/avatar-thumb-1.png';
+      user!.image = "/assets/images/users/avatar-1.png";
+      thumb = "/assets/images/users/avatar-thumb-1.png";
     }
 
     const newUser: UserProps = {
@@ -30,7 +30,7 @@ const useUser = () => {
       email: user!.email!,
       avatar: user?.image!,
       thumb,
-      role: 'UI/UX Designer'
+      role: "UI/UX Designer",
     };
 
     return newUser;

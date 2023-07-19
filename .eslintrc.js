@@ -32,5 +32,13 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/space-before-function-paren": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "multiline-ternary": "off",
+    "@typescript-eslint/no-misused-promises": "warn",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/no-throw-literal": "off",
   },
 };

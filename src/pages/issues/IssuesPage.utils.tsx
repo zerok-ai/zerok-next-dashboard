@@ -1,24 +1,23 @@
 import { Button, Checkbox, Menu, MenuItem, Skeleton } from "@mui/material";
+import { nanoid } from "@reduxjs/toolkit";
+import { createColumnHelper } from "@tanstack/react-table";
+import ChipX from "components/themeX/ChipX";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useMemo, useState } from "react";
-import { IssueDetail, ServiceDetail } from "utils/types";
-
-import styles from "./IssuesPage.module.scss";
-
+import { Fragment, useEffect, useState } from "react";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import cssVars from "styles/variables.module.scss";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
 import { DEFAULT_COL_WIDTH, SPACE_TOKEN } from "utils/constants";
+import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import {
   getFormattedServiceName,
   getNamespace,
   getTitleFromIssue,
 } from "utils/functions";
-import { nanoid } from "@reduxjs/toolkit";
-import { createColumnHelper } from "@tanstack/react-table";
-import Link from "next/link";
-import ChipX from "components/themeX/ChipX";
-import { AiOutlineArrowRight } from "react-icons/ai";
-import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
+import { type IssueDetail, type ServiceDetail } from "utils/types";
+
+import styles from "./IssuesPage.module.scss";
 
 const ServicesMenu = ({
   serviceList,
@@ -34,7 +33,9 @@ const ServicesMenu = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const closeMenu = () => setAnchorEl(null);
+  const closeMenu = () => {
+    setAnchorEl(null);
+  };
 
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
@@ -48,7 +49,7 @@ const ServicesMenu = ({
   };
 
   const handleApply = () => {
-    if (selectedServices.length) {
+    if (selectedServices.length > 0) {
       const selectedServicesString = encodeURIComponent(
         selectedServices
           .map((sv) => {
@@ -84,7 +85,7 @@ const ServicesMenu = ({
   };
 
   useEffect(() => {
-    if (services) {
+    if (services !== undefined) {
       setSelectedServices(decodeURIComponent(services as string).split(","));
     } else setSelectedServices([]);
   }, [services]);
@@ -130,14 +131,16 @@ const ServicesMenu = ({
       >
         <div className={styles["services-container"]}>
           <div className={styles["services-list"]}>
-            {serviceList ? (
+            {serviceList != null ? (
               serviceList.map((service) => {
                 return (
                   <MenuItem
                     className={styles["services-menu-item"]}
                     key={nanoid()}
                     id={service.service}
-                    onClick={() => handleCheckBox(service.service)}
+                    onClick={() => {
+                      handleCheckBox(service.service);
+                    }}
                   >
                     <Checkbox
                       // onChange={(e) => handleCheckBox(service.service)}
@@ -172,7 +175,10 @@ const ServicesMenu = ({
               fullWidth
               className={styles["services-action-btn"]}
               onClick={handleApply}
-              disabled={!selectedServices.length && !serviceList?.length}
+              disabled={
+                selectedServices.length === 0 &&
+                (serviceList === null || serviceList.length === 0)
+              }
             >
               Apply
             </Button>
