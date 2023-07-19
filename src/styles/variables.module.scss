@@ -92,6 +92,7 @@ $line-height-small:16px;
 $button-height-default:40px;
 $header-height:60px;
 $incident-drawer-width:320px;
+$node-width:220px;
 
 // BORDER RADIUS
 $br-xs:2px;
@@ -179,6 +180,7 @@ $header-width:60px;
     mainDrawerWidthFull:$main-drawer-width-full;
     mainDrawerWidthMini:$main-drawer-width-mini;
     incidentDrawerWidth:$incident-drawer-width;
+    nodeWidth:$node-width;
     // spacing
     spXS:$sp-xs;
     // font sizes

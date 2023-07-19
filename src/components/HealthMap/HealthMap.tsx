@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import styles from "./HealthMap.module.scss";
 import ReactFlow, {
   Background,
@@ -15,9 +15,11 @@ import MapControls from "components/MapControls";
 import { ServiceMapDetail } from "utils/health/types";
 import {
   HEALTHMAP_EDGETYPES,
+  ServiceMapCard,
   getEdgesFromServiceMap,
   getNodesFromServiceMap,
 } from "./HealthMap.utils";
+import { SPACE_TOKEN } from "utils/constants";
 
 const proOptions = { hideAttribution: true };
 
@@ -34,7 +36,10 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
       />
     );
   }
-
+  const [selectedService, setSelectedService] = useState<null | {
+    data: ServiceMapDetail;
+    position: { x: number; y: number };
+  }>(null);
   const initialNodes = useMemo(() => {
     return getNodesFromServiceMap(serviceMap);
   }, [serviceMap]);
@@ -52,9 +57,20 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-
+  console.log("rerender");
   return (
     <div className={styles["container"]}>
+      {selectedService && (
+        <div
+          className={styles["selected-service"]}
+          style={{
+            top: selectedService.position.y - SPACE_TOKEN * 10,
+            left: selectedService.position.x,
+          }}
+        >
+          <ServiceMapCard service={selectedService.data} />
+        </div>
+      )}
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -63,6 +79,10 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         onConnect={onConnect}
         proOptions={proOptions}
         edgeTypes={HEALTHMAP_EDGETYPES}
+        onNodeClick={(e, node) => {
+          setSelectedService(node);
+        }}
+        onPaneClick={() => setSelectedService(null)}
         className={styles["react-flow"]}
       >
         <MapControls showToggle={false} />

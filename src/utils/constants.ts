@@ -43,3 +43,5 @@ export const HTTP_METHODS = [
 ] as const;
 
 export const SPAN_PROTOCOLS = ["http", "mysql"] as const;
+
+export const NODE_WIDTH = 220;

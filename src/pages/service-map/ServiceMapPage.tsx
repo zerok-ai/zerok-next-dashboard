@@ -63,6 +63,7 @@ const ServiceMap = () => {
   return (
     <div className={styles["container"]}>
       <div className={styles["header"]}>
+        <h3 className="page-title">Health</h3>
         <div className={styles["header-left"]}>
           <ServiceMapFilterDisplay />
         </div>
