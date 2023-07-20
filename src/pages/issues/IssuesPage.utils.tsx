@@ -1,195 +1,14 @@
-import { Button, Checkbox, Menu, MenuItem, Skeleton } from "@mui/material";
-import { nanoid } from "@reduxjs/toolkit";
 import { createColumnHelper } from "@tanstack/react-table";
+import ServicesFilter from "components/ServicesFilter";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import cssVars from "styles/variables.module.scss";
-import { DEFAULT_COL_WIDTH, SPACE_TOKEN } from "utils/constants";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
-import {
-  getFormattedServiceName,
-  getNamespace,
-  getTitleFromIssue,
-} from "utils/functions";
-import { ICON_BASE_PATH, ICONS } from "utils/images";
-import { type IssueDetail, type ServiceDetail } from "utils/types";
+import { getTitleFromIssue } from "utils/functions";
+import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
-
-const ServicesMenu = ({
-  serviceList,
-}: {
-  serviceList: ServiceDetail[] | null;
-}) => {
-  const router = useRouter();
-  const { query } = router;
-  const { services } = query;
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const closeMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-
-  const handleCheckBox = (name: string) => {
-    const checked = selectedServices.includes(name);
-    if (checked) {
-      setSelectedServices((old) => old.filter((sv) => sv !== name));
-    } else {
-      setSelectedServices((prev) => [...prev, name]);
-    }
-  };
-
-  const handleApply = () => {
-    if (selectedServices.length > 0) {
-      const selectedServicesString = encodeURIComponent(
-        selectedServices
-          .map((sv) => {
-            try {
-              const svc = JSON.parse(sv);
-              if (Array.isArray(svc)) {
-                return [...svc];
-              } else return sv;
-            } catch (err) {
-              return sv;
-            }
-          })
-          .join(",")
-      );
-      router.push({
-        pathname: "/issues",
-        query: {
-          ...query,
-          services: selectedServicesString,
-        },
-      });
-    } else {
-      const newQuery = { ...query };
-      delete newQuery.services;
-      router.push({
-        pathname: "/issues",
-        query: {
-          ...newQuery,
-        },
-      });
-    }
-    closeMenu();
-  };
-
-  useEffect(() => {
-    if (services !== undefined) {
-      setSelectedServices(decodeURIComponent(services as string).split(","));
-    } else setSelectedServices([]);
-  }, [services]);
-
-  const skeletons = new Array(8).fill("skeleton");
-
-  return (
-    <Fragment>
-      <Button
-        onClick={handleMenuClick}
-        variant="outlined"
-        color="secondary"
-        className={styles["services-menu-btn"]}
-      >
-        Filter by services{" "}
-        <span className={styles["services-select-icon"]}>
-          <img
-            src={`${ICON_BASE_PATH}/${ICONS["caret-down"]}`}
-            alt="select_icon"
-          />
-        </span>
-      </Button>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        id="service-select-menu"
-        className={styles["services-menu"]}
-        onClose={closeMenu}
-        sx={{
-          "& .MuiMenu-paper": {
-            width: "300px",
-            background: cssVars.grey900,
-            marginTop: `${1 * SPACE_TOKEN}px`,
-            borderRadius: `${SPACE_TOKEN}px}`,
-          },
-          "& .MuiMenu-list": {
-            overflowY: "scroll",
-            background: cssVars.grey900,
-            borderRadius: `${SPACE_TOKEN}px}`,
-            border: `1px solid ${cssVars.grey700}`,
-          },
-        }}
-      >
-        <div className={styles["services-container"]}>
-          <div className={styles["services-list"]}>
-            {serviceList != null ? (
-              serviceList.map((service) => {
-                return (
-                  <MenuItem
-                    className={styles["services-menu-item"]}
-                    key={nanoid()}
-                    id={service.service}
-                    onClick={() => {
-                      handleCheckBox(service.service);
-                    }}
-                  >
-                    <Checkbox
-                      // onChange={(e) => handleCheckBox(service.service)}
-                      defaultChecked={selectedServices.includes(
-                        service.service
-                      )}
-                    />{" "}
-                    {getNamespace(service.service)}/
-                    {getFormattedServiceName(service.service)}
-                  </MenuItem>
-                );
-              })
-            ) : (
-              <div className={styles["services-skeleton-container"]}>
-                {skeletons.map((sk) => {
-                  return (
-                    <Skeleton
-                      key={nanoid()}
-                      variant="rectangular"
-                      className={styles["services-skeleton"]}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </div>
-          <div className={styles["services-action-container"]}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              fullWidth
-              className={styles["services-action-btn"]}
-              onClick={handleApply}
-              disabled={
-                selectedServices.length === 0 &&
-                (serviceList === null || serviceList.length === 0)
-              }
-            >
-              Apply
-            </Button>
-          </div>
-        </div>
-      </Menu>
-    </Fragment>
-  );
-};
-
-export default ServicesMenu;
 
 const helper = createColumnHelper<IssueDetail>();
 
@@ -199,7 +18,7 @@ export const getIssueColumns = () => {
       header: "Incident",
       size: DEFAULT_COL_WIDTH * 6,
       cell: (info) => {
-        const { issue_title, issue_hash, source, destination, incidents } =
+        const { issue_title, issue_hash, sources, destinations, incidents } =
           info.row.original;
         return (
           <div className={styles["issue-container"]}>
@@ -214,11 +33,11 @@ export const getIssueColumns = () => {
               </Link>
             </div>
             <div className={styles["issue-path"]}>
-              <ChipX label={source} />{" "}
+              <ChipX label={sources[0]} />{" "}
               <AiOutlineArrowRight
                 className={styles["issue-path-arrow-icon"]}
               />{" "}
-              <ChipX label={destination} />
+              <ChipX label={destinations[0]} />
             </div>
           </div>
         );
@@ -260,3 +79,5 @@ export const getIssueColumns = () => {
     }),
   ];
 };
+
+export default ServicesFilter;

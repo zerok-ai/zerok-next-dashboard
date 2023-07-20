@@ -12,11 +12,7 @@ import { useRouter } from "next/router";
 import { Fragment, useEffect, useMemo } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
-import {
-  LIST_INCIDENTS_ENDPOINT,
-  LIST_SERVICES_ENDPOINT,
-  LIST_SERVICES_ENDPOINT_V2,
-} from "utils/endpoints";
+import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { filterServices } from "utils/functions";
 import { type IssueDetail, type ServiceDetail } from "utils/types";
 
@@ -78,12 +74,12 @@ const IssuesPage = () => {
   useEffect(() => {
     if (selectedCluster) {
       const filter =
-        services != null && services.length > 0
+        services && services.length > 0
           ? `?services=${services.join(",")}`
           : "";
       // @TODO - better handling of endpoints
       const endpoint =
-        LIST_INCIDENTS_ENDPOINT.replace("{id}", selectedCluster) + filter;
+        LIST_ISSUES_ENDPOINT.replace("{id}", selectedCluster) + filter;
       fetchIssues(endpoint);
       fetchServices(LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster));
     }
