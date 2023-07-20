@@ -1,5 +1,6 @@
 import { Skeleton } from "@mui/material";
 import MapControls from "components/MapControls";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo } from "react";
 import ReactFlow, {
   addEdge,
@@ -41,8 +42,9 @@ const IncidentDetailMap = ({
       />
     );
   }
+  const router = useRouter();
   const initialNodes = useMemo(
-    () => getNodesFromSpanTree(spanTree),
+    () => getNodesFromSpanTree(spanData),
     [spanTree]
   );
   const initialEdges = useMemo(() => {
@@ -63,7 +65,7 @@ const IncidentDetailMap = ({
   useEffect(() => {
     setNodes(layoutedNodes);
     setEdges(layoutedEdges);
-  }, [layoutedEdges, layoutedNodes]);
+  }, [layoutedEdges, layoutedNodes, router]);
   return (
     <div className={styles.container}>
       <ReactFlow

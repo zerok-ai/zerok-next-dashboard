@@ -3,7 +3,6 @@ import cx from "classnames";
 import ClusterCreateModal from "components/ClusterCreateModal";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { BsChevronDown } from "react-icons/bs";
 import { clusterSelector, setSelectedCluster } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
@@ -40,7 +39,7 @@ const ClusterSelector = () => {
         <MenuItem value="" disabled>
           Target cluster
         </MenuItem>
-        {clusters &&
+        {clusters.length &&
           clusters.map((cl) => {
             return (
               <MenuItem value={cl.id} key={cl.id}>
