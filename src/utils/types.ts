@@ -72,8 +72,8 @@ export interface IssueDetail {
   scenario_version: string;
   total_count: number;
   velocity: number;
-  source: string;
-  destination: string;
+  sources: string[];
+  destinations: string[];
   first_seen: string;
   last_seen: string;
   incidents: string[];
