@@ -123,6 +123,8 @@ const IncidentTabs = ({
     return <TabSkeleton />;
   }
 
+  console.log({ TAB_KEYS, TAB_CONTENT, parsedSpanData, podData });
+
   return (
     <div className={styles["tabs-container"]}>
       {/*  */}

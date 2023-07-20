@@ -7,6 +7,8 @@ import ServiceMapFilterDisplay from "components/ServiceMapFilterDisplay";
 import DrawerX from "components/themeX/DrawerX";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import queryString from "query-string";
 import { useEffect, useState } from "react";
 import { HiPlus } from "react-icons/hi";
 import { ReactFlowProvider } from "reactflow";
@@ -42,6 +44,7 @@ const formatServiceMapData = (smap: ServiceMapDetail[]) => {
 
 const ServiceMap = () => {
   const { selectedCluster } = useSelector(clusterSelector);
+  const router = useRouter();
   const { loading, error, data, fetchData } = useFetch<ServiceMapDetail[]>(
     "results",
     null,
@@ -54,17 +57,24 @@ const ServiceMap = () => {
     setIsFilterDrawerOpen(!isFilterDrawerOpen);
   };
   useEffect(() => {
-    if (selectedCluster !== null) {
+    if (selectedCluster) {
+      const { namespaces, serviceNames } = router.query;
+      const params = queryString.stringify({
+        ns: namespaces,
+        svc: serviceNames,
+        st: "-5m",
+      });
       fetchData(
-        GET_SERVICE_MAP_ENDPOINT.replace("{cluster_id}", selectedCluster)
+        GET_SERVICE_MAP_ENDPOINT.replace("{cluster_id}", selectedCluster) +
+          params
       );
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, router]);
 
   return (
     <div className={styles.container}>
+      <h3 className="page-title">Health</h3>
       <div className={styles.header}>
-        <h3 className="page-title">Health</h3>
         <div className={styles["header-left"]}>
           <ServiceMapFilterDisplay />
         </div>

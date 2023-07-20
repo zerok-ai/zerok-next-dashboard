@@ -1,48 +1,48 @@
-import { Edge, MarkerType, Node, Position } from "reactflow";
-import { GenericObject, SpanDetail, SpanResponse } from "utils/types";
+import { nanoid } from "nanoid";
+import { type Edge, MarkerType, type Node, Position } from "reactflow";
 import cssVars from "styles/variables.module.scss";
 import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { getNamespace } from "utils/functions";
-import { nanoid } from "nanoid";
+import {
+  type GenericObject,
+  type SpanDetail,
+  type SpanResponse,
+} from "utils/types";
 const getNodeFromSpan = (id: string, span: SpanDetail): Node => {
-  let x = 0;
-  let y = 0;
   return {
     id,
     data: { label: id, ...span },
-    position: { x, y },
+    position: { x: 0, y: 0 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
   };
 };
 
-export const getNodesFromSpanTree = (
-  span: SpanDetail,
-  memo: GenericObject = {},
-  nodes: Node[] = []
-) => {
-  const { source, destination } = span;
-  if (
-    !memo[source] &&
-    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source)) &&
-    !source.includes("zk-client")
-  ) {
-    memo[source] = true;
-    nodes.push(getNodeFromSpan(source, span));
-  }
-  if (
-    !memo[destination] &&
-    !IGNORED_SERVICES_PREFIXES.includes(getNamespace(destination)) &&
-    !destination.includes("zk-client")
-  ) {
-    memo[destination] = true;
-    nodes.push(getNodeFromSpan(destination, span));
-  }
-  if (span.children) {
-    span.children.forEach((child, idx) => {
-      return getNodesFromSpanTree(child, { ...memo }, nodes);
-    });
-  }
+export const getNodesFromSpanTree = (spans: SpanResponse) => {
+  const nodes: Node[] = [];
+  const dict: GenericObject = {};
+  Object.keys(spans).map((key) => {
+    const span = spans[key];
+    const { source, destination } = span;
+    if (
+      !dict[source] &&
+      !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source)) &&
+      !source.includes("zk-client")
+    ) {
+      nodes.push(getNodeFromSpan(source, span));
+      dict[source] = true;
+    }
+    if (
+      !dict[destination] &&
+      !IGNORED_SERVICES_PREFIXES.includes(getNamespace(destination)) &&
+      !destination.includes("zk-client")
+    ) {
+      nodes.push(getNodeFromSpan(destination, span));
+      dict[destination] = true;
+    }
+    return true;
+  });
+  console.log({ nodes });
   return nodes;
 };
 
@@ -58,7 +58,7 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
       !getNamespace(span.source).includes("zk-client") &&
       !getNamespace(span.destination).includes("zk-client")
     ) {
-      edges.push({
+      return edges.push({
         id: `e-${span.source}-${span.destination}-${nanoid()}`,
         source: span.source,
         target: span.destination,
@@ -68,6 +68,7 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
         },
       });
     }
+    return null;
   });
   return edges;
 };
