@@ -5,6 +5,7 @@ import {
   convertNanoToMilliSeconds,
   getFormattedServiceName,
   getNamespace,
+  getNumberFromReqThroughput,
   roundToTwoDecimals,
 } from "utils/functions";
 import { type ServiceDetail } from "utils/types";
@@ -19,11 +20,9 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   const namespace = getNamespace(sname);
   const formattedServiceName = getFormattedServiceName(sname);
   const isHealthy = service.http_error_rate_in === 0;
-  const reqPerSecond = roundToTwoDecimals(
-    toNumber(service.http_req_throughput_in)
+  const reqPerSecond = getNumberFromReqThroughput(
+    service.http_req_throughput_in
   );
-  const displayReqPerSecond =
-    Number(reqPerSecond) > 0.1 ? reqPerSecond : "< 0.1";
 
   const serviceQuery = () => {
     try {
@@ -50,7 +49,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
       <div className={styles["stat-container"]}>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>Req/s</span>
-          <p>{displayReqPerSecond}</p>
+          <p>{reqPerSecond}</p>
         </div>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>
@@ -84,10 +83,6 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           <span className={cx("label-small", styles["item-label"])}>P99</span>
           <p>{convertNanoToMilliSeconds(service.http_latency_in.p99)}</p>
         </div>
-        {/* <div className={styles["stat-item"]}>
-    <span className={cx("label-small",styles['item-label'])}>P99</span>
-    <p>{convertNanoToMilliSeconds(service.http_latency_in.p90)}</p>
-  </div> */}
       </div>
     </div>
   );

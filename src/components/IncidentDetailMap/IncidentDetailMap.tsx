@@ -23,7 +23,6 @@ interface IncidentDetailMapProps {
   isMinimized: boolean;
   toggleSize: () => void;
   spanData: SpanResponse | null;
-  spanTree: SpanDetail | null;
   onNodeClick: (spanId: string) => void;
 }
 
@@ -31,10 +30,9 @@ const IncidentDetailMap = ({
   isMinimized,
   toggleSize,
   spanData,
-  spanTree,
   onNodeClick,
 }: IncidentDetailMapProps) => {
-  if (!spanData || !spanTree) {
+  if (!spanData) {
     return (
       <Skeleton
         variant="rectangular"
@@ -45,7 +43,7 @@ const IncidentDetailMap = ({
   const router = useRouter();
   const initialNodes = useMemo(
     () => getNodesFromSpanTree(spanData),
-    [spanTree]
+    [spanData]
   );
   const initialEdges = useMemo(() => {
     return getEdgesFromSpanTree(spanData);

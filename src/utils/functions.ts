@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import { toNumber } from "lodash";
 
 import { IGNORED_SERVICES_PREFIXES, TOKEN_NAME } from "./constants";
 import { type ServiceDetail } from "./types";
@@ -126,4 +127,9 @@ export const filterServices = (newData: ServiceDetail[]): ServiceDetail[] => {
   return newData.filter(
     (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
   );
+};
+
+export const getNumberFromReqThroughput = (val: number) => {
+  const reqPerSecond = roundToTwoDecimals(toNumber(val));
+  return Number(reqPerSecond) > 0.1 ? reqPerSecond : "< 0.1";
 };

@@ -1,13 +1,15 @@
 import { Skeleton } from "@mui/material";
-import CodeBlock from "components/CodeBlock";
+import ExceptionTab from "components/ExceptionTab";
+// import CodeBlock from "components/CodeBlock";
 import PodTable from "components/PodTable";
 import { nanoid } from "nanoid";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 import {
   type GenericObject,
   type PodDetail,
   type SpanDetail,
   type SpanRawData,
+  type SpanResponse,
 } from "utils/types";
 
 import {
@@ -25,7 +27,7 @@ import {
   MYSQL_RESULT_KEYS,
   MYSQL_TABS,
 } from "./IncidentInfoTabs.mysql";
-const ReactJson = dynamic(import("react-json-view"), { ssr: false });
+// const ReactJson = dynamic(import("react-json-view"), { ssr: false });
 
 export const DEFAULT_TAB_KEYS = [
   { label: "Overview", key: "overview" },
@@ -35,15 +37,7 @@ export const DEFAULT_TAB_KEYS = [
 export const ERROR_TAB_KEYS = [
   {
     label: "Exception",
-    key: "request_payload.req_body",
-    render: (value: string) => {
-      try {
-        const json = JSON.parse(value);
-        return <ReactJson src={json} />;
-      } catch (err) {
-        return <CodeBlock code={value} allowCopy color="light" />;
-      }
-    },
+    key: "exception",
   },
 ];
 
@@ -80,7 +74,8 @@ export const getTabByProtocol = (
   protocol: string,
   currentSpan: SpanDetail,
   rawSpanData: SpanRawData,
-  podData: PodDetail[]
+  podData: PodDetail[],
+  spanData: SpanResponse
 ) => {
   const DEFAULT_TAB_CONTENT = [
     {
@@ -92,24 +87,25 @@ export const getTabByProtocol = (
       component: <PodTable pods={podData} service={currentSpan.source} />,
     },
   ];
-
-  const ERROR_TAB_CONTENT = [
-    {
-      list: ERROR_TAB_KEYS,
-      valueObj: rawSpanData,
-    },
-  ];
   const defaultKeys = [...DEFAULT_TAB_KEYS];
   const defaultContent: GenericObject[] = [...DEFAULT_TAB_CONTENT];
+  if (currentSpan.exceptionParent) {
+    const exceptionSpan: string | undefined = Object.keys(spanData).find(
+      (key) => {
+        const span = spanData[key];
+        return span.exception && true;
+      }
+    );
+    if (exceptionSpan) {
+      defaultKeys.push(...ERROR_TAB_KEYS);
+      defaultContent.push({
+        list: ERROR_TAB_KEYS,
+        component: <ExceptionTab exceptionSpan={exceptionSpan} />,
+      });
+    }
+  }
   switch (protocol) {
     case "http":
-      if (currentSpan.destination.includes("zk-client")) {
-        defaultKeys.push(...ERROR_TAB_KEYS);
-        defaultContent.push({
-          list: ERROR_TAB_KEYS,
-          valueObj: rawSpanData,
-        });
-      }
       return {
         keys: [...defaultKeys, ...HTTP_TABS],
         content: [
@@ -132,7 +128,7 @@ export const getTabByProtocol = (
           },
         ],
       };
-    case "MYSQL":
+    case "mysql":
       return {
         keys: [...defaultKeys, ...MYSQL_TABS],
         content: [

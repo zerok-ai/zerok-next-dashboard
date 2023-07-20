@@ -75,7 +75,7 @@ const IssuesPage = () => {
     if (selectedCluster) {
       const filter =
         services && services.length > 0
-          ? `?services=${services.join(",")}`
+          ? `&services=${services.join(",")}`
           : "";
       // @TODO - better handling of endpoints
       const endpoint =

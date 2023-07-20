@@ -4,7 +4,7 @@ import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import objectPath from "object-path";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import {
@@ -49,8 +49,6 @@ const IncidentTabs = ({
     .replace("{issue_id}", issue_id as string);
 
   const {
-    loading,
-    error,
     data: rawSpanResponse,
     fetchData: fetchRawData,
     setData: setRawSpanResponse,
@@ -78,7 +76,7 @@ const IncidentTabs = ({
   useEffect(() => {
     const currentSpan =
       spanData && selectedSpan ? spanData[selectedSpan] : null;
-    if (selectedCluster && selectedSpan && spanData && currentSpan) {
+    if (selectedCluster && currentSpan) {
       const service = currentSpan.source;
       const namespace = getNamespace(service);
       const serviceName = getFormattedServiceName(service);
@@ -91,12 +89,14 @@ const IncidentTabs = ({
       fetchPodData(podEndpoint);
     }
   }, [selectedSpan, selectedCluster, spanData]);
+
   const rawSpanData =
     rawSpanResponse && selectedSpan ? rawSpanResponse[selectedSpan] : null;
+
   const parsedSpanData = useMemo(() => {
     if (!rawSpanData) return null;
     const parsedSpanData = rawSpanData;
-    if (rawSpanData.protocol === "http") {
+    if (rawSpanData.request_payload && rawSpanData.response_payload) {
       try {
         parsedSpanData.request_payload = JSON.parse(
           rawSpanData.request_payload as string
@@ -109,13 +109,16 @@ const IncidentTabs = ({
     return parsedSpanData;
   }, [rawSpanData]);
 
+  console.log({ spanData });
+
   const { keys: TAB_KEYS, content: TAB_CONTENT } =
     spanData && podData && parsedSpanData && selectedSpan
       ? getTabByProtocol(
           parsedSpanData.protocol,
           spanData[selectedSpan],
           parsedSpanData,
-          podData
+          podData,
+          spanData
         )
       : { keys: null, content: null };
 
@@ -123,7 +126,7 @@ const IncidentTabs = ({
     return <TabSkeleton />;
   }
 
-  console.log({ TAB_KEYS, TAB_CONTENT, parsedSpanData, podData });
+  console.log({ parsedSpanData });
 
   return (
     <div className={styles["tabs-container"]}>
@@ -188,4 +191,4 @@ const IncidentTabs = ({
   );
 };
 
-export default memo(IncidentTabs);
+export default IncidentTabs;

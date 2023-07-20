@@ -50,7 +50,7 @@ export const MYSQL_OVERVIEW_KEYS: MySqlTabKey[] = [
 export const MYSQL_QUERY_KEYS = [
   {
     label: "Query",
-    key: "req_body",
+    key: "request_payload.req_body",
     render: (value: string) => (
       <CodeBlock
         code={stringWithoutComments(value.trim())}

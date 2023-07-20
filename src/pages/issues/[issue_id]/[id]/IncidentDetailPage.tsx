@@ -27,12 +27,46 @@ import {
 
 import styles from "./IncidentDetailPage.module.scss";
 import {
-  buildSpanTree,
   IncidentMetadata,
   IncidentNavButtons,
   SpanDetailDrawer,
   SpanDrawerButton,
 } from "./IncidentDetails.utils";
+
+const spanTransformer = (spanData: SpanResponse) => {
+  const formattedSpans: SpanResponse = {};
+  const topKeys = Object.keys(spanData);
+  topKeys.map((key) => {
+    const span = spanData[key];
+    // find root node
+    if (!topKeys.includes(span.parent_span_id)) {
+      span.root = true;
+    }
+    // check for exception span
+    if (span.destination.includes("zk-client")) {
+      formattedSpans[key] = { ...span, span_id: key, exception: true };
+      // find it's parent
+      Object.keys(spanData).map((key) => {
+        const parentSpan = spanData[key];
+        if (span.parent_span_id === key) {
+          formattedSpans[key] = {
+            ...parentSpan,
+            span_id: key,
+            exceptionParent: true,
+          };
+        }
+        return true;
+      });
+    } else {
+      // check if span already exists, so as to not override exception span
+      if (!formattedSpans[key]) {
+        formattedSpans[key] = { ...span, span_id: key };
+      }
+    }
+    return true;
+  });
+  return formattedSpans;
+};
 
 const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
@@ -42,19 +76,16 @@ const IncidentDetailPage = () => {
   // Issue metadata - title,description,time etc
   const {
     loading: issueLoading,
-    error: incidentError,
     data: issue,
     fetchData: fetchIssueData,
-  } = useFetch<IssueDetail>("issue");
+  } = useFetch<IssueDetail[]>("issues");
 
   // Span data - overviews of each of the spans for this incident ID
-  const {
-    loading: spanLoading,
-    error: spanError,
-    data: spanData,
-    fetchData: fetchSpanData,
-    setData: setSpanData,
-  } = useFetch<SpanResponse>("spans");
+  const { data: spanData, fetchData: fetchSpanData } = useFetch<SpanResponse>(
+    "spans",
+    null,
+    spanTransformer
+  );
 
   // Selected span - which span is currently selected, used for fetching raw data to show in the infotabs
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
@@ -74,7 +105,7 @@ const IncidentDetailPage = () => {
     setIsSpanDrawerOpen(!isSpanDrawerOpen);
   };
 
-  const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
+  // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
   // Sticky header boolean and ref
   const { isSticky, stickyRef } = useSticky();
@@ -116,58 +147,43 @@ const IncidentDetailPage = () => {
       dispatch(minimizeDrawer());
     }
   }, [isSpanDrawerOpen]);
-
-  // Build and set the span tree on span change
-  // Span tree is used to render the span drawer and has the entire router of the trace from the parent to the children
-  const getSpans = () => {
-    if (spanData == null) return [];
-    const topKeys = Object.keys(spanData);
-    let rootNode: null | SpanDetail = null;
-    const formattedSpans: SpanDetail[] = [];
-    for (let i = 0; i < topKeys.length; i++) {
-      const key = topKeys[i];
-      const span = { ...spanData[key], span_id: key, children: [] };
-      if (!topKeys.includes(span.parent_span_id)) {
-        rootNode = span;
-      }
-      formattedSpans.push(span);
-    }
-    if (rootNode != null) {
-      setSpanTree(buildSpanTree(formattedSpans, rootNode));
-    }
-  };
-
   // Build the span tree on span data change
   useEffect(() => {
     if (spanData != null) {
-      getSpans();
-      setSelectedSpan(Object.keys(spanData)[0]);
+      setSelectedSpan(
+        Object.keys(spanData).filter((key) => {
+          const span = spanData[key];
+          const { source, destination, protocol } = span;
+          return source && destination && protocol;
+        })[0]
+      );
     }
   }, [spanData]);
 
   // Set the incident list on issue change
   useEffect(() => {
     if (issue != null) {
-      dispatch(setIncidentList(issue.incidents));
+      dispatch(setIncidentList(issue[0].incidents));
     }
   }, [issue]);
 
-  const renderSpanTree = (parentSpan: SpanDetail) => {
-    const active = selectedSpan === parentSpan.span_id;
-    return (
-      <div className={styles["span-tree-container"]} key={nanoid()}>
-        <SpanCard
-          span={parentSpan}
-          active={active}
-          onClick={(selectedSpan) => {
-            setSelectedSpan(selectedSpan.span_id as string);
-          }}
-        />
-        {parentSpan.children !== undefined &&
-          parentSpan.children.length > 0 &&
-          parentSpan.children.map((span) => renderSpanTree(span))}
-      </div>
-    );
+  const renderSpans = () => {
+    if (spanData == null) return null;
+    return Object.keys(spanData).map((key) => {
+      const span = spanData[key];
+      const active = span.span_id === selectedSpan;
+      return (
+        <div className={styles["span-tree-container"]} key={nanoid()}>
+          <SpanCard
+            span={span}
+            active={active}
+            onClick={(selectedSpan) => {
+              setSelectedSpan(selectedSpan.span_id as string);
+            }}
+          />{" "}
+        </div>
+      );
+    });
   };
 
   return (
@@ -178,7 +194,7 @@ const IncidentDetailPage = () => {
         </Head>
       </Fragment>
       <div className="page-title">
-        {issueLoading || issue == null ? (
+        {issueLoading || !issue ? (
           <Skeleton className={"page-title-loader"} />
         ) : (
           <div
@@ -192,8 +208,8 @@ const IncidentDetailPage = () => {
           >
             <div className={styles["header-left"]}>
               {" "}
-              <h3>{getTitleFromIssue(issue.issue_title)}</h3>
-              <IncidentMetadata incident={issue} />
+              <h3>{getTitleFromIssue(issue[0].issue_title)}</h3>
+              <IncidentMetadata incident={issue[0]} />
             </div>
             <div className={styles["header-right"]}>
               <IncidentNavButtons />
@@ -214,10 +230,10 @@ const IncidentDetailPage = () => {
             toggleDrawer={toggleSpanDrawer}
           />
           {/* Drawer for spans */}
-          {spanTree != null && (
+          {spanData && (
             <SpanDetailDrawer isOpen={isSpanDrawerOpen}>
               <div className={styles["span-tree-container"]}>
-                {renderSpanTree(spanTree)}
+                {renderSpans()}
               </div>
             </SpanDetailDrawer>
           )}
@@ -226,7 +242,6 @@ const IncidentDetailPage = () => {
               isMinimized={isMapMinimized}
               toggleSize={toggleMapMinimized}
               spanData={spanData}
-              spanTree={spanTree}
               onNodeClick={(spanId: string) => {
                 if (spanId !== selectedSpan) {
                   setSelectedSpan(spanId);
