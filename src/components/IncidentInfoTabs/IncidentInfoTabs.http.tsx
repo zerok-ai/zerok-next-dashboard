@@ -1,3 +1,4 @@
+import CodeBlock from "components/CodeBlock";
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 import { convertNanoToMilliSeconds } from "utils/functions";
@@ -15,6 +16,28 @@ interface HttpTabKey {
   key: string;
   render?: (val: any) => React.ReactNode;
 }
+
+export const renderJSON = (val: string) => {
+  let json = null;
+  console.log({ val });
+  try {
+    json = JSON.parse(val);
+  } catch (err) {
+    console.log({ err });
+  }
+  if (json) {
+    <DynamicReactJson
+      src={json}
+      name={false}
+      displayDataTypes={false}
+      enableClipboard={false}
+    />;
+  }
+  if (val.length > 0) {
+    return <CodeBlock code={val} allowCopy color="light" />;
+  }
+  return <span>{"{ }"}</span>;
+};
 
 export const HTTP_TABS: Array<{
   label: string;
@@ -80,16 +103,11 @@ export const HTTP_REQUEST_HEADER_KEYS = [
   {
     label: "Request headers",
     key: "request_payload.req_headers",
-    render: (val: GenericObject | null) => {
-      const json = val ?? {};
-      return (
-        <DynamicReactJson
-          src={json}
-          name={false}
-          displayDataTypes={false}
-          enableClipboard={false}
-        />
-      );
+    render: (val: string) => {
+      if (!val.length) {
+        return <span>{"{ }"}</span>;
+      }
+      return renderJSON(val);
     },
   },
 ];
@@ -104,11 +122,8 @@ export const HTTP_REQUEST_BODY_KEYS = [
   {
     label: "Request body",
     key: "request_payload.req_body",
-    render: (val: string | null) => {
-      const json = val ?? {};
-      return json ? (
-        <DynamicReactJson src={json} enableClipboard={false} />
-      ) : null;
+    render: (val: string) => {
+      return renderJSON(val);
     },
   },
 ];
@@ -118,16 +133,8 @@ export const HTTP_RESPONSE_HEADER_KEYS = [
     label: "Response headers",
     // key: "response_payload.resp_headers",
     key: "response_payload.resp_headers",
-    render: (val: string | null) => {
-      const json = val ?? {};
-      return (
-        <DynamicReactJson
-          src={json}
-          name={false}
-          displayDataTypes={false}
-          enableClipboard={false}
-        />
-      );
+    render: (val: string) => {
+      return renderJSON(val);
     },
   },
 ];
@@ -136,22 +143,8 @@ export const HTTP_RESPONSE_BODY_KEYS = [
   {
     label: "Response body",
     key: "response_payload.resp_body",
-    render: (val: string | null) => {
-      try {
-        const json = JSON.parse(val as string) ?? null;
-        return json ? (
-          <DynamicReactJson
-            src={json}
-            enableClipboard={false}
-            name={false}
-            displayDataTypes={false}
-          />
-        ) : (
-          "null"
-        );
-      } catch (err) {
-        return val;
-      }
+    render: (val: string) => {
+      return renderJSON(val);
     },
   },
 ];

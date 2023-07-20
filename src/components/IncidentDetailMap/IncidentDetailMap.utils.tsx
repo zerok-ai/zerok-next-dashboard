@@ -9,12 +9,14 @@ import {
   type SpanResponse,
 } from "utils/types";
 const getNodeFromSpan = (id: string, span: SpanDetail): Node => {
+  const exception = span.exception ? { type: "exception" } : {};
   return {
     id,
     data: { label: id, ...span },
     position: { x: 0, y: 0 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
+    ...exception,
   };
 };
 
@@ -27,7 +29,8 @@ export const getNodesFromSpanTree = (spans: SpanResponse) => {
     if (
       !dict[source] &&
       !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source)) &&
-      !source.includes("zk-client")
+      !source.includes("zk-client") &&
+      source
     ) {
       nodes.push(getNodeFromSpan(source, span));
       dict[source] = true;
@@ -35,14 +38,14 @@ export const getNodesFromSpanTree = (spans: SpanResponse) => {
     if (
       !dict[destination] &&
       !IGNORED_SERVICES_PREFIXES.includes(getNamespace(destination)) &&
-      !destination.includes("zk-client")
+      !destination.includes("zk-client") &&
+      destination
     ) {
       nodes.push(getNodeFromSpan(destination, span));
       dict[destination] = true;
     }
     return true;
   });
-  console.log({ nodes });
   return nodes;
 };
 

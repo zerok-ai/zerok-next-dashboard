@@ -1,5 +1,6 @@
 import { SmartBezierEdge } from "@tisoap/react-flow-smart-edge";
 import cx from "classnames";
+import { toNumber } from "lodash";
 import { nanoid } from "nanoid";
 import { type Edge, MarkerType, type Node, Position } from "reactflow";
 import cssVars from "styles/variables.module.scss";
@@ -7,6 +8,7 @@ import {
   convertNanoToMilliSeconds,
   getFormattedServiceName,
   getNamespace,
+  getNumberFromReqThroughput,
 } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";
 import { type GenericObject } from "utils/types";
@@ -81,7 +83,7 @@ export const ServiceMapCard = ({ service }: { service: ServiceMapDetail }) => {
   const ITEMS = [
     {
       label: "Req./s",
-      value: service.request_throughput,
+      value: getNumberFromReqThroughput(service.request_throughput),
     },
     {
       label: "Errors",

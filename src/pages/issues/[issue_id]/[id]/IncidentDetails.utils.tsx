@@ -14,7 +14,11 @@ import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { GET_INCIDENTS_ENDPOINT } from "utils/endpoints";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 import raxios from "utils/raxios";
-import { type IssueDetail, type SpanDetail } from "utils/types";
+import {
+  type IssueDetail,
+  type SpanDetail,
+  type SpanResponse,
+} from "utils/types";
 
 import styles from "./IncidentDetailPage.module.scss";
 
@@ -189,16 +193,22 @@ export const IncidentNavButtons = () => {
 export default IncidentNavButtons;
 
 export const buildSpanTree = (
-  spans: SpanDetail[],
+  spans: SpanResponse,
   parentSpan: SpanDetail,
   level: number = 0
 ) => {
-  if (spans.length === 0) {
+  const keys = Object.keys(spans);
+  if (keys.length === 0) {
     return parentSpan;
   }
-  const childrenSpan = spans.filter(
-    (span) => span.parent_span_id === parentSpan.span_id
-  );
+  const childrenSpan: SpanDetail[] = [];
+  keys.forEach((key) => {
+    const span = spans[key];
+    if (span.parent_span_id === parentSpan.span_id) {
+      childrenSpan.push(span);
+    }
+  });
+
   if (childrenSpan.length > 0) {
     parentSpan.children = childrenSpan;
     ++level;
