@@ -1,7 +1,8 @@
-import { Table, flexRender } from "@tanstack/react-table";
-import cx from 'classnames';
-import styles from "./TableX.module.scss";
+import { flexRender, type Table } from "@tanstack/react-table";
+import cx from "classnames";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
+
+import styles from "./TableX.module.scss";
 
 interface TableXProps<T extends object> {
   table: Table<T>;

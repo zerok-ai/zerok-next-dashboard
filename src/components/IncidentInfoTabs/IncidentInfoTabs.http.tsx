@@ -19,7 +19,6 @@ interface HttpTabKey {
 
 export const renderJSON = (val: string) => {
   let json = null;
-  console.log({ val });
   try {
     json = JSON.parse(val);
   } catch (err) {

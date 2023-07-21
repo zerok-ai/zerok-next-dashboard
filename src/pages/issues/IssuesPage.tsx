@@ -3,6 +3,7 @@ import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
 import CustomSkeleton from "components/CustomSkeleton";
 import PageLayout from "components/layouts/PageLayout";
+import PaginationX from "components/PaginationX";
 import PrivateRoute from "components/PrivateRoute";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
@@ -14,30 +15,34 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { filterServices } from "utils/functions";
+import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail, type ServiceDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
 import ServicesMenu, { getIssueColumns } from "./IssuesPage.utils";
+import queryString from "query-string";
+
+interface IssuesData {
+  issues: IssueDetail[];
+  total_records: number;
+}
 
 const IssuesPage = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const {
     loading,
-    error,
-    data: issues,
+    data: issuesData,
     fetchData: fetchIssues,
-  } = useFetch<IssueDetail[]>("issues");
+  } = useFetch<IssuesData>("");
 
-  const {
-    loading: serviceListLoading,
-    error: serviceListError,
-    data: serviceList,
-    fetchData: fetchServices,
-  } = useFetch<ServiceDetail[]>("results", null, filterServices);
+  const { data: serviceList, fetchData: fetchServices } = useFetch<
+    ServiceDetail[]
+  >("results", null, filterServices);
 
   const router = useRouter();
 
   const { query } = router;
+  const page = query.page ? parseInt(query.page as string) : 1;
   // @TODO - add types for filters here
 
   const services =
@@ -47,11 +52,11 @@ const IssuesPage = () => {
 
   const columns = useMemo(() => {
     return getIssueColumns();
-  }, [issues]);
+  }, [issuesData?.issues]);
 
   const table = useReactTable<IssueDetail>({
     columns,
-    data: issues ?? [],
+    data: issuesData?.issues ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -73,13 +78,15 @@ const IssuesPage = () => {
 
   useEffect(() => {
     if (selectedCluster) {
-      const filter =
-        services && services.length > 0
-          ? `&services=${services.join(",")}`
-          : "";
-      // @TODO - better handling of endpoints
+      const filter = services && services.length > 0 ? services.join(",") : "";
+      const params = queryString.stringify({
+        services: filter,
+        limit: ISSUES_PAGE_SIZE,
+        offset: (page - 1) * ISSUES_PAGE_SIZE,
+        st: "-24h",
+      });
       const endpoint =
-        LIST_ISSUES_ENDPOINT.replace("{id}", selectedCluster) + filter;
+        LIST_ISSUES_ENDPOINT.replace("{id}", selectedCluster) + params;
       fetchIssues(endpoint);
       fetchServices(LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster));
     }
@@ -119,10 +126,10 @@ const IssuesPage = () => {
           </div>
         </div>
       </div>
-      <div className="page-content">
+      <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}
-        {selectedCluster !== null && !loading && issues != null ? (
-          <TableX table={table} data={issues} />
+        {selectedCluster !== null && !loading && issuesData?.issues != null ? (
+          <TableX table={table} data={issuesData?.issues} />
         ) : (
           <CustomSkeleton
             containerClass={styles["skeleton-container"]}
@@ -131,6 +138,14 @@ const IssuesPage = () => {
           />
         )}
       </div>
+      {issuesData && (
+        <div className={styles["pagination-container"]}>
+          <PaginationX
+            totalItems={issuesData.total_records}
+            itemsPerPage={ISSUES_PAGE_SIZE}
+          />
+        </div>
+      )}
     </div>
   );
 };

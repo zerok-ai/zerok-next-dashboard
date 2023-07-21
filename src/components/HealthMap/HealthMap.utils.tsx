@@ -1,8 +1,7 @@
 import { SmartBezierEdge } from "@tisoap/react-flow-smart-edge";
 import cx from "classnames";
-import { toNumber } from "lodash";
 import { nanoid } from "nanoid";
-import { type Edge, MarkerType, type Node, Position } from "reactflow";
+import { type Edge, MarkerType, type Node } from "reactflow";
 import cssVars from "styles/variables.module.scss";
 import {
   convertNanoToMilliSeconds,

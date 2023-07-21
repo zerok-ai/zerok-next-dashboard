@@ -109,8 +109,6 @@ const IncidentTabs = ({
     return parsedSpanData;
   }, [rawSpanData]);
 
-  console.log({ spanData });
-
   const { keys: TAB_KEYS, content: TAB_CONTENT } =
     spanData && podData && parsedSpanData && selectedSpan
       ? getTabByProtocol(
@@ -125,8 +123,6 @@ const IncidentTabs = ({
   if (!rawSpanData || !spanData || !selectedSpan || !TAB_KEYS) {
     return <TabSkeleton />;
   }
-
-  console.log({ parsedSpanData });
 
   return (
     <div className={styles["tabs-container"]}>

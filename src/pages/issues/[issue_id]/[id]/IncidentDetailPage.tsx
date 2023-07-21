@@ -19,11 +19,7 @@ import { setIncidentList } from "redux/incidentList";
 import { useDispatch, useSelector } from "redux/store";
 import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { getTitleFromIssue } from "utils/functions";
-import {
-  type IssueDetail,
-  type SpanDetail,
-  type SpanResponse,
-} from "utils/types";
+import { type IssueDetail, type SpanResponse } from "utils/types";
 
 import styles from "./IncidentDetailPage.module.scss";
 import {
@@ -78,7 +74,7 @@ const IncidentDetailPage = () => {
     loading: issueLoading,
     data: issue,
     fetchData: fetchIssueData,
-  } = useFetch<IssueDetail[]>("issues");
+  } = useFetch<IssueDetail>("issue");
 
   // Span data - overviews of each of the spans for this incident ID
   const { data: spanData, fetchData: fetchSpanData } = useFetch<SpanResponse>(
@@ -163,7 +159,7 @@ const IncidentDetailPage = () => {
   // Set the incident list on issue change
   useEffect(() => {
     if (issue != null) {
-      dispatch(setIncidentList(issue[0].incidents));
+      dispatch(setIncidentList(issue.incidents));
     }
   }, [issue]);
 
@@ -208,8 +204,8 @@ const IncidentDetailPage = () => {
           >
             <div className={styles["header-left"]}>
               {" "}
-              <h3>{getTitleFromIssue(issue[0].issue_title)}</h3>
-              <IncidentMetadata incident={issue[0]} />
+              <h3>{getTitleFromIssue(issue.issue_title)}</h3>
+              <IncidentMetadata incident={issue} />
             </div>
             <div className={styles["header-right"]}>
               <IncidentNavButtons />
