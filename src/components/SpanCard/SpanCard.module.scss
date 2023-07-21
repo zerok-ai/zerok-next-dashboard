@@ -1,5 +1,6 @@
 @import "styles/variables.module.scss";
 .container {
+    position: relative;
     border:1px solid $grey-900;
     border-radius: $sp-base;
     transition: all 0.1s ease;
@@ -56,3 +57,9 @@
         color:$white;
     }
 }
+
+.protocol {
+    position: absolute;
+    top:0;
+    right:0;
+}   

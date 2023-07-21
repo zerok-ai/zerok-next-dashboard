@@ -15,7 +15,6 @@ interface ExceptionTabProps {
 }
 
 const transformSpan = (span: SpanRawData) => {
-  console.log({ span });
   try {
     span.request_payload = JSON.parse(span.request_payload as string);
     span.response_payload = JSON.parse(span.response_payload as string);
@@ -43,11 +42,9 @@ const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
         .replace("{span_id}", exceptionSpan)
         .replace("{incident_id}", incidentId as string)
         .replace("{issue_id}", issue_id as string);
-      console.log({ endpoint });
       fetchData(endpoint);
     }
   }, [incidentId]);
-  console.log({ exceptionSpanData, exceptionSpan });
   return exceptionSpanData ? (
     <div className={styles.container}>
       <label className={styles.label}>Exception:</label>

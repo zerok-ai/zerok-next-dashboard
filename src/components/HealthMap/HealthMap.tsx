@@ -62,7 +62,6 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     },
     [setEdges]
   );
-  console.log({ nodes });
   return (
     <div className={styles.container}>
       {selectedService && (

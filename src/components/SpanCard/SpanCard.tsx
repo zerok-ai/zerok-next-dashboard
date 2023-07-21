@@ -1,4 +1,5 @@
 import cx from "classnames";
+import ChipX from "components/themeX/ChipX";
 import dayjs from "dayjs";
 import { AiOutlineCheck } from "react-icons/ai";
 import { convertNanoToMilliSeconds } from "utils/functions";
@@ -40,6 +41,9 @@ const SpanCard = ({ span, active, onClick }: SpanCardProps) => {
             dayjs(span.timestamp).format("DD MMM YYYY hh:mm:ss A")}
         </small>
         {active && <AiOutlineCheck className={styles["active-icon"]} />}
+      </span>
+      <span className={styles.protocol}>
+        <ChipX label={span.protocol} />
       </span>
     </div>
   );
