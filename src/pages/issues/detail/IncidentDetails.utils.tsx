@@ -106,7 +106,7 @@ export const IncidentNavButtons = () => {
   const router = useRouter();
   const { issue_id, id } = router.query;
   if (incidentList.length === 0 || issue_id === undefined) return null;
-  const basePath = `/issues/${issue_id as string}`;
+  const basePath = `/issues/detail?issue=${issue_id as string}`;
   const activeIndex = incidentList.findIndex((incident) => incident === id);
   const fetchIncidentList = async () => {
     try {
@@ -128,14 +128,14 @@ export const IncidentNavButtons = () => {
   const getNewer = () => {
     if (activeIndex > 0) {
       const newIndex = activeIndex - 1;
-      router.push(`${basePath}/${incidentList[newIndex]}`);
+      router.push(`${basePath}&incident=${incidentList[newIndex]}`);
     }
   };
 
   const getOlder = () => {
     if (activeIndex < incidentList.length - 1) {
       const newIndex = activeIndex + 1;
-      router.push(`${basePath}/${incidentList[newIndex]}`);
+      router.push(`${basePath}&incident=${incidentList[newIndex]}`);
     } else {
       fetchIncidentList();
     }
