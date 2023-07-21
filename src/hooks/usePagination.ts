@@ -14,7 +14,6 @@ export default function usePagination(
   const maxPage = Math.ceil(totalItems / itemsPerPage);
 
   useEffect(() => {
-    console.log("here", router.query.page, currentPage);
     if (router.query.page && Number(router.query.page) !== currentPage) {
       setCurrentPage(Number(router.query.page));
     }

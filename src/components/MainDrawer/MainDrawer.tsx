@@ -36,9 +36,9 @@ const MainDrawer = () => {
 
   const renderLinks = (links: DrawerNavItemType[]) => {
     return links.map((nav) => {
-      const isHomeRoute = router.asPath === "/";
+      const isHomeRoute = router.pathname === "/";
       const activeLink = isHomeRoute
-        ? nav.path === router.asPath
+        ? nav.path === router.pathname
         : nav.path.includes(router.pathname.split("/")[1]);
       return <NavigationItem nav={nav} key={nav.path} active={activeLink} />;
     });
