@@ -4,7 +4,7 @@ import AuthLayout from "components/layouts/AuthLayout";
 import Head from "next/head";
 import { Fragment } from "react";
 
-import styles from "./ForgotPassword.module.scss";
+// import styles from "./ForgotPassword.module.scss";
 
 const ForgotPassword = () => {
   return (

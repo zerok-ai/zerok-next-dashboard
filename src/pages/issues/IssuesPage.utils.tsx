@@ -1,5 +1,4 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import ServicesFilter from "components/ServicesFilter";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
 import { AiOutlineArrowRight } from "react-icons/ai";
@@ -80,4 +79,5 @@ export const getIssueColumns = () => {
   ];
 };
 
-export default ServicesFilter;
+const Dummy = () => <span>hey</span>;
+export default Dummy;

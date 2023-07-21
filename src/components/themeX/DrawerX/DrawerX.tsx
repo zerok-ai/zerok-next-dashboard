@@ -1,6 +1,7 @@
 import { Drawer } from "@mui/material";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
+
 import styles from "./DrawerX.module.scss";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
 
 interface DrawerXProps {
   onClose: () => void;
@@ -13,11 +14,11 @@ const DrawerX = ({ onClose, title, children }: DrawerXProps) => {
     <Drawer
       open={true}
       onClose={onClose}
-      className={styles["drawer"]}
+      className={styles.drawer}
       anchor="right"
     >
-      <div className={styles["container"]}>
-        <div className={styles["header"]}>
+      <div className={styles.container}>
+        <div className={styles.header}>
           <h6>{title}</h6>
           <span className={styles["close-btn"]} onClick={onClose}>
             <img
@@ -26,7 +27,7 @@ const DrawerX = ({ onClose, title, children }: DrawerXProps) => {
             />
           </span>
         </div>
-        <div className={styles["content"]}>{children}</div>
+        <div className={styles.content}>{children}</div>
       </div>
     </Drawer>
   );

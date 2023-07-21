@@ -2,7 +2,6 @@ import CodeBlock from "components/CodeBlock";
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
 import { convertNanoToMilliSeconds } from "utils/functions";
-import { type GenericObject } from "utils/types";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 export const HTTP_TAB_KEYS = [
   "request_headers",

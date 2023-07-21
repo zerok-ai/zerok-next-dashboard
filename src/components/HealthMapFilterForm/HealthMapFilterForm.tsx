@@ -9,8 +9,6 @@ import { type GenericObject } from "utils/types";
 
 import styles from "./HealthMapFilterForm.module.scss";
 
-const FILTER_TYPES = ["namespaces", "serviceNames"] as const;
-
 interface HealthMapFilterFormProps {
   serviceList: ServiceMapDetail[];
   onFinish: () => void;

@@ -1,8 +1,6 @@
 import CreateClusterForm from "components/CreateClusterForm";
 import ModalX from "components/themeX/ModalX";
 
-import styles from "./ClusterCreateModal.module.scss";
-
 interface ClusterCreateModalProps {
   isOpen: boolean;
   onClose: () => void;

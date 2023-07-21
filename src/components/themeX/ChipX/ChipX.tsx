@@ -5,7 +5,7 @@ interface ChipXProps {
 }
 
 const ChipX = ({ label }: ChipXProps) => {
-  return <div className={styles["container"]}>{label}</div>;
+  return <div className={styles.container}>{label}</div>;
 };
 
 export default ChipX;

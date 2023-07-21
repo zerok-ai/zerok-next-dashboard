@@ -45,7 +45,7 @@ const formatServiceMapData = (smap: ServiceMapDetail[]) => {
 const ServiceMap = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
-  const { loading, error, data, fetchData } = useFetch<ServiceMapDetail[]>(
+  const { data, fetchData } = useFetch<ServiceMapDetail[]>(
     "results",
     null,
     formatServiceMapData

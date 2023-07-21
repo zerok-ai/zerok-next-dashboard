@@ -49,7 +49,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges);
   }, [initialNodes, initialEdges]);
-  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [nodes, , onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
   const onConnect = useCallback(
     (params: any) => {

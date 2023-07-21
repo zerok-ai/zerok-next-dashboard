@@ -37,7 +37,7 @@ const transformTimeSeries = (data: GenericObject) => {
 };
 
 const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
-  const { data, error, loading, fetchData } = useFetch<GenericObject>(
+  const { data, loading, fetchData } = useFetch<GenericObject>(
     ``,
     null,
     transformTimeSeries

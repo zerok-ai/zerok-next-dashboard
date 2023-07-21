@@ -1,10 +1,8 @@
-import { ModalProps } from "@mui/base";
-import styles from "./ModalX.module.scss";
-
+import { IconButton, Modal } from "@mui/material";
 import cx from "classnames";
-import { Modal } from "@mui/material";
-import { IconButton } from "@mui/material";
 import { AiOutlineClose } from "react-icons/ai";
+
+import styles from "./ModalX.module.scss";
 
 interface ModalXProps {
   isOpen: boolean;
@@ -27,10 +25,10 @@ const ModalX = ({
     <Modal
       open={isOpen}
       keepMounted={keepMounted}
-      className={cx(customClassName, styles["modal"])}
+      className={cx(customClassName, styles.modal)}
       onClose={onClose}
     >
-      <div className={styles["container"]}>
+      <div className={styles.container}>
         <div className={styles["modal-header"]}>
           <h5>{title}</h5>
           <IconButton className={styles["modal-close-icon"]} onClick={onClose}>

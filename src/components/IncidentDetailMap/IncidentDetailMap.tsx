@@ -9,7 +9,7 @@ import ReactFlow, {
   useNodesState,
 } from "reactflow";
 import { getLayoutedElements } from "utils/mapHelpers";
-import { type SpanDetail, type SpanResponse } from "utils/types";
+import { type SpanResponse } from "utils/types";
 
 import styles from "./IncidentDetailMap.module.scss";
 import {
