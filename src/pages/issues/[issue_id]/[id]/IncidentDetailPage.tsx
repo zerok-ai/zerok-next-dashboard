@@ -77,11 +77,11 @@ const IncidentDetailPage = () => {
   } = useFetch<IssueDetail>("issue");
 
   // Span data - overviews of each of the spans for this incident ID
-  const { data: spanData, fetchData: fetchSpanData } = useFetch<SpanResponse>(
-    "spans",
-    null,
-    spanTransformer
-  );
+  const {
+    data: spanData,
+    fetchData: fetchSpanData,
+    setData: setSpanData,
+  } = useFetch<SpanResponse>("spans", null, spanTransformer);
 
   // Selected span - which span is currently selected, used for fetching raw data to show in the infotabs
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
@@ -121,6 +121,7 @@ const IncidentDetailPage = () => {
   // Reset selected span on incident change
   useEffect(() => {
     setSelectedSpan(null);
+    setSpanData(null);
   }, [incidentId]);
 
   // Fetch span data for the incident on mount
@@ -189,7 +190,7 @@ const IncidentDetailPage = () => {
       );
     });
   };
-  console.log({ spanData });
+
   return (
     <div>
       <Fragment>

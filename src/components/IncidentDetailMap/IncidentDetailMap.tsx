@@ -66,9 +66,16 @@ const IncidentDetailMap = ({
     [setEdges]
   );
   useEffect(() => {
-    setNodes(layoutedNodes);
-    setEdges(layoutedEdges);
-  }, [layoutedEdges, layoutedNodes, router]);
+    setNodes([]);
+    setEdges([]);
+  }, [router]);
+
+  useEffect(() => {
+    if (layoutedNodes.length > 0) {
+      setEdges(layoutedEdges);
+      setNodes(layoutedNodes);
+    }
+  }, [router, layoutedEdges, layoutedNodes]);
   return (
     <div className={styles.container}>
       <ReactFlow

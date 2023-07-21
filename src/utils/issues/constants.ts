@@ -1,1 +1,1 @@
-export const ISSUES_PAGE_SIZE = 1;
+export const ISSUES_PAGE_SIZE = 4;
