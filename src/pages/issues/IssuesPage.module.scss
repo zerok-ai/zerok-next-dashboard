@@ -46,3 +46,17 @@
     display: flex;
     column-gap: $sp-base * 2;
 }
+
+// content
+.page-content {
+    height:60vh;
+    overflow: auto;
+    border-bottom:1px solid $grey-900;
+    border-radius: $sp-base * 2;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: $sp-base * 6;
+}

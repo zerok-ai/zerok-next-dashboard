@@ -62,7 +62,7 @@ const ServiceMap = () => {
       const params = queryString.stringify({
         ns: namespaces,
         svc: serviceNames,
-        st: "-5m",
+        st: "-24h",
       });
       fetchData(
         GET_SERVICE_MAP_ENDPOINT.replace("{cluster_id}", selectedCluster) +
