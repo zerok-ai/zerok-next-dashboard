@@ -9,7 +9,7 @@ import {
   type PodDetail,
   type SpanDetail,
   type SpanRawData,
-  type SpanResponse,
+  type SpanRawDataResponse,
 } from "utils/types";
 
 import {
@@ -75,7 +75,7 @@ export const getTabByProtocol = (
   currentSpan: SpanDetail,
   rawSpanData: SpanRawData,
   podData: PodDetail[],
-  spanData: SpanResponse
+  exceptionData: SpanRawDataResponse | null
 ) => {
   const DEFAULT_TAB_CONTENT = [
     {
@@ -89,21 +89,14 @@ export const getTabByProtocol = (
   ];
   const defaultKeys = [...DEFAULT_TAB_KEYS];
   const defaultContent: GenericObject[] = [...DEFAULT_TAB_CONTENT];
-  if (currentSpan.exceptionParent) {
-    const exceptionSpan: string | undefined = Object.keys(spanData).find(
-      (key) => {
-        const span = spanData[key];
-        return span.protocol === "exception";
-      }
-    );
-    if (exceptionSpan) {
-      defaultKeys.push(...ERROR_TAB_KEYS);
-      defaultContent.push({
-        list: ERROR_TAB_KEYS,
-        component: <ExceptionTab exceptionSpan={exceptionSpan} />,
-      });
-    }
+  if (currentSpan.exceptionParent && exceptionData) {
+    defaultKeys.push(...ERROR_TAB_KEYS);
+    defaultContent.push({
+      list: ERROR_TAB_KEYS,
+      component: <ExceptionTab exceptionSpan={exceptionData} />,
+    });
   }
+
   switch (protocol) {
     case "http":
       return {

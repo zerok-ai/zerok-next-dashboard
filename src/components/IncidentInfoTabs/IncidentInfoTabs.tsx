@@ -18,6 +18,7 @@ import {
   type HttpResponseDetail,
   type PodDetail,
   type SpanDetail,
+  SpanRawData,
   type SpanRawDataResponse,
   type SpanResponse,
 } from "utils/types";
@@ -29,6 +30,22 @@ import {
   TabSkeleton,
 } from "./IncidentInfoTabs.utils";
 
+const parseSpanData = (spans: SpanRawDataResponse) => {
+  const newSpans: SpanRawDataResponse = {};
+
+  Object.keys(spans).map((key) => {
+    try {
+      const span = spans[key];
+      span.request_payload = JSON.parse(span.request_payload as string);
+      span.response_payload = JSON.parse(span.response_payload as string);
+      newSpans[key] = span;
+    } catch (err) {
+      console.log({ err });
+    }
+    return true;
+  });
+  return newSpans;
+};
 const IncidentTabs = ({
   selectedSpan,
   spanData,
@@ -38,13 +55,13 @@ const IncidentTabs = ({
 }) => {
   const router = useRouter();
   const { issue: issue_id, incident: incidentId } = router.query;
+  const active = router.query.active ?? DEFAULT_TAB_KEYS[0].key;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const spanEndpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
     "{cluster_id}",
     selectedCluster as string
   )
-    .replace("{span_id}", selectedSpan as string)
     .replace("{incident_id}", incidentId as string)
     .replace("{issue_id}", issue_id as string);
 
@@ -52,20 +69,52 @@ const IncidentTabs = ({
     data: rawSpanResponse,
     fetchData: fetchRawData,
     setData: setRawSpanResponse,
-  } = useFetch<SpanRawDataResponse>(`span_raw_data_details`);
+  } = useFetch<SpanRawDataResponse>(
+    `span_raw_data_details`,
+    null,
+    parseSpanData
+  );
 
-  const { data: podData, fetchData: fetchPodData } =
-    useFetch<PodDetail[]>(`results`);
+  const { data: podData, fetchData: fetchPodData } = useFetch<PodDetail[]>(
+    `results`,
+    null
+  );
+
+  const {
+    data: exceptionData,
+    fetchData: fetchExceptionData,
+    setData: setExceptionData,
+  } = useFetch<SpanRawDataResponse>(
+    `span_raw_data_details`,
+    null,
+    parseSpanData
+  );
 
   useEffect(() => {
     if (selectedSpan && selectedCluster && incidentId) {
       setRawSpanResponse(null);
-      fetchRawData(spanEndpoint);
+      setExceptionData(null);
+      fetchRawData(spanEndpoint.replace("{span_id}", selectedSpan));
     }
   }, [selectedSpan, incidentId, selectedCluster]);
 
   useEffect(() => {
     setActiveTab(DEFAULT_TAB_KEYS[0].key);
+    if (selectedSpan && spanData) {
+      const span = spanData[selectedSpan];
+      if (span.exceptionParent) {
+        // find exception span
+        const exceptionSpan: string | undefined = Object.keys(spanData).find(
+          (key) => {
+            const span = spanData[key];
+            return span.protocol === "exception";
+          }
+        );
+        if (exceptionSpan) {
+          fetchExceptionData(spanEndpoint.replace("{span_id}", exceptionSpan));
+        }
+      }
+    }
   }, [router, selectedSpan]);
 
   useEffect(() => {
@@ -111,7 +160,7 @@ const IncidentTabs = ({
           spanData[selectedSpan],
           parsedSpanData,
           podData,
-          spanData
+          exceptionData
         )
       : { keys: null, content: null };
 
@@ -132,7 +181,7 @@ const IncidentTabs = ({
           <Tab key={tab.key} label={tab.label} value={tab.key} />
         ))}
       </Tabs>
-      {/* tab content */}
+      ;{/* tab content */}
       {selectedSpan && parsedSpanData && (
         <div className={styles["tab-content-container"]}>
           {TAB_CONTENT.map((tab, index) => {

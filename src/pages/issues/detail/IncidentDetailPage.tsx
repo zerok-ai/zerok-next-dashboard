@@ -8,7 +8,6 @@ import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import SpanCard from "components/SpanCard";
 import { useFetch } from "hooks/useFetch";
-import { useSticky } from "hooks/useSticky";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
@@ -18,13 +17,11 @@ import { drawerSelector, minimizeDrawer } from "redux/drawer";
 import { setIncidentList } from "redux/incidentList";
 import { useDispatch, useSelector } from "redux/store";
 import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
-import { getTitleFromIssue } from "utils/functions";
 import { type IssueDetail, type SpanResponse } from "utils/types";
 
 import styles from "./IncidentDetailPage.module.scss";
 import {
   IncidentMetadata,
-  IncidentNavButtons,
   SpanDetailDrawer,
   SpanDrawerButton,
 } from "./IncidentDetails.utils";
@@ -68,13 +65,8 @@ const IncidentDetailPage = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const { selectedCluster } = useSelector(clusterSelector);
   const dispatch = useDispatch();
-
   // Issue metadata - title,description,time etc
-  const {
-    loading: issueLoading,
-    data: issue,
-    fetchData: fetchIssueData,
-  } = useFetch<IssueDetail>("issue");
+  const { data: issue, fetchData } = useFetch<IssueDetail>("issue");
 
   // Span data - overviews of each of the spans for this incident ID
   const {
@@ -103,13 +95,10 @@ const IncidentDetailPage = () => {
 
   // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
-  // Sticky header boolean and ref
-  const { isSticky, stickyRef } = useSticky();
-
   // Fetch issue data on mount
   useEffect(() => {
     if (issueId !== undefined && selectedCluster !== null) {
-      fetchIssueData(
+      fetchData(
         GET_ISSUE_ENDPOINT.replace("{cluster_id}", selectedCluster).replace(
           "{issue_id}",
           issueId as string
@@ -128,9 +117,9 @@ const IncidentDetailPage = () => {
 
   // Fetch span data for the incident on mount
   useEffect(() => {
-    // if (router.isReady && incidentId === undefined) {
-    //   router.push("/issues");
-    // }
+    if (router.isReady && incidentId === undefined) {
+      router.push("/issues");
+    }
     if (selectedCluster !== null && incidentId !== undefined) {
       fetchSpanData(
         LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
@@ -201,27 +190,10 @@ const IncidentDetailPage = () => {
         </Head>
       </Fragment>
       <div className="page-title">
-        {issueLoading || !issue ? (
-          <Skeleton className={"page-title-loader"} />
+        {issue ? (
+          <IncidentMetadata issue={issue} />
         ) : (
-          <div
-            className={cx(
-              styles.header,
-              isSticky && styles.sticky,
-              isDrawerMinimized && styles["drawer-minimized"]
-            )}
-            id="incident-header"
-            ref={stickyRef}
-          >
-            <div className={styles["header-left"]}>
-              {" "}
-              <h3>{issue.issue_title}</h3>
-              <IncidentMetadata incident={issue} />
-            </div>
-            <div className={styles["header-right"]}>
-              <IncidentNavButtons />
-            </div>
-          </div>
+          <Skeleton className={"page-title-loader"} />
         )}
       </div>
       <div
@@ -249,9 +221,34 @@ const IncidentDetailPage = () => {
               isMinimized={isMapMinimized}
               toggleSize={toggleMapMinimized}
               spanData={spanData}
-              onNodeClick={(spanId: string) => {
-                if (spanId !== selectedSpan) {
-                  setSelectedSpan(spanId);
+              onNodeClick={(
+                sourceId: string,
+                source: string | null = null,
+                destination: string | null = null
+              ) => {
+                if (!spanData) return;
+                const old = selectedSpan;
+                if (!source && !destination) {
+                  const span = Object.keys(spanData).find((key) => {
+                    if (key !== selectedSpan) {
+                      const span = spanData[key];
+                      return span.source === sourceId;
+                    }
+                    return false;
+                  });
+                  setSelectedSpan(span ?? old);
+                } else if (!destination) {
+                  const span = Object.keys(spanData).find(
+                    (key) => spanData[key].source === source
+                  );
+                  setSelectedSpan(span ?? old);
+                } else if (source && destination) {
+                  const span = Object.keys(spanData).find(
+                    (key) =>
+                      spanData[key].source === source &&
+                      spanData[key].destination === destination
+                  );
+                  setSelectedSpan(span ?? old);
                 }
               }}
             />

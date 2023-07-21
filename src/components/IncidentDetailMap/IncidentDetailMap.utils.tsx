@@ -30,6 +30,7 @@ export const getNodesFromSpanTree = (spans: SpanResponse) => {
       !dict[source] &&
       !IGNORED_SERVICES_PREFIXES.includes(getNamespace(source)) &&
       !source.includes("zk-client") &&
+      !destination.includes("zk-client") &&
       source
     ) {
       nodes.push(getNodeFromSpan(source, span));
@@ -37,6 +38,7 @@ export const getNodesFromSpanTree = (spans: SpanResponse) => {
     }
     if (
       !dict[destination] &&
+      !source.includes("zk-client") &&
       !IGNORED_SERVICES_PREFIXES.includes(getNamespace(destination)) &&
       !destination.includes("zk-client") &&
       destination
