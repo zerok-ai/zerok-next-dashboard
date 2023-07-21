@@ -181,7 +181,7 @@ const IncidentTabs = ({
           <Tab key={tab.key} label={tab.label} value={tab.key} />
         ))}
       </Tabs>
-      ;{/* tab content */}
+      {/* tab content */}
       {selectedSpan && parsedSpanData && (
         <div className={styles["tab-content-container"]}>
           {TAB_CONTENT.map((tab, index) => {
