@@ -9,7 +9,7 @@ import {
   type SpanResponse,
 } from "utils/types";
 const getNodeFromSpan = (id: string, span: SpanDetail): Node => {
-  const exception = span.exception ? { type: "exception" } : {};
+  const exception = span.exceptionParent ? { type: "exception" } : {};
   return {
     id,
     data: { label: id, ...span },
