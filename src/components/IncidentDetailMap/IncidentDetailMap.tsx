@@ -28,7 +28,11 @@ interface IncidentDetailMapProps {
   isMinimized: boolean;
   toggleSize: () => void;
   spanData: SpanResponse | null;
-  onNodeClick: (spanId: string) => void;
+  onNodeClick: (
+    sourceId: string,
+    source?: string,
+    destination?: string
+  ) => void;
 }
 
 const IncidentDetailMap = ({
@@ -65,10 +69,6 @@ const IncidentDetailMap = ({
     },
     [setEdges]
   );
-  useEffect(() => {
-    setNodes([]);
-    setEdges([]);
-  }, [router]);
 
   useEffect(() => {
     if (layoutedNodes.length > 0) {
@@ -87,7 +87,8 @@ const IncidentDetailMap = ({
         proOptions={proOptions}
         nodeTypes={NodeTypes}
         onNodeClick={(event, node) => {
-          onNodeClick(node.data.span_id);
+          const edge = edges.find((edge) => edge.source === node.id);
+          onNodeClick(node.id, edge?.source, edge?.target);
         }}
       >
         <MapControls isMinimized={isMinimized} toggleSize={toggleSize} />

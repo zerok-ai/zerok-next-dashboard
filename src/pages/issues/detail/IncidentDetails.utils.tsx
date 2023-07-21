@@ -1,5 +1,6 @@
-import { Button, Drawer, IconButton } from "@mui/material";
+import { Button, Drawer, IconButton, Skeleton } from "@mui/material";
 import cx from "classnames";
+import { useSticky } from "hooks/useSticky";
 import { useRouter } from "next/router";
 import {
   AiFillCaretLeft,
@@ -7,6 +8,7 @@ import {
   AiOutlineClockCircle,
 } from "react-icons/ai";
 import { clusterSelector } from "redux/cluster";
+import { drawerSelector } from "redux/drawer";
 import { incidentListSelector, setIncidentList } from "redux/incidentList";
 import { useDispatch, useSelector } from "redux/store";
 import cssVars from "styles/variables.module.scss";
@@ -21,24 +23,6 @@ import {
 } from "utils/types";
 
 import styles from "./IncidentDetailPage.module.scss";
-
-export const IncidentMetadata = ({ incident }: { incident: IssueDetail }) => {
-  return (
-    <div className={styles["incident-metadata-container"]}>
-      {/* <span className={styles["incident-language-container"]}>
-        <BsCodeSlash /> Java
-      </span> */}
-      <span className={styles["incident-time-container"]}>
-        <span>{getFormattedTime(incident.first_seen)}</span>
-      </span>{" "}
-      |
-      <span className={styles["incident-time-container"]}>
-        <AiOutlineClockCircle />{" "}
-        <span>{getRelativeTime(incident.last_seen)}</span>
-      </span>
-    </div>
-  );
-};
 
 export const SpanDrawerButton = ({
   isOpen,
@@ -191,6 +175,44 @@ export const IncidentNavButtons = () => {
 };
 
 export default IncidentNavButtons;
+
+export const IncidentMetadata = ({ issue }: { issue: IssueDetail }) => {
+  const { isDrawerMinimized } = useSelector(drawerSelector);
+  // Sticky header boolean and ref
+  const { isSticky, stickyRef } = useSticky();
+
+  return issue ? (
+    <div
+      className={cx(
+        styles.header,
+        isSticky && styles.sticky,
+        isDrawerMinimized && styles["drawer-minimized"]
+      )}
+      id="incident-header"
+      ref={stickyRef}
+    >
+      <div className={styles["header-left"]}>
+        {" "}
+        <h3>{issue.issue_title}</h3>
+        <div className={styles["incident-metadata-container"]}>
+          <span className={styles["incident-time-container"]}>
+            <span>{getFormattedTime(issue.first_seen)}</span>
+          </span>{" "}
+          |
+          <span className={styles["incident-time-container"]}>
+            <AiOutlineClockCircle />{" "}
+            <span>{getRelativeTime(issue.last_seen)}</span>
+          </span>
+        </div>
+      </div>
+      <div className={styles["header-right"]}>
+        <IncidentNavButtons />
+      </div>
+    </div>
+  ) : (
+    <Skeleton className={"page-title-loader"} />
+  );
+};
 
 export const buildSpanTree = (
   spans: SpanResponse,
