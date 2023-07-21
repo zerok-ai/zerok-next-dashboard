@@ -1,4 +1,5 @@
 import { HiOutlineXMark } from "react-icons/hi2";
+
 import styles from "./TagX.module.scss";
 
 interface TagXProps {
@@ -10,9 +11,11 @@ interface TagXProps {
 const TagX = ({ label, onClose, closable }: TagXProps) => {
   return (
     <span
-      className={styles["container"]}
+      className={styles.container}
       role="button"
-      onClick={() => onClose(label)}
+      onClick={() => {
+        onClose(label);
+      }}
     >
       {label}
       {closable && <HiOutlineXMark className={styles["close-icon"]} />}

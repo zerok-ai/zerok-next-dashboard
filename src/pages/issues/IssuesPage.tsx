@@ -5,11 +5,13 @@ import CustomSkeleton from "components/CustomSkeleton";
 import PageLayout from "components/layouts/PageLayout";
 import PaginationX from "components/PaginationX";
 import PrivateRoute from "components/PrivateRoute";
+import ServicesMenu from "components/ServicesFilter/ServicesFilter";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import queryString from "query-string";
 import { Fragment, useEffect, useMemo } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -19,8 +21,7 @@ import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail, type ServiceDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
-import ServicesMenu, { getIssueColumns } from "./IssuesPage.utils";
-import queryString from "query-string";
+import { getIssueColumns } from "./IssuesPage.utils";
 
 interface IssuesData {
   issues: IssueDetail[];

@@ -14,7 +14,7 @@ import VisibilityToggleButton from "components/VisibilityToggleButton";
 import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
@@ -23,7 +23,7 @@ import {
   APIKEYS_ENDPOINT,
 } from "utils/endpoints";
 import raxios from "utils/raxios";
-import { type ApiKeyDetail, type ApiKeyHidden } from "utils/types";
+import { type ApiKeyDetail } from "utils/types";
 
 import styles from "./ApiKeys.module.scss";
 
@@ -39,8 +39,6 @@ const addToggle = (
 
 const ApiKeys = () => {
   const {
-    loading,
-    error,
     data: apiKeys,
     fetchData,
     setData: setApiKeys,

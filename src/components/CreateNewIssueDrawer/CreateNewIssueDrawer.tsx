@@ -33,7 +33,6 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
   };
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm();
 

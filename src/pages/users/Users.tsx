@@ -32,12 +32,10 @@ import { type UserDetail } from "utils/types";
 import styles from "./Users.module.scss";
 
 const Users = () => {
-  const {
-    loading: usersLoading,
-    error,
-    data: users,
-    fetchData,
-  } = useFetch<UserDetail[]>("users", GET_USERS_ENDPOINT);
+  const { data: users, fetchData } = useFetch<UserDetail[]>(
+    "users",
+    GET_USERS_ENDPOINT
+  );
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);

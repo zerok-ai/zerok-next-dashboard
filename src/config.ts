@@ -1,5 +1,10 @@
 // types
-import { DefaultConfigProps, MenuOrientation, ThemeDirection, ThemeMode } from 'types/config';
+import {
+  type DefaultConfigProps,
+  MenuOrientation,
+  ThemeDirection,
+  ThemeMode,
+} from "types/config";
 
 // ==============================|| THEME CONSTANT  ||============================== //
 

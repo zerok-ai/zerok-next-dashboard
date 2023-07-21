@@ -3,7 +3,7 @@ import PrivateRoute from "components/PrivateRoute";
 import UnderConstruction from "components/UnderConstruction";
 import Head from "next/head";
 
-import styles from "./LiveTraces.module.scss";
+// import styles from "./LiveTraces.module.scss";
 
 const LiveTraces = () => {
   return <div>LiveTraces</div>;

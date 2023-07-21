@@ -54,13 +54,8 @@ const IncidentTabs = ({
     setData: setRawSpanResponse,
   } = useFetch<SpanRawDataResponse>(`span_raw_data_details`);
 
-  const {
-    loading: podLoading,
-    error: podError,
-    data: podData,
-    fetchData: fetchPodData,
-    setData: setPodData,
-  } = useFetch<PodDetail[]>(`results`);
+  const { data: podData, fetchData: fetchPodData } =
+    useFetch<PodDetail[]>(`results`);
 
   useEffect(() => {
     if (selectedSpan && selectedCluster && incidentId) {

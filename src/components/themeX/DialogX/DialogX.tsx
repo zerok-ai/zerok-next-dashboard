@@ -1,7 +1,12 @@
-import { Dialog, DialogActions, DialogContentText } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
+
 import styles from "./DialogX.module.scss";
-import { DialogTitle } from "@mui/material";
-import { Button } from "@mui/material";
 
 interface DialogXProps {
   title: string;
