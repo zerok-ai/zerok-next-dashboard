@@ -88,8 +88,8 @@ const IncidentDetailPage = () => {
 
   const router = useRouter();
 
-  const incidentId = router.query.id;
-  const issueId = router.query.issue_id;
+  const incidentId = router.query.incident;
+  const issueId = router.query.issue;
 
   const [isMapMinimized, setIsMapMinimized] = useState(true);
   const toggleMapMinimized = () => {
@@ -120,15 +120,17 @@ const IncidentDetailPage = () => {
 
   // Reset selected span on incident change
   useEffect(() => {
-    setSelectedSpan(null);
-    setSpanData(null);
+    if (selectedSpan) {
+      setSelectedSpan(null);
+      setSpanData(null);
+    }
   }, [incidentId]);
 
   // Fetch span data for the incident on mount
   useEffect(() => {
-    if (router.isReady && incidentId === undefined) {
-      router.push("/issues");
-    }
+    // if (router.isReady && incidentId === undefined) {
+    //   router.push("/issues");
+    // }
     if (selectedCluster !== null && incidentId !== undefined) {
       fetchSpanData(
         LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
@@ -213,7 +215,7 @@ const IncidentDetailPage = () => {
           >
             <div className={styles["header-left"]}>
               {" "}
-              <h3>{getTitleFromIssue(issue.issue_title)}</h3>
+              <h3>{issue.issue_title}</h3>
               <IncidentMetadata incident={issue} />
             </div>
             <div className={styles["header-right"]}>

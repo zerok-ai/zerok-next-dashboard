@@ -37,7 +37,7 @@ const IncidentTabs = ({
   spanData: null | SpanResponse;
 }) => {
   const router = useRouter();
-  const { issue_id, id: incidentId } = router.query;
+  const { issue: issue_id, incident: incidentId } = router.query;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const spanEndpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(

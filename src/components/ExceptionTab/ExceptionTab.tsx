@@ -27,7 +27,7 @@ const transformSpan = (span: SpanRawData) => {
 const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
-  const { issue_id, id: incidentId } = router.query;
+  const { issue: issue_id, incident: incidentId } = router.query;
   const { data: exceptionSpanData, fetchData } = useFetch<SpanRawData>(
     `span_raw_data_details.${exceptionSpan}`,
     null,
@@ -45,15 +45,22 @@ const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
       fetchData(endpoint);
     }
   }, [incidentId]);
-  return exceptionSpanData ? (
+  let displayCode: string | string[] | undefined = (
+    exceptionSpanData?.request_payload as GenericObject
+  )?.req_body;
+  let message;
+  if (displayCode !== undefined) {
+    displayCode = (displayCode as string).substr(12);
+    displayCode = displayCode.split(",");
+    message = displayCode[displayCode.length - 1];
+    displayCode =
+      message.substr(0, message.length - 1) + "\n" + displayCode.join(",");
+  }
+  return displayCode ? (
     <div className={styles.container}>
       <label className={styles.label}>Exception:</label>
       <div className={styles.value}>
-        <CodeBlock
-          code={(exceptionSpanData.request_payload as GenericObject).req_body}
-          allowCopy
-          color="light"
-        />
+        <CodeBlock code={displayCode} allowCopy color="light" />
       </div>
     </div>
   ) : (
