@@ -96,7 +96,6 @@ export const getTabByProtocol = (
         return span.protocol === "exception";
       }
     );
-    console.log("HERE", { exceptionSpan });
     if (exceptionSpan) {
       defaultKeys.push(...ERROR_TAB_KEYS);
       defaultContent.push({

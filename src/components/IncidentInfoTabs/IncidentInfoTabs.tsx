@@ -66,7 +66,7 @@ const IncidentTabs = ({
 
   useEffect(() => {
     setActiveTab(DEFAULT_TAB_KEYS[0].key);
-  }, [router]);
+  }, [router, selectedSpan]);
 
   useEffect(() => {
     const currentSpan =
