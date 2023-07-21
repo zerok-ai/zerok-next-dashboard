@@ -1,15 +1,9 @@
 import { nanoid } from "nanoid";
-import { Handle, Position } from "reactflow";
-import { type GenericObject } from "utils/types";
+import { Handle, type NodeProps, Position } from "reactflow";
 
 import styles from "./ExceptionNode.module.scss";
 
-interface ExceptionNodeProps {
-  data: GenericObject;
-  label: string;
-}
-
-const ExceptionNode = ({ data }: ExceptionNodeProps) => {
+const ExceptionNode = ({ data }: NodeProps) => {
   return (
     <div className={styles.container}>
       <Handle type="target" position={Position.Left} />

@@ -1,4 +1,5 @@
 import { Skeleton } from "@mui/material";
+import ExceptionNode from "components/ExceptionNode";
 import MapControls from "components/MapControls";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo } from "react";
@@ -18,6 +19,10 @@ import {
 } from "./IncidentDetailMap.utils";
 
 const proOptions = { hideAttribution: true };
+
+const NodeTypes = {
+  exception: ExceptionNode,
+};
 
 interface IncidentDetailMapProps {
   isMinimized: boolean;
@@ -73,6 +78,7 @@ const IncidentDetailMap = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         proOptions={proOptions}
+        nodeTypes={NodeTypes}
         onNodeClick={(event, node) => {
           onNodeClick(node.data.span_id);
         }}

@@ -44,7 +44,7 @@ const spanTransformer = (spanData: SpanResponse) => {
       // find it's parent
       Object.keys(spanData).map((key) => {
         const parentSpan = spanData[key];
-        if (span.parent_span_id === key) {
+        if (span.source === spanData[key].source) {
           formattedSpans[key] = {
             ...parentSpan,
             span_id: key,
@@ -150,7 +150,12 @@ const IncidentDetailPage = () => {
         Object.keys(spanData).filter((key) => {
           const span = spanData[key];
           const { source, destination, protocol } = span;
-          return source && destination && protocol;
+          return (
+            source &&
+            destination &&
+            protocol &&
+            !destination.includes("zk-client")
+          );
         })[0]
       );
     }
@@ -168,6 +173,9 @@ const IncidentDetailPage = () => {
     return Object.keys(spanData).map((key) => {
       const span = spanData[key];
       const active = span.span_id === selectedSpan;
+      if (span.destination.includes("zk-client")) {
+        return null;
+      }
       return (
         <div className={styles["span-tree-container"]} key={nanoid()}>
           <SpanCard
@@ -181,7 +189,7 @@ const IncidentDetailPage = () => {
       );
     });
   };
-
+  console.log({ spanData });
   return (
     <div>
       <Fragment>
