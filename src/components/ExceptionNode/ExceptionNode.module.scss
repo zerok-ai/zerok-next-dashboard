@@ -1,0 +1,14 @@
+@import "styles/variables.module.scss";
+.container {
+    border:1px solid $error-500;
+    width:$node-width;
+    background-color: $grey-950;
+   
+    white-space: nowrap;
+  text-overflow: ellipsis;
+  padding:$sp-base * 2.5;
+  border-radius: $sp-base;
+  span {
+    color: $error-300;
+  }
+}

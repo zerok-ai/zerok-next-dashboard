@@ -18,10 +18,6 @@ export const MYSQL_TABS: Array<{
   key: (typeof MYSQL_TAB_KEYS)[number];
 }> = [
   {
-    label: "Overview",
-    key: "overview",
-  },
-  {
     label: "Query",
     key: "query",
   },
@@ -51,13 +47,13 @@ export const MYSQL_QUERY_KEYS = [
   {
     label: "Query",
     key: "request_payload.req_body",
-    render: (value: string) => (
-      <CodeBlock
-        code={stringWithoutComments(value.trim())}
-        allowCopy
-        color="light"
-      />
-    ),
+    render: (value: string) => {
+      let display = value;
+      if (value.length) {
+        display = stringWithoutComments(value.trim());
+      }
+      return <CodeBlock code={display} allowCopy color="light" />;
+    },
   },
 ];
 
@@ -66,11 +62,15 @@ export const MYSQL_RESULT_KEYS = [
     label: "Result",
     key: "resp_body",
     render: (value: string) => {
-      return (
-        <div className={styles["sql-table-container"]}>
-          <SQLRawTable value={value} />
-        </div>
-      );
+      if (value?.length) {
+        return (
+          <div className={styles["sql-table-container"]}>
+            <SQLRawTable value={value} />
+          </div>
+        );
+      } else {
+        return <CodeBlock code={"NULL"} allowCopy={false} color="light" />;
+      }
     },
   },
 ];

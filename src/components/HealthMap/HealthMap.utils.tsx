@@ -42,10 +42,15 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
     }
 
     if (!memo[resname]) {
+      const type =
+        service.requestor_service === "sofa-shop-mysql/inventory"
+          ? "exception"
+          : "default";
       nodes.push({
         id: resname,
         data: { label: resname, ...service, isCallingItself },
         position: { x: 0, y: 0 },
+        type,
       });
       memo[resname] = true;
     }

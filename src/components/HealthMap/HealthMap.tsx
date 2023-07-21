@@ -1,4 +1,5 @@
 import { Skeleton } from "@mui/material";
+import ExceptionNode from "components/ExceptionNode";
 import MapControls from "components/MapControls";
 import { useCallback, useMemo, useState } from "react";
 import ReactFlow, {
@@ -24,6 +25,10 @@ const proOptions = { hideAttribution: true };
 interface HealthMapProps {
   serviceMap: ServiceMapDetail[] | null;
 }
+
+const NodeTypes = {
+  exception: ExceptionNode,
+};
 
 const HealthMap = ({ serviceMap }: HealthMapProps) => {
   if (!serviceMap || !serviceMap.length) {
@@ -57,6 +62,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     },
     [setEdges]
   );
+  console.log({ nodes });
   return (
     <div className={styles.container}>
       {selectedService && (
@@ -78,6 +84,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         onConnect={onConnect}
         proOptions={proOptions}
         edgeTypes={HEALTHMAP_EDGETYPES}
+        nodeTypes={NodeTypes}
         onNodeClick={(e, node) => {
           setSelectedService(node);
         }}
