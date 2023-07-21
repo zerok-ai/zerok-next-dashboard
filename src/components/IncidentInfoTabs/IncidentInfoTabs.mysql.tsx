@@ -69,7 +69,7 @@ export const MYSQL_RESULT_KEYS = [
           </div>
         );
       } else {
-        return <CodeBlock code={"NULL"} allowCopy={false} color="light" />;
+        return <CodeBlock code={` `} allowCopy={false} color="light" />;
       }
     },
   },
