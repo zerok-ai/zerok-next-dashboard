@@ -1,30 +1,19 @@
 "use client";
 import { Skeleton } from "@mui/material";
-import { nanoid } from "@reduxjs/toolkit";
-import cx from "classnames";
-import IncidentDetailMap from "components/IncidentDetailMap";
-import IncidentInfoTabs from "components/IncidentInfoTabs";
+import IncidentDetailTab from "components/IncidentDetailTab";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
-import SpanCard from "components/SpanCard";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { ReactFlowProvider } from "reactflow";
 import { clusterSelector } from "redux/cluster";
-import { drawerSelector, minimizeDrawer } from "redux/drawer";
 import { setIncidentList } from "redux/incidentList";
 import { useDispatch, useSelector } from "redux/store";
 import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { type IssueDetail, type SpanResponse } from "utils/types";
 
-import styles from "./IncidentDetailPage.module.scss";
-import {
-  IncidentMetadata,
-  SpanDetailDrawer,
-  SpanDrawerButton,
-} from "./IncidentDetails.utils";
+import { IncidentMetadata } from "./IncidentDetails.utils";
 
 const spanTransformer = (spanData: SpanResponse) => {
   const formattedSpans: SpanResponse = {};
@@ -62,7 +51,6 @@ const spanTransformer = (spanData: SpanResponse) => {
 };
 
 const IncidentDetailPage = () => {
-  const { isDrawerMinimized } = useSelector(drawerSelector);
   const { selectedCluster } = useSelector(clusterSelector);
   const dispatch = useDispatch();
   // Issue metadata - title,description,time etc
@@ -82,16 +70,6 @@ const IncidentDetailPage = () => {
 
   const incidentId = router.query.incident;
   const issueId = router.query.issue;
-
-  const [isMapMinimized, setIsMapMinimized] = useState(true);
-  const toggleMapMinimized = () => {
-    setIsMapMinimized(!isMapMinimized);
-  };
-
-  const [isSpanDrawerOpen, setIsSpanDrawerOpen] = useState(false);
-  const toggleSpanDrawer = () => {
-    setIsSpanDrawerOpen(!isSpanDrawerOpen);
-  };
 
   // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
@@ -129,13 +107,7 @@ const IncidentDetailPage = () => {
     }
   }, [incidentId, router, selectedCluster]);
 
-  // Minimize main drawer when span drawer is open
-  useEffect(() => {
-    if (isSpanDrawerOpen && !isDrawerMinimized) {
-      dispatch(minimizeDrawer());
-    }
-  }, [isSpanDrawerOpen]);
-  // Build the span tree on span data change
+  // Set the selected span to an appropriate span
   useEffect(() => {
     if (spanData != null) {
       setSelectedSpan(
@@ -160,27 +132,7 @@ const IncidentDetailPage = () => {
     }
   }, [issue]);
 
-  const renderSpans = () => {
-    if (spanData == null) return null;
-    return Object.keys(spanData).map((key) => {
-      const span = spanData[key];
-      const active = span.span_id === selectedSpan;
-      if (span.destination.includes("zk-client")) {
-        return null;
-      }
-      return (
-        <div className={styles["span-tree-container"]} key={nanoid()}>
-          <SpanCard
-            span={span}
-            active={active}
-            onClick={(selectedSpan) => {
-              setSelectedSpan(selectedSpan.span_id as string);
-            }}
-          />{" "}
-        </div>
-      );
-    });
-  };
+  console.log({ selectedSpan });
 
   return (
     <div>
@@ -196,69 +148,15 @@ const IncidentDetailPage = () => {
           <Skeleton className={"page-title-loader"} />
         )}
       </div>
-      <div
-        className={cx(
-          styles.container,
-          !isMapMinimized && styles["max-map-container"]
-        )}
-      >
-        <div className={styles["map-container"]} id="map-drawer-container">
-          {/* Toggle button for drawer */}
-          <SpanDrawerButton
-            isOpen={isSpanDrawerOpen}
-            toggleDrawer={toggleSpanDrawer}
-          />
-          {/* Drawer for spans */}
-          {spanData && (
-            <SpanDetailDrawer isOpen={isSpanDrawerOpen}>
-              <div className={styles["span-tree-container"]}>
-                {renderSpans()}
-              </div>
-            </SpanDetailDrawer>
-          )}
-          <ReactFlowProvider>
-            <IncidentDetailMap
-              isMinimized={isMapMinimized}
-              toggleSize={toggleMapMinimized}
-              spanData={spanData}
-              onNodeClick={(
-                sourceId: string,
-                source: string | null = null,
-                destination: string | null = null
-              ) => {
-                if (!spanData) return;
-                const old = selectedSpan;
-                if (!source && !destination) {
-                  const span = Object.keys(spanData).find((key) => {
-                    if (key !== selectedSpan) {
-                      const span = spanData[key];
-                      return span.source === sourceId;
-                    }
-                    return false;
-                  });
-                  setSelectedSpan(span ?? old);
-                } else if (!destination) {
-                  const span = Object.keys(spanData).find(
-                    (key) => spanData[key].source === source
-                  );
-                  setSelectedSpan(span ?? old);
-                } else if (source && destination) {
-                  const span = Object.keys(spanData).find(
-                    (key) =>
-                      spanData[key].source === source &&
-                      spanData[key].destination === destination
-                  );
-                  setSelectedSpan(span ?? old);
-                }
-              }}
-            />
-          </ReactFlowProvider>
-        </div>
-
-        <div className={styles["incident-info-container"]}>
-          <IncidentInfoTabs selectedSpan={selectedSpan} spanData={spanData} />
-        </div>
-      </div>
+      {spanData && (
+        <IncidentDetailTab
+          spanData={spanData}
+          selectedSpan={selectedSpan}
+          onSpanChange={(spanId: string) => {
+            setSelectedSpan(spanId);
+          }}
+        />
+      )}
     </div>
   );
 };

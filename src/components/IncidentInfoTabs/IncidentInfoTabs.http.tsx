@@ -24,12 +24,14 @@ export const renderJSON = (val: string) => {
     console.log({ err });
   }
   if (json) {
-    <DynamicReactJson
-      src={json}
-      name={false}
-      displayDataTypes={false}
-      enableClipboard={false}
-    />;
+    return (
+      <DynamicReactJson
+        src={json}
+        name={false}
+        displayDataTypes={false}
+        enableClipboard={false}
+      />
+    );
   }
   if (val.length > 0) {
     return <CodeBlock code={val} allowCopy color="light" />;

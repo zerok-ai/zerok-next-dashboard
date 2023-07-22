@@ -74,7 +74,7 @@ export const getTabByProtocol = (
   protocol: string,
   currentSpan: SpanDetail,
   rawSpanData: SpanRawData,
-  podData: PodDetail[],
+  podData: PodDetail[] | null,
   exceptionData: SpanRawDataResponse | null
 ) => {
   const DEFAULT_TAB_CONTENT = [
@@ -84,7 +84,11 @@ export const getTabByProtocol = (
     },
     {
       list: POD_KEYS,
-      component: <PodTable pods={podData} service={currentSpan.source} />,
+      component: podData ? (
+        <PodTable pods={podData} service={currentSpan.source} />
+      ) : (
+        <span>No pods found.</span>
+      ),
     },
   ];
   const defaultKeys = [...DEFAULT_TAB_KEYS];

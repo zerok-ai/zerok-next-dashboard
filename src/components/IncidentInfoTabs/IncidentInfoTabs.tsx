@@ -18,7 +18,6 @@ import {
   type HttpResponseDetail,
   type PodDetail,
   type SpanDetail,
-  SpanRawData,
   type SpanRawDataResponse,
   type SpanResponse,
 } from "utils/types";
@@ -55,7 +54,6 @@ const IncidentTabs = ({
 }) => {
   const router = useRouter();
   const { issue: issue_id, incident: incidentId } = router.query;
-  const active = router.query.active ?? DEFAULT_TAB_KEYS[0].key;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const spanEndpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
@@ -154,16 +152,16 @@ const IncidentTabs = ({
   }, [rawSpanData]);
 
   const { keys: TAB_KEYS, content: TAB_CONTENT } =
-    spanData && podData && parsedSpanData && selectedSpan
+    spanData && parsedSpanData && selectedSpan
       ? getTabByProtocol(
           parsedSpanData.protocol,
           spanData[selectedSpan],
           parsedSpanData,
-          podData,
+          podData ?? null,
           exceptionData
         )
       : { keys: null, content: null };
-
+  console.log(spanData, selectedSpan, rawSpanData, podData);
   if (!rawSpanData || !spanData || !selectedSpan || !TAB_KEYS) {
     return <TabSkeleton />;
   }
