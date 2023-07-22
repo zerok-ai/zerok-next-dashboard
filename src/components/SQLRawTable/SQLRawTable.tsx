@@ -10,6 +10,7 @@ const SQLRawTable = ({ value }: SQLRawTableProps) => {
   const dataWithoutLabel = value.substr(17);
   // splitting on delimiter
   const rows = dataWithoutLabel.split(" | ");
+  console.log({ rows });
   return (
     <table className={styles.container}>
       <tbody>

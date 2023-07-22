@@ -60,7 +60,7 @@ export const MYSQL_QUERY_KEYS = [
 export const MYSQL_RESULT_KEYS = [
   {
     label: "Result",
-    key: "resp_body",
+    key: "response_payload.resp_body",
     render: (value: string) => {
       if (value?.length) {
         return (
