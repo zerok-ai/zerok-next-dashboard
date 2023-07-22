@@ -1,3 +1,61 @@
 @import "styles/variables.module.scss";
 .container {
+    border-radius: $sp-base;
+    height:calc(100vh - $header-height - $sp-base * 40);
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 4;
+}
+.chat-box-container {
+    display: flex;
+    border:1px solid $grey-900;
+    border-radius: $sp-base;
+}
+.chatbox-logo {
+    width:36px;
+    height:36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:1px solid $grey-900;
+    border-radius: $sp-base;
+    margin:0 $sp-base * 5;
+    > img {
+        width:28px;
+        height: 28px;
+    }
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.text-container {
+    max-height:calc(100vh - $header-height - $sp-base * 60);
+    overflow-y: scroll;
+    font-family:"Source Code Pro", monospace;
+    color:$grey-50;
+    font-weight: 400;
+    line-height: $default-line-height;
+}
+
+.chat-input {
+    background-color: $grey-800;
+    // border:1px solid $grey-600;
+    ::placeholder {
+        color:$grey-200 !important;
+    }  
+    // :hover {
+    //     :global( .MuiOutlinedInput-notchedOutline){
+    //         border:1px solid $grey-100;
+    //     }
+    // }
+}
+
+.send-icon {
+    display: flex;
+    align-items: center;
+    margin-right: $sp-base * 1.5;
+    cursor: pointer;
 }
