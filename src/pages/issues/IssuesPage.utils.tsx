@@ -1,10 +1,10 @@
+import { Tooltip } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import ChipX from "components/themeX/ChipX";
 import Link from "next/link";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
-import { getTitleFromIssue } from "utils/functions";
 import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
@@ -47,7 +47,9 @@ export const getIssueColumns = () => {
         const { last_seen } = info.row.original;
         return (
           <div className={styles["issue-time-container"]}>
-            {getFormattedTime(last_seen)}
+            <Tooltip title={getFormattedTime(last_seen)} placement="top" arrow>
+              <span>{getRelativeTime(last_seen)}</span>
+            </Tooltip>
           </div>
         );
       },
@@ -59,7 +61,9 @@ export const getIssueColumns = () => {
         const { first_seen } = info.row.original;
         return (
           <div className={styles["issue-time-container"]}>
-            {getRelativeTime(first_seen)}
+            <Tooltip title={getFormattedTime(first_seen)} placement="top" arrow>
+              <span>{getRelativeTime(first_seen)}</span>
+            </Tooltip>
           </div>
         );
       },

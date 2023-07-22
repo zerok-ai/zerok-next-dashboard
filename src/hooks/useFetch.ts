@@ -5,7 +5,8 @@ import raxios from "utils/raxios";
 export const useFetch = <T>(
   accessor: string,
   url?: string | null,
-  transformer?: (newData: T, oldData: T) => T
+  transformer?: (newData: T, oldData: T) => T,
+  replaceNull: boolean = false
 ) => {
   // @TODO - add generics here to get  better type detection
   const [data, setData] = useState<T | null>(null);
@@ -18,6 +19,7 @@ export const useFetch = <T>(
       setError(false);
       const resp = await raxios.get(endpoint);
       const rdata = objectPath.get(resp.data.payload, accessor);
+      if (replaceNull && rdata === null) setData([] as T);
       if (transformer != null) setData(transformer(rdata, data as T));
       else setData(rdata);
     } catch {

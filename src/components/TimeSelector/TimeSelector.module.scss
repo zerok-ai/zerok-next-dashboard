@@ -1,0 +1,16 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.select {
+    background-color: $grey-900;
+    // border:1px solid $grey-700;
+}
+
+.select-value {
+    color:$white;
+}
+
+.select-value-metric {
+    color:$grey-100;
+}

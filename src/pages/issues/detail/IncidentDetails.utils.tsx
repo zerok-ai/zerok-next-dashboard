@@ -1,4 +1,4 @@
-import { Button, Skeleton } from "@mui/material";
+import { Button, Skeleton, Tooltip } from "@mui/material";
 import cx from "classnames";
 import { useSticky } from "hooks/useSticky";
 import { useRouter } from "next/router";
@@ -131,13 +131,23 @@ export const IncidentMetadata = ({ issue }: { issue: IssueDetail }) => {
         {" "}
         <h3>{issue.issue_title}</h3>
         <div className={styles["incident-metadata-container"]}>
-          <span className={styles["incident-time-container"]}>
-            <span>{getFormattedTime(issue.first_seen)}</span>
-          </span>{" "}
+          <Tooltip
+            title={`Last seen: ${getFormattedTime(issue.last_seen)}`}
+            placement="bottom"
+            arrow
+          >
+            <span>{getRelativeTime(issue.last_seen)}</span>
+          </Tooltip>
           |
           <span className={styles["incident-time-container"]}>
             <AiOutlineClockCircle />{" "}
-            <span>{getRelativeTime(issue.last_seen)}</span>
+            <Tooltip
+              title={`First seen: ${getFormattedTime(issue.first_seen)}`}
+              placement="bottom"
+              arrow
+            >
+              <span>{getRelativeTime(issue.first_seen)}</span>
+            </Tooltip>
           </span>
         </div>
       </div>
