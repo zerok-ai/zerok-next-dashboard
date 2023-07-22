@@ -20,9 +20,7 @@ export const renderJSON = (val: string) => {
   let json = null;
   try {
     json = JSON.parse(val);
-  } catch (err) {
-    console.log({ err });
-  }
+  } catch (err) {}
   if (json) {
     return (
       <DynamicReactJson

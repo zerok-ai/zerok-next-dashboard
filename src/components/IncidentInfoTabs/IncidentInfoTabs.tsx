@@ -39,7 +39,7 @@ const parseSpanData = (spans: SpanRawDataResponse) => {
       span.response_payload = JSON.parse(span.response_payload as string);
       newSpans[key] = span;
     } catch (err) {
-      console.log({ err });
+      // console.log({ err });
     }
     return true;
   });
@@ -161,7 +161,6 @@ const IncidentTabs = ({
           exceptionData
         )
       : { keys: null, content: null };
-  console.log(spanData, selectedSpan, rawSpanData, podData);
   if (!rawSpanData || !spanData || !selectedSpan || !TAB_KEYS) {
     return <TabSkeleton />;
   }

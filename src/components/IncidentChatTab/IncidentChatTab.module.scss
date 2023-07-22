@@ -32,12 +32,15 @@
 }
 
 .text-container {
+    min-height: 200px;
     max-height:calc(100vh - $header-height - $sp-base * 60);
     overflow-y: scroll;
     font-family:"Source Code Pro", monospace;
     color:$grey-50;
     font-weight: 400;
     line-height: $default-line-height;
+    white-space: pre-line;
+    word-break: break-all;
 }
 
 .chat-input {
