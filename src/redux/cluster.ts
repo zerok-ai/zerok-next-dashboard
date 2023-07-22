@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
 import { CLUSTER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
 
@@ -10,6 +11,7 @@ const initialState: ClusterReduxType = {
   clusters: [],
   error: false,
   selectedCluster: "",
+  renderTrigger: nanoid(),
 };
 
 export const getClusters = createAsyncThunk("cluster/getClusters", async () => {
@@ -27,6 +29,9 @@ export const clusterSlice = createSlice({
   reducers: {
     setSelectedCluster: (state, { payload: { id } }) => {
       state.selectedCluster = id;
+    },
+    triggerRefetch: (state) => {
+      state.renderTrigger = nanoid();
     },
   },
   extraReducers: (builder) => {
@@ -53,6 +58,6 @@ export const clusterSlice = createSlice({
 export const clusterSelector = (state: RootState): ClusterReduxType =>
   state.cluster;
 
-export const { setSelectedCluster } = clusterSlice.actions;
+export const { setSelectedCluster, triggerRefetch } = clusterSlice.actions;
 
 export default clusterSlice.reducer;

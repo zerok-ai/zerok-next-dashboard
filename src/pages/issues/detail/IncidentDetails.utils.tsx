@@ -24,7 +24,7 @@ export const IncidentNavButtons = () => {
   const { incidentList } = useSelector(incidentListSelector);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { issue_id, id } = router.query;
+  const { issue: issue_id, incident: id } = router.query;
   if (incidentList.length === 0 || issue_id === undefined) return null;
   const basePath = `/issues/detail?issue=${issue_id as string}`;
   const activeIndex = incidentList.findIndex((incident) => incident === id);
@@ -63,11 +63,6 @@ export const IncidentNavButtons = () => {
 
   return (
     <div className={styles["incident-nav-buttons-container"]}>
-      {/* Newest */}
-      {/* <IconButton className={styles["incident-nav-iconbutton"]} size="large">
-        <img src={`${ICON_BASE_PATH}/${ICONS["two-arrows-left"]}`} />
-      </IconButton> */}
-      {/* Newer */}
       <Button
         className={styles["incident-nav-button"]}
         variant="outlined"
@@ -98,14 +93,6 @@ export const IncidentNavButtons = () => {
           <img src={`${ICON_BASE_PATH}/${ICONS["chevron-right"]}`} />
         </span>
       </Button>
-      {/* Oldest */}
-      {/* <IconButton
-        color="secondary"
-        className={styles["incident-nav-iconbutton"]}
-        size="large"
-      >
-        <img src={`${ICON_BASE_PATH}/${ICONS["two-arrows-right"]}`} />
-      </IconButton> */}
     </div>
   );
 };

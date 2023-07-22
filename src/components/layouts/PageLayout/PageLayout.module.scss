@@ -22,6 +22,12 @@
   align-items: center;
 }
 
+.header-right {
+  display: flex;
+  column-gap: $sp-base * 3;
+  align-items: center;
+}
+
 .header-container {
   width: 100%;
   padding: 2 * $sp-base 6 * $sp-base;

@@ -43,7 +43,7 @@ const formatServiceMapData = (smap: ServiceMapDetail[]) => {
 };
 
 const ServiceMap = () => {
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const router = useRouter();
   const { data, fetchData, setData } = useFetch<ServiceMapDetail[]>(
     "results",
@@ -70,7 +70,7 @@ const ServiceMap = () => {
           params
       );
     }
-  }, [selectedCluster, router]);
+  }, [selectedCluster, router, renderTrigger]);
 
   return (
     <div className={styles.container}>

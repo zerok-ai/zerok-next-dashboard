@@ -30,7 +30,7 @@ interface IssuesData {
 }
 
 const IssuesPage = () => {
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const {
     loading,
     data: issuesData,
@@ -96,7 +96,7 @@ const IssuesPage = () => {
           `st=${range as string}`
       );
     }
-  }, [selectedCluster, router]);
+  }, [selectedCluster, router, renderTrigger]);
 
   return (
     <div>
