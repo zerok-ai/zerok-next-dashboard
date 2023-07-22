@@ -15,29 +15,13 @@
   transition:all 0.3s ease;
 }
 
-.drawer-minimized {
-    width: calc(100vw - $main-drawer-width-mini - $sp-base * 12);
-    transition:all 0.3s ease;
-}
+
 
 .header.sticky {
     animation: slideDown 0.2s ease-out;
     border-bottom: 1px solid $grey-900;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.32), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
 
-}
-@keyframes slideDown {
-    from {
-      transform: translateY(-150%);
-    }
-    to {
-      transform: translateY(0);
-    }
-  }
-.container {
-    display: flex;
-    flex-direction: column;
-    min-height:calc(100vh - $header-height - $sp-base * 30);  
 }
 
 .drawer-container {
@@ -72,57 +56,9 @@
     }
 }
 
-.drawer-btn {
-    position: absolute;
-    top: $sp-base * 2;
-    left: 0;
-    z-index: 2000;
-    border-top-left-radius:0;
-    border-bottom-left-radius:0;
-    height:44px;
-    width:24px;
-    padding:$sp-base * 3 $sp-base;
-    transition:all 0.2s ease-in-out;
-    border:1px solid $grey-700;
-    border-left: none;
-    &:hover,&:focus {
-        border-left: none;
-    }
-}
-.drawer-btn-open {
-    left:$incident-drawer-width;
-    
-}
-.drawer-btn-icon {
-    // font-size: $sp-base * 10;
-    color:$grey-50;
-}
 
-.drawer {
-    :global(.MuiDrawer-paper) {
-        border-right: 1px solid $grey-700;
-        width:$incident-drawer-width;
-        background-color: $bg-dark;
-        position: absolute;
-      padding:$sp-base * 3;
 
-      }
-}
 
-.incident-info-container {
-    border-radius: 2 * $sp-base;
-    border: 1px solid  $grey-900;
-    margin-top: $sp-base * 4;
-    min-height: 320px;
-    padding:$sp-base * 5;
-    transition: all 0.2s ease;
-}
-
-.span-tree-container {
-    display: flex;
-    flex-direction: column;
-    row-gap: $sp-base * 3;
-}
 
 .header {
     display: flex;

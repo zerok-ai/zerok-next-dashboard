@@ -1,17 +1,12 @@
-import { Button, Drawer, IconButton, Skeleton } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import cx from "classnames";
 import { useSticky } from "hooks/useSticky";
 import { useRouter } from "next/router";
-import {
-  AiFillCaretLeft,
-  AiFillCaretRight,
-  AiOutlineClockCircle,
-} from "react-icons/ai";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { clusterSelector } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { incidentListSelector, setIncidentList } from "redux/incidentList";
 import { useDispatch, useSelector } from "redux/store";
-import cssVars from "styles/variables.module.scss";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { GET_INCIDENTS_ENDPOINT } from "utils/endpoints";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
@@ -23,65 +18,6 @@ import {
 } from "utils/types";
 
 import styles from "./IncidentDetailPage.module.scss";
-
-export const SpanDrawerButton = ({
-  isOpen,
-  toggleDrawer,
-}: {
-  isOpen: boolean;
-  toggleDrawer: () => void;
-}) => {
-  return (
-    <IconButton
-      size="medium"
-      className={cx(styles["drawer-btn"], isOpen && styles["drawer-btn-open"])}
-      onClick={toggleDrawer}
-    >
-      {isOpen ? (
-        <AiFillCaretLeft className={styles["drawer-btn-icon"]} />
-      ) : (
-        <AiFillCaretRight className={styles["drawer-btn-icon"]} />
-      )}
-    </IconButton>
-  );
-};
-
-export const SpanDetailDrawer = ({
-  isOpen,
-  children,
-}: {
-  isOpen: boolean;
-  children: React.ReactNode;
-}) => {
-  return (
-    <Drawer
-      open={isOpen}
-      anchor="left"
-      className={styles.drawer}
-      PaperProps={{
-        style: {
-          position: "absolute",
-          width: cssVars.incidentDrawerWidth,
-          background: cssVars.backgroundDark,
-        },
-      }}
-      ModalProps={{
-        container: document.getElementById("map-drawer-container"),
-        style: { position: "absolute" },
-      }}
-      SlideProps={{
-        onExiting: (node) => {
-          node.style.webkitTransform = "scaleX(0)";
-          node.style.transform = "scaleX(0)";
-          node.style.transformOrigin = "top left ";
-        },
-      }}
-      hideBackdrop
-    >
-      {children}
-    </Drawer>
-  );
-};
 
 export const IncidentNavButtons = () => {
   const { selectedCluster } = useSelector(clusterSelector);
