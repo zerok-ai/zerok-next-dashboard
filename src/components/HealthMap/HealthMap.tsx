@@ -90,7 +90,6 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
   // console.log("here");
   useEffect(() => {
-    console.log("in useeffct");
     setEdges(layoutedEdges);
     setNodes(layoutedNodes);
   }, [router]);
@@ -138,7 +137,6 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
           });
         }}
         onMove={() => {
-          console.log("draggin");
           setSelectedService(null);
         }}
         onPaneClick={() => {

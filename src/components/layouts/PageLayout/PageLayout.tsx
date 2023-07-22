@@ -1,3 +1,4 @@
+import ClusterRefreshButton from "components/ClusterRefreshButton";
 import ClusterSelector from "components/ClusterSelector";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import MainDrawer from "components/MainDrawer";
@@ -23,6 +24,7 @@ const PageLayout = ({ children, hideRange = false }: PageLayoutProps) => {
             <ClusterSelector />
           </div>
           <div className={styles["header-right"]}>
+            {!hideRange && <ClusterRefreshButton />}
             {!hideRange && <TimeSelector />}
           </div>
         </header>

@@ -54,18 +54,18 @@ const spanTransformer = (spanData: SpanResponse) => {
 };
 
 const TABS = [
-  {
-    label: (
-      <span className={styles["tab-label"]}>
-        <img
-          src={`${ICON_BASE_PATH}/${ICONS.sparkle}`}
-          alt="incident synthesis"
-        />
-        Incident Synthesis
-      </span>
-    ),
-    value: "chat",
-  },
+  // {
+  //   label: (
+  //     <span className={styles["tab-label"]}>
+  //       <img
+  //         src={`${ICON_BASE_PATH}/${ICONS.sparkle}`}
+  //         alt="incident synthesis"
+  //       />
+  //       Incident Synthesis
+  //     </span>
+  //   ),
+  //   value: "chat",
+  // },
   {
     label: "Incident Detail",
     value: "detail",
@@ -88,7 +88,7 @@ const IncidentDetailPage = () => {
   // Selected span - which span is currently selected, used for fetching raw data to show in the infotabs
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<string>(TABS[1].value);
+  const [activeTab, setActiveTab] = useState<string>(TABS[0].value);
 
   const router = useRouter();
 
@@ -192,7 +192,7 @@ const IncidentDetailPage = () => {
         aria-labelledby="incident-details-tab"
         aria-controls="incident-details-tab"
       >
-        {spanData && (
+        {
           <IncidentDetailTab
             spanData={spanData}
             selectedSpan={selectedSpan}
@@ -200,7 +200,7 @@ const IncidentDetailPage = () => {
               setSelectedSpan(spanId);
             }}
           />
-        )}
+        }
       </div>
 
       <div

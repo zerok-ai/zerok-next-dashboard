@@ -13,7 +13,7 @@ import styles from "./IncidentDetailTab.module.scss";
 import { SpanDetailDrawer, SpanDrawerButton } from "./IncidentDetailTab.utils";
 
 interface IncidentDetailTabProps {
-  spanData: SpanResponse;
+  spanData: SpanResponse | null;
   selectedSpan: string | null;
   onSpanChange: (spanId: string) => void;
 }
@@ -61,6 +61,37 @@ const IncidentDetailTab = ({
       );
     });
   };
+
+  const handleNodeClick = (
+    nodeId: string,
+    source?: string,
+    destination?: string
+  ) => {
+    if (!spanData) return;
+    const old = selectedSpan as string;
+    if (!source && !destination) {
+      const span = Object.keys(spanData).find((key) => {
+        if (key !== selectedSpan) {
+          const span = spanData[key];
+          return span.source === nodeId;
+        }
+        return false;
+      });
+      onSpanChange(span ?? old);
+    } else if (!destination) {
+      const span = Object.keys(spanData).find(
+        (key) => spanData[key].source === source
+      );
+      onSpanChange(span ?? old);
+    } else if (source && destination) {
+      const span = Object.keys(spanData).find(
+        (key) =>
+          spanData[key].source === source &&
+          spanData[key].destination === destination
+      );
+      onSpanChange(span ?? old);
+    }
+  };
   return (
     <div
       className={cx(
@@ -85,36 +116,7 @@ const IncidentDetailTab = ({
             isMinimized={isMapMinimized}
             toggleSize={toggleMapMinimized}
             spanData={spanData}
-            onNodeClick={(
-              sourceId: string,
-              source: string | null = null,
-              destination: string | null = null
-            ) => {
-              if (!spanData) return;
-              const old = selectedSpan as string;
-              if (!source && !destination) {
-                const span = Object.keys(spanData).find((key) => {
-                  if (key !== selectedSpan) {
-                    const span = spanData[key];
-                    return span.source === sourceId;
-                  }
-                  return false;
-                });
-                onSpanChange(span ?? old);
-              } else if (!destination) {
-                const span = Object.keys(spanData).find(
-                  (key) => spanData[key].source === source
-                );
-                onSpanChange(span ?? old);
-              } else if (source && destination) {
-                const span = Object.keys(spanData).find(
-                  (key) =>
-                    spanData[key].source === source &&
-                    spanData[key].destination === destination
-                );
-                onSpanChange(span ?? old);
-              }
-            }}
+            onNodeClick={handleNodeClick}
           />
         </ReactFlowProvider>
       </div>

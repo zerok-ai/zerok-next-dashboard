@@ -29,6 +29,7 @@ export interface ClusterReduxType {
   error: boolean;
   clusters: ClusterType[];
   selectedCluster: null | string;
+  renderTrigger: string;
 }
 
 export interface IncidentIDReduxType {

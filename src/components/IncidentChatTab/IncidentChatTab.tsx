@@ -38,7 +38,6 @@ const IncidentChatTab = () => {
       // fetchData(endpoint);
     }
   }, [incidentId, issueId, selectedCluster]);
-  // console.log({ chatText });
   return (
     <div className={styles.container}>
       <div className={styles["chat-box-container"]}>

@@ -2,10 +2,10 @@ import { MenuItem, Select } from "@mui/material";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { DEFAULT_TIME_RANGE } from "utils/constants";
 
 import styles from "./TimeSelector.module.scss";
 import { TIME_OPTIONS } from "./TimeSelector.utils";
-import { DEFAULT_TIME_RANGE } from "utils/constants";
 
 const TimeSelector = () => {
   const [time, setTime] = useState(
