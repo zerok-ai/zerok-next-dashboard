@@ -41,7 +41,7 @@ export const IncidentNavButtons = () => {
       dispatch(setIncidentList([...incidentList, ...list]));
       router.push(`${basePath}/${list[0] as string}`);
     } catch (err) {
-      console.log({ err });
+      // console.log({ err });
     }
   };
 
