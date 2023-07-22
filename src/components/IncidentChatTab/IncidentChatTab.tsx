@@ -1,5 +1,4 @@
 import { OutlinedInput } from "@mui/material";
-import { useFetch } from "hooks/useFetch";
 import { useTypeAnimation } from "hooks/useTypeAnimation";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
@@ -9,7 +8,6 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { ICON_BASE_PATH, ICONS, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import { ZK_GPT_RCA_ENDPOINT } from "utils/issues/endpoints";
-import { type GenericObject } from "utils/types";
 
 import styles from "./IncidentChatTab.module.scss";
 
