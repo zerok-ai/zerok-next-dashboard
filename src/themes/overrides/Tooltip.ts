@@ -1,5 +1,6 @@
 // material-ui
 import { Theme } from '@mui/material/styles';
+import cssVars from "styles/variables.module.scss";
 
 // ==============================|| OVERRIDES - TOOLTIP ||============================== //
 
@@ -8,9 +9,13 @@ export default function Tooltip(theme: Theme) {
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          color: theme.palette.background.paper
-        }
-      }
-    }
+          backgroundColor: cssVars.grey900,
+          color: cssVars.grey50,
+        },
+        arrow: {
+          color: cssVars.grey900,
+        },
+      },
+    },
   };
 }

@@ -15,6 +15,7 @@ import queryString from "query-string";
 import { Fragment, useEffect, useMemo } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { filterServices } from "utils/functions";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
@@ -80,16 +81,20 @@ const IssuesPage = () => {
   useEffect(() => {
     if (selectedCluster) {
       const filter = services && services.length > 0 ? services.join(",") : "";
+      const range = query.range ?? DEFAULT_TIME_RANGE;
       const params = queryString.stringify({
         services: filter,
         limit: ISSUES_PAGE_SIZE,
         offset: (page - 1) * ISSUES_PAGE_SIZE,
-        st: "-24h",
+        st: range,
       });
       const endpoint =
         LIST_ISSUES_ENDPOINT.replace("{id}", selectedCluster) + params;
       fetchIssues(endpoint);
-      fetchServices(LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster));
+      fetchServices(
+        LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster) +
+          `st=${range as string}`
+      );
     }
   }, [selectedCluster, router]);
 

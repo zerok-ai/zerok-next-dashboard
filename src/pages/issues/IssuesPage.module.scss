@@ -16,6 +16,12 @@
     color:$grey-25;
 }
 
+.issue-time-container {
+    span {
+        color:$grey-50;
+    }
+}
+
 .header {
     display: flex;
     justify-content: space-between;

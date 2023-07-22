@@ -14,7 +14,7 @@ import { HiPlus } from "react-icons/hi";
 import { ReactFlowProvider } from "reactflow";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
-import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
+import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { GET_SERVICE_MAP_ENDPOINT } from "utils/health/endpoints";
 import { filterEmptyServiceMapNodes } from "utils/health/functions";
 import { type ServiceMapDetail } from "utils/health/types";
@@ -45,12 +45,12 @@ const formatServiceMapData = (smap: ServiceMapDetail[]) => {
 const ServiceMap = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
-  const { data, fetchData } = useFetch<ServiceMapDetail[]>(
+  const { data, fetchData, setData } = useFetch<ServiceMapDetail[]>(
     "results",
     null,
-    formatServiceMapData
+    formatServiceMapData,
+    true
   );
-
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const toggleFilterDrawer = () => {
@@ -62,8 +62,9 @@ const ServiceMap = () => {
       const params = queryString.stringify({
         ns: namespaces,
         service_name: serviceNames,
-        st: "-24h",
+        st: router.query.range ?? DEFAULT_TIME_RANGE,
       });
+      setData(null);
       fetchData(
         GET_SERVICE_MAP_ENDPOINT.replace("{cluster_id}", selectedCluster) +
           params

@@ -35,7 +35,7 @@ const NodeTypes = {
 };
 
 const HealthMap = ({ serviceMap }: HealthMapProps) => {
-  if (!serviceMap || !serviceMap.length) {
+  if (!serviceMap) {
     return (
       <Skeleton
         variant="rectangular"
