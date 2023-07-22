@@ -61,7 +61,7 @@ const ServiceMap = () => {
       const { namespaces, serviceNames } = router.query;
       const params = queryString.stringify({
         ns: namespaces,
-        svc: serviceNames,
+        service_name: serviceNames,
         st: "-24h",
       });
       fetchData(
@@ -76,9 +76,6 @@ const ServiceMap = () => {
       <h3 className="page-title">Health</h3>
       <div className={styles.header}>
         <div className={styles["header-left"]}>
-          <ServiceMapFilterDisplay />
-        </div>
-        <div className={styles["header-right"]}>
           <Button
             variant="contained"
             color="secondary"
@@ -87,7 +84,9 @@ const ServiceMap = () => {
           >
             <HiPlus /> Filters
           </Button>
+          <ServiceMapFilterDisplay />
         </div>
+        <div className={styles["header-right"]}></div>
       </div>
       <div className={styles.content}>
         <ReactFlowProvider>

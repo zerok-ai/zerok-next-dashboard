@@ -3,6 +3,7 @@ import { useReactFlow } from "reactflow";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./MapControls.module.scss";
+import { useEffect } from "react";
 
 interface MapControlProps {
   showToggle?: boolean;
@@ -17,6 +18,7 @@ const MapControls = ({
 }: MapControlProps) => {
   const reactFlow = useReactFlow();
   const { zoomIn, zoomOut, fitView } = reactFlow;
+
   return (
     <div className={styles["map-controls"]}>
       {showToggle && toggleSize && (

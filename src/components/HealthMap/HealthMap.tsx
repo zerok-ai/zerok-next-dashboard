@@ -1,16 +1,20 @@
 import { Skeleton } from "@mui/material";
 import ExceptionNode from "components/ExceptionNode";
 import MapControls from "components/MapControls";
-import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   addEdge,
   Background,
+  type ReactFlowInstance,
   useEdgesState,
   useNodesState,
 } from "reactflow";
 import { SPACE_TOKEN } from "utils/constants";
+import { getFormattedServiceName, getNamespace } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";
 import { getLayoutedElements } from "utils/mapHelpers";
+import { getServiceString } from "utils/services/functions";
 
 import styles from "./HealthMap.module.scss";
 import {
@@ -43,32 +47,65 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     data: ServiceMapDetail;
     position: { x: number; y: number };
   }>(null);
+  const router = useRouter();
+  const { namespaces, serviceNames } = router.query;
+  const [reactFlow, setReactFlow] = useState<ReactFlowInstance | null>(null);
+
+  let filteredServiceMap = serviceMap;
+
+  if (namespaces) {
+    filteredServiceMap = filteredServiceMap.filter((service) => {
+      return (
+        namespaces.includes(getNamespace(service.requestor_service)) ||
+        namespaces.includes(getNamespace(service.responder_service))
+      );
+    });
+  }
+
+  if (serviceNames) {
+    filteredServiceMap = filteredServiceMap.filter((service) => {
+      return (
+        serviceNames.includes(
+          getFormattedServiceName(service.requestor_service)
+        ) ||
+        serviceNames.includes(
+          getFormattedServiceName(service.responder_service)
+        )
+      );
+    });
+  }
+
   const initialNodes = useMemo(() => {
-    return getNodesFromServiceMap(serviceMap);
-  }, [serviceMap]);
+    return getNodesFromServiceMap(filteredServiceMap);
+  }, [filteredServiceMap, router]);
 
   const initialEdges = useMemo(() => {
-    return getEdgesFromServiceMap(serviceMap);
-  }, [serviceMap]);
+    return getEdgesFromServiceMap(filteredServiceMap);
+  }, [filteredServiceMap, router]);
 
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges);
   }, [initialNodes, initialEdges]);
-  const [nodes, , onNodesChange] = useNodesState(layoutedNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
-  const onConnect = useCallback(
-    (params: any) => {
-      setEdges((eds) => addEdge(params, eds));
-    },
-    [setEdges]
-  );
+  // console.log("here");
+  useEffect(() => {
+    console.log("in useeffct");
+    setEdges(layoutedEdges);
+    setNodes(layoutedNodes);
+  }, [router]);
+  useEffect(() => {
+    if (reactFlow) {
+      setTimeout(() => reactFlow.fitView(), 100);
+    }
+  }, [reactFlow, router]);
   return (
     <div className={styles.container}>
       {selectedService && (
         <div
           className={styles["selected-service"]}
           style={{
-            top: selectedService.position.y - SPACE_TOKEN * 10,
+            top: selectedService.position.y,
             left: selectedService.position.x,
           }}
         >
@@ -80,12 +117,29 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
         proOptions={proOptions}
         edgeTypes={HEALTHMAP_EDGETYPES}
         nodeTypes={NodeTypes}
+        onClick={(e) => {
+          // const element = e.target;
+          // if (element.classList.contains("react-flow__node")) {
+          //   console.log("node clicked", element.getBoundingClientRect());
+          // }
+        }}
+        onInit={(rfi) => {
+          setReactFlow(rfi);
+        }}
         onNodeClick={(e, node) => {
-          setSelectedService(node);
+          const target = e.target as HTMLElement;
+          const pos = target.getBoundingClientRect();
+          setSelectedService({
+            ...node,
+            position: { x: pos.left, y: pos.top },
+          });
+        }}
+        onMove={() => {
+          console.log("draggin");
+          setSelectedService(null);
         }}
         onPaneClick={() => {
           setSelectedService(null);
