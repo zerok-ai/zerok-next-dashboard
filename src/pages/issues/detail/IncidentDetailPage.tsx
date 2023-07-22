@@ -1,5 +1,6 @@
 "use client";
-import { Skeleton } from "@mui/material";
+import { Skeleton, Tab, Tabs } from "@mui/material";
+import IncidentChatTab from "components/IncidentChatTab";
 import IncidentDetailTab from "components/IncidentDetailTab";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
@@ -11,8 +12,10 @@ import { clusterSelector } from "redux/cluster";
 import { setIncidentList } from "redux/incidentList";
 import { useDispatch, useSelector } from "redux/store";
 import { GET_ISSUE_ENDPOINT, LIST_SPANS_ENDPOINT } from "utils/endpoints";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { type IssueDetail, type SpanResponse } from "utils/types";
 
+import styles from "./IncidentDetailPage.module.scss";
 import { IncidentMetadata } from "./IncidentDetails.utils";
 
 const spanTransformer = (spanData: SpanResponse) => {
@@ -50,6 +53,25 @@ const spanTransformer = (spanData: SpanResponse) => {
   return formattedSpans;
 };
 
+const TABS = [
+  {
+    label: (
+      <span className={styles["tab-label"]}>
+        <img
+          src={`${ICON_BASE_PATH}/${ICONS.sparkle}`}
+          alt="incident synthesis"
+        />
+        Incident Synthesis
+      </span>
+    ),
+    value: "chat",
+  },
+  {
+    label: "Incident Detail",
+    value: "detail",
+  },
+];
+
 const IncidentDetailPage = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const dispatch = useDispatch();
@@ -65,6 +87,8 @@ const IncidentDetailPage = () => {
 
   // Selected span - which span is currently selected, used for fetching raw data to show in the infotabs
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
+
+  const [activeTab, setActiveTab] = useState<string>(TABS[0].value);
 
   const router = useRouter();
 
@@ -132,8 +156,6 @@ const IncidentDetailPage = () => {
     }
   }, [issue]);
 
-  console.log({ selectedSpan });
-
   return (
     <div>
       <Fragment>
@@ -148,15 +170,47 @@ const IncidentDetailPage = () => {
           <Skeleton className={"page-title-loader"} />
         )}
       </div>
-      {spanData && (
-        <IncidentDetailTab
-          spanData={spanData}
-          selectedSpan={selectedSpan}
-          onSpanChange={(spanId: string) => {
-            setSelectedSpan(spanId);
+      {/* Tab keys */}
+      <div className={styles["tabs-container"]}>
+        <Tabs
+          value={activeTab}
+          onChange={(_, tab) => {
+            setActiveTab(tab);
           }}
-        />
-      )}
+        >
+          {TABS.map((tab) => {
+            return <Tab label={tab.label} value={tab.value} key={tab.value} />;
+          })}
+        </Tabs>
+      </div>
+
+      {/* Tab content */}
+
+      <div
+        role="tabpanel"
+        hidden={activeTab !== "detail"}
+        aria-labelledby="incident-details-tab"
+        aria-controls="incident-details-tab"
+      >
+        {spanData && (
+          <IncidentDetailTab
+            spanData={spanData}
+            selectedSpan={selectedSpan}
+            onSpanChange={(spanId: string) => {
+              setSelectedSpan(spanId);
+            }}
+          />
+        )}
+      </div>
+
+      <div
+        role="tabpanel"
+        hidden={activeTab !== "chat"}
+        aria-labelledby="incident-synthesis-tab"
+        aria-controls="incident-synthesis-tab"
+      >
+        {spanData && <IncidentChatTab />}
+      </div>
     </div>
   );
 };

@@ -23,6 +23,8 @@ export const ICONS = {
   "two-arrows-right": "two-arrows-right.svg",
   "close-circle": "close-circle.svg",
   search: "search.svg",
+  sparkle: "sparkle.svg",
+  send: "send.svg",
 };
 
 export const ZEROK_MINIMAL_LOGO_LIGHT =

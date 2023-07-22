@@ -56,7 +56,26 @@
     }
 }
 
+.tabs-container {
+    :global(.Mui-selected){
+        span {
+            color:$white !important;
+            font-weight: 700;
+        }
+    }
+}
 
+.tab-label {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+    font-weight: 400;
+
+    > img {
+        width:$sp-base * 5;
+        height:$sp-base * 5;
+    }
+}
 
 
 
