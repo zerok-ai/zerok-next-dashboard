@@ -3,7 +3,6 @@ import { useReactFlow } from "reactflow";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./MapControls.module.scss";
-import { useEffect } from "react";
 
 interface MapControlProps {
   showToggle?: boolean;

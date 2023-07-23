@@ -2,19 +2,16 @@ import { Skeleton } from "@mui/material";
 import ExceptionNode from "components/ExceptionNode";
 import MapControls from "components/MapControls";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ReactFlow, {
-  addEdge,
   Background,
   type ReactFlowInstance,
   useEdgesState,
   useNodesState,
 } from "reactflow";
-import { SPACE_TOKEN } from "utils/constants";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";
 import { getLayoutedElements } from "utils/mapHelpers";
-import { getServiceString } from "utils/services/functions";
 
 import styles from "./HealthMap.module.scss";
 import {

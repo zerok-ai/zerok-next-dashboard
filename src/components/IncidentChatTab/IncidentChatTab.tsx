@@ -1,17 +1,10 @@
 import { OutlinedInput } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
-import { useTypeAnimation } from "hooks/useTypeAnimation";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import {
-  type FormEvent,
-  FormEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { TypeAnimation } from "react-type-animation";
+import { type FormEvent, useEffect, useRef, useState } from "react";
+// import { TypeAnimation } from "react-type-animation";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { ICON_BASE_PATH, ICONS, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
@@ -28,7 +21,7 @@ const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
   const { incident: incidentId, issue: issueId } = router.query;
-  const { loading, data, error, fetchData } = useFetch<GenericObject>("");
+  const { data, fetchData } = useFetch<GenericObject>("");
   const bottomRef = useRef<HTMLDivElement>(null);
   // const {
   //   currentText: currentChatText,
@@ -40,7 +33,7 @@ const IncidentChatTab = () => {
 
   const [questionAnswers, setQuestionAnswers] = useState<GenericObject[]>([]);
 
-  const { status, setStatus } = useStatus();
+  const { setStatus } = useStatus();
 
   useEffect(() => {
     if (selectedCluster) {
@@ -50,7 +43,7 @@ const IncidentChatTab = () => {
       )
         .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId as string);
-      fetchData("/gpt1.json");
+      fetchData(endpoint);
     }
   }, [incidentId, issueId, selectedCluster]);
   useEffect(() => {
@@ -58,11 +51,17 @@ const IncidentChatTab = () => {
   }, [questionAnswers]);
   const handleInputSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (userInput) {
+    if (userInput && selectedCluster) {
+      const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster
+      )
+        .replace("{issue_id}", issueId as string)
+        .replace("{incident_id}", incidentId as string);
       setQuestionAnswers((prev) => [...prev, { question: userInput }]);
       setUserInput("");
       setStatus({ loading: true, error: null });
-      const rdata = await raxios.get("/gpt2.json");
+      const rdata = await raxios.post(endpoint, { query: userInput });
       setQuestionAnswers((prev) =>
         prev.map((qa, idx) => {
           if (idx === prev.length - 1) {
