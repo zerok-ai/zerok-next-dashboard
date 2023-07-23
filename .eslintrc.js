@@ -23,8 +23,8 @@ module.exports = {
   plugins: ["react", "simple-import-sort", "react-hooks", "@typescript-eslint"],
   rules: {
     // increase the severity of rules so they are auto-fixable
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "off",
+    "simple-import-sort/exports": "off",
     "@typescript-eslint/quotes": "off",
     "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/semi": "off",
