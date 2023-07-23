@@ -106,7 +106,7 @@ const HealthMapFilterForm = ({
     }
     router.push({
       pathname: router.pathname,
-      query,
+      query: { ...router.query, ...query },
     });
     onFinish();
   };

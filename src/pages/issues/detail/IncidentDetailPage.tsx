@@ -54,18 +54,18 @@ const spanTransformer = (spanData: SpanResponse) => {
 };
 
 const TABS = [
-  // {
-  //   label: (
-  //     <span className={styles["tab-label"]}>
-  //       <img
-  //         src={`${ICON_BASE_PATH}/${ICONS.sparkle}`}
-  //         alt="incident synthesis"
-  //       />
-  //       Incident Synthesis
-  //     </span>
-  //   ),
-  //   value: "chat",
-  // },
+  {
+    label: (
+      <span className={styles["tab-label"]}>
+        <img
+          src={`${ICON_BASE_PATH}/${ICONS.sparkle}`}
+          alt="incident synthesis"
+        />
+        Incident Synthesis
+      </span>
+    ),
+    value: "chat",
+  },
   {
     label: "Incident Detail",
     value: "detail",
@@ -99,7 +99,7 @@ const IncidentDetailPage = () => {
 
   // Fetch issue data on mount
   useEffect(() => {
-    if (issueId !== undefined && selectedCluster !== null) {
+    if (issueId !== undefined && selectedCluster) {
       fetchData(
         GET_ISSUE_ENDPOINT.replace("{cluster_id}", selectedCluster).replace(
           "{issue_id}",
