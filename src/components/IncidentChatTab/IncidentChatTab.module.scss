@@ -68,11 +68,15 @@
         color:$white;
     }
 }
-
+.text-boxes {
+    display: flex;
+    row-gap: $sp-base * 2;
+    flex-direction: column;
+}
 .text-container {
     display: flex;
     flex-direction: column;
     row-gap: $sp-base * 2;
-    height:calc(100vh - $header-height - $sp-base * 70);
+    height:calc(100vh - $header-height - $sp-base * 64);
     overflow-y: scroll;
 }

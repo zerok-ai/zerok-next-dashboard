@@ -3,9 +3,10 @@ import { Handle, type NodeProps, Position } from "reactflow";
 import cx from "classnames";
 
 import styles from "./ExceptionNode.module.scss";
+import { type SpanDetail } from "utils/types";
 
 interface ExceptionNodeProps extends NodeProps {
-  selectedSpan?: string;
+  selectedSpan?: SpanDetail | null;
 }
 
 const ExceptionNode = ({ data, selectedSpan }: ExceptionNodeProps) => {
@@ -13,7 +14,7 @@ const ExceptionNode = ({ data, selectedSpan }: ExceptionNodeProps) => {
     <div
       className={cx(
         styles.container,
-        selectedSpan && selectedSpan === data.span_id && styles.selected
+        selectedSpan && selectedSpan.source === data.source && styles.selected
       )}
     >
       <Handle type="target" position={Position.Left} />

@@ -73,10 +73,11 @@ const IncidentTabs = ({
     parseSpanData
   );
 
-  const { data: podData, fetchData: fetchPodData } = useFetch<PodDetail[]>(
-    `results`,
-    null
-  );
+  const {
+    data: podData,
+    fetchData: fetchPodData,
+    setData: setPodData,
+  } = useFetch<PodDetail[]>(`results`, null);
 
   const {
     data: exceptionData,
@@ -92,6 +93,7 @@ const IncidentTabs = ({
     if (selectedSpan && selectedCluster && incidentId) {
       setRawSpanResponse(null);
       setExceptionData(null);
+      setPodData(null);
       fetchRawData(spanEndpoint.replace("{span_id}", selectedSpan));
     }
   }, [selectedSpan, incidentId, selectedCluster]);

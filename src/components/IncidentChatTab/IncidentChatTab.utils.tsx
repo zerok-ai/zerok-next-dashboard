@@ -44,7 +44,7 @@ export const UserInputField = ({
           setUserInput(e.target.value);
         }}
         className={styles["chat-input"]}
-        placeholder="Type something..."
+        placeholder="Ask a query"
         endAdornment={
           <span
             className={styles["send-icon"]}

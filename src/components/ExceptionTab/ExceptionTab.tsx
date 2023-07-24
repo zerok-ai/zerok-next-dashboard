@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material";
 import CodeBlock from "components/CodeBlock";
-import { Fragment, memo } from "react";
+import { memo } from "react";
 import { type GenericObject, type SpanRawDataResponse } from "utils/types";
 
 import styles from "./ExceptionTab.module.scss";

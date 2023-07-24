@@ -39,7 +39,11 @@ const MapControls = ({
           </span>
         </button>
       )}
-      <button onClick={() => fitView()}>
+      <button
+        onClick={() => {
+          fitView();
+        }}
+      >
         <span className={styles["map-btn-icon-container"]}>
           <img src={`${ICON_BASE_PATH}/${ICONS["move-map"]}`} alt="fit map" />
         </span>

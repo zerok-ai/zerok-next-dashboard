@@ -84,11 +84,7 @@ export const getTabByProtocol = (
     },
     {
       list: POD_KEYS,
-      component: podData ? (
-        <PodTable pods={podData} service={currentSpan.source} />
-      ) : (
-        <span>No pods found.</span>
-      ),
+      component: <PodTable pods={podData} service={currentSpan.source} />,
     },
   ];
   const defaultKeys = [...DEFAULT_TAB_KEYS];

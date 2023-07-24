@@ -71,7 +71,7 @@ export const getEdgesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
         color: cssVars.grey600,
       },
       // @TODO - add types for this
-      type: "smart",
+      // type: "smart",
     });
   });
   return edges;
