@@ -1,0 +1,19 @@
+@import "styles/variables.module.scss";
+.container {
+    border:1px solid $primary-500;
+    border-style: dashed;
+    width:$node-width;
+    height:$node-height;
+    background-color: $grey-950;
+    text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding:$sp-base * 2.5;
+  border-radius: $sp-base;
+  span {
+    color:$grey-50;
+  }
+  :global(.react-flow__handle ){
+    background-color: $primary-500;
+  }
+}

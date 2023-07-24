@@ -1,12 +1,8 @@
 @import "variables.module.scss";
-
+@import 'mixins.scss';
 .react-flow__node-default {
-  background-color: $grey-950;
   border: 1px solid $grey-600;
-  color: $grey-25;
-  width:$node-width;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  @include node-default;
 }
 
 .react-flow__panel {

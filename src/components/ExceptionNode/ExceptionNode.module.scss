@@ -1,17 +1,16 @@
 @import "styles/variables.module.scss";
+@import 'styles/mixins';
 .container {
+  @include node-default;
     border:1px solid $error-500;
-    width:$node-width;
-    background-color: $grey-950;
-    text-align: center;
-    white-space: nowrap;
-  text-overflow: ellipsis;
-  padding:$sp-base * 2.5;
-  border-radius: $sp-base;
   span {
     color: $error-300;
   }
   :global(.react-flow__handle ){
     background-color: $error-500;
   }
+}
+
+.selected {
+  border-style: dashed;
 }
