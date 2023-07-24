@@ -5,7 +5,7 @@ import cx from "classnames";
 import styles from "./ExceptionNode.module.scss";
 
 interface ExceptionNodeProps extends NodeProps {
-  selectedSpan: string;
+  selectedSpan?: string;
 }
 
 const ExceptionNode = ({ data, selectedSpan }: ExceptionNodeProps) => {
@@ -13,7 +13,7 @@ const ExceptionNode = ({ data, selectedSpan }: ExceptionNodeProps) => {
     <div
       className={cx(
         styles.container,
-        selectedSpan === data.span_id && styles.selected
+        selectedSpan && selectedSpan === data.span_id && styles.selected
       )}
     >
       <Handle type="target" position={Position.Left} />

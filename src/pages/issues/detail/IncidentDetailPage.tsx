@@ -88,7 +88,7 @@ const IncidentDetailPage = () => {
   // Selected span - which span is currently selected, used for fetching raw data to show in the infotabs
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<string>(TABS[1].value);
+  const [activeTab, setActiveTab] = useState<string>(TABS[0].value);
 
   const router = useRouter();
 

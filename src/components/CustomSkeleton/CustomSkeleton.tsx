@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 
 interface CustomSkeletonProps {
   containerClass: string;
-  skeletonClass: string;
+  skeletonClass?: string;
   len: number;
 }
 

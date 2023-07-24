@@ -8,6 +8,7 @@ import ReactFlow, {
   type ReactFlowInstance,
   useEdgesState,
   useNodesState,
+  type NodeProps,
 } from "reactflow";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";
@@ -28,7 +29,7 @@ interface HealthMapProps {
 }
 
 const NodeTypes = {
-  exception: ExceptionNode,
+  exception: (props: NodeProps) => <ExceptionNode {...props} />,
 };
 
 const HealthMap = ({ serviceMap }: HealthMapProps) => {
@@ -85,7 +86,6 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   }, [initialNodes, initialEdges]);
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
-  // console.log("here");
   useEffect(() => {
     setEdges(layoutedEdges);
     setNodes(layoutedNodes);

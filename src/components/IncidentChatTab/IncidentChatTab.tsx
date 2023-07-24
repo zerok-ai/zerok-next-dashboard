@@ -13,8 +13,16 @@ import raxios from "utils/raxios";
 import { type GenericObject } from "utils/types";
 
 import styles from "./IncidentChatTab.module.scss";
+import AIChatBox from "components/AIChatBox";
+import { UserInputField, UserQueryCard } from "./IncidentChatTab.utils";
 
 let timer: ReturnType<typeof setInterval>;
+
+interface IncidentChatData {
+  query: string;
+  loading: boolean;
+  reply: null | string;
+}
 
 const IncidentChatTab = () => {
   // const [allText, setAllText] = useState<string[]>([
@@ -23,21 +31,12 @@ const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
   const { incident: incidentId, issue: issueId } = router.query;
-  const { data, fetchData } = useFetch<GenericObject>("");
-  const bottomRef = useRef<HTMLDivElement>(null);
-  // const {
-  //   currentText: currentChatText,
-  //   isTyping,
-  //   setCurrentText,
-  //   setIsTyping,
-  // } = useTypeAnimation(allText[0], 10);
+  const { data: rca, fetchData } = useFetch<string>("rca");
   const [userInput, setUserInput] = useState("");
-
+  const bottomRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
 
-  const [questionAnswers, setQuestionAnswers] = useState<GenericObject[]>([]);
-
-  const { setStatus } = useStatus();
+  const [queries, setQueries] = useState<IncidentChatData[]>([]);
 
   useEffect(() => {
     if (selectedCluster) {
@@ -47,38 +46,39 @@ const IncidentChatTab = () => {
       )
         .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId as string);
-      fetchData("/gpt1.json");
+      fetchData(endpoint);
     }
   }, [incidentId, issueId, selectedCluster]);
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [questionAnswers, data]);
-  console.log("here");
-  useEffect(() => {
-    if (!isTyping) {
-      timer = setInterval(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 200);
-    } else clearInterval(timer);
-  }, [isTyping]);
 
-  const handleInputSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (userInput && selectedCluster) {
+  const onTypeStart = () => {
+    timer = setInterval(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 200);
+  };
+  const onTypeEnd = () => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    clearInterval(timer);
+  };
+
+  const handleInputSubmit = async (val: string) => {
+    if (selectedCluster) {
       const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       )
         .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId as string);
-      setQuestionAnswers((prev) => [...prev, { question: userInput }]);
-      setUserInput("");
-      setStatus({ loading: true, error: null });
-      const rdata = await raxios.get("/gpt2.json");
-      setQuestionAnswers((prev) =>
+      setQueries((prev) => [
+        ...prev,
+        { query: val, loading: true, reply: null },
+      ]);
+      // setStatus({ loading: true, error: null });
+      // const rdata = await raxios.get("/gpt2.json");
+      const rdata = await raxios.post(endpoint, { query: val });
+      setQueries((prev) =>
         prev.map((qa, idx) => {
           if (idx === prev.length - 1) {
-            return { ...qa, answer: rdata.data.payload.answer };
+            return { ...qa, loading: false, reply: rdata.data.payload.answer };
           }
           return qa;
         })
@@ -88,80 +88,39 @@ const IncidentChatTab = () => {
   return (
     <div className={styles.container}>
       <div className={styles["chat-box-container"]}>
-        <div className={styles["logo-container"]}>
-          <div className={styles["chatbox-logo"]}>
-            <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
-          </div>
-        </div>
         <div className={styles["text-container"]}>
-          {data && data.rca && (
-            <TypeAnimation
-              sequence={[
-                () => {
-                  setIsTyping(true);
-                },
-                data.rca,
-                () => {
-                  setIsTyping(false);
-                },
-              ]}
-              repeat={0}
-              wrapper="p"
-              speed={{ type: "keyStrokeDelayInMs", value: 3 }}
-              preRenderFirstString={false}
-            />
-          )}
-          {questionAnswers.length > 0 &&
-            questionAnswers.map((qa, idx) => {
-              const isNew = idx === questionAnswers.length - 1;
+          <AIChatBox
+            text={rca}
+            animate={true}
+            onTypeEnd={onTypeEnd}
+            onTypeStart={onTypeStart}
+          />
+
+          <div className={styles["text-boxes"]}>
+            {queries.map((qa, idx) => {
+              const { query, loading, reply } = qa;
               return (
-                <div className={styles["chat-qa-container"]} key={nanoid()}>
-                  <div className={styles["chat-question-container"]}>
-                    <br />
-                    <p className={styles["chat-question-number"]}>
-                      Question {idx + 1}:
-                    </p>
-                    <p className={styles["chat-question"]}>{qa.question}</p>
+                <div className={styles["query-container"]} key={nanoid()}>
+                  <div className={styles.query}>
+                    <UserQueryCard text={query} />
                   </div>
-                  <div className={styles["chat-answer-container"]}>
-                    <br />
-                    <p className={styles["chat-answer-number"]}>Answer: </p>
-                    <p className={styles["chat-answer"]}>{qa.answer}</p>
+                  <div className={styles.reply}>
+                    <AIChatBox
+                      text={reply}
+                      animate={idx === queries.length - 1}
+                      onTypeEnd={onTypeEnd}
+                      onTypeStart={onTypeStart}
+                    />
                   </div>
                 </div>
               );
             })}
+          </div>
           <div ref={bottomRef}></div>
         </div>
       </div>
       <div className={styles["chat-input-container"]}>
-        <form onSubmit={handleInputSubmit} id="chat-form">
-          <button
-            type="submit"
-            style={{ width: "0", height: "0", opacity: "0" }}
-            id="chat-form-btn"
-          ></button>
-          <OutlinedInput
-            fullWidth
-            value={userInput}
-            onChange={(e) => {
-              setUserInput(e.target.value);
-            }}
-            className={styles["chat-input"]}
-            placeholder="Type something..."
-            endAdornment={
-              <span
-                className={styles["send-icon"]}
-                role="button"
-                onClick={() => {
-                  document.getElementById("chat-form-btn")?.click();
-                }}
-              >
-                <img src={`${ICON_BASE_PATH}/${ICONS.send}`} alt="send_icon" />
-              </span>
-            }
-          />
-        </form>
+        <UserInputField onSubmit={handleInputSubmit} />
       </div>
     </div>
   );

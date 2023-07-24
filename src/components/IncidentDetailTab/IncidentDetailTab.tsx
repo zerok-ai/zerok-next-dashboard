@@ -67,7 +67,6 @@ const IncidentDetailTab = ({
     source?: string,
     destination?: string
   ) => {
-    console.log({ nodeId, source, destination });
     if (!spanData) return;
     const old = selectedSpan as string;
     if (!source && !destination) {
