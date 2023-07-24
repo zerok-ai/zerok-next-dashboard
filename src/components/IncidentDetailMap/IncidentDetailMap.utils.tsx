@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { type Edge, MarkerType, type Node, Position } from "reactflow";
 import cssVars from "styles/variables.module.scss";
 import { IGNORED_SERVICES_PREFIXES } from "utils/constants";
-import { getNamespace } from "utils/functions";
+import { getNamespace, trimString } from "utils/functions";
 import {
   type GenericObject,
   type SpanDetail,
@@ -24,7 +24,7 @@ const getNodeFromSpan = (
   };
   return {
     id,
-    data: { label: id, ...span },
+    data: { label: trimString(id, 25), ...span },
     position: { x: 0, y: 0 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,

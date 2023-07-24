@@ -8,6 +8,7 @@ import {
   getFormattedServiceName,
   getNamespace,
   getNumberFromReqThroughput,
+  trimString,
 } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";
 import { type GenericObject } from "utils/types";
@@ -35,7 +36,7 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
     if (!memo[reqname]) {
       nodes.push({
         id: reqname,
-        data: { label: reqname, ...service, isCallingItself },
+        data: { label: trimString(reqname, 25), ...service, isCallingItself },
         position: { x: 0, y: 0 },
       });
       memo[reqname] = true;
