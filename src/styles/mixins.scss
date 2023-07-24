@@ -11,10 +11,7 @@
   color: $grey-25;
   width:$node-width;
   height:$node-height;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  font-size: $font-sm;
+  font-size: $font-md;
   border-radius: $sp-base;
   text-align: center;
   padding:$sp-base * 2.5;
