@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material";
 import CodeBlock from "components/CodeBlock";
-import { memo } from "react";
+import { Fragment, memo } from "react";
 import { type GenericObject, type SpanRawDataResponse } from "utils/types";
 
 import styles from "./ExceptionTab.module.scss";
@@ -19,14 +19,23 @@ const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
     displayCode = (displayCode as string).substr(12);
     displayCode = displayCode.split(",");
     message = displayCode[displayCode.length - 1];
-    displayCode =
-      message.substr(0, message.length - 1) + "\n" + displayCode.join(",");
+    displayCode = displayCode.join(",");
   }
   return displayCode ? (
     <div className={styles.container}>
-      <label className={styles.label}>Exception:</label>
-      <div className={styles.value}>
-        <CodeBlock code={displayCode} allowCopy color="light" />
+      {message && (
+        <div className={styles.row}>
+          <label className={styles.label}>Message:</label>
+          <div className={styles.value}>
+            {message.substr(9, message.length)}
+          </div>
+        </div>
+      )}
+      <div className={styles.row}>
+        <label className={styles.label}>Exception:</label>
+        <div className={styles.value}>
+          <CodeBlock code={displayCode} allowCopy color="light" />
+        </div>
       </div>
     </div>
   ) : (

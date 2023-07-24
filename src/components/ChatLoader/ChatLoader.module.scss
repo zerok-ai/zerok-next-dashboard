@@ -1,0 +1,14 @@
+@import "styles/variables.module.scss";
+.container {
+    :global(.loader){
+        width:100px;
+    }
+}
+.dot {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 100%;
+    margin-right: 6px;
+    border: 3px #2b4d66 solid; 
+}

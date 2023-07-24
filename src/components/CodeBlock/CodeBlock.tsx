@@ -26,7 +26,7 @@ const CodeBlock = ({
           <span className={styles.copy}>
             {allowCopy && (
               <CopyToClipboard text={copyText ?? code}>
-                <IconButton size="small">
+                <IconButton size="small" className={styles["copy-btn"]}>
                   <BsFillClipboardFill />
                 </IconButton>
               </CopyToClipboard>
