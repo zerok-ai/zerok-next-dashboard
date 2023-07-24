@@ -2,32 +2,32 @@ import { Skeleton } from "@mui/material";
 import ExceptionNode from "components/ExceptionNode";
 import MapControls from "components/MapControls";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   addEdge,
   Background,
+  type NodeProps,
   useEdgesState,
   useNodesState,
+  type ReactFlowInstance,
 } from "reactflow";
 import { getLayoutedElements } from "utils/mapHelpers";
-import { type SpanResponse } from "utils/types";
+import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./IncidentDetailMap.module.scss";
 import {
   getEdgesFromSpanTree,
   getNodesFromSpanTree,
 } from "./IncidentDetailMap.utils";
+import SelectedNode from "components/SelectedNode";
 
 const proOptions = { hideAttribution: true };
-
-const NodeTypes = {
-  exception: ExceptionNode,
-};
 
 interface IncidentDetailMapProps {
   isMinimized: boolean;
   toggleSize: () => void;
   spanData: SpanResponse | null;
+  selectedSpan: string;
   onNodeClick: (
     sourceId: string,
     source?: string,
@@ -39,8 +39,20 @@ const IncidentDetailMap = ({
   isMinimized,
   toggleSize,
   spanData,
+  selectedSpan,
   onNodeClick,
 }: IncidentDetailMapProps) => {
+  const NodeTypes = useMemo(() => {
+    return {
+      exception: (props: NodeProps) => (
+        <ExceptionNode {...props} selectedSpan={selectedSpan} />
+      ),
+      selected: SelectedNode,
+    };
+  }, [spanData, selectedSpan]);
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance | null>(null);
+
   if (!spanData) {
     return (
       <Skeleton
@@ -51,12 +63,12 @@ const IncidentDetailMap = ({
   }
   const router = useRouter();
   const initialNodes = useMemo(
-    () => getNodesFromSpanTree(spanData),
-    [spanData]
+    () => getNodesFromSpanTree(spanData, selectedSpan),
+    [spanData, selectedSpan]
   );
   const initialEdges = useMemo(() => {
-    return getEdgesFromSpanTree(spanData);
-  }, [spanData]);
+    return getEdgesFromSpanTree(spanData, spanData[selectedSpan]);
+  }, [spanData, selectedSpan]);
 
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
     return getLayoutedElements(initialNodes, initialEdges);
@@ -75,7 +87,14 @@ const IncidentDetailMap = ({
       setEdges(layoutedEdges);
       setNodes(layoutedNodes);
     }
-  }, [router, layoutedEdges, layoutedNodes]);
+  }, [router, layoutedEdges, layoutedNodes, selectedSpan]);
+
+  useEffect(() => {
+    if (reactFlowInstance) {
+      setTimeout(() => reactFlowInstance.fitView(), 200);
+    }
+  }, [reactFlowInstance]);
+
   return (
     <div className={styles.container}>
       <ReactFlow
@@ -85,6 +104,9 @@ const IncidentDetailMap = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         proOptions={proOptions}
+        onInit={(rfi) => {
+          setReactFlowInstance(rfi);
+        }}
         nodeTypes={NodeTypes}
         onNodeClick={(event, node) => {
           const edge = edges.find((edge) => edge.source === node.id);

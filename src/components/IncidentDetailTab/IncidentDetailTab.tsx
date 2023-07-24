@@ -67,6 +67,7 @@ const IncidentDetailTab = ({
     source?: string,
     destination?: string
   ) => {
+    console.log({ nodeId, source, destination });
     if (!spanData) return;
     const old = selectedSpan as string;
     if (!source && !destination) {
@@ -111,14 +112,17 @@ const IncidentDetailTab = ({
             <div className={styles["span-tree-container"]}>{renderSpans()}</div>
           </SpanDetailDrawer>
         )}
-        <ReactFlowProvider>
-          <IncidentDetailMap
-            isMinimized={isMapMinimized}
-            toggleSize={toggleMapMinimized}
-            spanData={spanData}
-            onNodeClick={handleNodeClick}
-          />
-        </ReactFlowProvider>
+        {selectedSpan && (
+          <ReactFlowProvider>
+            <IncidentDetailMap
+              selectedSpan={selectedSpan}
+              isMinimized={isMapMinimized}
+              toggleSize={toggleMapMinimized}
+              spanData={spanData}
+              onNodeClick={handleNodeClick}
+            />
+          </ReactFlowProvider>
+        )}
       </div>
 
       <div className={styles["incident-info-container"]}>

@@ -4,7 +4,7 @@ import useStatus from "hooks/useStatus";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { type FormEvent, useEffect, useRef, useState } from "react";
-// import { TypeAnimation } from "react-type-animation";
+import { TypeAnimation } from "react-type-animation";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { ICON_BASE_PATH, ICONS, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
@@ -13,6 +13,8 @@ import raxios from "utils/raxios";
 import { type GenericObject } from "utils/types";
 
 import styles from "./IncidentChatTab.module.scss";
+
+let timer: ReturnType<typeof setInterval>;
 
 const IncidentChatTab = () => {
   // const [allText, setAllText] = useState<string[]>([
@@ -31,6 +33,8 @@ const IncidentChatTab = () => {
   // } = useTypeAnimation(allText[0], 10);
   const [userInput, setUserInput] = useState("");
 
+  const [isTyping, setIsTyping] = useState(false);
+
   const [questionAnswers, setQuestionAnswers] = useState<GenericObject[]>([]);
 
   const { setStatus } = useStatus();
@@ -43,12 +47,21 @@ const IncidentChatTab = () => {
       )
         .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId as string);
-      fetchData(endpoint);
+      fetchData("/gpt1.json");
     }
   }, [incidentId, issueId, selectedCluster]);
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [questionAnswers]);
+  }, [questionAnswers, data]);
+  console.log("here");
+  useEffect(() => {
+    if (!isTyping) {
+      timer = setInterval(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 200);
+    } else clearInterval(timer);
+  }, [isTyping]);
+
   const handleInputSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (userInput && selectedCluster) {
@@ -61,7 +74,7 @@ const IncidentChatTab = () => {
       setQuestionAnswers((prev) => [...prev, { question: userInput }]);
       setUserInput("");
       setStatus({ loading: true, error: null });
-      const rdata = await raxios.post(endpoint, { query: userInput });
+      const rdata = await raxios.get("/gpt2.json");
       setQuestionAnswers((prev) =>
         prev.map((qa, idx) => {
           if (idx === prev.length - 1) {
@@ -81,9 +94,26 @@ const IncidentChatTab = () => {
           </div>
         </div>
         <div className={styles["text-container"]}>
-          {data?.rca && <p>{data.rca}</p>}
+          {data && data.rca && (
+            <TypeAnimation
+              sequence={[
+                () => {
+                  setIsTyping(true);
+                },
+                data.rca,
+                () => {
+                  setIsTyping(false);
+                },
+              ]}
+              repeat={0}
+              wrapper="p"
+              speed={{ type: "keyStrokeDelayInMs", value: 3 }}
+              preRenderFirstString={false}
+            />
+          )}
           {questionAnswers.length > 0 &&
             questionAnswers.map((qa, idx) => {
+              const isNew = idx === questionAnswers.length - 1;
               return (
                 <div className={styles["chat-qa-container"]} key={nanoid()}>
                   <div className={styles["chat-question-container"]}>
@@ -102,18 +132,6 @@ const IncidentChatTab = () => {
               );
             })}
           <div ref={bottomRef}></div>
-          {/* {allText.map((text, index) => {
-            return (
-              <TypeAnimation
-                sequence={[text]}
-                repeat={0}
-                wrapper="p"
-                speed={{ type: "keyStrokeDelayInMs", value: 10 }}
-                preRenderFirstString={false}
-                key={nanoid()}
-              />
-            );
-          })} */}
         </div>
       </div>
       <div className={styles["chat-input-container"]}>

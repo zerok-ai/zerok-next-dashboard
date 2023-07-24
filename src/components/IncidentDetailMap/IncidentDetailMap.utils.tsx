@@ -8,19 +8,34 @@ import {
   type SpanDetail,
   type SpanResponse,
 } from "utils/types";
-const getNodeFromSpan = (id: string, span: SpanDetail): Node => {
-  const exception = span.exceptionParent ? { type: "exception" } : {};
+const getNodeFromSpan = (
+  id: string,
+  span: SpanDetail,
+  selectedSpan: SpanDetail
+): Node => {
+  const getType = () => {
+    if (id === selectedSpan.source && !span.exceptionParent) {
+      return "selected";
+    }
+    if (span.exceptionParent) {
+      return "exception";
+    }
+    return "default";
+  };
   return {
     id,
     data: { label: id, ...span },
     position: { x: 0, y: 0 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    ...exception,
+    type: getType(),
   };
 };
 
-export const getNodesFromSpanTree = (spans: SpanResponse) => {
+export const getNodesFromSpanTree = (
+  spans: SpanResponse,
+  selectedSpan: string
+) => {
   const nodes: Node[] = [];
   const dict: GenericObject = {};
   Object.keys(spans).map((key) => {
@@ -33,7 +48,7 @@ export const getNodesFromSpanTree = (spans: SpanResponse) => {
       !destination.includes("zk-client") &&
       source
     ) {
-      nodes.push(getNodeFromSpan(source, span));
+      nodes.push(getNodeFromSpan(source, span, spans[selectedSpan]));
       dict[source] = true;
     }
     if (
@@ -43,7 +58,7 @@ export const getNodesFromSpanTree = (spans: SpanResponse) => {
       !destination.includes("zk-client") &&
       destination
     ) {
-      nodes.push(getNodeFromSpan(destination, span));
+      nodes.push(getNodeFromSpan(destination, span, spans[selectedSpan]));
       dict[destination] = true;
     }
     return true;
@@ -51,7 +66,10 @@ export const getNodesFromSpanTree = (spans: SpanResponse) => {
   return nodes;
 };
 
-export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
+export const getEdgesFromSpanTree = (
+  spanData: SpanResponse,
+  selectedSpan: SpanDetail
+) => {
   const edges: Edge[] = [];
   Object.keys(spanData).map((key) => {
     const span = spanData[key];
@@ -71,6 +89,9 @@ export const getEdgesFromSpanTree = (spanData: SpanResponse) => {
           type: MarkerType.ArrowClosed,
           color: cssVars.grey600,
         },
+        animated:
+          selectedSpan.destination === span.destination &&
+          selectedSpan.source === span.source,
       });
     }
     return null;
