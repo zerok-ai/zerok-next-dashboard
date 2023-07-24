@@ -1,16 +1,11 @@
-import { OutlinedInput } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
-import useStatus from "hooks/useStatus";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { type FormEvent, useEffect, useRef, useState } from "react";
-import { TypeAnimation } from "react-type-animation";
+import { useEffect, useRef, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
-import { ICON_BASE_PATH, ICONS, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import { ZK_GPT_RCA_ENDPOINT } from "utils/issues/endpoints";
 import raxios from "utils/raxios";
-import { type GenericObject } from "utils/types";
 
 import styles from "./IncidentChatTab.module.scss";
 import AIChatBox from "components/AIChatBox";
@@ -32,9 +27,7 @@ const IncidentChatTab = () => {
   const router = useRouter();
   const { incident: incidentId, issue: issueId } = router.query;
   const { data: rca, fetchData } = useFetch<string>("rca");
-  const [userInput, setUserInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
-  const [isTyping, setIsTyping] = useState(false);
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
 
@@ -72,6 +65,7 @@ const IncidentChatTab = () => {
         ...prev,
         { query: val, loading: true, reply: null },
       ]);
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
       // setStatus({ loading: true, error: null });
       // const rdata = await raxios.get("/gpt2.json");
       const rdata = await raxios.post(endpoint, { query: val });
@@ -98,7 +92,7 @@ const IncidentChatTab = () => {
 
           <div className={styles["text-boxes"]}>
             {queries.map((qa, idx) => {
-              const { query, loading, reply } = qa;
+              const { query, reply } = qa;
               return (
                 <div className={styles["query-container"]} key={nanoid()}>
                   <div className={styles.query}>

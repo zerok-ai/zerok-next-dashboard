@@ -16,7 +16,7 @@ import { type PodDetail } from "utils/types";
 import styles from "./PodTable.module.scss";
 
 interface PodTableProps {
-  pods: PodDetail[];
+  pods: PodDetail[] | null;
   service: string;
 }
 
@@ -90,7 +90,7 @@ const PodTable = ({ pods, service }: PodTableProps) => {
 
   const table = useReactTable({
     columns,
-    data: pods || [],
+    data: pods ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 

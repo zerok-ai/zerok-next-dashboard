@@ -12,7 +12,7 @@ import ReactFlow, {
   type ReactFlowInstance,
 } from "reactflow";
 import { getLayoutedElements } from "utils/mapHelpers";
-import { type SpanDetail, type SpanResponse } from "utils/types";
+import { type SpanResponse } from "utils/types";
 
 import styles from "./IncidentDetailMap.module.scss";
 import {
@@ -43,9 +43,10 @@ const IncidentDetailMap = ({
   onNodeClick,
 }: IncidentDetailMapProps) => {
   const NodeTypes = useMemo(() => {
+    const currentSpan = spanData ? spanData[selectedSpan] : null;
     return {
       exception: (props: NodeProps) => (
-        <ExceptionNode {...props} selectedSpan={selectedSpan} />
+        <ExceptionNode {...props} selectedSpan={currentSpan} />
       ),
       selected: SelectedNode,
     };
@@ -90,10 +91,10 @@ const IncidentDetailMap = ({
   }, [router, layoutedEdges, layoutedNodes, selectedSpan]);
 
   useEffect(() => {
-    if (reactFlowInstance) {
-      setTimeout(() => reactFlowInstance.fitView(), 200);
+    if (reactFlowInstance && nodes.length) {
+      setTimeout(() => reactFlowInstance.fitView(), 500);
     }
-  }, [reactFlowInstance]);
+  }, [reactFlowInstance, nodes]);
 
   return (
     <div className={styles.container}>
@@ -113,7 +114,12 @@ const IncidentDetailMap = ({
           onNodeClick(node.id, edge?.source, edge?.target);
         }}
       >
-        <MapControls isMinimized={isMinimized} toggleSize={toggleSize} />
+        <MapControls
+          isMinimized={isMinimized}
+          toggleSize={() => {
+            toggleSize();
+          }}
+        />
         <Background gap={12} size={1} />
       </ReactFlow>
     </div>
