@@ -1,6 +1,7 @@
 import CodeBlock from "components/CodeBlock";
 import ChipX from "components/themeX/ChipX";
 import dynamic from "next/dynamic";
+import { getFormattedTime } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds } from "utils/functions";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 export const HTTP_TAB_KEYS = [
@@ -72,6 +73,12 @@ export const OVERVIEW_KEYS: HttpTabKey[] = [
     key: "latency_ns",
     render: (value) => `${convertNanoToMilliSeconds(value)}`,
   },
+  {
+    label: "Timestamp",
+    key: "time",
+    render: (value: string) => getFormattedTime(value),
+  },
+
   { label: "Status", key: "status" },
 ];
 
