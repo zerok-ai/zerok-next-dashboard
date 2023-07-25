@@ -30,4 +30,4 @@ export const ICONS = {
 export const ZEROK_MINIMAL_LOGO_LIGHT =
   "/images/brand/zerok_minimal_logo_light.svg";
 
-export const ZEROK_LOGO_LIGHT = "/images/brand/zerok_logo_light.svg";
+export const ZEROK_LOGO_LIGHT = "/images/brand/zerok_logo_light.png";

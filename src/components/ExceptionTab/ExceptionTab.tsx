@@ -11,7 +11,7 @@ interface ExceptionTabProps {
 
 const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
   const exceptionData = exceptionSpan[Object.keys(exceptionSpan)[0]];
-  let data: string | undefined = (
+  const data: string | undefined = (
     exceptionData.request_payload as GenericObject
   )?.req_body;
   if (!data) {
@@ -27,6 +27,7 @@ const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
   const stacktrace = traceStr.split(",");
   const splitTrace = (trace: string) => {
     const regex = /^(.*)[(](.*)(:(.*))?[)]$/;
+
     const traceItems = regex.exec(trace);
     if (!traceItems) {
       return {
