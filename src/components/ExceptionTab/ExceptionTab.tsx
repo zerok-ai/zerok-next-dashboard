@@ -11,7 +11,7 @@ interface ExceptionTabProps {
 
 const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
   const exceptionData = exceptionSpan[Object.keys(exceptionSpan)[0]];
-  const data: string | undefined = (
+  let data: string | undefined = (
     exceptionData.request_payload as GenericObject
   )?.req_body;
   if (!data) {
