@@ -122,7 +122,7 @@ const IncidentDetailPage = () => {
     if (router.isReady && incidentId === undefined) {
       router.push("/issues");
     }
-    if (selectedCluster !== null && incidentId !== undefined) {
+    if (selectedCluster && incidentId !== undefined) {
       fetchSpanData(
         LIST_SPANS_ENDPOINT.replace("{incident_id}", incidentId as string)
           .replace("{cluster_id}", selectedCluster)

@@ -3,23 +3,31 @@ import cx from "classnames";
 import ClusterCreateModal from "components/ClusterCreateModal";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { clusterSelector, setSelectedCluster } from "redux/cluster";
+import {
+  clusterSelector,
+  setSelectedCluster,
+  triggerRefetch,
+} from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
 
 import styles from "./ClusterSelector.module.scss";
+import { useRouter } from "next/router";
 
 const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const clusterSlice = useSelector(clusterSelector);
   const { clusters, selectedCluster } = clusterSlice;
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const router = useRouter();
   const dispatch = useDispatch();
+
+  const isRootPath = router.pathname.split("/").length === 1;
 
   const toggleModal = () => {
     setIsModalVisible((old) => !old);
   };
+  console.log({ isRootPath });
   return (
     <div
       className={cx(styles.container, isDrawerMinimized && styles.minimized)}
@@ -32,6 +40,15 @@ const ClusterSelector = () => {
         // IconComponent={StyleIcon}
         onChange={(val) => {
           if (val !== null && val.target && val.target.value) {
+            dispatch(setSelectedCluster({ id: null }));
+            if (!isRootPath) {
+              console.log("here", router.pathname.split("/")[0]);
+              router.push({
+                pathname: router.pathname.split("/")[0],
+              });
+            } else {
+              dispatch(triggerRefetch());
+            }
             dispatch(setSelectedCluster({ id: val.target.value }));
           }
         }}

@@ -4,6 +4,11 @@ module.exports = {
     es2021: true,
   },
   extends: ["standard-with-typescript", "plugin:react/recommended"],
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
   overrides: [
     {
       env: {
