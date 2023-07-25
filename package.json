@@ -1,14 +1,15 @@
 {
-  "name": "mantis-react-next-ts",
+  "name": "zerok-dashboard",
   "version": "2.1.0",
   "private": true,
   "lint-staged": {
-    "**/*.{.ts,.js,.tsx,.json}": [
-      "eslint . --fix"
+    "*.{ts,js,tsx}": [
+      "eslint . --fix --max-warnings=0"
     ]
   },
   "scripts": {
     "dev": "next dev",
+    "lint": "eslint --fix --ext .ts,.tsx ./src",
     "build": "next build",
     "start": "next start",
     "export": "next export",
