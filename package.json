@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "private": true,
   "lint-staged": {
-    "**/*.{.ts,.js,.tsx,json}": [
+    "**/*.{.ts,.js,.tsx,.json}": [
       "eslint . --fix"
     ]
   },
