@@ -42,7 +42,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     );
   }
   const [selectedService, setSelectedService] = useState<null | {
-    data: ServiceMapDetail;
+    data: ServiceMapDetail & { label: string };
     position: { x: number; y: number };
   }>(null);
   const router = useRouter();
@@ -105,7 +105,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
             left: selectedService.position.x,
           }}
         >
-          <ServiceMapCard service={selectedService.data} />
+          <ServiceMapCard selectedService={selectedService} />
         </div>
       )}
       <ReactFlow
@@ -116,12 +116,6 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         proOptions={proOptions}
         edgeTypes={HEALTHMAP_EDGETYPES}
         nodeTypes={NodeTypes}
-        onClick={(e) => {
-          // const element = e.target;
-          // if (element.classList.contains("react-flow__node")) {
-          //   console.log("node clicked", element.getBoundingClientRect());
-          // }
-        }}
         onInit={(rfi) => {
           setReactFlow(rfi);
         }}

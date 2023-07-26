@@ -27,7 +27,6 @@ const ClusterSelector = () => {
   const toggleModal = () => {
     setIsModalVisible((old) => !old);
   };
-  console.log({ isRootPath });
   return (
     <div
       className={cx(styles.container, isDrawerMinimized && styles.minimized)}
@@ -42,7 +41,6 @@ const ClusterSelector = () => {
           if (val !== null && val.target && val.target.value) {
             dispatch(setSelectedCluster({ id: null }));
             if (!isRootPath) {
-              console.log("here", router.pathname.split("/")[0]);
               router.push({
                 pathname: router.pathname.split("/")[0],
               });
