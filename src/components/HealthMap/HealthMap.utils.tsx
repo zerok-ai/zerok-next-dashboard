@@ -19,6 +19,11 @@ export const HEALTHMAP_EDGETYPES = {
   smart: SmartBezierEdge,
 };
 
+interface ServiceMapCardProps {
+  data: ServiceMapDetail & { label: string };
+  position: { x: number; y: number };
+}
+
 export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   const nodes: Node[] = [];
   const memo: GenericObject = {};
@@ -77,11 +82,14 @@ export const getEdgesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   return edges;
 };
 
-export const ServiceMapCard = ({ service }: { service: ServiceMapDetail }) => {
-  const namespace = getNamespace(service.requestor_service);
-  const formattedServiceName = getFormattedServiceName(
-    service.requestor_service
-  );
+export const ServiceMapCard = ({
+  selectedService,
+}: {
+  selectedService: ServiceMapCardProps;
+}) => {
+  const service = selectedService.data;
+  const namespace = getNamespace(service.label);
+  const formattedServiceName = getFormattedServiceName(service.label);
   const ITEMS = [
     {
       label: "Req./s",

@@ -68,15 +68,31 @@ const IncidentChatTab = () => {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
       // setStatus({ loading: true, error: null });
       // const rdata = await raxios.get("/gpt2.json");
-      const rdata = await raxios.post(endpoint, { query: val });
-      setQueries((prev) =>
-        prev.map((qa, idx) => {
-          if (idx === prev.length - 1) {
-            return { ...qa, loading: false, reply: rdata.data.payload.answer };
-          }
-          return qa;
-        })
-      );
+      try {
+        const rdata = await raxios.post(endpoint, { query: val });
+        setQueries((prev) =>
+          prev.map((qa, idx) => {
+            if (idx === prev.length - 1) {
+              return {
+                ...qa,
+                loading: false,
+                reply: rdata.data.payload.answer,
+              };
+            }
+            return qa;
+          })
+        );
+      } catch (err) {
+        console.log(err);
+        setQueries((prev) =>
+          prev.map((qa, idx) => {
+            if (idx === prev.length - 1) {
+              return { ...qa, loading: false, reply: "Something went wrong" };
+            }
+            return qa;
+          })
+        );
+      }
     }
   };
   return (
