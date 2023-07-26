@@ -9,8 +9,8 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   },
   {
     icon: `${ICONS.puzzle}`,
-    label: "Issues",
-    path: "/issues",
+    label: "Scenarios",
+    path: "/scenarios",
   },
   {
     icon: `${ICONS.plate}`,
