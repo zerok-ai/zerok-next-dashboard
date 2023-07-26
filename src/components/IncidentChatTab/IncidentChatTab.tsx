@@ -17,6 +17,7 @@ interface IncidentChatData {
   query: string;
   loading: boolean;
   reply: null | string;
+  doneTyping: boolean;
 }
 
 const IncidentChatTab = () => {
@@ -50,6 +51,17 @@ const IncidentChatTab = () => {
   };
   const onTypeEnd = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    setQueries((prev) => {
+      return prev.map((qa, idx) => {
+        if (idx === prev.length - 1) {
+          return {
+            ...qa,
+            doneTyping: true,
+          };
+        }
+        return qa;
+      });
+    });
     clearInterval(timer);
   };
 
@@ -63,9 +75,11 @@ const IncidentChatTab = () => {
         .replace("{incident_id}", incidentId as string);
       setQueries((prev) => [
         ...prev,
-        { query: val, loading: true, reply: null },
+        { query: val, loading: true, reply: null, doneTyping: false },
       ]);
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
       // setStatus({ loading: true, error: null });
       // const rdata = await raxios.get("/gpt2.json");
       try {
@@ -101,7 +115,7 @@ const IncidentChatTab = () => {
         <div className={styles["text-container"]}>
           <AIChatBox
             text={rca}
-            animate={true}
+            animate={queries.length === 0}
             onTypeEnd={onTypeEnd}
             onTypeStart={onTypeStart}
           />
@@ -117,7 +131,7 @@ const IncidentChatTab = () => {
                   <div className={styles.reply}>
                     <AIChatBox
                       text={reply}
-                      animate={idx === queries.length - 1}
+                      animate={idx === queries.length - 1 && !qa.doneTyping}
                       onTypeEnd={onTypeEnd}
                       onTypeStart={onTypeStart}
                     />
