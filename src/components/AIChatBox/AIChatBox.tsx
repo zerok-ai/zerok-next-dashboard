@@ -2,7 +2,7 @@ import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
 import styles from "./ChatBoxDisplay.module.scss";
 import { TypeAnimation } from "react-type-animation";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 // import cssVars from "styles/variables.module.scss";
 import CustomSkeleton from "components/CustomSkeleton";
@@ -13,7 +13,6 @@ interface ChatBoxDisplayProps {
   onTypeStart: () => void;
   onTypeEnd: () => void;
 }
-let timer: null | ReturnType<typeof setInterval>;
 
 const AIChatBox = ({
   text,
@@ -22,19 +21,6 @@ const AIChatBox = ({
   onTypeEnd,
 }: ChatBoxDisplayProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
-  const [isTyping, setIsTyping] = useState(false);
-  useEffect(() => {
-    if (animate && isTyping && !timer) {
-      timer = setInterval(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 200);
-    }
-    if (!isTyping && timer) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-      clearInterval(timer);
-      timer = null;
-    }
-  }, [isTyping]);
 
   return (
     <div className={styles.container}>
@@ -51,12 +37,10 @@ const AIChatBox = ({
               sequence={[
                 () => {
                   onTypeStart();
-                  setIsTyping(true);
                 },
                 text,
                 () => {
                   onTypeEnd();
-                  setIsTyping(false);
                 },
               ]}
               repeat={0}
