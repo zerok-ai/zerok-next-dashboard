@@ -1,38 +1,29 @@
 @import "styles/variables.module.scss";
-.drawer {
-    :global(.MuiDrawer-paper) {
-        width:600px;
-        border-left: 1px solid $grey-500;
-        background: $grey-950;
-      }
-      .add-condition-btn {
-        color:$primary-500;
-        cursor: pointer;
-        margin-top: $sp-base * 3;
-    } button {
-        margin-top: $sp-base * 6;
-    }
+
+.protocol-select {
+    width:100%;
+    
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    padding: $sp-base * 4 $sp-base * 5;
-    border-bottom: 1px solid $grey-700;
-    h6 {
-        font-weight: 500;
-    color:$white;
-    }
-    .close-btn {
-        width:24px;
-        height:24px;
-        cursor: pointer;
-        > img {
-            width:100%;
-            height:100%;
-        }
-    }
-}
+// .header {
+//     display: flex;
+//     justify-content: space-between;
+//     padding: $sp-base * 4 $sp-base * 5;
+//     border-bottom: 1px solid $grey-700;
+//     h6 {
+//         font-weight: 500;
+//     color:$white;
+//     }
+//     .close-btn {
+//         width:24px;
+//         height:24px;
+//         cursor: pointer;
+//         > img {
+//             width:100%;
+//             height:100%;
+//         }
+//     }
+// }
 
 .new-issue-btn {
     display: flex;
@@ -41,15 +32,28 @@
 }
 
 .form-content {
-    padding:$sp-base * 4 $sp-base * 5;
+    padding:$sp-base * 4 $sp-base * 3;
     color:$grey-25;
+    input {
+        width:250px;
+    }
 }
 
 .form {
     label,p {
         color:$grey-25;
+    } 
+    button {
+        margin-top: $sp-base * 6;
     }
+    .add-condition-btn {
+        color:$primary-500;
+        cursor: pointer;
+        margin-top: $sp-base * 3;
+    } 
 }
+
+
 
 .conditions-container {
     margin-top: 6 * $sp-base;
@@ -114,4 +118,19 @@
     font-size: $font-xl;
     color:$primary-500;
     cursor: pointer;
+}
+
+.group-container {
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: center;
+}
+
+.group-select {
+    width:200px;
+}
+
+.conditions-container {
+    max-height: calc(100vh - $header-height - $sp-base * 70);
+    overflow: scroll;
 }

@@ -29,6 +29,50 @@
                                     "input": "string",
                                     "operator": "ends_with",
                                     "value": "/exception"
+                                },
+                                {
+                                    "type": "rule_group",
+                                    "condition": "AND",
+                                    "rules": [
+                                        {
+                                            "type": "integer",
+                                            "id": "resp_status",
+                                            "field": "resp_status",
+                                            "input": "integer",
+                                            "operator": "equal",
+                                            "value": 200
+                                        },
+                                        {
+                                            "type": "integer",
+                                            "id": "resp_status",
+                                            "field": "resp_status",
+                                            "input": "integer",
+                                            "operator": "equal",
+                                            "value": 500
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "rule_group",
+                                    "condition": "OR",
+                                    "rules": [
+                                        {
+                                            "type": "integer",
+                                            "id": "resp_status",
+                                            "field": "resp_status",
+                                            "input": "integer",
+                                            "operator": "equal",
+                                            "value": 200
+                                        },
+                                        {
+                                            "type": "integer",
+                                            "id": "resp_status",
+                                            "field": "resp_status",
+                                            "input": "integer",
+                                            "operator": "equal",
+                                            "value": 500
+                                        }
+                                    ]
                                 }
                             ]
                         }

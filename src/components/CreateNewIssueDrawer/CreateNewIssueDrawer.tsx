@@ -1,13 +1,14 @@
-import { Button, Drawer, MenuItem, Select } from "@mui/material";
+import { Button, MenuItem, OutlinedInput, Select } from "@mui/material";
 import cx from "classnames";
-import TextFormField from "components/forms/TextFormField";
+import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineDelete } from "react-icons/ai";
-import { HiPlus } from "react-icons/hi";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { getFormattedServiceName } from "utils/functions";
-import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { type ServiceDetail } from "utils/types";
 
 import styles from "./CreateNewIssueDrawer.module.scss";
@@ -16,25 +17,19 @@ import {
   CUSTOM_TYPES,
   EQUALS,
   PROTOCOLS,
-  TIME_FRAMES,
 } from "./CreateNewIssueDrawer.utils";
 
-interface CreateNewIssueDrawerProps {
-  services: ServiceDetail[] | null;
-}
+const CreateNewIssueDrawer = () => {
+  const { data: services, fetchData: fetchServices } =
+    useFetch<ServiceDetail[]>("services");
+  const { selectedCluster } = useSelector(clusterSelector);
 
-const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const closeDrawer = () => {
-    setIsOpen(false);
-  };
-  const toggleDrawer = () => {
-    setIsOpen(!isOpen);
-  };
-  const {
-    register,
-    formState: { errors },
-  } = useForm();
+  useEffect(() => {
+    if (selectedCluster) {
+      fetchServices(LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster));
+    }
+  }, [selectedCluster]);
+  const { register } = useForm();
 
   const [rows, setRows] = useState(0);
 
@@ -82,6 +77,7 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
             defaultValue=""
             labelId="protocol"
             className={styles["protocol-select"]}
+            MenuProps={{ style: { maxHeight: 300 } }}
             onChange={(va) => {
               setType(va.target.value);
             }}
@@ -169,85 +165,50 @@ const CreateNewIssueDrawer = ({ services }: CreateNewIssueDrawerProps) => {
   };
   return (
     <div className={styles.container}>
-      <Button
-        variant="contained"
-        color="primary"
-        className={styles["new-issue-btn"]}
-        onClick={toggleDrawer}
-      >
-        New Issues Type <HiPlus className={styles["plus-icon"]} />
-      </Button>
-      {isOpen && (
-        <Drawer
-          anchor="right"
-          open={isOpen}
-          onClose={closeDrawer}
-          hideBackdrop
-          className={styles.drawer}
-        >
-          <div className={styles.header}>
-            <h6>Define New Issue Type</h6>
-            <span
-              className={styles["close-btn"]}
-              onClick={closeDrawer}
+      <div className={styles["form-content"]}>
+        <form className={styles.form}>
+          <div className={cx(styles["form-item"], styles["name-item"])}>
+            <OutlinedInput
+              placeholder="Give this issue a unique name"
+              {...register("name")}
+            />
+          </div>
+          <div className={cx(styles["conditions-container"])}>
+            <p>Define outlier conditions</p>
+
+            <div className={styles["conditions-container"]}>
+              <ConditionRow start={true} />
+              {[...Array(rows)].map((_, i) => {
+                return <ConditionRow key={nanoid()} start={false} />;
+              })}
+            </div>
+            <p
+              className={styles["add-condition-btn"]}
               role="button"
+              onClick={addRow}
             >
-              <img
-                src={`${ICON_BASE_PATH}/${ICONS["close-circle"]}`}
-                alt="close"
-              />
-            </span>
+              + Add condition
+            </p>
+            <div className={styles["group-container"]}>
+              <label>Group by:</label>
+              <Select
+                placeholder="Choose group by metric"
+                variant="standard"
+                className={styles["group-select"]}
+                defaultValue={PROTOCOLS[0].value}
+                {...register("group_by")}
+              >
+                {PROTOCOLS.map((prt) => (
+                  <MenuItem value={prt.value} key={nanoid()}>
+                    {prt.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
           </div>
-
-          <div className={styles["form-content"]}>
-            <form className={styles.form}>
-              <div className={cx(styles["form-item"], styles["name-item"])}>
-                <TextFormField
-                  name="name"
-                  label="Name this incident type"
-                  placeholder="Give a unique name"
-                  register={register}
-                  error={!!errors.name}
-                  errorText={errors.name?.message as string}
-                />
-              </div>
-              <div className={cx(styles["conditions-container"])}>
-                <p>Define outlier conditions</p>
-
-                <div className={styles["time-select"]}>
-                  <label>For the next:</label>
-                  <Select
-                    placeholder="Choose a timeframe"
-                    defaultValue={"5m"}
-                    variant="standard"
-                    {...register("time")}
-                  >
-                    {TIME_FRAMES.map((timeFrame) => (
-                      <MenuItem value={timeFrame.value} key={nanoid()}>
-                        {timeFrame.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-                <div className={styles["conditions-container"]}>
-                  <ConditionRow start={true} />
-                  {[...Array(rows)].map((_, i) => {
-                    return <ConditionRow key={nanoid()} start={false} />;
-                  })}
-                </div>
-                <p
-                  className={styles["add-condition-btn"]}
-                  role="button"
-                  onClick={addRow}
-                >
-                  + Add condition
-                </p>
-              </div>
-              <Button variant="contained"> Apply and save</Button>
-            </form>
-          </div>
-        </Drawer>
-      )}
+          <Button variant="contained"> Investigate</Button>
+        </form>
+      </div>
     </div>
   );
 };

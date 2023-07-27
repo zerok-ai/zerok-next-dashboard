@@ -7,7 +7,12 @@ import { DEFAULT_TIME_RANGE } from "utils/constants";
 import styles from "./TimeSelector.module.scss";
 import { TIME_OPTIONS } from "./TimeSelector.utils";
 
-const TimeSelector = () => {
+interface TimeSelectorProps {
+  handlePush?: boolean;
+  onChange?: (range: string) => void;
+}
+
+const TimeSelector = ({ handlePush = true, onChange }: TimeSelectorProps) => {
   const [time, setTime] = useState(
     TIME_OPTIONS.find((t) => t.value === DEFAULT_TIME_RANGE)?.value ??
       TIME_OPTIONS[0].value
@@ -40,7 +45,12 @@ const TimeSelector = () => {
         }}
         onChange={(val) => {
           if (val !== null && val.target && val.target.value) {
-            changeTime(val.target.value);
+            if (handlePush) {
+              changeTime(val.target.value);
+            } else {
+              setTime(val.target.value);
+              onChange && onChange(val.target.value);
+            }
           }
         }}
       >
