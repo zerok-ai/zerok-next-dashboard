@@ -39,7 +39,9 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
 
     const isCallingItself = reqname === resname;
     if (!memo[reqname]) {
+      const type = service.error_rate > 0 ? "exception" : "default";
       nodes.push({
+        type,
         id: reqname,
         data: { label: trimString(reqname, 25), ...service, isCallingItself },
         position: { x: 0, y: 0 },

@@ -1,0 +1,81 @@
+{
+    "payload": {
+        "scenarios": [
+            {
+                "version": "1621224000",
+                "scenario_id": "1",
+                "enabled": true,
+                "workloads": {
+                    "6c0daf9a-8a2a-516d-a80d-349cc0df2bc8": {
+                        "service": "zk-client/zk-operator",
+                        "trace_role": "server",
+                        "protocol": "HTTP",
+                        "rule": {
+                            "type": "rule_group",
+                            "condition": "AND",
+                            "rules": [
+                                {
+                                    "type": "string",
+                                    "id": "req_method",
+                                    "field": "req_method",
+                                    "input": "string",
+                                    "operator": "equal",
+                                    "value": "POST"
+                                },
+                                {
+                                    "type": "string",
+                                    "id": "req_path",
+                                    "field": "req_path",
+                                    "input": "string",
+                                    "operator": "ends_with",
+                                    "value": "/exception"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "filter": {
+                    "type": "workload",
+                    "condition": "AND",
+                    "workload_ids": [
+                        "6c0daf9a-8a2a-516d-a80d-349cc0df2bc8"
+                    ]
+                }
+            },
+            {
+                "version": "1681624000",
+                "scenario_id": "2",
+                "enabled": true,
+                "workloads": {
+                    "79fff7de-e09b-5d28-af4c-e2c2e8d6f5e8": {
+                        "service": "*/*",
+                        "trace_role": "server",
+                        "protocol": "HTTP",
+                        "rule": {
+                            "type": "",
+                            "condition": "AND",
+                            "rules": [
+                                {
+                                    "type": "integer",
+                                    "id": "resp_status",
+                                    "field": "resp_status",
+                                    "input": "integer",
+                                    "operator": "not equal",
+                                    "value": 200
+                                }
+                            ]
+                        }
+                    }
+                },
+                "filter": {
+                    "type": "workload",
+                    "condition": "AND",
+                    "workload_ids": [
+                        "79fff7de-e09b-5d28-af4c-e2c2e8d6f5e8"
+                    ]
+                }
+            }
+        ],
+        "deleted_scenario_id": []
+    }
+}
