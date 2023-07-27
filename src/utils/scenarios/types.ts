@@ -24,6 +24,13 @@ export interface ScenarioDetail {
   version: string;
   scenario_id: string;
   enabled: boolean;
+  scenario_title: string;
+  scenario_type: string;
+  rate_limit: Array<{
+    bucket_max_size: number;
+    bucket_refill_size: number;
+    tick_duration: string;
+  }>;
   workloads: Record<string, WorkloadType>;
   filter: {
     type: string;
