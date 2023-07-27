@@ -1,6 +1,5 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import CreateNewIssueDrawer from "components/CreateNewIssueDrawer";
 import CustomSkeleton from "components/CustomSkeleton";
 import PageLayout from "components/layouts/PageLayout";
 import PaginationX from "components/PaginationX";
@@ -127,9 +126,9 @@ const IssuesPage = () => {
                 })}
             </div>
           </div>
-          <div className={styles["header-right"]}>
+          {/* <div className={styles["header-right"]}>
             <CreateNewIssueDrawer services={serviceList} />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className={styles["page-content"]}>

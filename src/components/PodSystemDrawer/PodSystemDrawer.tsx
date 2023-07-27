@@ -1,9 +1,11 @@
 import { Drawer, Skeleton } from "@mui/material";
 import TimeSeriesChart from "components/TimeSeriesChart";
 import { useFetch } from "hooks/useFetch";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { GET_POD_DETAILS_ENDPOINT } from "utils/endpoints";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { parseTimeseriesData } from "utils/timeSeries";
@@ -43,15 +45,34 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
     transformTimeSeries
   );
   const { selectedCluster } = useSelector(clusterSelector);
+  const router = useRouter();
+  const range = router.query.range ?? DEFAULT_TIME_RANGE;
   useEffect(() => {
     if (pod && selectedCluster) {
       fetchData(
         GET_POD_DETAILS_ENDPOINT.replace("{cluster_id}", selectedCluster)
           .replace("{namespace}", namespace)
           .replace("{pod_name}", pod.split("/")[1])
+          .replace("{range}", range as string)
       );
     }
   }, [pod, selectedCluster]);
+
+  const updateTime = () => {
+    if (pod && selectedCluster && range) {
+      fetchData(
+        GET_POD_DETAILS_ENDPOINT.replace("{cluster_id}", selectedCluster)
+          .replace("{namespace}", namespace)
+          .replace("{pod_name}", pod.split("/")[1])
+          .replace("{range}", range as string)
+      );
+    }
+  };
+
+  useEffect(() => {
+    updateTime();
+  }, [range]);
+
   return (
     <Drawer
       open={true}
@@ -78,6 +99,7 @@ const PodSystemDrawer = ({ pod, onClose, namespace }: PodSystemDrawerProps) => {
       )}
       {data && (
         <div className={styles["charts-container"]}>
+          {/* <TimeSelector handlePush={false} onChange={updateTime} /> */}
           {!!data.cpu.time.length && (
             <div className={styles.chart}>
               <h6>CPU Usage</h6>

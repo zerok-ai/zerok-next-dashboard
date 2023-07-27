@@ -1,14 +1,15 @@
-import PrivateRoute from "components/PrivateRoute";
-// import styles from "./Scenarios.module.scss";
-import Head from "next/head";
 import PageLayout from "components/layouts/PageLayout";
+import PrivateRoute from "components/PrivateRoute";
 import { useFetch } from "hooks/useFetch";
+import { nanoid } from "nanoid";
+import Head from "next/head";
 import { useEffect } from "react";
-import { useSelector } from "redux/store";
 import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
 import { renderScenarioString } from "utils/scenarios/functions";
 import { type ScenarioDetail } from "utils/scenarios/types";
-import { nanoid } from "nanoid";
+
+import styles from "./Scenarios.module.scss";
 
 const Scenarios = () => {
   const { data: scenarios, fetchData: fetchScenarios } = useFetch<
@@ -26,7 +27,7 @@ const Scenarios = () => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       {scenarios.map((scenario) => {
         return <p key={nanoid()}>{renderScenarioString(scenario.workloads)}</p>;
       })}

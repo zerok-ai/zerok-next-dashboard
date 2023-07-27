@@ -218,7 +218,7 @@ const IncidentDetailPage = () => {
 IncidentDetailPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
-      <PageLayout hideRange={true}>{page}</PageLayout>
+      <PageLayout>{page}</PageLayout>
     </PrivateRoute>
   );
 };

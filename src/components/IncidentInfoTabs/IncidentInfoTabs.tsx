@@ -7,6 +7,7 @@ import objectPath from "object-path";
 import { useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { DEFAULT_TIME_RANGE } from "utils/constants";
 import {
   GET_SERVICE_PODS_ENDPOINT,
   GET_SPAN_RAWDATA_ENDPOINT,
@@ -54,6 +55,7 @@ const IncidentTabs = ({
 }) => {
   const router = useRouter();
   const { issue: issue_id, incident: incidentId } = router.query;
+  const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB_KEYS[0].key);
   const { selectedCluster } = useSelector(clusterSelector);
   const spanEndpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
@@ -129,7 +131,8 @@ const IncidentTabs = ({
         selectedCluster
       )
         .replace("{namespace}", namespace)
-        .replace("{service_name}", serviceName);
+        .replace("{service_name}", serviceName)
+        .replace("{range}", range as string);
       fetchPodData(podEndpoint);
     }
   }, [selectedSpan, selectedCluster, spanData]);
