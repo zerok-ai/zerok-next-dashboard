@@ -3,14 +3,19 @@ import { type DrawerNavItemType } from "./types";
 
 export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
-    icon: `${ICONS.plate}`,
-    label: "Classify",
-    path: "/classify",
+    icon: `${ICONS["chart-up"]}`,
+    label: "Health",
+    path: "/",
   },
+  // {
+  //   icon: `${ICONS.plate}`,
+  //   label: "Classify",
+  //   path: "/classify",
+  // },
   {
     icon: `${ICONS.puzzle}`,
-    label: "Scenarios",
-    path: "/scenarios",
+    label: "Issues",
+    path: "/issues",
   },
   {
     icon: `${ICONS.plate}`,

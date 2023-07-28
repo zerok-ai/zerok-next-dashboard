@@ -3,7 +3,6 @@ import { type RuleGroupType, type WorkloadType } from "./types";
 export const renderScenarioString = (
   scenarios: Record<string, WorkloadType> | null
 ) => {
-  console.log({ scenarios });
   if (!scenarios) {
     return null;
   }

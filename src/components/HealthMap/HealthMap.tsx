@@ -5,10 +5,10 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   Background,
+  type NodeProps,
   type ReactFlowInstance,
   useEdgesState,
   useNodesState,
-  type NodeProps,
 } from "reactflow";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";

@@ -198,7 +198,7 @@ ApiKeys.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
       <Head>
-        <title>ZeroK Dashboard | Users</title>
+        <title>ZeroK Dashboard | API Keys</title>
       </Head>
       <PageLayout>{page}</PageLayout>
     </PrivateRoute>

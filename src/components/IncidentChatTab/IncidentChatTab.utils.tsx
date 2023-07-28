@@ -1,7 +1,8 @@
 import { OutlinedInput } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
+
 import styles from "./IncidentChatTab.module.scss";
-import { useState } from "react";
-import { ICONS, ICON_BASE_PATH } from "utils/images";
 
 export const UserQueryCard = ({ text }: { text: string }) => {
   return (
@@ -23,6 +24,10 @@ export const UserInputField = ({
   onSubmit: (val: string) => void;
 }) => {
   const [userInput, setUserInput] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
   return (
     <form
       onSubmit={(e) => {
@@ -39,6 +44,7 @@ export const UserInputField = ({
       ></button>
       <OutlinedInput
         fullWidth
+        ref={inputRef}
         value={userInput}
         onChange={(e) => {
           setUserInput(e.target.value);

@@ -24,19 +24,19 @@ interface ServiceMapCardProps {
   position: { x: number; y: number };
 }
 
+const getLabelID = (service: ServiceMapDetail) => {
+  const reqname =
+    service.requestor_service || service.requestor_pod || service.requestor_ip;
+  const resname =
+    service.responder_service || service.responder_pod || service.responder_ip;
+  return { reqname, resname };
+};
+
 export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   const nodes: Node[] = [];
   const memo: GenericObject = {};
   serviceMap.forEach((service) => {
-    const reqname =
-      service.requestor_service ||
-      service.requestor_pod ||
-      service.requestor_ip;
-    const resname =
-      service.responder_service ||
-      service.responder_pod ||
-      service.responder_ip;
-
+    const { reqname, resname } = getLabelID(service);
     const isCallingItself = reqname === resname;
     if (!memo[reqname]) {
       const type = service.error_rate > 0 ? "exception" : "default";
@@ -67,18 +67,17 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
 export const getEdgesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   const edges: Edge[] = [];
   serviceMap.forEach((service) => {
+    const { reqname, resname } = getLabelID(service);
     edges.push({
-      id: `${service.requestor_service}-${
-        service.responder_service
-      }-${nanoid()}`,
-      source: service.requestor_service,
-      target: service.responder_service,
+      id: `${reqname}-${service.responder_service}-${resname}`,
+      source: reqname,
+      target: resname,
       markerEnd: {
         type: MarkerType.ArrowClosed,
         color: cssVars.grey600,
       },
+      type: reqname === resname ? "smart" : "default",
       // @TODO - add types for this
-      // type: "smart",
     });
   });
   return edges;

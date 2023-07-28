@@ -10,8 +10,11 @@
   text-overflow: ellipsis;
   padding:$sp-base * 2.5;
   border-radius: $sp-base;
+  font-size: $font-md;
+ 
   span {
     color:$grey-50;
+    font-size: $font-md;
   }
   :global(.react-flow__handle ){
     background-color: $primary-500;
