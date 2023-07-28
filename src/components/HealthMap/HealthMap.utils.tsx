@@ -20,7 +20,7 @@ export const HEALTHMAP_EDGETYPES = {
 };
 
 interface ServiceMapCardProps {
-  data: ServiceMapDetail & { label: string };
+  data: ServiceMapDetail & { fullName: string };
   position: { x: number; y: number };
 }
 
@@ -43,7 +43,12 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
       nodes.push({
         type,
         id: reqname,
-        data: { label: trimString(reqname, 25), ...service, isCallingItself },
+        data: {
+          label: trimString(reqname, 25),
+          ...service,
+          isCallingItself,
+          fullName: reqname,
+        },
         position: { x: 0, y: 0 },
       });
       memo[reqname] = true;
@@ -53,7 +58,12 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
       const type = service.error_rate > 0 ? "exception" : "default";
       nodes.push({
         id: resname,
-        data: { label: trimString(reqname, 25), ...service, isCallingItself },
+        data: {
+          label: trimString(resname, 25),
+          ...service,
+          fullName: resname,
+          isCallingItself,
+        },
         position: { x: 0, y: 0 },
         type,
       });
@@ -89,8 +99,8 @@ export const ServiceMapCard = ({
   selectedService: ServiceMapCardProps;
 }) => {
   const service = selectedService.data;
-  const namespace = getNamespace(service.label);
-  const formattedServiceName = getFormattedServiceName(service.label);
+  const namespace = getNamespace(service.fullName);
+  const formattedServiceName = getFormattedServiceName(service.fullName);
   const ITEMS = [
     {
       label: "Req./s",
@@ -98,7 +108,7 @@ export const ServiceMapCard = ({
     },
     {
       label: "Errors",
-      value: service.error_rate,
+      value: service.error_rate.toFixed(2),
     },
     {
       label: "Avg. Latency",
