@@ -1,15 +1,16 @@
 import { Skeleton } from "@mui/material";
 import ExceptionNode from "components/ExceptionNode";
 import MapControls from "components/MapControls";
+import SelectedNode from "components/SelectedNode";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   addEdge,
   Background,
   type NodeProps,
+  type ReactFlowInstance,
   useEdgesState,
   useNodesState,
-  type ReactFlowInstance,
 } from "reactflow";
 import { getLayoutedElements } from "utils/mapHelpers";
 import { type SpanResponse } from "utils/types";
@@ -19,7 +20,6 @@ import {
   getEdgesFromSpanTree,
   getNodesFromSpanTree,
 } from "./IncidentDetailMap.utils";
-import SelectedNode from "components/SelectedNode";
 
 const proOptions = { hideAttribution: true };
 

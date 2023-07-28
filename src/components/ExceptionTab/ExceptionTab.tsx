@@ -1,9 +1,9 @@
 import { Skeleton } from "@mui/material";
+import { nanoid } from "nanoid";
 import { memo } from "react";
 import { type GenericObject, type SpanRawDataResponse } from "utils/types";
 
 import styles from "./ExceptionTab.module.scss";
-import { nanoid } from "nanoid";
 
 interface ExceptionTabProps {
   exceptionSpan: SpanRawDataResponse;

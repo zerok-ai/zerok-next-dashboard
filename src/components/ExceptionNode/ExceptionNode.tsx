@@ -1,9 +1,9 @@
+import cx from "classnames";
 import { nanoid } from "nanoid";
 import { Handle, type NodeProps, Position } from "reactflow";
-import cx from "classnames";
+import { type SpanDetail } from "utils/types";
 
 import styles from "./ExceptionNode.module.scss";
-import { type SpanDetail } from "utils/types";
 
 interface ExceptionNodeProps extends NodeProps {
   selectedSpan?: SpanDetail | null;

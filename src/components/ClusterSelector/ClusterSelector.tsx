@@ -1,6 +1,7 @@
 import { Divider, MenuItem, Select } from "@mui/material";
 import cx from "classnames";
 import ClusterCreateModal from "components/ClusterCreateModal";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import {
@@ -12,7 +13,6 @@ import { drawerSelector } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
 
 import styles from "./ClusterSelector.module.scss";
-import { useRouter } from "next/router";
 
 const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
