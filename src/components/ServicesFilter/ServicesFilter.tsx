@@ -89,6 +89,7 @@ const ServicesMenu = ({
         onClick={handleMenuClick}
         variant="outlined"
         color="secondary"
+        size="medium"
         className={styles["services-menu-btn"]}
       >
         Filter by services{" "}

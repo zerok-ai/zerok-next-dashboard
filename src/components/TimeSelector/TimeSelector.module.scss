@@ -3,8 +3,15 @@
 }
 
 .select {
-    background-color: $grey-900;
+    background-color: $grey-950;
     // border:1px solid $grey-700;
+    :global(.MuiOutlinedInput-notchedOutline){
+        border-color: $grey-700;
+        &:hover {
+            border-color: $grey-900 !important;
+        }
+    }
+   
 }
 
 .select-value {
