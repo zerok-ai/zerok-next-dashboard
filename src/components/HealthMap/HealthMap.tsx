@@ -42,7 +42,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     );
   }
   const [selectedService, setSelectedService] = useState<null | {
-    data: ServiceMapDetail & { label: string };
+    data: ServiceMapDetail & { fullName: string };
     position: { x: number; y: number };
   }>(null);
   const router = useRouter();
