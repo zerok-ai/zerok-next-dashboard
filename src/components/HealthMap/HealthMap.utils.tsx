@@ -79,7 +79,7 @@ export const getEdgesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   serviceMap.forEach((service) => {
     const { reqname, resname } = getLabelID(service);
     edges.push({
-      id: `${reqname}-${service.responder_service}-${resname}`,
+      id: `${nanoid()}`,
       source: reqname,
       target: resname,
       markerEnd: {
