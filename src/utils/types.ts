@@ -10,6 +10,12 @@ export interface DrawerNavItemType {
   icon: string;
   label: string;
   path: string;
+  reactIcon?: (className: string) => React.ReactNode;
+  type: "single" | "group";
+  children?: Array<{
+    label: string;
+    path: string;
+  }>;
 }
 export interface useStatusType {
   loading: boolean;
