@@ -50,7 +50,7 @@ const IncidentDetailMap = ({
       ),
       selected: SelectedNode,
     };
-  }, [spanData, selectedSpan]);
+  }, [selectedSpan]);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
 
