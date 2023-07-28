@@ -1,3 +1,4 @@
+import AIChatBox from "components/AIChatBox";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
@@ -8,7 +9,6 @@ import { ZK_GPT_RCA_ENDPOINT } from "utils/issues/endpoints";
 import raxios from "utils/raxios";
 
 import styles from "./IncidentChatTab.module.scss";
-import AIChatBox from "components/AIChatBox";
 import { UserInputField, UserQueryCard } from "./IncidentChatTab.utils";
 
 let timer: ReturnType<typeof setInterval>;
