@@ -1,11 +1,10 @@
+// import cssVars from "styles/variables.module.scss";
+import CustomSkeleton from "components/CustomSkeleton";
+import { useRef } from "react";
+import { TypeAnimation } from "react-type-animation";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
 import styles from "./ChatBoxDisplay.module.scss";
-import { TypeAnimation } from "react-type-animation";
-import { useRef } from "react";
-
-// import cssVars from "styles/variables.module.scss";
-import CustomSkeleton from "components/CustomSkeleton";
 
 interface ChatBoxDisplayProps {
   text: string | null;
