@@ -1,13 +1,13 @@
 @import "styles/variables.module.scss";
 .services-menu-btn {
-    margin-top: $sp-base * 4;
-    margin-bottom: $sp-base * 3;
-    background-color: $grey-900;
+    background-color: $grey-950;
     border:1px solid $grey-700;
     color:$white;
     display: flex;
     align-items: center;
+    height:$sp-base * 10;
     column-gap: $sp-base * 2;
+    padding:$sp-base * 2 $sp-base * 3;
     &:hover {
         background-color: $grey-900;
     border:1px solid $grey-700;

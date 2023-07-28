@@ -2,9 +2,10 @@ import { nanoid } from "@reduxjs/toolkit";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import CustomSkeleton from "components/CustomSkeleton";
 import PageLayout from "components/layouts/PageLayout";
+import PageHeader from "components/PageHeader";
 import PaginationX from "components/PaginationX";
 import PrivateRoute from "components/PrivateRoute";
-import ServicesMenu from "components/ServicesFilter/ServicesFilter";
+import ServicesFilter from "components/ServicesFilter";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
@@ -104,32 +105,26 @@ const IssuesPage = () => {
           <title>ZeroK Dashboard | Issues</title>
         </Head>
       </Fragment>
-      <div className="page-title">
-        <div className={styles.header}>
-          <div className={styles["header-left"]}>
-            <h3>Issues</h3>
-            <div className={styles["services-select-container"]}>
-              <ServicesMenu serviceList={serviceList} />
-            </div>
-            <div className={styles["active-filters"]}>
-              {services !== null &&
-                services.length > 0 &&
-                services.map((sv) => {
-                  return (
-                    <TagX
-                      label={sv}
-                      onClose={removeService}
-                      closable={true}
-                      key={nanoid()}
-                    />
-                  );
-                })}
-            </div>
-          </div>
-          {/* <div className={styles["header-right"]}>
-            <CreateNewIssueDrawer services={serviceList} />
-          </div> */}
-        </div>
+      <PageHeader
+        title="Issues"
+        showRange={true}
+        showRefresh={true}
+        extras={[<ServicesFilter serviceList={serviceList} key={nanoid()} />]}
+      />
+      {/* Rendering filters */}
+      <div className={styles["active-filters"]}>
+        {services !== null &&
+          services.length > 0 &&
+          services.map((sv) => {
+            return (
+              <TagX
+                label={sv}
+                onClose={removeService}
+                closable={true}
+                key={nanoid()}
+              />
+            );
+          })}
       </div>
       <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}

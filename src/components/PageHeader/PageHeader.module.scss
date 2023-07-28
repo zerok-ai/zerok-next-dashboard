@@ -1,0 +1,11 @@
+@import "styles/variables.module.scss";
+.container {
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: center;
+    margin-bottom: $sp-base * 5;
+    h3 {
+        color:$white;
+        margin-right: $sp-base * 2;
+    }
+}
