@@ -138,9 +138,6 @@ export const IncidentMetadata = ({ issue }: { issue: IssueDetail }) => {
           </span>
         </div>
       </div>
-      <div className={styles["header-right"]}>
-        <IncidentNavButtons />
-      </div>
     </div>
   ) : (
     <Skeleton className={"page-title-loader"} />

@@ -1,17 +1,13 @@
-import ClusterRefreshButton from "components/ClusterRefreshButton";
 import ClusterSelector from "components/ClusterSelector";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import MainDrawer from "components/MainDrawer";
-import TimeSelector from "components/TimeSelector";
 
 import styles from "./PageLayout.module.scss";
-
 interface PageLayoutProps {
   children: React.ReactNode;
-  hideRange?: boolean;
 }
 
-const PageLayout = ({ children, hideRange = false }: PageLayoutProps) => {
+const PageLayout = ({ children }: PageLayoutProps) => {
   return (
     <div className={styles.container}>
       <aside className={styles["drawer-container"]}>
@@ -23,10 +19,7 @@ const PageLayout = ({ children, hideRange = false }: PageLayoutProps) => {
             <DrawerToggleButton />
             <ClusterSelector />
           </div>
-          <div className={styles["header-right"]}>
-            {!hideRange && <ClusterRefreshButton />}
-            {!hideRange && <TimeSelector />}
-          </div>
+          <div className={styles["header-right"]}></div>
         </header>
         <main className={styles["page-content"]}>{children}</main>
       </div>
