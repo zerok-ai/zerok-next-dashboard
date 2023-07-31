@@ -7,10 +7,10 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { type TraceMetadataDetail } from "utils/issues/types";
 
-import styles from "./IncidentTable.module.scss";
-import { INCIDENT_COLUMNS } from "./IncidentTable.utils";
+import styles from "./TraceTable.module.scss";
+import { INCIDENT_COLUMNS } from "./TraceTable.utils";
 
-const IncidentTable = () => {
+const TraceTable = () => {
   const router = useRouter();
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   // const scenario =
@@ -53,4 +53,4 @@ const IncidentTable = () => {
   );
 };
 
-export default IncidentTable;
+export default TraceTable;
