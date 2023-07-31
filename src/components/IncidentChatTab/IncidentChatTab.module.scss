@@ -1,11 +1,24 @@
 @import "styles/variables.module.scss";
 .container {
-    border-radius: $sp-base;
+    border-radius: $sp-base * 2;
     height:calc(100vh - $header-height - $sp-base * 40);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     row-gap: $sp-base * 4;
-   
+    border:1px solid $grey-800;
+    padding:$sp-base * 5;
+    overflow-y: auto;
+}
+
+.chat-box-container {
+    // height:300px;
+    height: 90%;
+    overflow-y: auto;
+}
+
+.chat-input-container {
+    flex:1;
 }
 
 
@@ -15,7 +28,6 @@
 }
 
 .text-container {
-   
     font-weight: 400;
     line-height: $default-line-height;
     white-space: pre-line;
@@ -24,16 +36,11 @@
 }
 
 .chat-input {
-    background-color: $grey-900;
+    background-color: $grey-925;
     // border:1px solid $grey-600;
     ::placeholder {
         color:$grey-200 !important;
     }  
-    // :hover {
-    //     :global( .MuiOutlinedInput-notchedOutline){
-    //         border:1px solid $grey-100;
-    //     }
-    // }
 }
 
 .send-icon {
@@ -72,11 +79,4 @@
     display: flex;
     row-gap: $sp-base * 2;
     flex-direction: column;
-}
-.text-container {
-    display: flex;
-    flex-direction: column;
-    row-gap: $sp-base * 2;
-    height:calc(100vh - $header-height - $sp-base * 64);
-    overflow-y: scroll;
 }

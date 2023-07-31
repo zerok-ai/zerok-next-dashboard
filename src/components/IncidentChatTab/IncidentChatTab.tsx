@@ -97,7 +97,6 @@ const IncidentChatTab = () => {
           })
         );
       } catch (err) {
-        console.log(err);
         setQueries((prev) =>
           prev.map((qa, idx) => {
             if (idx === prev.length - 1) {
