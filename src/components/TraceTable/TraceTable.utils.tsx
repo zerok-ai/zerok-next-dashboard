@@ -1,4 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
+import SpanEntryPoint from "components/helpers/SpanEntryPoint";
 import { type HTTP_METHODS } from "utils/constants";
 import { getFormattedTime } from "utils/dateHelpers";
 import { type TraceMetadataDetail } from "utils/issues/types";
@@ -25,7 +26,7 @@ export const INCIDENT_COLUMNS = [
     cell: (info) => {
       return (
         <div className={styles["entry-point-container"]}>
-          <HttpActionRender action={info.row.original.action} />
+          <SpanEntryPoint action={info.row.original.action} />
           <span className={styles["entry-point"]}>
             {info.row.original.entry_point}{" "}
           </span>

@@ -55,3 +55,14 @@
   align-items: center;
   column-gap: $sp-base * 2;
 }
+
+
+@mixin card-header {
+  background-color: $grey-900;
+  padding:$sp-base * 3;
+  border-radius: $sp-base * 2 0 0 0;
+  h6 {
+    color:$white;
+    font-weight: 400;
+  }
+}

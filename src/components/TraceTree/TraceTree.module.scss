@@ -1,3 +1,64 @@
 @import "styles/variables.module.scss";
-.container {
+@import "styles/mixins";
+
+.header {
+    @include card-header;
+}
+
+.tree {
+    padding:$sp-base * 3;
+    :global(.Mui-expanded){
+        margin:$sp-base;
+    }
+    :global(.MuiAccordionSummary-content){
+        margin:$sp-base 0;
+    }
+    :global(.MuiAccordionSummary-content:last-child){
+        margin-bottom:0;
+    }
+}
+
+.accordion {
+    background-color: $bg-dark;
+    border:none;
+}
+
+.accordion-summary {
+    background-color: $bg-dark;
+    margin:0 !important;
+    padding-left: $sp-base;
+    justify-content: space-between;
+    width:100%;
+    min-height: 0px !important;
+    padding:0;
+}
+
+.accordion-summary-content {
+    display: flex;
+    width:40%;
+    justify-content: space-between;
+}
+
+.accordion-label {
+    color:$grey-25;
+    cursor: pointer;
+    &:hover {
+        color:$primary-500;
+    }
+}
+
+.latency {
+    color:$grey-25;
+    text-align: right;
+}
+.accordion-details {
+    border:none;
+    padding:0 $sp-base * 3;
+    border-left: 1px solid $grey-700;
+    background-color: $bg-dark;
+}
+
+.last-child {
+    padding: $sp-base $sp-base * 4;
+    
 }
