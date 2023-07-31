@@ -55,7 +55,7 @@
 
 // content
 .page-content {
-    height:68vh;
+    height:calc(100vh - $header-height - $sp-base * 40);
     overflow: auto;
     border-bottom:1px solid $grey-900;
     border-radius: $sp-base * 2;

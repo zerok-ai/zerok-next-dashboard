@@ -27,20 +27,20 @@ const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
   const { incident: incidentId, issue: issueId } = router.query;
-  const { data: rca, fetchData } = useFetch<string>("rca");
+  const { data: rca } = useFetch<string>("rca");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
 
   useEffect(() => {
     if (selectedCluster) {
-      const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster
-      )
-        .replace("{issue_id}", issueId as string)
-        .replace("{incident_id}", incidentId as string);
-      fetchData(endpoint);
+      // const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
+      //   "{cluster_id}",
+      //   selectedCluster
+      // )
+      //   .replace("{issue_id}", issueId as string)
+      //   .replace("{incident_id}", incidentId as string);
+      // fetchData(endpoint);
     }
   }, [incidentId, issueId, selectedCluster]);
 
