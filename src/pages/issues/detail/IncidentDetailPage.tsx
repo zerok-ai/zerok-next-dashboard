@@ -1,7 +1,6 @@
-"use client";
 import { Skeleton } from "@mui/material";
 import IncidentChatTab from "components/IncidentChatTab";
-import IncidentDetailTab from "components/IncidentDetailTab";
+import IncidentTable from "components/IncidentTable";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import { useFetch } from "hooks/useFetch";
@@ -153,13 +152,7 @@ const IncidentDetailPage = () => {
           <IncidentChatTab />
         </div>
         <div className={styles["detail-container"]}>
-          <IncidentDetailTab
-            spanData={spanData}
-            selectedSpan={selectedSpan}
-            onSpanChange={(spanId: string) => {
-              setSelectedSpan(spanId);
-            }}
-          />
+          <IncidentTable />
         </div>
       </div>
     </div>

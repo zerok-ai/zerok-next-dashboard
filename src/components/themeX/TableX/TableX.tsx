@@ -8,13 +8,22 @@ interface TableXProps<T extends object> {
   table: Table<T>;
   data: T[];
   loading?: boolean;
+  headerClassName?: string;
+  rowClassName?: string;
+  onRowClick?: (row: T) => void;
 }
 
-const TableX = <T extends object>({ table, data }: TableXProps<T>) => {
+const TableX = <T extends object>({
+  table,
+  data,
+  headerClassName,
+  rowClassName,
+  onRowClick,
+}: TableXProps<T>) => {
   return (
     <div className="table">
       <table className={cx("table")}>
-        <thead className={cx("table-thead")}>
+        <thead className={cx("table-thead", headerClassName)}>
           {table.getHeaderGroups().map((gr) => {
             return (
               <tr key={gr.id}>
@@ -44,7 +53,15 @@ const TableX = <T extends object>({ table, data }: TableXProps<T>) => {
           {data.length ? (
             table.getRowModel().rows.map((row) => {
               return (
-                <tr key={row.id} className={cx("table-body-tr table-tr")}>
+                <tr
+                  key={row.id}
+                  className={cx("table-body-tr table-tr", rowClassName)}
+                  onClick={() => {
+                    if (onRowClick) {
+                      onRowClick(row.original);
+                    }
+                  }}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <td className={cx("table-td table-body-td")} key={cell.id}>
                       {flexRender(

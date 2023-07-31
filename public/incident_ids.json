@@ -1,11 +1,33 @@
 {
     "payload": {
-        "incidents": [
-            "incident6",
-            "incident7",
-            "incident8",
-            "incident9",
-            "incident10"
+        "traces": [
+            {
+                "entry_point": "/purchase-order",
+                "status": "500",
+                "protocol": "HTTP",
+                "action": "DELETE",
+                "latency": "30ms",
+                "id": "aaaaaaaa007a7340ee86d96b3b6e8460",
+                "timestamp": "2023-07-28T20:00:00Z"
+            },
+            {
+                "entry_point": "/purchase-order",
+                "status": "500",
+                "protocol": "HTTP",
+                "action": "DELETE",
+                "latency": "302ms",
+                "id": "aaaaaaaa007a7340ee86d96b3b6e8460",
+                "timestamp": "2023-07-29T20:00:20Z"
+            },
+            {
+                "entry_point": "/featured",
+                "status": "200",
+                "protocol": "HTTP",
+                "action": "GET",
+                "latency": "302ms",
+                "id": "aaaaaaaa007a7340ee86d96b3b6e8460",
+                "timestamp": "2023-07-29T20:00:20Z"
+            }
         ]
     }
 }
