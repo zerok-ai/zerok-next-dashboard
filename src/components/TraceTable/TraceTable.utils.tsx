@@ -3,7 +3,7 @@ import { type HTTP_METHODS } from "utils/constants";
 import { getFormattedTime } from "utils/dateHelpers";
 import { type TraceMetadataDetail } from "utils/issues/types";
 
-import styles from "./IncidentTable.module.scss";
+import styles from "./TraceTable.module.scss";
 
 export const HttpActionRender = ({
   action,
