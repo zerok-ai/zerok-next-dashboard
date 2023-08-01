@@ -21,26 +21,25 @@ const TraceDetails = () => {
           trace: selectedIncident.incident_id,
         },
       });
-    } else {
-      const oldQ = router.query;
-      delete oldQ.trace;
-      router.push({
-        pathname: router.pathname,
-        query: {
-          ...oldQ,
-        },
-      });
     }
   }, [selectedIncident]);
   return (
     <div className={styles.container}>
-      {trace && selectedIncident ? (
+      {trace ? (
         <div className={styles["tree-wrapper"]}>
           <BackLink
             onBack={() => {
               setSelectedIncident(null);
+              const old = router.query;
+              delete old.trace;
+              router.push({
+                pathname: router.pathname,
+                query: {
+                  ...old,
+                },
+              });
             }}
-            title={selectedIncident.entry_path}
+            title="Traces"
           />
           <div className={styles["tree-container"]}>
             <TraceTree />

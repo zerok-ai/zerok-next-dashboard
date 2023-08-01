@@ -1,7 +1,7 @@
 @import "styles/variables.module.scss";
 .container {
     padding:$sp-base * 5;
-    height:100%;
+
     position: relative;
     z-index: -1;
 }
@@ -10,6 +10,7 @@
 
 .drawer {
     z-index: 1;
+    height:calc(100vh - $header-height - $sp-base * 64);
     :global(.MuiPaper-root){
         padding:$sp-base * 5;
         border-left: 2px solid $grey-700;
