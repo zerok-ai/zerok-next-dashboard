@@ -4,7 +4,7 @@ import styles from "./TagX.module.scss";
 
 interface TagXProps {
   label: string;
-  onClose: (label: string) => void;
+  onClose?: (label: string) => void;
   closable: boolean;
 }
 
@@ -14,7 +14,7 @@ const TagX = ({ label, onClose, closable }: TagXProps) => {
       className={styles.container}
       role="button"
       onClick={() => {
-        onClose(label);
+       if (closable && onClose) onClose(label);
       }}
     >
       {label}

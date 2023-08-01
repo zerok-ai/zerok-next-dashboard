@@ -53,10 +53,16 @@ export const renderListOfKeyValue = (list: TabKeyType[]) => {
 export const renderJSON = (val: string) => {
   try {
     const parsed = JSON.parse(val);
-    return <DynamicReactJson src={parsed} />;
+
+    return typeof parsed === "object" ? (
+      <DynamicReactJson src={parsed} />
+    ) : (
+      <CodeBlock code={parsed.toString()} allowCopy color="light" />
+    );
   } catch (err) {
-    return <p>{`{ }`}</p>;
+    console.log("HERE");
   }
+  return <p>{val.length ? val : `{ }`}</p>;
 };
 
 export const DEFAULT_TABS = [

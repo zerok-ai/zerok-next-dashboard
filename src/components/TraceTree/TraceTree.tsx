@@ -1,4 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import CustomSkeleton from "components/CustomSkeleton";
 import TraceInfoDrawer from "components/TraceInfoDrawer";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
@@ -29,7 +30,7 @@ const TraceTree = () => {
   const { selectedCluster } = useSelector(clusterSelector);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
-  const { issue, incident } = router.query;
+  const { issue, trace } = router.query;
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
   console.log({ selectedSpan });
   useEffect(() => {
@@ -39,7 +40,7 @@ const TraceTree = () => {
         selectedCluster
       )
         .replace("{issue_id}", issue as string)
-        .replace("{incident_id}", incident as string);
+        .replace("{incident_id}", trace as string);
       // fetchSpans("/spans.json");
       fetchSpans(endpoint);
     }
@@ -56,7 +57,7 @@ const TraceTree = () => {
   const renderSpanTree = () => {
     console.log({ spanTree });
     if (!spanTree) {
-      return null;
+      return <CustomSkeleton len={8} />;
     }
     const renderSpan = (
       span: SpanDetail,

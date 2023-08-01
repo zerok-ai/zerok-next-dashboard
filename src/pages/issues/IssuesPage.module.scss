@@ -67,3 +67,8 @@
     margin-top: $sp-base * 6;
 }
 
+.issue-title-container {
+    display: flex;
+    // justify-content: space-between;
+    align-items: center;
+}

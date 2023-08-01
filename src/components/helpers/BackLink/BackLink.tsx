@@ -1,4 +1,5 @@
 import { HiOutlineArrowSmLeft } from "react-icons/hi";
+import { trimString } from "utils/functions";
 
 import styles from "./BackLink.module.scss";
 
@@ -11,7 +12,7 @@ const BackLink = ({ onBack, title }: BackLinkProps) => {
   return (
     <div className={styles.container} role="button" onClick={onBack}>
       <HiOutlineArrowSmLeft className={styles.icon} />
-      {title}
+      {trimString(title as string, 40)}
     </div>
   );
 };

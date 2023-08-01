@@ -51,6 +51,9 @@
 
 .chat-container,.detail-container {
     border-radius: $sp-base * 2;
-    border:1px solid $grey-800;
     height:calc(100vh - $header-height - $sp-base * 40);
+}
+
+.chat-container {
+    border:1px solid $grey-800;
 }

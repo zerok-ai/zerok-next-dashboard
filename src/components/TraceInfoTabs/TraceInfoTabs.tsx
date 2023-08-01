@@ -1,4 +1,5 @@
-import { Tab, Tabs } from "@mui/material";
+import { Skeleton, Tab, Tabs } from "@mui/material";
+import CustomSkeleton from "components/CustomSkeleton";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
@@ -43,7 +44,7 @@ const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
   const { data: rawResponse, fetchData: fetchRawData } =
     useFetch<SpanRawDataResponse>("span_raw_data_details", null, parseRawData);
   const router = useRouter();
-  const { issue, incident } = router.query;
+  const { issue, trace } = router.query;
   const { selectedCluster } = useSelector(clusterSelector);
   const [activeTab, setActiveTab] = useState(DEFAULT_TABS[0].value);
   useEffect(() => {
@@ -53,7 +54,7 @@ const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
         selectedCluster
       )
         .replace("{issue_id}", issue as string)
-        .replace("{incident_id}", incident as string)
+        .replace("{incident_id}", trace as string)
         .replace("{span_id}", selectedSpan);
       fetchRawData(endpoint);
     }
@@ -61,7 +62,16 @@ const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
   const rawData = rawResponse ? rawResponse[selectedSpan] : null;
   console.log({ rawData, rawResponse });
   if (!rawResponse || !rawData) {
-    return null;
+    return (
+      <div className={styles["skeleton-container"]}>
+        <div className={styles["tab-skeletons"]}>
+          <Skeleton variant="rectangular" width={100} height={30} />
+          <Skeleton variant="rectangular" width={100} height={30} />
+          <Skeleton variant="rectangular" width={100} height={30} />
+        </div>
+        <CustomSkeleton len={5} skeletonClass={styles.skeleton} />
+      </div>
+    );
   }
 
   const tabs = getTabs(rawData.protocol);
@@ -86,6 +96,7 @@ const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
           return <Tab label={t.label} value={t.value} key={nanoid()} />;
         })}
       </Tabs>
+
       <div className={styles["tab-content"]}>{renderTab()}</div>
     </div>
   );
