@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import HealthMap from "components/HealthMap";
 import HealthMapFilterForm from "components/HealthMapFilterForm";
 import PageLayout from "components/layouts/PageLayout";
+import PageHeader from "components/PageHeader";
 import PrivateRoute from "components/PrivateRoute";
 import ServiceMapFilterDisplay from "components/ServiceMapFilterDisplay";
 import DrawerX from "components/themeX/DrawerX";
@@ -74,7 +75,7 @@ const ServiceMap = () => {
 
   return (
     <div className={styles.container}>
-      <h3 className="page-title">Health</h3>
+      <PageHeader title="Service Map" showRange showRefresh />
       <div className={styles.header}>
         <div className={styles["header-left"]}>
           <Button

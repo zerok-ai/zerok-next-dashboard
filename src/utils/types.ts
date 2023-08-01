@@ -16,6 +16,7 @@ export interface DrawerNavItemType {
     label: string;
     path: string;
   }>;
+  openOnClick?: boolean;
 }
 export interface useStatusType {
   loading: boolean;
@@ -96,6 +97,7 @@ export interface SpanDetail {
   workload_id_list: string[];
   span_id?: string;
   children?: SpanDetail[];
+  time: string;
   timestamp?: string;
   level?: number;
   exception?: boolean;
@@ -109,14 +111,14 @@ export interface HttpRequestDetail {
   req_path: string;
   req_method: (typeof HTTP_METHODS)[number];
   req_headers: GenericObject | string;
-  req_body: GenericObject | null;
+  req_body: GenericObject | string;
 }
 
 export interface HttpResponseDetail {
   resp_path: string;
   resp_method: (typeof HTTP_METHODS)[number];
-  resp_headers: GenericObject | string;
-  resp_body: GenericObject | null;
+  resp_headers: GenericObject;
+  resp_body: GenericObject;
 }
 
 export interface SpanRawData {

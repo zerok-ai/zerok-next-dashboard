@@ -35,6 +35,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
         label: "Watching",
       },
     ],
+    openOnClick: true,
   },
   {
     icon: `${ICONS.plate}`,
