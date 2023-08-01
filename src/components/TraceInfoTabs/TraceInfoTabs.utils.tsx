@@ -1,10 +1,17 @@
+import cx from "classnames";
+import CodeBlock from "components/CodeBlock";
+import SQLRawTable from "components/SQLRawTable";
 import ChipX from "components/themeX/ChipX";
 import { nanoid } from "nanoid";
 import dynamic from "next/dynamic";
 import { getFormattedTime } from "utils/dateHelpers";
-import { convertNanoToMilliSeconds } from "utils/functions";
+import {
+  convertNanoToMilliSeconds,
+  stringWithoutComments,
+} from "utils/functions";
 import {
   type HttpRequestDetail,
+  type HttpResponseDetail,
   type SpanDetail,
   type SpanRawData,
 } from "utils/types";
@@ -16,6 +23,7 @@ export interface TabKeyType {
   label: string;
   value: string;
   customRender?: () => React.ReactNode;
+  fullWidth?: boolean;
 }
 
 export const renderListOfKeyValue = (list: TabKeyType[]) => {
@@ -24,11 +32,17 @@ export const renderListOfKeyValue = (list: TabKeyType[]) => {
       {list.map((key) => {
         const renderKey = key.customRender ? key.customRender() : key.value;
         return (
-          <div className={styles["key-value-row"]} key={nanoid()}>
-            <p className={styles["key-value-key"]}>{key.label}:</p>
-            <p className={styles["key-value-value"]}>
-              {key.value ? renderKey : ""}
-            </p>
+          <div
+            className={cx(
+              styles["key-value-row"],
+              key.fullWidth && styles["full-width"]
+            )}
+            key={nanoid()}
+          >
+            {!key.fullWidth && (
+              <p className={styles["key-value-key"]}>{key.label}:</p>
+            )}
+            <p className={styles["key-value-value"]}>{renderKey}</p>
           </div>
         );
       })}
@@ -41,7 +55,7 @@ export const renderJSON = (val: string) => {
     const parsed = JSON.parse(val);
     return <DynamicReactJson src={parsed} />;
   } catch (err) {
-    return <span>{"{ }"}</span>;
+    return <p>{`{ }`}</p>;
   }
 };
 
@@ -86,32 +100,7 @@ export const DEFAULT_TABS = [
 
 export const HTTP_TABS = [
   {
-    label: "Request body",
-    value: "request_body",
-    render: (metadata: SpanDetail, rawData: SpanRawData) => {
-      const req = rawData.request_payload as HttpRequestDetail;
-      const KEYS = [
-        {
-          label: "Method",
-          value: req.req_method,
-        },
-        {
-          label: "Path",
-          value: req.req_path,
-        },
-        {
-          label: "Request body",
-          value: req.req_body as string,
-          customRender: () => {
-            return renderJSON(req.req_body as string);
-          },
-        },
-      ];
-      return renderListOfKeyValue(KEYS);
-    },
-  },
-  {
-    label: "Request header",
+    label: "Request headers",
     value: "request_header",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
       const req = rawData.request_payload as HttpRequestDetail;
@@ -119,6 +108,9 @@ export const HTTP_TABS = [
         {
           label: "Method",
           value: req.req_method,
+          customRender: () => {
+            return <ChipX label={req.req_method} />;
+          },
         },
         {
           label: "Path",
@@ -136,12 +128,71 @@ export const HTTP_TABS = [
     },
   },
   {
-    label: "Response body",
-    value: "response_body",
+    label: "Request body",
+    value: "request_body",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const req = rawData.request_payload as HttpRequestDetail;
+      const KEYS = [
+        {
+          label: "Method",
+          value: req.req_method,
+          customRender: () => {
+            return <ChipX label={req.req_method} />;
+          },
+        },
+        {
+          label: "Path",
+          value: req.req_path,
+        },
+        {
+          label: "Request body",
+          value: req.req_body as string,
+          customRender: () => {
+            return renderJSON(req.req_body as string);
+          },
+        },
+      ];
+      return renderListOfKeyValue(KEYS);
+    },
   },
   {
     label: "Response header",
     value: "response_header",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const res = rawData.response_payload as unknown as HttpResponseDetail;
+      const KEYS = [
+        {
+          label: "Status",
+          value: res.resp_status,
+        },
+        {
+          label: "Response headers",
+          value: res.resp_headers as string,
+          customRender: () => {
+            return renderJSON(res.resp_headers as string);
+          },
+        },
+      ];
+      return renderListOfKeyValue(KEYS);
+    },
+  },
+  {
+    label: "Response body",
+    value: "response_body",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const res = rawData.response_payload as unknown as HttpResponseDetail;
+      const KEYS = [
+        {
+          label: "Response body",
+          fullWidth: true,
+          value: res.resp_body as string,
+          customRender: () => {
+            return renderJSON(res.resp_body as string);
+          },
+        },
+      ];
+      return renderListOfKeyValue(KEYS);
+    },
   },
 ];
 
@@ -149,10 +200,29 @@ export const MYSQL_TABS = [
   {
     label: "Query",
     value: "query",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const req = rawData.request_payload as HttpRequestDetail;
+      const value = req.req_body;
+      let display = "";
+      if (value.length) {
+        display = stringWithoutComments(value.trim());
+      }
+      return <CodeBlock code={display} allowCopy color="light" />;
+    },
   },
   {
     label: "Result",
     value: "result",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      return (
+        <SQLRawTable
+          value={
+            (rawData.response_payload as unknown as HttpResponseDetail)
+              .resp_body as string
+          }
+        />
+      );
+    },
   },
 ];
 
