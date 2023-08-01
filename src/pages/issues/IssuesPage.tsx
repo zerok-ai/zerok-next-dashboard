@@ -3,22 +3,26 @@ import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import CustomSkeleton from "components/CustomSkeleton";
 import PageLayout from "components/layouts/PageLayout";
 import PageHeader from "components/PageHeader";
-import PaginationX from "components/PaginationX";
 import PrivateRoute from "components/PrivateRoute";
-import ServicesFilter from "components/ServicesFilter";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import queryString from "query-string";
-import { Fragment, useEffect, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { filterServices } from "utils/functions";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
+import raxios from "utils/raxios";
+import {
+  GET_SCENARIO_DETAILS_ENDPOINT,
+  LIST_SCENARIOS_ENDPOINT,
+} from "utils/scenarios/endpoints";
+import { type ScenarioDetail } from "utils/scenarios/types";
 import { type IssueDetail, type ServiceDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
@@ -31,22 +35,68 @@ interface IssuesData {
 
 const IssuesPage = () => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
-  const {
-    loading,
-    data: issuesData,
-    fetchData: fetchIssues,
-  } = useFetch<IssuesData>("");
 
-  const { data: serviceList, fetchData: fetchServices } = useFetch<
-    ServiceDetail[]
-  >("results", null, filterServices);
+  const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
+  const { data: issuesData, fetchData: fetchIssues } = useFetch<IssuesData>("");
+
+  const { fetchData: fetchServices } = useFetch<ServiceDetail[]>(
+    "results",
+    null,
+    filterServices
+  );
 
   const router = useRouter();
 
   const { query } = router;
   const page = query.page ? parseInt(query.page as string) : 1;
-  // @TODO - add types for filters here
+  const range = query.range ?? DEFAULT_TIME_RANGE;
+  const getData = async () => {
+    try {
+      const listScenariosResponse = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
+        headers: {
+          "Cluster-Id": selectedCluster,
+        },
+      });
+      const listScenarios: ScenarioDetail[] =
+        listScenariosResponse.data.payload.scenarios;
+      const scenarioIDs = listScenarios.map((sc) => sc.scenario_id);
+      const scenarioDetailEndpoint = GET_SCENARIO_DETAILS_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
+      )
+        .replace("{scenario_id_list}", scenarioIDs.join(","))
+        .replace("{range}", range as string);
+      const scenarioDetails = (await raxios.get(scenarioDetailEndpoint)).data
+        .payload.scenarios;
+      const scenarioDetailsData: ScenarioDetail[] = listScenarios.map(
+        (sc: ScenarioDetail) => {
+          const sc1 = { ...sc };
+          const sc2 =
+            scenarioDetails.find(
+              (sc3: ScenarioDetail) => sc3.scenario_id === sc1.scenario_id
+            ) ?? {};
+          console.log({ sc1, sc2 });
+          const scenario: ScenarioDetail = {
+            ...sc1,
+            ...sc2,
+          };
+          return scenario;
+        }
+      );
+      setScenarios(scenarioDetailsData);
+    } catch (err) {
+      console.log({ err });
+    }
+  };
 
+  useEffect(() => {
+    if (selectedCluster) {
+      setScenarios(null);
+      getData();
+    }
+  }, [selectedCluster, renderTrigger]);
+  // @TODO - add types for filters here
+  console.log({ scenarios });
   const services =
     query.services && query.services?.length > 0
       ? decodeURIComponent(query.services as string).split(",")
@@ -56,9 +106,9 @@ const IssuesPage = () => {
     return getIssueColumns();
   }, [issuesData?.issues]);
 
-  const table = useReactTable<IssueDetail>({
+  const table = useReactTable<ScenarioDetail>({
     columns,
-    data: issuesData?.issues ?? [],
+    data: scenarios ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -110,7 +160,7 @@ const IssuesPage = () => {
         title="Issues"
         showRange={true}
         showRefresh={true}
-        extras={[<ServicesFilter serviceList={serviceList} key={nanoid()} />]}
+        // extras={[<ServicesFilter serviceList={serviceList} key={nanoid()} />]}
       />
       {/* Rendering filters */}
       <div className={styles["active-filters"]}>
@@ -129,8 +179,8 @@ const IssuesPage = () => {
       </div>
       <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}
-        {selectedCluster !== null && !loading && issuesData?.issues != null ? (
-          <TableX table={table} data={issuesData?.issues} />
+        {selectedCluster !== null && scenarios ? (
+          <TableX table={table} data={scenarios ?? []} />
         ) : (
           <CustomSkeleton
             containerClass={styles["skeleton-container"]}
@@ -139,14 +189,14 @@ const IssuesPage = () => {
           />
         )}
       </div>
-      {issuesData && (
+      {/* {issuesData && (
         <div className={styles["pagination-container"]}>
           <PaginationX
             totalItems={issuesData.total_records}
             itemsPerPage={ISSUES_PAGE_SIZE}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

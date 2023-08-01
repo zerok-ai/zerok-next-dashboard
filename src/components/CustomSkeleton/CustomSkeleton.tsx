@@ -2,7 +2,7 @@ import { Skeleton } from "@mui/material";
 import { nanoid } from "nanoid";
 
 interface CustomSkeletonProps {
-  containerClass: string;
+  containerClass?: string;
   skeletonClass?: string;
   len: number;
 }
@@ -16,7 +16,9 @@ const CustomSkeleton = ({
   return (
     <div className={containerClass}>
       {skeletonArray.map((sk) => {
-        return <Skeleton key={nanoid()} className={skeletonClass} />;
+        return (
+          <Skeleton key={nanoid()} className={skeletonClass} height={40} />
+        );
       })}
     </div>
   );

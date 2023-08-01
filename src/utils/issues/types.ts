@@ -4,8 +4,11 @@ export interface TraceMetadataDetail {
   id: string;
   status: string;
   timestamp: string;
-  latency: number;
+  latency_ns: number;
   protocol: string;
-  entry_point: string;
+  entry_path: string;
+  entry_service: string;
+  incident_id: string;
+  incident_collection_time: string;
   action: (typeof HTTP_METHODS)[number];
 }
