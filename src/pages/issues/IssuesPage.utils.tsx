@@ -19,6 +19,10 @@ export const getIssueColumns = () => {
       cell: (info) => {
         const { issue_title, issue_hash, sources, destinations, incidents } =
           info.row.original;
+        const filteredSources = sources.filter((source) => source.length > 0);
+        const filteredDestinations = destinations.filter(
+          (dest) => dest.length > 0
+        );
         return (
           <div className={styles["issue-container"]}>
             <div className={styles["issue-title-container"]}>
@@ -30,11 +34,11 @@ export const getIssueColumns = () => {
               </Link>
             </div>
             <div className={styles["issue-path"]}>
-              <ChipX label={sources[0]} />{" "}
+              <ChipX label={filteredSources[0]} />{" "}
               <AiOutlineArrowRight
                 className={styles["issue-path-arrow-icon"]}
               />{" "}
-              <ChipX label={destinations[0]} />
+              <ChipX label={filteredDestinations[0]} />
             </div>
           </div>
         );

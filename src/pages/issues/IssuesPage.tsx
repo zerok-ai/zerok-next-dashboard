@@ -82,8 +82,9 @@ const IssuesPage = () => {
     if (selectedCluster) {
       const filter = services && services.length > 0 ? services.join(",") : "";
       const range = query.range ?? DEFAULT_TIME_RANGE;
+      const serviceFilter = filter.length > 0 ? { services: filter } : {};
       const params = queryString.stringify({
-        services: filter,
+        ...serviceFilter,
         limit: ISSUES_PAGE_SIZE,
         offset: (page - 1) * ISSUES_PAGE_SIZE,
         st: range,

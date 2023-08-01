@@ -42,7 +42,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     );
   }
   const [selectedService, setSelectedService] = useState<null | {
-    data: ServiceMapDetail & { label: string };
+    data: ServiceMapDetail & { fullName: string };
     position: { x: number; y: number };
   }>(null);
   const router = useRouter();
@@ -82,7 +82,11 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   }, [filteredServiceMap, router]);
 
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
-    return getLayoutedElements(initialNodes, initialEdges);
+    if (!initialNodes || !initialEdges) {
+      return { nodes: [], edges: [] };
+    } else {
+      return getLayoutedElements(initialNodes, initialEdges);
+    }
   }, [initialNodes, initialEdges]);
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);

@@ -20,7 +20,7 @@ export const HEALTHMAP_EDGETYPES = {
 };
 
 interface ServiceMapCardProps {
-  data: ServiceMapDetail & { label: string };
+  data: ServiceMapDetail & { fullName: string };
   position: { x: number; y: number };
 }
 
@@ -38,22 +38,32 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   serviceMap.forEach((service) => {
     const { reqname, resname } = getLabelID(service);
     const isCallingItself = reqname === resname;
-    if (!memo[reqname]) {
+    if (!memo[reqname] && reqname.length > 0) {
       const type = service.error_rate > 0 ? "exception" : "default";
       nodes.push({
         type,
         id: reqname,
-        data: { label: trimString(reqname, 25), ...service, isCallingItself },
+        data: {
+          label: trimString(reqname, 25),
+          ...service,
+          isCallingItself,
+          fullName: reqname,
+        },
         position: { x: 0, y: 0 },
       });
       memo[reqname] = true;
     }
 
-    if (!memo[resname]) {
+    if (!memo[resname] && resname.length > 0) {
       const type = service.error_rate > 0 ? "exception" : "default";
       nodes.push({
         id: resname,
-        data: { label: resname, ...service, isCallingItself },
+        data: {
+          label: trimString(resname, 25),
+          ...service,
+          fullName: resname,
+          isCallingItself,
+        },
         position: { x: 0, y: 0 },
         type,
       });
@@ -68,17 +78,19 @@ export const getEdgesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   const edges: Edge[] = [];
   serviceMap.forEach((service) => {
     const { reqname, resname } = getLabelID(service);
-    edges.push({
-      id: `${reqname}-${service.responder_service}-${resname}`,
-      source: reqname,
-      target: resname,
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: cssVars.grey600,
-      },
-      type: reqname === resname ? "smart" : "default",
-      // @TODO - add types for this
-    });
+    if (reqname && resname) {
+      edges.push({
+        id: `${nanoid()}`,
+        source: reqname,
+        target: resname,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: cssVars.grey600,
+        },
+        type: reqname === resname ? "smart" : "default",
+        // @TODO - add types for this
+      });
+    }
   });
   return edges;
 };
@@ -89,8 +101,8 @@ export const ServiceMapCard = ({
   selectedService: ServiceMapCardProps;
 }) => {
   const service = selectedService.data;
-  const namespace = getNamespace(service.label);
-  const formattedServiceName = getFormattedServiceName(service.label);
+  const namespace = getNamespace(service.fullName);
+  const formattedServiceName = getFormattedServiceName(service.fullName);
   const ITEMS = [
     {
       label: "Req./s",
@@ -98,7 +110,7 @@ export const ServiceMapCard = ({
     },
     {
       label: "Errors",
-      value: service.error_rate,
+      value: service.error_rate.toFixed(2),
     },
     {
       label: "Avg. Latency",
