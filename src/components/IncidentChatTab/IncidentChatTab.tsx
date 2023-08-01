@@ -21,28 +21,27 @@ interface IncidentChatData {
 }
 
 const IncidentChatTab = () => {
-  // const [allText, setAllText] = useState<string[]>([
-  //   `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.\n`,
-  // ]);
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
-  const { incident: incidentId, issue: issueId } = router.query;
-  const { data: rca } = useFetch<string>("rca");
+  const { trace, issue: issueId } = router.query;
+  const { data: rca, fetchData, setData } = useFetch<string>("rca");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
 
   useEffect(() => {
-    if (selectedCluster) {
-      // const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
-      //   "{cluster_id}",
-      //   selectedCluster
-      // )
-      //   .replace("{issue_id}", issueId as string)
-      //   .replace("{incident_id}", incidentId as string);
-      // fetchData(endpoint);
+    if (selectedCluster && trace) {
+      const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster
+      )
+        .replace("{issue_id}", issueId as string)
+        .replace("{incident_id}", trace as string);
+      setData(null);
+      setQueries([]);
+      fetchData(endpoint);
     }
-  }, [incidentId, issueId, selectedCluster]);
+  }, [trace, selectedCluster]);
 
   const onTypeStart = () => {
     timer = setInterval(() => {
@@ -72,7 +71,7 @@ const IncidentChatTab = () => {
         selectedCluster
       )
         .replace("{issue_id}", issueId as string)
-        .replace("{incident_id}", incidentId as string);
+        .replace("{incident_id}", trace as string);
       setQueries((prev) => [
         ...prev,
         { query: val, loading: true, reply: null, doneTyping: false },

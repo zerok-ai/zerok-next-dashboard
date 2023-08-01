@@ -69,7 +69,7 @@ export const getIssueColumns = () => {
         return (
           <div className={styles["issue-time-container"]}>
             <Tooltip title={getFormattedTime(last_seen)} placement="top" arrow>
-              <span>{last_seen ? getRelativeTime(last_seen) : ""}</span>
+              <span>{last_seen ? getRelativeTime(last_seen) : "Never"}</span>
             </Tooltip>
           </div>
         );
@@ -83,7 +83,7 @@ export const getIssueColumns = () => {
         return (
           <div className={styles["issue-time-container"]}>
             <Tooltip title={getFormattedTime(first_seen)} placement="top" arrow>
-              <span>{first_seen ? getRelativeTime(first_seen) : ""}</span>
+              <span>{first_seen ? getRelativeTime(first_seen) : "Never"}</span>
             </Tooltip>
           </div>
         );
@@ -94,11 +94,27 @@ export const getIssueColumns = () => {
     helper.accessor("velocity", {
       header: "Velocity",
       size: DEFAULT_COL_WIDTH / 2,
+      cell: (info) => {
+        const { velocity } = info.row.original;
+        return (
+          <div className={styles["issue-time-container"]}>
+            <span>{velocity ?? "0"}</span>
+          </div>
+        );
+      },
     }),
     // Total events
     helper.accessor("total_count", {
       header: "Total events",
       size: DEFAULT_COL_WIDTH * 1.2,
+      cell: (info) => {
+        const { total_count } = info.row.original;
+        return (
+          <div className={styles["issue-time-container"]}>
+            <span>{total_count ?? "0"}</span>
+          </div>
+        );
+      },
     }),
   ];
 };
