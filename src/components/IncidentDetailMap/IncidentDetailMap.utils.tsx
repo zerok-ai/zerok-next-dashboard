@@ -14,10 +14,10 @@ const getNodeFromSpan = (
   selectedSpan: SpanDetail
 ): Node => {
   const getType = () => {
-    if (id === selectedSpan.source && !span.exceptionParent) {
+    if (id === selectedSpan.source && !selectedSpan.exceptionParent) {
       return "selected";
     }
-    if (span.exceptionParent) {
+    if (id === selectedSpan.source && selectedSpan.exceptionParent) {
       return "exception";
     }
     return "default";

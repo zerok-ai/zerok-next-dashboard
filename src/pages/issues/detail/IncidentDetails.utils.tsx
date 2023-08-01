@@ -21,7 +21,7 @@ import {
 
 import styles from "./IncidentDetailPage.module.scss";
 
-export const IncidentNavButtons = () => {
+export const IncidentNavButtons = ({ max }: { max: number }) => {
   const { selectedCluster } = useSelector(clusterSelector);
   const { incidentList } = useSelector(incidentListSelector);
   const dispatch = useDispatch();
@@ -55,14 +55,13 @@ export const IncidentNavButtons = () => {
   };
 
   const getOlder = () => {
-    if (activeIndex < incidentList.length - 1) {
+    if (activeIndex <= incidentList.length - 1) {
       const newIndex = activeIndex + 1;
       router.push(`${basePath}&incident=${incidentList[newIndex]}`);
     } else {
       fetchIncidentList();
     }
   };
-
   return (
     <div className={styles["incident-nav-buttons-container"]}>
       <Button
@@ -85,6 +84,7 @@ export const IncidentNavButtons = () => {
         color="secondary"
         variant="outlined"
         size="medium"
+        disabled={activeIndex >= max - 1}
         className={styles["incident-nav-button"]}
         onClick={() => {
           getOlder();
@@ -130,7 +130,6 @@ export const IssueMetadata = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   // Sticky header boolean and ref
   const { isSticky, stickyRef } = useSticky();
-
   return issue ? (
     <div
       className={cx(

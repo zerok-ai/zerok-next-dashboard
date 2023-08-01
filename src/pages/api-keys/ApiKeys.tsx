@@ -61,7 +61,7 @@ const ApiKeys = () => {
         const keyFromId = await raxios.get(
           APIKEY_ID_ENDPOINT.replace("{id}", id)
         );
-        selectedKey.key = keyFromId.data.payload.apikey.id;
+        selectedKey.key = keyFromId.data.payload.apikey.key;
         selectedKey.visible = visibility;
       }
       setApiKeys(
