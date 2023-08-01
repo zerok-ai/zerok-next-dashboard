@@ -12,10 +12,14 @@
 
 .key-value-row {
     display: grid;
-    grid-template-columns: 2fr 7fr;
+    grid-template-columns: 3fr 7fr;
     align-items: center;
 }
 
 .key-value-key,.key-value-value {
     color:$grey-25;
+}
+
+.full-width {
+    grid-template-columns: 1fr ;
 }

@@ -117,8 +117,9 @@ export interface HttpRequestDetail {
 export interface HttpResponseDetail {
   resp_path: string;
   resp_method: (typeof HTTP_METHODS)[number];
-  resp_headers: GenericObject;
-  resp_body: GenericObject;
+  resp_headers: GenericObject | string;
+  resp_body: GenericObject | string;
+  resp_status: string;
 }
 
 export interface SpanRawData {

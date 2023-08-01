@@ -35,7 +35,7 @@ const parseRawData = (rawData: SpanRawDataResponse) => {
     }
   }
   const result: SpanRawDataResponse = {};
-  result[Object.keys(result)[0]] = spanData;
+  result[Object.keys(rawData)[0]] = spanData;
   return result;
 };
 
@@ -58,10 +58,12 @@ const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
       fetchRawData(endpoint);
     }
   }, [selectedSpan]);
-  if (!rawResponse) {
+  const rawData = rawResponse ? rawResponse[selectedSpan] : null;
+  console.log({ rawData, rawResponse });
+  if (!rawResponse || !rawData) {
     return null;
   }
-  const rawData = rawResponse[selectedSpan];
+
   const tabs = getTabs(rawData.protocol);
 
   const renderTab = () => {
