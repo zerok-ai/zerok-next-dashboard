@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    # nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/add-base-url: "true"
+    # nginx.ingress.kubernetes.io/use-regex: 'true'
+    # nginx.ingress.kubernetes.io/rewrite-target: /$1
+    # nginx.ingress.kubernetes.io/configuration-snippet: |
+    #   try_files $uri $uri/ /index.html; 
+  name: zerok-next-dashboard-v1
+spec:
+  rules:
+  - host: dashboard-v1.loadcloud01.getanton.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: zk-auth
+            port:
+              number: 80
+        path: /v1/
+        pathType: Prefix
+      - backend:
+          service:
+            name: zerok-next-dashboard-v1
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

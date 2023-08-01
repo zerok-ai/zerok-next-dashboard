@@ -23,7 +23,7 @@ ClassifyPage.getLayout = function getLayout(page: React.ReactNode) {
       <Head>
         <title>ZeroK Dashboard | Classify New Issue</title>
       </Head>
-      <PageLayout hideRange={true}>{page}</PageLayout>
+      <PageLayout>{page}</PageLayout>
     </PrivateRoute>
   );
 };
