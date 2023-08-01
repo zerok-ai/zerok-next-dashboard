@@ -82,7 +82,11 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   }, [filteredServiceMap, router]);
 
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
-    return getLayoutedElements(initialNodes, initialEdges);
+    if (!initialNodes || !initialEdges) {
+      return { nodes: [], edges: [] };
+    } else {
+      return getLayoutedElements(initialNodes, initialEdges);
+    }
   }, [initialNodes, initialEdges]);
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);

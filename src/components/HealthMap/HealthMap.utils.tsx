@@ -38,7 +38,7 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   serviceMap.forEach((service) => {
     const { reqname, resname } = getLabelID(service);
     const isCallingItself = reqname === resname;
-    if (!memo[reqname]) {
+    if (!memo[reqname] && reqname.length > 0) {
       const type = service.error_rate > 0 ? "exception" : "default";
       nodes.push({
         type,
@@ -54,7 +54,7 @@ export const getNodesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
       memo[reqname] = true;
     }
 
-    if (!memo[resname]) {
+    if (!memo[resname] && resname.length > 0) {
       const type = service.error_rate > 0 ? "exception" : "default";
       nodes.push({
         id: resname,
@@ -78,17 +78,19 @@ export const getEdgesFromServiceMap = (serviceMap: ServiceMapDetail[]) => {
   const edges: Edge[] = [];
   serviceMap.forEach((service) => {
     const { reqname, resname } = getLabelID(service);
-    edges.push({
-      id: `${nanoid()}`,
-      source: reqname,
-      target: resname,
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: cssVars.grey600,
-      },
-      type: reqname === resname ? "smart" : "default",
-      // @TODO - add types for this
-    });
+    if (reqname && resname) {
+      edges.push({
+        id: `${nanoid()}`,
+        source: reqname,
+        target: resname,
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: cssVars.grey600,
+        },
+        type: reqname === resname ? "smart" : "default",
+        // @TODO - add types for this
+      });
+    }
   });
   return edges;
 };
