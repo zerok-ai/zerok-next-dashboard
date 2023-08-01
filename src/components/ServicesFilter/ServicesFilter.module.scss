@@ -9,8 +9,8 @@
     column-gap: $sp-base * 2;
     padding:$sp-base * 2 $sp-base * 3;
     &:hover {
-        background-color: $grey-900;
-    border:1px solid $grey-700;
+        background-color: $bg-dark;
+    border:1px solid $grey-300;
     color:$white;
     }
     

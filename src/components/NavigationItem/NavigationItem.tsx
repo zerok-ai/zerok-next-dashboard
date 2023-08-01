@@ -1,9 +1,10 @@
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
-import { useSelector } from "redux/store";
+import { toggleDrawer } from "redux/drawer";
+import { useDispatch, useSelector } from "redux/store";
 import { ICON_BASE_PATH } from "utils/images";
 import { type DrawerNavItemType } from "utils/types";
 
@@ -15,6 +16,7 @@ interface NavigationItemType {
 }
 const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const drawer = useSelector((state) => state.drawer);
+  const dispatch = useDispatch();
   const { isDrawerMinimized } = drawer;
   const iconKey = active
     ? nav.icon.replace(".svg", "_highlight.svg")
@@ -26,9 +28,25 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
 
   const isGroup = nav.type === "group";
 
+  useEffect(() => {
+    if (isDrawerMinimized && isNavOpen) {
+      setIsNavOpen(false);
+    }
+  }, [isDrawerMinimized]);
+
   const LinkWrapper = ({ children }: { children: React.ReactNode }) => {
     return isGroup ? (
-      <div role="button">{children}</div>
+      <div
+        role="button"
+        onClick={() => {
+          if (nav.openOnClick && isDrawerMinimized) {
+            dispatch(toggleDrawer());
+          }
+          toggleNav();
+        }}
+      >
+        {children}
+      </div>
     ) : (
       <Link href={nav.path}>{children}</Link>
     );
@@ -56,7 +74,6 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
           <p
             className={styles["link-label"]}
             role={isGroup ? "button" : "link"}
-            onClick={isGroup ? toggleNav : undefined}
           >
             {nav.label}
             {isGroup && (
