@@ -60,7 +60,6 @@ const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
     }
   }, [selectedSpan]);
   const rawData = rawResponse ? rawResponse[selectedSpan] : null;
-  console.log({ rawData, rawResponse });
   if (!rawResponse || !rawData) {
     return (
       <div className={styles["skeleton-container"]}>

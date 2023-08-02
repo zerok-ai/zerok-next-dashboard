@@ -65,7 +65,6 @@ export const getIssueColumns = () => {
       size: DEFAULT_COL_WIDTH * 2.4,
       cell: (info) => {
         const { last_seen } = info.row.original;
-        console.log({ last_seen });
         return (
           <div className={styles["issue-time-container"]}>
             <Tooltip title={getFormattedTime(last_seen)} placement="top" arrow>

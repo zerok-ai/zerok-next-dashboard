@@ -60,7 +60,7 @@ export const renderJSON = (val: string) => {
       <CodeBlock code={parsed.toString()} allowCopy color="light" />
     );
   } catch (err) {
-    console.log("HERE");
+    console.log({ err });
   }
   return <p>{val.length ? val : `{ }`}</p>;
 };
