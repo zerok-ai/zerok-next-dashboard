@@ -19,7 +19,6 @@ const IncidentDetailPage = () => {
     useState<null | TraceMetadataDetail>(null);
   const router = useRouter();
   const trace = router.query.trace;
-  console.log({ chatTrace });
   return (
     <div>
       <Fragment>

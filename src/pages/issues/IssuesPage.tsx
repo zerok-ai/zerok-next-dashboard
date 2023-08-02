@@ -67,7 +67,6 @@ const IssuesPage = () => {
             scenarioDetails.find(
               (sc3: ScenarioDetail) => sc3.scenario_id === sc1.scenario_id
             ) ?? {};
-          console.log({ sc1, sc2 });
           const scenario: ScenarioDetail = {
             ...sc1,
             ...sc2,

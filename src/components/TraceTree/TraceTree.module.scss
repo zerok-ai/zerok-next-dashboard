@@ -16,10 +16,11 @@
     position: relative;
     padding:$sp-base $sp-base * 2;
     :global(.Mui-expanded){
-        margin:$sp-base;
+        margin:0;
     }
     :global(.MuiAccordionSummary-content){
-        margin:$sp-base 0;
+        margin: 0;
+        margin-bottom: $sp-base;
     }
     :global(.MuiAccordionSummary-content:last-child){
         margin-bottom:0;
@@ -29,6 +30,7 @@
 .accordion {
     background-color: $bg-dark;
     border:none;
+
 }
 
 .accordion-summary {
@@ -43,8 +45,12 @@
 
 .accordion-summary-content {
     display: flex;
-    justify-content: space-between;
+
 }
+.last-child {
+    margin:$sp-base 0;
+}
+
 
 .accordion-label {
     color:$grey-25;
@@ -56,7 +62,7 @@
 
 .latency {
     color:$grey-25;
-    text-align: right;
+    width:100px;
 }
 .accordion-details {
     border:none;
@@ -66,7 +72,8 @@
 }
 
 .last-child {
-    padding: $sp-base $sp-base * 4;  
+    padding: 0 $sp-base * 2;  
+    display: flex;
 }
 
 .close-button {
@@ -89,4 +96,25 @@
 .close-icon {
     color:$grey-300;
     font-size: $font-lg;
+}
+
+.accordion-row {
+    display:grid;
+    grid-template-columns: 2fr 2fr;
+}
+
+.accordion-summary, .last-child {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.timeline {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    p {
+        height:$sp-base;
+        background-color: #569CD7;
+    }
 }

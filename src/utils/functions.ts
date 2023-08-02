@@ -68,10 +68,13 @@ export const getFormattedServiceName = (nameStr: string): string => {
   return stripNS(nameStr);
 };
 
-export const convertNanoToMilliSeconds = (value: number | null): string => {
+export const convertNanoToMilliSeconds = (
+  value: number | null,
+  addMs: boolean = true
+): string | number => {
   if (value != null) {
     const millis = parseFloat((value / 1000000).toFixed(2));
-    return `${millis} ms`;
+    return addMs ? `${millis} ms` : millis;
   }
   return "NA";
 };

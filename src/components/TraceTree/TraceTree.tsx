@@ -1,6 +1,8 @@
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import cx from "classnames";
 import CustomSkeleton from "components/CustomSkeleton";
 import TraceInfoDrawer from "components/TraceInfoDrawer";
+import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
@@ -17,6 +19,7 @@ import {
   buildSpanTree,
   COLORS,
   getRootSpan,
+  getWidthByLevel,
   spanTransformer,
 } from "./TraceTree.utils";
 
@@ -30,9 +33,12 @@ const TraceTree = () => {
   const { selectedCluster } = useSelector(clusterSelector);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
+  const [referenceTime, setReferenceTime] = useState<null | {
+    latency: number;
+    time: string;
+  }>(null);
   const { issue, trace } = router.query;
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
-  console.log({ selectedSpan });
   useEffect(() => {
     if (selectedCluster) {
       const endpoint = LIST_SPANS_ENDPOINT.replace(
@@ -54,9 +60,21 @@ const TraceTree = () => {
       }
     }
   }, [spans]);
+
+  useEffect(() => {
+    if (spanTree) {
+      setReferenceTime({
+        latency: convertNanoToMilliSeconds(
+          spanTree.latency_ns,
+          false
+        ) as number,
+        time: spanTree.time,
+      });
+    }
+  }, [spanTree]);
+
   const renderSpanTree = () => {
-    console.log({ spanTree });
-    if (!spanTree) {
+    if (!spanTree || !referenceTime) {
       return <CustomSkeleton len={8} />;
     }
     const renderSpan = (
@@ -68,26 +86,30 @@ const TraceTree = () => {
       const Label = () => {
         return (
           <div className={styles["accordion-summary-content"]}>
-            <span
-              className={styles["accordion-label"]}
-              role="button"
-              onClick={() => {
-                setSelectedSpan(span.span_id as string);
+            <p
+              className={styles["accordion-label-container"]}
+              style={{
+                width: getWidthByLevel(span.level ?? 0, isLastChild),
               }}
             >
-              {isTopRoot ? span.source : span.destination}
-            </span>
-            <span className={styles.latency}>
-              {convertNanoToMilliSeconds(span.latency_ns)}
-            </span>
+              <span
+                className={styles["accordion-label"]}
+                role="button"
+                onClick={() => {
+                  setSelectedSpan(span.span_id as string);
+                }}
+              >
+                {isTopRoot ? span.source : span.destination}
+              </span>
+            </p>
           </div>
         );
       };
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
         return isLastChild ? (
-          <div className={styles["last-child"]} role="button">
+          <p className={cx(styles["last-child"])} role="button">
             {children}
-          </div>
+          </p>
         ) : (
           <AccordionSummary
             className={styles["accordion-summary"]}
@@ -97,6 +119,19 @@ const TraceTree = () => {
           </AccordionSummary>
         );
       };
+      // const latencyTimeline = (span.latency_ns / referenceTime!.latency) * 100;
+      const latency = convertNanoToMilliSeconds(
+        span.latency_ns,
+        false
+      ) as number;
+      const timelineWidth = (latency / referenceTime.latency) * 100;
+      const timelineStart = dayjs(referenceTime.time).diff(
+        dayjs(span.time),
+        "milliseconds"
+      );
+      const timelineDisplacement =
+        (timelineStart / referenceTime.latency) * 100;
+
       return (
         <Accordion
           key={nanoid()}
@@ -105,6 +140,17 @@ const TraceTree = () => {
         >
           <WrapperElement>
             <Label />
+            <p className={styles.latency}>
+              {convertNanoToMilliSeconds(span.latency_ns)}
+            </p>
+            <p className={styles.timeline}>
+              <p
+                style={{
+                  width: `${timelineWidth}%`,
+                  marginLeft: `${timelineDisplacement}%`,
+                }}
+              ></p>
+            </p>
           </WrapperElement>
           <AccordionDetails
             className={styles["accordion-details"]}
