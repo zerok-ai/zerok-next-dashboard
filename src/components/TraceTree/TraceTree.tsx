@@ -23,7 +23,11 @@ import {
   spanTransformer,
 } from "./TraceTree.utils";
 
-const TraceTree = () => {
+interface TraceTreeProps {
+  updateExceptionSpan: (id: string) => void;
+}
+
+const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
   const router = useRouter();
   const { data: spans, fetchData: fetchSpans } = useFetch<SpanResponse>(
     "spans",
@@ -70,6 +74,9 @@ const TraceTree = () => {
         ) as number,
         time: spanTree.time,
       });
+      if (spanTree.source === "external-mysql/loadrun-deployment") {
+        updateExceptionSpan("something");
+      }
     }
   }, [spanTree]);
 

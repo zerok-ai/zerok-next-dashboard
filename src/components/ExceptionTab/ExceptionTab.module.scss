@@ -1,8 +1,22 @@
 @import "styles/variables.module.scss";
+@import "styles/mixins";
+
+.header {
+    width:100%;
+    @include card-header;
+}
+.content {
+}
 .container {
+    position: relative;
     display: flex;
     flex-direction: column;
     row-gap: $sp-base * 4;
+    height:400px;
+    border:1px solid $grey-800;
+    border-radius: $sp-base * 2;
+    overflow: auto;
+    
 // column-gap: $sp-base * 6;
 }
 
@@ -10,7 +24,7 @@
     display: flex;
     display: flex;
     column-gap: $sp-base * 8;
-    padding:$sp-base * 3 0;
+    padding:$sp-base * 3;
     border-bottom: 1px solid $grey-900;
     align-items: flex-start;
 
@@ -41,7 +55,7 @@
 }
 
 .exception-row {
-    padding:$sp-base * 3 $sp-base * 5;
+    padding:$sp-base*2 $sp-base * 5;
     border-bottom:1px solid $grey-900;
     span {
         color:$grey-25;

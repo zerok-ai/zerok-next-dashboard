@@ -103,6 +103,7 @@ export interface SpanDetail {
   exception?: boolean;
   root?: boolean;
   exceptionParent?: boolean;
+  exceptionSpan?: string;
 }
 
 export type SpanResponse = Record<string, SpanDetail>;

@@ -49,17 +49,13 @@ export const spanTransformer = (spanData: SpanResponse) => {
     if (span.destination.includes("zk-client")) {
       formattedSpans[key] = { ...span, span_id: key, exception: true };
       // find it's parent
-      Object.keys(spanData).map((key) => {
-        const parentSpan = spanData[key];
-        if (span.source === spanData[key].source) {
-          formattedSpans[key] = {
-            ...parentSpan,
-            span_id: key,
-            exceptionParent: true,
-          };
-        }
-        return true;
-      });
+      const rootSpan = getRootSpan(spanData);
+      if (rootSpan) {
+        formattedSpans[rootSpan] = {
+          ...formattedSpans[rootSpan],
+          exceptionSpan: key,
+        };
+      }
     } else {
       // check if span already exists, so as to not override exception span
       if (!formattedSpans[key]) {
