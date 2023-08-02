@@ -11,7 +11,9 @@
     @include card-header;
 
 }
-
+.exception-parent {
+    color:$error-500 !important;
+}
 .tree {
     position: relative;
     height:100%;
@@ -27,6 +29,8 @@
     :global(.MuiAccordionSummary-content:last-child){
         margin-bottom:0;
     }
+    padding-bottom: $sp-base * 4;
+    border-bottom: 1px solid $grey-800;
 }
 
 .accordion {
@@ -73,7 +77,7 @@
 }
 
 .last-child {
-    padding: 0 $sp-base * 2;  
+    padding: 0 $sp-base;  
     display: flex;
 }
 

@@ -48,8 +48,7 @@ const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
         .replace("{issue_id}", issue as string)
         .replace("{incident_id}", trace as string)
         .replace("{span_id}", spanKey);
-        console.log({ endpoint });
-      fetchData("/errors.json");
+      fetchData(endpoint);
     }
   }, [selectedCluster, router]);
 

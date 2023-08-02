@@ -38,8 +38,8 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
   const [referenceTime, setReferenceTime] = useState<null | {
-    latency: number;
-    time: string;
+    totalTime: number;
+    startTime: string;
   }>(null);
   const { issue, trace } = router.query;
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
@@ -68,14 +68,11 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
   useEffect(() => {
     if (spanTree) {
       setReferenceTime({
-        latency: convertNanoToMilliSeconds(
-          spanTree.latency_ns,
-          false
-        ) as number,
-        time: spanTree.time,
+        totalTime: spanTree.totalTime as number,
+        startTime: spanTree.time,
       });
-      if (spanTree.source === "external-mysql/loadrun-deployment") {
-        updateExceptionSpan("something");
+      if (spanTree.exceptionSpan) {
+        updateExceptionSpan(spanTree.exceptionSpan);
       }
     }
   }, [spanTree]);
@@ -84,6 +81,7 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
     if (!spanTree || !referenceTime) {
       return <CustomSkeleton len={8} />;
     }
+    const exceptionParent = spanTree.exceptionParent;
     const renderSpan = (
       span: SpanDetail,
       isTopRoot: boolean = false,
@@ -100,7 +98,10 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
               }}
             >
               <span
-                className={styles["accordion-label"]}
+                className={cx(
+                  styles["accordion-label"],
+                  exceptionParent === span.span_id && styles["exception-parent"]
+                )}
                 role="button"
                 onClick={() => {
                   setSelectedSpan(span.span_id as string);
@@ -131,13 +132,14 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
         span.latency_ns,
         false
       ) as number;
-      const timelineWidth = (latency / referenceTime.latency) * 100;
-      const timelineStart = dayjs(referenceTime.time).diff(
+      // const spanStartTime = new Date(span.time).getTime();
+      const timelineWidth = (latency / referenceTime.totalTime) * 100;
+      const timelineStart = dayjs(referenceTime.startTime).diff(
         dayjs(span.time),
         "milliseconds"
       );
       const timelineDisplacement =
-        (timelineStart / referenceTime.latency) * 100;
+        (timelineStart / referenceTime.totalTime) * 100;
 
       return (
         <Accordion

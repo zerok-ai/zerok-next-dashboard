@@ -9,6 +9,8 @@ import TraceTree from "components/TraceTree";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
+import { drawerSelector, toggleDrawer } from "redux/drawer";
+import { useDispatch, useSelector } from "redux/store";
 import { type TraceMetadataDetail } from "utils/issues/types";
 
 // import { type SpanResponse } from "utils/types";
@@ -22,10 +24,17 @@ const IncidentDetailPage = () => {
   const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
   const router = useRouter();
   const trace = router.query.trace;
-
+  const { isDrawerMinimized } = useSelector(drawerSelector);
+  const dispatch = useDispatch();
   useEffect(() => {
     setExceptionSpan(null);
   }, [router]);
+
+  useEffect(() => {
+    if (!isDrawerMinimized) {
+      dispatch(toggleDrawer());
+    }
+  }, []);
 
   return (
     <div>

@@ -24,6 +24,15 @@ interface TraceTableProps {
   updateSelectedTrace: (trace: TraceMetadataDetail) => void;
 }
 
+const transformTraces = (data: TracesStateDetail) => {
+  const newTraces = data;
+  newTraces.trace_det_list = data.trace_det_list.filter((trace) => {
+    return !trace.entry_service.includes("zk-client");
+  });
+
+  return newTraces;
+};
+
 const TraceTable = ({
   updateChatTrace,
   updateSelectedTrace,
@@ -36,8 +45,7 @@ const TraceTable = ({
     data: traces,
     fetchData: fetchTraces,
     setData: setTraces,
-  } = useFetch<TracesStateDetail>("");
-
+  } = useFetch<TracesStateDetail>("", null, transformTraces);
   useEffect(() => {
     if (selectedCluster) {
       setTraces(null);

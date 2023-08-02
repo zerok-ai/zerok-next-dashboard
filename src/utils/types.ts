@@ -102,8 +102,9 @@ export interface SpanDetail {
   level?: number;
   exception?: boolean;
   root?: boolean;
-  exceptionParent?: boolean;
+  exceptionParent?: string;
   exceptionSpan?: string;
+  totalTime?: number;
 }
 
 export type SpanResponse = Record<string, SpanDetail>;

@@ -31,6 +31,9 @@
     white-space: pre-line;
     word-break: break-word;
     hyphens: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 3;
 }
 
 .chat-input {
