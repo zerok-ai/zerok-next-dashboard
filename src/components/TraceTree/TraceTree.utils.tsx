@@ -86,16 +86,28 @@ export const spanTransformer = (spanData: SpanResponse) => {
     rootSpan.latency_ns,
     false
   ) as number;
-  let max = rootStartTime + rootLatency;
+  let max = rootLatency;
   topKeys.forEach((key) => {
     const span = formattedSpans[key];
     const latency = convertNanoToMilliSeconds(span.latency_ns, false) as number;
     const startTime = new Date(span.time).getTime();
-    const endTime = startTime + latency;
+    // const { span_id, parent_span_id, time } = span;
+    const endTime = startTime + latency - rootStartTime;
+    // console.log({
+    //   latency,
+    //   span_id,
+    //   parent_span_id,
+    //   time,
+    //   rootLatency,
+    //   rootStartTime,
+    //   endTime,
+    //   max,
+    // });
     if (endTime > max) {
-      max = endTime - rootStartTime;
+      max = endTime;
     }
   });
+  console.log({ max });
   formattedSpans[rootSpanId!] = { ...rootSpan, totalTime: max };
   return formattedSpans;
 };
