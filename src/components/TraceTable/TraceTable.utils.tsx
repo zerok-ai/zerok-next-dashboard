@@ -38,13 +38,14 @@ export const INCIDENT_COLUMNS = [
   }),
   helper.accessor("latency_ns", {
     header: "DURATION",
+    size: DEFAULT_COL_WIDTH / 2,
     cell: (info) => {
       return <span>{convertNanoToMilliSeconds(info.getValue())}</span>;
     },
   }),
   helper.accessor("incident_collection_time", {
     header: "TIMESTAMP",
-    size: DEFAULT_COL_WIDTH * 2.2,
+    size: DEFAULT_COL_WIDTH * 1.5,
     cell: (info) => {
       return <span>{getFormattedTime(info.getValue())}</span>;
     },
