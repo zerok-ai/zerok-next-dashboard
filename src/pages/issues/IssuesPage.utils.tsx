@@ -21,7 +21,7 @@ export const getIssueColumns = () => {
   return [
     helper.accessor("scenario_title", {
       header: "Issues",
-      size: DEFAULT_COL_WIDTH * 3,
+      size: DEFAULT_COL_WIDTH * 5,
       cell: (info) => {
         const {
           scenario_title,

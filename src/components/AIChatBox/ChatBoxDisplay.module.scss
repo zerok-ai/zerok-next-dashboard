@@ -5,6 +5,13 @@
     border:1px solid $grey-900;
     padding:$sp-base * 5;
     column-gap: $sp-base * 5;
+    h6 {
+        width:50%;
+        color:$white;
+        padding-bottom: $sp-base * 3;
+        margin-bottom: $sp-base * 3;
+        border-bottom: 1px solid $grey-800;
+    }
 }
 .chatbox-logo {
     width:36px;

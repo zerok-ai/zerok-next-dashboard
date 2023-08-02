@@ -1,3 +1,4 @@
+import { convertNanoToMilliSeconds } from "utils/functions";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
 export const buildSpanTree = (
@@ -42,20 +43,33 @@ export const spanTransformer = (spanData: SpanResponse) => {
   topKeys.map((key) => {
     const span = spanData[key];
     // find root node
-    if (!topKeys.includes(span.parent_span_id)) {
+    if (
+      !topKeys.includes(span.parent_span_id) &&
+      span.protocol !== "exception"
+    ) {
       span.root = true;
     }
     // check for exception span
     if (span.destination.includes("zk-client")) {
       formattedSpans[key] = { ...span, span_id: key, exception: true };
-      // find it's parent
       const rootSpan = getRootSpan(spanData);
       if (rootSpan) {
+        const exceptionParent = topKeys.find((k) => {
+          const espan = spanData[k];
+          return espan.source === span.source;
+        });
         formattedSpans[rootSpan] = {
           ...formattedSpans[rootSpan],
           exceptionSpan: key,
         };
+        if (exceptionParent) {
+          formattedSpans[rootSpan] = {
+            ...formattedSpans[rootSpan],
+            exceptionParent,
+          };
+        }
       }
+      // find exception parent
     } else {
       // check if span already exists, so as to not override exception span
       if (!formattedSpans[key]) {
@@ -64,6 +78,25 @@ export const spanTransformer = (spanData: SpanResponse) => {
     }
     return true;
   });
+  // get the total spanlength in milliseconds
+  const rootSpanId = getRootSpan(formattedSpans);
+  const rootSpan = formattedSpans[rootSpanId!];
+  const rootStartTime = new Date(rootSpan.time).getTime();
+  const rootLatency = convertNanoToMilliSeconds(
+    rootSpan.latency_ns,
+    false
+  ) as number;
+  let max = rootStartTime + rootLatency;
+  topKeys.forEach((key) => {
+    const span = formattedSpans[key];
+    const latency = convertNanoToMilliSeconds(span.latency_ns, false) as number;
+    const startTime = new Date(span.time).getTime();
+    const endTime = startTime + latency;
+    if (endTime > max) {
+      max = endTime - rootStartTime;
+    }
+  });
+  formattedSpans[rootSpanId!] = { ...rootSpan, totalTime: max };
   return formattedSpans;
 };
 

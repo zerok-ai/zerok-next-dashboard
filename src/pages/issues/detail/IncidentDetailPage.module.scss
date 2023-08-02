@@ -47,25 +47,26 @@
     display: grid;
     grid-template-columns: 1fr 1.8fr;
     column-gap: $sp-base * 4;
+    height:calc(100vh - $header-height - $sp-base * 40);
+
 }
 
 .chat-container{
     border-radius: $sp-base * 2;
     height:calc(100vh - $header-height - $sp-base * 40);
-    overflow: auto;
+    overflow: scroll;
+    border:1px solid $grey-800;
 }
-
+.detail-container {
+    height:calc(100vh - $header-height - $sp-base * 40);
+    overflow: scroll;
+}
 .tree-container {
     height:calc(100vh - $header-height - $sp-base * 49);
     display: grid;
 }
-
-.chat-container {
-    border:1px solid $grey-800;
-}
-
 .tree-container-minimal {
-    height:400px;
+    height:300px;
     position: relative;
     margin-bottom: $sp-base * 6;
 }
@@ -74,5 +75,6 @@
     // display: flex;
     // flex-direction: column;
     row-gap: $sp-base * 4;
+    overflow-y: scroll;
 }
 

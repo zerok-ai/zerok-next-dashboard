@@ -11,8 +11,6 @@ import raxios from "utils/raxios";
 import styles from "./IncidentChatTab.module.scss";
 import { UserInputField, UserQueryCard } from "./IncidentChatTab.utils";
 
-let timer: ReturnType<typeof setInterval>;
-
 interface IncidentChatData {
   query: string;
   loading: boolean;
@@ -45,28 +43,6 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
       fetchData(endpoint);
     }
   }, [selectedCluster, trace]);
-
-  const onTypeStart = () => {
-    timer = setInterval(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 200);
-  };
-  const onTypeEnd = () => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    setQueries((prev) => {
-      return prev.map((qa, idx) => {
-        if (idx === prev.length - 1) {
-          return {
-            ...qa,
-            doneTyping: true,
-          };
-        }
-        return qa;
-      });
-    });
-    clearInterval(timer);
-  };
-
   const handleInputSubmit = async (val: string) => {
     if (selectedCluster) {
       const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
@@ -114,12 +90,7 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
     <div className={styles.container}>
       <div className={styles["chat-box-container"]}>
         <div className={styles["text-container"]}>
-          <AIChatBox
-            text={rca}
-            animate={queries.length === 0}
-            onTypeEnd={onTypeEnd}
-            onTypeStart={onTypeStart}
-          />
+          <AIChatBox text={rca} animate={queries.length === 0} blink={false} />
 
           <div className={styles["text-boxes"]}>
             {queries.map((qa, idx) => {
@@ -133,15 +104,13 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
                     <AIChatBox
                       text={reply}
                       animate={idx === queries.length - 1 && !qa.doneTyping}
-                      onTypeEnd={onTypeEnd}
-                      onTypeStart={onTypeStart}
                     />
                   </div>
                 </div>
               );
             })}
+            <div ref={bottomRef}></div>
           </div>
-          <div ref={bottomRef}></div>
         </div>
       </div>
       <div className={styles["chat-input-container"]}>

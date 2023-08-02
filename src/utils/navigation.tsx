@@ -24,7 +24,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
     children: [
       {
         path: "/issues",
-        label: "Assigned to me",
+        label: "All issues",
       },
       {
         path: "/issues",
@@ -32,7 +32,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
       },
       {
         path: "/issues",
-        label: "Watching",
+        label: "Assigned to me",
       },
     ],
     openOnClick: true,

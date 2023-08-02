@@ -9,18 +9,37 @@ import styles from "./ChatBoxDisplay.module.scss";
 interface ChatBoxDisplayProps {
   text: string | null;
   animate: boolean;
-  onTypeStart: () => void;
-  onTypeEnd: () => void;
+  onTypeStart?: () => void;
+  onTypeEnd?: () => void;
+  header?: string;
+  blink?: boolean;
 }
 
 const AIChatBox = ({
   text,
+  blink = true,
+  header,
   animate,
-  onTypeStart,
-  onTypeEnd,
 }: ChatBoxDisplayProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
-
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const onTypeStart = () => {
+    timerRef.current = setInterval(() => {
+      bottomRef.current?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }, 100);
+  };
+  const onTypeEnd = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  };
   return (
     <div className={styles.container}>
       <div className={styles["logo-container"]}>
@@ -31,8 +50,10 @@ const AIChatBox = ({
 
       {text ? (
         <div className={styles["text-container"]}>
+          {header && <h6>{header}</h6>}
           {animate ? (
             <TypeAnimation
+              cursor={blink}
               sequence={[
                 () => {
                   onTypeStart();

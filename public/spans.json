@@ -1,114 +1,131 @@
 {
-    "payload": {
-        "spans": {
-            "a799204ee3e76e31": {
-                "source": "sofa-shop/inventory",
-                "destination": "zk-client/product",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "http",
-                "status": "200",
-                "parent_span_id": "9204ee3ea7976e31",
-                "workload_id_list": [],
-                "timestamp": "2023-06-25T02:50:15.572639Z"
-            },
-            "a799204ee3f76e31": {
-                "source": "sofa-shop/inventory",
-                "destination": "sofa-shop/twitter",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "9204ee3ea7976e31",
-                "workload_id_list": [],
-                "timestamp": "2023-06-25T02:50:15.572639Z"
-            },
-            "a799204ee3f76e32": {
-                "source": "sofa-shop/inventory",
-                "destination": "sofa-shop/insta",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "9204ee3ea7976e31",
-                "workload_id_list": [],
-                "timestamp": "2023-06-25T02:50:15.572639Z"
-            },
-            "a799204ee3e76e32": {
-                "source": "sofa-shop/product",
-                "destination": "sofa-shop/analytics",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "a799204ee3e76e31",
-                "workload_id_list": [],
-                "timestamp": "2023-06-25T02:50:15.572639Z"
-            },
-            "9204ee3ea7976e31": {
-                "source": "sofa-shop/frontend",
-                "destination": "sofa-shop/inventory",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "e0e842d1b1a0c975",
-                "workload_id_list": [],
-                "collection_ts": "TBD"
-            },
-            
-            "9204ee3ea7976e32": {
-                "source": "sofa-shop/inventory",
-                "destination": "sofa-shop/backend",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "9204ee3ea7976e31",
-                "workload_id_list": [],
-                "collection_ts": "TBD"
-            },
-            "9204ee3ea7976e33": {
-                "source": "sofa-shop/backend",
-                "destination": "sofa-shop/database",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "9204ee3ea7976e32",
-                "workload_id_list": [],
-                "collection_ts": "TBD"
-            },
-            "9204ee3ea7976e34": {
-                "source": "sofa-shop/backend",
-                "destination": "sofa-shop/google",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "9204ee3ea7976e32",
-                "workload_id_list": [],
-                "collection_ts": "TBD"
-            },
-            "1a0c975e0e842d1b": {
-                "source": "sofa-shop/product",
-                "destination": "sofa-shop/cart",
-                "error": false,
-                "metadata": "",
-                "latency_ns": 542.5754,
-                "protocol": "HTTP",
-                "status": "200",
-                "parent_span_id": "a799204ee3e76e31",
-                "workload_id_list": []
-            }
-        }
+    "05dca70a2f9f5f3d": {
+        "source": "sofa-shop-mysql/inventory",
+        "destination": "mysql/mysql",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 76350,
+        "protocol": "mysql",
+        "status": "2",
+        "parent_span_id": "6595e32367ddacf1",
+        "workload_id_list": [
+            ""
+        ],
+        "time": "2023-08-02T14:10:44.442438Z"
+    },
+    "2b95581531e491c1": {
+        "source": "sofa-shop-mysql/order",
+        "destination": "zk-client/zk-operator",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 72460,
+        "protocol": "exception",
+        "status": "200",
+        "parent_span_id": "",
+        "workload_id_list": [
+            "55661a0e-25cb-5a1c-94cd-fad172b0caa2",
+            "ae427f14-9833-539c-933f-f0f26c6e4263"
+        ],
+        "time": "2023-08-02T14:10:44.531022Z"
+    },
+    "332839a7de4b796f": {
+        "source": "",
+        "destination": "ingress-nginx/ingress-nginx-controller",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 225142060,
+        "protocol": "http",
+        "status": "500",
+        "parent_span_id": "",
+        "workload_id_list": [
+            "6d2f7f0d-94fb-5f5e-b1ba-dea30a6ddd16",
+            "9b9b9bd5-64dd-55bf-a11e-76027c2b0fa0",
+            "ae427f14-9833-539c-933f-f0f26c6e4263"
+        ],
+        "time": "2023-08-02T14:10:44.593103Z"
+    },
+    "33352cca2c9dfe96": {
+        "source": "sofa-shop-mysql/order",
+        "destination": "sofa-shop-mysql/inventory",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 22896260,
+        "protocol": "http",
+        "status": "200",
+        "parent_span_id": "5ab76c0dcd0b892a",
+        "workload_id_list": [
+            "ae427f14-9833-539c-933f-f0f26c6e4263"
+        ],
+        "time": "2023-08-02T14:10:44.450704Z"
+    },
+    "5ab76c0dcd0b892a": {
+        "source": "sofa-shop-mysql/order",
+        "destination": "mysql/mysql",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 137940,
+        "protocol": "mysql",
+        "status": "2",
+        "parent_span_id": "",
+        "workload_id_list": [
+            ""
+        ],
+        "time": "2023-08-02T14:10:44.495497Z"
+    },
+    "5cfc4600bf80ac96": {
+        "source": "sofa-shop-mysql/order",
+        "destination": "sofa-shop-mysql/product",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 12564167,
+        "protocol": "http",
+        "status": "200",
+        "parent_span_id": "5ab76c0dcd0b892a",
+        "workload_id_list": [
+            "ae427f14-9833-539c-933f-f0f26c6e4263"
+        ],
+        "time": "2023-08-02T14:10:44.487317Z"
+    },
+    "6595e32367ddacf1": {
+        "source": "sofa-shop-mysql/inventory",
+        "destination": "mysql/mysql",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 120360,
+        "protocol": "mysql",
+        "status": "2",
+        "parent_span_id": "33352cca2c9dfe96",
+        "workload_id_list": [
+            ""
+        ],
+        "time": "2023-08-02T14:10:44.443972Z"
+    },
+    "79330904422f4231": {
+        "source": "sofa-shop-mysql/product",
+        "destination": "mysql/mysql",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 238289,
+        "protocol": "mysql",
+        "status": "2",
+        "parent_span_id": "5cfc4600bf80ac96",
+        "workload_id_list": [
+            ""
+        ],
+        "time": "2023-08-02T14:10:44.485317Z"
+    },
+    "ba2c3de3f012388a": {
+        "source": "sofa-shop-mysql/inventory",
+        "destination": "mysql/mysql",
+        "error": true,
+        "metadata": "{}",
+        "latency_ns": 322710,
+        "protocol": "mysql",
+        "status": "2",
+        "parent_span_id": "6595e32367ddacf1",
+        "workload_id_list": [
+            ""
+        ],
+        "time": "2023-08-02T14:10:44.439467Z"
     }
 }
