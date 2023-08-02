@@ -88,7 +88,7 @@ export const DEFAULT_TABS = [
         },
         {
           label: "Latency",
-          value: convertNanoToMilliSeconds(metadata.latency_ns),
+          value: convertNanoToMilliSeconds(metadata.latency_ns) as string,
         },
         {
           label: "Timestamp",
