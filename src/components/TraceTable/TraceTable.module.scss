@@ -1,7 +1,9 @@
 @import "styles/variables.module.scss";
 .container {
-    height: 100%;
     overflow-y: auto;
+    border:1px solid $grey-800;
+    border-radius: $sp-base * 2;
+    height: calc(100vh - $header-height - $sp-base * 40);
 }
 
 
@@ -24,6 +26,7 @@
     flex-direction: column;
     justify-content: space-between;
     row-gap: $sp-base * 4;
+    height: calc(100% - $sp-base * 12);
     span,td {
         color:$grey-50;
     }

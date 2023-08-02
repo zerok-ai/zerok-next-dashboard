@@ -9,35 +9,27 @@ import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import queryString from "query-string";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
-import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
+import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { filterServices } from "utils/functions";
-import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import raxios from "utils/raxios";
 import {
   GET_SCENARIO_DETAILS_ENDPOINT,
   LIST_SCENARIOS_ENDPOINT,
 } from "utils/scenarios/endpoints";
 import { type ScenarioDetail } from "utils/scenarios/types";
-import { type IssueDetail, type ServiceDetail } from "utils/types";
+import { type ServiceDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
 import { getIssueColumns } from "./IssuesPage.utils";
-
-interface IssuesData {
-  issues: IssueDetail[];
-  total_records: number;
-}
 
 const IssuesPage = () => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
 
   const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
-  const { data: issuesData, fetchData: fetchIssues } = useFetch<IssuesData>("");
 
   const { fetchData: fetchServices } = useFetch<ServiceDetail[]>(
     "results",
@@ -48,7 +40,7 @@ const IssuesPage = () => {
   const router = useRouter();
 
   const { query } = router;
-  const page = query.page ? parseInt(query.page as string) : 1;
+  // const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
   const getData = async () => {
     try {
@@ -94,9 +86,8 @@ const IssuesPage = () => {
       setScenarios(null);
       getData();
     }
-  }, [selectedCluster, renderTrigger]);
+  }, [selectedCluster, renderTrigger, router.query]);
   // @TODO - add types for filters here
-  console.log({ scenarios });
   const services =
     query.services && query.services?.length > 0
       ? decodeURIComponent(query.services as string).split(",")
@@ -104,7 +95,7 @@ const IssuesPage = () => {
 
   const columns = useMemo(() => {
     return getIssueColumns();
-  }, [issuesData?.issues]);
+  }, [scenarios]);
 
   const table = useReactTable<ScenarioDetail>({
     columns,
@@ -130,18 +121,15 @@ const IssuesPage = () => {
 
   useEffect(() => {
     if (selectedCluster) {
-      const filter = services && services.length > 0 ? services.join(",") : "";
+      // const filter = services && services.length > 0 ? services.join(",") : "";
       const range = query.range ?? DEFAULT_TIME_RANGE;
-      const serviceFilter = filter.length > 0 ? { services: filter } : {};
-      const params = queryString.stringify({
-        ...serviceFilter,
-        limit: ISSUES_PAGE_SIZE,
-        offset: (page - 1) * ISSUES_PAGE_SIZE,
-        st: range,
-      });
-      const endpoint =
-        LIST_ISSUES_ENDPOINT.replace("{id}", selectedCluster) + params;
-      fetchIssues(endpoint);
+      // const serviceFilter = filter.length > 0 ? { services: filter } : {};
+      // const params = queryString.stringify({
+      //   ...serviceFilter,
+      //   limit: ISSUES_PAGE_SIZE,
+      //   offset: (page - 1) * ISSUES_PAGE_SIZE,
+      //   st: range,
+      // });
       fetchServices(
         LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster) +
           `st=${range as string}`

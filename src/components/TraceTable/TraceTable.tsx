@@ -20,10 +20,14 @@ interface TracesStateDetail {
 }
 
 interface TraceTableProps {
-  updateIncident: (trace: TraceMetadataDetail) => void;
+  updateChatTrace: (trace: TraceMetadataDetail) => void;
+  updateSelectedTrace: (trace: TraceMetadataDetail) => void;
 }
 
-const TraceTable = ({ updateIncident }: TraceTableProps) => {
+const TraceTable = ({
+  updateChatTrace,
+  updateSelectedTrace,
+}: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const scenario = router.query.issue;
@@ -49,6 +53,12 @@ const TraceTable = ({ updateIncident }: TraceTableProps) => {
     }
   }, [selectedCluster, renderTrigger, router.query]);
 
+  useEffect(() => {
+    if (traces) {
+      updateChatTrace(traces.trace_det_list[0]);
+    }
+  }, [traces]);
+
   const table = useReactTable({
     columns: INCIDENT_COLUMNS,
     data: traces?.trace_det_list ?? [],
@@ -68,7 +78,14 @@ const TraceTable = ({ updateIncident }: TraceTableProps) => {
             headerClassName={styles["table-header"]}
             rowClassName={styles["table-row"]}
             onRowClick={(row) => {
-              updateIncident(row);
+              updateSelectedTrace(row);
+              router.push({
+                pathname: router.pathname,
+                query: {
+                  ...router.query,
+                  trace: row.incident_id,
+                },
+              });
             }}
           />
           <div className={styles["pagination-container"]}>

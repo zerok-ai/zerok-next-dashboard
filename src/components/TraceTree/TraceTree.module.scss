@@ -2,7 +2,9 @@
 @import "styles/mixins";
 
 .container {
-    
+    border:1px solid $grey-800;
+    height:calc(100vh - $header-height - $sp-base * 49);
+    border-radius: $sp-base * 2;
 }
 
 .header {
@@ -10,9 +12,9 @@
 }
 
 .tree {
-    height:calc(100vh - $header-height - $sp-base * 52);
+    height:100%;
     position: relative;
-    padding:$sp-base * 3;
+    padding:$sp-base $sp-base * 2;
     :global(.Mui-expanded){
         margin:$sp-base;
     }
@@ -41,7 +43,6 @@
 
 .accordion-summary-content {
     display: flex;
-    width:40%;
     justify-content: space-between;
 }
 

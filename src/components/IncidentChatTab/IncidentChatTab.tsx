@@ -2,7 +2,7 @@ import AIChatBox from "components/AIChatBox";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { ZK_GPT_RCA_ENDPOINT } from "utils/issues/endpoints";
@@ -20,15 +20,18 @@ interface IncidentChatData {
   doneTyping: boolean;
 }
 
-const IncidentChatTab = () => {
+interface IncidentChatTabProps {
+  trace: string | null;
+}
+
+const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
-  const { trace, issue: issueId } = router.query;
+  const { issue: issueId } = router.query;
   const { data: rca, fetchData, setData } = useFetch<string>("rca");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
-
   useEffect(() => {
     if (selectedCluster && trace) {
       const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
@@ -36,12 +39,12 @@ const IncidentChatTab = () => {
         selectedCluster
       )
         .replace("{issue_id}", issueId as string)
-        .replace("{incident_id}", trace as string);
+        .replace("{incident_id}", trace);
       setData(null);
       setQueries([]);
       fetchData(endpoint);
     }
-  }, [trace, selectedCluster]);
+  }, [selectedCluster, trace]);
 
   const onTypeStart = () => {
     timer = setInterval(() => {
@@ -148,4 +151,4 @@ const IncidentChatTab = () => {
   );
 };
 
-export default IncidentChatTab;
+export default memo(IncidentChatTab);
