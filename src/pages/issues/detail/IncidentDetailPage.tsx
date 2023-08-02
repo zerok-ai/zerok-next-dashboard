@@ -1,3 +1,5 @@
+import cx from "classnames";
+import ExceptionTab from "components/ExceptionTab";
 import BackLink from "components/helpers/BackLink";
 import IncidentChatTab from "components/IncidentChatTab";
 import PageLayout from "components/layouts/PageLayout";
@@ -6,7 +8,7 @@ import TraceTable from "components/TraceTable";
 import TraceTree from "components/TraceTree";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type TraceMetadataDetail } from "utils/issues/types";
 
 // import { type SpanResponse } from "utils/types";
@@ -17,8 +19,14 @@ const IncidentDetailPage = () => {
   const [chatTrace, setChatTrace] = useState<null | TraceMetadataDetail>(null);
   const [selectedTrace, setSelectedTrace] =
     useState<null | TraceMetadataDetail>(null);
+  const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
   const router = useRouter();
   const trace = router.query.trace;
+
+  useEffect(() => {
+    setExceptionSpan(null);
+  }, [router]);
+
   return (
     <div>
       <Fragment>
@@ -49,8 +57,24 @@ const IncidentDetailPage = () => {
                 }}
                 title={selectedTrace.entry_path}
               />
-              <div className={styles["tree-container"]}>
-                <TraceTree />
+              <div className={styles["cards-container"]}>
+                <div
+                  className={cx(
+                    styles["tree-container"],
+                    exceptionSpan && styles["tree-container-minimal"]
+                  )}
+                >
+                  <TraceTree
+                    updateExceptionSpan={(id: string) => {
+                      setExceptionSpan(id);
+                    }}
+                  />
+                </div>
+                {exceptionSpan && (
+                  <div className={styles["exception-container"]}>
+                    <ExceptionTab spanKey={exceptionSpan} />
+                  </div>
+                )}
               </div>
             </div>
           ) : (

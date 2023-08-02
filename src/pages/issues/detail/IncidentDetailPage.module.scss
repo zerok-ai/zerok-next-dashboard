@@ -45,15 +45,34 @@
 
 .content-container {
     display: grid;
-    grid-template-columns: 0.4fr 0.6fr;
+    grid-template-columns: 1fr 1.6fr;
     column-gap: $sp-base * 4;
 }
 
-.chat-container,.detail-container {
+.chat-container{
     border-radius: $sp-base * 2;
     height:calc(100vh - $header-height - $sp-base * 40);
+    overflow: auto;
+}
+
+.tree-container {
+    height:calc(100vh - $header-height - $sp-base * 49);
+    display: grid;
 }
 
 .chat-container {
     border:1px solid $grey-800;
 }
+
+.tree-container-minimal {
+    height:400px;
+    position: relative;
+    margin-bottom: $sp-base * 6;
+}
+
+.cards-container {
+    // display: flex;
+    // flex-direction: column;
+    row-gap: $sp-base * 4;
+}
+

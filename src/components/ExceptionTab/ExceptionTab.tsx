@@ -1,23 +1,72 @@
-import { Skeleton } from "@mui/material";
+import CustomSkeleton from "components/CustomSkeleton";
+import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
-import { memo } from "react";
+import { useRouter } from "next/router";
+import { memo, useEffect } from "react";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
 import { type GenericObject, type SpanRawDataResponse } from "utils/types";
 
 import styles from "./ExceptionTab.module.scss";
 
 interface ExceptionTabProps {
-  exceptionSpan: SpanRawDataResponse;
+  spanKey: string;
 }
 
-const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
+const spanTransformer = (spans: SpanRawDataResponse) => {
+  const key = Object.keys(spans)[0];
+  const span = spans[key];
+  try {
+    span.request_payload = JSON.parse(span.request_payload as string);
+    span.response_payload = JSON.parse(span.response_payload as string);
+  } catch (err) {
+    console.log({ err });
+  }
+  const res: SpanRawDataResponse = {};
+  res[key] = span;
+  return res;
+};
+
+const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
+  const { data: exceptionSpan, fetchData } = useFetch<SpanRawDataResponse>(
+    "span_raw_data_details",
+    null,
+    spanTransformer
+  );
+
+  const { selectedCluster } = useSelector(clusterSelector);
+  const router = useRouter();
+  const { trace, issue } = router.query;
+
+  useEffect(() => {
+    if (selectedCluster) {
+      const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster
+      )
+        .replace("{issue_id}", issue as string)
+        .replace("{incident_id}", trace as string)
+        .replace("{span_id}", spanKey);
+        console.log({ endpoint });
+      fetchData("/errors.json");
+    }
+  }, [selectedCluster, router]);
+
+  if (!exceptionSpan) {
+    return (
+      <div className={styles.container}>
+        <CustomSkeleton len={5} />
+      </div>
+    );
+  }
   const exceptionData = exceptionSpan[Object.keys(exceptionSpan)[0]];
-  const data: string | undefined = (
-    exceptionData.request_payload as GenericObject
-  )?.req_body;
+  const data: string = (exceptionData.request_payload as GenericObject)
+    ?.req_body;
   if (!data) {
     return (
       <div className={styles.container}>
-        <Skeleton variant="rectangular" className={styles.skeleton} />
+        <CustomSkeleton len={5} />
       </div>
     );
   }
@@ -42,31 +91,38 @@ const ExceptionTab = ({ exceptionSpan }: ExceptionTabProps) => {
   };
   return (
     <div className={styles.container}>
-      <div className={styles.row}>
-        <label className={styles.label}>Message:</label>
-        <div className={styles.data}>{traceMsg}</div>
+      <div className={styles.header}>
+        <h6>Exception</h6>
       </div>
-      <div className={styles.row}>
-        <label className={styles.label}>Exception:</label>
-        <div className={styles["exception-rows"]}>
-          {stacktrace.map((trace) => {
-            const { text, file, line } = splitTrace(trace);
-            return (
-              <span key={nanoid()} className={styles["exception-row"]}>
-                <span>{text}</span>{" "}
-                <span className={styles["exception-helper-text"]}>in file</span>{" "}
-                <span>{file}</span>{" "}
-                {line && (
-                  <span>
-                    <span className={styles["exception-helper-text"]}>
-                      at line
-                    </span>{" "}
-                    <span>{line}</span>
-                  </span>
-                )}
-              </span>
-            );
-          })}
+      <div className={styles.content}>
+        <div className={styles.row}>
+          <label className={styles.label}>Message:</label>
+          <div className={styles.data}>{traceMsg}</div>
+        </div>
+        <div className={styles.row}>
+          <label className={styles.label}>Exception:</label>
+          <div className={styles["exception-rows"]}>
+            {stacktrace.map((trace) => {
+              const { text, file, line } = splitTrace(trace);
+              return (
+                <span key={nanoid()} className={styles["exception-row"]}>
+                  <span>{text}</span>{" "}
+                  <span className={styles["exception-helper-text"]}>
+                    in file
+                  </span>{" "}
+                  <span>{file}</span>{" "}
+                  {line && (
+                    <span>
+                      <span className={styles["exception-helper-text"]}>
+                        at line
+                      </span>{" "}
+                      <span>{line}</span>
+                    </span>
+                  )}
+                </span>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
