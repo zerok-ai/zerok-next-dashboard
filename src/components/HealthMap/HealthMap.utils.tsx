@@ -110,7 +110,7 @@ export const ServiceMapCard = ({
     },
     {
       label: "Errors",
-      value: service.error_rate.toFixed(2),
+      value: Math.ceil(service.error_rate),
     },
     {
       label: "Avg. Latency",

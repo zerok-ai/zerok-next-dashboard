@@ -1,10 +1,9 @@
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { HiOutlineChevronDown } from "react-icons/hi";
-import { toggleDrawer } from "redux/drawer";
-import { useDispatch, useSelector } from "redux/store";
+import { useSelector } from "redux/store";
 import { ICON_BASE_PATH } from "utils/images";
 import { type DrawerNavItemType } from "utils/types";
 
@@ -16,21 +15,24 @@ interface NavigationItemType {
 }
 const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const drawer = useSelector((state) => state.drawer);
-  const dispatch = useDispatch();
   const { isDrawerMinimized } = drawer;
   const iconKey = active
     ? nav.icon.replace(".svg", "_highlight.svg")
     : nav.icon;
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const toggleNav = () => {
-    setIsNavOpen((prev) => !prev);
-  };
+  const [isNavOpen, setIsNavOpen] = useState(true);
+  const router = useRouter();
+  // const toggleNav = () => {
+  //   setIsNavOpen((prev) => !prev);
+  // };
 
   const isGroup = nav.type === "group";
 
   useEffect(() => {
     if (isDrawerMinimized && isNavOpen) {
       setIsNavOpen(false);
+    }
+    if (!isDrawerMinimized && !isNavOpen) {
+      setIsNavOpen(true);
     }
   }, [isDrawerMinimized]);
 
@@ -39,10 +41,10 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
       <div
         role="button"
         onClick={() => {
-          if (nav.openOnClick && isDrawerMinimized) {
-            dispatch(toggleDrawer());
+          // dispatch(toggleDrawer());
+          if (nav.children) {
+            router.push(nav.children[0].path);
           }
-          toggleNav();
         }}
       >
         {children}
@@ -76,11 +78,11 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
             role={isGroup ? "button" : "link"}
           >
             {nav.label}
-            {isGroup && (
+            {/* {isGroup && (
               <span className={styles["group-item-icon"]}>
                 <HiOutlineChevronDown />
               </span>
-            )}
+            )} */}
           </p>
         </div>
         {isGroup && isNavOpen && (

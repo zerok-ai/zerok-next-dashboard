@@ -29,6 +29,7 @@ const IncidentDetailPage = () => {
   useEffect(() => {
     setExceptionSpan(null);
   }, [router]);
+  console.log({ selectedTrace });
 
   useEffect(() => {
     if (!isDrawerMinimized) {
@@ -48,10 +49,12 @@ const IncidentDetailPage = () => {
       </div>
       <div className={styles["content-container"]}>
         <div className={styles["chat-container"]}>
-          <IncidentChatTab trace={chatTrace?.incident_id ?? null} />
+          <IncidentChatTab
+            trace={chatTrace?.incident_id ?? (trace as string) ?? null}
+          />
         </div>
         <div className={styles["detail-container"]}>
-          {trace && selectedTrace ? (
+          {trace ? (
             <div className={styles["tree-wrapper"]}>
               <BackLink
                 onBack={() => {
@@ -64,7 +67,7 @@ const IncidentDetailPage = () => {
                     },
                   });
                 }}
-                title={selectedTrace.entry_path}
+                title="Back to traces"
               />
               <div className={styles["cards-container"]}>
                 <div
