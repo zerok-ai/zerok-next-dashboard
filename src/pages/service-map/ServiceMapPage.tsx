@@ -7,6 +7,7 @@ import PrivateRoute from "components/PrivateRoute";
 import ServiceMapFilterDisplay from "components/ServiceMapFilterDisplay";
 import DrawerX from "components/themeX/DrawerX";
 import { useFetch } from "hooks/useFetch";
+import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import queryString from "query-string";
@@ -24,13 +25,16 @@ import { getServiceString } from "utils/services/functions";
 import styles from "./ServiceMap.module.scss";
 
 const formatServiceMapData = (smap: ServiceMapDetail[]) => {
+  // remove unwanted namespaces
   const filteredServices = smap.filter((service) => {
     return (
       !IGNORED_SERVICES_PREFIXES.includes(service.requestor_service) &&
       !IGNORED_SERVICES_PREFIXES.includes(service.responder_service)
     );
   });
+  // filter out empty nodes
   const nonEmptyServices = filterEmptyServiceMapNodes(filteredServices);
+  //
   const formattedServices = nonEmptyServices.map((service) => {
     if (service.requestor_service.length > 0) {
       service.requestor_service = getServiceString(service.requestor_service);
@@ -46,7 +50,7 @@ const formatServiceMapData = (smap: ServiceMapDetail[]) => {
 const ServiceMap = () => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const router = useRouter();
-  const { data, fetchData, setData } = useFetch<ServiceMapDetail[]>(
+  const { data, fetchData, setData, error } = useFetch<ServiceMapDetail[]>(
     "results",
     null,
     formatServiceMapData,
@@ -72,29 +76,38 @@ const ServiceMap = () => {
       );
     }
   }, [selectedCluster, router, renderTrigger]);
-
   return (
     <div className={styles.container}>
-      <PageHeader title="Service Map" showRange showRefresh />
-      <div className={styles.header}>
-        <div className={styles["header-left"]}>
+      <PageHeader
+        title="Service Map"
+        showRange
+        showRefresh
+        extras={[
           <Button
             variant="contained"
             color="secondary"
             className={styles["filters-btn"]}
             onClick={toggleFilterDrawer}
+            key={nanoid()}
           >
             <HiPlus /> Filters
-          </Button>
-          <ServiceMapFilterDisplay />
+          </Button>,
+        ]}
+        bottomRow={
+          <div className={styles["header-left"]}>
+            <ServiceMapFilterDisplay />
+          </div>
+        }
+      />
+      {!error ? (
+        <div className={styles.content}>
+          <ReactFlowProvider>
+            <HealthMap serviceMap={data} />
+          </ReactFlowProvider>
         </div>
-        <div className={styles["header-right"]}></div>
-      </div>
-      <div className={styles.content}>
-        <ReactFlowProvider>
-          <HealthMap serviceMap={data} />
-        </ReactFlowProvider>
-      </div>
+      ) : (
+        <h6>Could not fetch service map data. Please try again later. </h6>
+      )}
       {isFilterDrawerOpen && data != null && (
         <DrawerX title="Filter" onClose={toggleFilterDrawer}>
           <HealthMapFilterForm

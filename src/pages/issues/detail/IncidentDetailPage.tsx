@@ -1,5 +1,5 @@
 import cx from "classnames";
-import ExceptionTab from "components/ExceptionTab";
+import ExceptionTab from "components/ExceptionCard";
 import BackLink from "components/helpers/BackLink";
 import IncidentChatTab from "components/IncidentChatTab";
 import PageLayout from "components/layouts/PageLayout";
