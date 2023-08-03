@@ -1,6 +1,7 @@
 import { Skeleton } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 import PageLayout from "components/layouts/PageLayout";
+import PageHeader from "components/PageHeader";
 import PrivateRoute from "components/PrivateRoute";
 import ServiceCard from "components/ServiceCard";
 import { useFetch } from "hooks/useFetch";
@@ -23,7 +24,7 @@ const Home = () => {
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
   const { selectedCluster } = useSelector(clusterSelector);
   useEffect(() => {
-    if (selectedCluster !== null) {
+    if (selectedCluster) {
       fetchServices(
         LIST_SERVICES_ENDPOINT.replace("{cluster_id}", selectedCluster)
       );
@@ -50,7 +51,7 @@ const Home = () => {
 
   return (
     <div>
-      <h3 className="page-title">Health</h3>
+      <PageHeader title="Health" showRange showRefresh />
       <div className={styles["content-container"]}>
         <div className={styles["services-container"]}>
           {!loading && services != null

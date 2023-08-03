@@ -42,6 +42,7 @@ const IssuesPage = () => {
   const { query } = router;
   // const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
+
   const getData = async () => {
     try {
       const listScenariosResponse = await raxios.get(LIST_SCENARIOS_ENDPOINT, {

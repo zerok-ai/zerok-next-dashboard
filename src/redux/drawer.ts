@@ -4,7 +4,7 @@ import { type RootState } from "./store";
 import { type DrawerReduxType } from "./types";
 
 const initialState: DrawerReduxType = {
-  isDrawerMinimized: false,
+  isDrawerMinimized: true,
   activeLink: null,
 };
 

@@ -2,9 +2,10 @@ import { Skeleton } from "@mui/material";
 import ExceptionNode from "components/ExceptionNode";
 import MapControls from "components/MapControls";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { type MouseEvent, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   Background,
+  type Node,
   type NodeProps,
   type ReactFlowInstance,
   useEdgesState,
@@ -50,7 +51,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   const [reactFlow, setReactFlow] = useState<ReactFlowInstance | null>(null);
 
   let filteredServiceMap = serviceMap;
-
+  // filter out services based on query params
   if (namespaces) {
     filteredServiceMap = filteredServiceMap.filter((service) => {
       return (
@@ -88,17 +89,30 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
       return getLayoutedElements(initialNodes, initialEdges);
     }
   }, [initialNodes, initialEdges]);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+
   useEffect(() => {
     setEdges(layoutedEdges);
     setNodes(layoutedNodes);
   }, [router]);
+
   useEffect(() => {
     if (reactFlow) {
       setTimeout(() => reactFlow.fitView(), 100);
     }
   }, [reactFlow, router]);
+
+  const onNodeClick = (e: MouseEvent, node: Node) => {
+    const target = e.target as HTMLElement;
+    const pos = target.getBoundingClientRect();
+    setSelectedService({
+      ...node,
+      position: { x: pos.left, y: pos.top },
+    });
+  };
+
   return (
     <div className={styles.container}>
       {selectedService && (
@@ -123,14 +137,7 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         onInit={(rfi) => {
           setReactFlow(rfi);
         }}
-        onNodeClick={(e, node) => {
-          const target = e.target as HTMLElement;
-          const pos = target.getBoundingClientRect();
-          setSelectedService({
-            ...node,
-            position: { x: pos.left, y: pos.top },
-          });
-        }}
+        onNodeClick={onNodeClick}
         onMove={() => {
           setSelectedService(null);
         }}

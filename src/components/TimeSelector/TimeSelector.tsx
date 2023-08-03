@@ -30,6 +30,7 @@ const TimeSelector = ({ handlePush = true, onChange }: TimeSelectorProps) => {
       setTime(range as string);
     }
   }, [router.query]);
+
   return (
     <div className={styles.container}>
       <Select
