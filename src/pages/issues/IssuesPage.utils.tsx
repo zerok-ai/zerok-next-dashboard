@@ -1,9 +1,7 @@
 import { Tooltip } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
-import ChipX from "components/themeX/ChipX";
 import TagX from "components/themeX/TagX";
 import Link from "next/link";
-import { HiArrowRight } from "react-icons/hi2";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { type ScenarioDetail } from "utils/scenarios/types";
@@ -12,30 +10,15 @@ import styles from "./IssuesPage.module.scss";
 
 const helper = createColumnHelper<ScenarioDetail>();
 
-const filterEmptyStrings = (list: string[] | undefined) => {
-  if (!list) return null;
-  return list.filter((item) => item.length > 0);
-};
-
 export const getIssueColumns = () => {
   return [
     helper.accessor("scenario_title", {
       header: "Issues",
-      size: DEFAULT_COL_WIDTH * 5,
+      size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
-        const {
-          scenario_title,
-          scenario_type,
-          sources,
-          destinations,
-          scenario_id,
-        } = info.row.original;
-        const filteredSource = filterEmptyStrings(sources);
-        const filteredDestination = filterEmptyStrings(destinations);
-        const source = (sources && filteredSource && filteredSource[0]) ?? null;
-        const destination =
-          (destinations && filteredDestination && filteredDestination[0]) ??
-          null;
+        const { scenario_title, scenario_type, scenario_id } =
+          info.row.original;
+
         return (
           <div className={styles["issue-container"]}>
             <div>
@@ -49,13 +32,6 @@ export const getIssueColumns = () => {
                 </span>
               </Link>
             </div>
-            {source && destination && (
-              <div className={styles["issue-path"]}>
-                <ChipX label={source} />{" "}
-                <HiArrowRight className={styles["issue-path-arrow-icon"]} />
-                <ChipX label={destination} />
-              </div>
-            )}
           </div>
         );
       },

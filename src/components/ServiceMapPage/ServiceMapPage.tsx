@@ -1,18 +1,11 @@
-import { Button } from "@mui/material";
 import HealthMap from "components/HealthMap";
 import HealthMapFilterForm from "components/HealthMapFilterForm";
-import PageLayout from "components/layouts/PageLayout";
-import PageHeader from "components/PageHeader";
-import PrivateRoute from "components/PrivateRoute";
 import ServiceMapFilterDisplay from "components/ServiceMapFilterDisplay";
 import DrawerX from "components/themeX/DrawerX";
 import { useFetch } from "hooks/useFetch";
-import { nanoid } from "nanoid";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
-import { HiPlus } from "react-icons/hi";
+import { useEffect } from "react";
 import { ReactFlowProvider } from "reactflow";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -47,7 +40,12 @@ const formatServiceMapData = (smap: ServiceMapDetail[]) => {
   return formattedServices;
 };
 
-const ServiceMap = () => {
+interface ServiceMapPage {
+  isFilterOpen: boolean;
+  toggleDrawer: () => void;
+}
+
+const ServiceMap = ({ isFilterOpen, toggleDrawer }: ServiceMapPage) => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const router = useRouter();
   const { data, fetchData, setData, error } = useFetch<ServiceMapDetail[]>(
@@ -56,11 +54,6 @@ const ServiceMap = () => {
     formatServiceMapData,
     true
   );
-  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
-
-  const toggleFilterDrawer = () => {
-    setIsFilterDrawerOpen(!isFilterDrawerOpen);
-  };
   useEffect(() => {
     if (selectedCluster) {
       const { namespaces, serviceNames } = router.query;
@@ -78,27 +71,7 @@ const ServiceMap = () => {
   }, [selectedCluster, router, renderTrigger]);
   return (
     <div className={styles.container}>
-      <PageHeader
-        title="Service Map"
-        showRange
-        showRefresh
-        extras={[
-          <Button
-            variant="contained"
-            color="secondary"
-            className={styles["filters-btn"]}
-            onClick={toggleFilterDrawer}
-            key={nanoid()}
-          >
-            <HiPlus /> Filters
-          </Button>,
-        ]}
-        bottomRow={
-          <div className={styles["header-left"]}>
-            <ServiceMapFilterDisplay />
-          </div>
-        }
-      />
+      <ServiceMapFilterDisplay />
       {!error ? (
         <div className={styles.content}>
           <ReactFlowProvider>
@@ -108,26 +81,12 @@ const ServiceMap = () => {
       ) : (
         <h6>Could not fetch service map data. Please try again later. </h6>
       )}
-      {isFilterDrawerOpen && data != null && (
-        <DrawerX title="Filter" onClose={toggleFilterDrawer}>
-          <HealthMapFilterForm
-            serviceList={data}
-            onFinish={toggleFilterDrawer}
-          />
+      {isFilterOpen && data && (
+        <DrawerX title="Filter" onClose={toggleDrawer}>
+          <HealthMapFilterForm serviceList={data} onFinish={toggleDrawer} />
         </DrawerX>
       )}
     </div>
-  );
-};
-
-ServiceMap.getLayout = function getLayout(page: React.ReactNode) {
-  return (
-    <PrivateRoute>
-      <Head>
-        <title>ZeroK Dashboard | Service Map</title>
-      </Head>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
   );
 };
 

@@ -53,7 +53,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
         </div>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>
-            Errors
+            Error/s
           </span>
           <p>
             {roundToTwoDecimals(toNumber(service.http_error_rate_in)) || "0"}

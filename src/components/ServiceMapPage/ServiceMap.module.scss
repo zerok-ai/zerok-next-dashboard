@@ -2,10 +2,6 @@
 .container {
     width:100%;
     height:calc(100vh - $header-height - $sp-base * 12);
-    
-    display: flex;
-    flex-direction: column;
-    row-gap: $sp-base * 2;
 }
 .header {
     display: flex;
@@ -20,21 +16,11 @@
     flex-direction: column;
     row-gap: $sp-base * 2;
 }
-.filters-btn {
-    display: flex;
-    column-gap: $sp-base;
-    padding: $sp-base * 2.5 $sp-base * 3; 
-    background-color: $bg-dark;
-    border:1px solid $grey-700;
-    &:hover {
-        background-color: $bg-dark;
-        border:1px solid $grey-300;
-    }
-}
+
 
 .content {
     border-radius: $sp-base * 2;
     border:1px solid $grey-900;
     width:100%;
-    height:calc(100vh - $header-height - $sp-base * 12);
+    height:calc(100vh - $header-height - $sp-base *40);
 }
