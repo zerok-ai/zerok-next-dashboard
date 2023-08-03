@@ -73,3 +73,16 @@
     align-items: center;
     cursor: pointer;
 }
+
+.source {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base;
+    >img {
+        height: $sp-base * 5;
+        width:$sp-base * 5;
+    }
+    span {
+        color:$grey-50;
+    }
+}

@@ -19,10 +19,8 @@ const Home = () => {
     setIsMapFilterOpen(!isMapFilterOpen);
   };
   const togglePage = () => {
-    console.log("called");
     setIsHealthMap(!isHealthMap);
   };
-  console.log({ isHealthMap });
   const MapFilterButton = () => {
     return (
       <Button

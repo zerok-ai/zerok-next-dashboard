@@ -26,10 +26,10 @@ const IncidentDetailPage = () => {
   const trace = router.query.trace;
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const dispatch = useDispatch();
+  console.log({ selectedTrace });
   useEffect(() => {
     setExceptionSpan(null);
   }, [router]);
-  console.log({ selectedTrace });
 
   useEffect(() => {
     if (!isDrawerMinimized) {
