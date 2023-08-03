@@ -90,7 +90,12 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
     <div className={styles.container}>
       <div className={styles["chat-box-container"]}>
         <div className={styles["text-container"]}>
-          <AIChatBox text={rca} animate={queries.length === 0} blink={false} />
+          <AIChatBox
+            text={rca}
+            animate={queries.length === 0}
+            blink={false}
+            header="Cause"
+          />
 
           <div className={styles["text-boxes"]}>
             {queries.map((qa, idx) => {

@@ -1,6 +1,5 @@
 import { Tooltip } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
-import TagX from "components/themeX/TagX";
 import Link from "next/link";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
@@ -16,8 +15,7 @@ export const getIssueColumns = () => {
       header: "Issues",
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
-        const { scenario_title, scenario_type, scenario_id } =
-          info.row.original;
+        const { scenario_title, scenario_id } = info.row.original;
 
         return (
           <div className={styles["issue-container"]}>
@@ -28,10 +26,21 @@ export const getIssueColumns = () => {
               >
                 <span className={styles["issue-title-container"]}>
                   <a className={styles["issue-title"]}>{scenario_title}</a>
-                  <TagX label={scenario_type} closable={false} />
+                  {/* <TagX label={scenario_type} closable={false} /> */}
                 </span>
               </Link>
             </div>
+          </div>
+        );
+      },
+    }),
+    helper.display({
+      header: "Reporting source",
+      cell: () => {
+        return (
+          <div className={styles.source}>
+            <img src={`/images/brand/zerok_source_logo.svg`} alt="zerok_logo" />
+            <span>ZeroK</span>
           </div>
         );
       },
