@@ -26,13 +26,13 @@ export const LIST_SERVICES_ENDPOINT = `/v1/u/cluster/{cluster_id}/service/list?s
 
 export const LIST_ISSUES_ENDPOINT = `/v1/c/{id}/issue?`;
 
-export const GET_ISSUE_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}`;
+export const GET_ISSUE_ENDPOINT = `/v1/c/{cluster_id}/axon/issue/{issue_id}`;
 
-export const LIST_SPANS_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident/{incident_id}`;
+export const LIST_SPANS_ENDPOINT = `/v1/c/{cluster_id}/axon/issue/{issue_id}/incident/{incident_id}`;
 
-export const GET_SPAN_RAWDATA_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident/{incident_id}/span/{span_id}`;
+export const GET_SPAN_RAWDATA_ENDPOINT = `/v1/c/{cluster_id}/axon/issue/{issue_id}/incident/{incident_id}/span/{span_id}`;
 
-export const GET_INCIDENTS_ENDPOINT = `/v1/c/{cluster_id}/issue/{issue_id}/incident?limit=10&offset={offset}`;
+export const GET_INCIDENTS_ENDPOINT = `/v1/c/{cluster_id}/axon/issue/{issue_id}/incident?limit=10&offset={offset}`;
 
 export const GET_SERVICE_PODS_ENDPOINT = `/v1/u/cluster/{cluster_id}/pod/list?st={range}&ns={namespace}&service_name={service_name}`;
 
