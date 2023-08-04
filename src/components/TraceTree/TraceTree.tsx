@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HiChevronRight, HiOutlineX } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -77,6 +77,10 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
     }
   }, [spanTree]);
 
+  const AccordionIcon = useMemo(() => {
+    return <HiChevronRight className={styles["expand-icon"]} />;
+  }, []);
+
   const renderSpanTree = () => {
     if (!spanTree || !referenceTime) {
       return <CustomSkeleton len={8} />;
@@ -87,7 +91,6 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
       isTopRoot: boolean = false,
       isLastChild: boolean = false
     ) => {
-      const expandIcon = <HiChevronRight className={styles["expand-icon"]} />;
       const Label = () => {
         return (
           <div className={styles["accordion-summary-content"]}>
@@ -121,7 +124,7 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
         ) : (
           <AccordionSummary
             className={styles["accordion-summary"]}
-            expandIcon={expandIcon}
+            expandIcon={AccordionIcon}
           >
             {children}
           </AccordionSummary>

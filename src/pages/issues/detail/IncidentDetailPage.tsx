@@ -19,14 +19,11 @@ import { IssueMetadata } from "./IncidentDetails.utils";
 
 const IncidentDetailPage = () => {
   const [chatTrace, setChatTrace] = useState<null | TraceMetadataDetail>(null);
-  const [selectedTrace, setSelectedTrace] =
-    useState<null | TraceMetadataDetail>(null);
   const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
   const router = useRouter();
   const trace = router.query.trace;
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const dispatch = useDispatch();
-  console.log({ selectedTrace });
   useEffect(() => {
     setExceptionSpan(null);
   }, [router]);
@@ -96,9 +93,6 @@ const IncidentDetailPage = () => {
                   if (!chatTrace) {
                     setChatTrace(trace);
                   }
-                }}
-                updateSelectedTrace={(trace) => {
-                  setSelectedTrace(trace);
                 }}
               />
             </div>
