@@ -2,7 +2,6 @@ set -x #echo on
 
 yarn
 yarn build
-yarn export
 
 docker build . -t us-west1-docker.pkg.dev/zerok-dev/zerok-dashboard/zerok-next-dashboard:dev-v1
 docker push us-west1-docker.pkg.dev/zerok-dev/zerok-dashboard/zerok-next-dashboard:dev-v1

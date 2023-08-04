@@ -24,6 +24,7 @@ const TraceInfoDrawer = ({
         open={!!selectedSpan}
         onClose={onClose}
         anchor="right"
+        variant="permanent"
         hideBackdrop
         PaperProps={{
           style: {

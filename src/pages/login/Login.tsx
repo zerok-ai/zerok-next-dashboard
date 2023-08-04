@@ -1,4 +1,3 @@
-"use client";
 import AuthFormCard from "components/forms/AuthFormCard";
 import LoginForm from "components/forms/LoginForm";
 import AuthLayout from "components/layouts/AuthLayout";

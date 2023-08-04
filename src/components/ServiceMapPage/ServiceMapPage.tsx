@@ -69,6 +69,7 @@ const ServiceMap = ({ isFilterOpen, toggleDrawer }: ServiceMapPage) => {
       );
     }
   }, [selectedCluster, router, renderTrigger]);
+
   return (
     <div className={styles.container}>
       <ServiceMapFilterDisplay />

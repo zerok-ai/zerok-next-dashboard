@@ -8,8 +8,8 @@
     h6 {
         width:50%;
         color:$white;
-        padding-bottom: $sp-base * 3;
-        margin-bottom: $sp-base * 3;
+        padding-bottom: $sp-base * 2;
+        margin-bottom: $sp-base * 2;
         border-bottom: 1px solid $grey-800;
     }
 }
@@ -35,7 +35,6 @@
     width:95%;
     min-height: 50px;
     overflow-y: scroll;
-    font-family:"Source Code Pro", monospace;
     color:$grey-50;
     font-weight: 400;
     line-height: $default-line-height; 

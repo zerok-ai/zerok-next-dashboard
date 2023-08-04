@@ -47,7 +47,7 @@ const HealthCards = () => {
   if (error) {
     return (
       <div className={styles["no-services"]}>
-        <h3>Could not fetch services, please try again.</h3>
+        <h6>Could not fetch services, please try again.</h6>
       </div>
     );
   }

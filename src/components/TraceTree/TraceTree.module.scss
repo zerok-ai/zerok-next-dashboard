@@ -60,6 +60,7 @@
 .accordion-label {
     color:$grey-25;
     cursor: pointer;
+    z-index:1000;
     &:hover {
         color:$primary-500;
     }
@@ -77,7 +78,7 @@
 }
 
 .last-child {
-    padding: 0 $sp-base * 1.5;  
+    padding: 0 8px;  
     display: flex;
 }
 
@@ -86,7 +87,7 @@
     top: $sp-base * 3;
     right: 700px;
     cursor: pointer;
-    z-index: 5000;
+    z-index: 500;
     background-color: $grey-700;
     display: flex;
     align-items: center;
