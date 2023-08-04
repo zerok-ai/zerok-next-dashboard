@@ -29,17 +29,13 @@ const removeToken = (): void => {
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (values: { email: string; password: string }) => {
-    try {
-      const { email, password } = values;
-      const encrypted = maskPassword(password);
-      const rdata = await raxios.post(LOGIN_ENDPOINT, {
-        email,
-        password: encrypted,
-      });
-      return rdata;
-    } catch (err) {
-      return err;
-    }
+    const { email, password } = values;
+    const encrypted = maskPassword(password);
+    const rdata = await raxios.post(LOGIN_ENDPOINT, {
+      email,
+      password: encrypted,
+    });
+    return rdata;
   }
 );
 
