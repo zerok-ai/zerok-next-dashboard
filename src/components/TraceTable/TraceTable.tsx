@@ -21,7 +21,6 @@ interface TracesStateDetail {
 
 interface TraceTableProps {
   updateChatTrace: (trace: TraceMetadataDetail) => void;
-  updateSelectedTrace: (trace: TraceMetadataDetail) => void;
 }
 
 const transformTraces = (data: TracesStateDetail) => {
@@ -33,10 +32,7 @@ const transformTraces = (data: TracesStateDetail) => {
   return newTraces;
 };
 
-const TraceTable = ({
-  updateChatTrace,
-  updateSelectedTrace,
-}: TraceTableProps) => {
+const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const scenario = router.query.issue;
@@ -86,7 +82,6 @@ const TraceTable = ({
             headerClassName={styles["table-header"]}
             rowClassName={styles["table-row"]}
             onRowClick={(row) => {
-              updateSelectedTrace(row);
               router.push({
                 pathname: router.pathname,
                 query: {

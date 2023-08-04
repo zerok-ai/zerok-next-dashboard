@@ -43,6 +43,7 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
       fetchData(endpoint);
     }
   }, [selectedCluster, trace]);
+
   const handleInputSubmit = async (val: string) => {
     if (selectedCluster) {
       const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
@@ -96,7 +97,6 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
             blink={false}
             header="Cause"
           />
-
           <div className={styles["text-boxes"]}>
             {queries.map((qa, idx) => {
               const { query, reply } = qa;
