@@ -167,7 +167,12 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
           >
             {span.children?.map((child) => {
               const hasChildren = child.children && child.children.length > 0;
-              return renderSpan(child, false, !hasChildren);
+              if (
+                child.source.includes("zk-client") ||
+                child.destination.includes("zk-client")
+              ) {
+                return null;
+              } else return renderSpan(child, false, !hasChildren);
             })}
           </AccordionDetails>
         </Accordion>
@@ -179,6 +184,7 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
   const resetSpan = () => {
     setSelectedSpan(null);
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>

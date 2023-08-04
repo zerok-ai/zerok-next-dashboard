@@ -4,11 +4,6 @@ export default function Document(): JSX.Element {
   return (
     <Html>
       <Head>
-        <meta name="theme-color" content="#2296f3" />
-        <meta name="title" content="TITLE_CONTENT" />
-        <meta name="description" content="DESCRIPTION_CONTENT" />
-        <meta name="keywords" content="KEYWORDS_CONTENT" />
-
         <link rel="shortcut icon" href="/favicon.svg" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link

@@ -131,8 +131,10 @@ const IssuesPage = () => {
       //   st: range,
       // });
       fetchServices(
-        LIST_SERVICES_ENDPOINT.replace("{id}", selectedCluster) +
-          `st=${range as string}`
+        LIST_SERVICES_ENDPOINT.replace("{cluster_id}", selectedCluster).replace(
+          "{range}",
+          range as string
+        )
       );
     }
   }, [selectedCluster, router, renderTrigger]);

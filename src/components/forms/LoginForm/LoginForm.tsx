@@ -29,16 +29,19 @@ const LoginForm = () => {
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
+
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   const dispatch = useDispatch();
   const router = useRouter();
+
   const onSubmit: SubmitHandler<LoginSchemaType> = async (values) => {
     dispatch(loginUser(values));
   };
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
   const auth = useSelector((state) => state.auth);
 
+  // if user logged in, redirect to home page
   useEffect(() => {
     if (auth.token && auth.isLoggedIn) {
       router.push("/");
