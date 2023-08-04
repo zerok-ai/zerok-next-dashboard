@@ -4,6 +4,7 @@ import BackLink from "components/helpers/BackLink";
 import IncidentChatTab from "components/IncidentChatTab";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
+// import TraceGroups from "components/TraceGroups";
 import TraceTable from "components/TraceTable";
 import TraceTree from "components/TraceTree";
 import Head from "next/head";
@@ -95,6 +96,7 @@ const IncidentDetailPage = () => {
                   }
                 }}
               />
+              {/* <TraceGroups /> */}
             </div>
           )}
         </div>
