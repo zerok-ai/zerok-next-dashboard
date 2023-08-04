@@ -1,0 +1,21 @@
+@import "styles/variables.module.scss";
+.skeleton-container {
+    display: grid;
+    grid-template-columns: 0.5fr 9fr;
+    height:100%;
+    column-gap: $sp-base * 6;
+}
+
+.drawer, .header,.content {
+    height:95vh;
+}
+
+.skeleton-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 6;
+}
+
+.header{
+    height:5%;
+}

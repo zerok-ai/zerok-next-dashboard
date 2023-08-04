@@ -1,7 +1,7 @@
 import { Divider } from "@mui/material";
 import NavigationItem from "components/NavigationItem";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useSelector } from "redux/store";
 import cssVars from "styles/variables.module.scss";
 import { ZEROK_LOGO_LIGHT, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
@@ -34,15 +34,18 @@ const MainDrawer = () => {
 
   const drawerHeader = useMemo(() => <DrawerHeader />, [isDrawerMinimized]);
 
-  const renderLinks = (links: DrawerNavItemType[]) => {
-    return links.map((nav) => {
-      const isHomeRoute = router.pathname === "/";
-      const activeLink = isHomeRoute
-        ? nav.path === router.pathname
-        : nav.path.includes(router.pathname.split("/")[1]);
-      return <NavigationItem nav={nav} key={nav.path} active={activeLink} />;
-    });
-  };
+  const renderLinks = useCallback(
+    (links: DrawerNavItemType[]) => {
+      return links.map((nav) => {
+        const isHomeRoute = router.pathname === "/";
+        const activeLink = isHomeRoute
+          ? nav.path === router.pathname
+          : nav.path.includes(router.pathname.split("/")[1]);
+        return <NavigationItem nav={nav} key={nav.path} active={activeLink} />;
+      });
+    },
+    [router]
+  );
   return (
     <StyledMainDrawer
       open={isDrawerMinimized}

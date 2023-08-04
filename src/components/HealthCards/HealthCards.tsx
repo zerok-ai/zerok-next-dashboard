@@ -21,8 +21,10 @@ const HealthCards = () => {
     error,
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
   const { selectedCluster } = useSelector(clusterSelector);
+
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
+
   useEffect(() => {
     if (selectedCluster) {
       fetchServices(
@@ -62,7 +64,7 @@ const HealthCards = () => {
                 </div>
               );
             })
-          : skeletons.map((sk) => {
+          : skeletons.map(() => {
               return (
                 <Skeleton
                   key={nanoid()}

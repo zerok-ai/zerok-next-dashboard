@@ -56,7 +56,6 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // @TODO - make this DRYer
     // LOGIN CASES
     builder
       .addCase(loginUser.pending, (state) => {
