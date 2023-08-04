@@ -1,3 +1,4 @@
+"use client";
 import cx from "classnames";
 import ExceptionTab from "components/ExceptionCard";
 import BackLink from "components/helpers/BackLink";

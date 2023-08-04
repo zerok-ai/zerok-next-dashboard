@@ -46,4 +46,4 @@ export const SPAN_PROTOCOLS = ["http", "mysql"] as const;
 
 export const NODE_WIDTH = 220;
 
-export const DEFAULT_TIME_RANGE = "-1h";
+export const DEFAULT_TIME_RANGE = "-1d";

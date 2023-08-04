@@ -1,6 +1,6 @@
+"use client";
 import { Skeleton, Tooltip } from "@mui/material";
 import cx from "classnames";
-import { useSticky } from "hooks/useSticky";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
@@ -40,7 +40,7 @@ export const IssueMetadata = () => {
           const data = res.data.payload.scenarios.find(
             (sc: ScenarioDetail) => sc.scenario_id === issueId
           );
-         setScenario(data);
+          setScenario(data);
         })
         .catch((err) => {
           console.log({ err });
@@ -70,16 +70,13 @@ export const IssueMetadata = () => {
 
   const { isDrawerMinimized } = useSelector(drawerSelector);
   // Sticky header boolean and ref
-  const { isSticky, stickyRef } = useSticky();
   return scenario ? (
     <div
       className={cx(
         styles.header,
-        isSticky && styles.sticky,
         isDrawerMinimized && styles["drawer-minimized"]
       )}
       id="incident-header"
-      ref={stickyRef}
     >
       <div className={styles["header-left"]}>
         {" "}

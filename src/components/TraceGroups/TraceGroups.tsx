@@ -33,10 +33,11 @@ const TraceGroups = () => {
         .replace("{range}", range)
         .replace("{offset}", "0")
         .replace("{scenario_id}", scenarioID as string);
-        console.log({ endpoint });
-      fetchTraceGroups("/incidents.json");
+      console.log({ endpoint });
+      fetchTraceGroups(endpoint);
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, scenarioID]);
+
   const AccordionIcon = useMemo(() => {
     return <HiChevronRight />;
   }, []);

@@ -5,6 +5,11 @@ import { useRouter } from "next/router";
 import { memo, useEffect, useRef, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import {
+  GPT_INCIDENT_ENDPOINT,
+  GPT_ISSUE_ENDPOINT,
+  GPT_SCENARIO_ENDPOINT,
+} from "utils/gpt/endpoints";
 import { ZK_GPT_RCA_ENDPOINT } from "utils/issues/endpoints";
 import raxios from "utils/raxios";
 
@@ -18,31 +23,64 @@ interface IncidentChatData {
   doneTyping: boolean;
 }
 
-interface IncidentChatTabProps {
-  trace: string | null;
-}
-
-const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
+const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
-  const { issue: issueId } = router.query;
-  const { data: rca, fetchData, setData } = useFetch<string>("rca");
+  const {
+    issue: scenarioId,
+    issue_id: issueId,
+    trace: incidentId,
+  } = router.query;
+  const { data: scenarioData, fetchData: fetchScenarioData } =
+    useFetch<string>("summary");
+  const {
+    data: issueData,
+    fetchData: fetchIssueData,
+    loading: issueLoading,
+  } = useFetch<string>("summary");
+  const {
+    data: incidentData,
+    fetchData: fetchIncidentData,
+    loading: incidentLoading,
+  } = useFetch<string>("rca");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
+
   useEffect(() => {
-    if (selectedCluster && trace) {
-      const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
+    if (scenarioId && selectedCluster) {
+      const endpoint = GPT_SCENARIO_ENDPOINT.replace(
+        "{scenario_id}",
+        scenarioId as string
+      ).replace("{cluster_id}", selectedCluster);
+      fetchScenarioData(endpoint);
+    }
+  }, [scenarioId, selectedCluster]);
+
+  useEffect(() => {
+    if (issueId && selectedCluster) {
+      const endpoint = GPT_ISSUE_ENDPOINT.replace(
+        "{issue_id}",
+        issueId as string
+      ).replace("{cluster_id}", selectedCluster);
+      fetchIssueData(endpoint);
+    }
+  }, [issueId, selectedCluster]);
+
+  console.log({ scenarioData });
+
+  useEffect(() => {
+    if (selectedCluster && incidentId) {
+      const endpoint = GPT_INCIDENT_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       )
         .replace("{issue_id}", issueId as string)
-        .replace("{incident_id}", trace);
-      setData(null);
+        .replace("{incident_id}", incidentId as string);
       setQueries([]);
-      fetchData(endpoint);
+      fetchIncidentData(endpoint);
     }
-  }, [selectedCluster, trace]);
+  }, [selectedCluster, incidentId]);
 
   const handleInputSubmit = async (val: string) => {
     if (selectedCluster) {
@@ -51,7 +89,7 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
         selectedCluster
       )
         .replace("{issue_id}", issueId as string)
-        .replace("{incident_id}", trace as string);
+        .replace("{incident_id}", incidentId as string);
       setQueries((prev) => [
         ...prev,
         { query: val, loading: true, reply: null, doneTyping: false },
@@ -92,11 +130,27 @@ const IncidentChatTab = ({ trace }: IncidentChatTabProps) => {
       <div className={styles["chat-box-container"]}>
         <div className={styles["text-container"]}>
           <AIChatBox
-            text={rca}
+            text={scenarioData}
             animate={queries.length === 0}
             blink={false}
-            header="Cause"
+            header="Scenario summary"
           />
+          {(issueData ?? issueLoading) && (
+            <AIChatBox
+              text={issueData}
+              animate={queries.length === 0}
+              blink={false}
+              header="Issue summary"
+            />
+          )}
+          {(incidentData ?? incidentLoading) && (
+            <AIChatBox
+              text={incidentData}
+              animate={queries.length === 0}
+              blink={queries.length === 0}
+              header="Cause"
+            />
+          )}
           <div className={styles["text-boxes"]}>
             {queries.map((qa, idx) => {
               const { query, reply } = qa;
