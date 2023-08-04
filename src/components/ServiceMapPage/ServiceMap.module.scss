@@ -1,26 +1,11 @@
 @import "styles/variables.module.scss";
 .container {
     width:100%;
-    height:calc(100vh - $header-height - $sp-base * 12);
 }
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-left {
-    width:80%;
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    row-gap: $sp-base * 2;
-}
-
 
 .content {
     border-radius: $sp-base * 2;
     border:1px solid $grey-900;
     width:100%;
-    height:calc(100vh - $header-height - $sp-base *40);
+    height:calc(100vh - $header-height - $sp-base * 32);
 }

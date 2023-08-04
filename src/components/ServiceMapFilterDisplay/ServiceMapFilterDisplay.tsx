@@ -36,7 +36,7 @@ const ServiceMapFilterDisplay = () => {
       });
     }
   };
-  return (
+  return nameSpaceFilters.length > 0 || serviceNameFilters.length > 0 ? (
     <div className={styles.container}>
       {[...nameSpaceFilters, ...serviceNameFilters].map((fil) => {
         return (
@@ -44,7 +44,7 @@ const ServiceMapFilterDisplay = () => {
         );
       })}
     </div>
-  );
+  ) : null;
 };
 
 export default ServiceMapFilterDisplay;

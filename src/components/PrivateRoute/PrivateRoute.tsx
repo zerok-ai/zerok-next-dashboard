@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import PageSkeleton from "components/helpers/PageSkeleton";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { tokenLogin } from "redux/authSlice";
@@ -42,8 +42,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   }, [auth.error]);
 
   if (!isAuthorized) {
-    // @TODO - make skeletons for these
-    return <CircularProgress color="primary" />;
+    return <PageSkeleton />;
   }
 
   return <Fragment>{children}</Fragment>;
