@@ -98,12 +98,14 @@ const LoginForm = () => {
           Login
         </LoadingButton>
       </form>
-      {/* Form error - Login issue */}
-      {auth.error && <p className="form-error">{auth.error}</p>}
+
       {/* Forgot password link */}
       <Link href="/forgot-password" className={cx("form-end-link")}>
         Forgot password?
       </Link>
+      <br />
+      {/* Form error - Login issue */}
+      {auth.error && <p className="form-error">{auth.error}</p>}
     </div>
   );
 };
