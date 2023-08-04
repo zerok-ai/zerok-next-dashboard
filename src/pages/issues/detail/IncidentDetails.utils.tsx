@@ -40,7 +40,7 @@ export const IssueMetadata = () => {
           const data = res.data.payload.scenarios.find(
             (sc: ScenarioDetail) => sc.scenario_id === issueId
           );
-          if (data) setScenario(data);
+         setScenario(data);
         })
         .catch((err) => {
           console.log({ err });

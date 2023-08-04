@@ -36,6 +36,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const scenario = router.query.issue;
+  const issue_id = router.query.issue_id;
   const page = parseInt((router.query.page as string) ?? 1);
   const {
     data: traces,
@@ -43,7 +44,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
     setData: setTraces,
   } = useFetch<TracesStateDetail>("", null, transformTraces);
   useEffect(() => {
-    if (selectedCluster) {
+    if (selectedCluster && scenario && issue_id) {
       setTraces(null);
       const offset = (page - 1) * TRACES_PAGE_SIZE;
       const endpoint = GET_SCENARIO_TRACES_ENDPOINT.replace(
@@ -51,6 +52,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
         selectedCluster
       )
         .replace("{scenario_id}", scenario as string)
+        .replace("{issue_hash}", issue_id as string)
         .replace("{limit}", TRACES_PAGE_SIZE.toString())
         .replace("{offset}", offset.toString());
       fetchTraces(endpoint);

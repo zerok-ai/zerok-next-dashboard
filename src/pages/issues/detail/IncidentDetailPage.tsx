@@ -4,7 +4,7 @@ import BackLink from "components/helpers/BackLink";
 import IncidentChatTab from "components/IncidentChatTab";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
-// import TraceGroups from "components/TraceGroups";
+import TraceGroups from "components/TraceGroups";
 import TraceTable from "components/TraceTable";
 import TraceTree from "components/TraceTree";
 import Head from "next/head";
@@ -23,6 +23,7 @@ const IncidentDetailPage = () => {
   const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
   const router = useRouter();
   const trace = router.query.trace;
+  const issue_id = router.query.issue_id;
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -89,14 +90,37 @@ const IncidentDetailPage = () => {
             </div>
           ) : (
             <div className={styles["table-container"]}>
-              <TraceTable
+              {/* <TraceTable
                 updateChatTrace={(trace) => {
                   if (!chatTrace) {
                     setChatTrace(trace);
                   }
                 }}
-              />
-              {/* <TraceGroups /> */}
+              /> */}
+              {issue_id ? (
+                <div>
+                  <BackLink
+                    title="Back"
+                    onBack={() => {
+                      const old = router.query;
+                      delete old.issue_id;
+                      router.push({
+                        pathname: router.pathname,
+                        query: old,
+                      });
+                    }}
+                  />
+                  <TraceTable
+                    updateChatTrace={(trace) => {
+                      if (!chatTrace) {
+                        setChatTrace(trace);
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                <TraceGroups />
+              )}
             </div>
           )}
         </div>

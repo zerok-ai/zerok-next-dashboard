@@ -46,6 +46,7 @@
     width:100%;
     min-height: 0px !important;
     padding:0;
+
 }
 
 .accordion-summary-content {
@@ -73,7 +74,6 @@
 .accordion-details {
     border:none;
     padding:0 $sp-base * 2;
-    // border-left: 1px solid $grey-700;
     background-color: $bg-dark;
 }
 

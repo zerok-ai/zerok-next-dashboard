@@ -57,7 +57,7 @@
     overflow: scroll;
     border:1px solid $grey-800;
 }
-.detail-container {
+.detail-container,.table-container {
     height:calc(100vh - $header-height - $sp-base * 40);
     overflow: scroll;
 }
