@@ -10,7 +10,6 @@ import {
   GPT_ISSUE_ENDPOINT,
   GPT_SCENARIO_ENDPOINT,
 } from "utils/gpt/endpoints";
-import { ZK_GPT_RCA_ENDPOINT } from "utils/issues/endpoints";
 import raxios from "utils/raxios";
 
 import styles from "./IncidentChatTab.module.scss";
@@ -84,7 +83,7 @@ const IncidentChatTab = () => {
 
   const handleInputSubmit = async (val: string) => {
     if (selectedCluster) {
-      const endpoint = ZK_GPT_RCA_ENDPOINT.replace(
+      const endpoint = GPT_INCIDENT_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       )

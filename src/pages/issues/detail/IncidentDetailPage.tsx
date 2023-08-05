@@ -49,9 +49,7 @@ const IncidentDetailPage = () => {
       </div>
       <div className={styles["content-container"]}>
         <div className={styles["chat-container"]}>
-          <IncidentChatTab
-            trace={chatTrace?.incident_id ?? (trace as string) ?? null}
-          />
+          <IncidentChatTab />
         </div>
         <div className={styles["detail-container"]}>
           {trace ? (
