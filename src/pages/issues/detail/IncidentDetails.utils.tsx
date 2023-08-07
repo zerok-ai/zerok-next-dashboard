@@ -96,13 +96,15 @@ export const IssueMetadata = () => {
     );
   };
 
+  console.log({ trace, issueId });
+
   return scenario ? (
     <div className={styles["header-left"]}>
       {" "}
       <PageHeader
         showBreadcrumb={true}
         title={scenario.scenario_title}
-        showRange={!trace && !issueId}
+        showRange={false}
         align="right"
         showRefresh={false}
         bottomRow={<IssueTimes />}
