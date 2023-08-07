@@ -66,8 +66,6 @@ const IncidentChatTab = () => {
     }
   }, [issueId, selectedCluster]);
 
-  console.log({ scenarioData });
-
   useEffect(() => {
     if (selectedCluster && incidentId) {
       const endpoint = GPT_INCIDENT_ENDPOINT.replace(

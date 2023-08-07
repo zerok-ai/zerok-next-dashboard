@@ -1,6 +1,6 @@
-"use client";
 import { Skeleton, Tooltip } from "@mui/material";
 import cx from "classnames";
+import PageHeader from "components/helpers/PageHeader";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
@@ -69,7 +69,32 @@ export const IssueMetadata = () => {
   }, [scenario, selectedCluster]);
 
   const { isDrawerMinimized } = useSelector(drawerSelector);
-  // Sticky header boolean and ref
+
+  const IssueTimes = () => {
+    if (!metadata) return null;
+    return (
+      <div className={styles["incident-metadata-container"]}>
+        <Tooltip
+          title={`Last seen: ${getFormattedTime(metadata.last_seen)}`}
+          placement="bottom"
+          arrow
+        >
+          <span>{getRelativeTime(metadata.last_seen)}</span>
+        </Tooltip>
+        |
+        <span className={styles["incident-time-container"]}>
+          <AiOutlineClockCircle />{" "}
+          <Tooltip
+            title={`First seen: ${getFormattedTime(metadata.first_seen)}`}
+            placement="bottom"
+            arrow
+          >
+            <span>{getRelativeTime(metadata.first_seen)}</span>
+          </Tooltip>
+        </span>
+      </div>
+    );
+  };
   return scenario ? (
     <div
       className={cx(
@@ -80,29 +105,13 @@ export const IssueMetadata = () => {
     >
       <div className={styles["header-left"]}>
         {" "}
-        <h3>{scenario.scenario_title}</h3>
-        {metadata && (
-          <div className={styles["incident-metadata-container"]}>
-            <Tooltip
-              title={`Last seen: ${getFormattedTime(metadata.last_seen)}`}
-              placement="bottom"
-              arrow
-            >
-              <span>{getRelativeTime(metadata.last_seen)}</span>
-            </Tooltip>
-            |
-            <span className={styles["incident-time-container"]}>
-              <AiOutlineClockCircle />{" "}
-              <Tooltip
-                title={`First seen: ${getFormattedTime(metadata.first_seen)}`}
-                placement="bottom"
-                arrow
-              >
-                <span>{getRelativeTime(metadata.first_seen)}</span>
-              </Tooltip>
-            </span>
-          </div>
-        )}
+        <PageHeader
+          showBreadcrumb={true}
+          title={scenario.scenario_title}
+          showRange={false}
+          showRefresh={false}
+          bottomRow={<IssueTimes />}
+        />
       </div>
     </div>
   ) : (

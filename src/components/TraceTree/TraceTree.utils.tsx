@@ -107,7 +107,6 @@ export const spanTransformer = (spanData: SpanResponse) => {
       max = endTime;
     }
   });
-  console.log({ max });
   formattedSpans[rootSpanId!] = { ...rootSpan, totalTime: max };
   return formattedSpans;
 };

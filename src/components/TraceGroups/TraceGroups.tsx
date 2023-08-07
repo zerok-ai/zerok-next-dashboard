@@ -33,7 +33,6 @@ const TraceGroups = () => {
         .replace("{range}", range)
         .replace("{offset}", "0")
         .replace("{scenario_id}", scenarioID as string);
-      console.log({ endpoint });
       fetchTraceGroups(endpoint);
     }
   }, [selectedCluster, scenarioID]);
