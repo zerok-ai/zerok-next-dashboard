@@ -9,19 +9,14 @@ import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
-import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
+import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { filterServices } from "utils/functions";
-import raxios from "utils/raxios";
-import {
-  GET_SCENARIO_DETAILS_ENDPOINT,
-  LIST_SCENARIOS_ENDPOINT,
-} from "utils/scenarios/endpoints";
-import { type ScenarioDetail } from "utils/scenarios/types";
-import { type ServiceDetail } from "utils/types";
+import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
+import { type IssueDetail, type ServiceDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
 import { getIssueColumns } from "./IssuesPage.utils";
@@ -29,7 +24,12 @@ import { getIssueColumns } from "./IssuesPage.utils";
 const IssuesPage = () => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
 
-  const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
+  // const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
+
+  const { data: issues, fetchData: fetchIssues } = useFetch<IssueDetail[]>(
+    "issues",
+    null
+  );
 
   const { fetchData: fetchServices } = useFetch<ServiceDetail[]>(
     "results",
@@ -40,57 +40,69 @@ const IssuesPage = () => {
   const router = useRouter();
 
   const { query } = router;
-  // const page = query.page ? parseInt(query.page as string) : 1;
+  const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
 
-  const getData = async () => {
-    try {
-      const listScenariosResponse = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
-        headers: {
-          "Cluster-Id": selectedCluster,
-        },
-      });
-      const listScenarios: ScenarioDetail[] =
-        listScenariosResponse.data.payload.scenarios;
-      const scenarioIDs = listScenarios.map((sc) => sc.scenario_id);
-      const scenarioDetailEndpoint = GET_SCENARIO_DETAILS_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster as string
-      )
-        .replace("{scenario_id_list}", scenarioIDs.join(","))
-        .replace("{range}", range as string);
-      const scenarioDetails = (await raxios.get(scenarioDetailEndpoint)).data
-        .payload.scenarios;
-      const scenarioDetailsData: ScenarioDetail[] = listScenarios.map(
-        (sc: ScenarioDetail) => {
-          const sc1 = { ...sc };
-          const sc2 =
-            scenarioDetails.find(
-              (sc3: ScenarioDetail) => sc3.scenario_id === sc1.scenario_id
-            ) ?? {};
-          const scenario: ScenarioDetail = {
-            ...sc1,
-            ...sc2,
-          };
-          return scenario;
-        }
-      );
-      // filter empty scenarios
-      const filteredScenarios = scenarioDetailsData.filter((sc) => {
-        return sc.last_seen && sc.first_seen;
-      });
-      setScenarios(filteredScenarios);
-    } catch (err) {
-      console.log({ err });
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const listScenariosResponse = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
+  //       headers: {
+  //         "Cluster-Id": selectedCluster,
+  //       },
+  //     });
+  //     const listScenarios: ScenarioDetail[] =
+  //       listScenariosResponse.data.payload.scenarios;
+  //     const scenarioIDs = listScenarios.map((sc) => sc.scenario_id);
+  //     const scenarioDetailEndpoint = GET_SCENARIO_DETAILS_ENDPOINT.replace(
+  //       "{cluster_id}",
+  //       selectedCluster as string
+  //     )
+  //       .replace("{scenario_id_list}", scenarioIDs.join(","))
+  //       .replace("{range}", range as string);
+  //     const scenarioDetails = (await raxios.get(scenarioDetailEndpoint)).data
+  //       .payload.scenarios;
+  //     const scenarioDetailsData: ScenarioDetail[] = listScenarios.map(
+  //       (sc: ScenarioDetail) => {
+  //         const sc1 = { ...sc };
+  //         const sc2 =
+  //           scenarioDetails.find(
+  //             (sc3: ScenarioDetail) => sc3.scenario_id === sc1.scenario_id
+  //           ) ?? {};
+  //         const scenario: ScenarioDetail = {
+  //           ...sc1,
+  //           ...sc2,
+  //         };
+  //         return scenario;
+  //       }
+  //     );
+  //     // filter empty scenarios
+  //     const filteredScenarios = scenarioDetailsData.filter((sc) => {
+  //       return sc.last_seen && sc.first_seen;
+  //     });
+  //     setScenarios(filteredScenarios);
+  //   } catch (err) {
+  //     console.log({ err });
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (selectedCluster) {
+  //     setScenarios(null);
+  //     getData();
+  //   }
+  // }, [selectedCluster, renderTrigger, router.query]);
 
   useEffect(() => {
     if (selectedCluster) {
-      setScenarios(null);
-      getData();
+      fetchIssues(
+        LIST_ISSUES_ENDPOINT.replace("{cluster_id}", selectedCluster)
+          .replace("{range}", range as string)
+          .replace("{limit}", ISSUES_PAGE_SIZE.toString())
+          .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString())
+      );
     }
-  }, [selectedCluster, renderTrigger, router.query]);
+  }, [selectedCluster, router.query]);
+
   // @TODO - add types for filters here
   const services =
     query.services && query.services?.length > 0
@@ -99,11 +111,11 @@ const IssuesPage = () => {
 
   const columns = useMemo(() => {
     return getIssueColumns();
-  }, [scenarios]);
+  }, [issues]);
 
-  const table = useReactTable<ScenarioDetail>({
+  const table = useReactTable<IssueDetail>({
     columns,
-    data: scenarios ?? [],
+    data: issues ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -173,8 +185,8 @@ const IssuesPage = () => {
       </div>
       <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}
-        {selectedCluster !== null && scenarios ? (
-          <TableX table={table} data={scenarios ?? []} />
+        {selectedCluster !== null && issues ? (
+          <TableX table={table} data={issues ?? []} />
         ) : (
           <CustomSkeleton
             containerClass={styles["skeleton-container"]}

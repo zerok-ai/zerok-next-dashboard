@@ -40,7 +40,19 @@
 .issue-title-container {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-base;
+    color:$grey-50;
+    &:hover {
+        color:$primary-500;
+        cursor: pointer;
+        .issue-title-joiner {
+            color:$primary-500;
+        }
+    }
+}
+
+.issue-title-joiner {
+    color:$grey-300;
 }
 
 // SERVICE FILTER SELECTOR
@@ -70,8 +82,6 @@
 .issue-title-container {
     display: flex;
     // justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
 }
 
 .source {
