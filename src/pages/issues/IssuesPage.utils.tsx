@@ -3,29 +3,37 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Link from "next/link";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
-import { type ScenarioDetail } from "utils/scenarios/types";
+import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
 
-const helper = createColumnHelper<ScenarioDetail>();
+const helper = createColumnHelper<IssueDetail>();
 
 export const getIssueColumns = () => {
   return [
-    helper.accessor("scenario_title", {
-      header: "Issues",
+    helper.accessor("issue_title", {
+      header: "Issue",
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
-        const { scenario_title, scenario_id } = info.row.original;
+        const { issue_title, issue_hash, scenario_id } = info.row.original;
+
+        const split = issue_title.split("¦");
+        const title = split[0];
+        const service = split[1];
 
         return (
           <div className={styles["issue-container"]}>
             <div>
               <Link
-                href={`/issues/detail?issue=${scenario_id}`}
+                href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}`}
                 className={"hover-link"}
               >
                 <span className={styles["issue-title-container"]}>
-                  <a className={styles["issue-title"]}>{scenario_title}</a>
+                  {title}{" "}
+                  {service && (
+                    <span className={styles["issue-title-joiner"]}>in</span>
+                  )}
+                  {service}
                   {/* <TagX label={scenario_type} closable={false} /> */}
                 </span>
               </Link>

@@ -98,7 +98,7 @@ const IncidentDetailPage = () => {
               /> */}
               {issue_id ? (
                 <div>
-                  <BackLink
+                  {/* <BackLink
                     title="Back"
                     onBack={() => {
                       const old = router.query;
@@ -108,7 +108,7 @@ const IncidentDetailPage = () => {
                         query: old,
                       });
                     }}
-                  />
+                  /> */}
                   <TraceTable
                     updateChatTrace={(trace) => {
                       if (!chatTrace) {

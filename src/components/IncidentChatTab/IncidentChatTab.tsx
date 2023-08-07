@@ -8,7 +8,7 @@ import { useSelector } from "redux/store";
 import {
   GPT_INCIDENT_ENDPOINT,
   GPT_ISSUE_ENDPOINT,
-  GPT_SCENARIO_ENDPOINT,
+  // GPT_SCENARIO_ENDPOINT,
 } from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
@@ -26,12 +26,12 @@ const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
   const {
-    issue: scenarioId,
+    // issue: scenarioId,
     issue_id: issueId,
     trace: incidentId,
   } = router.query;
-  const { data: scenarioData, fetchData: fetchScenarioData } =
-    useFetch<string>("summary");
+  // const { data: scenarioData, fetchData: fetchScenarioData } =
+  useFetch<string>("summary");
   const {
     data: issueData,
     fetchData: fetchIssueData,
@@ -46,15 +46,15 @@ const IncidentChatTab = () => {
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
 
-  useEffect(() => {
-    if (scenarioId && selectedCluster) {
-      const endpoint = GPT_SCENARIO_ENDPOINT.replace(
-        "{scenario_id}",
-        scenarioId as string
-      ).replace("{cluster_id}", selectedCluster);
-      fetchScenarioData(endpoint);
-    }
-  }, [scenarioId, selectedCluster]);
+  // useEffect(() => {
+  //   if (scenarioId && selectedCluster) {
+  //     const endpoint = GPT_SCENARIO_ENDPOINT.replace(
+  //       "{scenario_id}",
+  //       scenarioId as string
+  //     ).replace("{cluster_id}", selectedCluster);
+  //     fetchScenarioData(endpoint);
+  //   }
+  // }, [scenarioId, selectedCluster]);
 
   useEffect(() => {
     if (issueId && selectedCluster) {
@@ -126,12 +126,12 @@ const IncidentChatTab = () => {
     <div className={styles.container}>
       <div className={styles["chat-box-container"]}>
         <div className={styles["text-container"]}>
-          <AIChatBox
+          {/* <AIChatBox
             text={scenarioData}
             animate={queries.length === 0}
             blink={false}
             header="Scenario summary"
-          />
+          /> */}
           {(issueData ?? issueLoading) && (
             <AIChatBox
               text={issueData}
