@@ -3,7 +3,7 @@
     overflow-y: auto;
     border:1px solid $grey-800;
     border-radius: $sp-base * 2;
-    height: calc(100vh - $header-height - $sp-base * 40);
+    height: calc(100vh - $header-height - $sp-base * 50);
 }
 
 
@@ -38,10 +38,14 @@
 .entry-point-container {
     display: flex;
     column-gap: $sp-base * 2;
-    cursor: pointer;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    &:hover {
+        .entry-point {
+            color:$primary-500;
+        }
+    }
 }
 
 .table-header {
@@ -52,15 +56,8 @@
     }
 }
 
-.table-row {
+.entry-point {
     cursor: pointer;
-    &:hover {
-        background-color: $grey-900;
-        .entry-point {
-            color:$primary-500;
-        }
-    }
-   
 }
 
 .pagination-container {

@@ -16,8 +16,11 @@ import { type IssueDetail } from "utils/types";
 import styles from "./TraceGroups.module.scss";
 
 const TraceGroups = () => {
-  const { data: traceGroups, fetchData: fetchTraceGroups } =
-    useFetch<IssueDetail[]>("issues");
+  const {
+    data: traceGroups,
+    fetchData: fetchTraceGroups,
+    setData: setTraceGroups,
+  } = useFetch<IssueDetail[]>("issues");
   const router = useRouter();
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
   const scenarioID = router.query.issue;
@@ -25,6 +28,7 @@ const TraceGroups = () => {
 
   useEffect(() => {
     if (selectedCluster && scenarioID) {
+      setTraceGroups(null);
       const endpoint = GET_TRACE_GROUPS_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
@@ -35,7 +39,7 @@ const TraceGroups = () => {
         .replace("{scenario_id}", scenarioID as string);
       fetchTraceGroups(endpoint);
     }
-  }, [selectedCluster, scenarioID]);
+  }, [selectedCluster, scenarioID, router.query.range]);
 
   const AccordionIcon = useMemo(() => {
     return <HiChevronRight />;
