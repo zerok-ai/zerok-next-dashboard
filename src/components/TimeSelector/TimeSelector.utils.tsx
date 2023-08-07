@@ -31,12 +31,12 @@ export const TIME_OPTIONS = [
     label: "1d",
     value: "-24h",
   },
-  {
-    label: "3d",
-    value: "-3d",
-  },
-  {
-    label: "1w",
-    value: "-7d",
-  },
+  // {
+  //   label: "3d",
+  //   value: "-3d",
+  // },
+  // {
+  //   label: "1w",
+  //   value: "-7d",
+  // },
 ];
