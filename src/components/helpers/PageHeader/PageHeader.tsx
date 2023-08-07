@@ -1,3 +1,4 @@
+import BreadcrumbX from "components/BreadcrumbX";
 import ClusterRefreshButton from "components/ClusterRefreshButton";
 import TimeSelector from "components/TimeSelector";
 
@@ -9,6 +10,7 @@ interface PageHeaderProps {
   title: string;
   extras?: React.ReactNode[];
   bottomRow?: React.ReactNode;
+  showBreadcrumb: boolean;
 }
 
 const PageHeader = ({
@@ -17,9 +19,13 @@ const PageHeader = ({
   title,
   extras,
   bottomRow,
+  showBreadcrumb = false,
 }: PageHeaderProps) => {
   return (
     <div className={styles.container}>
+      <div className={styles["breadcrumb-container"]}>
+        {showBreadcrumb && <BreadcrumbX />}
+      </div>
       <div className={styles["top-row"]}>
         <h3>{title}</h3>
         {showRange && <TimeSelector />}
