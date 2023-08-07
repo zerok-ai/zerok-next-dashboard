@@ -4,6 +4,7 @@ import CustomSkeleton from "components/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
+import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
@@ -21,15 +22,21 @@ import { type IssueDetail, type ServiceDetail } from "utils/types";
 import styles from "./IssuesPage.module.scss";
 import { getIssueColumns } from "./IssuesPage.utils";
 
+interface IssuesDataType {
+  issues: IssueDetail[];
+  total_records: number;
+}
+
 const IssuesPage = () => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
 
   // const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
 
-  const { data: issues, fetchData: fetchIssues } = useFetch<IssueDetail[]>(
-    "issues",
-    null
-  );
+  const {
+    data,
+    fetchData: fetchIssues,
+    setData,
+  } = useFetch<IssuesDataType>("", null);
 
   const { fetchData: fetchServices } = useFetch<ServiceDetail[]>(
     "results",
@@ -94,6 +101,7 @@ const IssuesPage = () => {
 
   useEffect(() => {
     if (selectedCluster) {
+      setData(null);
       fetchIssues(
         LIST_ISSUES_ENDPOINT.replace("{cluster_id}", selectedCluster)
           .replace("{range}", range as string)
@@ -111,11 +119,11 @@ const IssuesPage = () => {
 
   const columns = useMemo(() => {
     return getIssueColumns();
-  }, [issues]);
+  }, [data?.issues]);
 
   const table = useReactTable<IssueDetail>({
     columns,
-    data: issues ?? [],
+    data: data?.issues ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -185,8 +193,8 @@ const IssuesPage = () => {
       </div>
       <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}
-        {selectedCluster !== null && issues ? (
-          <TableX table={table} data={issues ?? []} />
+        {selectedCluster !== null && data?.issues ? (
+          <TableX table={table} data={data?.issues ?? []} />
         ) : (
           <CustomSkeleton
             containerClass={styles["skeleton-container"]}
@@ -195,14 +203,14 @@ const IssuesPage = () => {
           />
         )}
       </div>
-      {/* {issuesData && (
+      {data?.issues && (
         <div className={styles["pagination-container"]}>
           <PaginationX
-            totalItems={issuesData.total_records}
+            totalItems={data.total_records}
             itemsPerPage={ISSUES_PAGE_SIZE}
           />
         </div>
-      )} */}
+      )}
     </div>
   );
 };
