@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import raxios from "utils/raxios";
 import {
@@ -22,6 +23,9 @@ export const IssueMetadata = () => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   const scenarioId = router.query.issue;
+  const trace = router.query.trace;
+  const issueId = router.query.issue_id;
+  const range = router.query.range ?? DEFAULT_TIME_RANGE;
 
   // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
@@ -53,7 +57,7 @@ export const IssueMetadata = () => {
         selectedCluster
       )
         .replace("{scenario_id_list}", scenario.scenario_id)
-        .replace("{range}", "-1d");
+        .replace("{range}", range as string);
       raxios
         .get(endpoint)
         .then((res) => {
@@ -98,7 +102,7 @@ export const IssueMetadata = () => {
       <PageHeader
         showBreadcrumb={true}
         title={scenario.scenario_title}
-        showRange={false}
+        showRange={!trace && !issueId}
         align="right"
         showRefresh={false}
         bottomRow={<IssueTimes />}

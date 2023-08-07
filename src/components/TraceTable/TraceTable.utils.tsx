@@ -32,6 +32,7 @@ export const INCIDENT_COLUMNS = [
           <span className={styles["entry-point"]}>
             {trimString(info.getValue(), 40)}{" "}
           </span>
+          {/* <ChipX label={info.row.original.protocol} /> */}
         </div>
       );
     },
