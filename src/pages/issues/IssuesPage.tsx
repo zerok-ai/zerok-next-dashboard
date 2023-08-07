@@ -75,7 +75,11 @@ const IssuesPage = () => {
           return scenario;
         }
       );
-      setScenarios(scenarioDetailsData);
+      // filter empty scenarios
+      const filteredScenarios = scenarioDetailsData.filter((sc) => {
+        return sc.last_seen && sc.first_seen;
+      });
+      setScenarios(filteredScenarios);
     } catch (err) {
       console.log({ err });
     }

@@ -75,31 +75,31 @@ export const getIssueColumns = () => {
     }),
 
     // Velocity
-    helper.accessor("velocity", {
-      header: "Velocity",
-      size: DEFAULT_COL_WIDTH / 2,
-      cell: (info) => {
-        const { velocity } = info.row.original;
-        return (
-          <div className={styles["issue-time-container"]}>
-            <span>{velocity ?? "0"}</span>
-          </div>
-        );
-      },
-    }),
+    // helper.accessor("velocity", {
+    //   header: "Velocity",
+    //   size: DEFAULT_COL_WIDTH / 2,
+    //   cell: (info) => {
+    //     const { velocity } = info.row.original;
+    //     return (
+    //       <div className={styles["issue-time-container"]}>
+    //         <span>{velocity ?? "0"}</span>
+    //       </div>
+    //     );
+    //   },
+    // }),
     // Total events
-    helper.accessor("total_count", {
-      header: "Total events",
-      size: DEFAULT_COL_WIDTH * 1.2,
-      cell: (info) => {
-        const { total_count } = info.row.original;
-        return (
-          <div className={styles["issue-time-container"]}>
-            <span>{total_count ?? "0"}</span>
-          </div>
-        );
-      },
-    }),
+    // helper.accessor("total_count", {
+    //   header: "Total events",
+    //   size: DEFAULT_COL_WIDTH * 1.2,
+    //   cell: (info) => {
+    //     const { total_count } = info.row.original;
+    //     return (
+    //       <div className={styles["issue-time-container"]}>
+    //         <span>{total_count ?? "0"}</span>
+    //       </div>
+    //     );
+    //   },
+    // }),
   ];
 };
 

@@ -10,6 +10,7 @@ interface TableXProps<T extends object> {
   loading?: boolean;
   headerClassName?: string;
   rowClassName?: string;
+  borderRadius?: boolean;
   onRowClick?: (row: T) => void;
 }
 
@@ -19,9 +20,10 @@ const TableX = <T extends object>({
   headerClassName,
   rowClassName,
   onRowClick,
+  borderRadius = true,
 }: TableXProps<T>) => {
   return (
-    <div className="table">
+    <div className={`table ${borderRadius ? `table-w-br` : ``}`}>
       <table className={cx("table")}>
         <thead className={cx("table-thead", headerClassName)}>
           {table.getHeaderGroups().map((gr) => {
@@ -29,7 +31,6 @@ const TableX = <T extends object>({
               <tr key={gr.id}>
                 {gr.headers.map((header) => {
                   const width = header.getSize() || DEFAULT_COL_WIDTH;
-
                   return (
                     <th
                       key={header.id}

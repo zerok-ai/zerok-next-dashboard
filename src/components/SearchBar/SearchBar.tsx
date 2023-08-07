@@ -22,6 +22,7 @@ const SearchBar = ({ onChange, inputState }: SearchBarProps) => {
         placeholder="Search"
         value={inputState}
         fullWidth
+        className={styles.input}
         onChange={(e) => {
           onChange(e.target.value);
         }}

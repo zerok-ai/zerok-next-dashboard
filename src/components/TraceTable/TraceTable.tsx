@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { type TraceMetadataDetail } from "utils/issues/types";
 import { TRACES_PAGE_SIZE } from "utils/scenarios/constants";
 import { GET_SCENARIO_TRACES_ENDPOINT } from "utils/scenarios/endpoints";
@@ -37,6 +38,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const scenario = router.query.issue;
   const issue_id = router.query.issue_id;
+  const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
   const page = parseInt((router.query.page as string) ?? 1);
   const {
     data: traces,
@@ -54,7 +56,8 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
         .replace("{scenario_id}", scenario as string)
         .replace("{issue_hash}", issue_id as string)
         .replace("{limit}", TRACES_PAGE_SIZE.toString())
-        .replace("{offset}", offset.toString());
+        .replace("{offset}", offset.toString())
+        .replace("{range}", range);
       fetchTraces(endpoint);
     }
   }, [selectedCluster, renderTrigger, router.query]);
