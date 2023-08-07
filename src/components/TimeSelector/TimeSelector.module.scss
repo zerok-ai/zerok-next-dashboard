@@ -11,6 +11,11 @@
             border-color: $grey-900 !important;
         }
     }
+    &:hover,&:focus {
+        :global(.MuiOutlinedInput-notchedOutline) {
+          border-color:$grey-300;
+        }
+      }
    
 }
 

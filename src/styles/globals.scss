@@ -99,3 +99,15 @@ a {
 .object-key-val, .variable-row {
   border-color: $grey-300 !important;
 }
+
+
+// MUI overloads
+
+// Menu item
+.MuiMenuItem-root {
+  color:$grey-50;
+}
+
+.MuiMenuItem-root.Mui-selected {
+  background-color: $primary-800;
+}

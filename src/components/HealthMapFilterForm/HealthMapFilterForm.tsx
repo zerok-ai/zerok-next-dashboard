@@ -98,6 +98,10 @@ const HealthMapFilterForm = ({
     e.preventDefault();
     const { namespaces, serviceNames } = filters;
     const query: GenericObject = {};
+    if (!namespaces.length && !serviceNames.length) {
+      query.namespaces = [];
+      query.serviceNames = [];
+    }
     if (namespaces.length) {
       query.namespaces = namespaces.join(",");
     }
@@ -116,11 +120,6 @@ const HealthMapFilterForm = ({
       namespaces: [],
       serviceNames: [],
     });
-    router.push({
-      pathname: router.pathname,
-      query: {},
-    });
-    onFinish();
   };
 
   // @TODO - better type checking for filter groups
@@ -196,11 +195,11 @@ const HealthMapFilterForm = ({
           {filters.namespaces.length + filters.serviceNames.length})
         </Button>
         <Button
-          variant="contained"
+          variant="text"
           color="secondary"
-          type="submit"
           fullWidth
           onClick={clearFilters}
+          className={styles["clear-btn"]}
         >
           Clear all
         </Button>
