@@ -1,6 +1,6 @@
 import cx from "classnames";
-import BreadcrumbX from "components/BreadcrumbX";
 import ClusterRefreshButton from "components/ClusterRefreshButton";
+import BreadcrumbX from "components/themeX/BreadcrumbX";
 import TimeSelector from "components/TimeSelector";
 
 import styles from "./PageHeader.module.scss";

@@ -88,9 +88,17 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
         {isGroup && isNavOpen && (
           <nav className={styles["group-items"]}>
             {nav.children?.map((child) => {
+              const active = router.pathname === child.path;
               return (
                 <Link href={child.path} key={nanoid()}>
-                  <span className={styles["group-item"]}>{child.label}</span>
+                  <span
+                    className={cx(
+                      styles["group-item"],
+                      active && styles.active
+                    )}
+                  >
+                    {child.label}
+                  </span>
                 </Link>
               );
             })}
