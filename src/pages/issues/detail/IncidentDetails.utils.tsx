@@ -1,11 +1,9 @@
 import { Skeleton, Tooltip } from "@mui/material";
-import cx from "classnames";
 import PageHeader from "components/helpers/PageHeader";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { clusterSelector } from "redux/cluster";
-import { drawerSelector } from "redux/drawer";
 import { useSelector } from "redux/store";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import raxios from "utils/raxios";
@@ -23,13 +21,14 @@ export const IssueMetadata = () => {
   const [metadata, setMetadata] = useState<null | ScenarioDetail>(null);
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
-  const issueId = router.query.issue;
+  const scenarioId = router.query.issue;
+  const issueId = router.query.issue_id;
 
   // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
   // Fetch issue data on mount
   useEffect(() => {
-    if (issueId && selectedCluster) {
+    if (scenarioId && selectedCluster) {
       raxios
         .get(LIST_SCENARIOS_ENDPOINT, {
           headers: {
@@ -38,7 +37,7 @@ export const IssueMetadata = () => {
         })
         .then((res) => {
           const data = res.data.payload.scenarios.find(
-            (sc: ScenarioDetail) => sc.scenario_id === issueId
+            (sc: ScenarioDetail) => sc.scenario_id === scenarioId
           );
           setScenario(data);
         })
@@ -46,7 +45,7 @@ export const IssueMetadata = () => {
           console.log({ err });
         });
     }
-  }, [issueId, selectedCluster]);
+  }, [scenarioId, selectedCluster]);
 
   useEffect(() => {
     if (scenario && selectedCluster) {
@@ -67,8 +66,6 @@ export const IssueMetadata = () => {
         });
     }
   }, [scenario, selectedCluster]);
-
-  const { isDrawerMinimized } = useSelector(drawerSelector);
 
   const IssueTimes = () => {
     if (!metadata) return null;
@@ -95,24 +92,23 @@ export const IssueMetadata = () => {
       </div>
     );
   };
+  const trace = router.query.trace;
+  const getRangeVisibility = () => {
+    if (trace) return false;
+    if (scenario && !issueId) return false;
+    return true;
+  };
   return scenario ? (
-    <div
-      className={cx(
-        styles.header,
-        isDrawerMinimized && styles["drawer-minimized"]
-      )}
-      id="incident-header"
-    >
-      <div className={styles["header-left"]}>
-        {" "}
-        <PageHeader
-          showBreadcrumb={true}
-          title={scenario.scenario_title}
-          showRange={false}
-          showRefresh={false}
-          bottomRow={<IssueTimes />}
-        />
-      </div>
+    <div className={styles["header-left"]}>
+      {" "}
+      <PageHeader
+        showBreadcrumb={true}
+        title={scenario.scenario_title}
+        showRange={getRangeVisibility()}
+        align="right"
+        showRefresh={false}
+        bottomRow={<IssueTimes />}
+      />
     </div>
   ) : (
     <Skeleton className={"page-title-loader"} />

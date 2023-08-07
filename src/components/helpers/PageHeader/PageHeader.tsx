@@ -1,3 +1,4 @@
+import cx from "classnames";
 import BreadcrumbX from "components/BreadcrumbX";
 import ClusterRefreshButton from "components/ClusterRefreshButton";
 import TimeSelector from "components/TimeSelector";
@@ -10,7 +11,8 @@ interface PageHeaderProps {
   title: string;
   extras?: React.ReactNode[];
   bottomRow?: React.ReactNode;
-  showBreadcrumb: boolean;
+  showBreadcrumb?: boolean;
+  align?: "left" | "right";
 }
 
 const PageHeader = ({
@@ -20,23 +22,31 @@ const PageHeader = ({
   extras,
   bottomRow,
   showBreadcrumb = false,
+  align = "left",
 }: PageHeaderProps) => {
   return (
     <div className={styles.container}>
       <div className={styles["breadcrumb-container"]}>
         {showBreadcrumb && <BreadcrumbX />}
       </div>
-      <div className={styles["top-row"]}>
-        <h3>{title}</h3>
-        {showRange && <TimeSelector />}
-        {showRefresh && <ClusterRefreshButton />}
-        {extras && (
-          <div className={styles.extras}>
-            {extras.map((el) => {
-              return el;
-            })}
-          </div>
+      <div
+        className={cx(
+          styles["top-row"],
+          align === "right" && styles["top-row-right"]
         )}
+      >
+        <h3>{title}</h3>
+        <div className={styles["top-row-actions"]}>
+          {showRange && <TimeSelector />}
+          {showRefresh && <ClusterRefreshButton />}
+          {extras && (
+            <div className={styles.extras}>
+              {extras.map((el) => {
+                return el;
+              })}
+            </div>
+          )}
+        </div>
       </div>
       <div className={styles["bottom-row"]}>{bottomRow && bottomRow}</div>
     </div>
