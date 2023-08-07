@@ -102,6 +102,7 @@ export default function Checkbox(theme: Theme) {
               borderColor: "inherit",
               borderRadius: 0.25,
               position: "relative",
+              background: "#fff",
             }}
           >
             <CheckSquareFilled

@@ -22,7 +22,6 @@ export const IssueMetadata = () => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   const scenarioId = router.query.issue;
-  const issueId = router.query.issue_id;
 
   // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
@@ -92,19 +91,14 @@ export const IssueMetadata = () => {
       </div>
     );
   };
-  const trace = router.query.trace;
-  const getRangeVisibility = () => {
-    if (trace) return false;
-    if (scenario && !issueId) return false;
-    return true;
-  };
+
   return scenario ? (
     <div className={styles["header-left"]}>
       {" "}
       <PageHeader
         showBreadcrumb={true}
         title={scenario.scenario_title}
-        showRange={getRangeVisibility()}
+        showRange={false}
         align="right"
         showRefresh={false}
         bottomRow={<IssueTimes />}

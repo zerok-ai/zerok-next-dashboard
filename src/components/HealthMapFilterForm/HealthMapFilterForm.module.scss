@@ -38,17 +38,22 @@
     }
 }
 .form-items {
-    height:78vh;
+    height: calc(100vh - 132px);
     overflow: auto;
 }
 
 .form-actions {
-    flex: 1;
-    padding:$sp-base * 3 $sp-base * 5;
+    margin-bottom: $sp-base * 5;
+    padding:0 $sp-base * 5;
     display: flex;
     column-gap: $sp-base * 2;
 }
 
 .empty-text {
     padding:$sp-base * 4 $sp-base * 5;
+}
+
+.clear-btn {
+    background-color: $grey-950 !important;
+    color:$white;
 }

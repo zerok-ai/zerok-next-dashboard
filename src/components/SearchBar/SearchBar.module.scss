@@ -12,3 +12,12 @@
         height: 100%;
     }
 }
+
+.input {
+    & ::placeholder {
+        color:$white !important;
+    }
+    input {
+        
+       }
+}
