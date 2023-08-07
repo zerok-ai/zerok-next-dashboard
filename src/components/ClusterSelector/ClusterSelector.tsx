@@ -51,9 +51,8 @@ const ClusterSelector = () => {
           }
         }}
       >
-        <MenuItem value="" disabled>
-          Target cluster
-        </MenuItem>
+        <p className={styles["menu-header"]}>Target cluster</p>
+        <Divider className={styles["menu-divider"]} />
         {clusters.length &&
           clusters.map((cl) => {
             return (

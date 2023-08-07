@@ -27,11 +27,11 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
         label: "Assigned to me",
       },
       {
-        path: "/issues",
+        path: "/issues?tab=recently-viewed",
         label: "Recently viewed",
       },
       {
-        path: "/issues",
+        path: "/issues?tab=unassigned",
         label: "Assigned to me",
       },
     ],

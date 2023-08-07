@@ -1,6 +1,6 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import CustomSkeleton from "components/CustomSkeleton";
-import PaginationX from "components/PaginationX";
+import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
