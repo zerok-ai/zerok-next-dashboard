@@ -80,19 +80,21 @@ const IncidentDetailPage = () => {
           <IncidentChatTab />
         </div>
         <div className={styles["detail-container"]}>
-          <BackLink
-            onBack={() => {
-              const old = router.query;
-              delete old.trace;
-              router.push({
-                pathname: router.pathname,
-                query: {
-                  ...old,
-                },
-              });
-            }}
-            title="Back to traces"
-          />
+          {trace && (
+            <BackLink
+              onBack={() => {
+                const old = router.query;
+                delete old.trace;
+                router.push({
+                  pathname: router.pathname,
+                  query: {
+                    ...old,
+                  },
+                });
+              }}
+              title="Back to traces"
+            />
+          )}
           {trace ? (
             <div className={styles["tree-wrapper"]}>
               <div className={styles["cards-container"]}>

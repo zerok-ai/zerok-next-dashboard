@@ -95,7 +95,8 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       isLastChild: boolean = false
     ) => {
       const Label = () => {
-        // const exSpan = exceptionParent ? spans![exceptionParent] : null;
+        const exSpan = exceptionParent ? spans![exceptionParent] : null;
+        const highlight = exSpan?.source === span.source && !isTopRoot;
         return (
           <div className={styles["accordion-summary-content"]}>
             <p
@@ -107,7 +108,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
               <span
                 className={cx(
                   styles["accordion-label"],
-                  exceptionParent === span.span_id && styles["exception-parent"]
+                  highlight && styles["exception-parent"]
                 )}
                 role="button"
                 onClick={() => {
