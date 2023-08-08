@@ -109,7 +109,7 @@ const IssuesPage = () => {
           .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString())
       );
     }
-  }, [selectedCluster, router.query]);
+  }, [selectedCluster, router.query, renderTrigger]);
 
   // @TODO - add types for filters here
   const services =
