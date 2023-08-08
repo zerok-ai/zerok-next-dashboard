@@ -15,8 +15,10 @@
 
 .tabs-container {
     overflow-x: auto;
-    padding:$sp-base * 4 $sp-base * 2;
-    
+    padding:$sp-base * 2 $sp-base * 2;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .tab-key {
@@ -29,8 +31,16 @@
 .pods-container {
     padding:0 $sp-base * 5;
     padding-right:0;
-    
+    position: relative;
 }
+
+.time-selector-container {
+    // position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: $sp-base * 6;
+}
+
 .pod-rows {
     display:flex;
     flex-direction: column;
@@ -55,7 +65,7 @@
     display: grid;
     grid-template-columns: 1.5fr 9fr;
     padding-bottom: $sp-base * 3;
-    border-bottom: 1px solid $grey-925;
+    border-bottom: 1px solid $grey-900;
     align-items: center;
     p, span {
         color:$grey-50;

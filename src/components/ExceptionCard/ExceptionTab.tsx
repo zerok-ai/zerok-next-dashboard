@@ -50,7 +50,7 @@ const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
         .replace("{span_id}", spanKey);
       fetchData(endpoint);
     }
-  }, [selectedCluster, router]);
+  }, [selectedCluster]);
 
   if (!exceptionSpan) {
     return (
