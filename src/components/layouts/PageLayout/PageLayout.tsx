@@ -13,7 +13,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
       <aside className={styles["drawer-container"]}>
         <MainDrawer />
       </aside>
-      <div className={styles["page-container"]}>
+      <div className={`${styles["page-container"]} global-container`}>
         <header className={styles["header-container"]}>
           <div className={styles["header-left"]}>
             <DrawerToggleButton />

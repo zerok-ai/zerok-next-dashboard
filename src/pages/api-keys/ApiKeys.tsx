@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-table";
 import cx from "classnames";
 import CodeBlock from "components/CodeBlock";
+import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
@@ -13,6 +14,7 @@ import TableX from "components/themeX/TableX";
 import VisibilityToggleButton from "components/VisibilityToggleButton";
 import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
+import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useMemo, useState } from "react";
 import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
@@ -160,15 +162,24 @@ const ApiKeys = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>API Keys</h2>
-        <Button
-          color="primary"
-          variant="contained"
-          className={styles["key-button"]}
-          onClick={createApiKey}
-        >
-          <AiOutlineFileAdd className={styles["key-icon"]} /> Create new API key
-        </Button>
+        <PageHeader
+          title="API Keys"
+          showRange={false}
+          align="right"
+          showRefresh={false}
+          extras={[
+            <Button
+              color="primary"
+              variant="contained"
+              className={styles["key-button"]}
+              onClick={createApiKey}
+              key={nanoid()}
+            >
+              <AiOutlineFileAdd className={styles["key-icon"]} /> Create new API
+              key
+            </Button>,
+          ]}
+        />
       </div>
       <div className={styles["table-container"]}>
         {/* API keys table */}
