@@ -4,6 +4,7 @@ import ExceptionTab from "components/ExceptionCard";
 import BackLink from "components/helpers/BackLink";
 import IncidentChatTab from "components/IncidentChatTab";
 import PageLayout from "components/layouts/PageLayout";
+import PodCard from "components/PodCard";
 import PrivateRoute from "components/PrivateRoute";
 import TraceGroups from "components/TraceGroups";
 import TraceTable from "components/TraceTable";
@@ -14,6 +15,7 @@ import { Fragment, useEffect, useState } from "react";
 import { drawerSelector, toggleDrawer } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
 import { type TraceMetadataDetail } from "utils/issues/types";
+import { type SpanResponse } from "utils/types";
 
 // import { type SpanResponse } from "utils/types";
 import styles from "./IncidentDetailPage.module.scss";
@@ -22,6 +24,8 @@ import { IssueMetadata } from "./IncidentDetails.utils";
 const IncidentDetailPage = () => {
   const [chatTrace, setChatTrace] = useState<null | TraceMetadataDetail>(null);
   const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
+  const [spans, setSpans] = useState<null | SpanResponse>(null);
+  const [podTabs, setPodTabs] = useState<null | string[]>(null);
   const router = useRouter();
   const trace = router.query.trace;
   const issue_id = router.query.issue_id;
@@ -36,6 +40,30 @@ const IncidentDetailPage = () => {
       dispatch(toggleDrawer());
     }
   }, []);
+
+  useEffect(() => {
+    if (spans) {
+      const memo = new Set<string>();
+      Object.keys(spans).forEach((key) => {
+        const span = spans[key];
+        if (
+          span.source &&
+          !span.source.includes("zk-client") &&
+          !memo.has(span.source)
+        ) {
+          memo.add(span.source);
+        }
+        if (
+          span.destination &&
+          !span.destination.includes("zk-client") &&
+          !memo.has(span.destination)
+        ) {
+          memo.add(span.destination);
+        }
+      });
+      setPodTabs(Array.from(memo));
+    }
+  }, [spans]);
 
   return (
     <div>
@@ -52,21 +80,21 @@ const IncidentDetailPage = () => {
           <IncidentChatTab />
         </div>
         <div className={styles["detail-container"]}>
+          <BackLink
+            onBack={() => {
+              const old = router.query;
+              delete old.trace;
+              router.push({
+                pathname: router.pathname,
+                query: {
+                  ...old,
+                },
+              });
+            }}
+            title="Back to traces"
+          />
           {trace ? (
             <div className={styles["tree-wrapper"]}>
-              <BackLink
-                onBack={() => {
-                  const old = router.query;
-                  delete old.trace;
-                  router.push({
-                    pathname: router.pathname,
-                    query: {
-                      ...old,
-                    },
-                  });
-                }}
-                title="Back to traces"
-              />
               <div className={styles["cards-container"]}>
                 <div
                   className={cx(
@@ -75,6 +103,9 @@ const IncidentDetailPage = () => {
                   )}
                 >
                   <TraceTree
+                    updateSpans={(spans: SpanResponse) => {
+                      setSpans(spans);
+                    }}
                     updateExceptionSpan={(id: string) => {
                       setExceptionSpan(id);
                     }}
@@ -85,6 +116,9 @@ const IncidentDetailPage = () => {
                     <ExceptionTab spanKey={exceptionSpan} />
                   </div>
                 )}
+                <div className={styles["pod-container"]}>
+                  <PodCard services={podTabs} />
+                </div>
               </div>
             </div>
           ) : (

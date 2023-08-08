@@ -4,15 +4,16 @@
 .header {
     width:100%;
     @include card-header;
+    
 }
 .content {
 }
 .container {
     position: relative;
+    height:400px;    height:400px;
     display: flex;
     flex-direction: column;
     row-gap: $sp-base * 4;
-    
     border:1px solid $grey-800;
     border-radius: $sp-base * 2;
     
@@ -30,7 +31,7 @@
 
 }
 .content {
-    height:400px;
+
     overflow-y: auto;
     overflow-x: hidden;
 }

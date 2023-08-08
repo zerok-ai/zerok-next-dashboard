@@ -114,7 +114,7 @@ const ServicesMenu = ({
             borderRadius: `${SPACE_TOKEN}px}`,
           },
           "& .MuiMenu-list": {
-            overflowY: "scroll",
+            overflowY: "auto",
             background: cssVars.grey900,
             borderRadius: `${SPACE_TOKEN}px}`,
             border: `1px solid ${cssVars.grey700}`,

@@ -1,5 +1,5 @@
-import { Skeleton, Tab, Tabs } from "@mui/material";
-import CustomSkeleton from "components/CustomSkeleton";
+import { Tab, Tabs } from "@mui/material";
+import TabSkeletons from "components/helpers/TabSkeletons";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
@@ -61,16 +61,7 @@ const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
   }, [selectedSpan]);
   const rawData = rawResponse ? rawResponse[selectedSpan] : null;
   if (!rawResponse || !rawData) {
-    return (
-      <div className={styles["skeleton-container"]}>
-        <div className={styles["tab-skeletons"]}>
-          <Skeleton variant="rectangular" width={100} height={30} />
-          <Skeleton variant="rectangular" width={100} height={30} />
-          <Skeleton variant="rectangular" width={100} height={30} />
-        </div>
-        <CustomSkeleton len={5} skeletonClass={styles.skeleton} />
-      </div>
-    );
+    return <TabSkeletons />;
   }
 
   const tabs = getTabs(rawData.protocol);
