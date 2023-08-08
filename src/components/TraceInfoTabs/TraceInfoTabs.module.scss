@@ -23,17 +23,3 @@
 .full-width {
     grid-template-columns: 1fr ;
 }
-
-.skeleton-container {
-    width:100%;
-    padding:$sp-base * 5;
-}
-
-.tab-skeletons {
-    display: flex;
-    column-gap: $sp-base * 4;
-}
-
-.skeleton {
-    height:40px;
-}

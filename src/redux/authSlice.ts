@@ -40,6 +40,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
+  localStorage.setItem("redirect", window.location.pathname);
   return await raxios.get(LOGOUT_ENDPOINT);
 });
 

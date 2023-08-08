@@ -25,9 +25,10 @@ import {
 
 interface TraceTreeProps {
   updateExceptionSpan: (id: string) => void;
+  updateSpans: (spans: SpanResponse) => void;
 }
 
-const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
+const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
   const router = useRouter();
   const { data: spans, fetchData: fetchSpans } = useFetch<SpanResponse>(
     "spans",
@@ -59,6 +60,7 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
   useEffect(() => {
     if (spans) {
       const root = getRootSpan(spans);
+      updateSpans(spans);
       if (root) {
         setSpanTree(buildSpanTree(spans, spans[root]));
       }

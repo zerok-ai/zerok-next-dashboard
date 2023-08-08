@@ -65,17 +65,19 @@
     overflow-y: auto;
 }
 .tree-container {
-    height:calc(100vh - $header-height - $sp-base * 50);
-    display: grid;
-}
-.tree-container-minimal {
     height:400px;
+    display: grid;
     position: relative;
-    margin-bottom: $sp-base * 6;
 }
 
 .cards-container {
-    row-gap: $sp-base * 4;
+    row-gap: $sp-base * 6;
+    display: flex;
+    flex-direction: column;
     // overflow-y: auto;
+}
+
+.pod-container {
+    height:400px;
 }
 

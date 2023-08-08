@@ -46,7 +46,6 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
     setData: setTraces,
   } = useFetch<TracesStateDetail>("", null, transformTraces);
   useEffect(() => {
-    console.log("called");
     if (selectedCluster && scenario && issue_id) {
       setTraces(null);
       const offset = (page - 1) * TRACES_PAGE_SIZE;

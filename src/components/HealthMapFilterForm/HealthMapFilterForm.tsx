@@ -49,7 +49,6 @@ const HealthMapFilterForm = ({
   });
 
   const [searchValue, setSearchValue] = useState("");
-  console.log({ serviceNameMap }, Array.from(serviceNameMap));
   const serviceNames = Array.from(serviceNameMap).filter(
     (sn) => sn && sn.includes(searchValue)
   );
