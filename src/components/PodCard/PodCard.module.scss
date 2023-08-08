@@ -40,10 +40,11 @@
     box-sizing: content-box;
     padding-right: $sp-base * 3;
     transition:all 0.3s ease;
-    ::-webkit-scrollbar {
-       opacity: 0;
+    *::-webkit-scrollbar {
+        width: 16px;
+        opacity: 0;
     }
-    *::-webkit-scrollbar-thumb {
+    ::-webkit-scrollbar-thumb {
         background-color: $grey-700;
         border-radius: 8px;
         border:5px solid $bg-dark;

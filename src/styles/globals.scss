@@ -127,14 +127,15 @@ a {
     scrollbar-color: $grey-500 $bg-dark;
   }
 
-  /* Chrome, Edge, and Safari */
+  // /* Chrome, Edge, and Safari */
   *::-webkit-scrollbar {
     width: 16px;
+    opacity: 0;
   }
 
-  *::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  // *::-webkit-scrollbar-track {
+  //   background: transparent;
+  // }
 
   *::-webkit-scrollbar-thumb {
     background-color: $grey-700;
