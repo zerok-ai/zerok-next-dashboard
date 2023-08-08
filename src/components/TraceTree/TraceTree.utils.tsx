@@ -114,7 +114,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
 export const COLORS = ["#1E7BC2", "#9B8AFB", "#FDB022", "#5925DC", "#39D896"];
 
 export const getWidthByLevel = (level: number, leaf: boolean = false) => {
-  const defaultWidth = 300;
+  const defaultWidth = 450;
   const width = defaultWidth - level * 9;
   return leaf ? `${width + 8}px` : `${width}px`;
 };

@@ -13,7 +13,7 @@ LiveTraces.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
       <Head>
-        <title>ZeroK Dashboard | Live Traces</title>
+        <title>ZeroK Dashboard | Probes</title>
       </Head>
       <PageLayout>
         <UnderConstruction />

@@ -48,33 +48,34 @@
     grid-template-columns: 1fr 1.8fr;
     column-gap: $sp-base * 4;
     height:calc(100vh - $header-height - $sp-base * 40);
-
 }
 
 .chat-container{
     border-radius: $sp-base * 2;
     height:calc(100vh - $header-height - $sp-base * 40);
-    overflow: scroll;
+    overflow: auto;
     border:1px solid $grey-800;
 }
-.detail-container,.table-container {
+.table-container {
     height:calc(100vh - $header-height - $sp-base * 40);
-    overflow: scroll;
+    overflow-y: auto;
+}
+.detail-container {
+    height:calc(100vh - $header-height - $sp-base * 40);
+    overflow-y: auto;
 }
 .tree-container {
-    height:calc(100vh - $header-height - $sp-base * 49);
+    height:calc(100vh - $header-height - $sp-base * 50);
     display: grid;
 }
 .tree-container-minimal {
-    height:400px;
+    height:350px;
     position: relative;
     margin-bottom: $sp-base * 6;
 }
 
 .cards-container {
-    // display: flex;
-    // flex-direction: column;
     row-gap: $sp-base * 4;
-    overflow-y: scroll;
+    // overflow-y: auto;
 }
 

@@ -33,8 +33,7 @@
 
 .text-container {
     width:95%;
-    min-height: 50px;
-    overflow-y: scroll;
+    overflow-y: auto;
     color:$grey-50;
     font-weight: 400;
     line-height: $default-line-height; 

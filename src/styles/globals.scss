@@ -111,3 +111,26 @@ a {
 .MuiMenuItem-root.Mui-selected {
   background-color: $primary-800;
 }
+
+// scrollbar
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: $grey-500 $bg-dark;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: $grey-700;
+    border-radius: 8px;
+    border:4px solid $bg-dark;
+  }

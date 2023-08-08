@@ -24,7 +24,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
     children: [
       {
         path: "/issues",
-        label: "Assigned to me",
+        label: "All issues",
       },
       {
         path: "/issues?tab=recently-viewed",
@@ -39,14 +39,8 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   },
   {
     icon: `${ICONS.plate}`,
-    label: "Live Traces",
-    path: "/live-traces",
-    type: "single",
-  },
-  {
-    icon: `${ICONS.code}`,
-    label: "Raw Traces",
-    path: "/raw-traces",
+    label: "Probes",
+    path: "/probes",
     type: "single",
   },
 ];
@@ -54,20 +48,8 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
 export const NAV_LINKS_2: DrawerNavItemType[] = [
   {
     icon: `${ICONS.data}`,
-    label: "API Catalog",
+    label: "Settings",
     path: "/api-keys",
-    type: "single",
-  },
-  {
-    icon: `${ICONS.dashboard}`,
-    label: "Custom Dashboard",
-    path: "/custom-dashboard",
-    type: "single",
-  },
-  {
-    icon: `${ICONS.bell}`,
-    label: "Alerts",
-    path: "/alerts",
     type: "single",
   },
 ];

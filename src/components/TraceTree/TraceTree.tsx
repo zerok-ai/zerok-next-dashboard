@@ -86,6 +86,7 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
       return <CustomSkeleton len={8} />;
     }
     const exceptionParent = spanTree.exceptionParent;
+
     const renderSpan = (
       span: SpanDetail,
       isTopRoot: boolean = false,
@@ -110,7 +111,11 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
                   setSelectedSpan(span.span_id as string);
                 }}
               >
-                {isTopRoot ? span.source : span.destination}
+                {isTopRoot
+                  ? span.source
+                  : isLastChild
+                  ? span.destination
+                  : span.source}
               </span>
             </p>
           </div>
