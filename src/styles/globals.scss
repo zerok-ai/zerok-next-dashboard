@@ -114,6 +114,12 @@ a {
 
 // scrollbar
 /* ===== Scrollbar CSS ===== */
+.hidden-scroll {
+  // *::-webkit-scrollbar {
+  //   width: 0px;
+  // }
+}
+
   /* Firefox */
   * {
     scrollbar-width: auto;
@@ -132,5 +138,5 @@ a {
   *::-webkit-scrollbar-thumb {
     background-color: $grey-700;
     border-radius: 8px;
-    border:4px solid $bg-dark;
+    border:5px solid $bg-dark;
   }

@@ -55,8 +55,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
       const rootSpan = getRootSpan(spanData);
       if (rootSpan) {
         const exceptionParent = topKeys.find((k) => {
-          const espan = spanData[k];
-          return espan.source === span.source;
+          return k === span.parent_span_id;
         });
         formattedSpans[rootSpan] = {
           ...formattedSpans[rootSpan],
