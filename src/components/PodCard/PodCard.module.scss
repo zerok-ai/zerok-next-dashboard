@@ -46,7 +46,8 @@
     flex-direction: column;
     row-gap: $sp-base * 3;
     height:250px;
-    overflow:auto;
+    overflow-y:auto;
+    overflow-x:hidden;
     box-sizing: content-box;
     padding-right: $sp-base * 3;
     transition:all 0.3s ease;

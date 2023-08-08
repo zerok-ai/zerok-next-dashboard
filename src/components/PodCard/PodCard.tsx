@@ -49,7 +49,13 @@ const PodCard = ({ services }: PodCardProps) => {
     }
   }, [services]);
 
-  const pod = podList ? podList[0] : null;
+  const filterPods = (pods: PodDetail[]) => {
+    const pod = pods.filter((pod) => {
+      return pod.status.phase === "Running";
+    });
+    return pod.length ? pod[0] : pods[0];
+  };
+  const pod = podList ? filterPods(podList) : null;
 
   useEffect(() => {
     if (selectedTab && selectedCluster) {
@@ -65,7 +71,7 @@ const PodCard = ({ services }: PodCardProps) => {
         .replace("{range}", range as string);
       fetchPodList(endpoint);
     }
-  }, [selectedTab, selectedCluster]);
+  }, [selectedTab, selectedCluster, router]);
 
   useEffect(() => {
     if (pod) {
