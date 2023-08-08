@@ -31,9 +31,9 @@ const IncidentDetailPage = () => {
   const issue_id = router.query.issue_id;
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const dispatch = useDispatch();
-  useEffect(() => {
-    setExceptionSpan(null);
-  }, [router]);
+  // useEffect(() => {
+  //   setExceptionSpan(null);
+  // }, [router]);
 
   useEffect(() => {
     if (!isDrawerMinimized) {
