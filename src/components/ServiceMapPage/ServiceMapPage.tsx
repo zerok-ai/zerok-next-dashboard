@@ -10,6 +10,7 @@ import { ReactFlowProvider } from "reactflow";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
+import { getNamespace } from "utils/functions";
 import { GET_SERVICE_MAP_ENDPOINT } from "utils/health/endpoints";
 import { filterEmptyServiceMapNodes } from "utils/health/functions";
 import { type ServiceMapDetail } from "utils/health/types";
@@ -20,10 +21,11 @@ import styles from "./ServiceMap.module.scss";
 const formatServiceMapData = (smap: ServiceMapDetail[]) => {
   // remove unwanted namespaces
   const filteredServices = smap.filter((service) => {
-    return (
-      !IGNORED_SERVICES_PREFIXES.includes(service.requestor_service) &&
-      !IGNORED_SERVICES_PREFIXES.includes(service.responder_service)
-    );
+    const reqName = getNamespace(service.requestor_service);
+    const resName = getNamespace(service.responder_service);
+    const ignoreReq = IGNORED_SERVICES_PREFIXES.includes(reqName);
+    const ignoreRes = IGNORED_SERVICES_PREFIXES.includes(resName);
+    return !ignoreReq && !ignoreRes;
   });
   // filter out empty nodes
   const nonEmptyServices = filterEmptyServiceMapNodes(filteredServices);

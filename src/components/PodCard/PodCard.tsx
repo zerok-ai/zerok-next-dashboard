@@ -1,6 +1,7 @@
 import { Skeleton, Tab, Tabs, Tooltip } from "@mui/material";
 import CustomSkeleton from "components/CustomSkeleton";
 import TabSkeletons from "components/helpers/TabSkeletons";
+import TimeSelector from "components/TimeSelector";
 import TimeSeriesChart from "components/TimeSeriesChart";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
@@ -73,9 +74,9 @@ const PodCard = ({ services }: PodCardProps) => {
         "{cluster_id}",
         selectedCluster!
       )
-        .replace("{pod_name}", pod.pod)
+        .replace("{pod_name}", pod.pod.split("/")[1])
         .replace("{range}", range as string)
-        .replace("{namespace}", getNamespace(selectedTab!));
+        .replace("{namespace}", pod.pod.split("/")[0]);
       fetchPodStats(endpoint);
     }
   }, [pod]);
@@ -100,8 +101,8 @@ const PodCard = ({ services }: PodCardProps) => {
               {services.map((service) => {
                 const Label = () => {
                   return (
-                    <Tooltip title={service}>
-                      <span>{trimString(service, 25)}</span>
+                    <Tooltip title={service} placement="top">
+                      <span>{trimString(service, 20)}</span>
                     </Tooltip>
                   );
                 };
@@ -110,6 +111,9 @@ const PodCard = ({ services }: PodCardProps) => {
             </Tabs>
           </div>
           <div className={styles["pods-container"]}>
+            <div className={styles["time-selector-container"]}>
+              <TimeSelector />
+            </div>
             {pod ? (
               <div className={styles["pod-rows"]}>
                 <div className={styles["pod-row"]}>
