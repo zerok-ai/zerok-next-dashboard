@@ -37,22 +37,30 @@ export const getRootSpan = (spans: SpanResponse) => {
   return rootSpan;
 };
 
-export const spanTransformer = (spanData: SpanResponse) => {
-  const formattedSpans: SpanResponse = {};
-  const topKeys = Object.keys(spanData);
-  topKeys.map((key) => {
-    const span = spanData[key];
-    // find root node
-    if (
-      !topKeys.includes(span.parent_span_id) &&
-      span.protocol !== "exception"
-    ) {
+export const setRootSpan = (spans: SpanResponse) => {
+  const topKeys = Object.keys(spans);
+  const newSpans: SpanResponse = {};
+  topKeys.forEach((key) => {
+    const span = spans[key];
+    if (!topKeys.includes(span.parent_span_id)) {
       span.root = true;
     }
+    newSpans[key] = { ...span, span_id: key };
+  });
+  return newSpans;
+};
+
+export const spanTransformer = (spanData: SpanResponse) => {
+  const formattedSpans: SpanResponse = {};
+  const newSpans = setRootSpan(spanData);
+  const topKeys = Object.keys(newSpans);
+  topKeys.map((key) => {
+    const span = newSpans[key];
     // check for exception span
     if (span.destination.includes("zk-client")) {
       formattedSpans[key] = { ...span, span_id: key, exception: true };
-      const rootSpan = getRootSpan(spanData);
+      const rootSpan = getRootSpan(newSpans);
+      formattedSpans[rootSpan!] = newSpans[rootSpan!];
       if (rootSpan) {
         const exceptionParent = topKeys.find((k) => {
           return k === span.parent_span_id;
@@ -79,6 +87,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
   });
   // get the total spanlength in milliseconds
   const rootSpanId = getRootSpan(formattedSpans);
+  console.log({ rootSpanId, formattedSpans });
   const rootSpan = formattedSpans[rootSpanId!];
   const rootStartTime = new Date(rootSpan.time).getTime();
   const rootLatency = convertNanoToMilliSeconds(
@@ -86,27 +95,19 @@ export const spanTransformer = (spanData: SpanResponse) => {
     false
   ) as number;
   let max = rootLatency;
+  console.log({ max });
   topKeys.forEach((key) => {
     const span = formattedSpans[key];
     const latency = convertNanoToMilliSeconds(span.latency_ns, false) as number;
     const startTime = new Date(span.time).getTime();
     // const { span_id, parent_span_id, time } = span;
     const endTime = startTime + latency - rootStartTime;
-    // console.log({
-    //   latency,
-    //   span_id,
-    //   parent_span_id,
-    //   time,
-    //   rootLatency,
-    //   rootStartTime,
-    //   endTime,
-    //   max,
-    // });
     if (endTime > max) {
       max = endTime;
     }
   });
   formattedSpans[rootSpanId!] = { ...rootSpan, totalTime: max };
+  console.log({ formattedSpans }, "hellooo");
   return formattedSpans;
 };
 

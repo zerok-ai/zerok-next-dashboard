@@ -23,8 +23,6 @@ export const IssueMetadata = () => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   const scenarioId = router.query.issue;
-  const trace = router.query.trace;
-  const issueId = router.query.issue_id;
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
 
   // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
@@ -95,8 +93,6 @@ export const IssueMetadata = () => {
       </div>
     );
   };
-
-  console.log({ trace, issueId });
 
   return scenario ? (
     <div className={styles["header-left"]}>
