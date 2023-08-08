@@ -95,6 +95,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       isLastChild: boolean = false
     ) => {
       const Label = () => {
+        // const exSpan = exceptionParent ? spans![exceptionParent] : null;
         return (
           <div className={styles["accordion-summary-content"]}>
             <p
@@ -113,7 +114,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                   setSelectedSpan(span.span_id as string);
                 }}
               >
-                {span.destination}
+                {isTopRoot ? span.source : span.destination}
               </span>
             </p>
           </div>
@@ -153,12 +154,9 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
             defaultExpanded
             className={styles.accordion}
           >
-            <AccordionSummary
-              className={styles["accordion-summary"]}
-              expandIcon={AccordionIcon}
-            >
-              <span>{span.source}</span>
-            </AccordionSummary>
+            <WrapperElement>
+              <Label />
+            </WrapperElement>
             <AccordionDetails className={styles["accordion-details"]}>
               {renderSpan(
                 span,
