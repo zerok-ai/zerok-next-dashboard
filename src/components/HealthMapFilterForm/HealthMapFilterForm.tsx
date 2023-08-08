@@ -49,8 +49,9 @@ const HealthMapFilterForm = ({
   });
 
   const [searchValue, setSearchValue] = useState("");
-  const serviceNames = Array.from(serviceNameMap).filter((sn) =>
-    sn.includes(searchValue)
+  console.log({ serviceNameMap }, Array.from(serviceNameMap));
+  const serviceNames = Array.from(serviceNameMap).filter(
+    (sn) => sn && sn.includes(searchValue)
   );
   const namespaces = Array.from(namespaceMap).filter((ns) =>
     ns.includes(searchValue)

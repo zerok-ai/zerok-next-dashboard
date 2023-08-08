@@ -111,11 +111,7 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
                   setSelectedSpan(span.span_id as string);
                 }}
               >
-                {isTopRoot
-                  ? span.source
-                  : isLastChild
-                  ? span.destination
-                  : span.source}
+                {span.destination}
               </span>
             </p>
           </div>
@@ -148,7 +144,29 @@ const TraceTree = ({ updateExceptionSpan }: TraceTreeProps) => {
       );
       const timelineDisplacement =
         (timelineStart / referenceTime.totalTime) * 100;
-
+      if (isTopRoot) {
+        return (
+          <Accordion
+            key={nanoid()}
+            defaultExpanded
+            className={styles.accordion}
+          >
+            <AccordionSummary
+              className={styles["accordion-summary"]}
+              expandIcon={AccordionIcon}
+            >
+              {span.source}
+            </AccordionSummary>
+            <AccordionDetails className={styles["accordion-details"]}>
+              {renderSpan(
+                span,
+                false,
+                !span.children || span.children.length === 0
+              )}
+            </AccordionDetails>
+          </Accordion>
+        );
+      }
       return (
         <Accordion
           key={nanoid()}
