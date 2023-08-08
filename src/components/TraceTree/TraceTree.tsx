@@ -157,7 +157,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
               className={styles["accordion-summary"]}
               expandIcon={AccordionIcon}
             >
-              {span.source}
+              <span>{span.source}</span>
             </AccordionSummary>
             <AccordionDetails className={styles["accordion-details"]}>
               {renderSpan(
