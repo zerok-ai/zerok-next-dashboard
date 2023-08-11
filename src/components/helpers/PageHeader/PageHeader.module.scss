@@ -16,6 +16,18 @@
     }
 }
 
+.top-row-actions {
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: center;
+}
+
+.extras-right {
+    display: flex;
+    width:100%;
+    justify-content: space-between;
+}
+
 .bottom-row {
     margin-bottom: $sp-base * 5;
 }

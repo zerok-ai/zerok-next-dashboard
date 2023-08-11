@@ -1,0 +1,33 @@
+@import "styles/variables.module.scss";
+.container {
+    span {
+        color:$grey-50;
+    }
+}
+
+.scenario-title {
+    cursor: pointer;
+    &:hover {
+        color:$primary-500;
+        
+    }
+}
+
+.new-probe-btn {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 3;
+}
+
+.source {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base;
+    >img {
+        height: $sp-base * 5;
+        width:$sp-base * 5;
+    }
+    span {
+        color:$grey-50;
+    }
+}

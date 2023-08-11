@@ -1,6 +1,5 @@
 import { flexRender, type Table } from "@tanstack/react-table";
 import cx from "classnames";
-import { DEFAULT_COL_WIDTH } from "utils/constants";
 
 import styles from "./TableX.module.scss";
 
@@ -30,7 +29,7 @@ const TableX = <T extends object>({
             return (
               <tr key={gr.id}>
                 {gr.headers.map((header) => {
-                  const width = header.getSize() || DEFAULT_COL_WIDTH;
+                  const width = header.getSize();
                   return (
                     <th
                       key={header.id}

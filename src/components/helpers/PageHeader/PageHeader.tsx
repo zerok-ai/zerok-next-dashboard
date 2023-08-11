@@ -13,6 +13,7 @@ interface PageHeaderProps {
   bottomRow?: React.ReactNode;
   showBreadcrumb?: boolean;
   align?: "left" | "right";
+  alignExtras?: "left" | "right";
 }
 
 const PageHeader = ({
@@ -23,6 +24,7 @@ const PageHeader = ({
   bottomRow,
   showBreadcrumb = false,
   align = "left",
+  alignExtras = "left",
 }: PageHeaderProps) => {
   return (
     <div className={styles.container}>
@@ -36,16 +38,25 @@ const PageHeader = ({
         )}
       >
         <h3>{title}</h3>
-        <div className={styles["top-row-actions"]}>
-          {showRange && <TimeSelector />}
-          {showRefresh && <ClusterRefreshButton />}
-          {extras && (
-            <div className={styles.extras}>
-              {extras.map((el) => {
-                return el;
-              })}
-            </div>
+        <div
+          className={cx(
+            alignExtras === "right" && styles["extras-right"],
+            styles["top-row-actions"]
           )}
+        >
+          <div className={styles["top-row-actions"]}>
+            {showRange && <TimeSelector />}
+            {showRefresh && <ClusterRefreshButton />}
+          </div>
+          <div>
+            {extras && (
+              <div className={styles.extras}>
+                {extras.map((el) => {
+                  return el;
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className={styles["bottom-row"]}>{bottomRow && bottomRow}</div>

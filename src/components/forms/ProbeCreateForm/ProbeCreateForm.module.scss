@@ -1,0 +1,169 @@
+@import "styles/variables.module.scss";
+.container {
+    width:1040px;
+    margin-top: $sp-base * 3;
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 7;
+}
+
+.add-card-btn {
+    margin-top: $sp-base * 7;
+    display: flex;
+    column-gap: $sp-base * 3;
+}
+
+.divider {
+    margin: $sp-base * 7 auto;
+    width: 100%;
+    height:1px;
+    background-color: $grey-300;
+}
+
+// submit btn 
+.create-button {
+    margin-top: $sp-base * 7;
+}
+
+// name-form
+.name-form-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 7;
+    justify-content: center;
+}
+
+.name-form-item {
+    display: grid;
+    grid-template-columns: 2fr 8fr;
+    label {
+        color:$grey-50;
+    }
+    :global(.MuiOutlinedInput-notchedOutline){
+        border-color: $grey-700;
+        &:hover {
+            border-color: $grey-900 !important;
+        }
+    }
+    &:hover,&:focus {
+        :global(.MuiOutlinedInput-notchedOutline) {
+          border-color:$grey-300;
+        }
+      }
+}
+
+.name-input {
+    width:340px;
+}
+
+.time-input {
+    width:120px;
+}
+
+
+// condition-card 
+.condition-card {
+    padding: $sp-base * 7;
+    padding-right: 0;
+    border-radius: $sp-base * 2;
+    border:1px solid $grey-800;
+    position: relative;
+}
+
+.condition-rows {
+    margin-top: $sp-base * 2;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    row-gap: $sp-base * 6;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.condition-card-item {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 40px 2fr 1fr 2fr 0.2fr;
+    column-gap: $sp-base * 4;
+    margin-right: $sp-base * 4;
+    :global(.MuiInputBase-root:before){
+        border-bottom: 1px solid $grey-700;
+    }
+}
+
+.close-button-container {
+    position: absolute;
+    top: - $sp-base * 2;
+    right:$sp-base * 2;
+}
+
+.close-button {
+    cursor: pointer;
+    font-size: $font-lg + 6;
+}
+
+.condition-row-1 {
+    grid-template-columns: 2fr 1fr 2fr;
+}
+
+.delete-button {
+    font-size: $font-lg + 2;
+    &:hover {
+        color:$primary-500;
+        cursor: pointer;
+    }
+}
+
+.add-condition-button {
+    color:$primary-500;
+    margin-top: $sp-base * 7;
+    cursor: pointer;
+    &:hover {
+        color:$primary-600;
+    }
+}
+
+// joining-select {
+.joining-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width:40px;
+}
+.no-button {
+    cursor: auto;
+}
+
+.blue {
+    background-color: #1E7BC2;
+    &:hover {
+        background-color: #1E7BC2;
+    }
+}
+
+.purple {
+    background-color: #5925DC;
+    &:hover {
+        background-color: #5925DC;
+    }
+}
+
+.joining-select-menu {
+    :global(.MuiPaper-root){
+        margin-top: $sp-base * 2;
+    }
+    :global(.MuiList-root) {
+        min-width: 70px;
+    }
+}
+
+// root-condition
+.root-condition-container {
+    position: absolute;
+    top: -$sp-base * 4;
+    left: $sp-base * 4;display: flex;
+    column-gap: $sp-base * 3;
+}
