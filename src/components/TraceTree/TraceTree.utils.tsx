@@ -87,7 +87,6 @@ export const spanTransformer = (spanData: SpanResponse) => {
   });
   // get the total spanlength in milliseconds
   const rootSpanId = getRootSpan(formattedSpans);
-  console.log({ rootSpanId, formattedSpans });
   const rootSpan = formattedSpans[rootSpanId!];
   const rootStartTime = new Date(rootSpan.time).getTime();
   const rootLatency = convertNanoToMilliSeconds(
@@ -95,7 +94,6 @@ export const spanTransformer = (spanData: SpanResponse) => {
     false
   ) as number;
   let max = rootLatency;
-  console.log({ max });
   topKeys.forEach((key) => {
     const span = formattedSpans[key];
     const latency = convertNanoToMilliSeconds(span.latency_ns, false) as number;
@@ -107,7 +105,6 @@ export const spanTransformer = (spanData: SpanResponse) => {
     }
   });
   formattedSpans[rootSpanId!] = { ...rootSpan, totalTime: max };
-  console.log({ formattedSpans }, "hellooo");
   return formattedSpans;
 };
 

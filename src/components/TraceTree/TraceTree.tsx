@@ -1,13 +1,31 @@
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  IconButton,
+  Modal,
+} from "@mui/material";
 import cx from "classnames";
 import CustomSkeleton from "components/CustomSkeleton";
 import TraceInfoDrawer from "components/TraceInfoDrawer";
 import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
+import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
-import { HiChevronRight, HiOutlineX } from "react-icons/hi";
+import {
+  Fragment,
+  type ReactElement,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  HiChevronRight,
+  HiOutlineArrowsExpand,
+  HiOutlineX,
+} from "react-icons/hi";
+import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
@@ -44,6 +62,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
   }>(null);
   const { issue, trace } = router.query;
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
+  const [isModalOpen, toggleModal] = useToggle(false);
   useEffect(() => {
     if (selectedCluster) {
       const endpoint = LIST_SPANS_ENDPOINT.replace(
@@ -79,6 +98,12 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     }
   }, [spanTree]);
 
+  useEffect(() => {
+    if (!isModalOpen && selectedSpan) {
+      setSelectedSpan(null);
+    }
+  }, [isModalOpen]);
+
   const AccordionIcon = useMemo(() => {
     return <HiChevronRight className={styles["expand-icon"]} />;
   }, []);
@@ -111,6 +136,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                   highlight && styles["exception-parent"]
                 )}
                 role="button"
+                id="span-label"
                 onClick={() => {
                   setSelectedSpan(span.span_id as string);
                 }}
@@ -158,7 +184,12 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
             <WrapperElement>
               <Label />
             </WrapperElement>
-            <AccordionDetails className={styles["accordion-details"]}>
+            <AccordionDetails
+              className={cx(
+                styles["accordion-details"],
+                styles["root-accordion"]
+              )}
+            >
               {renderSpan(
                 span,
                 false,
@@ -212,33 +243,86 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     setSelectedSpan(null);
   };
 
+  const Wrapper = ({ children }: { children: ReactElement }) => {
+    if (isModalOpen) {
+      return (
+        <Modal
+          open={true}
+          onClose={toggleModal}
+          keepMounted={true}
+          className={styles.modal}
+          hideBackdrop={true}
+        >
+          <Fragment>
+            <div
+              className={styles.backdrop}
+              role="presentation"
+              onClick={toggleModal}
+            ></div>
+            {children}
+          </Fragment>
+        </Modal>
+      );
+    } else {
+      return <Fragment>{children}</Fragment>;
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h6>Spans</h6>
-        <div className={styles["header-actions"]}></div>
+    <Wrapper>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h6>Spans</h6>
+          <div className={styles["header-actions"]}>
+            <IconButton
+              size="small"
+              className={
+                isModalOpen ? styles["expanded-btn"] : styles["expand-btn"]
+              }
+              onClick={toggleModal}
+            >
+              {isModalOpen ? (
+                <HiOutlineArrowsPointingIn className={styles["expand-icon"]} />
+              ) : (
+                <HiOutlineArrowsExpand className={styles["expand-icon"]} />
+              )}
+            </IconButton>
+          </div>
+        </div>
+
+        <div
+          className={cx(
+            styles.tree,
+            isModalOpen ? styles.expanded : styles.collapsed
+          )}
+          id="trace-tree-container"
+          onClick={(e) => {
+            if (!isModalOpen) {
+              toggleModal();
+            }
+          }}
+        >
+          {renderSpanTree()}
+          {selectedSpan && (
+            <span
+              className={styles["close-button"]}
+              onClick={resetSpan}
+              role="button"
+            >
+              <HiOutlineX className={styles["close-icon"]} />
+            </span>
+          )}
+          {spans && selectedSpan && (
+            <TraceInfoDrawer
+              selectedSpan={selectedSpan}
+              onClose={resetSpan}
+              anchorContainer="trace-tree-container"
+              allSpans={spans}
+            />
+          )}
+        </div>
       </div>
-      <div className={styles.tree} id="trace-tree-container">
-        {renderSpanTree()}
-        {selectedSpan && (
-          <span
-            className={styles["close-button"]}
-            onClick={resetSpan}
-            role="button"
-          >
-            <HiOutlineX className={styles["close-icon"]} />
-          </span>
-        )}
-        {spans && selectedSpan && (
-          <TraceInfoDrawer
-            selectedSpan={selectedSpan}
-            onClose={resetSpan}
-            anchorContainer="trace-tree-container"
-            allSpans={spans}
-          />
-        )}
-      </div>
-    </div>
+    </Wrapper>
   );
 };
 
