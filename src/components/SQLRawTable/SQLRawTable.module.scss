@@ -1,18 +1,21 @@
 @import "styles/variables.module.scss";
 .container {
     background-color: $grey-925;
-    padding:$sp-base * 3 $sp-base * 5;
+    padding:$sp-base * 3 $sp-base * 2;
     border-radius: $sp-base;
     width:100%;
     border-spacing: 0;
     min-height:32px;
     max-height:200px;
-    overflow:auto;
+    th {
+
+    }
     td {
         border-bottom: 1px solid $grey-800;
         padding:$sp-base $sp-base * 2;
         color:$grey-50;
-        
+        // display: table;
+        vertical-align: top;;
     } tr {
        
     }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { trimString } from "utils/functions";
+import { getTitleFromIssue } from "utils/issues/functions";
 import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
@@ -18,10 +19,7 @@ export const getIssueColumns = () => {
       cell: (info) => {
         const { issue_title, issue_hash, scenario_id } = info.row.original;
 
-        const split = issue_title.split("¦");
-        const title = split[0];
-        const service = split[1];
-        const group3 = split.length > 2 ? split[2] : null;
+        const title = trimString(getTitleFromIssue(issue_title), 80);
         return (
           <div className={styles["issue-container"]}>
             <div>
@@ -29,15 +27,7 @@ export const getIssueColumns = () => {
                 href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}`}
                 className={"hover-link"}
               >
-                <span className={styles["issue-title-container"]}>
-                  {title}{" "}
-                  {service && (
-                    <span className={styles["issue-title-joiner"]}>in</span>
-                  )}
-                  {service}
-                  {group3 && group3.length > 0 && `: ${trimString(group3, 60)}`}
-                  {/* <TagX label={scenario_type} closable={false} /> */}
-                </span>
+                <span className={styles["issue-title-container"]}>{title}</span>
               </Link>
             </div>
           </div>
