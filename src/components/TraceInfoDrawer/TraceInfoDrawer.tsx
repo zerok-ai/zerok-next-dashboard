@@ -29,7 +29,7 @@ const TraceInfoDrawer = ({
         PaperProps={{
           style: {
             position: "absolute",
-            width: "700px",
+            width: "720px",
             background: cssVars.grey925,
           },
         }}

@@ -92,7 +92,7 @@ export const IssueMetadata = () => {
       {" "}
       <PageHeader
         showBreadcrumb={true}
-        title={trimString(getTitleFromIssue(issue.issue_title), 60)}
+        title={trimString(getTitleFromIssue(issue.issue_title), 80)}
         showRange={false}
         align="right"
         showRefresh={false}
