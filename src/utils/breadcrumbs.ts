@@ -19,4 +19,16 @@ export const BREADCRUMB_ROUTES: Record<
       },
     ],
   },
+  "/probes/create": {
+    crumbs: [
+      {
+        name: "Probes",
+        path: "/probes",
+      },
+      {
+        name: "New Probe",
+        path: "probes/create",
+      },
+    ],
+  },
 };

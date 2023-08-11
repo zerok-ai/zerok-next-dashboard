@@ -1,3 +1,3 @@
-import LiveTraces from "./LiveTraces";
+import Probe from "./Probe";
 
-export default LiveTraces;
+export default Probe;
