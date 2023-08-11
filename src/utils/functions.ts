@@ -122,10 +122,6 @@ export const convertNanoToMilliSecondsNumber = (value: number): number => {
   return 0;
 };
 
-export const getTitleFromIssue = (title: string): string => {
-  return title.includes("¦") ? title.split("¦")[0] : title;
-};
-
 export const filterServices = (newData: ServiceDetail[]): ServiceDetail[] => {
   return newData.filter(
     (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
