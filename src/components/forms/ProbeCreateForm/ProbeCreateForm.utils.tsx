@@ -43,6 +43,10 @@ export const PROPERTIES = [
     value: "trace_id",
   },
   {
+    label: "HTTP Status Code",
+    value: "http_status_code",
+  },
+  {
     label: "HTTP host",
     value: "http_host",
   },
@@ -138,5 +142,37 @@ export const CUSTOM_TYPES = [
   {
     label: "Custom",
     value: "custom",
+  },
+];
+
+export interface SlackChannelType {
+  type: "channel" | "person";
+  value: string;
+}
+
+export const SLACK_CHANNELS: SlackChannelType[] = [
+  {
+    type: "channel",
+    value: "zerok",
+  },
+  {
+    type: "person",
+    value: "Varun",
+  },
+  {
+    type: "channel",
+    value: "tech",
+  },
+  {
+    type: "person",
+    value: "Shivam",
+  },
+  {
+    type: "person",
+    value: "Samyukktha",
+  },
+  {
+    type: "channel",
+    value: "oncall",
   },
 ];

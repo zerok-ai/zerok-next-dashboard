@@ -1,8 +1,8 @@
-import { Input, MenuItem, Select } from "@mui/material";
+import { IconButton, Input, MenuItem, Select } from "@mui/material";
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
-import { AiOutlineCloseCircle, AiOutlineDelete } from "react-icons/ai";
+import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
 import { type GenericObject } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
@@ -53,30 +53,32 @@ const ConditionCard = ({
 
   return (
     <div className={styles["condition-card"]}>
-      {deleteCard && (
-        <div
-          className={styles["close-button-container"]}
-          role="button"
-          onClick={deleteCard}
-        >
-          <AiOutlineCloseCircle className={styles["close-button"]} />
-        </div>
-      )}
       <div className={styles["root-condition-container"]}>
-        {includeAnd && (
+        <div className={styles["root-condition-selects"]}>
+          {includeAnd && (
+            <JoiningSelect
+              value="And"
+              buttonMode={true}
+              list={CONDITIONS}
+              color="purple"
+            />
+          )}
           <JoiningSelect
-            value="And"
-            buttonMode={true}
-            list={CONDITIONS}
-            color="purple"
+            buttonMode={false}
+            list={services}
+            color="blue"
+            value="Service"
           />
+        </div>
+        {deleteCard && (
+          <IconButton
+            className={styles["delete-card-button"]}
+            onClick={deleteCard}
+            size="small"
+          >
+            <HiOutlineTrash />
+          </IconButton>
         )}
-        <JoiningSelect
-          buttonMode={false}
-          list={services}
-          color="blue"
-          value="Service"
-        />
       </div>
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
@@ -151,9 +153,9 @@ const ConditionCard = ({
 
               {/* Delete */}
               {index !== 0 && (
-                <AiOutlineDelete
-                  className={styles["delete-button"]}
+                <HiOutlineX
                   role="button"
+                  className={styles["delete-condition-button"]}
                   onClick={() => {
                     deleteCondition(index);
                   }}

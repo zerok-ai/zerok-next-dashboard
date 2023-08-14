@@ -43,6 +43,10 @@ export const PROTOCOLS = [
     value: "http_host",
   },
   {
+    label: "HTTP Status Code",
+    value: "http_status_code",
+  },
+  {
     label: "HTTP method",
     value: "http_method",
   },
