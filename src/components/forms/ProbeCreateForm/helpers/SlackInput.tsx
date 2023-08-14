@@ -16,9 +16,11 @@ interface SlackInputProps {
 const InputComponent = ({
   addChannel,
   anchor,
+  channels,
 }: {
   addChannel: (channel: string) => void;
   anchor: React.RefObject<HTMLDivElement>;
+  channels: string[];
 }) => {
   const [channel, setChannel] = useState("");
   const [isMenuOpen, toggleMenu] = useToggle(false);
@@ -28,6 +30,11 @@ const InputComponent = ({
         return slc.value.toLowerCase().includes(channel.toLowerCase());
       })
     : SLACK_CHANNELS;
+  const unusedChannels = filteredChannels.filter((slc) => {
+    return !channels.includes(
+      `${slc.type === "channel" ? "#" : "@"}${slc.value}`
+    );
+  });
   return (
     <div>
       <input
@@ -48,9 +55,8 @@ const InputComponent = ({
       />
       {isMenuOpen && (
         <div className={styles["channels-menu"]}>
-          {filteredChannels.length !== 0 ? (
-            filteredChannels.map((slc) => {
-              console.log("slc", slc);
+          {unusedChannels.length !== 0 ? (
+            unusedChannels.map((slc) => {
               return (
                 <p
                   key={nanoid()}
@@ -119,7 +125,11 @@ const SlackInput = ({
           })}
         </div>
         <div className={styles["channels-input"]}>
-          <InputComponent addChannel={addChannel} anchor={anchorRef} />
+          <InputComponent
+            addChannel={addChannel}
+            anchor={anchorRef}
+            channels={channels}
+          />
         </div>
       </div>
     </div>
