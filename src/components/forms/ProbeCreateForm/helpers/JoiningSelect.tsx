@@ -1,5 +1,6 @@
 import { Button, Menu, MenuItem } from "@mui/material";
 import cx from "classnames";
+import CustomSkeleton from "components/CustomSkeleton";
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
@@ -53,20 +54,24 @@ const JoiningSelect = ({
           onClose={handleClose}
           className={styles["joining-select-menu"]}
         >
-          {list.map((item) => {
-            return (
-              <MenuItem
-                value={item.value}
-                key={nanoid()}
-                onClick={() => {
-                  setSelectedValue(item.value);
-                  handleClose();
-                }}
-              >
-                {item.label}
-              </MenuItem>
-            );
-          })}
+          {list.length > 0 ? (
+            list.map((item) => {
+              return (
+                <MenuItem
+                  value={item.value}
+                  key={nanoid()}
+                  onClick={() => {
+                    setSelectedValue(item.value);
+                    handleClose();
+                  }}
+                >
+                  {item.label}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <CustomSkeleton len={8} />
+          )}
         </Menu>
       )}
     </div>

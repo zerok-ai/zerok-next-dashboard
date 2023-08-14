@@ -1,0 +1,85 @@
+@import 'styles/variables.module.scss';
+
+.container {
+    margin-top: $sp-base * 4;
+    span,p,div {
+        color:$grey-100;
+    }
+    .slack-title {
+        display: flex;
+        align-items: center;
+        column-gap: $sp-base * 2;
+    }
+}
+
+.slack-image {
+    display: flex;
+    align-items: center;
+}
+
+.channels-container {
+    display: flex;
+    column-gap: $sp-base * 2;
+    margin-top: $sp-base * 4;
+    padding-bottom: $sp-base * 2;
+    border-bottom: 1px solid $grey-700;
+    position: relative;
+}
+
+.channels {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+
+.channels-input {
+    input {
+        background-color: $bg-dark;
+        border:none;
+        // border-bottom: 1px solid $grey-700;
+        color:$grey-50;
+        padding: $sp-base * 2;
+        box-shadow: none;
+        transition:all 0.2s ease;
+    }
+    input:focus {
+        outline: none;
+        // border-bottom: 1px solid $grey-600;
+    }
+
+}
+
+.autocomplete {
+    :global(.MuiAutocomplete-paper) {
+        background-color: red;
+    }
+}
+
+.channels-menu {
+    position: absolute;
+    top:50px;
+    z-index: 9999;
+    width:500px;
+    left:0;
+    background-color: $grey-900;
+}
+
+.test {
+    position: absolute;
+}
+
+.channel-item {
+    cursor: pointer;
+    display: flex;
+    column-gap: $sp-base * 2;
+    padding:$sp-base * 2 $sp-base * 2;
+    &:hover {
+        background-color: $grey-925;
+    }
+}
+
+.channel-type {
+    display: flex;
+    align-items: center;
+    width:30px;
+    justify-content: center;
+}

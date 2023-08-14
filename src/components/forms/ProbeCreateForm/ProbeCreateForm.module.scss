@@ -109,7 +109,12 @@
     grid-template-columns: 2fr 1fr 2fr;
 }
 
-.delete-button {
+.delete-card-button {
+    right:$sp-base * 8;
+    top:$sp-base;
+}
+
+.delete-condition-button {
     font-size: $font-lg + 2;
     &:hover {
         color:$primary-500;
@@ -132,6 +137,9 @@
     align-items: center;
     justify-content: space-between;
     min-width:40px;
+}
+.joining-select-menu {
+    min-width:200px;
 }
 .no-button {
     cursor: auto;
@@ -156,7 +164,7 @@
         margin-top: $sp-base * 2;
     }
     :global(.MuiList-root) {
-        min-width: 70px;
+        min-width: 300px;
     }
 }
 
@@ -166,4 +174,147 @@
     top: -$sp-base * 4;
     left: $sp-base * 4;display: flex;
     column-gap: $sp-base * 3;
+    justify-content: space-between;
+    width:100%;
+}
+
+.root-condition-selects {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+
+// group by form
+.group-by-container, .notification-form-container {
+    p {
+        color:$grey-50;
+    }
+}
+
+.group-by-link {
+    color:$primary-500;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: $sp-base * 2;
+}
+
+.group-by-select {
+    width:400px;
+    margin-top: $sp-base * 3;
+}
+
+// notification-form
+.email-container,.slack-container {
+    width:100%;
+    margin-top: $sp-base * 4;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 2;
+    label,.slack-title {
+        display: flex;
+        column-gap: $sp-base;
+        align-items: center;
+        color:$grey-100;
+    }
+    input {
+        background-color: $bg-dark;
+        border:none;
+        // border-bottom: 1px solid $grey-700;
+        color:$grey-50;
+        padding: $sp-base * 2;
+        box-shadow: none;
+        transition:all 0.2s ease;
+    }
+    input:focus {
+        outline: none;
+        // border-bottom: 1px solid $grey-600;
+    }
+}
+
+.email-input-container {
+    display: flex;
+    height:40px;
+    border-bottom: 1px solid $grey-700;
+    align-items: center;
+    column-gap: $sp-base * 2;
+    flex-wrap: wrap;
+    padding-bottom: $sp-base;
+    min-width: 300px;
+    form,input {
+        flex:1;
+        width:100%;
+    }
+}
+
+.emails-container {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: $sp-base * 2;
+    row-gap: $sp-base * 2;
+    max-width: 80%;
+}
+
+.email-icon {
+    font-size: $sp-base * 4;
+}
+
+.error-text {
+    color:$error-500 !important;
+}
+
+// slack form
+.slack-image {
+    width:20px;
+    height:20px;
+    > img {
+        width:100%;
+        height:100%;
+    }
+}
+
+.channels-container {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+
+.channels-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base;
+    width:100%;
+    border-bottom: 1px solid $grey-700;
+    > input {
+        width:100%;
+        flex:1;
+    }
+}
+
+.channels-menu {
+    position: absolute;
+    z-index: 10;
+    background-color: $grey-900;
+    width:500px;
+    padding:$sp-base * 2 0;
+    left:0;
+    min-height: 50px;
+}
+
+.channel-item {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 3;
+    padding:$sp-base * 2 $sp-base;
+    p,span,div {
+        color:$grey-50;
+    }
+    &:hover {
+        background-color: $grey-925;
+    }
+}
+
+.channel-type {
+    width:30px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
 }
