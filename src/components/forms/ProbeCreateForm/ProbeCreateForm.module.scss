@@ -83,6 +83,18 @@
     flex-direction: column;
 }
 
+.condition-item-container {
+    width:100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.error-input {
+    :global(.MuiInputBase-root:before){
+        border-bottom:1px solid $error-500 !important;
+    }
+}
+
 .condition-card-item {
     display: grid;
     align-items: center;

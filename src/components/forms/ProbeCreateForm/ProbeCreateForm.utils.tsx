@@ -1,8 +1,36 @@
-export interface PropertyType {
-  label: string;
+import { nanoid } from "nanoid";
+import {
+  type ScenarioCreationType,
+  type WorkloadType,
+} from "utils/scenarios/types";
+
+export type ConditionRowStrings =
+  | "property"
+  | "operator"
+  | "value"
+  | "datatype";
+
+export interface ConditionRowType {
+  property: string;
+  operator: string;
   value: string;
-  type: string;
-  dynamicLabel?: boolean;
+  datatype: string;
+  key: string;
+  errors: {
+    property: boolean;
+    operator: boolean;
+    value: boolean;
+    datatype: boolean;
+  };
+}
+
+export interface ConditionCardType {
+  rootProperty: string;
+  conditions: ConditionRowType[];
+  key: string;
+  errors: {
+    rootProperty: boolean;
+  };
 }
 
 export const PROBE_TIME_RANGES = [
@@ -32,21 +60,16 @@ export const PROBE_TIME_RANGES = [
   },
 ];
 
-export const getPropertyOptionLabel = (
-  item: PropertyType,
-  selectedProperty: string | null
-) => {
-  if (!item.dynamicLabel) {
-    return item.label;
+export const getPropertyByType = (type: string | null) => {
+  if (!type || !type.length) {
+    return HTTP_PROPERTIES;
   }
-  const type = selectedProperty?.split("/")[1].includes("sql")
-    ? "db"
-    : "service";
-  const prefix = type === "db" ? "DB" : "HTTP";
-  return `${prefix} ${item.label}`;
+  return !type?.split("/")[1].includes("sql")
+    ? HTTP_PROPERTIES
+    : SQL_PROPERTIES;
 };
 
-export const PROPERTIES: PropertyType[] = [
+export const HTTP_PROPERTIES = [
   {
     label: "Latency",
     value: "latency",
@@ -64,48 +87,56 @@ export const PROPERTIES: PropertyType[] = [
   },
   {
     label: "Request payload size",
-    value: "request.payload_size",
+    value: "req_body_size",
     type: "int",
   },
   {
     label: "Response payload size",
-    value: "response.payload_size",
+    value: "resp_body_size",
     type: "int",
   },
   {
-    label: "Method",
-    value: "method",
+    label: "Request method",
+    value: "req_method",
     type: "string",
-    dynamicLabel: true,
   },
   {
-    label: "Status Code",
-    value: "status",
+    label: "Request path",
+    value: "req_path",
+    type: "string",
+  },
+  {
+    label: "Response status",
+    value: "resp_status",
     type: "int",
-    dynamicLabel: true,
+  },
+];
+
+export const SQL_PROPERTIES = [
+  {
+    label: "Latency",
+    value: "latency",
+    type: "double",
   },
   {
-    label: "Route",
-    value: "route",
+    label: "Requester service",
+    value: "source",
     type: "string",
-    dynamicLabel: true,
   },
   {
-    label: "Query",
-    value: "query",
+    label: "MYSQL request command",
+    value: "req_cmd",
     type: "string",
-    dynamicLabel: true,
   },
   {
-    label: "Status Code",
-    value: "status",
+    label: "MYSQL request body",
+    value: "req_body",
+    type: "string",
+  },
+  {
+    label: "MYSQL response status code",
+    value: "resp_status",
     type: "int",
-    dynamicLabel: true,
-  },
-  {
-    label: "User",
-    value: "user",
-    type: "string",
   },
 ];
 
@@ -123,6 +154,81 @@ export const CONDITIONS = [
     value: "not",
   },
 ];
+
+export const STRING_OPERATORS = [
+  {
+    label: "is equal to",
+    value: "equal",
+  },
+  {
+    label: "is not equal to",
+    value: "not_equal",
+  },
+];
+
+export const NUMBER_OPERATORS = [
+  {
+    label: "is equal to",
+    value: "equal",
+  },
+  {
+    label: "is not equal to",
+    value: "not_equal",
+  },
+  {
+    label: "is less than",
+    value: "less_than",
+  },
+  {
+    label: "is less than or equal to",
+    value: "less_than_or_equal_to",
+  },
+  {
+    label: "is greater than",
+    value: "greater_than",
+  },
+  {
+    label: "is greater than or equal to",
+    value: "greater_than_or_equal_to",
+  },
+];
+
+export const getOperatorByType = (type: string) => {
+  if (!type) return [];
+  return type === "string" ? STRING_OPERATORS : NUMBER_OPERATORS;
+};
+
+export const getInputTypeByDatatype = (type: string) => {
+  if (!type) return "text";
+  return type === "string" ? "text" : "number";
+};
+
+export const getEmptyCondition = (): ConditionRowType => {
+  return {
+    property: "",
+    operator: "",
+    value: "",
+    datatype: "",
+    key: nanoid(),
+    errors: {
+      property: false,
+      operator: false,
+      value: false,
+      datatype: false,
+    },
+  };
+};
+
+export const getEmptyCard = (): ConditionCardType => {
+  return {
+    rootProperty: "",
+    conditions: [getEmptyCondition()],
+    key: nanoid(),
+    errors: {
+      rootProperty: false,
+    },
+  };
+};
 
 export const EQUALS = [
   {
@@ -209,3 +315,44 @@ export const SLACK_CHANNELS: SlackChannelType[] = [
     value: "oncall",
   },
 ];
+
+export const buildProbeBody = (
+  cards: ConditionCardType[],
+  title: string
+): ScenarioCreationType => {
+  const workloads = cards.map((card): WorkloadType => {
+    return {
+      service: card.rootProperty,
+      trace_role: "server",
+      protocol: "HTTP",
+      rule: {
+        type: "rule_group",
+        condition: "AND",
+        rules: card.conditions.map((condition) => {
+          return {
+            type: "rule",
+            id: condition.property,
+            field: condition.property,
+            input: condition.datatype === "string" ? "string" : "number",
+            operator: condition.operator,
+            value: condition.value,
+            datatype: condition.datatype,
+          };
+        }),
+      },
+    };
+  });
+  const body: ScenarioCreationType = {
+    scenario_title: title,
+    scenario_type: "USER",
+    workloads,
+    group_by: [
+      {
+        workload_index: 0,
+        title: cards[0].conditions[0].property,
+        hash: cards[0].conditions[0].property,
+      },
+    ],
+  };
+  return body;
+};

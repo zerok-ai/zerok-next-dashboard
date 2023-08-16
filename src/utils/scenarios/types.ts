@@ -1,6 +1,5 @@
 export interface RuleType {
-  type: "string";
-  id: string;
+  type: "rule" | "rule_group";
   field: string;
   input: string;
   operator: string;
@@ -9,76 +8,29 @@ export interface RuleType {
 
 export interface RuleGroupType {
   type: "rule_group";
-  condition: "AND" | "OR";
-  rules: RuleType[] | RuleGroupType[];
+  condition: "AND";
+  rules: RuleType[];
 }
 
 export interface WorkloadType {
   service: string;
-  trace_role: string;
-  protocol: string;
+  trace_role: "server";
+  protocol: "HTTP" | "MYSQL";
   rule: RuleGroupType;
 }
 
-// {
-//   "version": "1684149787",
-//   "scenario_id": "1",
-//   "scenario_title": "Exception",
-//   "scenario_type": "SYSTEM",
-//   "enabled": true,
-//   "workloads": {
-//       "55661a0e-25cb-5a1c-94cd-fad172b0caa2": {
-//           "service": "*/*",
-//           "trace_role": "server",
-//           "protocol": "HTTP",
-//           "rule": {
-//               "type": "rule_group",
-//               "condition": "AND",
-//               "rules": [
-//                   {
-//                       "type": "rule",
-//                       "id": "req_method",
-//                       "field": "req_method",
-//                       "datatype": "string",
-//                       "input": "string",
-//                       "operator": "equal",
-//                       "value": "POST"
-//                   },
-//                   {
-//                       "type": "rule",
-//                       "id": "req_path",
-//                       "field": "req_path",
-//                       "datatype": "string",
-//                       "input": "string",
-//                       "operator": "equal",
-//                       "value": "/exception"
-//                   }
-//               ]
-//           }
-//       }
-//   },
-//   "filter": {
-//       "type": "workload",
-//       "condition": "AND",
-//       "workload_ids": [
-//           "55661a0e-25cb-5a1c-94cd-fad172b0caa2"
-//       ]
-//   },
-//   "group_by": [
-//       {
-//           "workload_id": "55661a0e-25cb-5a1c-94cd-fad172b0caa2",
-//           "title": "source",
-//           "hash": "source"
-//       }
-//   ],
-//   "rate_limit": [
-//       {
-//           "bucket_max_size": 5,
-//           "bucket_refill_size": 5,
-//           "tick_duration": "1m"
-//       }
-//   ]
-// }
+export interface ScenarioGroupByType {
+  workload_index: number;
+  title: string;
+  hash: string;
+}
+
+export interface ScenarioCreationType {
+  scenario_title: string;
+  scenario_type: "USER";
+  workloads: WorkloadType[];
+  group_by: ScenarioGroupByType[];
+}
 
 export interface ScenarioDetail {
   version: string;
