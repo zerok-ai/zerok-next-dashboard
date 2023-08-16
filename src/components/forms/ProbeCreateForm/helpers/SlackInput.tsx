@@ -23,7 +23,7 @@ const InputComponent = ({
   channels: string[];
 }) => {
   const [channel, setChannel] = useState("");
-  const [isMenuOpen, toggleMenu] = useToggle(false);
+  const [isMenuOpen, toggleMenu, setMenu] = useToggle(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const filteredChannels = channel.length
     ? SLACK_CHANNELS.filter((slc) => {
@@ -40,13 +40,15 @@ const InputComponent = ({
       <input
         value={channel}
         ref={inputRef}
-        onClick={() => {
-          console.log("clicked");
-        }}
         onFocus={() => {
           if (!isMenuOpen) {
             toggleMenu();
           }
+        }}
+        onBlur={() => {
+          setTimeout(() => {
+            setMenu(false);
+          }, 200);
         }}
         onChange={(e) => {
           setChannel(e.target.value);
@@ -70,12 +72,7 @@ const InputComponent = ({
                     setChannel("");
                   }}
                 >
-                  <span
-                    className={styles["channel-type"]}
-                    onClick={() => {
-                      console.log("clicked");
-                    }}
-                  >
+                  <span className={styles["channel-type"]}>
                     {slc.type === "channel" ? (
                       " # "
                     ) : (
@@ -102,7 +99,6 @@ const SlackInput = ({
   deleteChannel,
 }: SlackInputProps) => {
   const anchorRef = React.useRef<HTMLDivElement>(null);
-  console.log({ anchorRef }, "here", { channels });
   return (
     <div className={styles.container} ref={anchorRef}>
       <div className={styles["slack-title"]}>

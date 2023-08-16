@@ -1,3 +1,10 @@
+export interface PropertyType {
+  label: string;
+  value: string;
+  type: string;
+  dynamicLabel?: boolean;
+}
+
 export const PROBE_TIME_RANGES = [
   {
     label: "Forever",
@@ -25,54 +32,80 @@ export const PROBE_TIME_RANGES = [
   },
 ];
 
-export const PROPERTIES = [
+export const getPropertyOptionLabel = (
+  item: PropertyType,
+  selectedProperty: string | null
+) => {
+  if (!item.dynamicLabel) {
+    return item.label;
+  }
+  const type = selectedProperty?.split("/")[1].includes("sql")
+    ? "db"
+    : "service";
+  const prefix = type === "db" ? "DB" : "HTTP";
+  return `${prefix} ${item.label}`;
+};
+
+export const PROPERTIES: PropertyType[] = [
   {
-    label: "Service",
-    value: "service",
+    label: "Latency",
+    value: "latency",
+    type: "double",
   },
   {
-    label: "Payload",
-    value: "payload",
+    label: "Source service",
+    value: "source",
+    type: "string",
   },
   {
-    label: "Span ID",
-    value: "span_id",
+    label: "Destination service",
+    value: "destination",
+    type: "string",
   },
   {
-    label: "Trace ID",
-    value: "trace_id",
+    label: "Request payload size",
+    value: "request.payload_size",
+    type: "int",
   },
   {
-    label: "HTTP Status Code",
-    value: "http_status_code",
+    label: "Response payload size",
+    value: "response.payload_size",
+    type: "int",
   },
   {
-    label: "HTTP host",
-    value: "http_host",
+    label: "Method",
+    value: "method",
+    type: "string",
+    dynamicLabel: true,
   },
   {
-    label: "HTTP method",
-    value: "http_method",
+    label: "Status Code",
+    value: "status",
+    type: "int",
+    dynamicLabel: true,
   },
   {
-    label: "HTTP target",
-    value: "http_target",
+    label: "Route",
+    value: "route",
+    type: "string",
+    dynamicLabel: true,
   },
   {
-    label: "DB System",
-    value: "db_system",
+    label: "Query",
+    value: "query",
+    type: "string",
+    dynamicLabel: true,
   },
   {
-    label: "DB Name",
-    value: "db_name",
+    label: "Status Code",
+    value: "status",
+    type: "int",
+    dynamicLabel: true,
   },
   {
-    label: "DB Statement",
-    value: "db_statement",
-  },
-  {
-    label: "DB User",
-    value: "db_user",
+    label: "User",
+    value: "user",
+    type: "string",
   },
 ];
 

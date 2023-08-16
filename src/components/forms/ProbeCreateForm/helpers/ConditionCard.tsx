@@ -6,7 +6,12 @@ import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
 import { type GenericObject } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
-import { CONDITIONS, EQUALS, PROPERTIES } from "../ProbeCreateForm.utils";
+import {
+  CONDITIONS,
+  EQUALS,
+  getPropertyOptionLabel,
+  PROPERTIES,
+} from "../ProbeCreateForm.utils";
 import JoiningSelect from "./JoiningSelect";
 
 interface ConditionCardProps {
@@ -24,9 +29,13 @@ const ConditionCard = ({
     {
       property: "",
       operator: "",
+      value: "",
       datatype: "",
+      key: nanoid(),
     },
   ]);
+
+  const [rootProperty, setRootProperty] = useState<string | null>(null);
 
   const addCondition = () => {
     setConditions([
@@ -34,7 +43,9 @@ const ConditionCard = ({
       {
         property: "",
         operator: "",
+        value: "",
         datatype: "",
+        key: nanoid(),
       },
     ]);
   };
@@ -47,10 +58,9 @@ const ConditionCard = ({
   const updateValues = (index: number, name: string, value: string) => {
     const newConditions = [...conditions];
     newConditions[index][name] = value;
-    console.log({ index, name, value });
     setConditions(newConditions);
   };
-
+  console.log({ rootProperty, conditions });
   return (
     <div className={styles["condition-card"]}>
       <div className={styles["root-condition-container"]}>
@@ -61,13 +71,17 @@ const ConditionCard = ({
               buttonMode={true}
               list={CONDITIONS}
               color="purple"
+              onSelect={null}
             />
           )}
           <JoiningSelect
             buttonMode={false}
             list={services}
             color="blue"
-            value="Service"
+            value={rootProperty ?? "Service"}
+            onSelect={(value) => {
+              setRootProperty(value);
+            }}
           />
         </div>
         {deleteCard && (
@@ -88,18 +102,19 @@ const ConditionCard = ({
                 styles["condition-card-item"],
                 index === 0 && styles["condition-row-1"]
               )}
-              key={nanoid()}
+              key={condition.key}
             >
               {index > 0 && (
                 <JoiningSelect
                   list={CONDITIONS}
                   color="purple"
                   value="And"
+                  onSelect={null}
                   buttonMode={true}
                 />
               )}
               <Select
-                defaultValue={null}
+                defaultValue=""
                 variant="standard"
                 name="property"
                 className={styles["property-select"]}
@@ -107,12 +122,18 @@ const ConditionCard = ({
                 value={conditions[index].property}
                 onChange={(value) => {
                   updateValues(index, "property", value.target.value as string);
+                  updateValues(
+                    index,
+                    "datatype",
+                    PROPERTIES.find((prt) => prt.value === value.target.value)
+                      ?.type ?? ""
+                  );
                 }}
               >
                 {PROPERTIES.map((prt) => {
                   return (
                     <MenuItem value={prt.value} key={nanoid()}>
-                      {prt.label}
+                      {getPropertyOptionLabel(prt, rootProperty)}
                     </MenuItem>
                   );
                 })}
@@ -120,8 +141,8 @@ const ConditionCard = ({
 
               {/* Operator */}
               <Select
-                defaultValue={null}
                 variant="standard"
+                defaultValue=""
                 name="operator"
                 className={styles["operator-select"]}
                 placeholder="Choose"
@@ -144,11 +165,10 @@ const ConditionCard = ({
                 name="value"
                 className={styles["value-input"]}
                 placeholder="Value"
-                // value={}
-                // onChange={(e) => {
-                //   console.log({ e });
-                //   updateValues(index, "value", e.target.value);
-                // }}
+                value={conditions[index].value}
+                onChange={(e) => {
+                  updateValues(index, "value", e.target.value);
+                }}
               />
 
               {/* Delete */}

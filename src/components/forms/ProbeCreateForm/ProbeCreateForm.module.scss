@@ -92,6 +92,13 @@
     :global(.MuiInputBase-root:before){
         border-bottom: 1px solid $grey-700;
     }
+    input {
+        border:none;
+        outline:none;
+        background-color: $bg-dark;
+        color:$grey-50;
+        border-bottom: 1px solid $grey-800;
+    }
 }
 
 .close-button-container {
