@@ -2,7 +2,7 @@ import { Divider, MenuItem, Select } from "@mui/material";
 import cx from "classnames";
 import ClusterCreateModal from "components/ClusterCreateModal";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import {
   clusterSelector,
@@ -17,13 +17,18 @@ import styles from "./ClusterSelector.module.scss";
 const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const clusterSlice = useSelector(clusterSelector);
-  const { clusters, selectedCluster } = clusterSlice;
+  const { clusters, selectedCluster, empty } = clusterSlice;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
   const isRootPath = router.pathname.split("/").length === 1;
-  console.log({ isRootPath, router }, router.pathname.split("/"));
+
+  useEffect(() => {
+    if (empty) {
+      setIsModalVisible(true);
+    }
+  }, [empty]);
 
   const toggleModal = () => {
     setIsModalVisible((old) => !old);

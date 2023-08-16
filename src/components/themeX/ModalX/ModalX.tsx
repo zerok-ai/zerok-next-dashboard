@@ -27,6 +27,7 @@ const ModalX = ({
       keepMounted={keepMounted}
       className={cx(customClassName, styles.modal)}
       onClose={onClose}
+      disableAutoFocus
     >
       <div className={styles.container}>
         <div className={styles["modal-header"]}>
