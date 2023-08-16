@@ -5,7 +5,15 @@ import React from "react";
 import styles from "../ProbeCreateForm.module.scss";
 import { PROBE_TIME_RANGES } from "../ProbeCreateForm.utils";
 
-const NameAndTimeForm = () => {
+interface NameAndTimeFormProps {
+  values: {
+    title: string;
+    time: string;
+  };
+  updateValues: (value: string, key: string) => void;
+}
+
+const NameAndTimeForm = ({ values, updateValues }: NameAndTimeFormProps) => {
   return (
     <div className={styles["name-form-container"]}>
       <div className={styles["name-form-item"]}>
@@ -14,6 +22,10 @@ const NameAndTimeForm = () => {
           placeholder="Give a unique name to your probe"
           className={styles["name-input"]}
           id="name"
+          value={values.title}
+          onChange={(e) => {
+            updateValues(e.target.value, "name");
+          }}
         />
       </div>
       <div className={styles["name-form-item"]}>
@@ -22,6 +34,10 @@ const NameAndTimeForm = () => {
           defaultValue={PROBE_TIME_RANGES[0].value}
           className={styles["time-input"]}
           id="time"
+          value={values.time}
+          onChange={(e) => {
+            updateValues(e.target.value, "time");
+          }}
         >
           {PROBE_TIME_RANGES.map((range) => {
             return (

@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
-import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
@@ -13,13 +12,20 @@ import {
   getFormattedServiceName,
   getNamespace,
 } from "utils/functions";
-import { type ServiceDetail } from "utils/types";
+import { type GenericObject, type ServiceDetail } from "utils/types";
 
 import ConditionCard from "./helpers/ConditionCard";
 import GroupBySelect from "./helpers/GroupBySelect";
 import NameAndTimeForm from "./helpers/NameAndTimeForm";
 import NotificationForm from "./helpers/NotificationForm";
 import styles from "./ProbeCreateForm.module.scss";
+import {
+  buildProbeBody,
+  type ConditionCardType,
+  type ConditionRowStrings,
+  getEmptyCard,
+  getEmptyCondition,
+} from "./ProbeCreateForm.utils";
 
 const formatServices = (services: ServiceDetail[]) => {
   return services.map((sv) => {
@@ -35,11 +41,19 @@ const formatServices = (services: ServiceDetail[]) => {
 };
 
 const ProbeCreateForm = () => {
-  const [cards, setCards] = useState<string[]>([nanoid()]);
+  const [cards, setCards] = useState<ConditionCardType[]>([getEmptyCard()]);
   const { selectedCluster } = useSelector(clusterSelector);
   const { data: services, fetchData: fetchServices } = useFetch<
     ServiceDetail[]
   >("results", null, filterServices);
+  const [nameForm, setNameForm] = useState<{ title: string; time: string }>({
+    title: "Slow requests, latency > 1000ms",
+    time: DEFAULT_TIME_RANGE,
+  });
+
+  const updateNameForm = (key: string, value: string) => {
+    setNameForm({ ...nameForm, [key]: value });
+  };
 
   useEffect(() => {
     if (selectedCluster) {
@@ -52,11 +66,108 @@ const ProbeCreateForm = () => {
   }, [selectedCluster]);
 
   const addCard = () => {
-    setCards([...cards, nanoid()]);
+    setCards([...cards, getEmptyCard()]);
   };
 
-  const deleteCard = (idx: number) => {
-    setCards(cards.filter((_, i) => i !== idx));
+  const deleteCard = (key: string) => {
+    setCards(cards.filter((c, i) => c.key !== key));
+  };
+
+  const addCondition = (idx: number) => {
+    const newCards = [...cards];
+    newCards[idx].conditions.push(getEmptyCondition());
+    setCards(newCards);
+  };
+
+  const deleteCondition = (cardIndex: number, conditionIndex: number) => {
+    const newCards = [...cards];
+    newCards[cardIndex].conditions = newCards[cardIndex].conditions.filter(
+      (_: GenericObject, i: number) => i !== conditionIndex
+    );
+    setCards(newCards);
+  };
+
+  const updateProperty = (
+    cardIndex: number,
+    conditionIndex: number,
+    property: string,
+    datatype: string
+  ) => {
+    const newCards = [...cards];
+    const card = newCards[cardIndex];
+    card.conditions[conditionIndex].property = property;
+    card.conditions[conditionIndex].datatype = datatype;
+    card.conditions[conditionIndex].operator = "";
+    card.conditions[conditionIndex].value = "";
+    card.conditions[conditionIndex].errors.property = false;
+    card.conditions[conditionIndex].errors.datatype = false;
+    newCards[cardIndex] = card;
+    setCards(newCards);
+  };
+
+  const updateOperator = (
+    cardIndex: number,
+    conditionIndex: number,
+    operator: string
+  ) => {
+    const newCards = [...cards];
+    const card = newCards[cardIndex];
+    card.conditions[conditionIndex].operator = operator;
+    card.conditions[conditionIndex].value = "";
+    card.conditions[conditionIndex].errors.operator = false;
+    newCards[cardIndex] = card;
+    setCards(newCards);
+  };
+
+  console.log({ cards });
+
+  const updateValue = (
+    cardIndex: number,
+    conditionIndex: number,
+    value: string
+  ) => {
+    const newCards = [...cards];
+    const card = newCards[cardIndex];
+    card.conditions[conditionIndex].value = value;
+    card.conditions[conditionIndex].errors.value = false;
+    newCards[cardIndex] = card;
+    setCards(newCards);
+  };
+
+  const updateRootProperty = (cardIndex: number, property: string) => {
+    const newCards = [...cards];
+    const card = newCards[cardIndex];
+    card.rootProperty = property;
+    card.conditions = [getEmptyCondition()];
+    card.errors.rootProperty = false;
+    newCards[cardIndex] = card;
+    setCards(newCards);
+  };
+  const handleSubmit = () => {
+    const newCards = [...cards];
+    let errors = 0;
+    newCards.forEach((c) => {
+      if (!c.rootProperty || !c.rootProperty.length) {
+        errors++;
+        c.errors.rootProperty = true;
+      }
+      c.conditions.forEach((cond) => {
+        Object.keys(cond).forEach((id: string) => {
+          if (id === "errors") return;
+          const key = id as ConditionRowStrings;
+          if (!cond[key] || !cond[key].length) {
+            errors++;
+            cond.errors[key] = true;
+          }
+        });
+      });
+    });
+    if (errors > 0) {
+      setCards(newCards);
+      return;
+    }
+    const body = buildProbeBody(cards, nameForm.title);
+    console.log({ cards }, "CLEAN", { body });
   };
 
   return (
@@ -66,12 +177,32 @@ const ProbeCreateForm = () => {
           return (
             <ConditionCard
               includeAnd={idx > 0}
-              key={c}
+              conditions={c.conditions}
+              rootProperty={c.rootProperty}
+              addCondition={() => {
+                addCondition(idx);
+              }}
+              deleteCondition={(conditionIndex) => {
+                deleteCondition(idx, conditionIndex);
+              }}
+              updateProperty={(conditionIndex, property, datatype) => {
+                updateProperty(idx, conditionIndex, property, datatype);
+              }}
+              updateOperator={(conditionIndex, operator) => {
+                updateOperator(idx, conditionIndex, operator);
+              }}
+              updateValue={(conditionIndex, value) => {
+                updateValue(idx, conditionIndex, value);
+              }}
+              updateRootProperty={(property) => {
+                updateRootProperty(idx, property);
+              }}
+              key={c.key}
               services={formatServices(services ?? [])}
               deleteCard={
                 idx > 0
                   ? () => {
-                      deleteCard(idx);
+                      deleteCard(c.key);
                     }
                   : null
               }
@@ -92,12 +223,19 @@ const ProbeCreateForm = () => {
       <div className={styles.divider}></div>
       <NotificationForm />
       <div className={styles.divider}></div>
-      <NameAndTimeForm />
+      <NameAndTimeForm values={nameForm} updateValues={updateNameForm} />
       <Link href="/probes">
         <Button variant="contained" className={styles["create-button"]}>
           Investigate
         </Button>
       </Link>
+      <Button
+        variant="contained"
+        className={styles["create-button"]}
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
     </div>
   );
 };

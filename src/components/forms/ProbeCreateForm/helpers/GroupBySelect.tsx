@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import React from "react";
 
 import styles from "../ProbeCreateForm.module.scss";
-import { PROPERTIES } from "../ProbeCreateForm.utils";
+import { HTTP_PROPERTIES } from "../ProbeCreateForm.utils";
 const GroupBySelect = () => {
   return (
     <div className={styles["group-by-container"]}>
@@ -17,7 +17,7 @@ const GroupBySelect = () => {
         placeholder="Start typing..."
         className={styles["group-by-select"]}
       >
-        {PROPERTIES.map((pr) => {
+        {HTTP_PROPERTIES.map((pr) => {
           return (
             <MenuItem value={pr.value} key={nanoid()}>
               {pr.label}
