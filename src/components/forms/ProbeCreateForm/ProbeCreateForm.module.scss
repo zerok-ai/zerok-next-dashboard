@@ -92,13 +92,6 @@
     :global(.MuiInputBase-root:before){
         border-bottom: 1px solid $grey-700;
     }
-    input {
-        border:none;
-        outline:none;
-        background-color: $bg-dark;
-        color:$grey-50;
-        border-bottom: 1px solid $grey-800;
-    }
 }
 
 .close-button-container {
@@ -210,7 +203,7 @@
 }
 
 // notification-form
-.email-container,.slack-container {
+.email-container {
     width:100%;
     margin-top: $sp-base * 4;
     display: flex;
@@ -266,62 +259,4 @@
 
 .error-text {
     color:$error-500 !important;
-}
-
-// slack form
-.slack-image {
-    width:20px;
-    height:20px;
-    > img {
-        width:100%;
-        height:100%;
-    }
-}
-
-.channels-container {
-    display: flex;
-    column-gap: $sp-base * 2;
-}
-
-.channels-input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    column-gap: $sp-base;
-    width:100%;
-    border-bottom: 1px solid $grey-700;
-    > input {
-        width:100%;
-        flex:1;
-    }
-}
-
-.channels-menu {
-    position: absolute;
-    z-index: 10;
-    background-color: $grey-900;
-    width:500px;
-    padding:$sp-base * 2 0;
-    left:0;
-    min-height: 50px;
-}
-
-.channel-item {
-    display: flex;
-    align-items: center;
-    column-gap: $sp-base * 3;
-    padding:$sp-base * 2 $sp-base;
-    p,span,div {
-        color:$grey-50;
-    }
-    &:hover {
-        background-color: $grey-925;
-    }
-}
-
-.channel-type {
-    width:30px;
-    display:flex;
-    align-items: center;
-    justify-content: center;
 }

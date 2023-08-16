@@ -132,3 +132,11 @@ export const getNumberFromReqThroughput = (val: number) => {
   const reqPerSecond = roundToTwoDecimals(toNumber(val));
   return Number(reqPerSecond) > 0.1 ? reqPerSecond : "< 0.1";
 };
+
+export const validateEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};

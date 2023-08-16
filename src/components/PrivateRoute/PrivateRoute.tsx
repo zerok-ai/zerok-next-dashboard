@@ -2,7 +2,7 @@ import PageSkeleton from "components/helpers/PageSkeleton";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { tokenLogin } from "redux/authSlice";
-import { getClusters } from "redux/cluster";
+import { clusterSelector, getClusters } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
 import { getLocalToken } from "utils/functions";
 
@@ -13,6 +13,7 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const auth = useSelector((state) => state.auth);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const { selectedCluster } = useSelector(clusterSelector);
   const { isLoggedIn, token } = auth;
   const dispatch = useDispatch();
   const router = useRouter();
@@ -20,7 +21,9 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // check if token exists and user is logged in
     if (isLoggedIn && token) {
       setIsAuthorized(true);
-      dispatch(getClusters());
+      if (!selectedCluster || !selectedCluster.length) {
+        dispatch(getClusters());
+      }
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();

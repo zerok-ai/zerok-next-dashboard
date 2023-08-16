@@ -1,3 +1,4 @@
+import { MenuItem } from "@mui/material";
 import TagX from "components/themeX/TagX";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
@@ -60,7 +61,7 @@ const InputComponent = ({
           {unusedChannels.length !== 0 ? (
             unusedChannels.map((slc) => {
               return (
-                <p
+                <MenuItem
                   key={nanoid()}
                   role="button"
                   className={styles["channel-item"]}
@@ -81,7 +82,7 @@ const InputComponent = ({
                   </span>
                   <span>{slc.value}</span>
                   {/* </p> */}
-                </p>
+                </MenuItem>
               );
             })
           ) : (
