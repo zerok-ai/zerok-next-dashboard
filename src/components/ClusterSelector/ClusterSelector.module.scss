@@ -1,6 +1,7 @@
 @import "styles/variables.module.scss";
 .container {
   .select{
+    min-width: 300px;
     :global(.MuiMenu-list){
       background-color: $white !important;
     color:$white;

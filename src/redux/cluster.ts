@@ -9,6 +9,7 @@ import { type ClusterReduxType } from "./types";
 const initialState: ClusterReduxType = {
   loading: false,
   clusters: [],
+  empty: false,
   error: false,
   selectedCluster: "",
   renderTrigger: nanoid(),
@@ -44,8 +45,9 @@ export const clusterSlice = createSlice({
         state.clusters = action.payload;
         state.loading = false;
         if (action.payload.length > 0) {
+          state.empty = false;
           state.selectedCluster = action.payload[0].id;
-        }
+        } else state.empty = true;
       })
       .addCase(getClusters.rejected, (state, action) => {
         state.loading = false;

@@ -13,7 +13,7 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const auth = useSelector((state) => state.auth);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, empty } = useSelector(clusterSelector);
   const { isLoggedIn, token } = auth;
   const dispatch = useDispatch();
   const router = useRouter();
@@ -44,6 +44,12 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
       router.push("/login");
     }
   }, [auth.error]);
+
+  useEffect(() => {
+    if (empty) {
+      router.push("/");
+    }
+  }, [empty]);
 
   if (!isAuthorized) {
     return <PageSkeleton />;
