@@ -47,19 +47,13 @@
     }
 
 }
-
-.autocomplete {
-    :global(.MuiAutocomplete-paper) {
-        background-color: red;
-    }
-}
-
 .channels-menu {
     position: absolute;
     top:50px;
     z-index: 9999;
     width:500px;
     left:0;
+    padding:$sp-base * 2 0;
     background-color: $grey-900;
 }
 

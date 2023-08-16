@@ -39,27 +39,31 @@ const Probe = () => {
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const getData = async () => {
-    const rdata = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
-      headers: {
-        "Cluster-Id": selectedCluster as string,
-      },
-    });
-    const slist = rdata.data.payload.scenarios as ScenarioDetail[];
-    const idList = slist.map((s) => s.scenario_id);
-    const sdata = await raxios.get(
-      GET_SCENARIO_DETAILS_ENDPOINT.replace(
-        "{scenario_id_list}",
-        idList.join(",")
-      )
-        .replace("{cluster_id}", selectedCluster as string)
-        .replace("{range}", range as string)
-    );
-    const sdlist = sdata.data.payload.scenarios as ScenarioDetail[];
-    const finalSlist = sdlist.map((sd) => {
-      const scen = slist.find((s) => s.scenario_id === sd.scenario_id);
-      return { ...sd, ...scen };
-    });
-    setScenarios(finalSlist);
+   try {
+     const rdata = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
+       headers: {
+         "Cluster-Id": selectedCluster as string,
+       },
+     });
+     const slist = rdata.data.payload.scenarios as ScenarioDetail[];
+     const idList = slist.map((s) => s.scenario_id);
+     const sdata = await raxios.get(
+       GET_SCENARIO_DETAILS_ENDPOINT.replace(
+         "{scenario_id_list}",
+         idList.join(",")
+       )
+         .replace("{cluster_id}", selectedCluster as string)
+         .replace("{range}", range as string)
+     );
+     const sdlist = sdata.data.payload.scenarios as ScenarioDetail[];
+     const finalSlist = sdlist.map((sd) => {
+       const scen = slist.find((s) => s.scenario_id === sd.scenario_id);
+       return { ...sd, ...scen };
+     });
+     setScenarios(finalSlist);
+   } catch (err) {
+     console.log({ err });
+   }
   };
   useEffect(() => {
     if (selectedCluster) {

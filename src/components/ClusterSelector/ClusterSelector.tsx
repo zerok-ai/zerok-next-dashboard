@@ -23,6 +23,7 @@ const ClusterSelector = () => {
   const dispatch = useDispatch();
 
   const isRootPath = router.pathname.split("/").length === 1;
+  console.log({ isRootPath, router }, router.pathname.split("/"));
 
   const toggleModal = () => {
     setIsModalVisible((old) => !old);
@@ -41,9 +42,7 @@ const ClusterSelector = () => {
           if (val !== null && val.target && val.target.value) {
             dispatch(setSelectedCluster({ id: null }));
             if (!isRootPath) {
-              router.push({
-                pathname: router.pathname.split("/")[0],
-              });
+              router.push(`/${router.pathname.split("/")[1]}`);
             } else {
               dispatch(triggerRefetch());
             }

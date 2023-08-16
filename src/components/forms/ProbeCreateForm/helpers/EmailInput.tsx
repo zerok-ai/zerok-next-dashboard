@@ -1,10 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import cx from "classnames";
 import TagX from "components/themeX/TagX";
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { HiOutlineMail } from "react-icons/hi";
-import z from "zod";
+import { validateEmail } from "utils/functions";
 
 import styles from "../ProbeCreateForm.module.scss";
 
@@ -14,35 +12,25 @@ interface EmailInputProps {
   deleteEmail: (email: string) => void;
 }
 
-const EmailSchema = z.object({
-  email: z.string().min(1).email(),
-});
-
-type EmailSchemaType = z.infer<typeof EmailSchema>;
-
 const EmailInput = ({ emails, addEmail, deleteEmail }: EmailInputProps) => {
-  const {
-    register,
-    handleSubmit,
-    setFocus,
-    reset,
-    formState: { errors },
-  } = useForm<EmailSchemaType>({
-    resolver: zodResolver(EmailSchema),
-    reValidateMode: "onSubmit",
-  });
-
-  const onSubmit = (data: EmailSchemaType) => {
-    addEmail(data.email);
-    reset();
-    setFocus("email");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const onSubmit = () => {
+    if (validateEmail(email)) {
+      setError(false);
+      addEmail(email);
+      setEmail("");
+      inputRef.current?.focus();
+    } else {
+      setError(true);
+    }
   };
 
   const removeEmail = (email: string) => {
     deleteEmail(email);
-    setFocus("email");
+    inputRef.current?.focus();
   };
-  console.log({ errors });
 
   return (
     <div className={styles["email-container"]}>
@@ -62,11 +50,25 @@ const EmailInput = ({ emails, addEmail, deleteEmail }: EmailInputProps) => {
             );
           })}
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSubmit();
+          }}
+        >
           <input
+            ref={inputRef}
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(false);
+            }}
             id="email"
-            {...register("email")}
-            className={cx(errors.email && styles["error-text"])}
+            onBlur={() => {
+              setEmail("");
+              setError(false);
+            }}
+            className={cx(error && styles["error-text"])}
           />
         </form>
       </div>

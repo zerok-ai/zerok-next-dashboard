@@ -50,6 +50,7 @@ const ProbeCreateForm = () => {
       fetchServices(endpoint);
     }
   }, [selectedCluster]);
+
   const addCard = () => {
     setCards([...cards, nanoid()]);
   };
@@ -57,6 +58,7 @@ const ProbeCreateForm = () => {
   const deleteCard = (idx: number) => {
     setCards(cards.filter((_, i) => i !== idx));
   };
+
   return (
     <div className={styles.container}>
       <div className={styles["cards-container"]}>

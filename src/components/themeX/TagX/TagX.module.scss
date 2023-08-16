@@ -7,9 +7,10 @@
     column-gap: $sp-base * 2.5;
     width: fit-content;
     cursor: pointer;
-    border:1px solid $grey-900;
+    border:1px solid $grey-700;
+    background-color: $grey-925;
     padding:$sp-base $sp-base * 2;
-    color:$grey-25;
+    color:$grey-50;
     border-radius: $sp-base;
 }
 
