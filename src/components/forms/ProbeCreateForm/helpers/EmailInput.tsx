@@ -64,6 +64,7 @@ const EmailInput = ({ emails, addEmail, deleteEmail }: EmailInputProps) => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
+            id="email"
             {...register("email")}
             className={cx(errors.email && styles["error-text"])}
           />

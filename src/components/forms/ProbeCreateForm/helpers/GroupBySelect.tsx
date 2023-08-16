@@ -1,9 +1,9 @@
 import { FormHelperText, MenuItem, Select } from "@mui/material";
-import { PROTOCOLS } from "components/CreateNewIssueDrawer/CreateNewIssueDrawer.utils";
 import { nanoid } from "nanoid";
 import React from "react";
 
 import styles from "../ProbeCreateForm.module.scss";
+import { PROPERTIES } from "../ProbeCreateForm.utils";
 const GroupBySelect = () => {
   return (
     <div className={styles["group-by-container"]}>
@@ -12,11 +12,12 @@ const GroupBySelect = () => {
         <span className={styles["group-by-link"]}>See how Group by works</span>
       </p>
       <Select
+        defaultValue=""
         variant="outlined"
         placeholder="Start typing..."
         className={styles["group-by-select"]}
       >
-        {PROTOCOLS.map((pr) => {
+        {PROPERTIES.map((pr) => {
           return (
             <MenuItem value={pr.value} key={nanoid()}>
               {pr.label}

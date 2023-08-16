@@ -13,6 +13,7 @@ const NameAndTimeForm = () => {
         <OutlinedInput
           placeholder="Give a unique name to your probe"
           className={styles["name-input"]}
+          id="name"
         />
       </div>
       <div className={styles["name-form-item"]}>
@@ -20,6 +21,7 @@ const NameAndTimeForm = () => {
         <Select
           defaultValue={PROBE_TIME_RANGES[0].value}
           className={styles["time-input"]}
+          id="time"
         >
           {PROBE_TIME_RANGES.map((range) => {
             return (

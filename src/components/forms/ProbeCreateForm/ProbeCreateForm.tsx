@@ -64,7 +64,7 @@ const ProbeCreateForm = () => {
           return (
             <ConditionCard
               includeAnd={idx > 0}
-              key={nanoid()}
+              key={c}
               services={formatServices(services ?? [])}
               deleteCard={
                 idx > 0

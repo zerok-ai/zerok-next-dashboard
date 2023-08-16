@@ -45,7 +45,6 @@ const Probe = () => {
       },
     });
     const slist = rdata.data.payload.scenarios as ScenarioDetail[];
-    console.log({ slist, rdata });
     const idList = slist.map((s) => s.scenario_id);
     const sdata = await raxios.get(
       GET_SCENARIO_DETAILS_ENDPOINT.replace(

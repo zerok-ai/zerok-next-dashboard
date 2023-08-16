@@ -16,6 +16,7 @@ interface JoiningSelectProps {
   placeholder?: string;
   color: "blue" | "purple";
   value?: string;
+  onSelect: ((value: string) => void) | null;
 }
 
 const JoiningSelect = ({
@@ -23,9 +24,9 @@ const JoiningSelect = ({
   buttonMode,
   color,
   value,
+  onSelect,
 }: JoiningSelectProps) => {
   const [btnRef, setBtnRef] = useState<HTMLButtonElement | null>(null);
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setBtnRef(event.currentTarget);
   };
@@ -44,7 +45,7 @@ const JoiningSelect = ({
           buttonMode && styles["no-button"]
         )}
       >
-        {selectedValue ?? value}
+        {value}
         {!buttonMode && <HiOutlineChevronDown />}
       </Button>
       {!buttonMode && (
@@ -61,7 +62,7 @@ const JoiningSelect = ({
                   value={item.value}
                   key={nanoid()}
                   onClick={() => {
-                    setSelectedValue(item.value);
+                    onSelect && onSelect(item.value);
                     handleClose();
                   }}
                 >

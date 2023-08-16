@@ -18,7 +18,6 @@ const NotificationForm = () => {
     setEmails(emails.filter((e) => e !== email));
   };
   const addChannel = (channel: string) => {
-    console.log("ADDING");
     setChannels([...channels, channel]);
   };
   const deleteChannel = (channel: string) => {
