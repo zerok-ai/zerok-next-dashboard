@@ -47,7 +47,7 @@ const ProbeCreateForm = () => {
     ServiceDetail[]
   >("results", null, filterServices);
   const [nameForm, setNameForm] = useState<{ title: string; time: string }>({
-    title: "Slow requests, latency > 1000ms",
+    title: "",
     time: DEFAULT_TIME_RANGE,
   });
 
@@ -163,7 +163,7 @@ const ProbeCreateForm = () => {
       });
     });
     if (errors > 0) {
-      setCards(newCards);
+      // setCards(newCards);
       return;
     }
     const body = buildProbeBody(cards, nameForm.title);
@@ -225,17 +225,21 @@ const ProbeCreateForm = () => {
       <div className={styles.divider}></div>
       <NameAndTimeForm values={nameForm} updateValues={updateNameForm} />
       <Link href="/probes">
-        <Button variant="contained" className={styles["create-button"]}>
+        <Button
+          variant="contained"
+          className={styles["create-button"]}
+          onClick={handleSubmit}
+        >
           Investigate
         </Button>
       </Link>
-      <Button
+      {/* <Button
         variant="contained"
         className={styles["create-button"]}
         onClick={handleSubmit}
       >
         Submit
-      </Button>
+      </Button> */}
     </div>
   );
 };
