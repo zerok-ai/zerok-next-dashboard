@@ -1,6 +1,7 @@
 import { Button, Step, StepContent, StepLabel, Stepper } from "@mui/material";
 import cx from "classnames";
 import CodeBlock from "components/CodeBlock";
+import CustomSkeleton from "components/CustomSkeleton";
 import useStatus from "hooks/useStatus";
 import { useEffect, useMemo, useState } from "react";
 import { TOP_APIKEY_ENDPOINT } from "utils/endpoints";
@@ -34,7 +35,10 @@ const CreateClusterForm = () => {
       fetchKey();
     }
   }, []);
-  const FORM_STEPS = useMemo(() => {
+  const FORM_STEPS: Array<{
+    label: string;
+    description: () => JSX.Element;
+  }> = useMemo(() => {
     return [
       {
         label: "Install ZeroK on your cluster",
@@ -45,11 +49,13 @@ const CreateClusterForm = () => {
                 Run the command below to install ZeroK in your current cluster
                 context
               </p>
-              {apiKey && (
+              {apiKey ? (
                 <CodeBlock
                   code={`zkctl install --apikey ${apiKey.key}`}
                   allowCopy
                 />
+              ) : (
+                <CustomSkeleton len={1} />
               )}
             </div>
           );
