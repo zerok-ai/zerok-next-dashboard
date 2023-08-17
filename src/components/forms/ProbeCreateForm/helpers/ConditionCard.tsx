@@ -80,7 +80,9 @@ const ConditionCard = ({
       </div>
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
-          const properties = getPropertyByType(rootProperty);
+          const properties = getPropertyByType(
+            services.find((s) => s.value === rootProperty)?.value ?? ""
+          );
           const operators = getOperatorByType(condition.datatype);
           const { errors } = condition;
           return (

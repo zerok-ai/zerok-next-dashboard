@@ -31,7 +31,8 @@ import {
 } from "./ProbeCreateForm.utils";
 
 const formatServices = (services: ServiceDetail[]) => {
-  return services.map((sv) => {
+  const filter = services.filter((sv) => sv.protocol);
+  return filter.map((sv) => {
     return {
       label: `${getNamespace(sv.service)}/${getFormattedServiceName(
         sv.service
@@ -154,6 +155,14 @@ const ProbeCreateForm = () => {
     card.errors.rootProperty = false;
     newCards[cardIndex] = card;
     setCards(newCards);
+    setGroupBy({
+      service: null,
+      property: "",
+      errors: {
+        service: false,
+        property: false,
+      },
+    });
   };
   const handleSubmit = () => {
     const newCards = [...cards];
@@ -270,6 +279,7 @@ const ProbeCreateForm = () => {
         cards={cards}
         updateValue={handleGroupByUpdate}
         values={groupBy}
+        services={formatServices(services ?? [])}
       />
       <div className={styles.divider}></div>
       <NotificationForm />
