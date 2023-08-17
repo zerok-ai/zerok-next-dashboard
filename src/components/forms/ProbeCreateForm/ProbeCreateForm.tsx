@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
@@ -25,6 +25,7 @@ import {
   type ConditionRowStrings,
   getEmptyCard,
   getEmptyCondition,
+  type GroupByType,
 } from "./ProbeCreateForm.utils";
 
 const formatServices = (services: ServiceDetail[]) => {
@@ -50,8 +51,19 @@ const ProbeCreateForm = () => {
     title: "",
     time: DEFAULT_TIME_RANGE,
   });
+  const router = useRouter();
+
+  const [groupBy, setGroupBy] = useState<GroupByType>({
+    service: null,
+    property: "",
+    errors: {
+      service: false,
+      property: false,
+    },
+  });
 
   const updateNameForm = (key: string, value: string) => {
+    console.log({ key, value });
     setNameForm({ ...nameForm, [key]: value });
   };
 
@@ -119,8 +131,6 @@ const ProbeCreateForm = () => {
     setCards(newCards);
   };
 
-  console.log({ cards });
-
   const updateValue = (
     cardIndex: number,
     conditionIndex: number,
@@ -162,12 +172,38 @@ const ProbeCreateForm = () => {
         });
       });
     });
-    if (errors > 0) {
-      // setCards(newCards);
+
+    if (groupBy.service === null || groupBy.property === "") {
+      errors++;
+      if (groupBy.service === null) {
+        console.log("called");
+        setGroupBy((old) => ({
+          ...old,
+          errors: { ...old.errors, service: true },
+        }));
+      }
+      if (groupBy.property === "") {
+        setGroupBy((old) => ({
+          ...old,
+          errors: { ...old.errors, property: true },
+        }));
+      }
       return;
     }
-    const body = buildProbeBody(cards, nameForm.title);
-    console.log({ cards }, "CLEAN", { body });
+    if (errors > 0) {
+      setCards(newCards);
+      return;
+    }
+    const body = buildProbeBody(cards, nameForm.title, groupBy);
+    console.log({ body });
+    router.push("/probes");
+  };
+  const handleGroupByUpdate = (key: string, value: string | number) => {
+    setGroupBy({
+      ...groupBy,
+      [key]: value,
+      errors: { service: false, property: false },
+    });
   };
 
   return (
@@ -219,27 +255,22 @@ const ProbeCreateForm = () => {
         Add service <HiOutlinePlus />
       </Button>
       <div className={styles.divider}></div>
-      <GroupBySelect />
+      <GroupBySelect
+        cards={cards}
+        updateValue={handleGroupByUpdate}
+        values={groupBy}
+      />
       <div className={styles.divider}></div>
       <NotificationForm />
       <div className={styles.divider}></div>
       <NameAndTimeForm values={nameForm} updateValues={updateNameForm} />
-      <Link href="/probes">
-        <Button
-          variant="contained"
-          className={styles["create-button"]}
-          onClick={handleSubmit}
-        >
-          Investigate
-        </Button>
-      </Link>
-      {/* <Button
+      <Button
         variant="contained"
         className={styles["create-button"]}
         onClick={handleSubmit}
       >
         Submit
-      </Button> */}
+      </Button>
     </div>
   );
 };

@@ -10,6 +10,14 @@ export type ConditionRowStrings =
   | "value"
   | "datatype";
 
+export interface GroupByType {
+  service: number | null;
+  property: string;
+  errors: {
+    service: boolean;
+    property: boolean;
+  };
+}
 export interface ConditionRowType {
   property: string;
   operator: string;
@@ -318,7 +326,8 @@ export const SLACK_CHANNELS: SlackChannelType[] = [
 
 export const buildProbeBody = (
   cards: ConditionCardType[],
-  title: string
+  title: string,
+  groupBy: GroupByType
 ): ScenarioCreationType => {
   const workloads = cards.map((card): WorkloadType => {
     return {
@@ -348,9 +357,9 @@ export const buildProbeBody = (
     workloads,
     group_by: [
       {
-        workload_index: 0,
-        title: cards[0].conditions[0].property,
-        hash: cards[0].conditions[0].property,
+        workload_index: groupBy.service as number,
+        title: groupBy.property,
+        hash: groupBy.property,
       },
     ],
   };

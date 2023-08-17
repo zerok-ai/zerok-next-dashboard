@@ -196,6 +196,18 @@
 }
 
 // group by form
+.group-by-selects {
+    display: grid;
+    grid-template-columns: 400px 200px;
+    column-gap: $sp-base * 2;
+    :global(.MuiOutlinedInput-notchedOutline){
+        border-color: $grey-700 !important;
+        &:hover {
+            border-color: $grey-300 !important;
+        }
+    }
+}
+
 .group-by-container, .notification-form-container {
     p {
         color:$grey-50;
