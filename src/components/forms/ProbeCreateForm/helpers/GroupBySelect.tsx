@@ -14,9 +14,18 @@ interface GroupBySelectProps {
   cards: ConditionCardType[];
   updateValue: (key: "service" | "property", value: string | number) => void;
   values: GroupByType;
+  services: Array<{
+    label: string;
+    value: string;
+  }>;
 }
 
-const GroupBySelect = ({ cards, updateValue, values }: GroupBySelectProps) => {
+const GroupBySelect = ({
+  cards,
+  updateValue,
+  values,
+  services,
+}: GroupBySelectProps) => {
   const emptyCard =
     cards.filter((card) => card.rootProperty !== "").length === 0;
 
@@ -25,8 +34,10 @@ const GroupBySelect = ({ cards, updateValue, values }: GroupBySelectProps) => {
       return [];
     }
     const baseProperties = getPropertyByType(
-      cards[values.service].rootProperty
+      services.find((s) => s.value === cards[values.service!].rootProperty)
+        ?.value ?? ""
     );
+
     const cardProperties: Array<{
       label: string;
       value: string;
@@ -57,6 +68,7 @@ const GroupBySelect = ({ cards, updateValue, values }: GroupBySelectProps) => {
             disabled={emptyCard}
             defaultValue={""}
             fullWidth
+            value={values.service?.toString() ?? ""}
             className={styles["group-by-select"]}
             variant="outlined"
             onChange={(e) => {
