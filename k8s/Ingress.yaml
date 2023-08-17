@@ -14,7 +14,7 @@ metadata:
   name: zerok-next-dashboard
 spec:
   rules:
-  - host: dashboard.loadcloud01.getanton.com
+  - host: sandbox.zerok.dev
     http:
       paths:
       - backend:
