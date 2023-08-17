@@ -12,6 +12,8 @@ import {
   getFormattedServiceName,
   getNamespace,
 } from "utils/functions";
+import raxios from "utils/raxios";
+import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
 import { type GenericObject, type ServiceDetail } from "utils/types";
 
 import ConditionCard from "./helpers/ConditionCard";
@@ -195,7 +197,17 @@ const ProbeCreateForm = () => {
       return;
     }
     const body = buildProbeBody(cards, nameForm.title, groupBy);
-    console.log({ body });
+    try {
+      const endpoint = CREATE_PROBE_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
+      );
+      raxios.post(endpoint, body);
+      router.push("/probes");
+    } catch (err) {
+      console.log({ err });
+    }
+
     router.push("/probes");
   };
   const handleGroupByUpdate = (key: string, value: string | number) => {
