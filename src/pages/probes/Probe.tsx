@@ -39,31 +39,36 @@ const Probe = () => {
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const getData = async () => {
-   try {
-     const rdata = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
-       headers: {
-         "Cluster-Id": selectedCluster as string,
-       },
-     });
-     const slist = rdata.data.payload.scenarios as ScenarioDetail[];
-     const idList = slist.map((s) => s.scenario_id);
-     const sdata = await raxios.get(
-       GET_SCENARIO_DETAILS_ENDPOINT.replace(
-         "{scenario_id_list}",
-         idList.join(",")
-       )
-         .replace("{cluster_id}", selectedCluster as string)
-         .replace("{range}", range as string)
-     );
-     const sdlist = sdata.data.payload.scenarios as ScenarioDetail[];
-     const finalSlist = sdlist.map((sd) => {
-       const scen = slist.find((s) => s.scenario_id === sd.scenario_id);
-       return { ...sd, ...scen };
-     });
-     setScenarios(finalSlist);
-   } catch (err) {
-     console.log({ err });
-   }
+    try {
+      const rdata = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
+        headers: {
+          "Cluster-Id": selectedCluster as string,
+        },
+      });
+      const allScenarios = rdata.data.payload.scenarios as ScenarioDetail[];
+      const idList = allScenarios.map((s) => s.scenario_id);
+      const sdata = await raxios.get(
+        GET_SCENARIO_DETAILS_ENDPOINT.replace(
+          "{scenario_id_list}",
+          idList.join(",")
+        )
+          .replace("{cluster_id}", selectedCluster as string)
+          .replace("{range}", range as string)
+      );
+      const scenarioMetadata = sdata.data.payload.scenarios as ScenarioDetail[];
+      const finalSlist = allScenarios.map((sd) => {
+        const scen = scenarioMetadata.find(
+          (s) => s.scenario_id === sd.scenario_id
+        );
+        if (scen) {
+          return { ...sd, ...scen };
+        }
+        return sd;
+      });
+      setScenarios(finalSlist);
+    } catch (err) {
+      console.log({ err });
+    }
   };
   useEffect(() => {
     if (selectedCluster) {
@@ -100,14 +105,33 @@ const Probe = () => {
       header: "Created on",
       size: DEFAULT_COL_WIDTH,
       cell: (info) => {
-        return <span>{getFormattedTime(info.getValue())}</span>;
+        const { first_seen } = info.row.original;
+        return (
+          <span>{first_seen ? getFormattedTime(info.getValue()) : `-`}</span>
+        );
       },
     }),
     helper.accessor("sources", {
       header: "Impacted services",
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
-        const { sources } = info.row.original;
+        const { sources, scenario_id } = info.row.original;
+        if (!sources) {
+          const scenario = scenarios?.find(
+            (s) => s.scenario_id === scenario_id
+          );
+          let sourceString = ``;
+          const keys = Object.keys(scenario!.workloads);
+          keys.forEach((k, idx) => {
+            const workload = scenario!.workloads[k];
+            if (workload?.service === "*/*") {
+              sourceString += `All ${workload?.protocol} services`;
+            } else {
+              sourceString += `${workload.service}`;
+            }
+          });
+          return <span> {sourceString} </span>;
+        }
         let str = ``;
         sources.forEach((s, idx) => {
           str += `${getNamespace(s)}/${getFormattedServiceName(s)} ${

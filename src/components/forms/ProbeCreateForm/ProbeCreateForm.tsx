@@ -206,9 +206,8 @@ const ProbeCreateForm = () => {
       router.push("/probes");
     } catch (err) {
       console.log({ err });
+      router.push("/probes");
     }
-
-    router.push("/probes");
   };
   const handleGroupByUpdate = (key: string, value: string | number) => {
     setGroupBy({
