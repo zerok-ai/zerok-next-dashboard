@@ -17,14 +17,14 @@ const NameAndTimeForm = ({ values, updateValues }: NameAndTimeFormProps) => {
   return (
     <div className={styles["name-form-container"]}>
       <div className={styles["name-form-item"]}>
-        <label htmlFor="name">Name of the probe</label>
+        <label htmlFor="title">Name of the probe</label>
         <OutlinedInput
           placeholder="Give a unique name to your probe"
           className={styles["name-input"]}
-          id="name"
+          id="title"
           value={values.title}
           onChange={(e) => {
-            updateValues(e.target.value, "name");
+            updateValues("title", e.target.value);
           }}
         />
       </div>

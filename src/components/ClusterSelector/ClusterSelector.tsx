@@ -33,6 +33,13 @@ const ClusterSelector = () => {
   const toggleModal = () => {
     setIsModalVisible((old) => !old);
   };
+
+  const handleModalClose = () => {
+    if (empty) {
+      setIsModalVisible(true);
+    }
+    setIsModalVisible(false);
+  };
   return (
     <div
       className={cx(styles.container, isDrawerMinimized && styles.minimized)}
@@ -78,7 +85,7 @@ const ClusterSelector = () => {
       </Select>
 
       {/* Modal */}
-      <ClusterCreateModal isOpen={isModalVisible} onClose={toggleModal} />
+      <ClusterCreateModal isOpen={isModalVisible} onClose={handleModalClose} />
     </div>
   );
 };
