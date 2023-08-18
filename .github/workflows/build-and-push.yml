@@ -12,7 +12,7 @@ on:
       GKE_CLUSTER:
         description: 'Cluster Name'
         required: true
-        default: 'pxclient01'
+        default: 'devclient01'
 env:
   BUILD_AND_PUSH: true
   DEPLOY: true
@@ -111,8 +111,11 @@ jobs:
         with:
           name: build-artifacts
           path: |
+            package.json
+            public
             .next/standalone
             .next/static
+            Dockerfile
 
   docker-build:
     needs: [ init,app-build ]
