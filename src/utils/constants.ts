@@ -23,7 +23,7 @@ export const HTTP_ERROR_CODES = {
 export const SPACE_TOKEN = 4;
 
 export const CLUSTER_STATES = {
-  HEALTHY: "CS_HEALTHY",
+  HEALTHY: "CS_HEALTsHY",
 };
 
 export const DEFAULT_COL_WIDTH = 80;
