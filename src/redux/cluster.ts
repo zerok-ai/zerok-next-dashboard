@@ -32,7 +32,7 @@ export const clusterSlice = createSlice({
     setSelectedCluster: (state, { payload: { id } }) => {
       state.selectedCluster = id;
       const cluster = state.clusters.find((c) => c.id === id);
-      state.status = cluster!.status;
+      state.status = cluster ? cluster.status : "";
     },
     triggerRefetch: (state) => {
       state.renderTrigger = nanoid();
