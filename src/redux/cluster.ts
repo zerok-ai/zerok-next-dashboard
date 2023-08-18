@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
+import { CLUSTER_STATES } from "utils/constants";
 import { CLUSTER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
 
 import { type RootState } from "./store";
-import { type ClusterReduxType } from "./types";
+import { type ClusterReduxType, type ClusterType } from "./types";
 
 const initialState: ClusterReduxType = {
   loading: false,
@@ -49,6 +50,16 @@ export const clusterSlice = createSlice({
         state.loading = false;
         if (action.payload.length > 0) {
           state.empty = false;
+          if (action.payload.length > 1) {
+            const healthyCluster = action.payload.find((c: ClusterType) => {
+              return c.status === CLUSTER_STATES.HEALTHY;
+            });
+            if (healthyCluster) {
+              state.selectedCluster = healthyCluster.id;
+              state.status = healthyCluster.status;
+              return;
+            }
+          }
           state.selectedCluster = action.payload[0].id;
           state.status = action.payload[0].status;
         } else state.empty = true;
