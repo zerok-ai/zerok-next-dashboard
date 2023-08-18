@@ -1,4 +1,4 @@
-name: CICD
+name: CICD - TO_BE_DELETED
 on:
   workflow_dispatch:
 jobs:

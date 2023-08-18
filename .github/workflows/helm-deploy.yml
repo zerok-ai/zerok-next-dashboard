@@ -1,4 +1,4 @@
-name: Helm deploy
+name: Helm deploy - TO_BE_DELETED
 on:
   workflow_dispatch:
 

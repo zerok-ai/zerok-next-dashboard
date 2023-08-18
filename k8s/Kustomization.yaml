@@ -1,7 +1,0 @@
-resources:
-- Namespace.yaml
-- ManagedCertificate.yaml
-- Deployment.yaml
-- Service.yaml
-- Ingress.yaml
-namespace: zkcloud

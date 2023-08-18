@@ -1,4 +1,4 @@
-name: CICD/poc
+name: CICD/poc - TO_BE_DELETED
 on:
   push:
     branches:
