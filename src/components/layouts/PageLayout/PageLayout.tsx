@@ -12,11 +12,22 @@ interface PageLayoutProps {
   children: React.ReactNode;
 }
 
+const CLUSTER_BLOCKED_ROUTES = [
+  "/",
+  "/probes/create",
+  "/probes",
+  "/issues/detail",
+];
+
 const PageLayout = ({ children }: PageLayoutProps) => {
   const { status } = useSelector(clusterSelector);
   const router = useRouter();
+  console.log(router.pathname);
   useEffect(() => {
-    if (status !== CLUSTER_STATES.HEALTHY) {
+    if (
+      status !== CLUSTER_STATES.HEALTHY &&
+      CLUSTER_BLOCKED_ROUTES.includes(router.pathname)
+    ) {
       router.push("/");
     }
   }, [status]);
