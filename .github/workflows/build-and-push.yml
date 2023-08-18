@@ -95,11 +95,11 @@ jobs:
 
       - name: Build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: npm install
+        run: yarn
 
       - name: Build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: npm run build
+        run: yarn build
 
       - name: Uploading Helm Charts (for deploy)
         uses: actions/upload-artifact@v3
