@@ -1,4 +1,4 @@
-name: CICD/poc-manual
+name: CICD/poc-manual - TO_BE_DELETED
 on:
   workflow_dispatch:
 jobs:

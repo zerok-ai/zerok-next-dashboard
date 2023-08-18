@@ -1,0 +1,17 @@
+kubernetesClusterDomain: cluster.local
+zerokNextDashboard:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  replicas: 1
+  type: ClusterIP
+  zerokNextDashboard:
+    image:
+      repository: us-west1-docker.pkg.dev/zerok-dev/zerok-dashboard/zerok-next-dashboard
+      tag: dev
+    imagePullPolicy: Always
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi

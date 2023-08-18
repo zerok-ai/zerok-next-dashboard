@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm-charts.fullname" . }}-zerok-next-dashboard
+  labels:
+  {{- include "helm-charts.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.zerokNextDashboard.replicas }}
+  selector:
+    matchLabels:
+      app: zerok-next-dashboard
+    {{- include "helm-charts.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: zerok-next-dashboard
+      {{- include "helm-charts.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.zerokNextDashboard.zerokNextDashboard.image.repository }}:{{
+          .Values.zerokNextDashboard.zerokNextDashboard.image.tag | default .Chart.AppVersion
+          }}
+        imagePullPolicy: {{ .Values.zerokNextDashboard.zerokNextDashboard.imagePullPolicy
+          }}
+        name: zerok-next-dashboard
+        ports:
+        - containerPort: 80
+        resources: {{- toYaml .Values.zerokNextDashboard.zerokNextDashboard.resources |
+          nindent 10 }}
+      serviceAccountName: {{ include "helm-charts.fullname" . }}-

@@ -1,4 +1,4 @@
-name: CICD/develop
+name: CICD/develop - TO_BE_DELETED
 on:
   push:
     branches:
