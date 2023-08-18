@@ -1,0 +1,16 @@
+@import "styles/variables.module.scss";
+.container {
+    background-color: $bg-dark;
+    border:1px solid $grey-700;
+    &:hover {
+        background-color: $bg-dark;
+        border:1px solid $grey-300;
+    }
+}
+
+.active {
+    background-color: $primary-500;
+    &:hover {
+        background-color: $primary-500;
+    }
+}

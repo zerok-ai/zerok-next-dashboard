@@ -1,0 +1,35 @@
+@import "styles/variables.module.scss";
+.map-controls {
+    display: flex;
+    column-gap: $sp-base * 2;
+    right:$sp-base * 4;
+    top:$sp-base * 2;
+    position: absolute;
+    button {
+        width:$sp-base * 6;
+        height:$sp-base * 6;
+        background-color: $grey-900;
+        border:1px solid $grey-600;
+        border-radius: $sp-base;
+        z-index: 4000;
+        padding:0;
+        cursor: pointer;
+    }
+    .active {
+        background-color: $primary-500;
+        border:1px solid $primary-500;
+    }
+    
+}
+
+.map-btn-icon-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    > img {
+        height: 100%;
+        width: 100%;
+    }
+}

@@ -1,0 +1,71 @@
+@import "styles/variables.module.scss";
+@mixin label-large {
+  font-weight: 500;
+  line-height: $default-line-height;
+  letter-spacing: 0.2px;
+}
+
+@mixin node-default {
+  background-color: $grey-950;
+  color: $grey-25;
+  width:$node-width;
+  height:$node-height;
+  font-size: $font-md;
+  border-radius: $sp-base;
+  text-align: center;
+  padding:$sp-base * 2.5;
+}
+
+@mixin logo-md {
+  width: 6 * $sp-base;
+  height: 6 * $sp-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  > img {
+    width: 5 * $sp-base;
+    height: 5 * $sp-base;
+  }
+}
+
+@mixin icon-xs {
+  width: 5 * $sp-base;
+  height: 5 * $sp-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  > img {
+    width: 3 * $sp-base;
+    height: 3 * $sp-base;
+  }
+}
+
+@mixin remove-icon-btn-styles {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  &:hover {
+    border: none;
+  }
+}
+
+@mixin button-icon {
+  display: flex;
+  align-items: center;
+  column-gap: $sp-base * 2;
+}
+
+
+@mixin card-header {
+  background-color: $grey-900;
+  padding:$sp-base * 3;
+  border-radius: $sp-base * 2 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h6 {
+    color:$white;
+    font-weight: 400;
+  }
+}

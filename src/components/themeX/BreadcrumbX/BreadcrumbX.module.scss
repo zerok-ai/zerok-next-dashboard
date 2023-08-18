@@ -1,0 +1,23 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.active {
+    color:$grey-100;
+    font-size: $font-sm;
+    font-weight: 500;
+}
+
+.seperator {
+    color:$grey-500;
+    font-size: $sp-base * 4;
+}
+
+.link {
+    color:$grey-500;
+    font-weight: 500;
+    font-size: $font-sm;
+    &:hover {
+        color:$grey-100;
+    }
+}

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zerok-next-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zerok-next-dashboard
+  template:
+    metadata:
+      labels:
+        app: zerok-next-dashboard
+    spec:
+      containers:
+        - name: zerok-next-dashboard
+          image: us-west1-docker.pkg.dev/zerok-dev/zerok-dashboard/zerok-next-dashboard:dev
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"

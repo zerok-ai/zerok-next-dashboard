@@ -1,0 +1,16 @@
+@import "styles/variables.module.scss";
+@import 'styles/mixins';
+.container {
+  @include node-default;
+    border:1px solid $error-500;
+  span {
+    color: $error-300;
+  }
+  :global(.react-flow__handle ){
+    background-color: $error-500;
+  }
+}
+
+.selected {
+  border-style: dashed;
+}

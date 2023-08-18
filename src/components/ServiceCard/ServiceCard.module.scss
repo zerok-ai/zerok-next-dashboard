@@ -1,0 +1,73 @@
+@import "styles/variables.module.scss";
+@import 'styles/mixins';
+.container {
+    border:1px solid $grey-600;
+    background-color: $grey-900;
+    border-radius: $sp-base;
+    padding:$sp-base * 4;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 5;
+    position: relative;
+    height:250px;
+    a {
+       width: fit-content;
+    }
+}
+
+.item-label {
+    font-size: smaller;
+    color:$grey-100;
+    font-weight: 500;
+}
+
+.namespace {}
+
+.service-name-container {
+    display: inline-block;
+    width:fit-content;
+    cursor: pointer;
+}
+
+.service-name, .service-namespace {
+    color:$white;
+}
+
+.stat-container, .percentile-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    p {
+        color:$white;
+    }
+}
+
+.status-icon {
+  position: absolute;  
+  right:$sp-base * 2;
+  top:- $sp-base;
+}
+
+.healthy-status {
+    display: flex;
+    column-gap: $sp-base + 1;
+    align-items: center;
+}
+.healthy-status-connected-icon {
+  @include icon-xs;
+  background-color: $white;
+  border-radius: $sp-base * 5; 
+}
+
+.healthy-status-green-dot-icon {
+    display: inline-block;
+    height:9px;
+    width:9px;
+    border-radius: 50%;
+    background-color:$success-500;
+}
+
+.error-status {
+    @include icon-xs;
+    border-radius: 50%;
+    background-color: $error-700;
+}

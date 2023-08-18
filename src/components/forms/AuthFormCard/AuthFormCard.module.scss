@@ -1,0 +1,24 @@
+@import "styles/variables.module.scss";
+.container {
+  width: 450px;
+  border-radius: $br-lg;
+  border: 1px solid rgba($primary-700, 0.3);
+  margin: 0 auto;
+  margin-top: 10vh;
+  padding: $sp-xxl;
+  h4 {
+    border-bottom: 1px solid $grey-700;
+    margin-bottom: $sp-lg;
+    padding-bottom: $sp-lg;
+    color:$grey-100;
+  }
+}
+
+.logo-container {
+  width: 50%;
+  margin: $sp-xl auto;
+  > img {
+    width: 100%;
+    height: 100%;
+  }
+}

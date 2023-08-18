@@ -1,0 +1,36 @@
+@import "variables.module.scss";
+@import 'mixins.scss';
+.react-flow__node-default {
+  border: 1px solid $grey-600;
+  @include node-default;
+}
+
+.react-flow__panel {
+  display: flex;
+  column-gap: $sp-base;
+  button {
+    background-color: $grey-900;
+    color: $grey-600;
+    border: 1px solid $grey-600;
+  }
+}
+
+.react-flow__edge {
+  path {
+    stroke: $grey-600;
+  }
+}
+
+.react-flow__edge-path {
+    stroke-width:1px;
+}
+
+.react-flow__handle {
+    background-color:$grey-600;
+    border:none;
+}
+
+.react-flow__handle-left {
+  opacity: 0;
+  left:0;
+}

@@ -1,0 +1,14 @@
+@import "styles/variables.module.scss";
+.container {
+    background-color: $primary-600;
+    width:40px;
+    height:40px;
+    line-height: $default-line-height;
+    text-align: center;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: larger;
+}

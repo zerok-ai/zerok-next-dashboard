@@ -1,0 +1,78 @@
+@import "styles/variables.module.scss";
+.container {
+  span {
+    color:$white;
+  }
+  .select{
+    min-width: 300px;
+    color: $white;
+    :global(.MuiMenu-list){
+      background-color: $white !important;
+      color:$white;
+    }
+    :global(.Mui-disabled){
+      color:$grey-25;
+    }
+  }
+}
+
+.menu-header {
+  color:$grey-25;
+  font-size: $font-md;
+  padding:$sp-base $sp-base * 3;
+}
+
+.select {
+  width: 100%;
+  border: none;
+  // :global(.MuiOutlinedInput-notchedOutline) {
+  //   border-color:$grey-800;
+  // }
+}
+
+.minimized {
+  padding: $sp-base;
+}
+
+.select-icon {
+  color: $white;
+  font-size: $font-lg;
+  font-weight: 500;
+}
+
+.new-cluster-item {
+  display: flex;
+  column-gap: $sp-base * 2;
+  color: $grey-50;
+}
+
+.menu-divider {
+  margin-bottom: $sp-base * 2;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  column-gap: $sp-base * 2;
+}
+
+.healthy-icon,.error-icon {
+  font-size: $font-lg + 2;
+  display: flex;
+  align-items: center;
+}
+
+.status-icon {
+  width:10px;
+  height:10px;
+  border-radius: 16px;
+  border:1px solid $grey-500;
+}
+
+.healthy {
+  background-color: $success-500;
+}
+
+.unhealthy {
+  background-color: $error-500;
+}

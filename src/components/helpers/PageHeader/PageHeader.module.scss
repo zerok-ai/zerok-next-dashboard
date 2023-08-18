@@ -1,0 +1,49 @@
+@import "styles/variables.module.scss";
+.container {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+}
+.top-row {
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: center;
+    width:100%;
+    justify-content: flex-start;
+    h3 {
+        color:$white;
+        margin-right: $sp-base * 2;
+    }
+}
+
+.top-row-actions {
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: center;
+}
+
+.extras-right {
+    display: flex;
+    width:100%;
+    justify-content: space-between;
+}
+
+.bottom-row {
+    margin-bottom: $sp-base * 5;
+}
+
+.extras {
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: center;
+}
+
+.top-row-actions {
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: center;
+}
+
+.top-row-right {
+    justify-content: space-between;
+}
