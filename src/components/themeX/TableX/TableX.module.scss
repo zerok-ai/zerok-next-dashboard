@@ -1,0 +1,9 @@
+@import "styles/variables.module.scss";
+.table {
+    height:100%;
+}
+
+.no-data {
+    height:100px;
+    padding-left: $sp-base * 3;
+}

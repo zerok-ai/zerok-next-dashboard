@@ -1,0 +1,77 @@
+@import "styles/variables.module.scss";
+.container {
+    overflow-y: auto;
+    border:1px solid $grey-800;
+    border-radius: $sp-base * 2;
+    height: calc(100vh - $header-height - $sp-base * 40);
+}
+
+
+.header {
+    background-color: $grey-900;
+    padding:$sp-base * 3 $sp-base * 5;
+    border-radius: $sp-base * 2 0 0 0;
+    h5 {
+        color:$white;
+        font-weight: 400;
+        margin:0;
+    }
+}
+
+// entry point
+
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: $sp-base * 4;
+    height: calc(100% - $sp-base * 16);
+    span,td {
+        color:$grey-50;
+    }
+    .action-delete {
+        color:$error-300;
+    }
+}
+
+.entry-point-container {
+    display: flex;
+    column-gap: $sp-base * 2;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &:hover {
+        .entry-point {
+            color:$primary-500;
+        }
+    }
+}
+
+.table-header {
+    background-color: $grey-925;
+    color:$grey-25;
+    th {
+        letter-spacing: 1.5px;
+    }
+}
+
+.entry-point {
+    cursor: pointer;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding:$sp-base * 5 0;
+}
+
+.skeleton-container {
+    padding:$sp-base * 3;
+    row-gap: $sp-base * 3;
+}
+
+.skeleton {
+    height:50px;
+}

@@ -1,0 +1,14 @@
+@import "styles/variables.module.scss";
+.container {
+    display: flex;
+    row-gap: $sp-base * 4;
+    align-items: center;
+    color:$grey-25;
+    margin-bottom: $sp-base * 3;
+    cursor: pointer;
+}
+
+.icon {
+    font-size: $sp-base * 6;margin-right: $sp-base * 4;
+    align-items: center;
+}

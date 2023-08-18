@@ -1,0 +1,12 @@
+@import "styles/variables.module.scss";
+.container {
+    width:100%;
+}
+
+.content {
+    border-radius: $sp-base * 2;
+    border:1px solid $grey-900;
+    width:100%;
+    overflow-x: hidden;
+    height:calc(100vh - $header-height - $sp-base * 32);
+}

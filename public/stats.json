@@ -1,0 +1,476 @@
+{
+    "payload": {
+        "requestAndError": {
+            "stats": {
+                "AcceptedBytes": 340,
+                "TotalBytes": 340,
+                "ExecutionTime": 3736000,
+                "CompilationTime": 22174203,
+                "BytesProcessed": 2160,
+                "RecordsProcessed": 30
+            },
+            "results": [
+                {
+                    "time": "2023-07-13 08:54:40 +0000 UTC",
+                    "container": "product",
+                    "request_throughput": 1e-10,
+                    "errors_per_ns": 0,
+                    "error_rate": 0
+                },
+                {
+                    "time": "2023-07-13 08:55:10 +0000 UTC",
+                    "container": "product",
+                    "request_throughput": 1e-10,
+                    "errors_per_ns": 0,
+                    "error_rate": 0
+                },
+                {
+                    "time": "2023-07-13 08:56:10 +0000 UTC",
+                    "container": "product",
+                    "request_throughput": 1e-10,
+                    "errors_per_ns": 0,
+                    "error_rate": 0
+                },
+                {
+                    "time": "2023-07-13 08:56:40 +0000 UTC",
+                    "container": "product",
+                    "request_throughput": 1e-10,
+                    "errors_per_ns": 0,
+                    "error_rate": 0
+                },
+                {
+                    "time": "2023-07-13 08:55:40 +0000 UTC",
+                    "container": "product",
+                    "request_throughput": 1e-10,
+                    "errors_per_ns": 0,
+                    "error_rate": 0
+                }
+            ]
+        },
+        "latency": {
+            "stats": {
+                "AcceptedBytes": 332,
+                "TotalBytes": 332,
+                "ExecutionTime": 3580000,
+                "CompilationTime": 24704581,
+                "BytesProcessed": 1920,
+                "RecordsProcessed": 30
+            },
+            "results": [
+                {
+                    "time": "2023-07-13 08:54:40 +0000 UTC",
+                    "latency_p50": 7315954,
+                    "latency_p90": 7315954,
+                    "latency_p99": 7315954
+                },
+                {
+                    "time": "2023-07-13 08:54:10 +0000 UTC",
+                    "latency_p50": 6501068,
+                    "latency_p90": 6501068,
+                    "latency_p99": 6501068
+                },
+                {
+                    "time": "2023-07-13 08:53:10 +0000 UTC",
+                    "latency_p50": 6596470,
+                    "latency_p90": 6596470,
+                    "latency_p99": 6596470
+                },
+                {
+                    "time": "2023-07-13 08:52:10 +0000 UTC",
+                    "latency_p50": 6586318,
+                    "latency_p90": 6586318,
+                    "latency_p99": 6586318
+                },
+                {
+                    "time": "2023-07-13 08:55:40 +0000 UTC",
+                    "latency_p50": 6386641,
+                    "latency_p90": 6386641,
+                    "latency_p99": 6386641
+                },
+                {
+                    "time": "2023-07-13 08:56:10 +0000 UTC",
+                    "latency_p50": 13437248,
+                    "latency_p90": 13437248,
+                    "latency_p99": 13437248
+                },
+                {
+                    "time": "2023-07-13 08:56:40 +0000 UTC",
+                    "latency_p50": 15214274,
+                    "latency_p90": 15214274,
+                    "latency_p99": 15214274
+                },
+                {
+                    "time": "2023-07-13 08:52:40 +0000 UTC",
+                    "latency_p50": 6284530,
+                    "latency_p90": 6284530,
+                    "latency_p99": 6284530
+                },
+                {
+                    "time": "2023-07-13 08:55:10 +0000 UTC",
+                    "latency_p50": 5977838,
+                    "latency_p90": 5977838,
+                    "latency_p99": 5977838
+                },
+                {
+                    "time": "2023-07-13 08:53:40 +0000 UTC",
+                    "latency_p50": 7334366,
+                    "latency_p90": 7334366,
+                    "latency_p99": 7334366
+                }
+            ]
+        },
+        "cpuUsage": {
+            "stats": {
+                "AcceptedBytes": 2490,
+                "TotalBytes": 2490,
+                "ExecutionTime": 25607000,
+                "CompilationTime": 20741268,
+                "BytesProcessed": 2737592,
+                "RecordsProcessed": 31109
+            },
+            "results": [
+                {
+                    "time": "2023-07-13 08:53:30 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:53:20 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:53:00 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:56:00 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:55:50 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:56:20 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:55:30 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:53:50 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:54:20 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:55:40 +0000 UTC",
+                    "cpu_usage": 0.03,
+                    "vsize": 7221997568,
+                    "rss": 357215436.8,
+                    "total_disk_write_throughput": 0.0000019807,
+                    "total_disk_read_throughput": 0.0000016739,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:54:50 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:57:00 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:52:30 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:54:40 +0000 UTC",
+                    "cpu_usage": 0.002,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0.0000019432,
+                    "total_disk_read_throughput": 0.0000015303,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:54:10 +0000 UTC",
+                    "cpu_usage": 0.002,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0.0000019156,
+                    "total_disk_read_throughput": 0.0000012972,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:52:40 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0.0000019432,
+                    "total_disk_read_throughput": 0.0000015303,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:55:10 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0.0000019282,
+                    "total_disk_read_throughput": 0.0000013685,
+                    "actual_disk_write_throughput": 0.0000012288,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:52:10 +0000 UTC",
+                    "cpu_usage": 0.002,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0.0000019156,
+                    "total_disk_read_throughput": 0.0000012972,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:54:30 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:52:20 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:55:20 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:53:40 +0000 UTC",
+                    "cpu_usage": 0.002,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0.0000019432,
+                    "total_disk_read_throughput": 0.0000015303,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:56:40 +0000 UTC",
+                    "cpu_usage": 0.002,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0.0000020651,
+                    "total_disk_read_throughput": 0.0000016076,
+                    "actual_disk_write_throughput": 0.0000012288,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:52:00 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:54:00 +0000 UTC",
+                    "cpu_usage": 0.001,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:52:50 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:56:50 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:55:00 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:56:10 +0000 UTC",
+                    "cpu_usage": 0.002,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0.0000019156,
+                    "total_disk_read_throughput": 0.0000012972,
+                    "actual_disk_write_throughput": 8.192e-7,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:53:10 +0000 UTC",
+                    "cpu_usage": 0.002,
+                    "vsize": 7221997568,
+                    "rss": 356188160,
+                    "total_disk_write_throughput": 0.0000019257,
+                    "total_disk_read_throughput": 0.0000013685,
+                    "actual_disk_write_throughput": 0.0000012288,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                },
+                {
+                    "time": "2023-07-13 08:56:30 +0000 UTC",
+                    "cpu_usage": 0,
+                    "vsize": 7221997568,
+                    "rss": 353480704,
+                    "total_disk_write_throughput": 0,
+                    "total_disk_read_throughput": 0,
+                    "actual_disk_write_throughput": 0,
+                    "actual_disk_read_throughput": 0,
+                    "container": "product"
+                }
+            ]
+        }
+    }
+}

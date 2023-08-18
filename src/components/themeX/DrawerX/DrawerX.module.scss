@@ -1,0 +1,34 @@
+@import "styles/variables.module.scss";
+.container {
+}
+.drawer {
+    :global(.MuiDrawer-paper) {
+        width:400px;
+        border-left: 1px solid $grey-500;
+        background: $grey-950;
+        z-index:600;
+      }
+}
+
+.header {
+    padding:$sp-base * 4 $sp-base * 5;
+    display: flex;
+    h6 {
+        color:$white;
+        font-weight: 500;
+        margin:0;
+        line-height: $default-line-height;
+    }
+    justify-content: space-between;
+    border-bottom: 1px solid $grey-700;
+}
+
+.close-btn {
+    width:24px;
+    height:24px;
+    cursor: pointer;
+    > img {
+        width:100%;
+        height:100%;
+    }
+}

@@ -1,0 +1,28 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.select {
+    background-color: $grey-950;
+    // border:1px solid $grey-700;
+    :global(.MuiOutlinedInput-notchedOutline){
+        border-color: $grey-700;
+        &:hover {
+            border-color: $grey-900 !important;
+        }
+    }
+    &:hover,&:focus {
+        :global(.MuiOutlinedInput-notchedOutline) {
+          border-color:$grey-300;
+        }
+      }
+   
+}
+
+.select-value {
+    color:$white;
+}
+
+.select-value-metric {
+    color:$grey-100;
+}

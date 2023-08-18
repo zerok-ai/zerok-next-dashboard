@@ -1,0 +1,31 @@
+@import "styles/variables.module.scss";
+@import "styles/mixins";
+.container {
+  width: fit-content;
+  height:fit-content;
+  background-color: $grey-900;
+  border-radius: $sp-base * 2;
+}
+
+.modal-content {
+  padding: $sp-base * 4 $sp-base * 6;
+}
+
+.modal {
+  display: flex;
+  margin-top: 15vh;
+  justify-content: center;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: $sp-base * 4 $sp-base * 6;
+  border-bottom: 1px solid $grey-700;
+  align-items: center;
+}
+
+.modal-close-icon {
+  color: $grey-25;
+  @include remove-icon-btn-styles;
+}

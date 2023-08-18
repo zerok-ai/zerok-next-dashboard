@@ -1,0 +1,55 @@
+@import "styles/variables.module.scss";
+.container {
+    display: flex;
+    border-radius: $sp-base;
+    border:1px solid $grey-900;
+    padding:$sp-base * 5;
+    column-gap: $sp-base * 5;
+    h6 {
+        width:50%;
+        color:$white;
+        padding-bottom: $sp-base * 2;
+        margin-bottom: $sp-base * 2;
+        border-bottom: 1px solid $grey-800;
+    }
+}
+.chatbox-logo {
+    width:36px;
+    height:36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:1px solid $grey-900;
+    > img {
+        width:28px;
+        height: 28px;
+    }
+}
+
+.logo-container {
+    flex:1;
+    display: flex;
+}
+
+.text-container {
+    width:95%;
+    overflow-y: auto;
+    color:$grey-50;
+    font-weight: 400;
+    line-height: $default-line-height; 
+    p {
+        color: $grey-50;
+    }
+}
+
+.skeleton-container {
+    display: flex;
+    row-gap: $sp-base * 3;
+    flex-direction: column;
+    width:100%;
+}
+
+.skeleton {
+    width:100%;
+    height:40px;
+}

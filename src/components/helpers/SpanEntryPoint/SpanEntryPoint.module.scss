@@ -1,0 +1,10 @@
+@import "styles/variables.module.scss";
+
+.container {
+    display: flex;
+    column-gap: $sp-base * 2;
+    cursor: pointer;
+    .action-delete {
+        color:$error-300;
+    }
+}

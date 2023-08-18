@@ -1,0 +1,49 @@
+{
+    "payload": {
+        "issues": [
+            {
+                "issue_hash": "69db611e7d1e1a7b62d0e6b8f398fe8c",
+                "issue_title": "Exception¦sofa-shop-mysql/order",
+                "scenario_id": "1",
+                "scenario_version": "1684149787",
+                "sources": [
+                    "sofa-shop-mysql/order"
+                ],
+                "destinations": [
+                    "zk-client/zk-operator"
+                ],
+                "total_count": 3,
+                "velocity": 0,
+                "first_seen": "2023-08-04T10:52:34.313665Z",
+                "last_seen": "2023-08-04T16:50:28.147732Z",
+                "incidents": [
+                    "6657e9173e9805984fcd3c4c224b85d8",
+                    "f0e0d81d6bbecf63703205c443d60337",
+                    "437f98b64487010ba0f7959dbdd367f9"
+                ]
+            },
+            {
+                "issue_hash": "69db611e7d1e1a7b62d0e6b8f398fe8c",
+                "issue_title": "Exception¦sofa-shop-mysql/order¦Exception¦Server Error¦500",
+                "scenario_id": "1",
+                "scenario_version": "1684149787",
+                "sources": [
+                    "sofa-shop-mysql/order"
+                ],
+                "destinations": [
+                    "zk-client/zk-operator"
+                ],
+                "total_count": 3,
+                "velocity": 0,
+                "first_seen": "2023-08-04T10:52:34.313665Z",
+                "last_seen": "2023-08-04T16:50:28.147732Z",
+                "incidents": [
+                    "6657e9173e9805984fcd3c4c224b85d8",
+                    "f0e0d81d6bbecf63703205c443d60337",
+                    "437f98b64487010ba0f7959dbdd367f9"
+                ]
+            }
+        ],
+        "total_records": 1
+    }
+}

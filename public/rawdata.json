@@ -1,0 +1,21 @@
+{
+    "payload": {
+        "spans": {
+            "a799204ee3e76e31": {
+                "protocol": "HTTP",
+                "request_payload": {
+                    "req_path": "/api/categories",
+                    "req_method": "GET",
+                    "req_headers": "{\"Referer\": \"http://localhost:3000/\"}",
+                    "req_body": null
+                },
+                "response_payload": {
+                    "resp_status": "200",
+                    "resp_message": "OK",
+                    "resp_headers": "{\"Content-Type\": \"Application/json\"}",
+                    "resp_body": "{\"name\": \"123\"}"
+                }
+            }
+        }
+    }
+}

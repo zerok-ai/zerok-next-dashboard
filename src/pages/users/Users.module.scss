@@ -1,0 +1,29 @@
+@import "styles/variables.module.scss";
+@import 'styles/mixins';
+.container {
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: $sp-base * 6;
+}
+
+.member-container {
+    display: flex;
+    column-gap: $sp-base * 3;
+}
+
+.actions-container {
+    display: flex;
+    column-gap: $sp-base * 3;
+}
+
+.user-button {
+    @include button-icon;
+}
+
+.form-container {
+    min-width: 450px;
+    padding-bottom: $sp-base * 6;
+}

@@ -1,0 +1,11 @@
+name: Helm deploy
+on:
+  workflow_dispatch:
+
+jobs:
+  helm-deploy:
+    runs-on: self-hosted
+    environment: poc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3 

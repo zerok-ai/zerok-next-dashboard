@@ -1,0 +1,168 @@
+@import "styles/variables.module.scss";
+@import "styles/mixins";
+
+.container {
+    border:1px solid $grey-800;
+    border-radius: $sp-base * 2;display: flex;
+    flex-direction: column;
+    width:100%;
+    background-color: $bg-dark;
+    z-index: 2;
+}
+
+.header {
+    @include card-header;
+
+}
+.expand-icon {
+    font-size: $font-lg + 2;
+}
+.expanded-btn {
+    background-color: $primary-500 !important;
+}
+.exception-parent {
+    color:$error-500 !important;
+}
+.collapsed {
+    cursor: pointer;
+}
+
+.expanded {
+    padding:$sp-base * 4;
+}
+.tree {
+    position: relative;
+    height:100%;
+    flex:1;
+    padding:$sp-base $sp-base * 2;
+    :global(.Mui-expanded){
+        margin:0;
+    }
+    :global(.MuiAccordionSummary-content){
+        margin: 0;
+        margin-bottom: $sp-base;
+    }
+    :global(.MuiAccordionSummary-content:last-child){
+        margin-bottom:0;
+    }
+    padding-bottom: $sp-base * 4;
+    border-bottom: 1px solid $grey-800;
+}
+
+.accordion {
+    border:none;
+    height:100%;
+    span {
+        color:$grey-25;
+    }
+}
+
+.root-accordion {
+    border-left: 1px solid $grey-500 !important;
+}
+
+.accordion-summary {
+    background-color: $bg-dark;
+    margin:0 !important;
+    padding-left: $sp-base;
+    justify-content: space-between;
+    width:100%;
+    min-height: 0px !important;
+    padding:0;
+}
+
+.accordion-summary-content {
+    display: flex;
+
+}
+.last-child {
+    margin:$sp-base 0;
+}
+
+
+.accordion-label {
+    color:$grey-25;
+    cursor: pointer;
+    z-index:1000;
+    &:hover {
+        color:$primary-500;
+    }
+}
+
+.latency {
+    color:$grey-25;
+    width:100px;
+}
+.accordion-details {
+    border:none;
+    padding:0 $sp-base * 2;
+    background-color: $bg-dark;
+}
+
+.last-child {
+    padding: 0 8px;  
+    display: flex;
+}
+
+.close-button {
+    position: absolute;
+    top: $sp-base * 3;
+    right: 720px;
+    cursor: pointer;
+    z-index: 500;
+    background-color: $grey-700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:24px;
+    width:24px;
+    border-radius: $sp-base;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.close-icon {
+    color:$grey-300;
+    font-size: $font-lg;
+}
+
+.accordion-row {
+    display:grid;
+    grid-template-columns: 2fr 2fr;
+}
+
+.accordion-summary, .last-child {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.timeline {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    p {
+        height:$sp-base;
+        background-color: #569CD7;
+    }
+}
+
+
+.modal {
+    display: flex;
+    margin-top: 10vh;
+    width:92vw;
+    margin:10vh auto;
+}
+
+.backdrop {
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    overflow: hidden;
+    height:100vh;
+    width:100vw;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1;
+}

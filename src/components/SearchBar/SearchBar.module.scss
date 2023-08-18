@@ -1,0 +1,23 @@
+@import "styles/variables.module.scss";
+.container {
+    // margin-top: -5px;
+   
+}
+
+.search-icon {
+    width: $sp-base * 6;
+    height: $sp-base * 6;
+    > img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.input {
+    & ::placeholder {
+        color:$white !important;
+    }
+    input {
+        
+       }
+}

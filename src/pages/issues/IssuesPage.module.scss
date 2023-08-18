@@ -1,0 +1,89 @@
+@import "styles/variables.module.scss";
+.container {
+    h3 {
+        margin-bottom: $sp-base * 5;
+    }
+}
+
+.issue-path {
+    display: flex;
+    column-gap: $sp-base * 2;
+    margin:$sp-base * 2 0;
+    align-items: center;
+}
+
+.issue-title {
+    color:$grey-25;
+}
+
+.issue-time-container {
+    span {
+        color:$grey-50;
+    }
+}
+
+
+.issue-path-container {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+
+.issue-title-container {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base;
+    color:$grey-50;
+    &:hover {
+        color:$primary-500;
+        cursor: pointer;
+        .issue-title-joiner {
+            color:$primary-500;
+        }
+    }
+}
+
+.issue-title-joiner {
+    color:$grey-300;
+}
+
+// SERVICE FILTER SELECTOR
+
+
+
+// FILTER BADGES
+.active-filters {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+
+// content
+.page-content {
+    height:calc(100vh - $header-height - $sp-base * 44);
+    overflow: auto;
+    border-bottom:1px solid $grey-900;
+    border-radius: $sp-base * 2;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: $sp-base * 6;
+}
+
+.issue-title-container {
+    display: flex;
+    // justify-content: space-between;
+}
+
+.source {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base;
+    >img {
+        height: $sp-base * 5;
+        width:$sp-base * 5;
+    }
+    span {
+        color:$grey-50;
+    }
+}

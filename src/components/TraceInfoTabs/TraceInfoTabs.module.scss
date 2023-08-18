@@ -1,0 +1,25 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+
+.key-value-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 4;
+    padding:$sp-base * 4 0;
+}
+
+.key-value-row {
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+    align-items: center;
+}
+
+.key-value-key,.key-value-value {
+    color:$grey-25;
+}
+
+.full-width {
+    grid-template-columns: 1fr ;
+}

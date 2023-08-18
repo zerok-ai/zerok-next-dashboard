@@ -1,0 +1,193 @@
+// COLORS
+
+// Primary color - light to dark
+$primary-100:#C3F5E8;
+$primary-200:#5BDCC6;
+$primary-300:#30C6BB;
+$primary-400: #04B0B0;
+$primary-500:#038C8C;
+$primary-600: #027070;
+$primary-700: #025C62;
+$primary-800: #024954;
+
+// grey colors - light to dark
+$grey-25:#DCEDFD;
+$grey-50:#BCD4EB;
+$grey-100:#9BB4CC;
+$grey-200:#819DB8;
+$grey-300:#6887A3;
+$grey-400:#506D86;
+$grey-500:#49637A;
+$grey-600:#3B5166;
+$grey-700:#283747;
+$grey-800:#1F2B38;
+$grey-900:#171F29;
+$grey-925:#121522;
+$grey-950:#0C0B1B;
+
+
+// backgrounds
+$bg-dark:#0c0b1b;
+
+// status colors
+
+
+// ERROR
+$error-900:#E01A00;
+$error-700:#FF5D47;
+// default error color
+$error-500:#FF7765;
+$error-300:#FFA599;
+$error-100:#FFC9C2;
+
+
+// SUCCESS
+$success-900:#1E9966;
+$success-700:#25BB7D;
+// default success
+$success-500:#39D896;
+$success-300:#88E7C0;
+$success-100:#AAEED2;
+
+// WARNING
+$warning-900:#B67702;
+$warning-700:#DE9102;
+// default warning
+$warning-500:#FDB022;
+$warning-300:#FDC55D;
+$warning-100:#FEDB9A;
+
+
+$error:$error-500;
+$success:$success-500;
+$warning:$warning-500;
+
+// status borders
+$error-border:$error-500;
+$success-border:$success-500;
+$warning-border:$warning-500;
+$primary-border:$primary-400;
+
+// common
+$white:#fff;
+$black:#000;
+
+
+// SPACING
+$sp-base:4px;
+$sp-xs: 4px;
+$sp-sm: 8px;
+$sp-md: 12px;
+$sp-lg: 16px;
+$sp-xl: 20px;
+$sp-xxl: 24px;
+$sp-xxxl: 32px;
+$sp-xxxl: 48px;
+
+
+// component specific widths and heights
+$input-height: 40px;
+$default-line-height:24px;
+$line-height-small:16px;
+$button-height-default:40px;
+$header-height:60px;
+$incident-drawer-width:320px;
+$node-width:220px;
+$node-height:42px;
+
+// BORDER RADIUS
+$br-xs:2px;
+$br-sm:4px;
+$br-md:6px;
+$br-lg:8px;
+$br-xl:12px;
+
+// FONT SIZES
+$font-xs: 10px;
+$font-sm: 12px;
+$font-md: 14px;
+$font-lg: 16px;
+$font-xl: 18px;
+
+// BREAKPOINTS
+$bp-laptop:1376px;
+$bp-desktop:1440px;
+$bp-xl:1920px;
+
+// form variables
+$max-form-width:500px;
+
+
+// component widths
+$main-drawer-width-full:260px;
+$main-drawer-width-mini:60px;
+$header-width:60px;
+
+
+:export{
+    primary100:$primary-100;
+    primary200:$primary-200;
+    primary300:$primary-300;
+    primary400:$primary-400;
+    primary500:$primary-500;
+    primary600:$primary-600;
+    primary700:$primary-700;
+    primary800:$primary-800;
+    // greys
+    grey25:$grey-25;
+    grey50:$grey-50;
+    grey100:$grey-100;
+    grey200:$grey-200;
+    grey300:$grey-300;
+    grey400:$grey-400;
+    grey500:$grey-500;
+    grey600:$grey-600;
+    grey700:$grey-700;
+    grey800:$grey-800;
+    grey900:$grey-900;
+    grey925:$grey-925;
+    grey950:$grey-950;
+    // status
+    errorColor:$error;
+    successColor:$success;
+    warningColor:$warning;
+    // error hues
+    error100:$error-100;
+    error300:$error-300;
+    error500:$error-500;
+    error700:$error-700;
+    error900:$error-900;
+    // warning hues
+    warning100:$warning-100;
+    warning300:$warning-300;
+    warning500:$warning-500;
+    warning700:$warning-700;
+    warning900:$warning-900;
+    // success hues
+    success100:$success-100;
+    success300:$success-300;
+    success500:$success-500;
+    success700:$success-700;
+    success900:$success-900;
+    // common
+    white:$white;
+    black:$black;
+    // backgrounds
+    backgroundDark:$bg-dark;
+    // component heights
+    inputHeight:$input-height;
+    defaultLineHeight:$default-line-height;
+    buttonHeightDefault:$button-height-default;
+    mainDrawerWidthFull:$main-drawer-width-full;
+    mainDrawerWidthMini:$main-drawer-width-mini;
+    incidentDrawerWidth:$incident-drawer-width;
+    nodeWidth:$node-width;
+    // spacing
+    spXS:$sp-xs;
+    // font sizes
+    fontXS:$font-xs;
+    fontLG:$font-lg;
+    fontXL:$font-xl;
+}
+
+
