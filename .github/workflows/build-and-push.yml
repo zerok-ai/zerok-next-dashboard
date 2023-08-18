@@ -95,6 +95,10 @@ jobs:
 
       - name: Build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
+        run: npm install
+
+      - name: Build
+        if: ${{ env.BUILD_AND_PUSH == 'true' }}
         run: npm run build
 
       - name: Uploading Helm Charts (for deploy)
