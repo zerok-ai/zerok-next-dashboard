@@ -95,7 +95,7 @@ jobs:
 
       - name: Build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
