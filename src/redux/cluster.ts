@@ -12,6 +12,7 @@ const initialState: ClusterReduxType = {
   empty: false,
   error: false,
   selectedCluster: "",
+  status: "",
   renderTrigger: nanoid(),
 };
 
@@ -30,6 +31,8 @@ export const clusterSlice = createSlice({
   reducers: {
     setSelectedCluster: (state, { payload: { id } }) => {
       state.selectedCluster = id;
+      const cluster = state.clusters.find((c) => c.id === id);
+      state.status = cluster!.status;
     },
     triggerRefetch: (state) => {
       state.renderTrigger = nanoid();
@@ -47,6 +50,7 @@ export const clusterSlice = createSlice({
         if (action.payload.length > 0) {
           state.empty = false;
           state.selectedCluster = action.payload[0].id;
+          state.status = action.payload[0].status;
         } else state.empty = true;
       })
       .addCase(getClusters.rejected, (state, action) => {

@@ -5,15 +5,23 @@ import PageHeader from "components/helpers/PageHeader";
 import PageWrapper from "components/helpers/PageWrapper";
 import MapToggle from "components/MapToggle";
 import ServiceMapPage from "components/ServiceMapPage";
+import UnderConstruction from "components/UnderConstruction";
 import { useToggle } from "hooks/useToggle";
 import { useCallback, useMemo } from "react";
 import { HiPlus } from "react-icons/hi";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { CLUSTER_STATES } from "utils/constants";
 
 import styles from "./Home.module.scss";
 
 const Home = () => {
   const [isHealthMap, toggleHealthMap] = useToggle(true);
   const [isMapFilterOpen, toggleMapFilter] = useToggle(false);
+  const { status, selectedCluster } = useSelector(clusterSelector);
+  const healthyCluster = selectedCluster
+    ? status === CLUSTER_STATES.HEALTHY
+    : true;
   const MapFilterButton = useMemo(() => {
     return (
       <Button
@@ -44,14 +52,23 @@ const Home = () => {
 
   return (
     <div>
-      <PageHeader title="Health" showRange showRefresh extras={getExtras()} />
-      {isHealthMap ? (
-        <ServiceMapPage
-          toggleDrawer={toggleMapFilter}
-          isFilterOpen={isMapFilterOpen}
-        />
+      <PageHeader
+        title="Health"
+        showRange={!!healthyCluster}
+        showRefresh={!!healthyCluster}
+        extras={healthyCluster ? getExtras() : []}
+      />
+      {healthyCluster ? (
+        isHealthMap ? (
+          <ServiceMapPage
+            toggleDrawer={toggleMapFilter}
+            isFilterOpen={isMapFilterOpen}
+          />
+        ) : (
+          <HealthCards />
+        )
       ) : (
-        <HealthCards />
+        <UnderConstruction altTitle="Please select a healthy cluster or add a new cluster to continue." />
       )}
     </div>
   );

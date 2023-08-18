@@ -11,24 +11,34 @@ import {
 } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
+import { CLUSTER_STATES } from "utils/constants";
 
 import styles from "./ClusterSelector.module.scss";
 
 const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const clusterSlice = useSelector(clusterSelector);
-  const { clusters, selectedCluster, empty } = clusterSlice;
+  const { clusters, selectedCluster, empty, status } = clusterSlice;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
   const isRootPath = router.pathname.split("/").length === 1;
 
+  const [isDefaultOpen, setIsDefaultOpen] = useState(false);
+
   useEffect(() => {
     if (empty) {
       setIsModalVisible(true);
     }
   }, [empty]);
+
+  useEffect(() => {
+    if (status && status !== CLUSTER_STATES.HEALTHY) {
+      setIsDefaultOpen(true);
+    }
+    setIsDefaultOpen(false);
+  }, [status]);
 
   const toggleModal = () => {
     setIsModalVisible((old) => !old);
@@ -47,8 +57,13 @@ const ClusterSelector = () => {
       {/* <InputLabel htmlFor="cluster-list">Cluster</InputLabel> */}
       <Select
         id="cluster-list"
+        defaultOpen={isDefaultOpen}
         value={selectedCluster}
         className={styles.select}
+        renderValue={(value) => {
+          const label = clusters.find((cl) => cl.id === value)?.name;
+          return <span>{label}</span>;
+        }}
         // IconComponent={StyleIcon}
         onChange={(val) => {
           if (val !== null && val.target && val.target.value) {
@@ -67,7 +82,19 @@ const ClusterSelector = () => {
         {clusters.length &&
           clusters.map((cl) => {
             return (
-              <MenuItem value={cl.id} key={cl.id}>
+              <MenuItem
+                value={cl.id}
+                key={cl.id}
+                className={styles["menu-item"]}
+              >
+                <span
+                  className={cx(
+                    cl.status === CLUSTER_STATES.HEALTHY
+                      ? styles.healthy
+                      : styles.unhealthy,
+                    styles["status-icon"]
+                  )}
+                ></span>
                 {cl.name}
               </MenuItem>
             );
