@@ -1,26 +1,25 @@
 import ClusterSelector from "components/ClusterSelector";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import MainDrawer from "components/MainDrawer";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { CLUSTER_STATES } from "utils/constants";
 
 import styles from "./PageLayout.module.scss";
 interface PageLayoutProps {
   children: React.ReactNode;
 }
 
-let timer: ReturnType<typeof setTimeout>;
-
 const PageLayout = ({ children }: PageLayoutProps) => {
+  const { status } = useSelector(clusterSelector);
+  const router = useRouter();
   useEffect(() => {
-    const body = document.querySelector("#global-container");
-    body?.addEventListener("scroll", () => {
-      body.classList.remove("hidden-scroll");
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        body.classList.add("hidden-scroll");
-      }, 500);
-    });
-  }, []);
+    if (status !== CLUSTER_STATES.HEALTHY) {
+      router.push("/");
+    }
+  }, [status]);
   return (
     <div className={styles.container}>
       <aside className={styles["drawer-container"]}>

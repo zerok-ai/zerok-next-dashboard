@@ -66,7 +66,6 @@ const ProbeCreateForm = () => {
   });
 
   const updateNameForm = (key: string, value: string) => {
-    console.log({ key, value });
     setNameForm({ ...nameForm, [key]: value });
   };
 
@@ -187,7 +186,6 @@ const ProbeCreateForm = () => {
     if (groupBy.service === null || groupBy.property === "") {
       errors++;
       if (groupBy.service === null) {
-        console.log("called");
         setGroupBy((old) => ({
           ...old,
           errors: { ...old.errors, service: true },
