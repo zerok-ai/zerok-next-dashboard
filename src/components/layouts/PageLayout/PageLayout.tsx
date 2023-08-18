@@ -16,13 +16,13 @@ const CLUSTER_BLOCKED_ROUTES = [
   "/",
   "/probes/create",
   "/probes",
+  "/issues",
   "/issues/detail",
 ];
 
 const PageLayout = ({ children }: PageLayoutProps) => {
   const { status } = useSelector(clusterSelector);
   const router = useRouter();
-  console.log(router.pathname);
   useEffect(() => {
     if (
       status !== CLUSTER_STATES.HEALTHY &&
