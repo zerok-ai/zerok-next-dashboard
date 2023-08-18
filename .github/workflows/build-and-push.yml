@@ -14,6 +14,15 @@ on:
         required: true
         default: 'devclient01'
 env:
+  NS: ${{ vars.NS }}
+  DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
+  GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
+  GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
+  GKE_ZONE : ${{ vars.GKE_ZONE }}
+  DOCKER_REG: ${{ vars.DOCKER_REG }}
+  PROJECT_ID:  ${{ vars.PROJECT_ID }}
+  DOCKER_REPO:  ${{ vars.DOCKER_REPO }}
+  APP_NAME:  ${{ vars.APP_NAME }}
   BUILD_AND_PUSH: true
   DEPLOY: true
 
@@ -93,7 +102,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build
+      - name: Download dependencies
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
         run: yarn
 
