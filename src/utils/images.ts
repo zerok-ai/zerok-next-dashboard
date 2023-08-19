@@ -32,6 +32,8 @@ export const ZEROK_MINIMAL_LOGO_LIGHT =
 
 export const ZEROK_LOGO_LIGHT = "/images/brand/zerok_logo_light.png";
 
+export const ZEROK_SOURCE_LOGO = "/images/brand/zerok_source_logo.svg";
+
 export const SLACK_LOGO = `/images/brand/slack_logo.svg`;
 
 export const GENERIC_AVATAR = "/images/vectors/Avatar.svg";
