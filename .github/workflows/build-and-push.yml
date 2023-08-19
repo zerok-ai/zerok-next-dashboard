@@ -89,7 +89,7 @@ jobs:
           echo "ENVIRONMENT=$ENVIRONMENT"
 
   ##############
-  app-build:
+  build-and-push:
     needs: init
     runs-on: zk-self-hosted
     env:
@@ -118,45 +118,6 @@ jobs:
           path: |
             helm-charts
 
-      - name: Uploading Build files (for docker push)
-        uses: actions/upload-artifact@v3
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        with:
-          name: build-artifacts
-          path: |
-            package.json
-            public
-            .next/standalone
-            .next/static
-            Dockerfile
-
-  docker-build:
-    needs: [ init,app-build ]
-    env:
-      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
-      VERSION: ${{ needs.init.outputs.VERSION }}
-      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-    environment:
-      name: ${{ needs.init.outputs.ENVIRONMENT }}
-    runs-on: zk-self-hosted
-    steps:
-      - id: 'auth'
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: '${{ env.GKE_SA_KEY }}'
-
-      - name: login to docker registry
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |
-          gcloud auth configure-docker $DOCKER_REG --quiet
-
-      - uses: actions/download-artifact@v3
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        with:
-          name: build-artifacts
-
       - name: Docker build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
         run: |-
@@ -174,7 +135,7 @@ jobs:
           docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$VERSION"
 
   deploy:
-    needs: [ init,app-build,docker-build ]
+    needs: [ init,build-and-push ]
     env:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
