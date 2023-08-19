@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:14.8.0-slim
+FROM --platform=linux/amd64 node:14
 WORKDIR /app
 
 COPY ./public ./public
