@@ -30,4 +30,4 @@ spec:
         - containerPort: 80
         resources: {{- toYaml .Values.zerokNextDashboard.zerokNextDashboard.resources |
           nindent 10 }}
-      serviceAccountName: {{ include "helm-charts.fullname" . }}-
+      serviceAccountName: {{ include "helm-charts.fullname" . }}
