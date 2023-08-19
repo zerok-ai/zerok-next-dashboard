@@ -168,6 +168,8 @@ jobs:
         if: ${{ env.DEPLOY == 'true' }}
         run: |-
           helm --install  \
+          --set=zerokNextDashboard.zerokNextDashboard.image.repository=$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME \
+          --set=zerokNextDashboard.zerokNextDashboard.image.tag=$GITHUB_SHA \
           upgrade $APP_NAME \
            -f ./helm-charts/$ENV.yaml ./helm-charts/ \
            --create-namespace \
