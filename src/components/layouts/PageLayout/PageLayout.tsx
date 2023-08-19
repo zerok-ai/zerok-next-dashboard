@@ -25,6 +25,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
   const router = useRouter();
   useEffect(() => {
     if (
+      status.length &&
       status !== CLUSTER_STATES.HEALTHY &&
       CLUSTER_BLOCKED_ROUTES.includes(router.pathname)
     ) {
