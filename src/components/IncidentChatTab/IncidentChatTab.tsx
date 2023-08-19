@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { memo, useEffect, useRef, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 import {
   GPT_INCIDENT_ENDPOINT,
   GPT_ISSUE_ENDPOINT,
@@ -20,6 +21,7 @@ interface IncidentChatData {
   loading: boolean;
   reply: null | string;
   doneTyping: boolean;
+  tagCard?: boolean;
 }
 
 const IncidentChatTab = () => {
@@ -46,16 +48,6 @@ const IncidentChatTab = () => {
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
 
-  // useEffect(() => {
-  //   if (scenarioId && selectedCluster) {
-  //     const endpoint = GPT_SCENARIO_ENDPOINT.replace(
-  //       "{scenario_id}",
-  //       scenarioId as string
-  //     ).replace("{cluster_id}", selectedCluster);
-  //     fetchScenarioData(endpoint);
-  //   }
-  // }, [scenarioId, selectedCluster]);
-
   useEffect(() => {
     if (issueId && selectedCluster) {
       const endpoint = GPT_ISSUE_ENDPOINT.replace(
@@ -80,6 +72,19 @@ const IncidentChatTab = () => {
   }, [selectedCluster, incidentId]);
 
   const handleInputSubmit = async (val: string) => {
+    if (val.includes(CHAT_TAG_CHARACTER)) {
+      setQueries((prev) => [
+        ...prev,
+        {
+          query: val,
+          loading: false,
+          reply: null,
+          doneTyping: false,
+          tagCard: true,
+        },
+      ]);
+      return;
+    }
     if (selectedCluster) {
       const endpoint = GPT_INCIDENT_ENDPOINT.replace(
         "{cluster_id}",
@@ -150,11 +155,20 @@ const IncidentChatTab = () => {
           )}
           <div className={styles["text-boxes"]}>
             {queries.map((qa, idx) => {
-              const { query, reply } = qa;
+              const { query, reply, tagCard } = qa;
+              if (tagCard) {
+                return (
+                  <div className={styles["query-container"]} key={nanoid()}>
+                    <div className={styles.query}>
+                      <UserQueryCard text={query} tagCard={true} />
+                    </div>
+                  </div>
+                );
+              }
               return (
                 <div className={styles["query-container"]} key={nanoid()}>
                   <div className={styles.query}>
-                    <UserQueryCard text={query} />
+                    <UserQueryCard text={query} tagCard={false} />
                   </div>
                   <div className={styles.reply}>
                     <AIChatBox
