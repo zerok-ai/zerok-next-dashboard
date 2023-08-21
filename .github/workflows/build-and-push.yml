@@ -8,11 +8,11 @@ on:
       DOCKER_TAG:
         description: 'Docker Image Tag'
         required: true
-        default: 'latest'
+        default: 'dev'
       GKE_CLUSTER:
         description: 'Cluster Name'
         required: true
-        default: 'devclient01'
+        default: 'devcloud01'
 env:
   NS: ${{ vars.NS }}
   DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
@@ -109,6 +109,18 @@ jobs:
       - name: Build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
         run: yarn build
+      
+      - name: Uploading Build files (for docker push)
+        uses: actions/upload-artifact@v3
+        if: ${{ env.BUILD_AND_PUSH == 'true' }}
+        with:
+          name: build-artifacts
+          path: |
+            package.json
+            public
+            .next/standalone
+            .next/static
+            Dockerfile
 
       - name: Uploading Helm Charts (for deploy)
         uses: actions/upload-artifact@v3
@@ -119,7 +131,7 @@ jobs:
             helm-charts
 
       - name: Docker build
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
+        if: ${{ env.BUILD_AND_  SH == 'true' }}
         run: |-
           docker build  --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" .
 

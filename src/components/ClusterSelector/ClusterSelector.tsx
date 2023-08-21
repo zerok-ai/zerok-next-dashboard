@@ -34,7 +34,7 @@ const ClusterSelector = () => {
   }, [empty]);
 
   useEffect(() => {
-    if (status && status !== CLUSTER_STATES.HEALTHY) {
+    if (status.length && status !== CLUSTER_STATES.HEALTHY) {
       setIsDefaultOpen(true);
     }
     setIsDefaultOpen(false);

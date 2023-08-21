@@ -1,8 +1,10 @@
 import { nanoid } from "nanoid";
+import { HTTP_METHODS } from "utils/constants";
 import {
   type ScenarioCreationType,
   type WorkloadType,
 } from "utils/scenarios/types";
+import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 export type ConditionRowStrings =
   | "property"
@@ -11,12 +13,13 @@ export type ConditionRowStrings =
   | "datatype";
 
 export interface GroupByType {
-  service: number | null;
+  service: string | null;
   property: string;
   errors: {
     service: boolean;
     property: boolean;
   };
+  key: string;
 }
 export interface ConditionRowType {
   property: string;
@@ -68,16 +71,42 @@ export const PROBE_TIME_RANGES = [
   },
 ];
 
-export const getPropertyByType = (type: string | null) => {
+export const HTTP_OPTIONS = HTTP_METHODS.map((m) => ({ label: m, value: m }));
+
+export const MYSQL_OPTIONS = [
+  {
+    label: "SELECT",
+    value: "SELECT",
+  },
+  {
+    label: "INSERT",
+    value: "INSERT",
+  },
+  {
+    label: "UPDATE",
+    value: "UPDATE",
+  },
+  {
+    label: "DELETE",
+    value: "DELETE",
+  },
+];
+
+export const getPropertyByType = (type: SPAN_PROTOCOLS_TYPE | null) => {
   if (!type || !type.length) {
     return HTTP_PROPERTIES;
   }
-  return !type?.split("/")[1].includes("sql")
-    ? HTTP_PROPERTIES
-    : SQL_PROPERTIES;
+  return type === "http" ? HTTP_PROPERTIES : SQL_PROPERTIES;
 };
 
-export const HTTP_PROPERTIES = [
+export interface ProbePropertyType {
+  label: string;
+  value: string;
+  type: string;
+  options?: Array<{ label: string; value: string }>;
+}
+
+export const HTTP_PROPERTIES: ProbePropertyType[] = [
   {
     label: "Latency",
     value: "latency",
@@ -106,7 +135,8 @@ export const HTTP_PROPERTIES = [
   {
     label: "Request method",
     value: "req_method",
-    type: "string",
+    type: "select",
+    options: HTTP_OPTIONS,
   },
   {
     label: "Request path",
@@ -120,7 +150,7 @@ export const HTTP_PROPERTIES = [
   },
 ];
 
-export const SQL_PROPERTIES = [
+export const SQL_PROPERTIES: ProbePropertyType[] = [
   {
     label: "Latency",
     value: "latency",
@@ -134,7 +164,8 @@ export const SQL_PROPERTIES = [
   {
     label: "MYSQL request command",
     value: "req_cmd",
-    type: "string",
+    type: "select",
+    options: MYSQL_OPTIONS,
   },
   {
     label: "MYSQL request body",
@@ -203,6 +234,9 @@ export const NUMBER_OPERATORS = [
 
 export const getOperatorByType = (type: string) => {
   if (!type) return [];
+  if (type === "select") {
+    return STRING_OPERATORS;
+  }
   return type === "string" ? STRING_OPERATORS : NUMBER_OPERATORS;
 };
 
@@ -224,6 +258,18 @@ export const getEmptyCondition = (): ConditionRowType => {
       value: false,
       datatype: false,
     },
+  };
+};
+
+export const getEmptyGroupBy = (): GroupByType => {
+  return {
+    service: null,
+    property: "",
+    errors: {
+      service: false,
+      property: false,
+    },
+    key: nanoid(),
   };
 };
 
@@ -327,7 +373,7 @@ export const SLACK_CHANNELS: SlackChannelType[] = [
 export const buildProbeBody = (
   cards: ConditionCardType[],
   title: string,
-  groupBy: GroupByType
+  groupBy: GroupByType[]
 ): ScenarioCreationType => {
   const workloads = cards.map((card): WorkloadType => {
     return {
@@ -351,17 +397,18 @@ export const buildProbeBody = (
       },
     };
   });
+  const groupByObject = groupBy.map((g) => {
+    return {
+      workload_index: cards.findIndex((c) => c.rootProperty === g.service),
+      title: g.property,
+      hash: g.property,
+    };
+  });
   const body: ScenarioCreationType = {
     scenario_title: title,
     scenario_type: "USER",
     workloads,
-    group_by: [
-      {
-        workload_index: groupBy.service as number,
-        title: groupBy.property,
-        hash: groupBy.property,
-      },
-    ],
+    group_by: groupByObject,
   };
   return body;
 };

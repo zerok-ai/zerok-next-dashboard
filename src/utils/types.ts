@@ -6,6 +6,9 @@ export interface ChildrenType {
 
 export type GenericObject = Record<string, any>;
 
+export type HTTP_METHODS_TYPE = (typeof HTTP_METHODS)[number];
+
+export type SPAN_PROTOCOLS_TYPE = (typeof SPAN_PROTOCOLS)[number];
 export interface DrawerNavItemType {
   icon: string;
   label: string;
@@ -91,14 +94,18 @@ export interface SpanDetail {
   destination: string;
   error: boolean;
   metadata: string;
-  latency_ns: number;
-  protocol: string;
+  latency: number;
+  protocol: SPAN_PROTOCOLS_TYPE;
   status: string;
+  kind: "CLIENT" | "SERVER";
+  method: HTTP_METHODS_TYPE;
+  route: string;
   parent_span_id: string;
   workload_id_list: string[];
-  span_id?: string;
+  span_id: string;
+  path: string;
   children?: SpanDetail[];
-  time: string;
+  start_time: string;
   timestamp?: string;
   level?: number;
   exception?: boolean;
@@ -127,8 +134,10 @@ export interface HttpResponseDetail {
 
 export interface SpanRawData {
   protocol: (typeof SPAN_PROTOCOLS)[number];
-  request_payload: string | HttpRequestDetail;
-  response_payload: string | HttpRequestDetail;
+  req_body: string | GenericObject;
+  req_headers: string | GenericObject;
+  resp_body: string | GenericObject;
+  resp_headers: string | GenericObject;
 }
 
 export type SpanRawDataResponse = Record<string, SpanRawData>;

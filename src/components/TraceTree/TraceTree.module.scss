@@ -96,6 +96,7 @@
 .accordion-details {
     border:none;
     padding:0 $sp-base * 2;
+    padding-right: 0;
     background-color: $bg-dark;
 }
 
@@ -107,7 +108,7 @@
 .close-button {
     position: absolute;
     top: $sp-base * 3;
-    right: 720px;
+    right: 840px;
     cursor: pointer;
     z-index: 500;
     background-color: $grey-700;

@@ -6,7 +6,7 @@ import { memo, useEffect } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
-import { type GenericObject, type SpanRawDataResponse } from "utils/types";
+import { type SpanRawDataResponse } from "utils/types";
 
 import styles from "./ExceptionTab.module.scss";
 
@@ -18,8 +18,7 @@ const spanTransformer = (spans: SpanRawDataResponse) => {
   const key = Object.keys(spans)[0];
   const span = spans[key];
   try {
-    span.request_payload = JSON.parse(span.request_payload as string);
-    span.response_payload = JSON.parse(span.response_payload as string);
+    span.req_body = JSON.parse(span.req_body as string);
   } catch (err) {
     console.log({ err });
   }
@@ -60,8 +59,7 @@ const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
     );
   }
   const exceptionData = exceptionSpan[Object.keys(exceptionSpan)[0]];
-  const data: string = (exceptionData.request_payload as GenericObject)
-    ?.req_body;
+  const data = exceptionData.req_body as string;
   if (!data) {
     return (
       <div className={styles.container}>

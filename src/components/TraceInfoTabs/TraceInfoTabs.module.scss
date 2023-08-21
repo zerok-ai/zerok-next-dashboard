@@ -8,16 +8,20 @@
     flex-direction: column;
     row-gap: $sp-base * 4;
     padding:$sp-base * 4 0;
+    justify-content: flex-start;
 }
 
 .key-value-row {
     display: grid;
-    grid-template-columns: 3fr 7fr;
-    align-items: center;
+    grid-template-columns: 3fr 8fr;
 }
 
 .key-value-key,.key-value-value {
     color:$grey-25;
+}
+
+.key-value-key {
+    min-width: 120px;
 }
 
 .full-width {
