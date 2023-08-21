@@ -100,7 +100,6 @@ const ConditionCard = ({
               []
             );
           };
-          console.log(getSelectValues());
           return (
             <div
               className={cx(

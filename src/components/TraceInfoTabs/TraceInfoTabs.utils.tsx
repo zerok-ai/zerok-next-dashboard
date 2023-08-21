@@ -36,9 +36,9 @@ export const renderListOfKeyValue = (list: TabKeyType[]) => {
             key={nanoid()}
           >
             {!key.fullWidth && (
-              <p className={styles["key-value-key"]}>{key.label}:</p>
+              <div className={styles["key-value-key"]}>{key.label}:</div>
             )}
-            <p className={styles["key-value-value"]}>{renderKey}</p>
+            <div className={styles["key-value-value"]}>{renderKey}</div>
           </div>
         );
       })}
@@ -54,13 +54,19 @@ export const renderJSON = (val: GenericObject | string) => {
   }
 };
 
-const renderJSONorString = (val: GenericObject | string) => {
-  const type = typeof val === "string" ? "string" : "object";
-  if (type === "string" && !val.length) {
+const renderJSONorString = (val: GenericObject | string | boolean) => {
+  const type = typeof val;
+  if (type === "string" && !(val as string).length) {
     return `{ }`;
   }
-  if (type === "string") {
-    return <CodeBlock code={val as string} allowCopy color="light" />;
+  if (type === "string" || type === "boolean") {
+    return (
+      <CodeBlock
+        code={(val as string | boolean).toString()}
+        allowCopy
+        color="light"
+      />
+    );
   }
   try {
     return <DynamicReactJson src={val as GenericObject} />;
@@ -164,7 +170,6 @@ export const HTTP_TABS = [
       const KEYS = [
         {
           label: "Response body",
-          fullWidth: typeof rawData.resp_body.length === "object",
           value: rawData.resp_body as string,
           customRender: () => {
             return renderJSONorString(rawData.resp_body);
