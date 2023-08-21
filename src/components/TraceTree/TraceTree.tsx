@@ -90,7 +90,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     if (spanTree) {
       setReferenceTime({
         totalTime: spanTree.totalTime as number,
-        startTime: spanTree.time,
+        startTime: spanTree.start_time,
       });
       if (spanTree.exceptionSpan) {
         updateExceptionSpan(spanTree.exceptionSpan);
@@ -162,14 +162,11 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
         );
       };
       // const latencyTimeline = (span.latency_ns / referenceTime!.latency) * 100;
-      const latency = convertNanoToMilliSeconds(
-        span.latency_ns,
-        false
-      ) as number;
+      const latency = convertNanoToMilliSeconds(span.latency, false) as number;
       // const spanStartTime = new Date(span.time).getTime();
       const timelineWidth = (latency / referenceTime.totalTime) * 100;
       const timelineStart = dayjs(referenceTime.startTime).diff(
-        dayjs(span.time),
+        dayjs(span.start_time),
         "milliseconds"
       );
       const timelineDisplacement =
@@ -208,7 +205,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           <WrapperElement>
             <Label />
             <p className={styles.latency}>
-              {convertNanoToMilliSeconds(span.latency_ns)}
+              {span.latency.toPrecision(4)} {` ms`}
             </p>
             <p className={styles.timeline}>
               <p

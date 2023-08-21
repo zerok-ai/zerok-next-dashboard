@@ -41,6 +41,7 @@ export const INCIDENT_COLUMNS = [
     header: "DURATION",
     size: DEFAULT_COL_WIDTH / 2,
     cell: (info) => {
+      console.log(info.getValue());
       return <span>{convertNanoToMilliSeconds(info.getValue())}</span>;
     },
   }),

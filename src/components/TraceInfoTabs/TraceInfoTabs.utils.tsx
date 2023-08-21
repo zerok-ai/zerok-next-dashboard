@@ -5,16 +5,8 @@ import ChipX from "components/themeX/ChipX";
 import { nanoid } from "nanoid";
 import dynamic from "next/dynamic";
 import { getFormattedTime } from "utils/dateHelpers";
-import {
-  convertNanoToMilliSeconds,
-  stringWithoutComments,
-} from "utils/functions";
-import {
-  type HttpRequestDetail,
-  type HttpResponseDetail,
-  type SpanDetail,
-  type SpanRawData,
-} from "utils/types";
+import { stringWithoutComments } from "utils/functions";
+import { type SpanDetail, type SpanRawData } from "utils/types";
 
 import styles from "./TraceInfoTabs.module.scss";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
@@ -88,11 +80,11 @@ export const DEFAULT_TABS = [
         },
         {
           label: "Latency",
-          value: convertNanoToMilliSeconds(metadata.latency_ns) as string,
+          value: `${metadata.latency.toPrecision(4)} ms`,
         },
         {
           label: "Timestamp",
-          value: getFormattedTime(metadata.time),
+          value: getFormattedTime(metadata.start_time),
         },
         {
           label: "Status",
@@ -109,24 +101,12 @@ export const HTTP_TABS = [
     label: "Request headers",
     value: "request_header",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
-      const req = rawData.request_payload as HttpRequestDetail;
       const KEYS = [
         {
-          label: "Method",
-          value: req.req_method,
-          customRender: () => {
-            return <ChipX label={req.req_method} />;
-          },
-        },
-        {
-          label: "Path",
-          value: req.req_path,
-        },
-        {
           label: "Request headers",
-          value: req.req_headers as string,
+          value: rawData.req_headers as string,
           customRender: () => {
-            return renderJSON(req.req_headers as string);
+            return renderJSON(rawData.req_headers as string);
           },
         },
       ];
@@ -137,24 +117,12 @@ export const HTTP_TABS = [
     label: "Request body",
     value: "request_body",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
-      const req = rawData.request_payload as HttpRequestDetail;
       const KEYS = [
         {
-          label: "Method",
-          value: req.req_method,
-          customRender: () => {
-            return <ChipX label={req.req_method} />;
-          },
-        },
-        {
-          label: "Path",
-          value: req.req_path,
-        },
-        {
           label: "Request body",
-          value: req.req_body as string,
+          value: rawData.req_body as string,
           customRender: () => {
-            return renderJSON(req.req_body as string);
+            return renderJSON(rawData.req_body as string);
           },
         },
       ];
@@ -165,17 +133,12 @@ export const HTTP_TABS = [
     label: "Response header",
     value: "response_header",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
-      const res = rawData.response_payload as unknown as HttpResponseDetail;
       const KEYS = [
         {
-          label: "Status",
-          value: res.resp_status,
-        },
-        {
           label: "Response headers",
-          value: res.resp_headers as string,
+          value: rawData.resp_headers as string,
           customRender: () => {
-            return renderJSON(res.resp_headers as string);
+            return renderJSON(rawData.resp_headers as string);
           },
         },
       ];
@@ -186,14 +149,13 @@ export const HTTP_TABS = [
     label: "Response body",
     value: "response_body",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
-      const res = rawData.response_payload as unknown as HttpResponseDetail;
       const KEYS = [
         {
           label: "Response body",
           fullWidth: true,
-          value: res.resp_body as string,
+          value: rawData.resp_body as string,
           customRender: () => {
-            return renderJSON(res.resp_body as string);
+            return renderJSON(rawData.resp_body as string);
           },
         },
       ];
@@ -207,8 +169,7 @@ export const MYSQL_TABS = [
     label: "Query",
     value: "query",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
-      const req = rawData.request_payload as HttpRequestDetail;
-      const value = req.req_body;
+      const value = rawData.req_body;
       let display = "";
       if (value.length) {
         display = stringWithoutComments(value.trim());
@@ -220,14 +181,7 @@ export const MYSQL_TABS = [
     label: "Result",
     value: "result",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
-      return (
-        <SQLRawTable
-          value={
-            (rawData.response_payload as unknown as HttpResponseDetail)
-              .resp_body as string
-          }
-        />
-      );
+      return <SQLRawTable value={rawData.resp_body as string} />;
     },
   },
 ];

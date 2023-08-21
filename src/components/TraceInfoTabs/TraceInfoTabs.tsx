@@ -19,18 +19,16 @@ interface TraceInfoTabsProps {
 
 const parseRawData = (rawData: SpanRawDataResponse) => {
   const spanData = rawData[Object.keys(rawData)[0]];
-  if (spanData.request_payload) {
+  if (spanData.req_body.length) {
     try {
-      spanData.request_payload = JSON.parse(spanData.request_payload as string);
+      spanData.req_body = JSON.parse(spanData.req_body as string);
     } catch (error) {
       console.error("Error parsing request_payload", error);
     }
   }
-  if (spanData.response_payload) {
+  if (spanData.resp_body.length) {
     try {
-      spanData.response_payload = JSON.parse(
-        spanData.response_payload as string
-      );
+      spanData.resp_body = JSON.parse(spanData.resp_body as string);
     } catch (error) {
       console.error("Error parsing response_payload", error);
     }

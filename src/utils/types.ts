@@ -91,14 +91,14 @@ export interface SpanDetail {
   destination: string;
   error: boolean;
   metadata: string;
-  latency_ns: number;
+  latency: number;
   protocol: string;
   status: string;
   parent_span_id: string;
   workload_id_list: string[];
   span_id?: string;
   children?: SpanDetail[];
-  time: string;
+  start_time: string;
   timestamp?: string;
   level?: number;
   exception?: boolean;
@@ -127,8 +127,10 @@ export interface HttpResponseDetail {
 
 export interface SpanRawData {
   protocol: (typeof SPAN_PROTOCOLS)[number];
-  request_payload: string | HttpRequestDetail;
-  response_payload: string | HttpRequestDetail;
+  req_body: string | GenericObject;
+  req_headers: string | GenericObject;
+  resp_body: string | GenericObject;
+  resp_headers: string | GenericObject;
 }
 
 export type SpanRawDataResponse = Record<string, SpanRawData>;
