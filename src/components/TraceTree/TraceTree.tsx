@@ -29,7 +29,7 @@ import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
-import { convertNanoToMilliSeconds } from "utils/functions";
+import { formatMilliseconds } from "utils/functions";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./TraceTree.module.scss";
@@ -90,7 +90,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     if (spanTree) {
       setReferenceTime({
         totalTime: spanTree.totalTime as number,
-        startTime: spanTree.time,
+        startTime: spanTree.start_time,
       });
       if (spanTree.exceptionSpan) {
         updateExceptionSpan(spanTree.exceptionSpan);
@@ -138,7 +138,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                 role="button"
                 id="span-label"
                 onClick={() => {
-                  setSelectedSpan(span.span_id as string);
+                  setSelectedSpan(span.span_id);
                 }}
               >
                 {isTopRoot ? span.source : span.destination}
@@ -149,9 +149,9 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       };
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
         return isLastChild ? (
-          <p className={cx(styles["last-child"])} role="button">
+          <div className={cx(styles["last-child"])} role="button">
             {children}
-          </p>
+          </div>
         ) : (
           <AccordionSummary
             className={styles["accordion-summary"]}
@@ -162,14 +162,11 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
         );
       };
       // const latencyTimeline = (span.latency_ns / referenceTime!.latency) * 100;
-      const latency = convertNanoToMilliSeconds(
-        span.latency_ns,
-        false
-      ) as number;
+      const latency = span.latency;
       // const spanStartTime = new Date(span.time).getTime();
       const timelineWidth = (latency / referenceTime.totalTime) * 100;
-      const timelineStart = dayjs(referenceTime.startTime).diff(
-        dayjs(span.time),
+      const timelineStart = dayjs(span.start_time).diff(
+        dayjs(referenceTime.startTime),
         "milliseconds"
       );
       const timelineDisplacement =
@@ -199,6 +196,9 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           </Accordion>
         );
       }
+      const level = span.level ?? 0;
+      const colorsLength = COLORS.length - 1;
+      const colorIndex = level % colorsLength;
       return (
         <Accordion
           key={nanoid()}
@@ -208,20 +208,20 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           <WrapperElement>
             <Label />
             <p className={styles.latency}>
-              {convertNanoToMilliSeconds(span.latency_ns)}
+              {formatMilliseconds(span.latency)} {` ms`}
             </p>
-            <p className={styles.timeline}>
+            <div className={styles.timeline}>
               <p
                 style={{
                   width: `${timelineWidth}%`,
                   marginLeft: `${timelineDisplacement}%`,
                 }}
               ></p>
-            </p>
+            </div>
           </WrapperElement>
           <AccordionDetails
             className={styles["accordion-details"]}
-            style={{ borderLeft: `1px solid ${COLORS[span.level ?? 0]}` }}
+            style={{ borderLeft: `1px solid ${COLORS[colorIndex]}` }}
           >
             {span.children?.map((child) => {
               const hasChildren = child.children && child.children.length > 0;

@@ -14,7 +14,7 @@ interface PageLayoutProps {
 
 const CLUSTER_BLOCKED_ROUTES = [
   "/",
-  "/probes/create",
+  "/probes",
   "/probes",
   "/issues",
   "/issues/detail",

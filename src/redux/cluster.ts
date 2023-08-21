@@ -22,7 +22,7 @@ export const getClusters = createAsyncThunk("cluster/getClusters", async () => {
     const rdata = await raxios.get(CLUSTER_ENDPOINT);
     return rdata.data.payload.clusters;
   } catch (err: unknown) {
-    return { error: true, message: err };
+    throw new Error((err as Error).message);
   }
 });
 
@@ -67,6 +67,7 @@ export const clusterSlice = createSlice({
       .addCase(getClusters.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
+        state.status = "";
       });
   },
 });

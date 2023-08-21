@@ -74,6 +74,7 @@ export const convertNanoToMilliSeconds = (
 ): string | number => {
   if (value != null) {
     const millis = parseFloat((value / 1000000).toFixed(2));
+    console.log(millis);
     return addMs ? `${millis} ms` : millis;
   }
   return "NA";
@@ -139,4 +140,8 @@ export const validateEmail = (email: string) => {
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
+};
+
+export const formatMilliseconds = (milliseconds: number) => {
+  return milliseconds.toFixed(2);
 };

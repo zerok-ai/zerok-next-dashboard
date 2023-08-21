@@ -36,17 +36,7 @@ export const IGNORED_SERVICES_PREFIXES = [
   "zk-client",
 ];
 
-export const HTTP_METHODS = [
-  "GET",
-  "POST",
-  "DELETE",
-  "PUT",
-  "PATCH",
-  "HEAD",
-  "OPTIONS",
-  "CONNECT",
-  "TRACE",
-] as const;
+export const HTTP_METHODS = ["GET", "POST", "DELETE", "PUT", "PATCH"] as const;
 
 export const SPAN_PROTOCOLS = ["http", "mysql"] as const;
 

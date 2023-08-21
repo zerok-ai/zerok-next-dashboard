@@ -1,4 +1,4 @@
-import { MenuItem, OutlinedInput, Select } from "@mui/material";
+import { FormHelperText, MenuItem, OutlinedInput, Select } from "@mui/material";
 import { nanoid } from "nanoid";
 import React from "react";
 
@@ -9,6 +9,7 @@ interface NameAndTimeFormProps {
   values: {
     title: string;
     time: string;
+    error: boolean;
   };
   updateValues: (value: string, key: string) => void;
 }
@@ -18,15 +19,20 @@ const NameAndTimeForm = ({ values, updateValues }: NameAndTimeFormProps) => {
     <div className={styles["name-form-container"]}>
       <div className={styles["name-form-item"]}>
         <label htmlFor="title">Name of the probe</label>
-        <OutlinedInput
-          placeholder="Give a unique name to your probe"
-          className={styles["name-input"]}
-          id="title"
-          value={values.title}
-          onChange={(e) => {
-            updateValues("title", e.target.value);
-          }}
-        />
+        <div>
+          <OutlinedInput
+            placeholder="Give a unique name to your probe"
+            className={styles["name-input"]}
+            id="title"
+            value={values.title}
+            onChange={(e) => {
+              updateValues("title", e.target.value);
+            }}
+          />
+          {values.error && (
+            <FormHelperText error>Probe name cannot be empty.</FormHelperText>
+          )}
+        </div>
       </div>
       <div className={styles["name-form-item"]}>
         <label htmlFor="time">Probe active for</label>

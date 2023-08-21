@@ -3,6 +3,7 @@ import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
 import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
+import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
@@ -15,7 +16,11 @@ import {
 import JoiningSelect from "./JoiningSelect";
 
 interface ConditionCardProps {
-  services: Array<{ label: string; value: string }>;
+  services: Array<{
+    label: string;
+    value: string;
+    protocol: SPAN_PROTOCOLS_TYPE;
+  }>;
   includeAnd: boolean;
   deleteCard: (() => void) | null;
   conditions: ConditionRowType[];
@@ -81,10 +86,20 @@ const ConditionCard = ({
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
           const properties = getPropertyByType(
-            services.find((s) => s.value === rootProperty)?.value ?? ""
+            services.find((s) => s.value === rootProperty)?.protocol ?? null
           );
           const operators = getOperatorByType(condition.datatype);
           const { errors } = condition;
+          const valueType =
+            properties.find((p) => {
+              return p.value === condition.property;
+            })?.type ?? "input";
+          const getSelectValues = () => {
+            return (
+              properties.find((p) => p.value === condition.property)?.options ??
+              []
+            );
+          };
           return (
             <div
               className={cx(
@@ -102,7 +117,6 @@ const ConditionCard = ({
                   buttonMode={true}
                 />
               )}
-
               <div
                 className={cx(
                   styles["condition-item-container"],
@@ -111,6 +125,7 @@ const ConditionCard = ({
               >
                 <Select
                   fullWidth
+                  disabled={!rootProperty.length}
                   defaultValue=""
                   variant="standard"
                   name="property"
@@ -172,18 +187,39 @@ const ConditionCard = ({
                   errors.value && styles["error-input"]
                 )}
               >
-                <Input
-                  name="value"
-                  fullWidth
-                  className={cx(styles["value-input"])}
-                  placeholder="Value"
-                  type={getInputTypeByDatatype(conditions[index].datatype)}
-                  disabled={!conditions[index].operator.length}
-                  value={conditions[index].value}
-                  onChange={(e) => {
-                    updateValue(index, e.target.value);
-                  }}
-                />
+                {valueType !== "select" ? (
+                  <Input
+                    name="value"
+                    fullWidth
+                    className={cx(styles["value-input"])}
+                    placeholder="Value"
+                    type={getInputTypeByDatatype(conditions[index].datatype)}
+                    disabled={!conditions[index].operator.length}
+                    value={conditions[index].value}
+                    onChange={(e) => {
+                      updateValue(index, e.target.value);
+                    }}
+                  />
+                ) : (
+                  <Select
+                    name="value"
+                    fullWidth
+                    variant="standard"
+                    disabled={!conditions[index].operator.length}
+                    value={conditions[index].value}
+                    onChange={(e) => {
+                      updateValue(index, e.target.value);
+                    }}
+                  >
+                    {getSelectValues().map((v) => {
+                      return (
+                        <MenuItem value={v.value} key={nanoid()}>
+                          {v.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                )}
               </div>
               {index !== 0 && (
                 <HiOutlineX

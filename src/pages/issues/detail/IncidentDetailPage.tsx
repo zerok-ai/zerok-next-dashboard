@@ -96,63 +96,41 @@ const IncidentDetailPage = () => {
             />
           )}
           {trace ? (
-            <div className={styles["tree-wrapper"]}>
-              <div className={styles["cards-container"]}>
-                <div
-                  className={cx(
-                    styles["tree-container"],
-                    exceptionSpan && styles["tree-container-minimal"]
-                  )}
-                >
-                  <TraceTree
-                    updateSpans={(spans: SpanResponse) => {
-                      setSpans(spans);
-                    }}
-                    updateExceptionSpan={(id: string) => {
-                      setExceptionSpan(id);
-                    }}
-                  />
-                </div>
-                {exceptionSpan && (
-                  <div className={styles["exception-container"]}>
-                    <ExceptionTab spanKey={exceptionSpan} />
-                  </div>
+            <div className={styles["cards-container"]}>
+              <div
+                className={cx(
+                  styles["tree-container"],
+                  exceptionSpan && styles["tree-container-minimal"]
                 )}
-                <div className={styles["pod-container"]}>
-                  <PodCard services={podTabs} />
+              >
+                <TraceTree
+                  updateSpans={(spans: SpanResponse) => {
+                    setSpans(spans);
+                  }}
+                  updateExceptionSpan={(id: string) => {
+                    setExceptionSpan(id);
+                  }}
+                />
+              </div>
+              {exceptionSpan && (
+                <div className={styles["exception-container"]}>
+                  <ExceptionTab spanKey={exceptionSpan} />
                 </div>
+              )}
+              <div className={styles["pod-container"]}>
+                <PodCard services={podTabs} />
               </div>
             </div>
           ) : (
             <div className={styles["table-container"]}>
-              {/* <TraceTable
-                updateChatTrace={(trace) => {
-                  if (!chatTrace) {
-                    setChatTrace(trace);
-                  }
-                }}
-              /> */}
               {issue_id ? (
-                <div>
-                  {/* <BackLink
-                    title="Back"
-                    onBack={() => {
-                      const old = router.query;
-                      delete old.issue_id;
-                      router.push({
-                        pathname: router.pathname,
-                        query: old,
-                      });
-                    }}
-                  /> */}
-                  <TraceTable
-                    updateChatTrace={(trace) => {
-                      if (!chatTrace) {
-                        setChatTrace(trace);
-                      }
-                    }}
-                  />
-                </div>
+                <TraceTable
+                  updateChatTrace={(trace) => {
+                    if (!chatTrace) {
+                      setChatTrace(trace);
+                    }
+                  }}
+                />
               ) : (
                 <TraceGroups />
               )}
