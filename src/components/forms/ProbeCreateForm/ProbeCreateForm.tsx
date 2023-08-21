@@ -12,7 +12,7 @@ import {
   getFormattedServiceName,
   getNamespace,
 } from "utils/functions";
-import raxios from "utils/raxios";
+// import raxios from "utils/raxios";
 import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
 import { type GenericObject, type ServiceDetail } from "utils/types";
 
@@ -27,12 +27,13 @@ import {
   type ConditionRowStrings,
   getEmptyCard,
   getEmptyCondition,
+  getEmptyGroupBy,
   type GroupByType,
 } from "./ProbeCreateForm.utils";
 
 const formatServices = (services: ServiceDetail[]) => {
-  // const filter = services.filter((sv) => sv.protocol);
-  return services.map((sv) => {
+  const filter = services.filter((sv) => sv.protocol);
+  return filter.map((sv) => {
     return {
       label: `${getNamespace(sv.service)}/${getFormattedServiceName(
         sv.service
@@ -62,14 +63,7 @@ const ProbeCreateForm = () => {
   });
   const router = useRouter();
 
-  const [groupBy, setGroupBy] = useState<GroupByType>({
-    service: null,
-    property: "",
-    errors: {
-      service: false,
-      property: false,
-    },
-  });
+  const [groupBy, setGroupBy] = useState<GroupByType[]>([getEmptyGroupBy()]);
 
   const updateNameForm = (key: string, value: string) => {
     setNameForm({ ...nameForm, [key]: value, error: false });
@@ -80,7 +74,7 @@ const ProbeCreateForm = () => {
       const endpoint = LIST_SERVICES_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
-      ).replace("{range}", "-30m");
+      ).replace("{range}", DEFAULT_TIME_RANGE);
       fetchServices(endpoint);
     }
   }, [selectedCluster]);
@@ -91,6 +85,14 @@ const ProbeCreateForm = () => {
 
   const deleteCard = (key: string) => {
     setCards(cards.filter((c, i) => c.key !== key));
+  };
+
+  const addGroupBy = () => {
+    setGroupBy([...groupBy, getEmptyGroupBy()]);
+  };
+
+  const deleteGroupBy = (key: string) => {
+    setGroupBy(groupBy.filter((g, i) => g.key !== key));
   };
 
   const addCondition = (idx: number) => {
@@ -162,14 +164,6 @@ const ProbeCreateForm = () => {
     card.errors.rootProperty = false;
     newCards[cardIndex] = card;
     setCards(newCards);
-    setGroupBy({
-      service: null,
-      property: "",
-      errors: {
-        service: false,
-        property: false,
-      },
-    });
   };
   const handleSubmit = () => {
     const newCards = [...cards];
@@ -196,22 +190,18 @@ const ProbeCreateForm = () => {
       setNameForm((old) => ({ ...old, error: true }));
     }
 
-    if (groupBy.service === null || groupBy.property === "") {
-      errors++;
-      if (groupBy.service === null) {
-        setGroupBy((old) => ({
-          ...old,
-          errors: { ...old.errors, service: true },
-        }));
+    const newGroup = [...groupBy];
+    newGroup.forEach((gr) => {
+      if (gr.service === null) {
+        errors++;
+        gr.errors.service = true;
       }
-      if (groupBy.property === "") {
-        setGroupBy((old) => ({
-          ...old,
-          errors: { ...old.errors, property: true },
-        }));
+      if (!gr.property || !gr.property.length) {
+        errors++;
+        gr.errors.property = true;
       }
-      return;
-    }
+    });
+    setGroupBy(newGroup);
     if (errors > 0) {
       setCards(newCards);
       return;
@@ -222,20 +212,28 @@ const ProbeCreateForm = () => {
         "{cluster_id}",
         selectedCluster as string
       );
-      raxios.post(endpoint, body);
+      console.log({ body, endpoint });
+      // raxios.post(endpoint, body);
       router.push("/probes");
     } catch (err) {
       router.push("/probes");
     }
   };
-  const handleGroupByUpdate = (key: string, value: string | number) => {
-    setGroupBy({
-      ...groupBy,
-      [key]: value,
-      errors: { service: false, property: false },
-    });
+  const handleGroupByUpdate = (
+    key: "service" | "property",
+    value: string,
+    index: number
+  ) => {
+    const newGroup = [...groupBy];
+    const group = newGroup[index];
+    group[key] = value;
+    group.errors = {
+      service: false,
+      property: false,
+    };
+    newGroup[index] = group;
+    setGroupBy([...newGroup]);
   };
-
   return (
     <div className={styles.container}>
       <div className={styles["cards-container"]}>
@@ -285,12 +283,41 @@ const ProbeCreateForm = () => {
         Add service <HiOutlinePlus />
       </Button>
       <div className={styles.divider}></div>
-      <GroupBySelect
-        cards={cards}
-        updateValue={handleGroupByUpdate}
-        values={groupBy}
-        services={formatServices(services ?? [])}
-      />
+      <div className={styles["group-by-container"]}>
+        <p className={styles["group-by-title"]}>
+          Group inferences by{" "}
+          <span className={styles["group-by-link"]}>
+            See how Group by works
+          </span>
+        </p>
+        <div className={styles["group-by-selects"]}>
+          {groupBy.map((gr, idx) => {
+            return (
+              <GroupBySelect
+                isFirstRow={idx === 0}
+                deleteGroupBy={() => {
+                  deleteGroupBy(gr.key);
+                }}
+                cards={cards}
+                key={gr.key}
+                values={gr}
+                updateValue={(key, value) => {
+                  handleGroupByUpdate(key, value, idx);
+                }}
+                services={formattedServices}
+              />
+            );
+          })}
+        </div>
+        <p
+          role="button"
+          className={styles["add-group-by-button"]}
+          onClick={addGroupBy}
+        >
+          + Group by another property
+        </p>
+      </div>
+
       <div className={styles.divider}></div>
       <NotificationForm />
       <div className={styles.divider}></div>

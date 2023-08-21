@@ -90,6 +90,17 @@ const ConditionCard = ({
           );
           const operators = getOperatorByType(condition.datatype);
           const { errors } = condition;
+          const valueType =
+            properties.find((p) => {
+              return p.value === condition.property;
+            })?.type ?? "input";
+          const getSelectValues = () => {
+            return (
+              properties.find((p) => p.value === condition.property)?.options ??
+              []
+            );
+          };
+          console.log(getSelectValues());
           return (
             <div
               className={cx(
@@ -107,7 +118,6 @@ const ConditionCard = ({
                   buttonMode={true}
                 />
               )}
-
               <div
                 className={cx(
                   styles["condition-item-container"],
@@ -178,18 +188,39 @@ const ConditionCard = ({
                   errors.value && styles["error-input"]
                 )}
               >
-                <Input
-                  name="value"
-                  fullWidth
-                  className={cx(styles["value-input"])}
-                  placeholder="Value"
-                  type={getInputTypeByDatatype(conditions[index].datatype)}
-                  disabled={!conditions[index].operator.length}
-                  value={conditions[index].value}
-                  onChange={(e) => {
-                    updateValue(index, e.target.value);
-                  }}
-                />
+                {valueType !== "select" ? (
+                  <Input
+                    name="value"
+                    fullWidth
+                    className={cx(styles["value-input"])}
+                    placeholder="Value"
+                    type={getInputTypeByDatatype(conditions[index].datatype)}
+                    disabled={!conditions[index].operator.length}
+                    value={conditions[index].value}
+                    onChange={(e) => {
+                      updateValue(index, e.target.value);
+                    }}
+                  />
+                ) : (
+                  <Select
+                    name="value"
+                    fullWidth
+                    variant="standard"
+                    disabled={!conditions[index].operator.length}
+                    value={conditions[index].value}
+                    onChange={(e) => {
+                      updateValue(index, e.target.value);
+                    }}
+                  >
+                    {getSelectValues().map((v) => {
+                      return (
+                        <MenuItem value={v.value} key={nanoid()}>
+                          {v.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                )}
               </div>
               {index !== 0 && (
                 <HiOutlineX

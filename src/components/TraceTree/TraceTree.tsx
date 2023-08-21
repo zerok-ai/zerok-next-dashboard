@@ -199,7 +199,6 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       const level = span.level ?? 0;
       const colorsLength = COLORS.length - 1;
       const colorIndex = level % colorsLength;
-      console.log({ colorIndex, level });
       return (
         <Accordion
           key={nanoid()}

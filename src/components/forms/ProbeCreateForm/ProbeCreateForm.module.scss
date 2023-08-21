@@ -197,18 +197,38 @@
 
 // group by form
 .group-by-selects {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base;
+}
+.group-by-row {
     display: grid;
-    grid-template-columns: 400px 200px;
-    column-gap: $sp-base * 2;
+    padding-bottom: $sp-base * 3;
+    grid-template-columns: 400px 300px 50px;
+    align-items: center;
+    column-gap: $sp-base * 4;
     :global(.MuiOutlinedInput-notchedOutline){
         border-color: $grey-700 !important;
         &:hover {
             border-color: $grey-300 !important;
         }
     }
+    border-bottom: 1px solid $grey-900;
+}
+
+.delete-group-by-button {
+    margin-top: - $sp-base * 2;
 }
 
 .group-by-container, .notification-form-container {
+    .add-group-by-button {
+        color:$primary-500;
+        margin-top: $sp-base * 7;
+        cursor: pointer;
+        &:hover {
+            color:$primary-600;
+        }
+    }
     p {
         color:$grey-50;
     }
@@ -222,7 +242,6 @@
 }
 
 .group-by-select {
-    width:400px;
     margin-top: $sp-base * 3;
 }
 
