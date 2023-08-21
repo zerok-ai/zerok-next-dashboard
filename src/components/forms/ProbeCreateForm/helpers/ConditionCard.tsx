@@ -3,6 +3,7 @@ import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
 import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
+import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
@@ -15,7 +16,11 @@ import {
 import JoiningSelect from "./JoiningSelect";
 
 interface ConditionCardProps {
-  services: Array<{ label: string; value: string }>;
+  services: Array<{
+    label: string;
+    value: string;
+    protocol: SPAN_PROTOCOLS_TYPE;
+  }>;
   includeAnd: boolean;
   deleteCard: (() => void) | null;
   conditions: ConditionRowType[];
@@ -81,7 +86,7 @@ const ConditionCard = ({
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
           const properties = getPropertyByType(
-            services.find((s) => s.value === rootProperty)?.value ?? ""
+            services.find((s) => s.value === rootProperty)?.protocol ?? null
           );
           const operators = getOperatorByType(condition.datatype);
           const { errors } = condition;
@@ -111,6 +116,7 @@ const ConditionCard = ({
               >
                 <Select
                   fullWidth
+                  disabled={!rootProperty.length}
                   defaultValue=""
                   variant="standard"
                   name="property"

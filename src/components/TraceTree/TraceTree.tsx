@@ -29,6 +29,7 @@ import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
+import { formatMilliseconds } from "utils/functions";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./TraceTree.module.scss";
@@ -164,8 +165,8 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       const latency = span.latency;
       // const spanStartTime = new Date(span.time).getTime();
       const timelineWidth = (latency / referenceTime.totalTime) * 100;
-      const timelineStart = dayjs(referenceTime.startTime).diff(
-        dayjs(span.start_time),
+      const timelineStart = dayjs(span.start_time).diff(
+        dayjs(referenceTime.startTime),
         "milliseconds"
       );
       const timelineDisplacement =
@@ -195,6 +196,10 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           </Accordion>
         );
       }
+      const level = span.level ?? 0;
+      const colorsLength = COLORS.length - 1;
+      const colorIndex = level % colorsLength;
+      console.log({ colorIndex, level });
       return (
         <Accordion
           key={nanoid()}
@@ -204,7 +209,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           <WrapperElement>
             <Label />
             <p className={styles.latency}>
-              {span.latency.toPrecision(4)} {` ms`}
+              {formatMilliseconds(span.latency)} {` ms`}
             </p>
             <div className={styles.timeline}>
               <p
@@ -217,7 +222,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           </WrapperElement>
           <AccordionDetails
             className={styles["accordion-details"]}
-            style={{ borderLeft: `1px solid ${COLORS[span.level ?? 0]}` }}
+            style={{ borderLeft: `1px solid ${COLORS[colorIndex]}` }}
           >
             {span.children?.map((child) => {
               const hasChildren = child.children && child.children.length > 0;

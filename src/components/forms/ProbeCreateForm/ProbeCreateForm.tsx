@@ -40,6 +40,7 @@ const formatServices = (services: ServiceDetail[]) => {
       value: `${getNamespace(sv.service)}/${getFormattedServiceName(
         sv.service
       )}`,
+      protocol: sv.protocol ?? "http",
     };
   });
 };
@@ -50,9 +51,14 @@ const ProbeCreateForm = () => {
   const { data: services, fetchData: fetchServices } = useFetch<
     ServiceDetail[]
   >("results", null, filterServices);
-  const [nameForm, setNameForm] = useState<{ title: string; time: string }>({
+  const [nameForm, setNameForm] = useState<{
+    title: string;
+    time: string;
+    error: boolean;
+  }>({
     title: "",
     time: DEFAULT_TIME_RANGE,
+    error: false,
   });
   const router = useRouter();
 
@@ -66,7 +72,7 @@ const ProbeCreateForm = () => {
   });
 
   const updateNameForm = (key: string, value: string) => {
-    setNameForm({ ...nameForm, [key]: value });
+    setNameForm({ ...nameForm, [key]: value, error: false });
   };
 
   useEffect(() => {
@@ -74,7 +80,7 @@ const ProbeCreateForm = () => {
       const endpoint = LIST_SERVICES_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
-      ).replace("{range}", DEFAULT_TIME_RANGE);
+      ).replace("{range}", "-30m");
       fetchServices(endpoint);
     }
   }, [selectedCluster]);
@@ -100,6 +106,8 @@ const ProbeCreateForm = () => {
     );
     setCards(newCards);
   };
+
+  const formattedServices = formatServices(services ?? []);
 
   const updateProperty = (
     cardIndex: number,
@@ -183,6 +191,11 @@ const ProbeCreateForm = () => {
       });
     });
 
+    if (!nameForm.title || !nameForm.title.length) {
+      errors++;
+      setNameForm((old) => ({ ...old, error: true }));
+    }
+
     if (groupBy.service === null || groupBy.property === "") {
       errors++;
       if (groupBy.service === null) {
@@ -251,7 +264,7 @@ const ProbeCreateForm = () => {
                 updateRootProperty(idx, property);
               }}
               key={c.key}
-              services={formatServices(services ?? [])}
+              services={formattedServices}
               deleteCard={
                 idx > 0
                   ? () => {

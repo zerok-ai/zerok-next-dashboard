@@ -3,6 +3,7 @@ import {
   type ScenarioCreationType,
   type WorkloadType,
 } from "utils/scenarios/types";
+import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 export type ConditionRowStrings =
   | "property"
@@ -68,13 +69,11 @@ export const PROBE_TIME_RANGES = [
   },
 ];
 
-export const getPropertyByType = (type: string | null) => {
+export const getPropertyByType = (type: SPAN_PROTOCOLS_TYPE | null) => {
   if (!type || !type.length) {
     return HTTP_PROPERTIES;
   }
-  return !type?.split("/")[1].includes("sql")
-    ? HTTP_PROPERTIES
-    : SQL_PROPERTIES;
+  return type === "http" ? HTTP_PROPERTIES : SQL_PROPERTIES;
 };
 
 export const HTTP_PROPERTIES = [

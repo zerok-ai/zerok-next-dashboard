@@ -2,6 +2,7 @@ import { FormHelperText, MenuItem, Select } from "@mui/material";
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
+import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
@@ -17,6 +18,7 @@ interface GroupBySelectProps {
   services: Array<{
     label: string;
     value: string;
+    protocol: SPAN_PROTOCOLS_TYPE;
   }>;
 }
 
@@ -28,34 +30,11 @@ const GroupBySelect = ({
 }: GroupBySelectProps) => {
   const emptyCard =
     cards.filter((card) => card.rootProperty !== "").length === 0;
-
-  const getPropertiesByCard = () => {
-    if (values.service === null) {
-      return [];
-    }
-    const baseProperties = getPropertyByType(
-      services.find((s) => s.value === cards[values.service!].rootProperty)
-        ?.value ?? ""
-    );
-
-    const cardProperties: Array<{
-      label: string;
-      value: string;
-      type: string;
-    }> = [];
-    cards[values.service].conditions.forEach((cond) => {
-      const prop = baseProperties.find((pr) => pr.value === cond.property);
-      if (prop) {
-        cardProperties.push(prop);
-      }
-    });
-    if (!cardProperties.length) return [];
-
-    return cardProperties;
-  };
-
-  const cardProperties = getPropertiesByCard();
-
+  const cardProperties = getPropertyByType(
+    services.find((s) => {
+      return values.property === s.value;
+    })?.protocol ?? null
+  );
   return (
     <div className={styles["group-by-container"]}>
       <p className={styles["group-by-title"]}>
@@ -103,7 +82,7 @@ const GroupBySelect = ({
             }}
             placeholder="Start typing..."
             className={styles["group-by-select"]}
-            disabled={values.service === null || !cardProperties.length}
+            disabled={values.service === null}
           >
             {cardProperties.length > 0 &&
               cardProperties.map((pr) => {
