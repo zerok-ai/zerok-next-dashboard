@@ -29,7 +29,7 @@ interface PodCardProps {
 }
 
 const PodCard = ({ services }: PodCardProps) => {
-  const [selectedTab, setSelectedTab] = useState<string | null>("");
+  const [selectedTab, setSelectedTab] = useState<string | false>(false);
   const {
     data: podList,
     fetchData: fetchPodList,

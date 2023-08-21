@@ -6,6 +6,8 @@ export interface ChildrenType {
 
 export type GenericObject = Record<string, any>;
 
+export type HTTP_METHODS_TYPE = typeof HTTP_METHODS;
+
 export interface DrawerNavItemType {
   icon: string;
   label: string;
@@ -94,9 +96,13 @@ export interface SpanDetail {
   latency: number;
   protocol: string;
   status: string;
+  kind: "CLIENT" | "SERVER";
+  method: HTTP_METHODS_TYPE[number];
+  route: string;
   parent_span_id: string;
   workload_id_list: string[];
-  span_id?: string;
+  span_id: string;
+  path: string;
   children?: SpanDetail[];
   start_time: string;
   timestamp?: string;

@@ -6,7 +6,11 @@ import { nanoid } from "nanoid";
 import dynamic from "next/dynamic";
 import { getFormattedTime } from "utils/dateHelpers";
 import { stringWithoutComments } from "utils/functions";
-import { type SpanDetail, type SpanRawData } from "utils/types";
+import {
+  type GenericObject,
+  type SpanDetail,
+  type SpanRawData,
+} from "utils/types";
 
 import styles from "./TraceInfoTabs.module.scss";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
@@ -42,19 +46,27 @@ export const renderListOfKeyValue = (list: TabKeyType[]) => {
   );
 };
 
-export const renderJSON = (val: string) => {
+export const renderJSON = (val: GenericObject | string) => {
   try {
-    const parsed = JSON.parse(val);
-
-    return typeof parsed === "object" ? (
-      <DynamicReactJson src={parsed} />
-    ) : (
-      <CodeBlock code={parsed.toString()} allowCopy color="light" />
-    );
+    return <DynamicReactJson src={val as GenericObject} />;
   } catch (err) {
-    console.log({ err });
+    return <CodeBlock code={val as string} allowCopy color="light" />;
   }
-  return <p>{val.length ? val : `{ }`}</p>;
+};
+
+const renderJSONorString = (val: GenericObject | string) => {
+  const type = typeof val === "string" ? "string" : "object";
+  if (type === "string" && !val.length) {
+    return `{ }`;
+  }
+  if (type === "string") {
+    return <CodeBlock code={val as string} allowCopy color="light" />;
+  }
+  try {
+    return <DynamicReactJson src={val as GenericObject} />;
+  } catch (err) {
+    return <CodeBlock code={val as string} allowCopy color="light" />;
+  }
 };
 
 export const DEFAULT_TABS = [
@@ -106,7 +118,7 @@ export const HTTP_TABS = [
           label: "Request headers",
           value: rawData.req_headers as string,
           customRender: () => {
-            return renderJSON(rawData.req_headers as string);
+            return renderJSONorString(rawData.req_headers);
           },
         },
       ];
@@ -122,7 +134,7 @@ export const HTTP_TABS = [
           label: "Request body",
           value: rawData.req_body as string,
           customRender: () => {
-            return renderJSON(rawData.req_body as string);
+            return renderJSONorString(rawData.req_body);
           },
         },
       ];
@@ -138,7 +150,7 @@ export const HTTP_TABS = [
           label: "Response headers",
           value: rawData.resp_headers as string,
           customRender: () => {
-            return renderJSON(rawData.resp_headers as string);
+            return renderJSONorString(rawData.resp_headers);
           },
         },
       ];
@@ -152,10 +164,10 @@ export const HTTP_TABS = [
       const KEYS = [
         {
           label: "Response body",
-          fullWidth: true,
+          fullWidth: typeof rawData.resp_body.length === "object",
           value: rawData.resp_body as string,
           customRender: () => {
-            return renderJSON(rawData.resp_body as string);
+            return renderJSONorString(rawData.resp_body);
           },
         },
       ];
