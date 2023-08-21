@@ -131,7 +131,7 @@ jobs:
             helm-charts
 
       - name: Docker build
-        if: ${{ env.BUILD_AND_  SH == 'true' }}
+        if: ${{ env.BUILD_AND_PUSH == 'true' }}
         run: |-
           docker build  --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" .
 
