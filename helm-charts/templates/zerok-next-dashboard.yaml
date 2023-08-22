@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "helm-charts.fullname" . }}-ingress
+  name: {{ include "helm-charts.name" . }}-zerok-next-dashboard
   labels:
   {{- include "helm-charts.labels" . | nindent 4 }}
   annotations:
