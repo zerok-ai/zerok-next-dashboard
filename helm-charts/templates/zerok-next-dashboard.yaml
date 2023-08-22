@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "helm-charts.name" . }}
+  name: "zerok-next-dashboard"
   labels:
   {{- include "helm-charts.labels" . | nindent 4 }}
   annotations:
@@ -22,7 +22,7 @@ spec:
         pathType: Prefix
       - backend:
           service:
-            name: '{{ include "helm-charts.fullname" . }}-zerok-next-dashboard'
+            name: 'zerok-next-dashboard'
             port:
               number: 80
         path: /
@@ -31,7 +31,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm-charts.fullname" . }}
+  name: "zerok-next-dashboard"
   labels:
   {{- include "helm-charts.labels" . | nindent 4 }}
 spec:
