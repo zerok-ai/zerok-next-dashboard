@@ -77,9 +77,9 @@ jobs:
             echo "Invalid environment"
             exit 1
           fi
-          echo "ENVIRONMENT=${ENVIRONMENT}" >> $GITHUB_ENV
-          echo "DOMAIN_NAME=${DOMAIN_NAME}" >> $GITHUB_ENV
-          echo "HOST_NAME=${HOST_NAME}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_ENV
+          echo "DOMAIN_NAME=$DOMAIN_NAME" >> $GITHUB_ENV
+          echo "HOST_NAME=$HOST_NAME" >> $GITHUB_ENV
 
       - name: Dump steps context
         env:
