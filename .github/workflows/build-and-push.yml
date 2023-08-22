@@ -68,7 +68,7 @@ jobs:
           if [ "${{ github.event.inputs.environment }}" == "poc" ]; then
             ENVIRONMENT="poc"
             DOMAIN_NAME="getanton.com"
-            HOST_NAME="dashboard.${{ github.event.inputs.cluster }}.getanton.com"
+            HOST_NAME="dashboard.${{ github.event.inputs.GKE_CLUSTER }}.getanton.com"
           elif [ "${{ github.event.inputs.environment }}" == "sandbox" ]; then
             ENVIRONMENT="sandbox"
             DOMAIN_NAME="zerok.dev"
