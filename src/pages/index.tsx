@@ -22,6 +22,7 @@ const Home = () => {
   const healthyCluster = selectedCluster
     ? status === CLUSTER_STATES.HEALTHY
     : true;
+  console.log("Deployed latest changes");
   const MapFilterButton = useMemo(() => {
     return (
       <Button
