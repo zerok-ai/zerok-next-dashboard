@@ -65,6 +65,7 @@ export const clusterSlice = createSlice({
         } else state.empty = true;
       })
       .addCase(getClusters.rejected, (state, action) => {
+        console.log("ERROR");
         state.loading = false;
         state.error = true;
         state.status = "";
