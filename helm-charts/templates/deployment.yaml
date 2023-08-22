@@ -8,12 +8,12 @@ spec:
   replicas: {{ .Values.zerokNextDashboard.replicas }}
   selector:
     matchLabels:
-      app: zerok-next-dashboard
+      app: "zerok-next-dashboard"
     {{- include "helm-charts.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: zerok-next-dashboard
+        app: "zerok-next-dashboard"
       {{- include "helm-charts.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -22,9 +22,8 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.image.imagePullPolicy }}
-        name: zerok-next-dashboard
+        name: "zerok-next-dashboard"
         ports:
         - containerPort: 80
         resources: {{- toYaml .Values.zerokNextDashboard.zerokNextDashboard.resources |
           nindent 10 }}
-      serviceAccountName: {{ include "helm-charts.fullname" . }}
