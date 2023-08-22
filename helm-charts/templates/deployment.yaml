@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-charts.fullname" . }}
+  name: "zerok-next-dashboard"
   labels:
   {{- include "helm-charts.labels" . | nindent 4 }}
 spec:
