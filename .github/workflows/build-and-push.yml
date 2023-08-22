@@ -107,8 +107,8 @@ jobs:
           echo "DOCKER_REPO=$DOCKER_REPO"
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
-          echo "DOMAIN_NAME=$DOMAIN_NAME"
-          echo "HOST_NAME=$HOST_NAME"
+          echo "DASHBOARD_HOST=$DASHBOARD_HOST"
+          echo "DASHBOARD_DOMAIN=$DASHBOARD_DOMAIN"
 
   ##############
   build-and-push:
