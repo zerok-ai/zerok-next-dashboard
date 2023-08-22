@@ -1,5 +1,6 @@
 import ClusterSelector from "components/ClusterSelector";
 import DrawerToggleButton from "components/DrawerToggleButton";
+import ErrorBoundary from "components/ErrorBoundary";
 import MainDrawer from "components/MainDrawer";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -49,7 +50,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           className={`${styles["page-content"]} hidden-scroll`}
           id="global-container"
         >
-          {children}
+          <ErrorBoundary>{children}</ErrorBoundary>
         </main>
       </div>
     </div>
