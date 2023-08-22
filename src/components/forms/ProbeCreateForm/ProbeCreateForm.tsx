@@ -283,7 +283,7 @@ const ProbeCreateForm = () => {
         variant="contained"
         className={styles["add-card-btn"]}
         onClick={addCard}
-        disabled={cards.length === services?.length}
+        disabled={cards.length === formattedServices.length}
       >
         Add service <HiOutlinePlus />
       </Button>
