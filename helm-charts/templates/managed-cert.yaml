@@ -6,4 +6,4 @@ metadata:
   {{- include "helm-charts.labels" . | nindent 4 }}
 spec:
   domains:
-  - ${{ .Values.global.domain }}
+  - {{ .Values.global.domain }}
