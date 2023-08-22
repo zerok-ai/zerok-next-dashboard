@@ -88,7 +88,11 @@ const GroupBySelect = ({
         >
           {cards.map((card, idx) => {
             return (
-              <MenuItem value={card.rootProperty} key={card.key}>
+              <MenuItem
+                value={card.rootProperty}
+                key={card.key}
+                className={styles["menu-item"]}
+              >
                 {card.rootProperty}
               </MenuItem>
             );
@@ -111,7 +115,11 @@ const GroupBySelect = ({
           {cardProperties.length > 0 &&
             cardProperties.map((pr) => {
               return (
-                <MenuItem value={pr.value} key={nanoid()}>
+                <MenuItem
+                  value={pr.value}
+                  key={nanoid()}
+                  className={styles["menu-item"]}
+                >
                   {pr.label}
                 </MenuItem>
               );

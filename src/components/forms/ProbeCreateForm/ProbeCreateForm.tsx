@@ -49,9 +49,11 @@ const formatServices = (services: ServiceDetail[]) => {
 const ProbeCreateForm = () => {
   const [cards, setCards] = useState<ConditionCardType[]>([getEmptyCard()]);
   const { selectedCluster } = useSelector(clusterSelector);
-  const { data: services, fetchData: fetchServices } = useFetch<
-    ServiceDetail[]
-  >("results", null, filterServices);
+  const {
+    data: services,
+    fetchData: fetchServices,
+    loading: loadingServices,
+  } = useFetch<ServiceDetail[]>("results", null, filterServices);
   const [nameForm, setNameForm] = useState<{
     title: string;
     time: string;
@@ -240,9 +242,11 @@ const ProbeCreateForm = () => {
         {cards.map((c, idx) => {
           return (
             <ConditionCard
+              cards={cards}
               includeAnd={idx > 0}
               conditions={c.conditions}
               rootProperty={c.rootProperty}
+              loadingServices={loadingServices}
               addCondition={() => {
                 addCondition(idx);
               }}
@@ -279,6 +283,7 @@ const ProbeCreateForm = () => {
         variant="contained"
         className={styles["add-card-btn"]}
         onClick={addCard}
+        disabled={cards.length === services?.length}
       >
         Add service <HiOutlinePlus />
       </Button>

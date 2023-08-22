@@ -74,7 +74,6 @@ export const convertNanoToMilliSeconds = (
 ): string | number => {
   if (value != null) {
     const millis = parseFloat((value / 1000000).toFixed(2));
-    console.log(millis);
     return addMs ? `${millis} ms` : millis;
   }
   return "NA";
