@@ -109,18 +109,6 @@ jobs:
       - name: Build
         if: ${{ env.BUILD_AND_PUSH == 'true' }}
         run: yarn build
-      
-      - name: Uploading Build files (for docker push)
-        uses: actions/upload-artifact@v3
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        with:
-          name: build-artifacts
-          path: |
-            package.json
-            public
-            .next/standalone
-            .next/static
-            Dockerfile
 
       - name: Uploading Helm Charts (for deploy)
         uses: actions/upload-artifact@v3
