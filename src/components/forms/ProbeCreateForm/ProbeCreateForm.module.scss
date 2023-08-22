@@ -73,6 +73,16 @@
     position: relative;
 }
 
+.menu-item {
+    background-color: $grey-925;
+    &:hover {
+        background-color: $grey-900;
+    }
+    &:focus {
+        background-color: $primary-800;
+    }
+}
+
 .condition-rows {
     margin-top: $sp-base * 2;
     max-height: 300px;

@@ -17,6 +17,7 @@ interface JoiningSelectProps {
   color: "blue" | "purple";
   value?: string;
   onSelect: ((value: string) => void) | null;
+  loading?: boolean;
 }
 
 const JoiningSelect = ({
@@ -25,6 +26,7 @@ const JoiningSelect = ({
   color,
   value,
   onSelect,
+  loading,
 }: JoiningSelectProps) => {
   const [btnRef, setBtnRef] = useState<HTMLButtonElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,6 +34,12 @@ const JoiningSelect = ({
   };
   const handleClose = () => {
     setBtnRef(null);
+  };
+  const getList = () => {
+    if (loading) {
+      return list;
+    }
+    return list.length > 0 ? list : [{ label: "No services.", value: "" }];
   };
   return (
     <div className={styles["joining-select-container"]}>
@@ -55,11 +63,12 @@ const JoiningSelect = ({
           onClose={handleClose}
           className={styles["joining-select-menu"]}
         >
-          {list.length > 0 ? (
-            list.map((item) => {
+          {!loading ? (
+            getList().map((item) => {
               return (
                 <MenuItem
                   value={item.value}
+                  disabled={!item.value}
                   key={nanoid()}
                   onClick={() => {
                     onSelect && onSelect(item.value);

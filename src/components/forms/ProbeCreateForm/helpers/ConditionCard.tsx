@@ -7,6 +7,7 @@ import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
+  type ConditionCardType,
   type ConditionRowType,
   CONDITIONS,
   getInputTypeByDatatype,
@@ -16,6 +17,7 @@ import {
 import JoiningSelect from "./JoiningSelect";
 
 interface ConditionCardProps {
+  cards: ConditionCardType[];
   services: Array<{
     label: string;
     value: string;
@@ -35,9 +37,12 @@ interface ConditionCardProps {
   updateOperator: (conditionIndex: number, operator: string) => void;
   updateValue: (conditionIndex: number, value: string) => void;
   updateRootProperty: (value: string) => void;
+  loadingServices: boolean;
 }
 
 const ConditionCard = ({
+  loadingServices,
+  cards,
   includeAnd,
   deleteCard,
   services,
@@ -50,6 +55,12 @@ const ConditionCard = ({
   updateValue,
   updateRootProperty,
 }: ConditionCardProps) => {
+  const getServicesForRootProperty = () => {
+    return services.filter((s) => {
+      const cardRoots = cards.map((c) => c.rootProperty);
+      return !cardRoots.includes(s.value);
+    });
+  };
   return (
     <div className={styles["condition-card"]}>
       <div className={styles["root-condition-container"]}>
@@ -64,8 +75,9 @@ const ConditionCard = ({
             />
           )}
           <JoiningSelect
+            loading={loadingServices}
             buttonMode={false}
-            list={services}
+            list={getServicesForRootProperty()}
             color="blue"
             value={rootProperty.length ? rootProperty : "Service"}
             onSelect={(value) => {
@@ -146,7 +158,11 @@ const ConditionCard = ({
                 >
                   {properties.map((prt) => {
                     return (
-                      <MenuItem value={prt.value} key={nanoid()}>
+                      <MenuItem
+                        className={styles["menu-item"]}
+                        value={prt.value}
+                        key={nanoid()}
+                      >
                         {prt.label}
                       </MenuItem>
                     );
@@ -174,7 +190,11 @@ const ConditionCard = ({
                 >
                   {operators.map((prt) => {
                     return (
-                      <MenuItem value={prt.value} key={nanoid()}>
+                      <MenuItem
+                        value={prt.value}
+                        key={nanoid()}
+                        className={styles["menu-item"]}
+                      >
                         {prt.label}
                       </MenuItem>
                     );
@@ -213,7 +233,11 @@ const ConditionCard = ({
                   >
                     {getSelectValues().map((v) => {
                       return (
-                        <MenuItem value={v.value} key={nanoid()}>
+                        <MenuItem
+                          value={v.value}
+                          key={nanoid()}
+                          className={styles["menu-item"]}
+                        >
                           {v.label}
                         </MenuItem>
                       );

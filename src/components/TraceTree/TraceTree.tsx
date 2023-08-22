@@ -29,7 +29,7 @@ import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
-import { formatMilliseconds } from "utils/functions";
+import { convertNanoToMilliSeconds } from "utils/functions";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./TraceTree.module.scss";
@@ -89,7 +89,10 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
   useEffect(() => {
     if (spanTree) {
       setReferenceTime({
-        totalTime: spanTree.totalTime as number,
+        totalTime: convertNanoToMilliSeconds(
+          spanTree.totalTime as number,
+          false
+        ) as number,
         startTime: spanTree.start_time,
       });
       if (spanTree.exceptionSpan) {
@@ -162,11 +165,17 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
         );
       };
       // const latencyTimeline = (span.latency_ns / referenceTime!.latency) * 100;
-      const latency = span.latency;
+      const latency = convertNanoToMilliSeconds(span.latency, false) as number;
       // const spanStartTime = new Date(span.time).getTime();
       const timelineWidth = (latency / referenceTime.totalTime) * 100;
-      const timelineStart = dayjs(span.start_time).diff(
-        dayjs(referenceTime.startTime),
+      console.log(
+        { timelineWidth },
+        latency,
+        referenceTime.startTime,
+        referenceTime.totalTime
+      );
+      const timelineStart = dayjs(referenceTime.startTime).diff(
+        dayjs(span.start_time),
         "milliseconds"
       );
       const timelineDisplacement =
@@ -208,7 +217,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           <WrapperElement>
             <Label />
             <p className={styles.latency}>
-              {formatMilliseconds(span.latency)} {` ms`}
+              {convertNanoToMilliSeconds(span.latency, true)}
             </p>
             <div className={styles.timeline}>
               <p

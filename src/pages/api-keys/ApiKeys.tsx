@@ -105,13 +105,13 @@ const ApiKeys = () => {
       }),
       colHelper.accessor("key", {
         header: "API Key",
-        size: DEFAULT_COL_WIDTH * 3.5,
+        size: DEFAULT_COL_WIDTH * 3,
         cell: (info) => {
           const key = info.getValue();
           return (
             <CodeBlock
               allowCopy={key !== null}
-              code={key && info.row.original.visible ? key : "*".repeat(36)}
+              code={key && info.row.original.visible ? key : "*".repeat(16)}
               copyText={key as string}
               color="light"
             />
