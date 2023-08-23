@@ -62,7 +62,7 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
   if (type === "string" && !(val as string).length) {
     return `{ }`;
   }
-  if (type === "string" || type === "boolean") {
+  if (type === "boolean") {
     return (
       <CodeBlock
         code={(val as string | boolean).toString()}
@@ -72,7 +72,10 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
     );
   }
   try {
-    return <DynamicReactJson src={val as GenericObject} />;
+    const json = JSON.parse(val as string);
+    return (
+      <DynamicReactJson src={json as GenericObject} displayDataTypes={false} />
+    );
   } catch (err) {
     return <CodeBlock code={val as string} allowCopy color="light" />;
   }
