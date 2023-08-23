@@ -12,6 +12,7 @@ import "styles/react-flow.scss";
 import "styles/globals.scss";
 import "styles/utils.scss";
 import "styles/tables.scss";
+import "styles/mui-overrides.scss"
 
 import { type NextPage } from "next";
 import type { AppProps } from "next/app";

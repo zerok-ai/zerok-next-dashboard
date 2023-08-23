@@ -1,0 +1,30 @@
+@import "styles/variables.module.scss";
+.container {
+    background-color: $grey-925;
+    cursor: pointer;
+    width:36px;
+    height:36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.icon {
+    color:$grey-50;
+}
+
+
+.menu {
+    margin-top: $sp-base;
+    :global(.MuiMenu-paper){
+        width:150px;
+    }
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+}
