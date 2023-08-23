@@ -1,5 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Divider, OutlinedInput, Skeleton } from "@mui/material";
+import {
+  Button,
+  Divider,
+  OutlinedInput,
+  Skeleton,
+  TextareaAutosize,
+} from "@mui/material";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
@@ -148,7 +154,11 @@ const ZkGptPrompter = () => {
             <div className={styles["query-container"]}>
               <label>Query:</label>
               <div className={styles["query-input-container"]}>
-                <OutlinedInput type="textarea" {...register("query")} />
+                <TextareaAutosize
+                  className={styles["text-area"]}
+                  {...register("query")}
+                  minRows={3}
+                />
                 <Button type="submit" variant="contained">
                   Submit
                 </Button>
