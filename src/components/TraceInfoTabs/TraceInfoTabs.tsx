@@ -17,30 +17,9 @@ interface TraceInfoTabsProps {
   allSpans: SpanResponse;
 }
 
-const parseRawData = (rawData: SpanRawDataResponse) => {
-  const spanData = rawData[Object.keys(rawData)[0]];
-  if (spanData.req_body.length && spanData.protocol === "http") {
-    try {
-      spanData.req_body = JSON.parse(spanData.req_body as string);
-    } catch (error) {
-      console.error("Error parsing request_payload", error);
-    }
-  }
-  if (spanData.resp_body.length && spanData.protocol === "http") {
-    try {
-      spanData.resp_body = JSON.parse(spanData.resp_body as string);
-    } catch (error) {
-      console.error("Error parsing response_payload", error);
-    }
-  }
-  const result: SpanRawDataResponse = {};
-  result[Object.keys(rawData)[0]] = spanData;
-  return result;
-};
-
 const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
   const { data: rawResponse, fetchData: fetchRawData } =
-    useFetch<SpanRawDataResponse>("span_raw_data_details", null, parseRawData);
+    useFetch<SpanRawDataResponse>("span_raw_data_details", null);
   const router = useRouter();
   const { issue, trace } = router.query;
   const { selectedCluster } = useSelector(clusterSelector);
