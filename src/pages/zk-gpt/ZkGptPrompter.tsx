@@ -4,15 +4,18 @@ import {
   Divider,
   OutlinedInput,
   Skeleton,
+  Slider,
   TextareaAutosize,
 } from "@mui/material";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
+import ModalX from "components/themeX/ModalX";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
+import { GENERIC_AVATAR, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import { z } from "zod";
 
 import styles from "./ZkGptPrompter.module.scss";
@@ -38,6 +41,7 @@ type GptForm = z.infer<typeof gptFormSchema>;
 
 type GptReply = GptForm & {
   answer: string | null;
+  key: string;
 };
 
 const FIELDS: Array<{
@@ -72,12 +76,24 @@ const FIELDS: Array<{
   },
 ];
 
+interface UserFormType {
+  comments: string;
+  score: number;
+}
+
 const ZkGptPrompter = () => {
   const [replies, setReplies] = useState<GptReply[]>([]);
+  const [modalOpen, setModalOpen] = useState<string | null>(null);
+  const userForm = useForm<UserFormType>({
+    defaultValues: {
+      comments: "",
+      score: 0,
+    },
+  });
   const form = useForm<GptForm>({
     defaultValues: {
-      query: "",
-      issueId: "",
+      query: "some query",
+      issueId: "some issue id",
       temperature: 0.2,
       topK: 100,
       gptModel: "gpt-3.5-turbo",
@@ -85,18 +101,69 @@ const ZkGptPrompter = () => {
     },
     resolver: zodResolver(gptFormSchema),
   });
-  const {
-    handleSubmit,
-    formState: { errors },
-    register,
-  } = form;
+  const { handleSubmit: handleUserSubmit, register: userRegister } = userForm;
+  const { handleSubmit, register } = form;
   const onSubmit = (data: GptForm) => {
     console.log({ data });
-    setReplies((prev) => [...prev, { ...data, answer: null }]);
+    setReplies((prev) => [
+      ...prev,
+      { ...data, answer: "some answer", key: nanoid() },
+    ]);
+    form.reset();
   };
-  console.log({ replies, errors });
+  const deleteReply = (key: string) => {
+    setReplies((prev) => prev.filter((rp) => rp.key !== key));
+  };
+  const onUserSubmit = (data: UserFormType) => {
+    const reply = replies.find((rp) => rp.key === modalOpen);
+    if (reply) {
+      const body = {
+        uuid: reply.key,
+        score: data.score,
+        comments: data.comments,
+      };
+      console.log({ body });
+      setModalOpen(null);
+      userForm.reset();
+    }
+  };
   return (
     <Fragment>
+      <ModalX
+        isOpen={!!modalOpen}
+        onClose={() => {
+          setModalOpen(null);
+        }}
+        title="Feedback form"
+        customClassName={styles.modal}
+      >
+        <form
+          className={styles["feedback-form"]}
+          onSubmit={handleUserSubmit(onUserSubmit)}
+        >
+          <div className={styles["form-field"]}>
+            <label htmlFor="comments">Comments:</label>
+            <TextareaAutosize
+              className={styles["text-area"]}
+              {...userRegister("comments")}
+              minRows={3}
+            />
+          </div>
+          <div className={styles["form-field"]}>
+            <label htmlFor="score">Score:</label>
+            <Slider
+              defaultValue={70}
+              valueLabelDisplay="on"
+              onChange={(e, val) => {
+                userForm.setValue("score", val as number);
+              }}
+            />
+          </div>
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
+        </form>
+      </ModalX>
       <PageHeader
         title="ZK GPT Prompter"
         showRange={false}
@@ -110,19 +177,36 @@ const ZkGptPrompter = () => {
               return (
                 <div className={styles["reply-container"]} key={nanoid()}>
                   <div className={styles["query-card"]}>
-                    <p>
-                      <span>Query</span> - {rp.query}
-                    </p>
+                    <img src={GENERIC_AVATAR} alt="user" />
+                    <p> {rp.query}</p>
                   </div>
                   <div className={styles["reply-card"]}>
                     {rp.answer ? (
-                      <p>
-                        <span>Response - </span>
-                        {rp.answer}
-                      </p>
+                      <Fragment>
+                        <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chat_logo" />
+                        <p>{rp.answer}</p>
+                      </Fragment>
                     ) : (
                       <Skeleton variant="text" width="100%" height="80px" />
                     )}
+                  </div>
+                  <div className={styles["buttons-div"]}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        setModalOpen(rp.key);
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      color="error"
+                      onClick={() => {
+                        deleteReply(rp.key);
+                      }}
+                    >
+                      Clear
+                    </Button>
                   </div>
                   <Divider />
                 </div>
