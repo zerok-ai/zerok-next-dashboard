@@ -2,6 +2,7 @@ import ClusterSelector from "components/ClusterSelector";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import ErrorBoundary from "components/ErrorBoundary";
 import MainDrawer from "components/MainDrawer";
+import UserPill from "components/UserPill";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { clusterSelector } from "redux/cluster";
@@ -44,7 +45,9 @@ const PageLayout = ({ children }: PageLayoutProps) => {
             <DrawerToggleButton />
             <ClusterSelector />
           </div>
-          <div className={styles["header-right"]}></div>
+          <div className={styles["header-right"]}>
+            <UserPill />
+          </div>
         </header>
         <main
           className={`${styles["page-content"]} hidden-scroll`}

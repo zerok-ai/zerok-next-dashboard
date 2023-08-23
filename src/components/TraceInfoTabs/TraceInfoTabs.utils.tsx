@@ -5,7 +5,10 @@ import ChipX from "components/themeX/ChipX";
 import { nanoid } from "nanoid";
 import dynamic from "next/dynamic";
 import { getFormattedTime } from "utils/dateHelpers";
-import { stringWithoutComments } from "utils/functions";
+import {
+  convertNanoToMilliSeconds,
+  stringWithoutComments,
+} from "utils/functions";
 import {
   type GenericObject,
   type SpanDetail,
@@ -98,7 +101,7 @@ export const DEFAULT_TABS = [
         },
         {
           label: "Latency",
-          value: `${metadata.latency.toPrecision(4)} ms`,
+          value: `${convertNanoToMilliSeconds(metadata.latency)}`,
         },
         {
           label: "Timestamp",

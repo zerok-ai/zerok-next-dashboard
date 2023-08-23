@@ -168,14 +168,8 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       const latency = convertNanoToMilliSeconds(span.latency, false) as number;
       // const spanStartTime = new Date(span.time).getTime();
       const timelineWidth = (latency / referenceTime.totalTime) * 100;
-      console.log(
-        { timelineWidth },
-        latency,
-        referenceTime.startTime,
-        referenceTime.totalTime
-      );
-      const timelineStart = dayjs(referenceTime.startTime).diff(
-        dayjs(span.start_time),
+      const timelineStart = dayjs(span.start_time).diff(
+        dayjs(referenceTime.startTime),
         "milliseconds"
       );
       const timelineDisplacement =
