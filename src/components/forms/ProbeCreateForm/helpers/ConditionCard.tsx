@@ -2,65 +2,130 @@ import { IconButton, Input, MenuItem, Select } from "@mui/material";
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
+import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
 import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
-  type ConditionCardType,
-  type ConditionRowType,
   CONDITIONS,
+  getEmptyCondition,
   getInputTypeByDatatype,
   getOperatorByType,
   getPropertyByType,
+  type ProbeFormType,
 } from "../ProbeCreateForm.utils";
 import JoiningSelect from "./JoiningSelect";
 
 interface ConditionCardProps {
-  cards: ConditionCardType[];
   services: Array<{
     label: string;
     value: string;
     protocol: SPAN_PROTOCOLS_TYPE;
   }>;
   includeAnd: boolean;
-  deleteCard: (() => void) | null;
-  conditions: ConditionRowType[];
-  rootProperty: string;
-  addCondition: () => void;
-  deleteCondition: (index: number) => void;
-  updateProperty: (
-    conditionIndex: number,
-    property: string,
-    datatype: string
-  ) => void;
-  updateOperator: (conditionIndex: number, operator: string) => void;
-  updateValue: (conditionIndex: number, value: string) => void;
-  updateRootProperty: (value: string) => void;
+  form: UseFormReturn<ProbeFormType, any, undefined>;
   loadingServices: boolean;
+  currentCardKey: string;
 }
 
 const ConditionCard = ({
   loadingServices,
-  cards,
   includeAnd,
-  deleteCard,
   services,
-  conditions,
-  rootProperty,
-  addCondition,
-  deleteCondition,
-  updateProperty,
-  updateOperator,
-  updateValue,
-  updateRootProperty,
+  form,
+  currentCardKey,
 }: ConditionCardProps) => {
+  const {
+    setValue,
+    getValues,
+    formState: { errors },
+  } = form;
+  const cards = getValues("cards");
+  const currentCardIndex = cards.findIndex((c) => c.key === currentCardKey);
+  const currentCard = cards[currentCardIndex];
+
+  const { rootProperty, conditions } = currentCard;
+
+  const properties = getPropertyByType(
+    services.find((s) => s.value === rootProperty)?.protocol ?? null
+  );
+
   const getServicesForRootProperty = () => {
     return services.filter((s) => {
       const cardRoots = cards.map((c) => c.rootProperty);
       return !cardRoots.includes(s.value);
     });
   };
+
+  const deleteCard = () => {
+    const newCards = cards.filter((c) => c.key !== currentCardKey);
+    setValue("cards", newCards);
+  };
+
+  const getConditionErrors = (conditionIndex: number) => {
+    if (
+      errors.cards &&
+      errors.cards[currentCardIndex] &&
+      errors.cards[currentCardIndex]?.conditions &&
+      errors.cards[currentCardIndex]?.conditions![conditionIndex]
+    ) {
+      return errors.cards[currentCardIndex]?.conditions![conditionIndex];
+    } else {
+      return {};
+    }
+  };
+
+  console.log("in card");
+
+  const updateProperty = (conditionIndex: number, value: string) => {
+    const datatype = properties.find((p) => p.value === value)?.type ?? "";
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.property`,
+      value
+    );
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.datatype`,
+      datatype
+    );
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.operator`,
+      ""
+    );
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
+      ""
+    );
+  };
+
+  const updateOperator = (conditionIndex: number, value: string) => {
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.operator`,
+      value
+    );
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
+      ""
+    );
+  };
+
+  const updateValue = (conditionIndex: number, value: string) => {
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
+      value
+    );
+  };
+
+  const deleteCondition = (conditionKey: string) => {
+    const newConditions = conditions.filter((c) => c.key !== conditionKey);
+    setValue(`cards.${currentCardIndex}.conditions`, newConditions);
+  };
+
+  const addConditon = () => {
+    const newConditions = [...conditions, getEmptyCondition()];
+    setValue(`cards.${currentCardIndex}.conditions`, newConditions);
+  };
+
   return (
     <div className={styles["condition-card"]}>
       <div className={styles["root-condition-container"]}>
@@ -81,11 +146,11 @@ const ConditionCard = ({
             color="blue"
             value={rootProperty.length ? rootProperty : "Service"}
             onSelect={(value) => {
-              updateRootProperty(value);
+              setValue(`cards.${currentCardIndex}.rootProperty`, value);
             }}
           />
         </div>
-        {deleteCard && (
+        {currentCardIndex !== 0 && (
           <IconButton
             className={styles["delete-card-button"]}
             onClick={deleteCard}
@@ -97,11 +162,7 @@ const ConditionCard = ({
       </div>
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
-          const properties = getPropertyByType(
-            services.find((s) => s.value === rootProperty)?.protocol ?? null
-          );
           const operators = getOperatorByType(condition.datatype);
-          const { errors } = condition;
           const valueType =
             properties.find((p) => {
               return p.value === condition.property;
@@ -112,6 +173,7 @@ const ConditionCard = ({
               []
             );
           };
+          const errors = getConditionErrors(index);
           return (
             <div
               className={cx(
@@ -132,7 +194,7 @@ const ConditionCard = ({
               <div
                 className={cx(
                   styles["condition-item-container"],
-                  errors.property && styles["error-input"]
+                  errors?.property && styles["error-input"]
                 )}
               >
                 <Select
@@ -141,19 +203,11 @@ const ConditionCard = ({
                   defaultValue=""
                   variant="standard"
                   name="property"
-                  className={cx(
-                    styles["property-select"],
-                    errors.property && styles["error-input"]
-                  )}
+                  className={cx(styles["property-select"])}
                   placeholder="Choose a property"
                   value={conditions[index].property}
                   onChange={(value) => {
-                    updateProperty(
-                      index,
-                      value.target.value,
-                      properties.find((p) => p.value === value.target.value)
-                        ?.type ?? ""
-                    );
+                    updateProperty(index, value.target.value);
                   }}
                 >
                   {properties.map((prt) => {
@@ -172,7 +226,7 @@ const ConditionCard = ({
               <div
                 className={cx(
                   styles["condition-item-container"],
-                  errors.operator && styles["error-input"]
+                  errors?.operator && styles["error-input"]
                 )}
               >
                 <Select
@@ -204,7 +258,7 @@ const ConditionCard = ({
               <div
                 className={cx(
                   styles["condition-item-container"],
-                  errors.value && styles["error-input"]
+                  errors?.value && styles["error-input"]
                 )}
               >
                 {valueType !== "select" ? (
@@ -250,7 +304,7 @@ const ConditionCard = ({
                   role="button"
                   className={styles["delete-condition-button"]}
                   onClick={() => {
-                    deleteCondition(index);
+                    deleteCondition(condition.key);
                   }}
                 />
               )}
@@ -261,7 +315,7 @@ const ConditionCard = ({
       <p
         className={styles["add-condition-button"]}
         role="button"
-        onClick={addCondition}
+        onClick={addConditon}
       >
         + Condition
       </p>
