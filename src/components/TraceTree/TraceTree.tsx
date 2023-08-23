@@ -8,7 +8,6 @@ import {
 import cx from "classnames";
 import CustomSkeleton from "components/CustomSkeleton";
 import TraceInfoDrawer from "components/TraceInfoDrawer";
-import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
@@ -34,10 +33,12 @@ import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./TraceTree.module.scss";
 import {
+  AccordionLabel,
   buildSpanTree,
   COLORS,
   getRootSpan,
-  getWidthByLevel,
+  SpanLatency,
+  SpanLatencyTimeline,
   spanTransformer,
 } from "./TraceTree.utils";
 
@@ -56,13 +57,18 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
+
   const [referenceTime, setReferenceTime] = useState<null | {
     totalTime: number;
     startTime: string;
   }>(null);
+
   const { issue, trace } = router.query;
+
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
+
   const [isModalOpen, toggleModal] = useToggle(false);
+
   useEffect(() => {
     if (selectedCluster) {
       const endpoint = LIST_SPANS_ENDPOINT.replace(
@@ -71,7 +77,6 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       )
         .replace("{issue_id}", issue as string)
         .replace("{incident_id}", trace as string);
-      // fetchSpans("/spans.json");
       fetchSpans(endpoint);
     }
   }, [selectedCluster]);
@@ -122,34 +127,9 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       isTopRoot: boolean = false,
       isLastChild: boolean = false
     ) => {
-      const Label = () => {
-        const exSpan = exceptionParent ? spans![exceptionParent] : null;
-        const highlight = exSpan?.source === span.source && !isTopRoot;
-        return (
-          <div className={styles["accordion-summary-content"]}>
-            <p
-              className={styles["accordion-label-container"]}
-              style={{
-                width: getWidthByLevel(span.level ?? 0, isLastChild),
-              }}
-            >
-              <span
-                className={cx(
-                  styles["accordion-label"],
-                  highlight && styles["exception-parent"]
-                )}
-                role="button"
-                id="span-label"
-                onClick={() => {
-                  setSelectedSpan(span.span_id);
-                }}
-              >
-                {isTopRoot ? span.source : span.destination}
-              </span>
-            </p>
-          </div>
-        );
-      };
+      const exSpan = exceptionParent ? spans![exceptionParent] : null;
+      // console.log({ spans, exSpan, exceptionParent });
+      const highlight = exSpan?.span_id === span.span_id;
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
         return isLastChild ? (
           <div className={cx(styles["last-child"])} role="button">
@@ -165,76 +145,63 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
         );
       };
       // const latencyTimeline = (span.latency_ns / referenceTime!.latency) * 100;
-      const latency = convertNanoToMilliSeconds(span.latency, false) as number;
-      // const spanStartTime = new Date(span.time).getTime();
-      const timelineWidth = (latency / referenceTime.totalTime) * 100;
-      const timelineStart = dayjs(span.start_time).diff(
-        dayjs(referenceTime.startTime),
-        "milliseconds"
-      );
-      const timelineDisplacement =
-        (timelineStart / referenceTime.totalTime) * 100;
-      if (isTopRoot) {
-        return (
-          <Accordion
-            key={nanoid()}
-            defaultExpanded
-            className={styles.accordion}
-          >
-            <WrapperElement>
-              <Label />
-            </WrapperElement>
-            <AccordionDetails
-              className={cx(
-                styles["accordion-details"],
-                styles["root-accordion"]
-              )}
-            >
-              {renderSpan(
-                span,
-                false,
-                !span.children || span.children.length === 0
-              )}
-            </AccordionDetails>
-          </Accordion>
-        );
-      }
       const level = span.level ?? 0;
       const colorsLength = COLORS.length - 1;
       const colorIndex = level % colorsLength;
+
+      const defaultExpanded = isTopRoot
+        ? true
+        : span.children && span.children.length > 0;
+
+      const nextRender = () => {
+        if (isTopRoot) {
+          return renderSpan(
+            span,
+            false,
+            !span.children || span.children.length === 0
+          );
+        } else {
+          return span.children?.map((child) => {
+            const hasChildren = child.children && child.children.length > 0;
+            if (
+              child.source.includes("zk-client") ||
+              child.destination.includes("zk-client")
+            ) {
+              return null;
+            } else return renderSpan(child, false, !hasChildren);
+          });
+        }
+      };
+
       return (
         <Accordion
           key={nanoid()}
-          defaultExpanded={span.children && span.children.length > 0}
+          defaultExpanded={defaultExpanded}
           className={styles.accordion}
         >
           <WrapperElement>
-            <Label />
-            <p className={styles.latency}>
-              {convertNanoToMilliSeconds(span.latency, true)}
-            </p>
-            <div className={styles.timeline}>
-              <p
-                style={{
-                  width: `${timelineWidth}%`,
-                  marginLeft: `${timelineDisplacement}%`,
-                }}
-              ></p>
-            </div>
+            <AccordionLabel
+              span={span}
+              highlight={highlight}
+              isLastChild={isLastChild}
+              isTopRoot={isTopRoot}
+              setSelectedSpan={setSelectedSpan}
+            />
+            {!isTopRoot && (
+              <Fragment>
+                <SpanLatency latency={span.latency} />
+                <SpanLatencyTimeline
+                  span={span}
+                  referenceTime={referenceTime}
+                />
+              </Fragment>
+            )}
           </WrapperElement>
           <AccordionDetails
             className={styles["accordion-details"]}
             style={{ borderLeft: `1px solid ${COLORS[colorIndex]}` }}
           >
-            {span.children?.map((child) => {
-              const hasChildren = child.children && child.children.length > 0;
-              if (
-                child.source.includes("zk-client") ||
-                child.destination.includes("zk-client")
-              ) {
-                return null;
-              } else return renderSpan(child, false, !hasChildren);
-            })}
+            {nextRender()}
           </AccordionDetails>
         </Accordion>
       );
