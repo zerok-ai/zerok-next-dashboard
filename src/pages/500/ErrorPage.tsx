@@ -4,10 +4,6 @@ import UnderConstruction from "components/UnderConstruction";
 import Head from "next/head";
 
 const ErrorPage = () => {
-  return <div></div>;
-};
-
-ErrorPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
       <Head>
@@ -20,4 +16,4 @@ ErrorPage.getLayout = function getLayout(page: React.ReactNode) {
   );
 };
 
-export default Error;
+export default ErrorPage;
