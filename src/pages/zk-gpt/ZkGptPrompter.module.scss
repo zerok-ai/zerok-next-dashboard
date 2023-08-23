@@ -1,0 +1,62 @@
+@import "styles/variables.module.scss";
+.container {
+    
+}
+
+.replies-container {
+    height:55vh;
+    overflow: auto;
+    border:1px solid $grey-900;
+    border-radius: $sp-base * 2;
+    margin-bottom: $sp-base * 4;
+    padding: $sp-base * 4;
+}
+
+.query-card {
+    background-color: $grey-900;
+    border-radius: $sp-base;
+    padding:$sp-base * 4;
+   p {
+    color:$grey-50;
+   }
+
+}
+
+.form-container {
+    margin-top: $sp-base * 4;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 3;
+}
+
+.form-fields {
+    display: flex;
+    column-gap: $sp-base * 3;
+}
+
+.field-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base;
+    label {
+        color:$grey-50;
+    }
+    input {
+        width:220px;
+    }
+}
+
+.query-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base;
+    label {
+        color:$grey-50;
+    }
+}
+
+.query-input-container {
+    display: grid;
+    grid-template-columns: 1fr 0.1fr;
+    column-gap: $sp-base * 3;
+}
