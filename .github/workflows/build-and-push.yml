@@ -97,9 +97,9 @@ jobs:
       - name: Extract host name
         id: extractHostName
         run: |
-          if [ "$ENVIRONMENT" == "poc" ]; then
+          if [ $ENVIRONMENT == "poc" ]; then
             HOST_NAME="dashboard.${{ needs.init.outputs.CLUSTERNAME }}.$DOMAIN_NAME"
-          elif [ "$ENVIRONMENT" == "sandbox" ]; then
+          elif [ $ENVIRONMENT == "sandbox" ]; then
             HOST_NAME="sandbox.$DOMAIN_NAME"
           else
             echo "Invalid environment"
