@@ -109,6 +109,7 @@ export interface SpanDetail {
   timestamp?: string;
   level?: number;
   exception?: boolean;
+  is_root: boolean;
   root?: boolean;
   exceptionParent?: string;
   exceptionSpan?: string;

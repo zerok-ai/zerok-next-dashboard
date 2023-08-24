@@ -101,6 +101,17 @@ a {
   border-color: $grey-300 !important;
 }
 
+.object-key {
+  span {
+    color:$grey-100 !important;
+  }
+}
+
+.variable-value {
+  span {
+    color:$grey-50 !important;
+  }
+}
 
 // MUI overloads
 

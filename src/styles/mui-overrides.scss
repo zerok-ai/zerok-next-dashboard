@@ -1,0 +1,11 @@
+@import './variables.module.scss';
+
+// MenuItem
+.MuiMenuItem-root {
+    p,span,div,a {
+        color:$grey-50 !important;
+    }
+    &:focus {
+        background-color: $primary-800;
+    }
+}

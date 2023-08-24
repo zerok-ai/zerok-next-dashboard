@@ -62,8 +62,8 @@ jobs:
           TAG_CLUSTERNAME_CAPITAL=$(echo "$clusterName" | tr '[:lower:]' '[:upper:]')
           echo "TAG_CLUSTERNAME_CAPITAL=$TAG_CLUSTERNAME_CAPITAL" >> $GITHUB_OUTPUT
 
-      - name: Set environment, domain and host name
-        id: extractDomaindAndHost
+      - name: Set environment
+        id: extractEnvironment
         run: |
           if [ "${{ github.event.inputs.environment }}" == "poc" ]; then
             ENVIRONMENT="poc"
@@ -78,13 +78,34 @@ jobs:
             exit 1
           fi
           echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
-          echo "DOMAIN_NAME=$DOMAIN_NAME" >> $GITHUB_OUTPUT
-          echo "HOST_NAME=$HOST_NAME" >> $GITHUB_OUTPUT
 
       - name: Dump steps context
         env:
           STEPS_CONTEXT: ${{ toJson(steps) }}
         run: echo "$STEPS_CONTEXT"
+  
+  get-host:
+    needs: init
+    runs-on: zk-self-hosted
+    env:
+      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
+    environment:
+      name: ${{ needs.init.outputs.ENVIRONMENT }}
+    outputs:
+      HOST_NAME: ${{ steps.extractHostName.outputs.HOST_NAME }}
+    steps:
+      - name: Extract host name
+        id: extractHostName
+        run: |
+          if [ "$ENVIRONMENT" == "poc" ]; then
+            HOST_NAME="dashboard.${{ needs.init.outputs.CLUSTERNAME }}.$DOMAIN_NAME"
+          elif [ "$ENVIRONMENT" == "sandbox" ]; then
+            HOST_NAME="sandbox.$DOMAIN_NAME"
+          else
+            echo "Invalid environment"
+            exit 1
+          fi
+          echo "HOST_NAME=$HOST_NAME" >> $GITHUB_OUTPUT
 
   print-envs:
     needs: init
@@ -93,8 +114,7 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      DASHBOARD_HOST: ${{ needs.init.outputs.HOST_NAME }}
-      DASHBOARD_DOMAIN: ${{ needs.init.outputs.DOMAIN_NAME }}
+      HOST_NAME: ${{ needs.get-host.outputs.HOST_NAME }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -107,8 +127,7 @@ jobs:
           echo "DOCKER_REPO=$DOCKER_REPO"
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
-          echo "DASHBOARD_HOST=$DASHBOARD_HOST"
-          echo "DASHBOARD_DOMAIN=$DASHBOARD_DOMAIN"
+          echo "HOST_NAME=$HOST_NAME"
 
   ##############
   build-and-push:
@@ -118,7 +137,7 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      DASHBOARD_HOST: ${{ needs.init.outputs.HOST_NAME }}
+      HOST_NAME: ${{ needs.init.outputs.HOST_NAME }}
       DASHBOARD_DOMAIN: ${{ needs.init.outputs.DOMAIN_NAME }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
@@ -164,8 +183,7 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENV: ${{ needs.init.outputs.ENVIRONMENT }}
-      DASHBOARD_HOST: ${{ needs.init.outputs.HOST_NAME }}
-      DASHBOARD_DOMAIN: ${{ needs.init.outputs.DOMAIN_NAME }}
+      HOST_NAME: ${{ needs.get-host.outputs.HOST_NAME }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     runs-on: zk-self-hosted
@@ -196,8 +214,8 @@ jobs:
           helm --install  \
           --set=image.repository=$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME \
           --set=image.tag=$GITHUB_SHA \
-          --set=global.host=$DASHBOARD_HOST \
-          --set=global.domain=$DASHBOARD_DOMAIN \
+          --set=global.host=$HOST_NAME \
+          --set=global.domain=$DOMAIN_NAME \
           upgrade $APP_NAME \
            -f ./helm-charts/$ENV.yaml ./helm-charts/ \
            --create-namespace \
