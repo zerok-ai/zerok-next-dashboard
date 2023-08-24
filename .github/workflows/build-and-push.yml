@@ -28,6 +28,7 @@ env:
   PROJECT_ID:  ${{ vars.PROJECT_ID }}
   DOCKER_REPO:  ${{ vars.DOCKER_REPO }}
   APP_NAME:  ${{ vars.APP_NAME }}
+  DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
   BUILD_AND_PUSH: true
   DEPLOY: true
 
@@ -67,12 +68,8 @@ jobs:
         run: |
           if [ "${{ github.event.inputs.environment }}" == "poc" ]; then
             ENVIRONMENT="poc"
-            DOMAIN_NAME="getanton.com"
-            HOST_NAME="dashboard.${{ github.event.inputs.GKE_CLUSTER }}.getanton.com"
           elif [ "${{ github.event.inputs.environment }}" == "sandbox" ]; then
             ENVIRONMENT="sandbox"
-            DOMAIN_NAME="zerok.dev"
-            HOST_NAME="sandbox.zerok.dev"
           else
             echo "Invalid environment"
             exit 1
@@ -108,7 +105,7 @@ jobs:
           echo "HOST_NAME=$HOST_NAME" >> $GITHUB_OUTPUT
 
   print-envs:
-    needs: init
+    needs: [ init, get-host ]
     runs-on: zk-self-hosted
     env:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
