@@ -5,7 +5,10 @@ import ChipX from "components/themeX/ChipX";
 import { nanoid } from "nanoid";
 import dynamic from "next/dynamic";
 import { getFormattedTime } from "utils/dateHelpers";
-import { stringWithoutComments } from "utils/functions";
+import {
+  convertNanoToMilliSeconds,
+  stringWithoutComments,
+} from "utils/functions";
 import {
   type GenericObject,
   type SpanDetail,
@@ -57,9 +60,9 @@ export const renderJSON = (val: GenericObject | string) => {
 const renderJSONorString = (val: GenericObject | string | boolean) => {
   const type = typeof val;
   if (type === "string" && !(val as string).length) {
-    return `{ }`;
+    return <CodeBlock code={val as string} allowCopy color="light" />;
   }
-  if (type === "string" || type === "boolean") {
+  if (type === "boolean") {
     return (
       <CodeBlock
         code={(val as string | boolean).toString()}
@@ -69,8 +72,19 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
     );
   }
   try {
-    return <DynamicReactJson src={val as GenericObject} />;
+    const json = JSON.parse(val as string);
+    if (typeof json !== "object") {
+      throw new Error("Not an object");
+    }
+    return (
+      <DynamicReactJson
+        src={json as GenericObject}
+        displayDataTypes={false}
+        name={false}
+      />
+    );
   } catch (err) {
+    console.log({ err });
     return <CodeBlock code={val as string} allowCopy color="light" />;
   }
 };
@@ -98,7 +112,7 @@ export const DEFAULT_TABS = [
         },
         {
           label: "Latency",
-          value: `${metadata.latency.toPrecision(4)} ms`,
+          value: `${convertNanoToMilliSeconds(metadata.latency)}`,
         },
         {
           label: "Timestamp",
@@ -118,10 +132,12 @@ export const HTTP_TABS = [
   {
     label: "Request headers",
     value: "request_header",
+
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
       const KEYS = [
         {
           label: "Request headers",
+          fullWidth: true,
           value: rawData.req_headers as string,
           customRender: () => {
             return renderJSONorString(rawData.req_headers);
@@ -139,6 +155,7 @@ export const HTTP_TABS = [
         {
           label: "Request body",
           value: rawData.req_body as string,
+          fullWidth: true,
           customRender: () => {
             return renderJSONorString(rawData.req_body);
           },
@@ -148,13 +165,14 @@ export const HTTP_TABS = [
     },
   },
   {
-    label: "Response header",
-    value: "response_header",
+    label: "Response headers",
+    value: "response_headers",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
       const KEYS = [
         {
           label: "Response headers",
           value: rawData.resp_headers as string,
+          fullWidth: true,
           customRender: () => {
             return renderJSONorString(rawData.resp_headers);
           },
@@ -170,6 +188,7 @@ export const HTTP_TABS = [
       const KEYS = [
         {
           label: "Response body",
+          fullWidth: true,
           value: rawData.resp_body as string,
           customRender: () => {
             return renderJSONorString(rawData.resp_body);

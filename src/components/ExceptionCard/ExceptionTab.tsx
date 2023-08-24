@@ -14,24 +14,10 @@ interface ExceptionTabProps {
   spanKey: string;
 }
 
-const spanTransformer = (spans: SpanRawDataResponse) => {
-  const key = Object.keys(spans)[0];
-  const span = spans[key];
-  try {
-    span.req_body = JSON.parse(span.req_body as string);
-  } catch (err) {
-    console.log({ err });
-  }
-  const res: SpanRawDataResponse = {};
-  res[key] = span;
-  return res;
-};
-
 const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
   const { data: exceptionSpan, fetchData } = useFetch<SpanRawDataResponse>(
     "span_raw_data_details",
-    null,
-    spanTransformer
+    null
   );
 
   const { selectedCluster } = useSelector(clusterSelector);
