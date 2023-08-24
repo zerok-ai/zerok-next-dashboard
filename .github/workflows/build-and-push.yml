@@ -38,9 +38,7 @@ jobs:
     outputs:
       CLUSTERNAME: ${{ steps.extractClusterInfo.outputs.TAG_CLUSTERNAME }}
       VERSION: ${{ steps.extractClusterInfo.outputs.TAG_VERSION }}
-      ENVIRONMENT: ${{ steps.extractDomaindAndHost.outputs.ENVIRONMENT }}
-      HOST_NAME: ${{ steps.extractDomaindAndHost.outputs.HOST_NAME }}
-      DOMAIN_NAME: ${{ steps.extractDomaindAndHost.outputs.DOMAIN_NAME }}
+      ENVIRONMENT: ${{ steps.extractEnvironment.outputs.ENVIRONMENT }}
     steps:
       - name: Set tag envt var
         run: |
