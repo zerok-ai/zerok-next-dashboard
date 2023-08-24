@@ -137,8 +137,7 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      HOST_NAME: ${{ needs.init.outputs.HOST_NAME }}
-      DASHBOARD_DOMAIN: ${{ needs.init.outputs.DOMAIN_NAME }}
+      HOST_NAME: ${{ needs.get-host.outputs.HOST_NAME }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
