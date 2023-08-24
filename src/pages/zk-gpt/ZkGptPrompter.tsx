@@ -13,31 +13,15 @@ import PrivateRoute from "components/PrivateRoute";
 import ModalX from "components/themeX/ModalX";
 import { nanoid } from "nanoid";
 import Head from "next/head";
+import Link from "next/link";
 import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { GENERIC_AVATAR, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
-import { z } from "zod";
 
 import styles from "./ZkGptPrompter.module.scss";
-
-const gptFormSchema = z.object({
-  query: z.string().min(1, "Prompt cant be empty"),
-  issueId: z.string().min(1, "IssueId cant be empty"),
-  temperature: z
-    .number()
-    .or(z.string().regex(/\d+/).transform(Number))
-    .refine((n) => n >= 0 && n <= 1),
-  topK: z
-    .number()
-    .or(z.string().regex(/\d+/).transform(Number))
-    .refine((n) => n >= 0),
-  gptModel: z.string().min(1),
-  vectorEmbeddingModel: z.string().min(1),
-});
+import { type GptForm, gptFormSchema } from "./ZkGptPrompter.utils";
 
 export const gptFormKeys = Object.keys(gptFormSchema.shape);
-
-type GptForm = z.infer<typeof gptFormSchema>;
 
 type GptReply = GptForm & {
   answer: string | null;
@@ -127,6 +111,12 @@ const ZkGptPrompter = () => {
       userForm.reset();
     }
   };
+
+  const extras = [
+    <Link href="/zk-gpt/list" key={nanoid()}>
+      <Button>History</Button>
+    </Link>,
+  ];
   return (
     <Fragment>
       <ModalX
@@ -169,6 +159,7 @@ const ZkGptPrompter = () => {
         showRange={false}
         showRefresh={false}
         showBreadcrumb={false}
+        extras={extras}
       />
       <div className={styles.container}>
         <div className={styles["replies-container"]}>
