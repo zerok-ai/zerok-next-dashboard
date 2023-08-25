@@ -36,6 +36,8 @@ import { type GptForm, gptFormSchema } from "./ZkGptPrompter.utils";
 
 export const gptFormKeys = Object.keys(gptFormSchema.shape);
 
+const CLUSTER = "d980180f-7314-451f-8cd0-0cd4516f3a00";
+
 type GptReply = GptForm & {
   answer: string | null;
   key: string;
@@ -103,7 +105,7 @@ const ZkGptPrompter = () => {
   useEffect(() => {
     if (selectedCluster) {
       fetchIssues(
-        LIST_ISSUES_ENDPOINT.replace("{cluster_id}", selectedCluster)
+        LIST_ISSUES_ENDPOINT.replace("{cluster_id}", CLUSTER)
           .replace("{range}", DEFAULT_TIME_RANGE)
           .replace("{limit}", "100")
           .replace("{offset}", "0")
@@ -115,7 +117,7 @@ const ZkGptPrompter = () => {
     try {
       const endpoint = GPT_PROMPT_OBSERVABILITY_ENDPOINT.replace(
         "{cluster_id}",
-        selectedCluster as string
+        CLUSTER as string
       );
       const rdata = await raxios.post(endpoint, data);
       const newReplies = [...replies];
