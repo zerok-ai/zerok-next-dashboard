@@ -41,6 +41,7 @@ const JoiningSelect = ({
     }
     return list.length > 0 ? list : [{ label: "No services.", value: "" }];
   };
+  // console.log({ list });
   return (
     <div className={styles["joining-select-container"]}>
       <Button

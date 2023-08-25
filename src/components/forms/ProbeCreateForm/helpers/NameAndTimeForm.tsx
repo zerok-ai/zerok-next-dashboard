@@ -1,20 +1,25 @@
 import { FormHelperText, MenuItem, OutlinedInput, Select } from "@mui/material";
 import { nanoid } from "nanoid";
 import React from "react";
+import { type UseFormReturn } from "react-hook-form";
 
 import styles from "../ProbeCreateForm.module.scss";
-import { PROBE_TIME_RANGES } from "../ProbeCreateForm.utils";
+import {
+  PROBE_TIME_RANGES,
+  type ProbeFormType,
+} from "../ProbeCreateForm.utils";
 
 interface NameAndTimeFormProps {
-  values: {
-    title: string;
-    time: string;
-    error: boolean;
-  };
-  updateValues: (value: string, key: string) => void;
+  form: UseFormReturn<ProbeFormType, any, undefined>;
 }
 
-const NameAndTimeForm = ({ values, updateValues }: NameAndTimeFormProps) => {
+const NameAndTimeForm = ({ form }: NameAndTimeFormProps) => {
+  const {
+    setValue,
+    getValues,
+    formState: { errors },
+  } = form;
+  const { name, time } = getValues();
   return (
     <div className={styles["name-form-container"]}>
       <div className={styles["name-form-item"]}>
@@ -24,12 +29,12 @@ const NameAndTimeForm = ({ values, updateValues }: NameAndTimeFormProps) => {
             placeholder="Give a unique name to your probe"
             className={styles["name-input"]}
             id="title"
-            value={values.title}
+            value={name}
             onChange={(e) => {
-              updateValues("title", e.target.value);
+              setValue("name", e.target.value);
             }}
           />
-          {values.error && (
+          {errors.name && (
             <FormHelperText error>Probe name cannot be empty.</FormHelperText>
           )}
         </div>
@@ -40,9 +45,9 @@ const NameAndTimeForm = ({ values, updateValues }: NameAndTimeFormProps) => {
           defaultValue={PROBE_TIME_RANGES[0].value}
           className={styles["time-input"]}
           id="time"
-          value={values.time}
+          value={time}
           onChange={(e) => {
-            updateValues(e.target.value, "time");
+            setValue("time", e.target.value);
           }}
         >
           {PROBE_TIME_RANGES.map((range) => {

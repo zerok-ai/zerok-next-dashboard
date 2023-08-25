@@ -2,22 +2,19 @@ import { FormHelperText, IconButton, MenuItem, Select } from "@mui/material";
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
+import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash } from "react-icons/hi";
 import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
-  type ConditionCardType,
   getPropertyByType,
-  type GroupByType,
+  type ProbeFormType,
 } from "../ProbeCreateForm.utils";
 
 interface GroupBySelectProps {
-  cards: ConditionCardType[];
-  updateValue: (key: "service" | "property", value: string) => void;
-  values: GroupByType;
-  isFirstRow: boolean;
-  deleteGroupBy: () => void;
+  form: UseFormReturn<ProbeFormType, any, undefined>;
+  currentGroupByKey: string;
   services: Array<{
     label: string;
     value: string;
@@ -26,13 +23,16 @@ interface GroupBySelectProps {
 }
 
 const GroupBySelect = ({
-  cards,
-  updateValue,
-  values,
+  form,
   services,
-  isFirstRow,
-  deleteGroupBy,
+  currentGroupByKey,
 }: GroupBySelectProps) => {
+  const { setValue, getValues, formState } = form;
+  const { cards, groupBy } = getValues();
+  const currentGroupByIndex = groupBy.findIndex((g) => {
+    return g.key === currentGroupByKey;
+  });
+  const values = getValues(`groupBy.${currentGroupByIndex}`);
   const emptyCard =
     cards.filter((card) => card.rootProperty !== "").length === 0;
   const cardProperties = getPropertyByType(
@@ -41,23 +41,33 @@ const GroupBySelect = ({
     })?.protocol ?? null
   );
 
+  const errors = formState.errors.groupBy?.[currentGroupByIndex] ?? {};
+  const isFirstIndex = currentGroupByIndex === 0;
+
+  const updateValue = (key: "property" | "service", value: string) => {
+    setValue(`groupBy.${currentGroupByIndex}.${key}`, value);
+  };
+
+  const deleteGroupBy = () => {
+    const newGroupBy = groupBy.filter((g) => g.key !== currentGroupByKey);
+    setValue("groupBy", newGroupBy);
+  };
+
   const renderHelperText = (key: "service" | "property") => {
-    if (isFirstRow) {
+    if (currentGroupByIndex === 0) {
       return (
         <FormHelperText
           className={cx(
             styles["group-by-helper-text"],
-            values.errors.service && styles["error-text"]
+            errors[key] && styles["error-text"]
           )}
         >
-          {values.errors[key]
-            ? `Please select a ${key} to group by`
-            : `Service name`}
+          {errors[key] ? `Please select a ${key} to group by` : `Service name`}
         </FormHelperText>
       );
     } else {
       return (
-        values.errors[key] && (
+        errors[key] && (
           <FormHelperText
             className={cx(styles["group-by-helper-text"], styles["error-text"])}
           >
@@ -71,7 +81,7 @@ const GroupBySelect = ({
     <div
       className={cx(
         styles["group-by-row"],
-        isFirstRow && styles["group-by-first-row"]
+        isFirstIndex && styles["group-by-first-row"]
       )}
     >
       <div className={styles["group-by-select-container"]}>
@@ -127,7 +137,7 @@ const GroupBySelect = ({
         </Select>
         {renderHelperText("property")}
       </div>
-      {!isFirstRow && (
+      {!isFirstIndex && (
         <IconButton
           size="small"
           className={styles["delete-group-by-button"]}
