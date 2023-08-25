@@ -15,10 +15,6 @@ export type ConditionRowStrings =
 export interface GroupByType {
   service: string | null;
   property: string;
-  errors: {
-    service: boolean;
-    property: boolean;
-  };
   key: string;
 }
 export interface ConditionRowType {
@@ -27,21 +23,12 @@ export interface ConditionRowType {
   value: string;
   datatype: string;
   key: string;
-  errors: {
-    property: boolean;
-    operator: boolean;
-    value: boolean;
-    datatype: boolean;
-  };
 }
 
 export interface ConditionCardType {
   rootProperty: string;
   conditions: ConditionRowType[];
   key: string;
-  errors: {
-    rootProperty: boolean;
-  };
 }
 
 export const PROBE_TIME_RANGES = [
@@ -252,12 +239,6 @@ export const getEmptyCondition = (): ConditionRowType => {
     value: "",
     datatype: "",
     key: nanoid(),
-    errors: {
-      property: false,
-      operator: false,
-      value: false,
-      datatype: false,
-    },
   };
 };
 
@@ -265,10 +246,6 @@ export const getEmptyGroupBy = (): GroupByType => {
   return {
     service: null,
     property: "",
-    errors: {
-      service: false,
-      property: false,
-    },
     key: nanoid(),
   };
 };
@@ -278,9 +255,6 @@ export const getEmptyCard = (): ConditionCardType => {
     rootProperty: "",
     conditions: [getEmptyCondition()],
     key: nanoid(),
-    errors: {
-      rootProperty: false,
-    },
   };
 };
 
@@ -411,4 +385,10 @@ export const buildProbeBody = (
     group_by: groupByObject,
   };
   return body;
+};
+export interface ProbeFormType {
+  cards: ConditionCardType[];
+  groupBy: GroupByType[];
+  name: string;
+  time: string;
 };
