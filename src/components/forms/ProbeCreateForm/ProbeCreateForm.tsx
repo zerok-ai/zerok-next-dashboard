@@ -112,8 +112,12 @@ const ProbeCreateForm = () => {
   const { cards, groupBy } = watch();
   const onSubmit = () => {
     const body = buildProbeBody(cards, getValues("name"), groupBy);
+    const endpoint = CREATE_PROBE_ENDPOINT.replace(
+      "{cluster_id}",
+      selectedCluster as string
+    );
     raxios
-      .post(CREATE_PROBE_ENDPOINT, body)
+      .post(endpoint, body)
       .then((res) => {
         // router.push("/probes");
       })
