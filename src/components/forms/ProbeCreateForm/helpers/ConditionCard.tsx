@@ -76,8 +76,6 @@ const ConditionCard = ({
     }
   };
 
-  console.log("in card");
-
   const updateProperty = (conditionIndex: number, value: string) => {
     const datatype = properties.find((p) => p.value === value)?.type ?? "";
     setValue(

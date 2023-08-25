@@ -99,7 +99,6 @@ const ProbeCreateForm = () => {
   }, [selectedCluster]);
 
   const addCard = () => {
-    console.log("called");
     setValue("cards", [...getValues("cards"), getEmptyCard()]);
   };
 
@@ -119,13 +118,13 @@ const ProbeCreateForm = () => {
     raxios
       .post(endpoint, body)
       .then((res) => {
-        // router.push("/probes");
+        router.push("/probes");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log("in form", router);
+
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles["cards-container"]}>
