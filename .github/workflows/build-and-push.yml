@@ -175,11 +175,10 @@ jobs:
       - name: Deploy
         if: ${{ env.DEPLOY == 'true' }}
         run: |-
-          HOST_NAME = "dashboard.$CLUSTERNAME.$DOMAIN_NAME"
           helm --install  \
           --set=image.repository=$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME \
           --set=image.tag=$GITHUB_SHA \
-          --set=global.host=$HOST_NAME \
+          --set=global.host="dashboard.$CLUSTERNAME.$DOMAIN_NAME" \
           --set=global.domain=$DOMAIN_NAME \
           upgrade $APP_NAME \
            -f ./helm-charts/$ENV.yaml ./helm-charts/ \
