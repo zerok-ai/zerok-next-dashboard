@@ -16,7 +16,11 @@ import Head from "next/head";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { GPT_PROMPT_OBSERVABILITY_ENDPOINT } from "utils/gpt/endpoints";
 import { GENERIC_AVATAR, ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
+import raxios from "utils/raxios";
 
 import styles from "./ZkGptPrompter.module.scss";
 import { type GptForm, gptFormSchema } from "./ZkGptPrompter.utils";
@@ -74,6 +78,7 @@ const ZkGptPrompter = () => {
       score: 0,
     },
   });
+  const { selectedCluster } = useSelector(clusterSelector);
   const form = useForm<GptForm>({
     defaultValues: {
       query: "some query",
@@ -87,12 +92,19 @@ const ZkGptPrompter = () => {
   });
   const { handleSubmit: handleUserSubmit, register: userRegister } = userForm;
   const { handleSubmit, register } = form;
-  const onSubmit = (data: GptForm) => {
+  const onSubmit = async (data: GptForm) => {
     console.log({ data });
-    setReplies((prev) => [
-      ...prev,
-      { ...data, answer: "some answer", key: nanoid() },
-    ]);
+    setReplies((prev) => [...prev, { ...data, answer: null, key: nanoid() }]);
+    try {
+      const endpoint = GPT_PROMPT_OBSERVABILITY_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
+      );
+      const rdata = await raxios.post(endpoint, data);
+      console.log({ rdata });
+    } catch (err) {
+      console.log({ err });
+    }
     form.reset();
   };
   const deleteReply = (key: string) => {

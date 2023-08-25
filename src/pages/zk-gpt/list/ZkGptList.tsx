@@ -19,10 +19,10 @@ import { type GptReplyWithScore } from "../ZkGptPrompter.utils";
 import styles from "./ZkGptList.module.scss";
 
 const ZkGptList = () => {
-  const { data, loading, fetchData } = useFetch<GptReplyWithScore[]>("data");
+  const { data, loading } = useFetch<GptReplyWithScore[]>("data");
   const helper = createColumnHelper<GptReplyWithScore>();
   useEffect(() => {
-    fetchData("/prompts.json");
+    // fetchData("/v1/c/gpt/issues/observation");
   }, []);
   const columns = [
     helper.accessor("query", {
