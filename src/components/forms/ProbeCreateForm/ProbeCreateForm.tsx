@@ -14,6 +14,8 @@ import {
   getFormattedServiceName,
   getNamespace,
 } from "utils/functions";
+import raxios from "utils/raxios";
+import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
 // import raxios from "utils/raxios";
 import { type ServiceDetail } from "utils/types";
 
@@ -110,15 +112,14 @@ const ProbeCreateForm = () => {
   const { cards, groupBy } = watch();
   const onSubmit = () => {
     const body = buildProbeBody(cards, getValues("name"), groupBy);
-    console.log(body);
-    // raxios
-    //   .post(CREATE_PROBE_ENDPOINT, body)
-    //   .then((res) => {
-    //     router.push("/scenarios");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    raxios
+      .post(CREATE_PROBE_ENDPOINT, body)
+      .then((res) => {
+        // router.push("/probes");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   console.log("in form", router);
   return (
