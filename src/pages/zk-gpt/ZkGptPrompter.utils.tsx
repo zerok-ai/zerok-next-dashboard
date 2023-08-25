@@ -22,7 +22,10 @@ export type GptReply = GptForm & {
   key: string;
 };
 
-export type GptReplyWithScore = GptReply & {
-  score: number;
-  comments: string;
+export interface GptReplyWithScore {
+  temerature: number;
+  userScore: number | null;
+  userComments: string | null;
+  answer: string | null;
+  query: string;
 };
