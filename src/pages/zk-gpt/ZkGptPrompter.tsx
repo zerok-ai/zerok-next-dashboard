@@ -150,10 +150,7 @@ const ZkGptPrompter = () => {
       };
       try {
         await raxios.post(
-          GPT_FEEDBACK_ENDPOINT.replace(
-            "{cluster_id}",
-            selectedCluster as string
-          ),
+          GPT_FEEDBACK_ENDPOINT.replace("{cluster_id}", CLUSTER),
           body
         );
         setModalOpen(null);
