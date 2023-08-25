@@ -50,12 +50,7 @@ const EmailInput = ({ emails, addEmail, deleteEmail }: EmailInputProps) => {
             );
           })}
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit();
-          }}
-        >
+        <div>
           <input
             ref={inputRef}
             value={email}
@@ -64,13 +59,18 @@ const EmailInput = ({ emails, addEmail, deleteEmail }: EmailInputProps) => {
               setError(false);
             }}
             id="email"
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                onSubmit();
+              }
+            }}
             onBlur={() => {
               setEmail("");
               setError(false);
             }}
             className={cx(error && styles["error-text"])}
           />
-        </form>
+        </div>
       </div>
     </div>
   );
