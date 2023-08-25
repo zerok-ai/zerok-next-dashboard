@@ -38,7 +38,7 @@ jobs:
     outputs:
       CLUSTERNAME: ${{ steps.extractClusterInfo.outputs.TAG_CLUSTERNAME }}
       VERSION: ${{ steps.extractClusterInfo.outputs.TAG_VERSION }}
-      ENVIRONMENT: ${{ steps.extractEnvironment.outputs.ENVIRONMENT }}
+      ENVIRONMENT: ${{ steps.extractEnvironment.outputs.EXTRACTED_ENVIRONMENT }}
     steps:
       - name: Set tag envt var
         run: |
@@ -61,55 +61,28 @@ jobs:
           TAG_CLUSTERNAME_CAPITAL=$(echo "$clusterName" | tr '[:lower:]' '[:upper:]')
           echo "TAG_CLUSTERNAME_CAPITAL=$TAG_CLUSTERNAME_CAPITAL" >> $GITHUB_OUTPUT
 
-      - name: Set environment
+      - name: Extract environment
         id: extractEnvironment
+        env:
+          ORG_VARIABLE_NAME: ${{ format('{0}_ENV', steps.extractClusterAndVersion.outputs.TAG_CLUSTERNAME_CAPITAL) }}
+          ORG_VARIABLE: ${{ vars[format('{0}_ENV', steps.extractClusterAndVersion.outputs.TAG_CLUSTERNAME_CAPITAL)] }}
         run: |
-          if [ "${{ github.event.inputs.environment }}" == "poc" ]; then
-            ENVIRONMENT="poc"
-          elif [ "${{ github.event.inputs.environment }}" == "sandbox" ]; then
-            ENVIRONMENT="sandbox"
-          else
-            echo "Invalid environment"
-            exit 1
-          fi
-          echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
-
+          echo "EXTRACTED_ENVIRONMENT=$ORG_VARIABLE" >> $GITHUB_OUTPUT
+          echo "$ORG_VARIABLE_NAME"
+          echo "$ORG_VARIABLE"
+  
       - name: Dump steps context
         env:
           STEPS_CONTEXT: ${{ toJson(steps) }}
         run: echo "$STEPS_CONTEXT"
-  
-  get-host:
-    needs: init
-    runs-on: zk-self-hosted
-    env:
-      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-    environment:
-      name: ${{ needs.init.outputs.ENVIRONMENT }}
-    outputs:
-      HOST_NAME: ${{ steps.extractHostName.outputs.HOST_NAME }}
-    steps:
-      - name: Extract host name
-        id: extractHostName
-        run: |
-          if [ "${{ github.event.inputs.environment }}" == "poc" ]; then
-            HOST_NAME="dashboard.${{ needs.init.outputs.CLUSTERNAME }}.$DOMAIN_NAME"
-          elif [ "${{ github.event.inputs.environment }}" == "sandbox" ]; then
-            HOST_NAME="sandbox.$DOMAIN_NAME"
-          else
-            echo "Invalid environment"
-            exit 1
-          fi
-          echo "HOST_NAME=$HOST_NAME" >> $GITHUB_OUTPUT
 
   print-envs:
-    needs: [ init, get-host ]
+    needs: init
     runs-on: zk-self-hosted
     env:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      HOST_NAME: ${{ needs.get-host.outputs.HOST_NAME }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -122,7 +95,6 @@ jobs:
           echo "DOCKER_REPO=$DOCKER_REPO"
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
-          echo "HOST_NAME=$HOST_NAME"
 
   ##############
   build-and-push:
@@ -132,7 +104,6 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      HOST_NAME: ${{ needs.get-host.outputs.HOST_NAME }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -177,7 +148,6 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENV: ${{ needs.init.outputs.ENVIRONMENT }}
-      HOST_NAME: ${{ needs.get-host.outputs.HOST_NAME }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     runs-on: zk-self-hosted
@@ -205,6 +175,7 @@ jobs:
       - name: Deploy
         if: ${{ env.DEPLOY == 'true' }}
         run: |-
+          HOST_NAME = "dashboard.$CLUSTERNAME.$DOMAIN_NAME"
           helm --install  \
           --set=image.repository=$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME \
           --set=image.tag=$GITHUB_SHA \
