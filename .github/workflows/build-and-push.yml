@@ -13,10 +13,6 @@ on:
         description: 'Cluster Name'
         required: true
         default: 'devcloud01'
-      ENVIRONMENT: 
-        description: 'Environment (poc or sandbox)'
-        required: true
-        default: 'poc'
       
 env:
   NS: ${{ vars.NS }}
