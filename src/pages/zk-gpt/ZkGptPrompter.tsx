@@ -121,7 +121,7 @@ const ZkGptPrompter = () => {
       );
       const rdata = await raxios.post(endpoint, data);
       const newReplies = [...replies];
-      const index = newReplies.length - 1;
+      const index = newReplies.length > 0 ? newReplies.length - 1 : 0;
       newReplies[index].answer = rdata.data.payload.Answer;
       newReplies[index].key = rdata.data.payload.requestId;
       setReplies(newReplies);
