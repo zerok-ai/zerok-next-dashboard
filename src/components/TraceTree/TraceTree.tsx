@@ -35,11 +35,13 @@ import styles from "./TraceTree.module.scss";
 import {
   AccordionLabel,
   buildSpanTree,
+  checkForVisibleChildren,
   COLORS,
   getRootSpan,
   SpanLatency,
   SpanLatencyTimeline,
   spanTransformer,
+  TOP_BORDER_COLOR,
 } from "./TraceTree.utils";
 
 interface TraceTreeProps {
@@ -128,10 +130,10 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       isLastChild: boolean = false
     ) => {
       const exSpan = exceptionParent ? spans![exceptionParent] : null;
-      // console.log({ spans, exSpan, exceptionParent });
       const highlight = exSpan?.span_id === span.span_id;
+      const hasVisibleChildren = checkForVisibleChildren(span);
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
-        return isLastChild ? (
+        return isLastChild || !hasVisibleChildren ? (
           <div className={cx(styles["last-child"])} role="button">
             {children}
           </div>
@@ -144,16 +146,17 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           </AccordionSummary>
         );
       };
-      // const latencyTimeline = (span.latency_ns / referenceTime!.latency) * 100;
       const level = span.level ?? 0;
       const colorsLength = COLORS.length - 1;
-      const colorIndex = level % colorsLength;
+      const borderColor = isTopRoot
+        ? TOP_BORDER_COLOR
+        : COLORS[level % colorsLength];
 
       const defaultExpanded = isTopRoot
         ? true
         : span.children && span.children.length > 0;
 
-      const nextRender = () => {
+      const nextRender = (): null | React.ReactNode => {
         if (isTopRoot) {
           return renderSpan(
             span,
@@ -172,6 +175,9 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           });
         }
       };
+      if (!span.destination) {
+        return nextRender();
+      }
 
       return (
         <Accordion
@@ -180,26 +186,28 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           className={styles.accordion}
         >
           <WrapperElement>
-            <AccordionLabel
-              span={span}
-              highlight={highlight}
-              isLastChild={isLastChild}
-              isTopRoot={isTopRoot}
-              setSelectedSpan={setSelectedSpan}
-            />
-            {!isTopRoot && (
-              <Fragment>
-                <SpanLatency latency={span.latency} />
-                <SpanLatencyTimeline
-                  span={span}
-                  referenceTime={referenceTime}
-                />
-              </Fragment>
-            )}
+            <Fragment>
+              <AccordionLabel
+                span={span}
+                highlight={highlight}
+                isLastChild={isLastChild || !hasVisibleChildren}
+                isTopRoot={isTopRoot}
+                setSelectedSpan={setSelectedSpan}
+              />
+              {!isTopRoot && (
+                <Fragment>
+                  <SpanLatency latency={span.latency} />
+                  <SpanLatencyTimeline
+                    span={span}
+                    referenceTime={referenceTime}
+                  />
+                </Fragment>
+              )}
+            </Fragment>
           </WrapperElement>
           <AccordionDetails
             className={styles["accordion-details"]}
-            style={{ borderLeft: `1px solid ${COLORS[colorIndex]}` }}
+            style={{ borderLeft: `1px solid ${borderColor}` }}
           >
             {nextRender()}
           </AccordionDetails>
