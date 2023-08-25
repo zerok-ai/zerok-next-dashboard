@@ -24,7 +24,9 @@ export const buildSpanTree = (
 
   if (childrenSpan.length > 0) {
     parentSpan.children = childrenSpan;
-    ++level;
+    if (parentSpan.destination) {
+      ++level;
+    }
     childrenSpan.map((span) => {
       span.level = level;
       return buildSpanTree(spans, span, level);
@@ -35,7 +37,6 @@ export const buildSpanTree = (
 
 export const getRootSpan = (spans: SpanResponse) => {
   const keys = Object.keys(spans);
-  console.log(spans, { spans });
   const rootSpan = keys.find((key) => {
     return spans[key].is_root;
   });
@@ -100,7 +101,26 @@ export const spanTransformer = (spanData: SpanResponse) => {
   return formattedSpans;
 };
 
+export const TOP_BORDER_COLOR = "#506D86";
+
 export const COLORS = ["#1E7BC2", "#9B8AFB", "#FDB022", "#5925DC", "#39D896"];
+
+export const checkForVisibleChildren = (span: SpanDetail) => {
+  if ((span.children && span.children.length === 0) ?? !span.children) {
+    return false;
+  }
+  const children: SpanDetail[] = [];
+  const getAllChildren = (span: SpanDetail) => {
+    span.children!.forEach((child) => {
+      children.push(child);
+      if (child.children && child.children.length > 0) {
+        getAllChildren(child);
+      }
+    });
+  };
+  getAllChildren(span);
+  return children.some((child) => child.destination);
+};
 
 export const getWidthByLevel = (level: number, leaf: boolean = false) => {
   const defaultWidth = 450;
