@@ -33,8 +33,8 @@ import {
 } from "./ProbeCreateForm.utils";
 
 const formatServices = (services: ServiceDetail[]) => {
-  // const filter = services.filter((sv) => sv.protocol);
-  return services.map((sv) => {
+  const filter = services.filter((sv) => sv.protocol);
+  return filter.map((sv) => {
     return {
       label: `${getNamespace(sv.service)}/${getFormattedServiceName(
         sv.service

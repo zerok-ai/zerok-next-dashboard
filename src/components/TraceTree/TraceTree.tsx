@@ -128,7 +128,6 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       isLastChild: boolean = false
     ) => {
       const exSpan = exceptionParent ? spans![exceptionParent] : null;
-      // console.log({ spans, exSpan, exceptionParent });
       const highlight = exSpan?.span_id === span.span_id;
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
         return isLastChild ? (
@@ -144,7 +143,6 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           </AccordionSummary>
         );
       };
-      // const latencyTimeline = (span.latency_ns / referenceTime!.latency) * 100;
       const level = span.level ?? 0;
       const colorsLength = COLORS.length - 1;
       const colorIndex = level % colorsLength;
