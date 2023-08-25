@@ -29,3 +29,9 @@ export interface GptReplyWithScore {
   answer: string | null;
   query: string;
 };
+// @TODO - fix these
+const DummyPage = () => {
+  return null;
+};
+
+export default DummyPage;
