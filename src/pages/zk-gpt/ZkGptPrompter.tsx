@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoadingButton } from "@mui/lab";
 import {
   Button,
   Divider,
@@ -77,6 +78,7 @@ interface UserFormType {
 
 const ZkGptPrompter = () => {
   const [replies, setReplies] = useState<GptReply[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<string | null>(null);
   const userForm = useForm<UserFormType>({
     defaultValues: {
@@ -113,26 +115,31 @@ const ZkGptPrompter = () => {
     }
   }, [selectedCluster]);
   const onSubmit = async (data: GptForm) => {
-    setReplies((prev) => [...prev, { ...data, answer: null, key: nanoid() }]);
     try {
+      setLoading(true);
       const endpoint = GPT_PROMPT_OBSERVABILITY_ENDPOINT.replace(
         "{cluster_id}",
         CLUSTER as string
       );
       const rdata = await raxios.post(endpoint, data);
-      const newReplies = [...replies];
-      const index = newReplies.length > 0 ? newReplies.length - 1 : 0;
-      newReplies[index].answer = rdata.data.payload.Answer;
-      newReplies[index].key = rdata.data.payload.requestId;
-      setReplies(newReplies);
+      setReplies((prev) => [
+        ...prev,
+        {
+          ...data,
+          answer: rdata.data.payload.Answer,
+          key: rdata.data.payload.requestId,
+        },
+      ]);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log({ err });
     }
-    form.reset();
   };
   const deleteReply = (key: string) => {
     setReplies((prev) => prev.filter((rp) => rp.key !== key));
   };
+  console.log({ replies });
   const onUserSubmit = async (data: UserFormType) => {
     const reply = replies.find((rp) => rp.key === modalOpen);
     if (reply) {
@@ -150,7 +157,6 @@ const ZkGptPrompter = () => {
           body
         );
         setModalOpen(null);
-        userForm.reset();
       } catch (err) {
         console.log({ err });
         alert("Couldnt submit feedback, call the devs");
@@ -250,6 +256,7 @@ const ZkGptPrompter = () => {
                 </div>
               );
             })}
+          {loading && <Skeleton variant="text" width="100%" height="80px" />}
         </div>
         <Divider />
         <div>
@@ -307,9 +314,13 @@ const ZkGptPrompter = () => {
                   {...register("query")}
                   minRows={3}
                 />
-                <Button type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  variant="contained"
+                >
                   Submit
-                </Button>
+                </LoadingButton>
               </div>
             </div>
           </form>
