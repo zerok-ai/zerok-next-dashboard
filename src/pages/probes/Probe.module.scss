@@ -23,3 +23,20 @@
         color:$grey-50;
     }
 }
+
+.table {
+    height:75vh;
+    overflow-y: auto;
+    border-radius: $sp-base * 2;
+    margin-bottom: $sp-base * 6;
+}
+
+.pagination {
+    display: flex;
+    justify-content:center;
+}
+
+.probe-actions {
+    display: flex;
+    align-items: center;
+}
