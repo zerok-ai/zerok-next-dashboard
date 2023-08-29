@@ -56,3 +56,8 @@ export interface ScenarioDetail {
     workload_ids: string[];
   };
 }
+
+export interface ScenarioDetailType {
+  created_at: number;
+  scenario: ScenarioDetail;
+}
