@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { FieldErrors, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { HiOutlinePlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";

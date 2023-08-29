@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton } from "@mui/material";
 import TooltipX from "components/themeX/TooltipX";
 import { triggerRefetch } from "redux/cluster";
 import { useDispatch } from "redux/store";
