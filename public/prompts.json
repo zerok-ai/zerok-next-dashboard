@@ -1,0 +1,12 @@
+{
+    "payload": {
+    "requestId": "uuid",
+    "query": "user query",
+    "issueId": "issueId",
+    "temperature": 0.2,
+    "vectorEmbeddingModel": "default : text-embedding-ada-002",
+    "topK": "intger [>0]",
+    "gptModel": "[default : gpt-3.5-turbo]",
+    "Answer": "answer"
+    }
+}
