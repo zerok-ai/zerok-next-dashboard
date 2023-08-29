@@ -1,7 +1,11 @@
 import CryptoJS from "crypto-js";
 import { toNumber } from "lodash";
 
-import { IGNORED_SERVICES_PREFIXES, TOKEN_NAME } from "./constants";
+import {
+  CLUSTER_LOCALSTORAGE_NAME,
+  IGNORED_SERVICES_PREFIXES,
+  TOKEN_NAME,
+} from "./constants";
 import { type ServiceDetail } from "./types";
 
 export const capitalizeFirstLetter = (str: string): string => {
@@ -143,4 +147,13 @@ export const validateEmail = (email: string) => {
 
 export const formatMilliseconds = (milliseconds: number) => {
   return milliseconds.toFixed(2);
+};
+
+export const getClusterFromLocalStorage = () => {
+  return localStorage.getItem(CLUSTER_LOCALSTORAGE_NAME);
+};
+
+export const setClusterToLocalStorage = (cluster: string) => {
+  localStorage.setItem(CLUSTER_LOCALSTORAGE_NAME, cluster);
+  return true;
 };

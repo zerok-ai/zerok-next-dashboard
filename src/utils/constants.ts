@@ -43,3 +43,5 @@ export const SPAN_PROTOCOLS = ["http", "mysql"] as const;
 export const NODE_WIDTH = 220;
 
 export const DEFAULT_TIME_RANGE = "-24h";
+
+export const CLUSTER_LOCALSTORAGE_NAME = "zk-cluster";
