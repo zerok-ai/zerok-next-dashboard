@@ -9,6 +9,7 @@ import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import TableX from "components/themeX/TableX";
+import TooltipX from "components/themeX/TooltipX";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import Link from "next/link";
@@ -134,11 +135,18 @@ const Probe = () => {
         }
         let str = ``;
         sources.forEach((s, idx) => {
+          if (!s.length) {
+            return;
+          }
           str += `${getNamespace(s)}/${getFormattedServiceName(s)} ${
             idx === sources.length - 1 ? `` : `,`
           } `;
         });
-        return <span>{trimString(str, 60)}</span>;
+        return (
+          <TooltipX title={str}>
+            <span>{trimString(str, 60)}</span>
+          </TooltipX>
+        );
       },
     }),
   ];
@@ -160,7 +168,7 @@ const Probe = () => {
     <div className={styles.container}>
       <PageHeader
         title="Probes"
-        showRange
+        showRange={false}
         showRefresh
         extras={extras}
         alignExtras="right"

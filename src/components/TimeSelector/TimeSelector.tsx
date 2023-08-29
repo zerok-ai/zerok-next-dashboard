@@ -1,4 +1,4 @@
-import { MenuItem, Select } from "@mui/material";
+import { MenuItem, Select, Tooltip } from "@mui/material";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -33,36 +33,38 @@ const TimeSelector = ({ handlePush = true, onChange }: TimeSelectorProps) => {
 
   return (
     <div className={styles.container}>
-      <Select
-        value={time}
-        className={styles.select}
-        renderValue={(val) => {
-          return (
-            <span className={styles["select-value"]}>
-              <span className={styles["select-value-metric"]}>Last </span>
-              {TIME_OPTIONS.find((t) => t.value === val)?.label}
-            </span>
-          );
-        }}
-        onChange={(val) => {
-          if (val !== null && val.target && val.target.value) {
-            if (handlePush) {
-              changeTime(val.target.value);
-            } else {
-              setTime(val.target.value);
-              onChange && onChange(val.target.value);
+      <Tooltip placement="top" arrow title="Time range">
+        <Select
+          value={time}
+          className={styles.select}
+          renderValue={(val) => {
+            return (
+              <span className={styles["select-value"]}>
+                <span className={styles["select-value-metric"]}>Last </span>
+                {TIME_OPTIONS.find((t) => t.value === val)?.label}
+              </span>
+            );
+          }}
+          onChange={(val) => {
+            if (val !== null && val.target && val.target.value) {
+              if (handlePush) {
+                changeTime(val.target.value);
+              } else {
+                setTime(val.target.value);
+                onChange && onChange(val.target.value);
+              }
             }
-          }
-        }}
-      >
-        {TIME_OPTIONS.map((t) => {
-          return (
-            <MenuItem value={t.value} key={nanoid()}>
-              {t.label}
-            </MenuItem>
-          );
-        })}
-      </Select>
+          }}
+        >
+          {TIME_OPTIONS.map((t) => {
+            return (
+              <MenuItem value={t.value} key={nanoid()}>
+                {t.label}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </Tooltip>
     </div>
   );
 };

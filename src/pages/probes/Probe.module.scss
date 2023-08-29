@@ -5,14 +5,6 @@
     }
 }
 
-.scenario-title {
-    cursor: pointer;
-    &:hover {
-        color:$primary-500;
-        
-    }
-}
-
 .new-probe-btn {
     display: flex;
     align-items: center;

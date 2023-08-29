@@ -1,4 +1,10 @@
-import { IconButton, Input, MenuItem, Select } from "@mui/material";
+import {
+  FormHelperText,
+  IconButton,
+  Input,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
@@ -161,10 +167,11 @@ const ConditionCard = ({
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
           const operators = getOperatorByType(condition.datatype);
-          const valueType =
-            properties.find((p) => {
-              return p.value === condition.property;
-            })?.type ?? "input";
+          const property = properties.find((p) => {
+            return p.value === condition.property;
+          });
+          const valueType = property?.type ?? "input";
+          const helpText = property?.helpText ?? "";
           const getSelectValues = () => {
             return (
               properties.find((p) => p.value === condition.property)?.options ??
@@ -295,6 +302,9 @@ const ConditionCard = ({
                       );
                     })}
                   </Select>
+                )}
+                {helpText.length > 0 && !errors?.value && (
+                  <FormHelperText>{helpText}</FormHelperText>
                 )}
               </div>
               {index !== 0 && (

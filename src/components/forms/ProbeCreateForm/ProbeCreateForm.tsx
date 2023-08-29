@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { HiOutlinePlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -22,7 +22,6 @@ import { type ServiceDetail } from "utils/types";
 import ConditionCard from "./helpers/ConditionCard";
 import GroupBySelect from "./helpers/GroupBySelect";
 import NameAndTimeForm from "./helpers/NameAndTimeForm";
-import NotificationForm from "./helpers/NotificationForm";
 import styles from "./ProbeCreateForm.module.scss";
 import { probeFormSchema } from "./ProbeCreateForm.types";
 import {
@@ -97,6 +96,17 @@ const ProbeCreateForm = () => {
       fetchServices(endpoint);
     }
   }, [selectedCluster]);
+
+  const {
+    formState: { errors },
+  } = probeForm;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      // scroll to top smoothly
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [errors]);
 
   const addCard = () => {
     setValue("cards", [...getValues("cards"), getEmptyCard()]);
@@ -179,8 +189,8 @@ const ProbeCreateForm = () => {
         </p>
       </div>
 
-      <div className={styles.divider}></div>
-      <NotificationForm />
+      {/* <div className={styles.divider}></div>
+      <NotificationForm /> */}
       <div className={styles.divider}></div>
       <NameAndTimeForm form={probeForm} />
       <Button

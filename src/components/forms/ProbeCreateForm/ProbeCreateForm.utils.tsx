@@ -91,6 +91,7 @@ export interface ProbePropertyType {
   value: string;
   type: string;
   options?: Array<{ label: string; value: string }>;
+  helpText?: string;
 }
 
 export const HTTP_PROPERTIES: ProbePropertyType[] = [
@@ -98,42 +99,50 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     label: "Latency",
     value: "latency",
     type: "double",
+    helpText: "Latency of the service in milliseconds",
   },
   {
     label: "Source service",
     value: "source",
     type: "string",
+    helpText: "Service that initiated the request",
   },
   {
     label: "Destination service",
     value: "destination",
     type: "string",
+    helpText: "Service that received the request",
   },
   {
     label: "Request payload size",
     value: "req_body_size",
     type: "int",
+    helpText: "Size of the request payload in KB",
   },
   {
     label: "Response payload size",
     value: "resp_body_size",
     type: "int",
+    helpText: "Size of the response payload in KB",
   },
   {
     label: "Request method",
     value: "req_method",
     type: "select",
     options: HTTP_OPTIONS,
+    helpText: "HTTP method of the request",
   },
   {
     label: "Request path",
     value: "req_path",
     type: "string",
+    helpText: "Path of the request",
   },
   {
     label: "Response status",
     value: "resp_status",
     type: "int",
+    helpText: "HTTP status code of the response",
   },
 ];
 
@@ -142,11 +151,13 @@ export const SQL_PROPERTIES: ProbePropertyType[] = [
     label: "Latency",
     value: "latency",
     type: "double",
+    helpText: "Latency of the service in milliseconds",
   },
   {
     label: "Requester service",
     value: "source",
     type: "string",
+    helpText: "Service that initiated the request",
   },
   {
     label: "MYSQL request command",

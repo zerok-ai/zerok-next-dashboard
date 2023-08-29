@@ -42,6 +42,7 @@ const Home = () => {
         active={isHealthMap}
         key={nanoid()}
         onChange={toggleHealthMap}
+        title="Toggle map view"
       />
     );
   }, [isHealthMap]);
