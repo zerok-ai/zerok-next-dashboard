@@ -22,7 +22,8 @@ export const useFetch = <T>(
       if (replaceNull && rdata === null) setData([] as T);
       if (transformer != null) setData(transformer(rdata, data as T));
       else setData(rdata);
-    } catch {
+    } catch (err) {
+      console.log({ err })
       setError(true);
     } finally {
       setLoading(false);

@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, IconButton, Switch, Tooltip } from "@mui/material";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -8,14 +8,16 @@ import CustomSkeleton from "components/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
+import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
+import { HiOutlineTrash } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_COL_WIDTH, DEFAULT_TIME_RANGE } from "utils/constants";
@@ -26,6 +28,7 @@ import {
   trimString,
 } from "utils/functions";
 import raxios from "utils/raxios";
+import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
 import {
   GET_SCENARIO_DETAILS_ENDPOINT,
   LIST_SCENARIOS_ENDPOINT,
@@ -77,6 +80,11 @@ const Probe = () => {
       getData();
     }
   }, [selectedCluster, router, renderTrigger]);
+
+  const handleSwitchChange = async (scenario_id: string) => {
+    console.log("do some stuff");
+    getData();
+  };
 
   const helper = createColumnHelper<ScenarioDetail>();
 
@@ -149,6 +157,39 @@ const Probe = () => {
         );
       },
     }),
+    helper.display({
+      header: "Actions",
+      size: DEFAULT_COL_WIDTH / 2,
+      cell: (info) => {
+        return (
+          <div className={styles["probe-actions"]}>
+            <Fragment>
+              <Tooltip
+                arrow
+                placement="top"
+                title={
+                  info.row.original.enabled ? "Disable probe" : "Enable probe"
+                }
+              >
+                <Switch
+                  defaultChecked={info.row.original.enabled}
+                  color="primary"
+                  onChange={() => {
+                    handleSwitchChange(info.row.original.scenario_id);
+                  }}
+                />
+              </Tooltip>
+            </Fragment>
+            {/* Delete */}
+            <Tooltip placement="top" title="Delete probe">
+              <IconButton size="small">
+                <HiOutlineTrash />
+              </IconButton>
+            </Tooltip>
+          </div>
+        );
+      },
+    }),
   ];
 
   const table = useReactTable({
@@ -173,11 +214,16 @@ const Probe = () => {
         extras={extras}
         alignExtras="right"
       />
-      {scenarios ? (
-        <TableX table={table} data={scenarios ?? []} />
-      ) : (
-        <CustomSkeleton len={8} />
-      )}
+      <div className={styles.table}>
+        {scenarios ? (
+          <TableX table={table} data={scenarios ?? []} />
+        ) : (
+          <CustomSkeleton len={8} />
+        )}
+      </div>
+      <div className={styles.pagination}>
+        <PaginationX totalItems={100} itemsPerPage={PROBE_PAGE_SIZE} />
+      </div>
     </div>
   );
 };
