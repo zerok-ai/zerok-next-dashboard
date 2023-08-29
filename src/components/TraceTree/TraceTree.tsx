@@ -175,7 +175,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           });
         }
       };
-      if (!span.destination) {
+      if (!span.destination && !isTopRoot) {
         return nextRender();
       }
 
