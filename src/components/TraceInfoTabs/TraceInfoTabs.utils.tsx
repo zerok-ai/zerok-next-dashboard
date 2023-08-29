@@ -60,7 +60,7 @@ export const renderJSON = (val: GenericObject | string) => {
 const renderJSONorString = (val: GenericObject | string | boolean) => {
   const type = typeof val;
   if (type === "string" && !(val as string).length) {
-    return <CodeBlock code={val as string} allowCopy color="light" />;
+    return <p>No data found.</p>;
   }
   if (type === "boolean") {
     return (
@@ -81,6 +81,7 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
         src={json as GenericObject}
         displayDataTypes={false}
         name={false}
+        enableClipboard={false}
       />
     );
   } catch (err) {

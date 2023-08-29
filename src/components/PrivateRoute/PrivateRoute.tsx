@@ -34,7 +34,9 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
     // if not logged in AND no local token, push user to login screen.
     if (!token && !localToken) {
-      localStorage.setItem("redirect", router.asPath);
+      if (!router.asPath.includes("logout")) {
+        localStorage.setItem("redirect", router.asPath);
+      }
       router.push("/login");
     }
   }, [auth.isLoggedIn, auth.token, auth.loading]);
