@@ -21,7 +21,7 @@ import { HiOutlineTrash } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_COL_WIDTH, DEFAULT_TIME_RANGE } from "utils/constants";
-import { getFormattedTime } from "utils/dateHelpers";
+import { getFormattedTimeFromEpoc } from "utils/dateHelpers";
 import {
   getFormattedServiceName,
   getNamespace,
@@ -33,24 +33,38 @@ import {
   GET_SCENARIO_DETAILS_ENDPOINT,
   LIST_SCENARIOS_ENDPOINT,
 } from "utils/scenarios/endpoints";
-import { type ScenarioDetail } from "utils/scenarios/types";
+import {
+  type ScenarioDetail,
+  type ScenarioDetailType,
+} from "utils/scenarios/types";
 
 import styles from "./Probe.module.scss";
 
 const Probe = () => {
-  const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
+  const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
+  const [totalScenarios, setTotalScenarios] = useState<number>(0);
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
+  const page = router.query.page ?? "1";
+  console.log({ scenarios });
   const getData = async () => {
     try {
-      const rdata = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
+      const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
+        "{limit}",
+        PROBE_PAGE_SIZE.toString()
+      ).replace(
+        "{offset}",
+        ((parseInt(page as string) - 1) * PROBE_PAGE_SIZE).toString()
+      );
+      const rdata = await raxios.get(endpoint, {
         headers: {
           "Cluster-Id": selectedCluster as string,
         },
       });
-      const allScenarios = rdata.data.payload.scenarios as ScenarioDetail[];
-      const idList = allScenarios.map((s) => s.scenario_id);
+      setTotalScenarios(rdata.data.payload.total_rows);
+      const allScenarios = rdata.data.payload.scenarios as ScenarioDetailType[];
+      const idList = allScenarios.map((s) => s.scenario.scenario_id);
       const sdata = await raxios.get(
         GET_SCENARIO_DETAILS_ENDPOINT.replace(
           "{scenario_id_list}",
@@ -62,7 +76,7 @@ const Probe = () => {
       const scenarioMetadata = sdata.data.payload.scenarios as ScenarioDetail[];
       const finalSlist = allScenarios.map((sd) => {
         const scen = scenarioMetadata.find(
-          (s) => s.scenario_id === sd.scenario_id
+          (s) => s.scenario_id === sd.scenario.scenario_id
         );
         if (scen) {
           return { ...sd, ...scen };
@@ -86,15 +100,17 @@ const Probe = () => {
     getData();
   };
 
-  const helper = createColumnHelper<ScenarioDetail>();
+  const helper = createColumnHelper<ScenarioDetailType>();
 
   const columns = [
-    helper.accessor("scenario_title", {
+    helper.accessor("scenario.scenario_title", {
       header: "Name",
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
         return (
-          <span className={styles["scenario-title"]}>{info.getValue()}</span>
+          <span className={styles["scenario-title"]}>
+            {info.row.original.scenario.scenario_title}
+          </span>
         );
       },
     }),
@@ -110,29 +126,29 @@ const Probe = () => {
         );
       },
     }),
-    helper.accessor("first_seen", {
+    helper.accessor("created_at", {
       header: "Created on",
       size: DEFAULT_COL_WIDTH,
       cell: (info) => {
-        const { first_seen } = info.row.original;
+        const { created_at } = info.row.original;
         return (
-          <span>{first_seen ? getFormattedTime(info.getValue()) : `-`}</span>
+          <span>{created_at ? getFormattedTimeFromEpoc(created_at) : `-`}</span>
         );
       },
     }),
-    helper.accessor("sources", {
+    helper.accessor("scenario.sources", {
       header: "Impacted services",
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
-        const { sources, scenario_id } = info.row.original;
+        const { sources, scenario_id } = info.row.original.scenario;
         if (!sources) {
           const scenario = scenarios?.find(
-            (s) => s.scenario_id === scenario_id
+            (s) => s.scenario.scenario_id === scenario_id
           );
           let sourceString = ``;
-          const keys = Object.keys(scenario!.workloads);
+          const keys = Object.keys(scenario!.scenario.workloads);
           keys.forEach((k, idx) => {
-            const workload = scenario!.workloads[k];
+            const workload = scenario!.scenario.workloads[k];
             if (workload?.service === "*/*") {
               sourceString += `All ${workload?.protocol} services`;
             } else {
@@ -158,7 +174,7 @@ const Probe = () => {
       },
     }),
     helper.display({
-      header: "Actions",
+      header: "Actions (not working right now)",
       size: DEFAULT_COL_WIDTH / 2,
       cell: (info) => {
         return (
@@ -168,14 +184,17 @@ const Probe = () => {
                 arrow
                 placement="top"
                 title={
-                  info.row.original.enabled ? "Disable probe" : "Enable probe"
+                  info.row.original.scenario.enabled
+                    ? "Disable probe"
+                    : "Enable probe"
                 }
               >
                 <Switch
-                  defaultChecked={info.row.original.enabled}
+                  size="small"
+                  defaultChecked={info.row.original.scenario.enabled}
                   color="primary"
                   onChange={() => {
-                    handleSwitchChange(info.row.original.scenario_id);
+                    handleSwitchChange(info.row.original.scenario.scenario_id);
                   }}
                 />
               </Tooltip>
@@ -222,7 +241,10 @@ const Probe = () => {
         )}
       </div>
       <div className={styles.pagination}>
-        <PaginationX totalItems={100} itemsPerPage={PROBE_PAGE_SIZE} />
+        <PaginationX
+          totalItems={totalScenarios ?? PROBE_PAGE_SIZE}
+          itemsPerPage={PROBE_PAGE_SIZE}
+        />
       </div>
     </div>
   );
