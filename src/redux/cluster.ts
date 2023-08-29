@@ -2,6 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
 import { CLUSTER_STATES } from "utils/constants";
 import { CLUSTER_ENDPOINT } from "utils/endpoints";
+import {
+  getClusterFromLocalStorage,
+  setClusterToLocalStorage,
+} from "utils/functions";
 import raxios from "utils/raxios";
 
 import { type RootState } from "./store";
@@ -33,6 +37,7 @@ export const clusterSlice = createSlice({
     setSelectedCluster: (state, { payload: { id } }) => {
       state.selectedCluster = id;
       const cluster = state.clusters.find((c) => c.id === id);
+      setClusterToLocalStorage(cluster ? cluster.id : "");
       state.status = cluster ? cluster.status : "";
     },
     triggerRefetch: (state) => {
@@ -50,6 +55,19 @@ export const clusterSlice = createSlice({
         state.loading = false;
         if (action.payload.length > 0) {
           state.empty = false;
+          const localCluster = getClusterFromLocalStorage();
+          // check if the saved cluster is in the list of clusters
+          if (localCluster) {
+            const cluster = action.payload.find((c: ClusterType) => {
+              return c.id === localCluster;
+            });
+            if (cluster) {
+              state.selectedCluster = cluster.id;
+              state.status = cluster.status;
+              return;
+            }
+          }
+          // if there is no saved cluster, select the first healthy cluster
           if (action.payload.length > 1) {
             const healthyCluster = action.payload.find((c: ClusterType) => {
               return c.status === CLUSTER_STATES.HEALTHY;
