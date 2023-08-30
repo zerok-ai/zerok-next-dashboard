@@ -55,7 +55,6 @@ const Probe = () => {
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
-  console.log({ scenarios });
   const getData = async () => {
     setScenarios(null);
     try {
@@ -113,7 +112,6 @@ const Probe = () => {
         "{cluster_id}",
         selectedCluster as string
       ).replace("{scenario_id}", scenario_id);
-      console.log({ enable, endpoint });
       await raxios.put(endpoint, {
         action: enable ? "enable" : "disable",
       });
@@ -206,19 +204,22 @@ const Probe = () => {
           const keys = Object.keys(scenario!.scenario.workloads);
           keys.forEach((k, idx) => {
             const workload = scenario!.scenario.workloads[k];
+            const comma = idx === keys.length - 1 ? ` ` : `, `;
             if (workload?.service === "*/*") {
-              sourceString += `All ${workload?.protocol} services`;
+              sourceString += `All ${workload?.protocol} services${comma}`;
             } else {
-              sourceString += `${workload.service}`;
+              sourceString += `${workload.service}${comma}`;
             }
           });
           return (
-            <span
-              className={cx(info.row.original.disabled_at && styles.disabled)}
-            >
-              {" "}
-              {sourceString}{" "}
-            </span>
+            <TooltipX title={sourceString}>
+              <span
+                className={cx(info.row.original.disabled_at && styles.disabled)}
+              >
+                {" "}
+                {trimString(sourceString, 45)}{" "}
+              </span>
+            </TooltipX>
           );
         }
         let str = ``;

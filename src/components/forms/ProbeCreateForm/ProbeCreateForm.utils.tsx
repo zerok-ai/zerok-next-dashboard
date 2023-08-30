@@ -108,12 +108,6 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     helpText: "Service that initiated the request",
   },
   {
-    label: "Destination service",
-    value: "destination",
-    type: "select",
-    helpText: "Service that received the request",
-  },
-  {
     label: "Request payload size",
     value: "req_body_size",
     type: "int",
@@ -123,7 +117,7 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     label: "Response payload size",
     value: "resp_body_size",
     type: "int",
-    helpText: "Size of the response payload in KB",
+    helpText: "Size of the response payload in bytes",
   },
   {
     label: "Request method",
@@ -358,7 +352,12 @@ export const SLACK_CHANNELS: SlackChannelType[] = [
 export const buildProbeBody = (
   cards: ConditionCardType[],
   title: string,
-  groupBy: GroupByType[]
+  groupBy: GroupByType[],
+  sampling: {
+    samples: number;
+    duration: number;
+    metric: "m" | "s" | "h" | "d";
+  }
 ): ScenarioCreationType => {
   const workloads = cards.map((card): WorkloadType => {
     return {
@@ -389,11 +388,19 @@ export const buildProbeBody = (
       hash: g.property,
     };
   });
+  const rateLimit = [
+    {
+      bucket_max_size: Number(sampling.samples),
+      bucket_refill_size: Number(sampling.samples),
+      tick_duration: `${sampling.duration}${sampling.metric}`,
+    },
+  ];
   const body: ScenarioCreationType = {
     scenario_title: title,
     scenario_type: "USER",
     workloads,
     group_by: groupByObject,
+    rate_limit: rateLimit,
   };
   return body;
 };
@@ -402,4 +409,9 @@ export interface ProbeFormType {
   groupBy: GroupByType[];
   name: string;
   time: string;
+  sampling: {
+    samples: number;
+    duration: number;
+    metric: "m" | "s" | "h" | "d";
+  };
 };

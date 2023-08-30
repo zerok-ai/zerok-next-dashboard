@@ -29,8 +29,6 @@ const TableX = <T extends object>({
             return (
               <tr key={gr.id}>
                 {gr.headers.map((header) => {
-                  const width = header.getSize();
-                  console.log({ width });
                   return (
                     <th
                       key={header.id}

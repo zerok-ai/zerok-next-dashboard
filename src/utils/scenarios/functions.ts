@@ -14,6 +14,5 @@ export const getScenarioString = (scenario: ScenarioDetail) => {
     });
     if (index !== Object.keys(workloads).length - 1) workLoadString += "AND ";
   });
-  console.log({ workLoadString });
   return workLoadString;
 };

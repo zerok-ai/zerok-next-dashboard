@@ -315,3 +315,15 @@
 .error-text {
     color:$error-500 !important;
 }
+
+
+.sampling-container {
+    color:$grey-50;
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: flex-start;
+}
+
+.sampling-select {
+    width:100px;
+}
