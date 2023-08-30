@@ -5,6 +5,12 @@
     }
 }
 
+.scenario-title-container {
+    display: flex;
+    align-items: center;justify-content: space-between;
+    column-gap: $sp-base * 3;
+}
+
 .new-probe-btn {
     display: flex;
     align-items: center;
@@ -39,4 +45,8 @@
 .probe-actions {
     display: flex;
     align-items: center;
+}
+
+.disabled {
+    color:$grey-200 !important;
 }

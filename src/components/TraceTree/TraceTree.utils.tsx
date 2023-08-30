@@ -1,5 +1,6 @@
 import cx from "classnames";
 import dayjs from "dayjs";
+import { formatDuration } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds } from "utils/functions";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
@@ -171,7 +172,9 @@ export const AccordionLabel = ({
 
 export const SpanLatency = ({ latency }: { latency: number }) => {
   return (
-    <p className={styles.latency}>{convertNanoToMilliSeconds(latency, true)}</p>
+    <p className={styles.latency}>
+      {formatDuration(convertNanoToMilliSeconds(latency, false) as number)}
+    </p>
   );
 };
 

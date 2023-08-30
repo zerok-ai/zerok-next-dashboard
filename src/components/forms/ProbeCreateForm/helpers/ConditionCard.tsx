@@ -173,10 +173,18 @@ const ConditionCard = ({
           const valueType = property?.type ?? "input";
           const helpText = property?.helpText ?? "";
           const getSelectValues = () => {
-            return (
-              properties.find((p) => p.value === condition.property)?.options ??
-              []
-            );
+            if (
+              property?.value === "source" ||
+              property?.value === "destination"
+            ) {
+              return services.map((s) => {
+                return {
+                  label: s.label,
+                  value: s.value,
+                };
+              });
+            }
+            return property?.options ?? [];
           };
           const errors = getConditionErrors(index);
           return (

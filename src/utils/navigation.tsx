@@ -46,12 +46,12 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
 ];
 
 export const NAV_LINKS_2: DrawerNavItemType[] = [
-  {
-    icon: `${ICONS.data}`,
-    label: "Settings",
-    path: "/api-keys",
-    type: "single",
-  },
+  // {
+  //   icon: `${ICONS.data}`,
+  //   label: "Settings",
+  //   path: "/api-keys",
+  //   type: "single",
+  // },
 ];
 
 export const PATH_TO_LABEL = {
