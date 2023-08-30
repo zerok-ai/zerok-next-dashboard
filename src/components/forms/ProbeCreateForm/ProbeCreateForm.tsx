@@ -22,6 +22,7 @@ import { type ServiceDetail } from "utils/types";
 import ConditionCard from "./helpers/ConditionCard";
 import GroupBySelect from "./helpers/GroupBySelect";
 import NameAndTimeForm from "./helpers/NameAndTimeForm";
+import Sampling from "./helpers/Sampling";
 import styles from "./ProbeCreateForm.module.scss";
 import { probeFormSchema } from "./ProbeCreateForm.types";
 import {
@@ -76,6 +77,11 @@ const ProbeCreateForm = () => {
       ],
       name: "",
       time: DEFAULT_TIME_RANGE,
+      sampling: {
+        samples: 10,
+        duration: 1,
+        metric: "m",
+      },
     },
   });
   const { setValue, watch, getValues, handleSubmit } = probeForm;
@@ -118,9 +124,9 @@ const ProbeCreateForm = () => {
 
   const formattedServices = formatServices(services ?? []);
 
-  const { cards, groupBy } = watch();
+  const { cards, groupBy, sampling } = watch();
   const onSubmit = () => {
-    const body = buildProbeBody(cards, getValues("name"), groupBy);
+    const body = buildProbeBody(cards, getValues("name"), groupBy, sampling);
     const endpoint = CREATE_PROBE_ENDPOINT.replace(
       "{cluster_id}",
       selectedCluster as string
@@ -191,6 +197,8 @@ const ProbeCreateForm = () => {
 
       {/* <div className={styles.divider}></div>
       <NotificationForm /> */}
+      <div className={styles.divider}></div>
+      <Sampling form={probeForm} />
       <div className={styles.divider}></div>
       <NameAndTimeForm form={probeForm} />
       <Button
