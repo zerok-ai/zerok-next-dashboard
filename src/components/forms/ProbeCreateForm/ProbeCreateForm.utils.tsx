@@ -104,13 +104,13 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
   {
     label: "Source service",
     value: "source",
-    type: "string",
+    type: "select",
     helpText: "Service that initiated the request",
   },
   {
     label: "Destination service",
     value: "destination",
-    type: "string",
+    type: "select",
     helpText: "Service that received the request",
   },
   {

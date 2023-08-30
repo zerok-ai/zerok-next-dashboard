@@ -9,3 +9,7 @@ export const GET_SCENARIO_TRACES_ENDPOINT = `/v1/c/{cluster_id}/axon/scenario/{s
 export const GET_TRACE_GROUPS_ENDPOINT = `/v1/c/{cluster_id}/axon/issue?limit={limit}&offset={offset}&st={range}&scenario_id_list={scenario_id}`;
 
 export const CREATE_PROBE_ENDPOINT = `/v1/u/cluster/{cluster_id}/scenario`;
+
+export const UPDATE_PROBE_STATUS_ENDPOINT = `/v1/u/cluster/{cluster_id}/scenario/{scenario_id}/status`;
+
+export const DELETE_PROBE_ENDPOINT = `/v1/u/cluster/{cluster_id}/scenario/{scenario_id}`;

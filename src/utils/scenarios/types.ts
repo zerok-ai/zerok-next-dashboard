@@ -59,5 +59,6 @@ export interface ScenarioDetail {
 
 export interface ScenarioDetailType {
   created_at: number;
+  disabled_at?: number;
   scenario: ScenarioDetail;
 }

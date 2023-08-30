@@ -4,10 +4,12 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import cx from "classnames";
 import CustomSkeleton from "components/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
+import ChipX from "components/themeX/ChipX";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
@@ -21,7 +23,10 @@ import { HiOutlineTrash } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_COL_WIDTH, DEFAULT_TIME_RANGE } from "utils/constants";
-import { getFormattedTimeFromEpoc } from "utils/dateHelpers";
+import {
+  getFormattedTimeFromEpoc,
+  getRelativeTimeFromEpoc,
+} from "utils/dateHelpers";
 import {
   getFormattedServiceName,
   getNamespace,
@@ -30,9 +35,12 @@ import {
 import raxios from "utils/raxios";
 import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
 import {
+  DELETE_PROBE_ENDPOINT,
   GET_SCENARIO_DETAILS_ENDPOINT,
   LIST_SCENARIOS_ENDPOINT,
+  UPDATE_PROBE_STATUS_ENDPOINT,
 } from "utils/scenarios/endpoints";
+import { getScenarioString } from "utils/scenarios/functions";
 import {
   type ScenarioDetail,
   type ScenarioDetailType,
@@ -49,6 +57,7 @@ const Probe = () => {
   const page = router.query.page ?? "1";
   console.log({ scenarios });
   const getData = async () => {
+    setScenarios(null);
     try {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
         "{limit}",
@@ -83,6 +92,9 @@ const Probe = () => {
         }
         return sd;
       });
+      finalSlist.sort((a, b) => {
+        return a.disabled_at ? 1 : -1;
+      });
       setScenarios(finalSlist);
     } catch (err) {
       console.log({ err });
@@ -95,9 +107,33 @@ const Probe = () => {
     }
   }, [selectedCluster, router, renderTrigger]);
 
-  const handleSwitchChange = async (scenario_id: string) => {
-    console.log("do some stuff");
-    getData();
+  const handleSwitchChange = async (scenario_id: string, enable: boolean) => {
+    try {
+      const endpoint = UPDATE_PROBE_STATUS_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
+      ).replace("{scenario_id}", scenario_id);
+      console.log({ enable, endpoint });
+      await raxios.put(endpoint, {
+        action: enable ? "enable" : "disable",
+      });
+      getData();
+    } catch (err) {
+      console.log({ err });
+    }
+  };
+
+  const handleDelete = (scenario_id: string) => {
+    try {
+      const endpoint = DELETE_PROBE_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
+      ).replace("{scenario_id}", scenario_id);
+      raxios.delete(endpoint);
+      getData();
+    } catch (err) {
+      console.log({ err });
+    }
   };
 
   const helper = createColumnHelper<ScenarioDetailType>();
@@ -105,34 +141,55 @@ const Probe = () => {
   const columns = [
     helper.accessor("scenario.scenario_title", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 3,
+      size: DEFAULT_COL_WIDTH * 5,
       cell: (info) => {
+        const ruleString = getScenarioString(info.row.original.scenario);
         return (
-          <span className={styles["scenario-title"]}>
-            {info.row.original.scenario.scenario_title}
-          </span>
+          <div className={styles["scenario-title-container"]}>
+            <TooltipX title={ruleString}>
+              <span
+                className={cx(
+                  styles["scenario-title"],
+                  info.row.original.disabled_at && styles.disabled
+                )}
+              >
+                {info.row.original.scenario.scenario_title}
+              </span>
+            </TooltipX>
+            {info.row.original.disabled_at && <ChipX label="Disabled" />}
+          </div>
         );
       },
     }),
     helper.display({
       header: "Created by",
-      size: DEFAULT_COL_WIDTH / 2,
-      cell: () => {
+      size: DEFAULT_COL_WIDTH,
+      cell: (info) => {
         return (
           <div className={styles.source}>
             <img src={`/images/brand/zerok_source_logo.svg`} alt="zerok_logo" />
-            <span>ZeroK</span>
+            <span
+              className={cx(info.row.original.disabled_at && styles.disabled)}
+            >
+              ZeroK
+            </span>
           </div>
         );
       },
     }),
     helper.accessor("created_at", {
-      header: "Created on",
-      size: DEFAULT_COL_WIDTH,
+      header: "Created",
+      size: DEFAULT_COL_WIDTH * 1.5,
       cell: (info) => {
         const { created_at } = info.row.original;
         return (
-          <span>{created_at ? getFormattedTimeFromEpoc(created_at) : `-`}</span>
+          <TooltipX title={getFormattedTimeFromEpoc(created_at) as string}>
+            <span
+              className={cx(info.row.original.disabled_at && styles.disabled)}
+            >
+              {created_at ? getRelativeTimeFromEpoc(created_at) : `-`}
+            </span>
+          </TooltipX>
         );
       },
     }),
@@ -155,7 +212,14 @@ const Probe = () => {
               sourceString += `${workload.service}`;
             }
           });
-          return <span> {sourceString} </span>;
+          return (
+            <span
+              className={cx(info.row.original.disabled_at && styles.disabled)}
+            >
+              {" "}
+              {sourceString}{" "}
+            </span>
+          );
         }
         let str = ``;
         sources.forEach((s, idx) => {
@@ -168,14 +232,18 @@ const Probe = () => {
         });
         return (
           <TooltipX title={str}>
-            <span>{trimString(str, 60)}</span>
+            <span
+              className={cx(info.row.original.disabled_at && styles.disabled)}
+            >
+              {trimString(str, 60)}
+            </span>
           </TooltipX>
         );
       },
     }),
     helper.display({
-      header: "Actions (not working right now)",
-      size: DEFAULT_COL_WIDTH / 2,
+      header: "Actions",
+      size: 70,
       cell: (info) => {
         return (
           <div className={styles["probe-actions"]}>
@@ -184,23 +252,32 @@ const Probe = () => {
                 arrow
                 placement="top"
                 title={
-                  info.row.original.scenario.enabled
+                  !info.row.original.disabled_at
                     ? "Disable probe"
                     : "Enable probe"
                 }
               >
                 <Switch
                   size="small"
-                  defaultChecked={info.row.original.scenario.enabled}
+                  defaultChecked={!info.row.original.disabled_at}
                   color="primary"
                   onChange={() => {
-                    handleSwitchChange(info.row.original.scenario.scenario_id);
+                    handleSwitchChange(
+                      info.row.original.scenario.scenario_id,
+                      !!info.row.original.disabled_at
+                    );
                   }}
                 />
               </Tooltip>
             </Fragment>
             {/* Delete */}
-            <Tooltip placement="top" title="Delete probe">
+            <Tooltip
+              placement="top"
+              title="Delete probe"
+              onClick={() => {
+                handleDelete(info.row.original.scenario.scenario_id);
+              }}
+            >
               <IconButton size="small">
                 <HiOutlineTrash />
               </IconButton>
