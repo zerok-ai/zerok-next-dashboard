@@ -56,7 +56,7 @@ const Probe = () => {
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
   const getData = async () => {
-    setScenarios(null);
+    // setScenarios(null);
     try {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
         "{limit}",
@@ -91,9 +91,9 @@ const Probe = () => {
         }
         return sd;
       });
-      finalSlist.sort((a, b) => {
-        return a.disabled_at ? 1 : -1;
-      });
+      // finalSlist.sort((a, b) => {
+      //   return a.disabled_at ? 1 : -1;
+      // });
       setScenarios(finalSlist);
     } catch (err) {
       console.log({ err });

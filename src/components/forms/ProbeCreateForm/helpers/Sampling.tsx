@@ -37,7 +37,6 @@ const Sampling = ({ form }: SamplingProps) => {
           <MenuItem value="d">days</MenuItem>
         </Select>
       </div>
-      .
     </div>
   );
 };

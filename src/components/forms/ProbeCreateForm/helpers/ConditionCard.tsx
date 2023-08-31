@@ -224,6 +224,9 @@ const ConditionCard = ({
                   }}
                 >
                   {properties.map((prt) => {
+                    if (prt.groupByOnly) {
+                      return null;
+                    }
                     return (
                       <MenuItem
                         className={styles["menu-item"]}

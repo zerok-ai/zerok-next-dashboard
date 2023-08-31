@@ -84,9 +84,9 @@ export default function Checkbox(theme: Theme) {
           <Box
             className="icon"
             sx={{
-              width: 16,
-              height: 16,
-              border: "1px solid",
+              width: 32,
+              height: 32,
+              border: `1px solid`,
               borderColor: "inherit",
               borderRadius: 0.25,
             }}
@@ -98,16 +98,20 @@ export default function Checkbox(theme: Theme) {
             sx={{
               width: 16,
               height: 16,
-              border: "1px solid",
-              borderColor: "inherit",
               borderRadius: 0.25,
               position: "relative",
-              background: "#fff",
             }}
           >
             <CheckSquareFilled
               className="filled"
-              style={{ position: "absolute" }}
+              style={{
+                width: 16,
+                height: 16,
+                position: "absolute",
+                marginTop: 2,
+                backgroundColor: `#fff`,
+                border: "none",
+              }}
             />
           </Box>
         ),
@@ -118,7 +122,6 @@ export default function Checkbox(theme: Theme) {
               width: 16,
               height: 16,
               border: "1px solid",
-              borderColor: "inherit",
               borderRadius: 0.25,
               position: "relative",
             }}

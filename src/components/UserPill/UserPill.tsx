@@ -1,4 +1,4 @@
-import { Divider, Menu, MenuItem } from "@mui/material";
+import { ClickAwayListener, Divider, Menu, MenuItem } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { HiOutlineLogout } from "react-icons/hi";
@@ -18,14 +18,13 @@ const UserPill = () => {
   const closeMenu = () => {
     setAnchorEl(null);
   };
+  console.log({ anchorEl });
   return (
-    <div
-      className={styles.container}
-      role="button"
-      onMouseOver={handleMouseOver}
-    >
-      <HiOutlineUser className={styles.icon} />
-      Setting
+    <div>
+      <div className={styles.container} role="button" onClick={handleMouseOver}>
+        <HiOutlineUser className={styles.icon} />
+        Settings
+      </div>
       <Menu
         open={!!anchorEl}
         anchorEl={anchorEl}
@@ -35,7 +34,6 @@ const UserPill = () => {
         style={{
           zIndex: 1,
         }}
-        // hideBackdrop
       >
         <Link href="/api-keys">
           <MenuItem className={styles["menu-item"]}>
