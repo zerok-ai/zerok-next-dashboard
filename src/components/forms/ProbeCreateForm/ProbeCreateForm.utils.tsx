@@ -92,6 +92,7 @@ export interface ProbePropertyType {
   type: string;
   options?: Array<{ label: string; value: string }>;
   helpText?: string;
+  groupByOnly?: boolean;
 }
 
 export const HTTP_PROPERTIES: ProbePropertyType[] = [
@@ -108,10 +109,17 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     helpText: "Service that initiated the request",
   },
   {
+    label: "Destination service",
+    value: "destination",
+    type: "select",
+    helpText: "Service that received the request",
+    groupByOnly: true,
+  },
+  {
     label: "Request payload size",
     value: "req_body_size",
     type: "int",
-    helpText: "Size of the request payload in KB",
+    helpText: "Size of the request payload in bytes",
   },
   {
     label: "Response payload size",
@@ -153,6 +161,7 @@ export const SQL_PROPERTIES: ProbePropertyType[] = [
     type: "string",
     helpText: "Service that initiated the request",
   },
+
   {
     label: "MYSQL request command",
     value: "req_cmd",
