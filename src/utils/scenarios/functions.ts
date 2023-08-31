@@ -4,8 +4,12 @@ export const getScenarioString = (scenario: ScenarioDetail) => {
   const { workloads } = scenario;
   let workLoadString = "";
   Object.keys(workloads).forEach((key, index) => {
-    const { rule, service } = workloads[key];
-    workLoadString += `${service} where `;
+    const { rule, service, protocol } = workloads[key];
+    if (service === "*/*") {
+      workLoadString += `All ${protocol} services where `;
+    } else {
+      workLoadString += `${service} where `;
+    }
     rule.rules.forEach((r, idx) => {
       const { operator, field, value } = r;
       workLoadString += `${field} ${operator} ${value} ${

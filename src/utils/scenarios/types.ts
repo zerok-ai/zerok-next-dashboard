@@ -15,7 +15,7 @@ export interface RuleGroupType {
 export interface WorkloadType {
   service: string;
   trace_role: "server";
-  protocol: "HTTP" | "MYSQL";
+  protocol: string;
   rule: RuleGroupType;
 }
 

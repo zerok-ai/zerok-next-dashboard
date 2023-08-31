@@ -73,7 +73,6 @@ const IssuesPage = () => {
     query.services && query.services?.length > 0
       ? decodeURIComponent(query.services as string).split(",")
       : null;
-  console.log({ services });
 
   const columns = useMemo(() => {
     return getIssueColumns();

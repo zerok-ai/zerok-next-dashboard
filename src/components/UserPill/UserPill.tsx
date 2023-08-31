@@ -18,7 +18,6 @@ const UserPill = () => {
   const closeMenu = () => {
     setAnchorEl(null);
   };
-  console.log({ anchorEl });
   return (
     <div>
       <div className={styles.container} role="button" onClick={handleMouseOver}>

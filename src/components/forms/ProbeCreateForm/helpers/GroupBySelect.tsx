@@ -19,6 +19,7 @@ interface GroupBySelectProps {
     label: string;
     value: string;
     protocol: SPAN_PROTOCOLS_TYPE;
+    rootOnly?: boolean;
   }>;
 }
 
@@ -97,13 +98,15 @@ const GroupBySelect = ({
           }}
         >
           {cards.map((card, idx) => {
+            const service = services.find((s) => s.value === card.rootProperty);
+            const label = service?.label;
             return (
               <MenuItem
                 value={card.rootProperty}
                 key={card.key}
                 className={styles["menu-item"]}
               >
-                {card.rootProperty}
+                {label}
               </MenuItem>
             );
           })}

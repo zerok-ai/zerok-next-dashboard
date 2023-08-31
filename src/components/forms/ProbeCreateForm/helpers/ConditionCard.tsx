@@ -28,6 +28,7 @@ interface ConditionCardProps {
     label: string;
     value: string;
     protocol: SPAN_PROTOCOLS_TYPE;
+    rootOnly?: boolean;
   }>;
   includeAnd: boolean;
   form: UseFormReturn<ProbeFormType, any, undefined>;
@@ -150,7 +151,10 @@ const ConditionCard = ({
             color="blue"
             value={rootProperty.length ? rootProperty : "Service"}
             onSelect={(value) => {
+              const service = services.find((s) => s.value === value);
+              const protocol = service?.protocol ?? "";
               setValue(`cards.${currentCardIndex}.rootProperty`, value);
+              setValue(`cards.${currentCardIndex}.protocol`, protocol);
             }}
           />
         </div>
@@ -174,8 +178,8 @@ const ConditionCard = ({
           const helpText = property?.helpText ?? "";
           const getSelectValues = () => {
             if (
-              property?.value === "source" ||
-              property?.value === "destination"
+              property?.value === "destination" ||
+              property?.value === "source"
             ) {
               return services.map((s) => {
                 return {
@@ -302,6 +306,10 @@ const ConditionCard = ({
                     }}
                   >
                     {getSelectValues().map((v) => {
+                      console.log({ v });
+                      if (v.value.includes("*/*")) {
+                        return null;
+                      }
                       return (
                         <MenuItem
                           value={v.value}

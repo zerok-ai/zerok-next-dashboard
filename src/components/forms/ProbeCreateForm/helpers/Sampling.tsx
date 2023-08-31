@@ -18,11 +18,17 @@ const Sampling = ({ form }: SamplingProps) => {
     <div className={styles["sampling-container"]}>
       Collect{" "}
       <div className={cx(errors.sampling?.samples && styles["error-input"])}>
-        <Input {...form.register("sampling.samples")} type="number" />
+        <Input
+          {...form.register("sampling.samples", { valueAsNumber: true })}
+          type="number"
+        />
       </div>{" "}
       samples per{" "}
       <div className={cx(errors.sampling?.duration && styles["error-input"])}>
-        <Input {...form.register("sampling.duration")} type="number" />{" "}
+        <Input
+          {...form.register("sampling.duration", { valueAsNumber: true })}
+          type="number"
+        />{" "}
       </div>
       <div className={cx(errors.sampling?.metric && styles["error-input"])}>
         <Select
