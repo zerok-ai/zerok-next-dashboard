@@ -1,5 +1,7 @@
 import cx from "classnames";
+import TooltipX from "components/themeX/TooltipX";
 import dayjs from "dayjs";
+import { formatDuration } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds } from "utils/functions";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
@@ -122,8 +124,12 @@ export const checkForVisibleChildren = (span: SpanDetail) => {
   return children.some((child) => child.destination);
 };
 
-export const getWidthByLevel = (level: number, leaf: boolean = false) => {
-  const defaultWidth = 450;
+export const getWidthByLevel = (
+  level: number,
+  leaf: boolean = false,
+  expand = true
+) => {
+  const defaultWidth = expand ? 800 : 450;
   const width = defaultWidth - level * 9;
   return leaf ? `${width + 8}px` : `${width}px`;
 };
@@ -134,6 +140,7 @@ interface AccordionLabelProps {
   highlight: boolean;
   isTopRoot: boolean;
   setSelectedSpan: (spanId: string) => void;
+  isModalOpen: boolean;
 }
 
 export const AccordionLabel = ({
@@ -142,28 +149,33 @@ export const AccordionLabel = ({
   isTopRoot,
   setSelectedSpan,
   highlight,
+  isModalOpen,
 }: AccordionLabelProps) => {
+  const name = isTopRoot ? span.source : span.destination;
+  const service = name.includes("/") ? name.split("/")[1] : name;
   return (
     <div className={styles["accordion-summary-content"]}>
       <p
         className={styles["accordion-label-container"]}
         style={{
-          width: getWidthByLevel(span.level ?? 0, isLastChild),
+          width: getWidthByLevel(span.level ?? 0, isLastChild, isModalOpen),
         }}
       >
-        <span
-          className={cx(
-            styles["accordion-label"],
-            highlight && styles["exception-parent"]
-          )}
-          role="button"
-          id="span-label"
-          onClick={() => {
-            setSelectedSpan(span.span_id);
-          }}
-        >
-          {isTopRoot ? span.source : span.destination}
-        </span>
+        <TooltipX title={name}>
+          <span
+            className={cx(
+              styles["accordion-label"],
+              highlight && styles["exception-parent"]
+            )}
+            role="button"
+            id="span-label"
+            onClick={() => {
+              setSelectedSpan(span.span_id);
+            }}
+          >
+            {service}
+          </span>
+        </TooltipX>
       </p>
     </div>
   );
@@ -171,7 +183,9 @@ export const AccordionLabel = ({
 
 export const SpanLatency = ({ latency }: { latency: number }) => {
   return (
-    <p className={styles.latency}>{convertNanoToMilliSeconds(latency, true)}</p>
+    <p className={styles.latency}>
+      {formatDuration(convertNanoToMilliSeconds(latency, false) as number)}
+    </p>
   );
 };
 

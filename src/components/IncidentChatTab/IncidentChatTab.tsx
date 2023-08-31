@@ -1,8 +1,11 @@
+import { IconButton } from "@mui/material";
 import AIChatBox from "components/AIChatBox";
 import { useFetch } from "hooks/useFetch";
+import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { memo, useEffect, useRef, useState } from "react";
+import { Fragment, memo, useEffect, useRef, useState } from "react";
+import { HiOutlineBugAnt } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
@@ -26,6 +29,7 @@ interface IncidentChatData {
 
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
+  const [enableChat, toggleEnableChat] = useToggle(false);
   const router = useRouter();
   const {
     // issue: scenarioId,
@@ -72,6 +76,9 @@ const IncidentChatTab = () => {
   }, [selectedCluster, incidentId]);
 
   const handleInputSubmit = async (val: string) => {
+    if (!enableChat) {
+      return;
+    }
     if (val.includes(CHAT_TAG_CHARACTER)) {
       setQueries((prev) => [
         ...prev,
@@ -127,16 +134,12 @@ const IncidentChatTab = () => {
       }
     }
   };
-  return (
-    <div className={styles.container}>
-      <div className={styles["chat-box-container"]}>
-        <div className={styles["text-container"]}>
-          {/* <AIChatBox
-            text={scenarioData}
-            animate={queries.length === 0}
-            blink={false}
-            header="Scenario summary"
-          /> */}
+  const renderChat = () => {
+    if (!enableChat) {
+      return null;
+    } else {
+      return (
+        <Fragment>
           {(issueData ?? issueLoading) && (
             <AIChatBox
               text={issueData}
@@ -181,10 +184,32 @@ const IncidentChatTab = () => {
             })}
             <div ref={bottomRef}></div>
           </div>
+        </Fragment>
+      );
+    }
+  };
+  return (
+    <div className={styles.container}>
+      <div className={styles["chat-box-container"]}>
+        <IconButton size="small" onClick={toggleEnableChat}>
+          <HiOutlineBugAnt />
+        </IconButton>
+        <div className={styles["text-container"]}>
+          {!enableChat && (
+            <AIChatBox
+              text={
+                "This functionality is disabled for your organization. Please contact ZeroK support to enable this."
+              }
+              animate={queries.length === 0}
+              blink={false}
+              header="Scenario summary"
+            />
+          )}
+          {renderChat()}
         </div>
       </div>
       <div className={styles["chat-input-container"]}>
-        <UserInputField onSubmit={handleInputSubmit} />
+        <UserInputField onSubmit={handleInputSubmit} disabled={!enableChat} />
       </div>
     </div>
   );

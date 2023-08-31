@@ -45,7 +45,7 @@ const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
     );
   }
   const exceptionData = exceptionSpan[Object.keys(exceptionSpan)[0]];
-  const data = exceptionData.req_body as string;
+  const data = exceptionData?.req_body as string;
   if (!data) {
     return (
       <div className={styles.container}>

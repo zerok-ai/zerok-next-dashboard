@@ -154,6 +154,10 @@ a {
     border:5px solid $bg-dark;
   }
 
+  ::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
+
   // input number, hide the arrows
   input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

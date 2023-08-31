@@ -10,6 +10,7 @@ import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import queryString from "query-string";
 import { Fragment, useEffect, useMemo } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -38,76 +39,32 @@ const IssuesPage = () => {
     setData,
   } = useFetch<IssuesDataType>("", null);
 
-  const { fetchData: fetchServices } = useFetch<ServiceDetail[]>(
-    "results",
-    null,
-    filterServices
-  );
-
   const router = useRouter();
 
   const { query } = router;
   const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
 
-  // const getData = async () => {
-  //   try {
-  //     const listScenariosResponse = await raxios.get(LIST_SCENARIOS_ENDPOINT, {
-  //       headers: {
-  //         "Cluster-Id": selectedCluster,
-  //       },
-  //     });
-  //     const listScenarios: ScenarioDetail[] =
-  //       listScenariosResponse.data.payload.scenarios;
-  //     const scenarioIDs = listScenarios.map((sc) => sc.scenario_id);
-  //     const scenarioDetailEndpoint = GET_SCENARIO_DETAILS_ENDPOINT.replace(
-  //       "{cluster_id}",
-  //       selectedCluster as string
-  //     )
-  //       .replace("{scenario_id_list}", scenarioIDs.join(","))
-  //       .replace("{range}", range as string);
-  //     const scenarioDetails = (await raxios.get(scenarioDetailEndpoint)).data
-  //       .payload.scenarios;
-  //     const scenarioDetailsData: ScenarioDetail[] = listScenarios.map(
-  //       (sc: ScenarioDetail) => {
-  //         const sc1 = { ...sc };
-  //         const sc2 =
-  //           scenarioDetails.find(
-  //             (sc3: ScenarioDetail) => sc3.scenario_id === sc1.scenario_id
-  //           ) ?? {};
-  //         const scenario: ScenarioDetail = {
-  //           ...sc1,
-  //           ...sc2,
-  //         };
-  //         return scenario;
-  //       }
-  //     );
-  //     // filter empty scenarios
-  //     const filteredScenarios = scenarioDetailsData.filter((sc) => {
-  //       return sc.last_seen && sc.first_seen;
-  //     });
-  //     setScenarios(filteredScenarios);
-  //   } catch (err) {
-  //     console.log({ err });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (selectedCluster) {
-  //     setScenarios(null);
-  //     getData();
-  //   }
-  // }, [selectedCluster, renderTrigger, router.query]);
-
   useEffect(() => {
     if (selectedCluster) {
       setData(null);
-      fetchIssues(
+      const filter = services && services.length > 0 ? services.join(",") : "";
+      const range = query.range ?? DEFAULT_TIME_RANGE;
+      const serviceFilter = filter.length > 0 ? { services: filter } : {};
+      const params = queryString.stringify({
+        ...serviceFilter,
+        limit: ISSUES_PAGE_SIZE,
+        offset: (page - 1) * ISSUES_PAGE_SIZE,
+        st: range,
+      });
+      const endpoint =
         LIST_ISSUES_ENDPOINT.replace("{cluster_id}", selectedCluster)
           .replace("{range}", range as string)
           .replace("{limit}", ISSUES_PAGE_SIZE.toString())
-          .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString())
-      );
+          .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString()) +
+        "&" +
+        params;
+      fetchIssues(endpoint);
     }
   }, [selectedCluster, router.query, renderTrigger]);
 
@@ -142,26 +99,6 @@ const IssuesPage = () => {
       });
     }
   };
-
-  useEffect(() => {
-    if (selectedCluster) {
-      // const filter = services && services.length > 0 ? services.join(",") : "";
-      const range = query.range ?? DEFAULT_TIME_RANGE;
-      // const serviceFilter = filter.length > 0 ? { services: filter } : {};
-      // const params = queryString.stringify({
-      //   ...serviceFilter,
-      //   limit: ISSUES_PAGE_SIZE,
-      //   offset: (page - 1) * ISSUES_PAGE_SIZE,
-      //   st: range,
-      // });
-      fetchServices(
-        LIST_SERVICES_ENDPOINT.replace("{cluster_id}", selectedCluster).replace(
-          "{range}",
-          range as string
-        )
-      );
-    }
-  }, [selectedCluster, router, renderTrigger]);
 
   return (
     <div>

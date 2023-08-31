@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Checkbox } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 import HealthCards from "components/HealthCards";
 import PageHeader from "components/helpers/PageHeader";
@@ -42,6 +42,7 @@ const Home = () => {
         active={isHealthMap}
         key={nanoid()}
         onChange={toggleHealthMap}
+        title="Toggle map view"
       />
     );
   }, [isHealthMap]);

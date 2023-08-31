@@ -1,6 +1,8 @@
 @import "styles/variables.module.scss";
 .table {
     height:100%;
+    overflow-x: auto;
+    table-layout: fixed;
 }
 
 .no-data {

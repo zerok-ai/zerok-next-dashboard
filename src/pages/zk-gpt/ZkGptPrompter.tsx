@@ -139,7 +139,6 @@ const ZkGptPrompter = () => {
   const deleteReply = (key: string) => {
     setReplies((prev) => prev.filter((rp) => rp.key !== key));
   };
-  console.log({ replies });
   const onUserSubmit = async (data: UserFormType) => {
     const reply = replies.find((rp) => rp.key === modalOpen);
     if (reply) {

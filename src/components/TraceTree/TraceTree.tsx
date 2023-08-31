@@ -24,7 +24,7 @@ import {
   HiOutlineArrowsExpand,
   HiOutlineX,
 } from "react-icons/hi";
-import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
+import { HiOutlineArrowsPointingIn, HiOutlineBugAnt } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
@@ -57,6 +57,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     spanTransformer
   );
   const { selectedCluster } = useSelector(clusterSelector);
+  const [debugMode, toggleDebugMode] = useToggle(false);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
@@ -175,7 +176,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           });
         }
       };
-      if (!span.destination && !isTopRoot) {
+      if (!debugMode && !span.destination && !isTopRoot) {
         return nextRender();
       }
 
@@ -193,6 +194,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                 isLastChild={isLastChild || !hasVisibleChildren}
                 isTopRoot={isTopRoot}
                 setSelectedSpan={setSelectedSpan}
+                isModalOpen={isModalOpen}
               />
               {!isTopRoot && (
                 <Fragment>
@@ -264,6 +266,13 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
               ) : (
                 <HiOutlineArrowsExpand className={styles["expand-icon"]} />
               )}
+            </IconButton>
+            <IconButton
+              size="small"
+              className={styles["expand-btn"]}
+              onClick={toggleDebugMode}
+            >
+              <HiOutlineBugAnt className={styles["expand-icon"]} />
             </IconButton>
           </div>
         </div>

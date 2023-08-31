@@ -13,6 +13,7 @@ export interface DrawerNavItemType {
   icon: string;
   label: string;
   path: string;
+  highlightIcon?: boolean;
   reactIcon?: (className: string) => React.ReactNode;
   type: "single" | "group";
   children?: Array<{

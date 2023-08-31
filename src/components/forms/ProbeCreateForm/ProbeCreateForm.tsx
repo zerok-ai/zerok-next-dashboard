@@ -22,7 +22,7 @@ import { type ServiceDetail } from "utils/types";
 import ConditionCard from "./helpers/ConditionCard";
 import GroupBySelect from "./helpers/GroupBySelect";
 import NameAndTimeForm from "./helpers/NameAndTimeForm";
-import NotificationForm from "./helpers/NotificationForm";
+import Sampling from "./helpers/Sampling";
 import styles from "./ProbeCreateForm.module.scss";
 import { probeFormSchema } from "./ProbeCreateForm.types";
 import {
@@ -31,6 +31,26 @@ import {
   getEmptyGroupBy,
   type ProbeFormType,
 } from "./ProbeCreateForm.utils";
+
+const ALL_PROTOCOL_SERVICES: Array<{
+  label: string;
+  value: string;
+  protocol: "http" | "mysql";
+  rootOnly?: boolean;
+}> = [
+  {
+    label: "All HTTP services",
+    value: "*/*_http",
+    protocol: "http",
+    rootOnly: true,
+  },
+  {
+    label: "All MYSQL services",
+    value: "*/*_mysql",
+    protocol: "mysql",
+    rootOnly: true,
+  },
+];
 
 const formatServices = (services: ServiceDetail[]) => {
   const filter = services.filter((sv) => sv.protocol);
@@ -57,6 +77,7 @@ const ProbeCreateForm = () => {
         {
           key: "card-1",
           rootProperty: "",
+          protocol: "",
           conditions: [
             {
               key: "condition-1",
@@ -77,6 +98,11 @@ const ProbeCreateForm = () => {
       ],
       name: "",
       time: DEFAULT_TIME_RANGE,
+      sampling: {
+        samples: 10,
+        duration: 1,
+        metric: "m",
+      },
     },
   });
   const { setValue, watch, getValues, handleSubmit } = probeForm;
@@ -98,6 +124,17 @@ const ProbeCreateForm = () => {
     }
   }, [selectedCluster]);
 
+  const {
+    formState: { errors },
+  } = probeForm;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      // scroll to top smoothly
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [errors]);
+
   const addCard = () => {
     setValue("cards", [...getValues("cards"), getEmptyCard()]);
   };
@@ -106,11 +143,14 @@ const ProbeCreateForm = () => {
     setValue("groupBy", [...getValues("groupBy"), getEmptyGroupBy()]);
   };
 
-  const formattedServices = formatServices(services ?? []);
+  const formattedServices = [
+    ...ALL_PROTOCOL_SERVICES,
+    ...formatServices(services ?? []),
+  ];
 
-  const { cards, groupBy } = watch();
+  const { cards, groupBy, sampling } = watch();
   const onSubmit = () => {
-    const body = buildProbeBody(cards, getValues("name"), groupBy);
+    const body = buildProbeBody(cards, getValues("name"), groupBy, sampling);
     const endpoint = CREATE_PROBE_ENDPOINT.replace(
       "{cluster_id}",
       selectedCluster as string
@@ -118,7 +158,7 @@ const ProbeCreateForm = () => {
     raxios
       .post(endpoint, body)
       .then((res) => {
-        router.push("/probes");
+        // router.push("/probes");
       })
       .catch((err) => {
         console.log(err);
@@ -179,8 +219,10 @@ const ProbeCreateForm = () => {
         </p>
       </div>
 
+      {/* <div className={styles.divider}></div>
+      <NotificationForm /> */}
       <div className={styles.divider}></div>
-      <NotificationForm />
+      <Sampling form={probeForm} />
       <div className={styles.divider}></div>
       <NameAndTimeForm form={probeForm} />
       <Button
