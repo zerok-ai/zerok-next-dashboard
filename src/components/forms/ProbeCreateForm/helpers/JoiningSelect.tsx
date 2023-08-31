@@ -41,7 +41,16 @@ const JoiningSelect = ({
     }
     return list.length > 0 ? list : [{ label: "No services.", value: "" }];
   };
-  // console.log({ list });
+  const getLabel = () => {
+    if (buttonMode) {
+      return value;
+    }
+    if (value?.includes("*/*") && value?.includes("_")) {
+      return `All ${value.split("_")[1].toUpperCase()} services`;
+    } else {
+      return value ?? "Select a service";
+    }
+  };
   return (
     <div className={styles["joining-select-container"]}>
       <Button
@@ -54,7 +63,7 @@ const JoiningSelect = ({
           buttonMode && styles["no-button"]
         )}
       >
-        {value}
+        {getLabel()}
         {!buttonMode && <HiOutlineChevronDown />}
       </Button>
       {!buttonMode && (

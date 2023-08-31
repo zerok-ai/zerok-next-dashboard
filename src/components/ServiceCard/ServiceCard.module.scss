@@ -9,9 +9,15 @@
     flex-direction: column;
     row-gap: $sp-base * 5;
     position: relative;
-    height:250px;
+    height:220px;
     a {
        width: fit-content;
+    }
+}
+
+.text-small {
+    p {
+        color:red;
     }
 }
 

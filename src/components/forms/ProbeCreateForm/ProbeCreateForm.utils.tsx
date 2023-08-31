@@ -27,6 +27,7 @@ export interface ConditionRowType {
 
 export interface ConditionCardType {
   rootProperty: string;
+  protocol: string;
   conditions: ConditionRowType[];
   key: string;
 }
@@ -91,6 +92,8 @@ export interface ProbePropertyType {
   value: string;
   type: string;
   options?: Array<{ label: string; value: string }>;
+  helpText?: string;
+  groupByOnly?: boolean;
 }
 
 export const HTTP_PROPERTIES: ProbePropertyType[] = [
@@ -98,42 +101,51 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     label: "Latency",
     value: "latency",
     type: "double",
+    helpText: "Latency of the service in milliseconds",
   },
   {
     label: "Source service",
     value: "source",
-    type: "string",
+    type: "select",
+    helpText: "Service that initiated the request",
   },
   {
     label: "Destination service",
     value: "destination",
-    type: "string",
+    type: "select",
+    helpText: "Service that received the request",
+    groupByOnly: true,
   },
   {
     label: "Request payload size",
     value: "req_body_size",
     type: "int",
+    helpText: "Size of the request payload in bytes",
   },
   {
     label: "Response payload size",
     value: "resp_body_size",
     type: "int",
+    helpText: "Size of the response payload in bytes",
   },
   {
     label: "Request method",
     value: "req_method",
     type: "select",
     options: HTTP_OPTIONS,
+    helpText: "HTTP method of the request",
   },
   {
     label: "Request path",
     value: "req_path",
     type: "string",
+    helpText: "Path of the request",
   },
   {
     label: "Response status",
     value: "resp_status",
     type: "int",
+    helpText: "HTTP status code of the response",
   },
 ];
 
@@ -142,12 +154,15 @@ export const SQL_PROPERTIES: ProbePropertyType[] = [
     label: "Latency",
     value: "latency",
     type: "double",
+    helpText: "Latency of the service in milliseconds",
   },
   {
     label: "Requester service",
     value: "source",
     type: "string",
+    helpText: "Service that initiated the request",
   },
+
   {
     label: "MYSQL request command",
     value: "req_cmd",
@@ -253,6 +268,7 @@ export const getEmptyGroupBy = (): GroupByType => {
 export const getEmptyCard = (): ConditionCardType => {
   return {
     rootProperty: "",
+    protocol: "",
     conditions: [getEmptyCondition()],
     key: nanoid(),
   };
@@ -347,13 +363,22 @@ export const SLACK_CHANNELS: SlackChannelType[] = [
 export const buildProbeBody = (
   cards: ConditionCardType[],
   title: string,
-  groupBy: GroupByType[]
+  groupBy: GroupByType[],
+  sampling: {
+    samples: number;
+    duration: number;
+    metric: "m" | "s" | "h" | "d";
+  }
 ): ScenarioCreationType => {
   const workloads = cards.map((card): WorkloadType => {
+    let service = card.rootProperty;
+    if (card.rootProperty.includes("*/*")) {
+      service = "*/*";
+    }
     return {
-      service: card.rootProperty,
+      service,
       trace_role: "server",
-      protocol: "HTTP",
+      protocol: card.protocol.toUpperCase(),
       rule: {
         type: "rule_group",
         condition: "AND",
@@ -378,11 +403,20 @@ export const buildProbeBody = (
       hash: g.property,
     };
   });
+
+  const rateLimit = [
+    {
+      bucket_max_size: Number(sampling.samples),
+      bucket_refill_size: Number(sampling.samples),
+      tick_duration: `${sampling.duration}${sampling.metric}`,
+    },
+  ];
   const body: ScenarioCreationType = {
     scenario_title: title,
     scenario_type: "USER",
     workloads,
     group_by: groupByObject,
+    rate_limit: rateLimit,
   };
   return body;
 };
@@ -391,4 +425,9 @@ export interface ProbeFormType {
   groupBy: GroupByType[];
   name: string;
   time: string;
+  sampling: {
+    samples: number;
+    duration: number;
+    metric: "m" | "s" | "h" | "d";
+  };
 };

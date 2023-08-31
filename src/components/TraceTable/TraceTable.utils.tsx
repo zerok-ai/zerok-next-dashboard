@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import SpanEntryPoint from "components/helpers/SpanEntryPoint";
 import { DEFAULT_COL_WIDTH, type HTTP_METHODS } from "utils/constants";
-import { getFormattedTime } from "utils/dateHelpers";
+import { formatDuration, getFormattedTime } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds, trimString } from "utils/functions";
 import { type TraceMetadataDetail } from "utils/issues/types";
 
@@ -41,7 +41,13 @@ export const INCIDENT_COLUMNS = [
     header: "DURATION",
     size: DEFAULT_COL_WIDTH / 2,
     cell: (info) => {
-      return <span>{convertNanoToMilliSeconds(info.getValue())}</span>;
+      return (
+        <span>
+          {formatDuration(
+            convertNanoToMilliSeconds(info.getValue(), false) as number
+          )}
+        </span>
+      );
     },
   }),
   helper.accessor("incident_collection_time", {

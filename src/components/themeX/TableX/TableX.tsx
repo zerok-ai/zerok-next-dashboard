@@ -23,19 +23,19 @@ const TableX = <T extends object>({
 }: TableXProps<T>) => {
   return (
     <div className={`table ${borderRadius ? `table-w-br` : ``}`}>
-      <table className={cx("table")}>
+      <table className={cx(styles.table)}>
         <thead className={cx("table-thead", headerClassName)}>
           {table.getHeaderGroups().map((gr) => {
             return (
               <tr key={gr.id}>
                 {gr.headers.map((header) => {
-                  const width = header.getSize();
                   return (
                     <th
                       key={header.id}
                       className={cx("table-th")}
+                      colSpan={header.colSpan}
                       style={{
-                        width: `${width}px`,
+                        width: header.getSize(),
                       }}
                     >
                       {flexRender(
@@ -63,7 +63,11 @@ const TableX = <T extends object>({
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td className={cx("table-td table-body-td")} key={cell.id}>
+                    <td
+                      className={cx("table-td table-body-td")}
+                      key={cell.id}
+                      style={{ width: cell.column.getSize() }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

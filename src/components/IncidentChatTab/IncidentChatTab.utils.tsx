@@ -61,8 +61,10 @@ export const UserQueryCard = ({
 
 export const UserInputField = ({
   onSubmit,
+  disabled,
 }: {
   onSubmit: (val: string) => void;
+  disabled: boolean;
 }) => {
   const [userInput, setUserInput] = useState("");
   const [tagCount, setTagCount] = useState(0);
@@ -158,6 +160,7 @@ export const UserInputField = ({
             lastItemRef.current?.focus();
           }
         }}
+        disabled={disabled}
         onChange={(e) => {
           setUserInput(e.target.value);
           inputRef.current?.focus();

@@ -7,24 +7,33 @@ interface SQLRawTableProps {
 }
 const SQLRawTable = ({ value }: SQLRawTableProps) => {
   // remove resultset rows string from the start
-  const dataWithoutLabel = value.substr(17);
   // splitting on delimiter
-  const rows = dataWithoutLabel.split(" | ");
+  const [rowText, values] = value.split(" > ");
+  const rowCount = rowText.includes(" = ") ? rowText.split(" = ")[1] : "";
+  const rows = values.split(" | ");
+
   return (
-    <table className={styles.container}>
-      <tbody>
-        {rows.map((row) => {
-          const items = decodeLengthEncodedHexString(row);
-          return (
-            <tr key={nanoid()}>
-              {items.map((it) => {
-                return <td key={nanoid()}>{it}</td>;
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <div className={styles.container}>
+      {rowCount.length && (
+        <p>
+          <span>{rowCount}</span> rows
+        </p>
+      )}
+      <table className={styles.table}>
+        <tbody>
+          {rows.map((row) => {
+            const items = decodeLengthEncodedHexString(row);
+            return (
+              <tr key={nanoid()}>
+                {items.map((it) => {
+                  return <td key={nanoid()}>{it}</td>;
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

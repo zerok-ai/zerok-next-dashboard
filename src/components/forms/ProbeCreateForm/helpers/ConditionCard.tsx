@@ -1,4 +1,10 @@
-import { IconButton, Input, MenuItem, Select } from "@mui/material";
+import {
+  FormHelperText,
+  IconButton,
+  Input,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
@@ -22,6 +28,7 @@ interface ConditionCardProps {
     label: string;
     value: string;
     protocol: SPAN_PROTOCOLS_TYPE;
+    rootOnly?: boolean;
   }>;
   includeAnd: boolean;
   form: UseFormReturn<ProbeFormType, any, undefined>;
@@ -144,7 +151,10 @@ const ConditionCard = ({
             color="blue"
             value={rootProperty.length ? rootProperty : "Service"}
             onSelect={(value) => {
+              const service = services.find((s) => s.value === value);
+              const protocol = service?.protocol ?? "";
               setValue(`cards.${currentCardIndex}.rootProperty`, value);
+              setValue(`cards.${currentCardIndex}.protocol`, protocol);
             }}
           />
         </div>
@@ -161,15 +171,24 @@ const ConditionCard = ({
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
           const operators = getOperatorByType(condition.datatype);
-          const valueType =
-            properties.find((p) => {
-              return p.value === condition.property;
-            })?.type ?? "input";
+          const property = properties.find((p) => {
+            return p.value === condition.property;
+          });
+          const valueType = property?.type ?? "input";
+          const helpText = property?.helpText ?? "";
           const getSelectValues = () => {
-            return (
-              properties.find((p) => p.value === condition.property)?.options ??
-              []
-            );
+            if (
+              property?.value === "destination" ||
+              property?.value === "source"
+            ) {
+              return services.map((s) => {
+                return {
+                  label: s.label,
+                  value: s.value,
+                };
+              });
+            }
+            return property?.options ?? [];
           };
           const errors = getConditionErrors(index);
           return (
@@ -209,6 +228,9 @@ const ConditionCard = ({
                   }}
                 >
                   {properties.map((prt) => {
+                    if (prt.groupByOnly) {
+                      return null;
+                    }
                     return (
                       <MenuItem
                         className={styles["menu-item"]}
@@ -284,6 +306,10 @@ const ConditionCard = ({
                     }}
                   >
                     {getSelectValues().map((v) => {
+                      console.log({ v });
+                      if (v.value.includes("*/*")) {
+                        return null;
+                      }
                       return (
                         <MenuItem
                           value={v.value}
@@ -295,6 +321,9 @@ const ConditionCard = ({
                       );
                     })}
                   </Select>
+                )}
+                {helpText.length > 0 && !errors?.value && (
+                  <FormHelperText>{helpText}</FormHelperText>
                 )}
               </div>
               {index !== 0 && (

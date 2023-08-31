@@ -109,6 +109,7 @@
     display: grid;
     align-items: center;
     grid-template-columns: 40px 2fr 1fr 2fr 0.2fr;
+    align-items: flex-start;
     column-gap: $sp-base * 4;
     margin-right: $sp-base * 4;
     :global(.MuiInputBase-root:before){
@@ -129,6 +130,7 @@
 
 .condition-row-1 {
     grid-template-columns: 2fr 1fr 2fr;
+    align-items: flex-start;
 }
 
 .delete-card-button {
@@ -312,4 +314,16 @@
 
 .error-text {
     color:$error-500 !important;
+}
+
+
+.sampling-container {
+    color:$grey-50;
+    display: flex;
+    column-gap: $sp-base * 3;
+    align-items: flex-start;
+}
+
+.sampling-select {
+    width:100px;
 }

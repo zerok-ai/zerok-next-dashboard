@@ -15,7 +15,7 @@ export interface RuleGroupType {
 export interface WorkloadType {
   service: string;
   trace_role: "server";
-  protocol: "HTTP" | "MYSQL";
+  protocol: string;
   rule: RuleGroupType;
 }
 
@@ -25,11 +25,18 @@ export interface ScenarioGroupByType {
   hash: string;
 }
 
+export interface RateLimitType {
+  bucket_max_size: number;
+  bucket_refill_size: number;
+  tick_duration: string;
+}
+
 export interface ScenarioCreationType {
   scenario_title: string;
   scenario_type: "USER";
   workloads: WorkloadType[];
   group_by: ScenarioGroupByType[];
+  rate_limit: RateLimitType[];
 }
 
 export interface ScenarioDetail {
@@ -55,4 +62,10 @@ export interface ScenarioDetail {
     condition: "AND" | "OR";
     workload_ids: string[];
   };
+}
+
+export interface ScenarioDetailType {
+  created_at: number;
+  disabled_at?: number;
+  scenario: ScenarioDetail;
 }

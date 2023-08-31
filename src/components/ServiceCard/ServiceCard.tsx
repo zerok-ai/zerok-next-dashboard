@@ -35,7 +35,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
     }
   };
   return (
-    <div className={styles.container}>
+    <div className={cx(styles.container)}>
       <ServiceCardStatusIcon status={isHealthy ? "healthy" : "error"} />
       <Link href={`/issues?services=${encodeURIComponent(serviceQuery())}`}>
         <div className={styles["service-name-container"]}>
