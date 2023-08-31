@@ -165,7 +165,7 @@ const Probe = () => {
       cell: (info) => {
         return (
           <div className={styles.source}>
-            <img src={`/images/brand/zerok_source_logo.svg`} alt="zerok_logo" />
+            <img src={`/images/brand/zerok_source_logo.png`} alt="zerok_logo" />
             <span
               className={cx(info.row.original.disabled_at && styles.disabled)}
             >

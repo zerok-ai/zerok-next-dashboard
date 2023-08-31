@@ -194,6 +194,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                 isLastChild={isLastChild || !hasVisibleChildren}
                 isTopRoot={isTopRoot}
                 setSelectedSpan={setSelectedSpan}
+                isModalOpen={isModalOpen}
               />
               {!isTopRoot && (
                 <Fragment>
