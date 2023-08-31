@@ -22,8 +22,8 @@
     align-items: center;
     column-gap: $sp-base;
     >img {
-        height: $sp-base * 5;
-        width:$sp-base * 5;
+        height: $sp-base * 6;
+        width:$sp-base * 6;
     }
     span {
         color:$grey-50;
@@ -31,13 +31,15 @@
 }
 
 .table {
-    height:75vh;
+    height:72vh;
     overflow-y: auto;
     border-radius: $sp-base * 2;
     margin-bottom: $sp-base * 6;
 }
 
 .pagination {
+    border-top: 1px solid $grey-800;
+    padding-top: $sp-base * 4;
     display: flex;
     justify-content:center;
 }

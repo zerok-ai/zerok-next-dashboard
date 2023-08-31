@@ -54,11 +54,12 @@
 .active-filters {
     display: flex;
     column-gap: $sp-base * 2;
+    margin-bottom: $sp-base * 4;
 }
 
 // content
 .page-content {
-    height:calc(100vh - $header-height - $sp-base * 44);
+    height:72vh;
     overflow: auto;
     border-bottom:1px solid $grey-900;
     border-radius: $sp-base * 2;
