@@ -27,6 +27,7 @@ export interface ConditionRowType {
 
 export interface ConditionCardType {
   rootProperty: string;
+  protocol: string;
   conditions: ConditionRowType[];
   key: string;
 }
@@ -267,6 +268,7 @@ export const getEmptyGroupBy = (): GroupByType => {
 export const getEmptyCard = (): ConditionCardType => {
   return {
     rootProperty: "",
+    protocol: "",
     conditions: [getEmptyCondition()],
     key: nanoid(),
   };
@@ -369,10 +371,14 @@ export const buildProbeBody = (
   }
 ): ScenarioCreationType => {
   const workloads = cards.map((card): WorkloadType => {
+    let service = card.rootProperty;
+    if (card.rootProperty.includes("*/*")) {
+      service = "*/*";
+    }
     return {
-      service: card.rootProperty,
+      service,
       trace_role: "server",
-      protocol: "HTTP",
+      protocol: card.protocol.toUpperCase(),
       rule: {
         type: "rule_group",
         condition: "AND",
@@ -397,6 +403,7 @@ export const buildProbeBody = (
       hash: g.property,
     };
   });
+
   const rateLimit = [
     {
       bucket_max_size: Number(sampling.samples),

@@ -32,6 +32,26 @@ import {
   type ProbeFormType,
 } from "./ProbeCreateForm.utils";
 
+const ALL_PROTOCOL_SERVICES: Array<{
+  label: string;
+  value: string;
+  protocol: "http" | "mysql";
+  rootOnly?: boolean;
+}> = [
+  {
+    label: "All HTTP services",
+    value: "*/*_http",
+    protocol: "http",
+    rootOnly: true,
+  },
+  {
+    label: "All MYSQL services",
+    value: "*/*_mysql",
+    protocol: "mysql",
+    rootOnly: true,
+  },
+];
+
 const formatServices = (services: ServiceDetail[]) => {
   const filter = services.filter((sv) => sv.protocol);
   return filter.map((sv) => {
@@ -57,6 +77,7 @@ const ProbeCreateForm = () => {
         {
           key: "card-1",
           rootProperty: "",
+          protocol: "",
           conditions: [
             {
               key: "condition-1",
@@ -122,7 +143,10 @@ const ProbeCreateForm = () => {
     setValue("groupBy", [...getValues("groupBy"), getEmptyGroupBy()]);
   };
 
-  const formattedServices = formatServices(services ?? []);
+  const formattedServices = [
+    ...ALL_PROTOCOL_SERVICES,
+    ...formatServices(services ?? []),
+  ];
 
   const { cards, groupBy, sampling } = watch();
   const onSubmit = () => {
@@ -134,7 +158,7 @@ const ProbeCreateForm = () => {
     raxios
       .post(endpoint, body)
       .then((res) => {
-        router.push("/probes");
+        // router.push("/probes");
       })
       .catch((err) => {
         console.log(err);
