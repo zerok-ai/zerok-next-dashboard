@@ -84,8 +84,8 @@ export default function Checkbox(theme: Theme) {
           <Box
             className="icon"
             sx={{
-              width: 32,
-              height: 32,
+              width: 16,
+              height: 16,
               border: `1px solid`,
               borderColor: "inherit",
               borderRadius: 0.25,

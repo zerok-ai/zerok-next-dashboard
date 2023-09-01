@@ -6,9 +6,10 @@ import styles from "./SearchBar.module.scss";
 interface SearchBarProps {
   onChange: (input: string) => void;
   inputState: string;
+  placeholder?: string;
 }
 
-const SearchBar = ({ onChange, inputState }: SearchBarProps) => {
+const SearchBar = ({ onChange, inputState, placeholder }: SearchBarProps) => {
   const SearchIcon = () => {
     return (
       <span className={styles["search-icon"]}>
@@ -19,8 +20,9 @@ const SearchBar = ({ onChange, inputState }: SearchBarProps) => {
   return (
     <div className={styles.container}>
       <OutlinedInput
-        placeholder="Search"
+        placeholder={placeholder ?? "Search"}
         value={inputState}
+        autoFocus
         fullWidth
         className={styles.input}
         onChange={(e) => {

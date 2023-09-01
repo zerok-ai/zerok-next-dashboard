@@ -1,4 +1,5 @@
-import { Button, Checkbox, MenuItem } from "@mui/material";
+import { Button, MenuItem } from "@mui/material";
+import CustomCheckbox from "components/CustomCheckbox";
 import SearchBar from "components/SearchBar";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
@@ -80,8 +81,8 @@ const HealthMapFilterForm = ({
   }, [router.query]);
 
   const handleClick = (key: "namespaces" | "serviceNames", value: string) => {
-    const checked = !filters[key].includes(value);
-    if (checked) {
+    const checked = filters[key].includes(value);
+    if (!checked) {
       setFilters((prev) => ({
         ...prev,
         [key]: [...prev[key], value],
@@ -97,11 +98,13 @@ const HealthMapFilterForm = ({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { namespaces, serviceNames } = filters;
-    const query: GenericObject = {};
+    const query = { ...router.query };
     if (!namespaces.length && !serviceNames.length) {
       query.namespaces = [];
       query.serviceNames = [];
     }
+    delete query.namespaces;
+    delete query.serviceNames;
     if (namespaces.length) {
       query.namespaces = namespaces.join(",");
     }
@@ -110,7 +113,7 @@ const HealthMapFilterForm = ({
     }
     router.push({
       pathname: router.pathname,
-      query: { ...router.query, ...query },
+      query: { ...query },
     });
     onFinish();
   };
@@ -173,7 +176,9 @@ const HealthMapFilterForm = ({
                           handleClick(fg.key, nm);
                         }}
                       >
-                        <Checkbox checked={filters[fg.key].includes(nm)} />
+                        <CustomCheckbox
+                          defaultChecked={filters[fg.key].includes(nm)}
+                        />
                         <label>{nm}</label>
                       </MenuItem>
                     );

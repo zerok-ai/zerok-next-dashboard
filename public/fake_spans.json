@@ -1,0 +1,726 @@
+{
+    "payload": {
+        "spans": {
+            "parent_span": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000000",
+                "span_id": "0000000000000001",
+                "is_root": true,
+                "kind": "SERVER",
+                "start_time": "2023-08-31T12:47:48.290383Z",
+                "latency": 5000000,
+                "source": "source-A",
+                "destination": "destination-B",
+                "workload_id_list": [
+                    "workload-1",
+                    "workload-2"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-1",
+                    "issue-hash-2"
+                ],
+                "request_payload_size": 1024,
+                "response_payload_size": 512,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user1"
+            },
+            "child_span_1": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000001",
+                "span_id": "0000000000000002",
+                "is_root": false,
+                "kind": "CLIENT",
+                "start_time": "2023-08-31T12:47:50.123456Z",
+                "latency": 2000000,
+                "source": "source-B",
+                "destination": "destination-C",
+                "workload_id_list": [
+                    "workload-2",
+                    "workload-3"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-2",
+                    "issue-hash-3"
+                ],
+                "request_payload_size": 2048,
+                "response_payload_size": 1024,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user2"
+            },
+            "child_span_2": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000002",
+                "span_id": "0000000000000003",
+                "is_root": false,
+                "kind": "SERVER",
+                "start_time": "2023-08-31T12:47:52.345678Z",
+                "latency": 3000000,
+                "source": "source-C",
+                "destination": "destination-D",
+                "workload_id_list": [
+                    "workload-3",
+                    "workload-4"
+                ],
+                "protocol": "grpc",
+                "issue_hash_list": [
+                    "issue-hash-3",
+                    "issue-hash-4"
+                ],
+                "request_payload_size": 3072,
+                "response_payload_size": 1536,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user3"
+            },
+            "child_span_3": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000003",
+                "span_id": "0000000000000004",
+                "is_root": false,
+                "kind": "CLIENT",
+                "start_time": "2023-08-31T12:47:54.567890Z",
+                "latency": 4000000,
+                "source": "source-D",
+                "destination": "destination-E",
+                "workload_id_list": [
+                    "workload-4",
+                    "workload-5"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-4",
+                    "issue-hash-5"
+                ],
+                "request_payload_size": 4096,
+                "response_payload_size": 2048,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user4"
+            },
+            "child_span_4": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000004",
+                "span_id": "0000000000000005",
+                "is_root": false,
+                "kind": "SERVER",
+                "start_time": "2023-08-31T12:47:56.789012Z",
+                "latency": 5000000,
+                "source": "source-E",
+                "destination": "destination-F",
+                "workload_id_list": [
+                    "workload-5",
+                    "workload-6"
+                ],
+                "protocol": "grpc",
+                "issue_hash_list": [
+                    "issue-hash-5",
+                    "issue-hash-6"
+                ],
+                "request_payload_size": 5120,
+                "response_payload_size": 2560,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user5"
+            },
+            "child_span_5": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000005",
+                "span_id": "0000000000000006",
+                "is_root": false,
+                "kind": "CLIENT",
+                "start_time": "2023-08-31T12:47:59.012345Z",
+                "latency": 6000000,
+                "source": "source-F",
+                "destination": "destination-G",
+                "workload_id_list": [
+                    "workload-6",
+                    "workload-7"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-6",
+                    "issue-hash-7"
+                ],
+                "request_payload_size": 6144,
+                "response_payload_size": 3072,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user6"
+            },
+            "child_span_6": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000006",
+                "span_id": "0000000000000007",
+                "is_root": false,
+                "kind": "SERVER",
+                "start_time": "2023-08-31T12:48:00.222222Z",
+                "latency": 7000000,
+                "source": "source-G",
+                "destination": "destination-H",
+                "workload_id_list": [
+                    "workload-7",
+                    "workload-8"
+                ],
+                "protocol": "grpc",
+                "issue_hash_list": [
+                    "issue-hash-7",
+                    "issue-hash-8"
+                ],
+                "request_payload_size": 7168,
+                "response_payload_size": 3584,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user7"
+            },
+            "child_span_7": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000007",
+                "span_id": "0000000000000008",
+                "is_root": false,
+                "kind": "CLIENT",
+                "start_time": "2023-08-31T12:48:02.444444Z",
+                "latency": 8000000,
+                "source": "source-H",
+                "destination": "destination-I",
+                "workload_id_list": [
+                    "workload-8",
+                    "workload-9"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-8",
+                    "issue-hash-9"
+                ],
+                "request_payload_size": 8192,
+                "response_payload_size": 4096,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user8"
+            },
+            "child_span_8": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000008",
+                "span_id": "0000000000000009",
+                "is_root": false,
+                "kind": "SERVER",
+                "start_time": "2023-08-31T12:48:04.666666Z",
+                "latency": 9000000,
+                "source": "source-I",
+                "destination": "destination-J",
+                "workload_id_list": [
+                    "workload-9",
+                    "workload-10"
+                ],
+                "protocol": "grpc",
+                "issue_hash_list": [
+                    "issue-hash-9",
+                    "issue-hash-10"
+                ],
+                "request_payload_size": 9216,
+                "response_payload_size": 4608,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user9"
+            },
+            "child_span_9": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000009",
+                "span_id": "0000000000000010",
+                "is_root": false,
+                "kind": "CLIENT",
+                "start_time": "2023-08-31T12:48:06.888888Z",
+                "latency": 10000000,
+                "source": "source-J",
+                "destination": "destination-K",
+                "workload_id_list": [
+                    "workload-10",
+                    "workload-11"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-10",
+                    "issue-hash-11"
+                ],
+                "request_payload_size": 10240,
+                "response_payload_size": 5120,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user10"
+            },
+            "mysql_span_1": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000002",
+                "span_id": "0000000000000011",
+                "is_root": false,
+                "kind": "DATABASE",
+                "start_time": "2023-08-31T12:48:10.000000Z",
+                "latency": 2000000,
+                "source": "source-C",
+                "destination": "mysql-server-1",
+                "workload_id_list": [
+                    "workload-3",
+                    "workload-4"
+                ],
+                "protocol": "mysql",
+                "issue_hash_list": [
+                    "issue-hash-3",
+                    "issue-hash-4"
+                ],
+                "request_payload_size": 2048,
+                "response_payload_size": 1024,
+                "method": "QUERY",
+                "route": "",
+                "scheme": "",
+                "path": "",
+                "query": "SELECT * FROM table1",
+                "status": 200,
+                "username": ""
+            },
+            "mysql_span_2": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000004",
+                "span_id": "0000000000000012",
+                "is_root": false,
+                "kind": "DATABASE",
+                "start_time": "2023-08-31T12:48:12.222222Z",
+                "latency": 3000000,
+                "source": "source-D",
+                "destination": "mysql-server-2",
+                "workload_id_list": [
+                    "workload-4",
+                    "workload-5"
+                ],
+                "protocol": "mysql",
+                "issue_hash_list": [
+                    "issue-hash-4",
+                    "issue-hash-5"
+                ],
+                "request_payload_size": 3072,
+                "response_payload_size": 1536,
+                "method": "QUERY",
+                "route": "",
+                "scheme": "",
+                "path": "",
+                "query": "SELECT * FROM table2",
+                "status": 200,
+                "username": ""
+            },
+            "mysql_span_3": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000006",
+                "span_id": "0000000000000013",
+                "is_root": false,
+                "kind": "DATABASE",
+                "start_time": "2023-08-31T12:48:14.444444Z",
+                "latency": 4000000,
+                "source": "source-E",
+                "destination": "mysql-server-3",
+                "workload_id_list": [
+                    "workload-6",
+                    "workload-7"
+                ],
+                "protocol": "mysql",
+                "issue_hash_list": [
+                    "issue-hash-6",
+                    "issue-hash-7"
+                ],
+                "request_payload_size": 4096,
+                "response_payload_size": 2048,
+                "method": "QUERY",
+                "route": "",
+                "scheme": "",
+                "path": "",
+                "query": "SELECT * FROM table3",
+                "status": 200,
+                "username": ""
+            },
+            "mysql_span_4": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000008",
+                "span_id": "0000000000000014",
+                "is_root": false,
+                "kind": "DATABASE",
+                "start_time": "2023-08-31T12:48:16.666666Z",
+                "latency": 5000000,
+                "source": "source-I",
+                "destination": "mysql-server-4",
+                "workload_id_list": [
+                    "workload-8",
+                    "workload-9"
+                ],
+                "protocol": "mysql",
+                "issue_hash_list": [
+                    "issue-hash-8",
+                    "issue-hash-9"
+                ],
+                "request_payload_size": 5120,
+                "response_payload_size": 2560,
+                "method": "QUERY",
+                "route": "",
+                "scheme": "",
+                "path": "",
+                "query": "SELECT * FROM table4",
+                "status": 200,
+                "username": ""
+            },
+            "leaf_span_1": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000010",
+                "span_id": "0000000000000015",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:18.888888Z",
+                "latency": 6000000,
+                "source": "source-K",
+                "destination": "destination-L",
+                "workload_id_list": [
+                    "workload-10",
+                    "workload-11"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-10",
+                    "issue-hash-11"
+                ],
+                "request_payload_size": 6144,
+                "response_payload_size": 3072,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user10"
+            },
+            "leaf_span_2": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000011",
+                "span_id": "0000000000000016",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:21.111111Z",
+                "latency": 7000000,
+                "source": "source-L",
+                "destination": "destination-M",
+                "workload_id_list": [
+                    "workload-11",
+                    "workload-12"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-11",
+                    "issue-hash-12"
+                ],
+                "request_payload_size": 7168,
+                "response_payload_size": 3584,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user11"
+            },
+            "leaf_span_3": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000012",
+                "span_id": "0000000000000017",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:23.333333Z",
+                "latency": 8000000,
+                "source": "source-M",
+                "destination": "destination-N",
+                "workload_id_list": [
+                    "workload-12",
+                    "workload-13"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-12",
+                    "issue-hash-13"
+                ],
+                "request_payload_size": 8192,
+                "response_payload_size": 4096,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user12"
+            },
+            "leaf_span_4": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000013",
+                "span_id": "0000000000000018",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:25.555555Z",
+                "latency": 9000000,
+                "source": "source-N",
+                "destination": "destination-O",
+                "workload_id_list": [
+                    "workload-13",
+                    "workload-14"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-13",
+                    "issue-hash-14"
+                ],
+                "request_payload_size": 9216,
+                "response_payload_size": 4608,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user13"
+            },
+            "leaf_span_5": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000014",
+                "span_id": "0000000000000019",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:27.777777Z",
+                "latency": 10000000,
+                "source": "source-O",
+                "destination": "destination-P",
+                "workload_id_list": [
+                    "workload-14",
+                    "workload-15"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-14",
+                    "issue-hash-15"
+                ],
+                "request_payload_size": 10240,
+                "response_payload_size": 5120,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user14"
+            },
+            "leaf_span_6": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000015",
+                "span_id": "0000000000000020",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:30.000000Z",
+                "latency": 11000000,
+                "source": "source-P",
+                "destination": "destination-Q",
+                "workload_id_list": [
+                    "workload-15",
+                    "workload-16"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-15",
+                    "issue-hash-16"
+                ],
+                "request_payload_size": 11264,
+                "response_payload_size": 5632,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user15"
+            },
+            "leaf_span_7": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000016",
+                "span_id": "0000000000000021",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:32.222222Z",
+                "latency": 12000000,
+                "source": "source-Q",
+                "destination": "destination-R",
+                "workload_id_list": [
+                    "workload-16",
+                    "workload-17"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-16",
+                    "issue-hash-17"
+                ],
+                "request_payload_size": 11520,
+                "response_payload_size": 5760,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user16"
+            },
+            "leaf_span_8": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000017",
+                "span_id": "0000000000000022",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:34.444444Z",
+                "latency": 13000000,
+                "source": "source-R",
+                "destination": "destination-S",
+                "workload_id_list": [
+                    "workload-17",
+                    "workload-18"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-17",
+                    "issue-hash-18"
+                ],
+                "request_payload_size": 11776,
+                "response_payload_size": 5888,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user17"
+            },
+            "leaf_span_9": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000018",
+                "span_id": "0000000000000023",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:36.666666Z",
+                "latency": 14000000,
+                "source": "source-S",
+                "destination": "destination-T",
+                "workload_id_list": [
+                    "workload-18",
+                    "workload-19"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-18",
+                    "issue-hash-19"
+                ],
+                "request_payload_size": 12032,
+                "response_payload_size": 6016,
+                "method": "POST",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user18"
+            },
+            "leaf_span_10": {
+                "error": false,
+                "trace_id": "0b958a6f6adfd732342b892f43dd3cd0",
+                "parent_span_id": "0000000000000019",
+                "span_id": "0000000000000024",
+                "is_root": false,
+                "kind": "LEAF",
+                "start_time": "2023-08-31T12:48:38.888888Z",
+                "latency": 15000000,
+                "source": "source-T",
+                "destination": "destination-U",
+                "workload_id_list": [
+                    "workload-19",
+                    "workload-20"
+                ],
+                "protocol": "http",
+                "issue_hash_list": [
+                    "issue-hash-19",
+                    "issue-hash-20"
+                ],
+                "request_payload_size": 12288,
+                "response_payload_size": 6144,
+                "method": "GET",
+                "route": "/api/service",
+                "scheme": "http",
+                "path": "/api/service",
+                "query": "param=value",
+                "status": 200,
+                "username": "user19"
+            }
+        }
+    }
+}
