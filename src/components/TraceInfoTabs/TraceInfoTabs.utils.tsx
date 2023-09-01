@@ -82,6 +82,7 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
         displayDataTypes={false}
         name={false}
         enableClipboard={false}
+        theme="tomorrow"
       />
     );
   } catch (err) {

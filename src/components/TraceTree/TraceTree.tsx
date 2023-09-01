@@ -80,6 +80,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       )
         .replace("{issue_id}", issue as string)
         .replace("{incident_id}", trace as string);
+      // const endpoint = `/fake_spans.json`;
       fetchSpans(endpoint);
     }
   }, [selectedCluster]);
@@ -157,6 +158,9 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
         ? true
         : span.children && span.children.length > 0;
 
+      const shouldRenderLatency =
+        !isTopRoot || (isTopRoot && !span.destination && !span.source);
+
       const nextRender = (): null | React.ReactNode => {
         if (isTopRoot) {
           return renderSpan(
@@ -176,7 +180,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           });
         }
       };
-      if (!debugMode && !span.destination && !isTopRoot) {
+      if (!debugMode && !span.destination && !span.source && !isTopRoot) {
         return nextRender();
       }
 
@@ -196,7 +200,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                 setSelectedSpan={setSelectedSpan}
                 isModalOpen={isModalOpen}
               />
-              {!isTopRoot && (
+              {shouldRenderLatency && (
                 <Fragment>
                   <SpanLatency latency={span.latency} />
                   <SpanLatencyTimeline

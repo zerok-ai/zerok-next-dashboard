@@ -56,7 +56,6 @@ const Probe = () => {
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
   const getData = async () => {
-    setScenarios(null);
     try {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
         "{limit}",
@@ -115,9 +114,10 @@ const Probe = () => {
       await raxios.put(endpoint, {
         action: enable ? "enable" : "disable",
       });
-      getData();
     } catch (err) {
       console.log({ err });
+    } finally {
+      getData();
     }
   };
 
@@ -128,9 +128,10 @@ const Probe = () => {
         selectedCluster as string
       ).replace("{scenario_id}", scenario_id);
       await raxios.delete(endpoint);
-      getData();
     } catch (err) {
       console.log({ err });
+    } finally {
+      getData();
     }
   };
 

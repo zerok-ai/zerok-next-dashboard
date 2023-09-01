@@ -1,5 +1,6 @@
-import { Button, Checkbox, Menu, MenuItem, Skeleton } from "@mui/material";
+import { Button, Menu, MenuItem, Skeleton } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
+import CustomCheckbox from "components/CustomCheckbox";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import cssVars from "styles/variables.module.scss";
@@ -135,16 +136,11 @@ const ServicesMenu = ({
                       handleCheckBox(service.service);
                     }}
                   >
-                    <Checkbox
+                    <CustomCheckbox
                       // onChange={(e) => handleCheckBox(service.service)}
                       defaultChecked={selectedServices.includes(
                         service.service
                       )}
-                      color="primary"
-                      sx={{
-                        color: cssVars.primary500,
-                        "&.Mui-checked": {},
-                      }}
                     />{" "}
                     {getNamespace(service.service)}/
                     {getFormattedServiceName(service.service)}

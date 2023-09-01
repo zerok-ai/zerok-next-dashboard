@@ -28,9 +28,9 @@
 
 .form-group-item {
     display: flex;
-    column-gap: $sp-base;
+    column-gap: $sp-base * 2;
     align-items: center;
-    padding: $sp-base $sp-base * 3;
+    padding: $sp-base * 2 $sp-base * 3;
     color:$grey-25;
     cursor: pointer;
     &:hover {
