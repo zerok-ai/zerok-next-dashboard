@@ -100,7 +100,7 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
   {
     label: "Latency",
     value: "latency",
-    type: "double",
+    type: "integer",
     helpText: "Latency of the service in milliseconds",
   },
   {
@@ -144,7 +144,7 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
   {
     label: "Response status",
     value: "resp_status",
-    type: "int",
+    type: "integer",
     helpText: "HTTP status code of the response",
   },
 ];
@@ -153,7 +153,7 @@ export const SQL_PROPERTIES: ProbePropertyType[] = [
   {
     label: "Latency",
     value: "latency",
-    type: "double",
+    type: "integer",
     helpText: "Latency of the service in milliseconds",
   },
   {
@@ -387,7 +387,7 @@ export const buildProbeBody = (
             type: "rule",
             id: condition.property,
             field: condition.property,
-            input: condition.datatype === "string" ? "string" : "number",
+            input: condition.datatype === "string" ? "string" : "integer",
             operator: condition.operator,
             value: condition.value,
             datatype: condition.datatype,

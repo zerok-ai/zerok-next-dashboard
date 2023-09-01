@@ -49,21 +49,16 @@ const IssuesPage = () => {
     if (selectedCluster) {
       setData(null);
       const filter = services && services.length > 0 ? services.join(",") : "";
-      const range = query.range ?? DEFAULT_TIME_RANGE;
       const serviceFilter = filter.length > 0 ? { services: filter } : {};
       const params = queryString.stringify({
         ...serviceFilter,
-        limit: ISSUES_PAGE_SIZE,
-        offset: (page - 1) * ISSUES_PAGE_SIZE,
-        st: range,
       });
       const endpoint =
         LIST_ISSUES_ENDPOINT.replace("{cluster_id}", selectedCluster)
           .replace("{range}", range as string)
           .replace("{limit}", ISSUES_PAGE_SIZE.toString())
           .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString()) +
-        "&" +
-        params;
+        `${params.length ? `&${params}` : ""}`;
       fetchIssues(endpoint);
     }
   }, [selectedCluster, router.query, renderTrigger]);
