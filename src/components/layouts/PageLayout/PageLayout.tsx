@@ -1,3 +1,4 @@
+import cx from "classnames";
 import ClusterSelector from "components/ClusterSelector";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import ErrorBoundary from "components/ErrorBoundary";
@@ -6,6 +7,7 @@ import UserPill from "components/UserPill";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { clusterSelector } from "redux/cluster";
+import { drawerSelector } from "redux/drawer";
 import { useSelector } from "redux/store";
 import { CLUSTER_STATES } from "utils/constants";
 
@@ -25,6 +27,7 @@ const CLUSTER_BLOCKED_ROUTES = [
 const PageLayout = ({ children }: PageLayoutProps) => {
   const { status } = useSelector(clusterSelector);
   const router = useRouter();
+  const { isDrawerMinimized } = useSelector(drawerSelector);
   useEffect(() => {
     if (
       status.length &&
@@ -39,7 +42,12 @@ const PageLayout = ({ children }: PageLayoutProps) => {
       <aside className={styles["drawer-container"]}>
         <MainDrawer />
       </aside>
-      <div className={`${styles["page-container"]}`}>
+      <div
+        className={cx(
+          styles["page-container"],
+          !isDrawerMinimized && styles["full-drawer-width"]
+        )}
+      >
         <header className={styles["header-container"]}>
           <div className={styles["header-left"]}>
             <DrawerToggleButton />

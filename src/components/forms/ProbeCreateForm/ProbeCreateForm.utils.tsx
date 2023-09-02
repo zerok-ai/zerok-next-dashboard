@@ -33,9 +33,17 @@ export interface ConditionCardType {
 }
 
 export const PROBE_TIME_RANGES = [
+  // {
+  //   label: "Forever",
+  //   value: "forever",
+  // },
   {
-    label: "Forever",
-    value: "forever",
+    label: "1 hour",
+    value: "-1h",
+  },
+  {
+    label: "3 hours",
+    value: "-3h",
   },
   {
     label: "6 hours",
@@ -101,7 +109,7 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     label: "Latency",
     value: "latency",
     type: "integer",
-    helpText: "Latency of the service in milliseconds",
+    helpText: "Latency of the service in nanoseconds",
   },
   {
     label: "Source service",

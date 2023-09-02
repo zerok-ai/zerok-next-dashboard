@@ -260,6 +260,7 @@ const Probe = () => {
                 }
               >
                 <Switch
+                  name="probe-toggle-switch"
                   size="small"
                   defaultChecked={!info.row.original.disabled_at}
                   color="primary"

@@ -24,7 +24,7 @@ const HealthCards = ({ filter }: HealthCardProps) => {
     loading,
     error,
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
 
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
@@ -38,7 +38,7 @@ const HealthCards = ({ filter }: HealthCardProps) => {
         )
       );
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, renderTrigger]);
 
   const skeletons = new Array(8).fill("skeleton");
 

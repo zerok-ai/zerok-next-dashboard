@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-table";
 import cx from "classnames";
 import CodeBlock from "components/CodeBlock";
+import CustomSkeleton from "components/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
@@ -43,6 +44,7 @@ const ApiKeys = () => {
   const {
     data: apiKeys,
     fetchData,
+    loading,
     setData: setApiKeys,
   } = useFetch<ApiKeyDetailWithToggle[]>(
     "apikeys",
@@ -183,7 +185,11 @@ const ApiKeys = () => {
       </div>
       <div className={styles["table-container"]}>
         {/* API keys table */}
-        <TableX table={table} data={apiKeys ?? []} />
+        {loading ? (
+          <CustomSkeleton len={8} />
+        ) : (
+          <TableX table={table} data={apiKeys ?? []} />
+        )}
         {/* Delete key dialog */}
         <DialogX
           title="Delete API Key"

@@ -158,7 +158,7 @@ const ProbeCreateForm = () => {
     raxios
       .post(endpoint, body)
       .then((res) => {
-        // router.push("/probes");
+        router.push("/probes");
       })
       .catch((err) => {
         console.log(err);
