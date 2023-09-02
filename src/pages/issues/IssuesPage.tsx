@@ -15,10 +15,9 @@ import { Fragment, useEffect, useMemo } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
-import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
-import { filterServices } from "utils/functions";
+import { LIST_ISSUES_ENDPOINT } from "utils/endpoints";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
-import { type IssueDetail, type ServiceDetail } from "utils/types";
+import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
 import { getIssueColumns } from "./IssuesPage.utils";

@@ -1,4 +1,4 @@
-import { ClickAwayListener, Divider, Menu, MenuItem } from "@mui/material";
+import { Divider, Menu, MenuItem } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { HiOutlineLogout } from "react-icons/hi";

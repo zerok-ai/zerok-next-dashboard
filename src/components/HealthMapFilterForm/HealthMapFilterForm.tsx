@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { type FormEvent, useEffect, useState } from "react";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";
-import { type GenericObject } from "utils/types";
 
 import styles from "./HealthMapFilterForm.module.scss";
 
