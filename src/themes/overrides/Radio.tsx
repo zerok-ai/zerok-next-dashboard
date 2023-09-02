@@ -1,12 +1,10 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-import { Box, CheckboxProps } from '@mui/material';
-
+import { Box, type CheckboxProps } from "@mui/material";
+import { type Theme } from "@mui/material/styles";
+// types
+import { type ExtendedStyleProps } from "types/extended";
 // project import
 import getColors from 'utils/mantis/getColors';
-
-// types
-import { ExtendedStyleProps } from 'types/extended';
 
 // ==============================|| RADIO - COLORS ||============================== //
 

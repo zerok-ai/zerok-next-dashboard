@@ -1,6 +1,6 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-import { SwitchProps } from '@mui/material/Switch';
+import { type Theme } from "@mui/material/styles";
+import { type SwitchProps } from "@mui/material/Switch";
 
 // ==============================|| SWITCH - SIZE STYLE ||============================== //
 

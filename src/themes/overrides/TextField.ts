@@ -1,6 +1,5 @@
 // material-ui
-import { Theme } from "@mui/material/styles";
-import css from "styles/variables.module.scss";
+import { type Theme } from "@mui/material/styles";
 
 // ==============================|| OVERRIDES - INPUT LABEL ||============================== //
 
