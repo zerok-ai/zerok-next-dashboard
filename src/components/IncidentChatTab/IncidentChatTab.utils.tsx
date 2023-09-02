@@ -153,6 +153,7 @@ export const UserInputField = ({
       <OutlinedInput
         fullWidth
         inputRef={inputRef}
+        name="main-chat-input"
         value={userInput}
         onKeyDown={(e) => {
           if (e.key === "ArrowUp") {

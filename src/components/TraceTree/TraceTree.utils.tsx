@@ -129,7 +129,7 @@ export const getWidthByLevel = (
   leaf: boolean = false,
   expand = true
 ) => {
-  const defaultWidth = expand ? 1000 : 600;
+  const defaultWidth = expand ? 800 : 600;
   const width = defaultWidth - level * 9;
   return leaf ? `${width + 8}px` : `${width}px`;
 };

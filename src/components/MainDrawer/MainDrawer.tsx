@@ -4,12 +4,7 @@ import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import { useSelector } from "redux/store";
 import cssVars from "styles/variables.module.scss";
-import {
-  ZEROK_DRAWER_LOGO,
-  ZEROK_DRAWER_LOGO_MINIMIZED,
-  ZEROK_LOGO_LIGHT,
-  ZEROK_MINIMAL_LOGO_LIGHT,
-} from "utils/images";
+import { ZEROK_DRAWER_LOGO, ZEROK_DRAWER_LOGO_MINIMIZED } from "utils/images";
 import { NAV_LINKS_1, NAV_LINKS_2 } from "utils/navigation";
 import { type DrawerNavItemType } from "utils/types";
 
@@ -21,7 +16,6 @@ const MainDrawer = () => {
   const { isDrawerMinimized } = drawer;
 
   const router = useRouter();
-
   const DrawerHeader = () => {
     return (
       <div className={styles["header-container"]}>

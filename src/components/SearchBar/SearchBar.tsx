@@ -23,6 +23,7 @@ const SearchBar = ({ onChange, inputState, placeholder }: SearchBarProps) => {
         placeholder={placeholder ?? "Search"}
         value={inputState}
         autoFocus
+        name="search-bar"
         fullWidth
         className={styles.input}
         onChange={(e) => {

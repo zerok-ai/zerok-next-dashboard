@@ -14,12 +14,9 @@
     "start": "next start",
     "export": "next export",
     "create": "node scripts",
-    "configure-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "configure-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\"",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "dependencies": {
     "@ant-design/colors": "^7.0.0",
@@ -149,6 +146,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "immutable": "^4.3.0",
     "prettier": "^2.8.8",
-    "typescript": "*"
+    "typescript": "*",
+    "husky": "^8.0.0"
   }
 }

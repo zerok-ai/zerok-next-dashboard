@@ -97,21 +97,25 @@ a {
 
 
 // JSON viwer
-// .object-key-val, .variable-row {
-//   border-color: $grey-300 !important;
-// }
+.object-key-val, .variable-row {
+  border-color: $grey-300 !important;
+}
 
-// .object-key {
-//   span {
-//     color:$grey-100 !important;
-//   }
-// }
+.object-key {
+  span {
+    color:$grey-100 !important;
+  }
+}
 
-// .variable-value {
-//   span {
-//     color:$grey-50 !important;
-//   }
-// }
+.variable-value {
+  span {
+    color:$grey-50 !important;
+  }
+}
+
+.react-json-view {
+  background-color: $grey-900 !important;
+}
 
 // MUI overloads
 
