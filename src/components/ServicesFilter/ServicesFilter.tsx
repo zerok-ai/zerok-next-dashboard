@@ -141,11 +141,6 @@ const ServicesMenu = ({
                       defaultChecked={selectedServices.includes(
                         service.service
                       )}
-                      color="primary"
-                      sx={{
-                        color: cssVars.primary500,
-                        "&.Mui-checked": {},
-                      }}
                     />{" "}
                     {getNamespace(service.service)}/
                     {getFormattedServiceName(service.service)}
