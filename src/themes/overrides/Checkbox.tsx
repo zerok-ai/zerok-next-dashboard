@@ -1,23 +1,19 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-import { Box, CheckboxProps } from '@mui/material';
-
-// project import
-import getColors from 'utils/mantis/getColors';
-
 // assets
-import { CheckSquareFilled, MinusSquareFilled } from '@ant-design/icons';
-
-// types
-import { ExtendedStyleProps } from 'types/extended';
-
+import { CheckSquareFilled, MinusSquareFilled } from "@ant-design/icons";
+import { Box, type CheckboxProps } from "@mui/material";
+import { type Theme } from "@mui/material/styles";
 import cssVars from "styles/variables.module.scss";
+// types
+import { type ExtendedStyleProps } from "types/extended";
+// project import
+import getColors from "utils/mantis/getColors";
 
 // ==============================|| RADIO - COLORS ||============================== //
 
 function getColorStyle({ color, theme }: ExtendedStyleProps) {
   const colors = getColors(theme, color);
-  const { lighter, main, dark } = colors;
+  const { main } = colors;
 
   return {
     "&:hover": {

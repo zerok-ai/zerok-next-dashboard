@@ -1,12 +1,10 @@
 // material-ui
-import { alpha, Theme } from '@mui/material/styles';
-
+import { alpha, type Theme } from "@mui/material/styles";
+// types
+import { type ExtendedStyleProps } from "types/extended";
 // project import
 import getColors from "utils/mantis/getColors";
 import getShadow from "utils/mantis/getShadow";
-
-// types
-import { ExtendedStyleProps } from 'types/extended';
 
 // ==============================|| BUTTON - COLORS ||============================== //
 
@@ -14,6 +12,7 @@ function getColorStyle({ color, theme }: ExtendedStyleProps) {
   const colors = getColors(theme, color);
   const { main, dark, contrastText } = colors;
 
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   const buttonShadow = `${color}Button`;
   const shadows = getShadow(theme, buttonShadow);
 
@@ -21,22 +20,22 @@ function getColorStyle({ color, theme }: ExtendedStyleProps) {
     color: contrastText,
     backgroundColor: main,
     boxShadow: shadows,
-    '&:hover': {
-      boxShadow: 'none',
-      backgroundColor: dark
+    "&:hover": {
+      boxShadow: "none",
+      backgroundColor: dark,
     },
-    '&:focus-visible': {
+    "&:focus-visible": {
       outline: `2px solid ${dark}`,
-      outlineOffset: 2
+      outlineOffset: 2,
     },
-    '&::after': {
-      borderRadius: '50px',
-      boxShadow: `0 0 5px 5px ${alpha(main, 0.9)}`
+    "&::after": {
+      borderRadius: "50px",
+      boxShadow: `0 0 5px 5px ${alpha(main, 0.9)}`,
     },
-    '&:active::after': {
-      borderRadius: '50px',
-      boxShadow: `0 0 0 0 ${alpha(main, 0.9)}`
-    }
+    "&:active::after": {
+      borderRadius: "50px",
+      boxShadow: `0 0 0 0 ${alpha(main, 0.9)}`,
+    },
   };
 }
 

@@ -1,6 +1,5 @@
 // material-ui
-import { Theme } from '@mui/material/styles';
-
+import { type Theme } from "@mui/material/styles";
 import cssVars from "styles/variables.module.scss";
 import { SPACE_TOKEN } from "utils/constants";
 

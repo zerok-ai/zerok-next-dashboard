@@ -1,16 +1,16 @@
 // material-ui
-import { alpha, Theme } from '@mui/material/styles';
-
+import { alpha, type Theme } from "@mui/material/styles";
+// custom cssvars
+import cssVars from "styles/variables.module.scss";
+// types
+import {
+  type ButtonVariantProps,
+  type ExtendedStyleProps,
+} from "types/extended";
+import { SPACE_TOKEN } from "utils/constants";
 // project import
 import getColors from "utils/mantis/getColors";
 import getShadow from "utils/mantis/getShadow";
-
-// types
-import { ButtonVariantProps, ExtendedStyleProps } from 'types/extended';
-
-
-// custom cssvars
-import cssVars from 'styles/variables.module.scss';
 
 // ==============================|| BUTTON - COLORS ||============================== //
 
@@ -18,13 +18,11 @@ interface ButtonStyleProps extends ExtendedStyleProps {
   variant: ButtonVariantProps;
 }
 
-import css from "styles/variables.module.scss";
-import { SPACE_TOKEN } from "utils/constants";
-
 function getColorStyle({ variant, color, theme }: ButtonStyleProps) {
   const colors = getColors(theme, color);
   const { lighter, main, dark, contrastText } = colors;
 
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   const buttonShadow = `${color}Button`;
   const shadows = getShadow(theme, buttonShadow);
 
@@ -84,7 +82,7 @@ function getColorStyle({ variant, color, theme }: ButtonStyleProps) {
     case "text":
       return {
         "&:hover": {
-          backgroundColor: css.grey800,
+          backgroundColor: cssVars.grey800,
         },
       };
     default:
@@ -150,7 +148,7 @@ export default function Button(theme: Theme) {
       styleOverrides: {
         root: {
           fontWeight: 500,
-          lineHeight: css.defaultLineHeight,
+          lineHeight: cssVars.defaultLineHeight,
           "&::after": {
             content: '""',
             display: "block",
@@ -362,7 +360,7 @@ export default function Button(theme: Theme) {
           padding: "2px 8px",
         },
         sizeMedium: {
-          height: css.buttonHeightDefault,
+          height: cssVars.buttonHeightDefault,
           padding: `${2 * SPACE_TOKEN}px ${4 * SPACE_TOKEN}px`,
         },
       },

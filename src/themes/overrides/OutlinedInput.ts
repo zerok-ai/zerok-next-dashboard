@@ -1,13 +1,11 @@
 // material-ui
-import { Theme } from "@mui/material/styles";
-import { ColorProps } from "types/extended";
-
+import { type Theme } from "@mui/material/styles";
+import css from "styles/variables.module.scss";
+import { type ColorProps } from "types/extended";
+import { SPACE_TOKEN } from "utils/constants";
 // project import
 import getColors from "utils/mantis/getColors";
 import getShadow from "utils/mantis/getShadow";
-
-import css from "styles/variables.module.scss";
-import { SPACE_TOKEN } from "utils/constants";
 interface Props {
   variant: ColorProps;
   theme: Theme;
@@ -19,6 +17,7 @@ function getColor({ variant, theme }: Props) {
   const colors = getColors(theme, variant);
   const { light } = colors;
 
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   const shadows = getShadow(theme, `${variant}`);
 
   return {
