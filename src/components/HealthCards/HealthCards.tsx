@@ -13,14 +13,18 @@ import { type ServiceDetail } from "utils/types";
 
 import styles from "./HealthCards.module.scss";
 
-const HealthCards = () => {
+interface HealthCardProps {
+  filter: string;
+}
+
+const HealthCards = ({ filter }: HealthCardProps) => {
   const {
     data: services,
     fetchData: fetchServices,
     loading,
     error,
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
 
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
@@ -34,7 +38,7 @@ const HealthCards = () => {
         )
       );
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, renderTrigger]);
 
   const skeletons = new Array(8).fill("skeleton");
 
@@ -53,11 +57,15 @@ const HealthCards = () => {
       </div>
     );
   }
+  const filteredServices =
+    services && services.length > 0
+      ? services.filter((sv) => sv.service.includes(filter))
+      : services;
   return (
     <div className={styles["content-container"]}>
       <div className={styles["services-container"]}>
-        {!loading && services != null
-          ? services.map((sv) => {
+        {!loading && filteredServices != null
+          ? filteredServices.map((sv) => {
               return (
                 <div className={styles.service} key={nanoid()}>
                   <ServiceCard service={sv} />

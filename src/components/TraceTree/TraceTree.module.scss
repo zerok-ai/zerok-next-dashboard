@@ -8,6 +8,7 @@
     width:100%;
     background-color: $bg-dark;
     z-index: 2;
+
 }
 
 .header {
@@ -32,9 +33,9 @@
 }
 .tree {
     position: relative;
-    height:100%;
     flex:1;
     padding:$sp-base $sp-base * 2;
+    overflow-y: auto;
     :global(.Mui-expanded){
         margin:0;
     }
@@ -45,8 +46,8 @@
     :global(.MuiAccordionSummary-content:last-child){
         margin-bottom:0;
     }
-    padding-bottom: $sp-base * 4;
     border-bottom: 1px solid $grey-800;
+    padding-bottom: $sp-base * 7;
 }
 
 .accordion {
@@ -87,6 +88,11 @@
     &:hover {
         color:$primary-500;
     }
+}
+
+.accordion-label-container {
+    display: flex;
+    column-gap: $sp-base * 4;
 }
 
 .latency {
@@ -154,6 +160,9 @@
     margin-top: 10vh;
     width:92vw;
     margin:10vh auto;
+    // height:300px;
+    height:70vh;
+
 }
 
 .backdrop {
@@ -166,4 +175,21 @@
     width:100vw;
     background-color: rgba(0,0,0,0.5);
     z-index: 1;
+}
+
+.span-name {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+
+.span-method {
+    font-weight: 600;
+    text-transform: uppercase;
+    color:$grey-100;
+}
+
+.span-route {
+    font-weight: 400;
+    // font-style: italic;
+    color:$grey-100 !important;
 }

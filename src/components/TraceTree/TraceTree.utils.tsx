@@ -129,7 +129,7 @@ export const getWidthByLevel = (
   leaf: boolean = false,
   expand = true
 ) => {
-  const defaultWidth = expand ? 800 : 450;
+  const defaultWidth = expand ? 800 : 600;
   const width = defaultWidth - level * 9;
   return leaf ? `${width + 8}px` : `${width}px`;
 };
@@ -151,8 +151,13 @@ export const AccordionLabel = ({
   highlight,
   isModalOpen,
 }: AccordionLabelProps) => {
-  const name = isTopRoot ? span.source : span.destination;
+  const name = isTopRoot
+    ? span.source.length
+      ? span.source
+      : "Unknown"
+    : span.destination;
   const service = name.includes("/") ? name.split("/")[1] : name;
+  const spanName = getSpanName(span);
   return (
     <div className={styles["accordion-summary-content"]}>
       <p
@@ -165,7 +170,7 @@ export const AccordionLabel = ({
           <span
             className={cx(
               styles["accordion-label"],
-              highlight && styles["exception-parent"]
+              highlight && !isTopRoot && styles["exception-parent"]
             )}
             role="button"
             id="span-label"
@@ -176,6 +181,7 @@ export const AccordionLabel = ({
             {service}
           </span>
         </TooltipX>
+        {spanName}
       </p>
     </div>
   );
@@ -217,4 +223,42 @@ export const SpanLatencyTimeline = ({
       ></p>
     </div>
   );
+};
+
+export const getSpanName = (span: SpanDetail) => {
+  const { protocol, kind, method, route } = span;
+  const DefaultSpanName = () => {
+    return (
+      <span className={styles["span-name"]}>
+        <span className={styles["span-method"]}>{method}</span>
+      </span>
+    );
+  };
+  if (protocol === "http") {
+    switch (kind) {
+      case "SERVER":
+        if (route) {
+          return (
+            <span className={styles["span-name"]}>
+              <span className={styles["span-method"]}>{method}</span> |
+              <span className={styles["span-route"]}>{route}</span>
+            </span>
+          );
+        }
+        return <DefaultSpanName />;
+      case "CLIENT":
+        return <DefaultSpanName />;
+      default:
+        return <DefaultSpanName />;
+    }
+  } else if (protocol === "mysql") {
+    return (
+      <span className={styles["span-name"]}>
+        <span className={styles["span-method"]}>
+          {protocol} {method && `|`}
+        </span>
+        {method && <span className={styles["span-route"]}>{method}</span>}
+      </span>
+    );
+  }
 };

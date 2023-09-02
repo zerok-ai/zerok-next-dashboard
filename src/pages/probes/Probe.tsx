@@ -115,9 +115,10 @@ const Probe = () => {
       await raxios.put(endpoint, {
         action: enable ? "enable" : "disable",
       });
-      getData();
     } catch (err) {
       console.log({ err });
+    } finally {
+      getData();
     }
   };
 
@@ -128,9 +129,10 @@ const Probe = () => {
         selectedCluster as string
       ).replace("{scenario_id}", scenario_id);
       await raxios.delete(endpoint);
-      getData();
     } catch (err) {
       console.log({ err });
+    } finally {
+      getData();
     }
   };
 
@@ -259,6 +261,7 @@ const Probe = () => {
                 }
               >
                 <Switch
+                  name="probe-toggle-switch"
                   size="small"
                   defaultChecked={!info.row.original.disabled_at}
                   color="primary"
