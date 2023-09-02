@@ -14,7 +14,7 @@ import "styles/mui-overrides.scss"
 
 import { type NextPage } from "next";
 import type { AppProps } from "next/app";
-import { type ReactElement, type ReactNode } from "react";
+import { type ReactElement } from "react";
 // third-party
 import { Provider } from "react-redux";
 import store from "redux/store";
@@ -22,7 +22,7 @@ import ThemeCustomization from "themes";
 
 // types
 type LayoutProps = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode;
+  getLayout?: (page: ReactElement) => ReactElement;
 };
 
 interface Props {
