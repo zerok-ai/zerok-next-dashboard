@@ -57,6 +57,7 @@ const ClusterSelector = () => {
       {/* <InputLabel htmlFor="cluster-list">Cluster</InputLabel> */}
       <Select
         id="cluster-list"
+        name="cluster-selector"
         defaultOpen={isDefaultOpen}
         value={selectedCluster}
         className={styles.select}

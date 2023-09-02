@@ -306,7 +306,6 @@ const ConditionCard = ({
                     }}
                   >
                     {getSelectValues().map((v) => {
-                      console.log({ v });
                       if (v.value.includes("*/*")) {
                         return null;
                       }

@@ -15,10 +15,9 @@ import { Fragment, useEffect, useMemo } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
-import { LIST_ISSUES_ENDPOINT, LIST_SERVICES_ENDPOINT } from "utils/endpoints";
-import { filterServices } from "utils/functions";
+import { LIST_ISSUES_ENDPOINT } from "utils/endpoints";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
-import { type IssueDetail, type ServiceDetail } from "utils/types";
+import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
 import { getIssueColumns } from "./IssuesPage.utils";
@@ -49,21 +48,16 @@ const IssuesPage = () => {
     if (selectedCluster) {
       setData(null);
       const filter = services && services.length > 0 ? services.join(",") : "";
-      const range = query.range ?? DEFAULT_TIME_RANGE;
       const serviceFilter = filter.length > 0 ? { services: filter } : {};
       const params = queryString.stringify({
         ...serviceFilter,
-        limit: ISSUES_PAGE_SIZE,
-        offset: (page - 1) * ISSUES_PAGE_SIZE,
-        st: range,
       });
       const endpoint =
         LIST_ISSUES_ENDPOINT.replace("{cluster_id}", selectedCluster)
           .replace("{range}", range as string)
           .replace("{limit}", ISSUES_PAGE_SIZE.toString())
           .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString()) +
-        "&" +
-        params;
+        `${params.length ? `&${params}` : ""}`;
       fetchIssues(endpoint);
     }
   }, [selectedCluster, router.query, renderTrigger]);

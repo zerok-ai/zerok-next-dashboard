@@ -24,7 +24,7 @@ import {
   HiOutlineArrowsExpand,
   HiOutlineX,
 } from "react-icons/hi";
-import { HiOutlineArrowsPointingIn, HiOutlineBugAnt } from "react-icons/hi2";
+import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
@@ -57,7 +57,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     spanTransformer
   );
   const { selectedCluster } = useSelector(clusterSelector);
-  const [debugMode, toggleDebugMode] = useToggle(false);
+  // const [debugMode, toggleDebugMode] = useToggle(false);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
@@ -80,6 +80,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       )
         .replace("{issue_id}", issue as string)
         .replace("{incident_id}", trace as string);
+      // const endpoint = `/fake_spans.json`;
       fetchSpans(endpoint);
     }
   }, [selectedCluster]);
@@ -157,6 +158,9 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
         ? true
         : span.children && span.children.length > 0;
 
+      const shouldRenderLatency =
+        !isTopRoot || (isTopRoot && !span.destination && !span.source);
+
       const nextRender = (): null | React.ReactNode => {
         if (isTopRoot) {
           return renderSpan(
@@ -176,7 +180,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
           });
         }
       };
-      if (!debugMode && !span.destination && !isTopRoot) {
+      if (!span.destination && !span.source && !isTopRoot) {
         return nextRender();
       }
 
@@ -196,7 +200,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                 setSelectedSpan={setSelectedSpan}
                 isModalOpen={isModalOpen}
               />
-              {!isTopRoot && (
+              {shouldRenderLatency && (
                 <Fragment>
                   <SpanLatency latency={span.latency} />
                   <SpanLatencyTimeline
@@ -267,13 +271,13 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                 <HiOutlineArrowsExpand className={styles["expand-icon"]} />
               )}
             </IconButton>
-            <IconButton
+            {/* <IconButton
               size="small"
               className={styles["expand-btn"]}
               onClick={toggleDebugMode}
             >
               <HiOutlineBugAnt className={styles["expand-icon"]} />
-            </IconButton>
+            </IconButton> */}
           </div>
         </div>
 

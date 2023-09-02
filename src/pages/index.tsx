@@ -1,13 +1,14 @@
-import { Button, Checkbox } from "@mui/material";
+import { Button } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 import HealthCards from "components/HealthCards";
 import PageHeader from "components/helpers/PageHeader";
 import PageWrapper from "components/helpers/PageWrapper";
 import MapToggle from "components/MapToggle";
+import SearchBar from "components/SearchBar";
 import ServiceMapPage from "components/ServiceMapPage";
 import UnderConstruction from "components/UnderConstruction";
 import { useToggle } from "hooks/useToggle";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { HiPlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -18,6 +19,7 @@ import styles from "./Home.module.scss";
 const Home = () => {
   const [isHealthMap, toggleHealthMap] = useToggle(true);
   const [isMapFilterOpen, toggleMapFilter] = useToggle(false);
+  const [cardFilter, setCardFilter] = useState("");
   const { status, selectedCluster } = useSelector(clusterSelector);
   const healthyCluster = selectedCluster
     ? status === CLUSTER_STATES.HEALTHY
@@ -36,6 +38,19 @@ const Home = () => {
     );
   }, [toggleMapFilter]);
 
+  const CardFilterSearch = useMemo(() => {
+    return (
+      <SearchBar
+        onChange={(val) => {
+          setCardFilter(val);
+        }}
+        key="search-bar"
+        inputState={cardFilter}
+        placeholder="Filter by service name"
+      />
+    );
+  }, [cardFilter]);
+
   const MapToggleMemo = useMemo(() => {
     return (
       <MapToggle
@@ -48,8 +63,10 @@ const Home = () => {
   }, [isHealthMap]);
 
   const getExtras = useCallback(() => {
-    return isHealthMap ? [MapToggleMemo, MapFilterButton] : [MapToggleMemo];
-  }, [isHealthMap]);
+    return isHealthMap
+      ? [MapToggleMemo, MapFilterButton]
+      : [MapToggleMemo, CardFilterSearch];
+  }, [isHealthMap, cardFilter]);
 
   return (
     <div>
@@ -66,7 +83,7 @@ const Home = () => {
             isFilterOpen={isMapFilterOpen}
           />
         ) : (
-          <HealthCards />
+          <HealthCards filter={cardFilter} />
         )
       ) : (
         <UnderConstruction altTitle="Please select a healthy cluster or add a new cluster to continue." />

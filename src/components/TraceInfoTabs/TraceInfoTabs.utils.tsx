@@ -82,6 +82,7 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
         displayDataTypes={false}
         name={false}
         enableClipboard={false}
+        theme="twilight"
       />
     );
   } catch (err) {
@@ -114,6 +115,10 @@ export const DEFAULT_TABS = [
         {
           label: "Latency",
           value: `${convertNanoToMilliSeconds(metadata.latency)}`,
+        },
+        {
+          label: "Span ID",
+          value: metadata.span_id,
         },
         {
           label: "Timestamp",

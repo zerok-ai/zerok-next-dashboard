@@ -25,7 +25,13 @@ module.exports = {
     sourceType: "module",
     project: "./tsconfig.json",
   },
-  plugins: ["react", "simple-import-sort", "react-hooks", "@typescript-eslint"],
+  plugins: [
+    "react",
+    "simple-import-sort",
+    "react-hooks",
+    "@typescript-eslint",
+    "@next/eslint-plugin-next",
+  ],
   rules: {
     // increase the severity of rules so they are auto-fixable
     "simple-import-sort/imports": "error",

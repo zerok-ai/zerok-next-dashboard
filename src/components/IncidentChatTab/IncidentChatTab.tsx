@@ -1,11 +1,11 @@
-import { IconButton } from "@mui/material";
+// import { IconButton } from "@mui/material";
 import AIChatBox from "components/AIChatBox";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { Fragment, memo, useEffect, useRef, useState } from "react";
-import { HiOutlineBugAnt } from "react-icons/hi2";
+// import { HiOutlineBugAnt } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
@@ -29,7 +29,7 @@ interface IncidentChatData {
 
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
-  const [enableChat, toggleEnableChat] = useToggle(false);
+  const [enableChat] = useToggle(false);
   const router = useRouter();
   const {
     // issue: scenarioId,
@@ -191,9 +191,9 @@ const IncidentChatTab = () => {
   return (
     <div className={styles.container}>
       <div className={styles["chat-box-container"]}>
-        <IconButton size="small" onClick={toggleEnableChat}>
+        {/* <IconButton size="small" onClick={toggleEnableChat}>
           <HiOutlineBugAnt />
-        </IconButton>
+        </IconButton> */}
         <div className={styles["text-container"]}>
           {!enableChat && (
             <AIChatBox

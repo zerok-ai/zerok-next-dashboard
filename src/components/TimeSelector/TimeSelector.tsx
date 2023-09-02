@@ -36,6 +36,7 @@ const TimeSelector = ({ handlePush = true, onChange }: TimeSelectorProps) => {
       <Tooltip placement="top" arrow title="Time range">
         <Select
           value={time}
+          name="time-selector"
           className={styles.select}
           renderValue={(val) => {
             return (

@@ -40,11 +40,12 @@ const NameAndTimeForm = ({ form }: NameAndTimeFormProps) => {
         </div>
       </div>
       <div className={styles["name-form-item"]}>
-        <label htmlFor="time">Probe active for</label>
+        <label htmlFor="time-input">Probe active for</label>
         <Select
           defaultValue={PROBE_TIME_RANGES[0].value}
           className={styles["time-input"]}
-          id="time"
+          id="time-input"
+          name="time-input"
           value={time}
           onChange={(e) => {
             setValue("time", e.target.value);

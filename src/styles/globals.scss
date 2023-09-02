@@ -19,9 +19,9 @@ p {
   line-height: $default-line-height;
 }
 
-p,span {
-  color:$grey-300;
-}
+// p,span {
+//   color:$grey-300;
+// }
 
 h1 {
   font-size: 40px;
@@ -111,6 +111,10 @@ a {
   span {
     color:$grey-50 !important;
   }
+}
+
+.react-json-view {
+  background-color: $grey-900 !important;
 }
 
 // MUI overloads

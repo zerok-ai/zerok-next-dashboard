@@ -20,22 +20,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
     reactIcon: (cls: string) => <HiLightningBolt className={cls} />,
     label: "Issues",
     path: "/issues",
-    type: "group",
-    children: [
-      {
-        path: "/issues",
-        label: "All issues",
-      },
-      {
-        path: "/issues?tab=recently-viewed",
-        label: "Recently viewed",
-      },
-      {
-        path: "/issues?tab=unassigned",
-        label: "Assigned to me",
-      },
-    ],
-    openOnClick: true,
+    type: "single",
   },
   {
     icon: `${ICONS.plate}`,

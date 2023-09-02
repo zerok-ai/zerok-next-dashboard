@@ -91,6 +91,7 @@ const GroupBySelect = ({
           defaultValue={""}
           fullWidth
           value={values.service ?? ""}
+          name="group-service"
           className={styles["group-by-select"]}
           variant="outlined"
           onChange={(e) => {
@@ -118,6 +119,7 @@ const GroupBySelect = ({
           defaultValue=""
           fullWidth
           variant="outlined"
+          name="group-property"
           onChange={(e) => {
             updateValue("property", e.target.value);
           }}
