@@ -1,7 +1,5 @@
 import "styles/normalize.scss";
 import "simplebar/dist/simplebar.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 // apex-chart
 import "styles/apex-chart.scss";
 import "styles/react-table.scss";
