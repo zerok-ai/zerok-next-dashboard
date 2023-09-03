@@ -53,10 +53,17 @@ const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
   const [totalScenarios, setTotalScenarios] = useState<number>(0);
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
-  const [loading, setLoading] = useState<null | string>(null);
+  const [selectedProbe, setSelectedProbe] = useState<null | {
+    scenario_id: string;
+    loading: boolean;
+    deleting: boolean;
+  }>(null);
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
+  const resetSelectedProbe = () => {
+    setSelectedProbe(null);
+  };
   const getData = async () => {
     try {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
@@ -96,7 +103,7 @@ const Probe = () => {
     } catch (err) {
       console.log({ err });
     } finally {
-      setLoading(null);
+      resetSelectedProbe();
     }
   };
   useEffect(() => {
@@ -107,7 +114,7 @@ const Probe = () => {
   }, [selectedCluster, router, renderTrigger]);
 
   const handleSwitchChange = async (scenario_id: string, enable: boolean) => {
-    setLoading(scenario_id);
+    setSelectedProbe({ scenario_id, loading: true, deleting: false });
     try {
       const endpoint = UPDATE_PROBE_STATUS_ENDPOINT.replace(
         "{cluster_id}",
@@ -128,10 +135,10 @@ const Probe = () => {
   }, []);
 
   const handleDelete = async () => {
-    if (!loading) {
+    if (!selectedProbe?.scenario_id) {
       return;
     }
-    const scenario_id = loading;
+    const scenario_id = selectedProbe.scenario_id;
     try {
       const endpoint = DELETE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
@@ -153,11 +160,14 @@ const Probe = () => {
       size: DEFAULT_COL_WIDTH * 5,
       cell: (info) => {
         const ruleString = getScenarioString(info.row.original.scenario);
+        if (
+          selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
+        ) {
+          return columnSkeleton;
+        }
         return (
           <div className={styles["scenario-title-container"]}>
-            {loading === info.row.original.scenario.scenario_id ? (
-              columnSkeleton
-            ) : (
+            {
               <Fragment>
                 <TooltipX title={ruleString}>
                   <span
@@ -171,7 +181,7 @@ const Probe = () => {
                 </TooltipX>
                 {info.row.original.disabled_at && <ChipX label="Disabled" />}
               </Fragment>
-            )}
+            }
           </div>
         );
       },
@@ -180,8 +190,9 @@ const Probe = () => {
       header: "Created by",
       size: DEFAULT_COL_WIDTH,
       cell: (info) => {
-        const { scenario_id } = info.row.original.scenario;
-        if (scenario_id === loading) {
+        if (
+          selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
+        ) {
           return columnSkeleton;
         }
         return (
@@ -201,8 +212,9 @@ const Probe = () => {
       size: DEFAULT_COL_WIDTH * 1.5,
       cell: (info) => {
         const { created_at } = info.row.original;
-        const { scenario_id } = info.row.original.scenario;
-        if (scenario_id === loading) {
+        if (
+          selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
+        ) {
           return columnSkeleton;
         }
         return (
@@ -221,7 +233,7 @@ const Probe = () => {
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
         const { sources, scenario_id } = info.row.original.scenario;
-        if (scenario_id === loading) {
+        if (selectedProbe?.scenario_id === scenario_id) {
           return columnSkeleton;
         }
         if (!sources) {
@@ -274,8 +286,9 @@ const Probe = () => {
       header: "Actions",
       size: 70,
       cell: (info) => {
-        const { scenario_id } = info.row.original.scenario;
-        if (scenario_id === loading) {
+        if (
+          selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
+        ) {
           return columnSkeleton;
         }
         return (
@@ -291,7 +304,7 @@ const Probe = () => {
                 }
               >
                 <Switch
-                  disabled={!!loading}
+                  disabled={!!selectedProbe?.scenario_id}
                   name="probe-toggle-switch"
                   size="small"
                   defaultChecked={!info.row.original.disabled_at}
@@ -306,13 +319,16 @@ const Probe = () => {
               </Tooltip>
             </Fragment>
             {/* Delete */}
-            <TooltipX title="Delete probe" disabled={!!loading}>
+            <TooltipX title="Delete probe" disabled={selectedProbe?.loading}>
               <span>
                 <IconButton
                   size="small"
-                  disabled={!!loading}
                   onClick={() => {
-                    setLoading(info.row.original.scenario.scenario_id);
+                    setSelectedProbe({
+                      loading: true,
+                      scenario_id: info.row.original.scenario.scenario_id,
+                      deleting: true,
+                    });
                   }}
                 >
                   <HiOutlineTrash />
@@ -348,16 +364,16 @@ const Probe = () => {
         alignExtras="right"
       />
       <DialogX
-        isOpen={!!loading}
+        isOpen={!!(selectedProbe && selectedProbe.deleting)}
         title="Delete Probe"
         successText="Delete"
         cancelText="Cancel"
         onClose={() => {
-          setLoading(null);
+          resetSelectedProbe();
         }}
         onSuccess={handleDelete}
         onCancel={() => {
-          setLoading(null);
+          resetSelectedProbe();
         }}
       >
         <span>Are you sure you want to delete this probe?</span> <br />

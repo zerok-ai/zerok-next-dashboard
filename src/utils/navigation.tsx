@@ -1,11 +1,29 @@
+import { useMemo } from "react";
 import { HiLightningBolt } from "react-icons/hi";
 
-import { ICONS } from "./images";
+import { ICON_BASE_PATH, ICONS } from "./images";
 import { type DrawerNavItemType } from "./types";
+console.log(useMemo);
+const HealthNormal = () => {
+  return <img src={`${ICON_BASE_PATH}/${ICONS["chart-up"]}`} />;
+};
+
+const HealthHighlight = () => {
+  return <img src={`${ICON_BASE_PATH}/chart-up_highlight.svg`} />;
+};
+
+const ProbeNormal = () => {
+  return <img src={`${ICON_BASE_PATH}/${ICONS.plate}`} />;
+};
+
+const ProbeHighlight = () => {
+  return <img src={`${ICON_BASE_PATH}/plate_highlight.svg`} />;
+};
 
 export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
-    icon: `${ICONS["chart-up"]}`,
+    icon: <HealthNormal />,
+    highlightIcon: <HealthHighlight />,
     label: "Health",
     path: "/",
     type: "single",
@@ -16,14 +34,14 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   //   path: "/classify",
   // },
   {
-    icon: `${ICONS.puzzle}`,
     reactIcon: (cls: string) => <HiLightningBolt className={cls} />,
     label: "Issues",
     path: "/issues",
     type: "single",
   },
   {
-    icon: `${ICONS.plate}`,
+    icon: <ProbeNormal />,
+    highlightIcon: <ProbeHighlight />,
     label: "Probes",
     path: "/probes",
     type: "single",
