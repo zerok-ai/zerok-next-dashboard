@@ -27,13 +27,33 @@ const CLUSTER_BLOCKED_ROUTES = [
 ];
 
 const PageLayout = ({ children }: PageLayoutProps) => {
-  const { status } = useSelector(clusterSelector);
+  const { status, empty } = useSelector(clusterSelector);
   const router = useRouter();
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const blockRoute =
     status.length &&
     status !== CLUSTER_STATES.HEALTHY &&
     CLUSTER_BLOCKED_ROUTES.includes(router.pathname);
+  const renderChildren = () => {
+    if (empty) {
+      return <Fragment>
+        <Head>
+          <title>ZeroK Dashboard - Add a cluster</title>
+        </Head>
+        <UnderConstruction altTitle="Please add a cluster to continue." />
+      </Fragment>;
+    } else if (blockRoute) {
+      return (
+        <Fragment>
+          <Head>
+            <title>ZeroK Dashboard - Unhealthy cluster</title>
+          </Head>
+        </Fragment>
+      );
+    } else {
+      return children;
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -59,18 +79,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           className={`${styles["page-content"]} hidden-scroll`}
           id="global-container"
         >
-          <ErrorBoundary>
-            {!blockRoute ? (
-              children
-            ) : (
-              <Fragment>
-                <Head>
-                  <title>ZeroK Dashboard</title>
-                </Head>
-                <UnderConstruction altTitle="Please select a healthy cluster to continue" />
-              </Fragment>
-            )}
-          </ErrorBoundary>
+          <ErrorBoundary>{renderChildren()}</ErrorBoundary>
         </main>
       </div>
     </div>
