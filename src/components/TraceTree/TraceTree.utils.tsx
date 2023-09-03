@@ -1,6 +1,7 @@
 import cx from "classnames";
 import TooltipX from "components/themeX/TooltipX";
 import dayjs from "dayjs";
+import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds } from "utils/functions";
 import { type SpanDetail, type SpanResponse } from "utils/types";
@@ -105,7 +106,13 @@ export const spanTransformer = (spanData: SpanResponse) => {
 
 export const TOP_BORDER_COLOR = "#506D86";
 
-export const COLORS = ["#1E7BC2", "#9B8AFB", "#FDB022", "#5925DC", "#39D896"];
+export const COLORS = [
+  "rgba(30, 123, 194, 0.7)",
+  "rgba(155, 138, 251, 0.7)",
+  "rgba(253, 176, 34, 0.7)",
+  "rgba(89, 37, 220, 0.7)",
+  "rgba(57, 216, 150, 0.7)",
+];
 
 export const checkForVisibleChildren = (span: SpanDetail) => {
   if ((span.children && span.children.length === 0) ?? !span.children) {
@@ -131,7 +138,7 @@ export const getWidthByLevel = (
 ) => {
   const defaultWidth = expand ? 800 : 600;
   const width = defaultWidth - level * 9;
-  return leaf ? `${width + 8}px` : `${width}px`;
+  return leaf ? `${width + 9}px` : `${width}px`;
 };
 
 interface AccordionLabelProps {
@@ -230,7 +237,14 @@ export const getSpanName = (span: SpanDetail) => {
   const DefaultSpanName = () => {
     return (
       <span className={styles["span-name"]}>
-        <span className={styles["span-method"]}>{method}</span>
+        <span
+          className={styles["span-method"]}
+          style={{
+            backgroundColor: HTTP_METHOD_COLORS[method],
+          }}
+        >
+          {method}
+        </span>
       </span>
     );
   };
@@ -240,8 +254,15 @@ export const getSpanName = (span: SpanDetail) => {
         if (route) {
           return (
             <span className={styles["span-name"]}>
-              <span className={styles["span-method"]}>{method}</span> |
-              <span className={styles["span-route"]}>{route}</span>
+              <span
+                className={styles["span-method"]}
+                style={{
+                  backgroundColor: HTTP_METHOD_COLORS[method],
+                }}
+              >
+                {method}
+              </span>{" "}
+              |<span className={styles["span-route"]}>{route}</span>
             </span>
           );
         }
@@ -254,9 +275,15 @@ export const getSpanName = (span: SpanDetail) => {
   } else if (protocol === "mysql") {
     return (
       <span className={styles["span-name"]}>
-        <span className={styles["span-method"]}>
-          {protocol} {method && `|`}
+        <span
+          className={styles["span-method"]}
+          style={{
+            backgroundColor: MYSQL_COLOR,
+          }}
+        >
+          {protocol}
         </span>
+        {method && `|`}
         {method && <span className={styles["span-route"]}>{method}</span>}
       </span>
     );

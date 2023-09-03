@@ -18,7 +18,7 @@ import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useMemo, useState } from "react";
-import { AiOutlineDelete, AiOutlineFileAdd } from "react-icons/ai";
+import { HiOutlineKey, HiOutlineTrash } from "react-icons/hi2";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   APIKEY_CREATE_ENDPOINT,
@@ -141,7 +141,7 @@ const ApiKeys = () => {
                 }}
                 className={styles["delete-button"]}
               >
-                <AiOutlineDelete />
+                <HiOutlineTrash />
               </IconButton>
             </div>
           );
@@ -177,8 +177,7 @@ const ApiKeys = () => {
               onClick={createApiKey}
               key={nanoid()}
             >
-              <AiOutlineFileAdd className={styles["key-icon"]} /> Create new API
-              key
+              <HiOutlineKey className={styles["key-icon"]} /> Create new API key
             </Button>,
           ]}
         />

@@ -12,6 +12,8 @@ interface DialogXProps {
   title: string;
   children: React.ReactNode;
   isOpen: boolean;
+  successText?: string;
+  cancelText?: string;
   onClose: () => void;
   onSuccess: () => void;
   onCancel: () => void;
@@ -24,23 +26,21 @@ const DialogX = ({
   isOpen,
   onClose,
   children,
+  successText = "Delete",
+  cancelText = "Cancel",
 }: DialogXProps) => {
   return (
-    <Dialog
-      open={isOpen}
-      onClose={onClose}
-      className={styles["dialog-container"]}
-    >
-      <DialogTitle>{title}</DialogTitle>
+    <Dialog open={isOpen} onClose={onClose} className={styles.container}>
+      <DialogTitle className={styles.title}>{title}</DialogTitle>
       <DialogContentText className={styles["dialog-content"]}>
         {children}
       </DialogContentText>
       <DialogActions className={styles["dialog-actions"]}>
         <Button color="primary" onClick={onSuccess} variant="contained">
-          Delete
+          {successText ?? "Delete"}
         </Button>
         <Button color="secondary" onClick={onCancel}>
-          Cancel
+          {cancelText ?? "Cancel"}
         </Button>
       </DialogActions>
     </Dialog>

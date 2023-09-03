@@ -1,13 +1,9 @@
-import { FormHelperText, MenuItem, OutlinedInput, Select } from "@mui/material";
-import { nanoid } from "nanoid";
+import { FormHelperText, OutlinedInput } from "@mui/material";
 import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 
 import styles from "../ProbeCreateForm.module.scss";
-import {
-  PROBE_TIME_RANGES,
-  type ProbeFormType,
-} from "../ProbeCreateForm.utils";
+import { type ProbeFormType } from "../ProbeCreateForm.utils";
 
 interface NameAndTimeFormProps {
   form: UseFormReturn<ProbeFormType, any, undefined>;
@@ -19,7 +15,7 @@ const NameAndTimeForm = ({ form }: NameAndTimeFormProps) => {
     getValues,
     formState: { errors },
   } = form;
-  const { name, time } = getValues();
+  const { name } = getValues();
   return (
     <div className={styles["name-form-container"]}>
       <div className={styles["name-form-item"]}>
@@ -39,7 +35,7 @@ const NameAndTimeForm = ({ form }: NameAndTimeFormProps) => {
           )}
         </div>
       </div>
-      <div className={styles["name-form-item"]}>
+      {/* <div className={styles["name-form-item"]}>
         <label htmlFor="time-input">Probe active for</label>
         <Select
           defaultValue={PROBE_TIME_RANGES[0].value}
@@ -59,7 +55,7 @@ const NameAndTimeForm = ({ form }: NameAndTimeFormProps) => {
             );
           })}
         </Select>
-      </div>
+      </div> */}
     </div>
   );
 };

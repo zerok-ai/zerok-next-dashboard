@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { HiOutlineLogout } from "react-icons/hi";
 import {
-  HiOutlineCog6Tooth,
+  HiOutlineDocumentMagnifyingGlass,
   HiOutlineKey,
   HiOutlineUser,
 } from "react-icons/hi2";
@@ -36,7 +36,9 @@ const UserPill = () => {
       >
         <Link href="/api-keys">
           <MenuItem className={styles["menu-item"]}>
-            <HiOutlineCog6Tooth className={styles["menu-item-icon"]} />
+            <HiOutlineDocumentMagnifyingGlass
+              className={styles["menu-item-icon"]}
+            />
             <p>API Documentation</p>
           </MenuItem>
         </Link>

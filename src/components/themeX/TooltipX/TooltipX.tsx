@@ -4,6 +4,7 @@ interface TooltipXProps {
   placement?: "top" | "bottom" | "left" | "right";
   arrow?: boolean;
   title: string;
+  disabled?: boolean;
   children: React.ReactElement;
 }
 
@@ -12,9 +13,15 @@ const TooltipX = ({
   arrow = true,
   title,
   children,
+  disabled = false,
 }: TooltipXProps) => {
   return (
-    <Tooltip placement={placement} arrow={arrow} title={title}>
+    <Tooltip
+      disableFocusListener={!!disabled}
+      placement={placement}
+      arrow={arrow}
+      title={title}
+    >
       {children}
     </Tooltip>
   );

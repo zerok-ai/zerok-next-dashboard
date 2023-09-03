@@ -21,7 +21,6 @@ export const probeFormSchema = z.object({
     })
   ),
   name: z.string().min(1, "Probe name cannot be empty"),
-  time: z.string().min(1, "Time range cannot be empty"),
   sampling: z.object({
     samples: z.coerce.string().min(1, "Samples cannot be empty"),
     duration: z.coerce.string().min(1, "Duration cannot be empty"),

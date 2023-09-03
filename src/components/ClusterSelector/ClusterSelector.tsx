@@ -1,24 +1,26 @@
-import { Divider, MenuItem, Select } from "@mui/material";
+import { Divider, IconButton, MenuItem, Select, Skeleton } from "@mui/material";
 import cx from "classnames";
 import ClusterCreateModal from "components/ClusterCreateModal";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import {
   clusterSelector,
+  getClusters,
   setSelectedCluster,
   triggerRefetch,
 } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
 import { CLUSTER_STATES } from "utils/constants";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./ClusterSelector.module.scss";
 
 const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const clusterSlice = useSelector(clusterSelector);
-  const { clusters, selectedCluster, empty, status } = clusterSlice;
+  const { clusters, selectedCluster, empty, status, loading } = clusterSlice;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -50,6 +52,20 @@ const ClusterSelector = () => {
     }
     setIsModalVisible(false);
   };
+
+  const refreshClusters = () => {
+    dispatch(getClusters());
+  };
+
+  const loadingOptions = useMemo(() => {
+    return [1, 2, 3].map((x) => {
+      return (
+        <MenuItem key={x} className={styles["menu-item"]}>
+          <Skeleton height={30} width="100%" />
+        </MenuItem>
+      );
+    });
+  }, []);
   return (
     <div
       className={cx(styles.container, isDrawerMinimized && styles.minimized)}
@@ -65,7 +81,6 @@ const ClusterSelector = () => {
           const label = clusters.find((cl) => cl.id === value)?.name;
           return <span>{label}</span>;
         }}
-        // IconComponent={StyleIcon}
         onChange={(val) => {
           if (val !== null && val.target && val.target.value) {
             dispatch(setSelectedCluster({ id: null }));
@@ -78,28 +93,35 @@ const ClusterSelector = () => {
           }
         }}
       >
-        <p className={styles["menu-header"]}>Target cluster</p>
+        <div className={styles["menu-header"]}>
+          <p>Target cluster</p>
+          <IconButton className={styles.refresh} onClick={refreshClusters}>
+            <img src={`${ICON_BASE_PATH}/${ICONS.refresh}`} alt="refresh" />
+          </IconButton>
+        </div>
         <Divider className={styles["menu-divider"]} />
-        {clusters.length &&
-          clusters.map((cl) => {
-            return (
-              <MenuItem
-                value={cl.id}
-                key={cl.id}
-                className={styles["menu-item"]}
-              >
-                <span
-                  className={cx(
-                    cl.status === CLUSTER_STATES.HEALTHY
-                      ? styles.healthy
-                      : styles.unhealthy,
-                    styles["status-icon"]
-                  )}
-                ></span>
-                {cl.name}
-              </MenuItem>
-            );
-          })}
+        {loading
+          ? loadingOptions
+          : clusters.length &&
+            clusters.map((cl) => {
+              return (
+                <MenuItem
+                  value={cl.id}
+                  key={cl.id}
+                  className={styles["menu-item"]}
+                >
+                  <span
+                    className={cx(
+                      cl.status === CLUSTER_STATES.HEALTHY
+                        ? styles.healthy
+                        : styles.unhealthy,
+                      styles["status-icon"]
+                    )}
+                  ></span>
+                  {cl.name}
+                </MenuItem>
+              );
+            })}
         <Divider />
         <MenuItem
           className={styles["new-cluster-item"]}
