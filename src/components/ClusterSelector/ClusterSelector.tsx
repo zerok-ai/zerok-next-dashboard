@@ -47,15 +47,14 @@ const ClusterSelector = () => {
   };
 
   const handleModalClose = () => {
-    if (empty) {
-      setIsModalVisible(true);
-    }
     setIsModalVisible(false);
   };
 
   const refreshClusters = () => {
     dispatch(getClusters());
   };
+
+  console.log({ selectedCluster });
 
   const loadingOptions = useMemo(() => {
     return [1, 2, 3].map((x) => {
@@ -75,7 +74,7 @@ const ClusterSelector = () => {
         id="cluster-list"
         name="cluster-selector"
         defaultOpen={isDefaultOpen}
-        value={selectedCluster}
+        value={selectedCluster ?? ""}
         className={styles.select}
         renderValue={(value) => {
           const label = clusters.find((cl) => cl.id === value)?.name;

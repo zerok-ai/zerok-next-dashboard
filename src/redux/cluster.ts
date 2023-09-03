@@ -80,7 +80,10 @@ export const clusterSlice = createSlice({
           }
           state.selectedCluster = action.payload[0].id;
           state.status = action.payload[0].status;
-        } else state.empty = true;
+        } else {
+          state.empty = true;
+          state.selectedCluster = null;
+        }
       })
       .addCase(getClusters.rejected, (state, action) => {
         state.loading = false;
