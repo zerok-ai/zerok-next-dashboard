@@ -5,8 +5,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import CustomSkeleton from "components/CustomSkeleton";
 // custom
 import InviteUserForm from "components/forms/InviteUserForm";
+import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
@@ -19,9 +21,11 @@ import useStatus from "hooks/useStatus";
 // next
 import Head from "next/head";
 // react
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // react-icons
 import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
 // utils
 import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
@@ -32,10 +36,13 @@ import { type UserDetail } from "utils/types";
 import styles from "./Users.module.scss";
 
 const Users = () => {
-  const { data: users, fetchData } = useFetch<UserDetail[]>(
-    "users",
-    GET_USERS_ENDPOINT
-  );
+  const {
+    data: users,
+    fetchData,
+    loading,
+  } = useFetch<UserDetail[]>("users", GET_USERS_ENDPOINT);
+
+  const { renderTrigger } = useSelector(clusterSelector);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
@@ -46,12 +53,17 @@ const Users = () => {
 
   const { status, setStatus } = useStatus();
 
+  useEffect(() => {
+    fetchData(GET_USERS_ENDPOINT);
+  }, [renderTrigger]);
+
   const deleteUser = async () => {
     const endpoint = GET_USERS_ENDPOINT + `/${deletingUser!.id}`;
     try {
       setStatus({ loading: true, error: null });
       await raxios.delete(endpoint);
       clearDeletingUser();
+      fetchData(GET_USERS_ENDPOINT);
     } catch (err) {
       setStatus({
         loading: false,
@@ -134,6 +146,7 @@ const Users = () => {
     colHelper.accessor("id", {
       header: "Actions",
       cell: (info) => {
+        const isAdmin = info.row.original.email.includes("admin");
         return (
           <div className={styles["actions-container"]}>
             <LoadingButton
@@ -146,13 +159,15 @@ const Users = () => {
             >
               Resend Invite
             </LoadingButton>
-            <IconButton
-              onClick={() => {
-                setDeletingUser(info.row.original);
-              }}
-            >
-              <AiOutlineDelete />
-            </IconButton>
+            {!isAdmin && (
+              <IconButton
+                onClick={() => {
+                  setDeletingUser(info.row.original);
+                }}
+              >
+                <AiOutlineDelete />
+              </IconButton>
+            )}
           </div>
         );
       },
@@ -164,20 +179,33 @@ const Users = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const AddUserButton = () => {
+    return (
+      <Button
+        variant="contained"
+        className={styles["user-button"]}
+        onClick={toggleForm}
+      >
+        <AiOutlineUserAdd className={styles["user-icon"]} /> Add a new user
+      </Button>
+    );
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>Users</h2>
-        <Button
-          variant="contained"
-          className={styles["user-button"]}
-          onClick={toggleForm}
-        >
-          <AiOutlineUserAdd className={styles["user-icon"]} /> Add a new user
-        </Button>
-      </div>
+      <PageHeader
+        title="Users"
+        showRange={false}
+        showRefresh={true}
+        extras={[<AddUserButton key={"add-btn"} />]}
+        alignExtras="right"
+      />
       <div className={styles["table-container"]}>
-        <TableX table={table} data={users ?? []} />
+        {loading ? (
+          <CustomSkeleton len={8} />
+        ) : (
+          <TableX table={table} data={users ?? []} />
+        )}
       </div>
       <ModalX
         isOpen={isFormOpen}

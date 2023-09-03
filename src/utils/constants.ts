@@ -45,3 +45,14 @@ export const NODE_WIDTH = 220;
 export const DEFAULT_TIME_RANGE = "-24h";
 
 export const CLUSTER_LOCALSTORAGE_NAME = "zk-cluster";
+
+export const HTTP_METHOD_COLORS: Record<(typeof HTTP_METHODS)[number], string> =
+  {
+    GET: "rgba(15, 105, 180, 0.8)",
+    POST: "rgba(11, 165, 73, 0.8)",
+    DELETE: "rgba(164, 30,34, 0.6)",
+    PUT: "rgba(197, 134, 42, 0.6)",
+    PATCH: "rgba(210, 128, 66, 0.6)",
+  };
+
+export const MYSQL_COLOR = "rgba(243, 148, 31, 0.8)";

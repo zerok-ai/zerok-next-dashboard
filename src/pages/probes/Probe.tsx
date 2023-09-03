@@ -1,4 +1,4 @@
-import { Button, IconButton, Switch, Tooltip } from "@mui/material";
+import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -10,6 +10,7 @@ import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import ChipX from "components/themeX/ChipX";
+import DialogX from "components/themeX/DialogX";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
@@ -17,7 +18,7 @@ import { nanoid } from "nanoid";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineTrash } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
@@ -52,11 +53,11 @@ const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
   const [totalScenarios, setTotalScenarios] = useState<number>(0);
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const [loading, setLoading] = useState<null | string>(null);
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
   const getData = async () => {
-    setScenarios(null);
     try {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
         "{limit}",
@@ -91,12 +92,11 @@ const Probe = () => {
         }
         return sd;
       });
-      // finalSlist.sort((a, b) => {
-      //   return a.disabled_at ? 1 : -1;
-      // });
       setScenarios(finalSlist);
     } catch (err) {
       console.log({ err });
+    } finally {
+      setLoading(null);
     }
   };
   useEffect(() => {
@@ -107,6 +107,7 @@ const Probe = () => {
   }, [selectedCluster, router, renderTrigger]);
 
   const handleSwitchChange = async (scenario_id: string, enable: boolean) => {
+    setLoading(scenario_id);
     try {
       const endpoint = UPDATE_PROBE_STATUS_ENDPOINT.replace(
         "{cluster_id}",
@@ -122,7 +123,15 @@ const Probe = () => {
     }
   };
 
-  const handleDelete = async (scenario_id: string) => {
+  const columnSkeleton = useMemo(() => {
+    return <Skeleton variant="rectangular" width="100%" height={20} />;
+  }, []);
+
+  const handleDelete = async () => {
+    if (!loading) {
+      return;
+    }
+    const scenario_id = loading;
     try {
       const endpoint = DELETE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
@@ -146,17 +155,23 @@ const Probe = () => {
         const ruleString = getScenarioString(info.row.original.scenario);
         return (
           <div className={styles["scenario-title-container"]}>
-            <TooltipX title={ruleString}>
-              <span
-                className={cx(
-                  styles["scenario-title"],
-                  info.row.original.disabled_at && styles.disabled
-                )}
-              >
-                {info.row.original.scenario.scenario_title}
-              </span>
-            </TooltipX>
-            {info.row.original.disabled_at && <ChipX label="Disabled" />}
+            {loading === info.row.original.scenario.scenario_id ? (
+              columnSkeleton
+            ) : (
+              <Fragment>
+                <TooltipX title={ruleString}>
+                  <span
+                    className={cx(
+                      styles["scenario-title"],
+                      info.row.original.disabled_at && styles.disabled
+                    )}
+                  >
+                    {info.row.original.scenario.scenario_title}
+                  </span>
+                </TooltipX>
+                {info.row.original.disabled_at && <ChipX label="Disabled" />}
+              </Fragment>
+            )}
           </div>
         );
       },
@@ -165,6 +180,10 @@ const Probe = () => {
       header: "Created by",
       size: DEFAULT_COL_WIDTH,
       cell: (info) => {
+        const { scenario_id } = info.row.original.scenario;
+        if (scenario_id === loading) {
+          return columnSkeleton;
+        }
         return (
           <div className={styles.source}>
             <img src={`/images/brand/zerok_source_logo.png`} alt="zerok_logo" />
@@ -182,6 +201,10 @@ const Probe = () => {
       size: DEFAULT_COL_WIDTH * 1.5,
       cell: (info) => {
         const { created_at } = info.row.original;
+        const { scenario_id } = info.row.original.scenario;
+        if (scenario_id === loading) {
+          return columnSkeleton;
+        }
         return (
           <TooltipX title={getFormattedTimeFromEpoc(created_at) as string}>
             <span
@@ -198,6 +221,9 @@ const Probe = () => {
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
         const { sources, scenario_id } = info.row.original.scenario;
+        if (scenario_id === loading) {
+          return columnSkeleton;
+        }
         if (!sources) {
           const scenario = scenarios?.find(
             (s) => s.scenario.scenario_id === scenario_id
@@ -248,6 +274,10 @@ const Probe = () => {
       header: "Actions",
       size: 70,
       cell: (info) => {
+        const { scenario_id } = info.row.original.scenario;
+        if (scenario_id === loading) {
+          return columnSkeleton;
+        }
         return (
           <div className={styles["probe-actions"]}>
             <Fragment>
@@ -261,6 +291,7 @@ const Probe = () => {
                 }
               >
                 <Switch
+                  disabled={!!loading}
                   name="probe-toggle-switch"
                   size="small"
                   defaultChecked={!info.row.original.disabled_at}
@@ -275,17 +306,19 @@ const Probe = () => {
               </Tooltip>
             </Fragment>
             {/* Delete */}
-            <Tooltip
-              placement="top"
-              title="Delete probe"
-              onClick={() => {
-                handleDelete(info.row.original.scenario.scenario_id);
-              }}
-            >
-              <IconButton size="small">
-                <HiOutlineTrash />
-              </IconButton>
-            </Tooltip>
+            <TooltipX title="Delete probe" disabled={!!loading}>
+              <span>
+                <IconButton
+                  size="small"
+                  disabled={!!loading}
+                  onClick={() => {
+                    setLoading(info.row.original.scenario.scenario_id);
+                  }}
+                >
+                  <HiOutlineTrash />
+                </IconButton>
+              </span>
+            </TooltipX>
           </div>
         );
       },
@@ -314,6 +347,22 @@ const Probe = () => {
         extras={extras}
         alignExtras="right"
       />
+      <DialogX
+        isOpen={!!loading}
+        title="Delete Probe"
+        successText="Delete"
+        cancelText="Cancel"
+        onClose={() => {
+          setLoading(null);
+        }}
+        onSuccess={handleDelete}
+        onCancel={() => {
+          setLoading(null);
+        }}
+      >
+        <span>Are you sure you want to delete this probe?</span> <br />
+        <em>This action cannot be undone.</em>
+      </DialogX>
       <div className={styles.table}>
         {scenarios ? (
           <TableX table={table} data={scenarios ?? []} />

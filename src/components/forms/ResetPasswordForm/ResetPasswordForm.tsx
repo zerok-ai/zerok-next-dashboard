@@ -45,11 +45,18 @@ const ResetPasswordForm = () => {
     const { password } = values;
     try {
       setStatus({ loading: true, error: null });
-      await raxios.post(SET_USER_PASSWORD_ENDPOINT, {
-        token,
-        flow,
-        password: maskPassword(password),
-      });
+      await raxios.post(
+        SET_USER_PASSWORD_ENDPOINT,
+        {
+          password: maskPassword(password),
+        },
+        {
+          params: {
+            token,
+            flow,
+          },
+        }
+      );
       router.push("/login");
     } catch (err) {
       setStatus({

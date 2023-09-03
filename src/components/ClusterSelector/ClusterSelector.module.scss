@@ -20,6 +20,9 @@
   color:$grey-25;
   font-size: $font-md;
   padding:$sp-base $sp-base * 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .select {
@@ -75,4 +78,15 @@
 
 .unhealthy {
   background-color: $error-500;
+}
+
+.refresh {
+  background-color: $grey-925;
+  border:none;
+  transition:all 0.2s ease;
+
+  &:hover {
+    background-color: $grey-900;
+    border:none;
+  }
 }

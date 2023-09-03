@@ -1,9 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import cx from "classnames";
 import TextFormField from "components/forms/TextFormField";
 import Link from "next/link";
+import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import { FORGOT_PASSWORD_ENDPOINT } from "utils/endpoints";
+import raxios from "utils/raxios";
 import { z } from "zod";
 
 import styles from "./ForgotPasswordForm.module.scss";
@@ -20,8 +23,25 @@ const ForgotPasswordForm = () => {
   } = useForm<ForgotPasswordSchemaType>({
     resolver: zodResolver(ForgotPasswordSchema),
   });
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit: SubmitHandler<ForgotPasswordSchemaType> = (values) => {};
+  const [error, setError] = useState<null | string>(null);
+
+  const onSubmit: SubmitHandler<ForgotPasswordSchemaType> = async (values) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await raxios.post(
+        FORGOT_PASSWORD_ENDPOINT.replace("{email}", values.email)
+      );
+    } catch (err) {
+      setError(
+        "Could not send recovery email, please try again or contact support."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -40,9 +60,15 @@ const ForgotPasswordForm = () => {
           errorText={errors.email?.message}
         />
         {/* Submit button */}
-        <Button variant="contained" color="primary" type="submit">
+        <LoadingButton
+          variant="contained"
+          color="primary"
+          type="submit"
+          loading={loading}
+        >
           Send recovery email
-        </Button>
+        </LoadingButton>
+        {error && <p className="error-text">{error}</p>}
       </form>
       {/* Login link */}
       <Link href="/login" className={"form-end-link"}>

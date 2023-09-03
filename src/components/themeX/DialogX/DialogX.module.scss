@@ -1,8 +1,14 @@
 @import "styles/variables.module.scss";
 .container {
     :global(.MuiPaper-root) {
-        width: 400px;
+        min-width: 600px;
+        background-color: $grey-925;
+        border:1px solid $grey-900;
+        border-radius: $sp-base * 2;
       }
+  :global(.MuiDialog-paper){
+    background-image: none;
+  }
 }
 
 
@@ -13,4 +19,8 @@
   }
 .dialog-actions {
   padding-bottom: $sp-base * 4;;
+}
+
+.title {
+  color:$grey-25;
 }

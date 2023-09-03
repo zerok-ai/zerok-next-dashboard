@@ -142,6 +142,9 @@
     display: flex;
     align-items: center;
     position: relative;
+    padding-top: $sp-base / 2;
+    padding-bottom: $sp-base / 2;
+    // padding:$sp-base / 2 0;
 }
 
 .timeline {
@@ -179,6 +182,7 @@
 
 .span-name {
     display: flex;
+    align-items: center;
     column-gap: $sp-base * 2;
 }
 
@@ -186,10 +190,17 @@
     font-weight: 600;
     text-transform: uppercase;
     color:$grey-100;
+    padding:0 $sp-base * 1.5;
+    font-size: smaller;
+    line-height: $default-line-height; 
+    border-radius: $sp-base / 2;
+    line-height: 20px;
+    height:20px;
+
 }
 
 .span-route {
     font-weight: 400;
     // font-style: italic;
-    color:$grey-100 !important;
+    color:$grey-50 !important;
 }

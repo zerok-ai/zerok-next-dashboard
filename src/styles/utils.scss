@@ -20,6 +20,10 @@
   margin-top: $sp-md;
 }
 
+.error-text {
+  color:lighten($error, 8%);
+}
+
 // page content
 
 .label-medium {
