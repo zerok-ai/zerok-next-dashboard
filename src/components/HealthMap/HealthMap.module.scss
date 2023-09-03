@@ -21,7 +21,6 @@
     background-color: $grey-900;
     border-radius: 2 * $sp-base;
     width:300px;
-    cursor: pointer;
     opacity: 1;
 }
 
@@ -47,6 +46,10 @@
         color:$grey-100;
         font-weight: 500;
     }
+}
+
+.service-name-container {
+    cursor: pointer;
 }
 
 .service-card-items {
