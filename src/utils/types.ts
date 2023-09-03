@@ -1,3 +1,5 @@
+import { type ReactNode } from "react";
+
 import { type HTTP_METHODS, type SPAN_PROTOCOLS } from "./constants";
 
 export interface ChildrenType {
@@ -10,10 +12,10 @@ export type HTTP_METHODS_TYPE = (typeof HTTP_METHODS)[number];
 
 export type SPAN_PROTOCOLS_TYPE = (typeof SPAN_PROTOCOLS)[number];
 export interface DrawerNavItemType {
-  icon: string;
+  icon?: ReactNode;
   label: string;
   path: string;
-  highlightIcon?: boolean;
+  highlightIcon?: ReactNode;
   reactIcon?: (className: string) => React.ReactNode;
   type: "single" | "group";
   children?: Array<{

@@ -17,17 +17,18 @@ const MainDrawer = () => {
 
   const router = useRouter();
   const DrawerHeader = () => {
+    const minimizedLogo = useMemo(() => {
+      return <img src={ZEROK_DRAWER_LOGO_MINIMIZED} alt="zerok_logo" />;
+    }, []);
+
+    const maximizedLogo = useMemo(() => {
+      return <img src={ZEROK_DRAWER_LOGO} alt="zerok_logo" />;
+    }, []);
+
     return (
       <div className={styles["header-container"]}>
         <div className={styles["logo-container"]}>
-          <img
-            src={
-              isDrawerMinimized
-                ? ZEROK_DRAWER_LOGO_MINIMIZED
-                : ZEROK_DRAWER_LOGO
-            }
-            alt="zerok_logo"
-          />
+          {isDrawerMinimized ? minimizedLogo : maximizedLogo}
         </div>
       </div>
     );

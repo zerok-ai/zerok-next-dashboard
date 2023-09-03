@@ -29,9 +29,9 @@ export const ICONS = {
 
 export const ZEROK_MINIMAL_LOGO_LIGHT = "/images/brand/zerok_minimal_light.png";
 
-export const ZEROK_DRAWER_LOGO_MINIMIZED = `/images/brand/drawer_logo_minimized.png`;
+export const ZEROK_DRAWER_LOGO_MINIMIZED = `/images/brand/drawer_logo_minimized.svg`;
 
-export const ZEROK_DRAWER_LOGO = `/images/brand/drawer_logo.png`;
+export const ZEROK_DRAWER_LOGO = `/images/brand/drawer_logo.svg`;
 
 export const ZEROK_LOGO_LIGHT = "/images/brand/zerok_logo_light.png";
 

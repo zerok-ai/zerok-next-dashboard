@@ -3,9 +3,11 @@ import ClusterSelector from "components/ClusterSelector";
 import DrawerToggleButton from "components/DrawerToggleButton";
 import ErrorBoundary from "components/ErrorBoundary";
 import MainDrawer from "components/MainDrawer";
+import UnderConstruction from "components/UnderConstruction";
 import UserPill from "components/UserPill";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { Fragment } from "react";
 import { clusterSelector } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useSelector } from "redux/store";
@@ -28,15 +30,11 @@ const PageLayout = ({ children }: PageLayoutProps) => {
   const { status } = useSelector(clusterSelector);
   const router = useRouter();
   const { isDrawerMinimized } = useSelector(drawerSelector);
-  useEffect(() => {
-    if (
-      status.length &&
-      status !== CLUSTER_STATES.HEALTHY &&
-      CLUSTER_BLOCKED_ROUTES.includes(router.pathname)
-    ) {
-      router.push("/");
-    }
-  }, [status]);
+  const blockRoute =
+    status.length &&
+    status !== CLUSTER_STATES.HEALTHY &&
+    CLUSTER_BLOCKED_ROUTES.includes(router.pathname);
+
   return (
     <div className={styles.container}>
       <aside className={styles["drawer-container"]}>
@@ -61,7 +59,18 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           className={`${styles["page-content"]} hidden-scroll`}
           id="global-container"
         >
-          <ErrorBoundary>{children}</ErrorBoundary>
+          <ErrorBoundary>
+            {!blockRoute ? (
+              children
+            ) : (
+              <Fragment>
+                <Head>
+                  <title>ZeroK Dashboard</title>
+                </Head>
+                <UnderConstruction altTitle="Please select a healthy cluster to continue" />
+              </Fragment>
+            )}
+          </ErrorBoundary>
         </main>
       </div>
     </div>
