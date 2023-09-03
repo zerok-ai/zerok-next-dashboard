@@ -146,7 +146,9 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
         }}
         className={styles["react-flow"]}
       >
-        <MapControls showToggle={false} />
+        {reactFlow && (
+          <MapControls showToggle={false} reactFlowInstance={reactFlow} />
+        )}
         <Background gap={12} size={1} />
       </ReactFlow>
     </div>

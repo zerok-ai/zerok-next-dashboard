@@ -18,7 +18,7 @@ export const GET_USERS_ENDPOINT = `/v1/u/user`;
 
 export const INVITE_USER_ENDPOINT = `/v1/u/user/invite`;
 
-export const SET_USER_PASSWORD_ENDPOINT = `/v1/u/user/invite/set`;
+export const SET_USER_PASSWORD_ENDPOINT = `/v1/p/user/password/set`;
 
 export const LIST_SERVICES_ENDPOINT_V2 = `/v1/u/cluster/{id}/service/list?st=-5m`;
 

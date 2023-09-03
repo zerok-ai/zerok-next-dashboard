@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useReactFlow } from "reactflow";
+import { type ReactFlowInstance } from "reactflow";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./MapControls.module.scss";
@@ -8,15 +8,16 @@ interface MapControlProps {
   showToggle?: boolean;
   isMinimized?: boolean;
   toggleSize?: () => void;
+  reactFlowInstance: ReactFlowInstance;
 }
 
 const MapControls = ({
   showToggle = true,
   isMinimized,
   toggleSize,
+  reactFlowInstance,
 }: MapControlProps) => {
-  const reactFlow = useReactFlow();
-  const { zoomIn, zoomOut, fitView } = reactFlow;
+  const { zoomIn, zoomOut, fitView } = reactFlowInstance;
 
   return (
     <div className={styles["map-controls"]}>
