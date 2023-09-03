@@ -1,6 +1,7 @@
 import { SmartBezierEdge } from "@tisoap/react-flow-smart-edge";
 import cx from "classnames";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/router";
 import { type Edge, MarkerType, type Node } from "reactflow";
 import cssVars from "styles/variables.module.scss";
 import {
@@ -102,7 +103,16 @@ export const ServiceMapCard = ({
 }) => {
   const service = selectedService.data;
   const namespace = getNamespace(service.fullName);
+  const router = useRouter();
   const formattedServiceName = getFormattedServiceName(service.fullName);
+  const routeToIssues = () => {
+    if (!namespace || !formattedServiceName) {
+      router.push(`/issues`);
+      return;
+    }
+    const service = namespace + "/" + formattedServiceName;
+    router.push(`/issues?services=${encodeURIComponent(service)}`);
+  };
   const ITEMS = [
     {
       label: "Req./s",
@@ -131,7 +141,11 @@ export const ServiceMapCard = ({
   ];
   return (
     <div className={styles["service-card-container"]}>
-      <div className={styles["service-name-container"]}>
+      <div
+        className={styles["service-name-container"]}
+        role="button"
+        onClick={routeToIssues}
+      >
         <p className={styles["service-name"]}>{formattedServiceName}</p>
         <p className={cx("label-medium", styles["service-namespace"])}>
           {namespace}
