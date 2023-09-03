@@ -113,6 +113,8 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     });
   };
 
+  console.log({ selectedService });
+
   return (
     <div className={styles.container}>
       {selectedService && (
