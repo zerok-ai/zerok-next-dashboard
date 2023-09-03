@@ -46,12 +46,13 @@ const Users = () => {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
+  const [invitingUser, setInvitingUser] = useState<null | UserDetail>(null);
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
   const colHelper = createColumnHelper<UserDetail>();
 
-  const { status, setStatus } = useStatus();
+  const { setStatus } = useStatus();
 
   useEffect(() => {
     fetchData(GET_USERS_ENDPOINT);
@@ -70,28 +71,26 @@ const Users = () => {
         error: "Could not delete user, please try again",
       });
     } finally {
-      setStatus((old) => ({ ...old, loading: false }));
+      clearDeletingUser();
     }
   };
 
   const inviteUser = async (user: UserDetail) => {
+    setInvitingUser(user);
     const { name, email } = user;
     const nameArr = name.split(" ");
     const firstName = nameArr[0];
     const lastName = nameArr.slice(1).join(" ");
     try {
-      setStatus({ loading: true, error: null });
       await raxios.post(INVITE_USER_ENDPOINT, {
         name: firstName,
         familyName: lastName,
         email,
       });
     } catch (err) {
-      setStatus({
-        loading: false,
-        error: "Could not delete user, please try again",
-      });
+      console.log({ err });
     } finally {
+      setInvitingUser(null);
       setStatus((old) => ({ ...old, loading: false }));
     }
   };
@@ -155,7 +154,7 @@ const Users = () => {
               onClick={async () => {
                 await inviteUser(info.row.original);
               }}
-              loading={status.loading}
+              loading={invitingUser?.id === info.row.original.id}
             >
               Resend Invite
             </LoadingButton>

@@ -25,15 +25,19 @@ const ForgotPasswordForm = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  const [done, setDone] = useState(false);
+
   const [error, setError] = useState<null | string>(null);
 
   const onSubmit: SubmitHandler<ForgotPasswordSchemaType> = async (values) => {
+    setDone(false);
     setLoading(true);
     setError(null);
     try {
-      await raxios.post(
+      await raxios.get(
         FORGOT_PASSWORD_ENDPOINT.replace("{email}", values.email)
       );
+      setDone(true);
     } catch (err) {
       setError(
         "Could not send recovery email, please try again or contact support."
@@ -69,6 +73,11 @@ const ForgotPasswordForm = () => {
           Send recovery email
         </LoadingButton>
         {error && <p className="error-text">{error}</p>}
+        {done && (
+          <p className={styles["done-text"]}>
+            Please check your email for further steps.
+          </p>
+        )}
       </form>
       {/* Login link */}
       <Link href="/login" className={"form-end-link"}>
