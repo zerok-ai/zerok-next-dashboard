@@ -1,6 +1,7 @@
 @import "styles/variables.module.scss";
 .container {
     width:100%;
+    position: relative;
 }
 
 .content {
@@ -9,4 +10,9 @@
     width:100%;
     overflow-x: hidden;
     height:calc(100vh - $header-height - $sp-base * 32);
+}
+
+.skeleton-map {
+
+    // height:calc(100vh - $header-height - $sp-base * 32);
 }

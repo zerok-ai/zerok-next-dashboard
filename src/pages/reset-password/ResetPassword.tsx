@@ -13,7 +13,7 @@ const ResetPassword = () => {
           <title>ZeroK Dashboard | Reset Password</title>
         </Head>
       </Fragment>
-      <AuthFormCard title="Reset password">
+      <AuthFormCard title="Set new password">
         <ResetPasswordForm />
       </AuthFormCard>
     </div>
