@@ -6,6 +6,7 @@ import {
   HiOutlineDocumentMagnifyingGlass,
   HiOutlineKey,
   HiOutlineUser,
+  HiOutlineUsers,
 } from "react-icons/hi2";
 
 import styles from "./UserPill.module.scss";
@@ -46,6 +47,12 @@ const UserPill = () => {
           <MenuItem className={styles["menu-item"]}>
             <HiOutlineKey className={styles["menu-item-icon"]} />
             <p>API Keys</p>
+          </MenuItem>
+        </Link>
+        <Link href="/users">
+          <MenuItem className={styles["menu-item"]}>
+            <HiOutlineUsers className={styles["menu-item-icon"]} />
+            <p>Users</p>
           </MenuItem>
         </Link>
 
