@@ -24,13 +24,13 @@ const helper = createColumnHelper<TraceMetadataDetail>();
 export const INCIDENT_COLUMNS = [
   helper.accessor("entry_path", {
     header: "REQUEST ENTRY POINT",
-    size: DEFAULT_COL_WIDTH * 3,
+    size: DEFAULT_COL_WIDTH * 2.5,
     cell: (info) => {
       return (
         <div className={styles["entry-point-container"]}>
           <SpanEntryPoint action={info.row.original.action} />
           <span className={styles["entry-point"]}>
-            {trimString(info.getValue(), 60)}{" "}
+            {trimString(info.getValue(), 55)}{" "}
           </span>
           {/* <ChipX label={info.row.original.protocol} /> */}
         </div>
@@ -52,7 +52,7 @@ export const INCIDENT_COLUMNS = [
   }),
   helper.accessor("incident_collection_time", {
     header: "TIMESTAMP",
-    size: DEFAULT_COL_WIDTH * 1.5,
+    size: DEFAULT_COL_WIDTH * 1.2,
     cell: (info) => {
       return <span>{getFormattedTime(info.getValue())}</span>;
     },
