@@ -2,8 +2,6 @@ import { MenuItem, Select, Tab, Tabs } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
 import { type PodDetailResponseType } from "utils/pods/types";
 
 import styles from "./PodDetailsCard.module.scss";
@@ -19,8 +17,6 @@ import {
 const PodDetailsCard = () => {
   const { data: pods, fetchData: fetchPods } =
     useFetch<PodDetailResponseType[]>("pods");
-  const { selectedCluster } = useSelector(clusterSelector);
-  console.log({ selectedCluster });
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
   useEffect(() => {
     fetchPods(`/pods.json`);

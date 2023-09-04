@@ -4,7 +4,7 @@
 
     border-radius: $sp-base * 2;
     border:1px solid $grey-800;
-    
+
 }
 
 .header {
@@ -20,7 +20,6 @@
 }
 
 .tab-content {
-    height:400px;
     overflow-y: auto;
     padding:0 $sp-base * 4;
     padding-bottom: $sp-base * 6;
@@ -42,4 +41,19 @@
 
 .pod-metadata-value {
     color:$grey-50;
+}
+
+
+
+
+// charts
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+}
+
+.line-chart {
+    margin:0px;
+    // padding:20px;
 }
