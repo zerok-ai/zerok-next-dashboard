@@ -1,15 +1,21 @@
-/* eslint-disable */
-import { type ApexOptions } from "apexcharts";
+// /* eslint-disable */
+import ZkChartTooltip from "components/ZkChartTooltip";
 import dayjs from "dayjs";
-import dynamic from "next/dynamic";
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import cssVars from "styles/variables.module.scss";
 import { type PodDetailResponseType } from "utils/pods/types";
+import { type GenericObject } from "utils/types";
 
 import styles from "./PodDetailsCard.module.scss";
-
-const ReactApexChart = dynamic(async () => await import("react-apexcharts"), {
-  ssr: false,
-});
 
 export const POD_TABS = [
   {
@@ -36,7 +42,7 @@ export const PodMetadata = ({ pod }: { pod: PodDetailResponseType }) => {
   return (
     <div className={styles["pod-metadata"]}>
       {keys.map((k) => {
-        // @ts-ignore
+        // @ts-expect-error annoying
         const value = pod.metadata[k];
         return (
           <div className={styles["pod-metadata-row"]} key={k}>
@@ -58,55 +64,57 @@ export const PodChart = ({
   pod: PodDetailResponseType;
   dataKey: "cpuUsage" | "memUsage";
 }) => {
-  console.log({ pod, dataKey });
-  const getSeries = () => {
-    const data = pod[dataKey];
-    console.log({ data }, dataKey);
-    return data.frames.map((frame) => {
-      return {
-        name: frame.schema.name,
-        data: frame.data.values,
-      };
-    });
-  };
-  const series = getSeries();
-  const timestamps: string[] = [];
-  pod.cpuUsage.frames.map((fr) => {
-    fr.data.timeStamp.map((ts) => {
-      console.log(dayjs.unix(ts / 1000).format("DD/MM/YY HH:mm:ss"));
-      timestamps.push(dayjs.unix(ts / 1000).toISOString());
+  const getChartData = () => {
+    const dataset = pod[dataKey];
+    const series: GenericObject[] = [];
+    dataset.frames.map((fr) => {
+      const { schema, data } = fr;
+      data.values.map((val, idx) => {
+        series.push({
+          x: data.timeStamp[idx],
+          [schema.name]: val,
+          name: schema.name,
+        });
+        return true;
+      });
       return true;
     });
-    return true;
-  });
-  const options: ApexOptions = {
-    theme: {
-      mode: "dark",
-    },
-    chart: {
-      height: 350,
-      type: "area",
-      background: cssVars["dark-bg"],
-      toolbar: {
-        show: false,
-      },
-    },
-    grid: {
-      show: true,
-      borderColor: "#000",
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      curve: "smooth",
-      width: 2,
-    },
-    xaxis: {
-      type: "datetime",
-      categories: timestamps,
-    },
+    return series;
   };
-
-  return <ReactApexChart series={series} options={options} height="350px" />;
+  const series = getChartData();
+  return (
+    <div className={styles["chart-container"]}>
+      <ResponsiveContainer width="95%" height={500}>
+        <LineChart data={series} className={styles["line-chart"]}>
+          <CartesianGrid opacity={1} stroke={cssVars.grey900} />
+          <XAxis
+            dataKey="x"
+            axisLine={{
+              stroke: cssVars.grey600,
+            }}
+            stroke={cssVars.grey200}
+            tickFormatter={(tick) => {
+              return dayjs(tick).format("HH:mm");
+            }}
+          />
+          <YAxis
+            dataKey="zk-wsp-client"
+            axisLine={{
+              stroke: cssVars.grey600,
+            }}
+            stroke={cssVars.grey200}
+          />
+          <Tooltip content={<ZkChartTooltip />} />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="zk-wsp-client"
+            stroke="#8884d8"
+            dot={false}
+            activeDot={{ r: 4 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
 };
