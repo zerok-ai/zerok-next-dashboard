@@ -54,8 +54,6 @@ const ClusterSelector = () => {
     dispatch(getClusters());
   };
 
-  console.log({ selectedCluster });
-
   const loadingOptions = useMemo(() => {
     return [1, 2, 3].map((x) => {
       return (
