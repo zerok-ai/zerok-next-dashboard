@@ -1,17 +1,24 @@
+// MUI
 import { Button } from "@mui/material";
+// redux
 import { nanoid } from "@reduxjs/toolkit";
+// custom
 import HealthCards from "components/HealthCards";
 import PageHeader from "components/helpers/PageHeader";
 import PageWrapper from "components/helpers/PageWrapper";
 import MapToggle from "components/MapToggle";
 import SearchBar from "components/SearchBar";
 import ServiceMapPage from "components/ServiceMapPage";
-import UnderConstruction from "components/UnderConstruction";
+// hooks
 import { useToggle } from "hooks/useToggle";
+// react
 import { useCallback, useMemo, useState } from "react";
+// icons
 import { HiPlus } from "react-icons/hi";
+// redux
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+// utils
 import { CLUSTER_STATES } from "utils/constants";
 
 import styles from "./Home.module.scss";
@@ -72,21 +79,17 @@ const Home = () => {
     <div>
       <PageHeader
         title="Health"
-        showRange={!!healthyCluster}
-        showRefresh={!!healthyCluster}
+        showRange={true}
+        showRefresh={true}
         extras={healthyCluster ? getExtras() : []}
       />
-      {healthyCluster ? (
-        isHealthMap ? (
-          <ServiceMapPage
-            toggleDrawer={toggleMapFilter}
-            isFilterOpen={isMapFilterOpen}
-          />
-        ) : (
-          <HealthCards filter={cardFilter} />
-        )
+      {isHealthMap ? (
+        <ServiceMapPage
+          toggleDrawer={toggleMapFilter}
+          isFilterOpen={isMapFilterOpen}
+        />
       ) : (
-        <UnderConstruction altTitle="Please select a healthy cluster or add a new cluster to continue." />
+        <HealthCards filter={cardFilter} />
       )}
     </div>
   );
