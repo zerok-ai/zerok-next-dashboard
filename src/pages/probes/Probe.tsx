@@ -157,7 +157,7 @@ const Probe = () => {
   const columns = [
     helper.accessor("scenario.scenario_title", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 5,
+      size: DEFAULT_COL_WIDTH * 7,
       cell: (info) => {
         const ruleString = getScenarioString(info.row.original.scenario);
         if (
@@ -165,6 +165,8 @@ const Probe = () => {
         ) {
           return columnSkeleton;
         }
+        const { scenario, disabled_at } = info.row.original;
+        const { scenario_title, scenario_type } = scenario;
         return (
           <div className={styles["scenario-title-container"]}>
             {
@@ -173,13 +175,16 @@ const Probe = () => {
                   <span
                     className={cx(
                       styles["scenario-title"],
-                      info.row.original.disabled_at && styles.disabled
+                      disabled_at && styles.disabled
                     )}
                   >
-                    {info.row.original.scenario.scenario_title}
+                    {trimString(scenario_title, 100)}
                   </span>
                 </TooltipX>
-                {info.row.original.disabled_at && <ChipX label="Disabled" />}
+                <div className={styles["scenario-title-chips"]}>
+                  {scenario_type === "SYSTEM" && <ChipX label="System" />}
+                  {disabled_at && <ChipX label="Disabled" />}
+                </div>
               </Fragment>
             }
           </div>
@@ -290,6 +295,9 @@ const Probe = () => {
           selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
         ) {
           return columnSkeleton;
+        }
+        if (info.row.original.scenario.scenario_type === "SYSTEM") {
+          return null;
         }
         return (
           <div className={styles["probe-actions"]}>
