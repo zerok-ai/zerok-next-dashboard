@@ -194,9 +194,9 @@ const ProbeCreateForm = () => {
       <div className={styles["group-by-container"]}>
         <p className={styles["group-by-title"]}>
           Group inferences by{" "}
-          <span className={styles["group-by-link"]}>
+          {/* <span className={styles["group-by-link"]}>
             See how Group by works
-          </span>
+          </span> */}
         </p>
         <div className={styles["group-by-selects"]}>
           {groupBy.map((gr, idx) => {
