@@ -48,6 +48,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           <Head>
             <title>ZeroK Dashboard - Unhealthy cluster</title>
           </Head>
+          <UnderConstruction altTitle="Please select a healthy cluster to continue." />
         </Fragment>
       );
     } else {
