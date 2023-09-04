@@ -68,7 +68,7 @@
     justify-content: space-between;
     width:100%;
     min-height: 0px !important;
-    padding:0;
+    padding:$sp-base / 2 0;
     // margin-left: -$sp-base;
 }
 
@@ -77,7 +77,7 @@
 
 }
 .last-child {
-    margin:$sp-base * 0 0;
+    margin:$sp-base 0;
     margin-left: - $sp-base;
 }
 
@@ -110,10 +110,6 @@
     background-color: $bg-dark;
 }
 
-.last-child {
-    padding: 0 12px;  
-    display: flex;
-}
 
 .close-button {
     position: absolute;
@@ -148,6 +144,13 @@
     position: relative;
     // padding:$sp-base / 2 0;
 }
+
+.last-child {
+    padding: 0 $sp-base * 3;  
+    padding-bottom: $sp-base / 2;
+    display: flex;
+}
+
 
 .timeline {
     flex: 1;
