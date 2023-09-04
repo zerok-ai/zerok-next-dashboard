@@ -4,7 +4,7 @@ import ExceptionTab from "components/ExceptionCard";
 import BackLink from "components/helpers/BackLink";
 import IncidentChatTab from "components/IncidentChatTab";
 import PageLayout from "components/layouts/PageLayout";
-import PodCard from "components/PodCard";
+import PodDetailsCard from "components/PodDetailsCard";
 import PrivateRoute from "components/PrivateRoute";
 import TraceGroups from "components/TraceGroups";
 import TraceTable from "components/TraceTable";
@@ -23,7 +23,6 @@ const IncidentDetailPage = () => {
   const [chatTrace, setChatTrace] = useState<null | TraceMetadataDetail>(null);
   const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
   const [spans, setSpans] = useState<null | SpanResponse>(null);
-  const [podTabs, setPodTabs] = useState<null | string[]>(null);
   const router = useRouter();
   const trace = router.query.trace;
   const issue_id = router.query.issue_id;
@@ -51,7 +50,6 @@ const IncidentDetailPage = () => {
           memo.add(span.destination);
         }
       });
-      setPodTabs(Array.from(memo));
     }
   }, [spans]);
 
@@ -108,7 +106,7 @@ const IncidentDetailPage = () => {
                 </div>
               )}
               <div className={styles["pod-container"]}>
-                <PodCard services={podTabs} />
+                <PodDetailsCard />
               </div>
             </div>
           ) : (
