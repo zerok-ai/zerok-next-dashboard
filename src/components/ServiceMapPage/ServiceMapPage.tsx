@@ -6,7 +6,6 @@ import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 import { useEffect } from "react";
-import { ReactFlowProvider } from "reactflow";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
@@ -77,9 +76,7 @@ const ServiceMap = ({ isFilterOpen, toggleDrawer }: ServiceMapPage) => {
       <ServiceMapFilterDisplay />
       {!error ? (
         <div className={styles.content}>
-          <ReactFlowProvider>
-            <HealthMap serviceMap={data} />
-          </ReactFlowProvider>
+          <HealthMap serviceMap={data} />
         </div>
       ) : (
         <h6>Could not fetch service map data. Please try again later. </h6>
