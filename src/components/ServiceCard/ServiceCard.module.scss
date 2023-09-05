@@ -15,19 +15,11 @@
     }
 }
 
-.text-small {
-    p {
-        color:red;
-    }
-}
-
 .item-label {
     font-size: smaller;
     color:$grey-100;
     font-weight: 500;
 }
-
-.namespace {}
 
 .service-name-container {
     display: inline-block;
@@ -66,14 +58,17 @@
 
 .healthy-status-green-dot-icon {
     display: inline-block;
-    height:9px;
-    width:9px;
+    height:12px;
+    width:12px;
     border-radius: 50%;
     background-color:$success-500;
 }
 
 .error-status {
+    position: absolute;
     @include icon-xs;
     border-radius: 50%;
     background-color: $error-700;
+    top:- 2 * $sp-base;
+    right: $sp-base;
 }
