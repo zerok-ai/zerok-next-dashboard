@@ -55,6 +55,9 @@
     height:calc(100vh - $header-height - $sp-base * 40);
     overflow: auto;
     border:1px solid $grey-800;
+    @media only screen and (min-width:$bp-desktop){
+        width:500px;
+    }
 }
 .table-container {
     height:calc(100vh - $header-height - $sp-base * 40);

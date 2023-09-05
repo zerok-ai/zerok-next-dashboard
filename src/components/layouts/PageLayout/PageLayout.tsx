@@ -19,11 +19,11 @@ interface PageLayoutProps {
 }
 
 const CLUSTER_BLOCKED_ROUTES = [
-  "/",
-  "/probes",
-  "/probes/create",
-  "/issues",
-  "/issues/detail",
+  // "/",
+  // "/probes",
+  // "/probes/create",
+  // "/issues",
+  // "/issues/detail",
 ];
 
 const PageLayout = ({ children }: PageLayoutProps) => {
