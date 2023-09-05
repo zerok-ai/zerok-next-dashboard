@@ -1,5 +1,3 @@
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import CustomSkeleton from "components/CustomSkeleton";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
@@ -39,6 +37,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   const scenario = router.query.issue;
   const issue_id = router.query.issue_id;
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
+
   const page = parseInt((router.query.page as string) ?? 1);
   const {
     data: traces,
@@ -68,48 +67,34 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
     }
   }, [traces]);
 
-  const table = useReactTable({
-    columns: INCIDENT_COLUMNS,
-    data: traces?.trace_det_list ?? [],
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h5>Traces:</h5>
       </div>
-      {traces ? (
-        <div className={styles["table-container"]}>
-          <TableX
-            table={table}
-            data={traces?.trace_det_list ?? []}
-            headerClassName={styles["table-header"]}
-            rowClassName={styles["table-row"]}
-            onRowClick={(row) => {
-              router.push({
-                pathname: router.pathname,
-                query: {
-                  ...router.query,
-                  trace: row.incident_id,
-                },
-              });
-            }}
-          />
-          <div className={styles["pagination-container"]}>
-            <PaginationX
-              itemsPerPage={TRACES_PAGE_SIZE}
-              totalItems={traces.total_records}
-            />
-          </div>
-        </div>
-      ) : (
-        <CustomSkeleton
-          len={10}
-          containerClass={styles["skeleton-container"]}
-          skeletonClass={styles.skeleton}
+      <div className={styles["table-container"]}>
+        <TableX
+          columns={INCIDENT_COLUMNS}
+          data={traces?.trace_det_list ?? null}
+          headerClassName={styles["table-header"]}
+          rowClassName={styles["table-row"]}
+          onRowClick={(row) => {
+            router.push({
+              pathname: router.pathname,
+              query: {
+                ...router.query,
+                trace: row.incident_id,
+              },
+            });
+          }}
         />
-      )}
+        <div className={styles["pagination-container"]}>
+          <PaginationX
+            itemsPerPage={TRACES_PAGE_SIZE}
+            totalItems={traces?.total_records ?? TRACES_PAGE_SIZE}
+          />
+        </div>
+      </div>
     </div>
   );
 };
