@@ -21,6 +21,7 @@ env:
   DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
   HOST_NAME: ${{ vars.HOST_NAME }}
   PROJECT_ID: ${{ vars.PROJECT_ID }}
+  DEPLOYMENT_CLUSTER: ${{ vars.DEPLOYMENT_CLUSTER }}
   BUILD_AND_PUSH: true
   DEPLOY: true
 
@@ -103,7 +104,6 @@ jobs:
   deploy:
     needs: [ init,build-and-push ]
     env:
-      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENV: ${{ needs.init.outputs.ENVIRONMENT }}
     environment:
@@ -122,7 +122,7 @@ jobs:
         if: ${{ env.DEPLOY == 'true' }}
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
-          cluster_name: '${{ env.CLUSTERNAME }}'
+          cluster_name: '${{ env.DEPLOYMENT_CLUSTER }}'
           location: '${{ env.GKE_ZONE }}'
 
       - uses: actions/download-artifact@v3
