@@ -9,30 +9,27 @@ on:
         description: 'Docker Image Tag'
         required: true
         default: 'dev'
-      GKE_CLUSTER:
-        description: 'Cluster Name'
-        required: true
-        default: 'devcloud01'
       
 env:
   NS: ${{ vars.NS }}
   DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
-  GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
   GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
   GKE_ZONE : ${{ vars.GKE_ZONE }}
   DOCKER_REG: ${{ vars.DOCKER_REG }}
-  PROJECT_ID:  ${{ vars.PROJECT_ID }}
   DOCKER_REPO:  ${{ vars.DOCKER_REPO }}
   APP_NAME:  ${{ vars.APP_NAME }}
   DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
+  HOST_NAME: ${{ vars.HOST_NAME }}
+  PROJECT_ID: ${{ vars.PROJECT_ID }}
+  DEPLOYMENT_CLUSTER: ${{ vars.DEPLOYMENT_CLUSTER }}
   BUILD_AND_PUSH: true
   DEPLOY: true
 
 jobs:
   init:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-dev-init.yml@main
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-prod-init.yml@main
     with:
-      GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
+      ENVIRONMENT: ${{ github.event.inputs.ENV }}
       GIT_TAG: ${{ github.ref }}
       DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
 
@@ -56,6 +53,7 @@ jobs:
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "DOMAIN_NAME=$DOMAIN_NAME"
+          echo "HOST_NAME=$HOST_NAME"
 
   ##############
   build-and-push:
@@ -106,7 +104,6 @@ jobs:
   deploy:
     needs: [ init,build-and-push ]
     env:
-      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENV: ${{ needs.init.outputs.ENVIRONMENT }}
     environment:
@@ -125,7 +122,7 @@ jobs:
         if: ${{ env.DEPLOY == 'true' }}
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
-          cluster_name: '${{ env.CLUSTERNAME }}'
+          cluster_name: '${{ env.DEPLOYMENT_CLUSTER }}'
           location: '${{ env.GKE_ZONE }}'
 
       - uses: actions/download-artifact@v3
@@ -139,7 +136,7 @@ jobs:
           helm --install  \
           --set=image.repository=$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME \
           --set=image.tag=$GITHUB_SHA \
-          --set=global.host="$CLUSTERNAME.$DOMAIN_NAME" \
+          --set=global.host="$HOST_NAME.$DOMAIN_NAME" \
           --set=global.domain=$DOMAIN_NAME \
           upgrade $APP_NAME \
            -f ./helm-charts/$ENV.yaml ./helm-charts/ \
