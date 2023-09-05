@@ -4,6 +4,7 @@ import { DEFAULT_COL_WIDTH, type HTTP_METHODS } from "utils/constants";
 import { formatDuration, getFormattedTime } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds, trimString } from "utils/functions";
 import { type TraceMetadataDetail } from "utils/issues/types";
+import { type TableSortOptions } from "utils/tables/types";
 
 import styles from "./TraceTable.module.scss";
 
@@ -63,4 +64,27 @@ export const INCIDENT_COLUMNS = [
       return <span>{getFormattedTime(info.getValue())}</span>;
     },
   }),
+];
+
+export const INCIDENT_COL_FILTERS: TableSortOptions[] = [
+  {
+    label: "Latest first",
+    value: "incident_collection_time:desc",
+    sort: "desc",
+  },
+  {
+    label: "Earliest first",
+    value: "incident_collection_time:asc",
+    sort: "asc",
+  },
+  {
+    label: "Longest first",
+    value: "latency_ns:desc",
+    sort: "desc",
+  },
+  {
+    label: "Shortest first",
+    value: "latency_ns:asc",
+    sort: "asc",
+  },
 ];

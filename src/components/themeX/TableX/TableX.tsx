@@ -44,7 +44,7 @@ const TableX = <T extends object>({
       sorting,
     },
   });
-
+  console.log({ sorting });
   if (!data) {
     return <CustomSkeleton len={10} />;
   }
