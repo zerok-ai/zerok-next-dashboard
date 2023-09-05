@@ -30,7 +30,7 @@ export const INCIDENT_COLUMNS = [
         <div className={styles["entry-point-container"]}>
           <SpanEntryPoint action={info.row.original.action} />
           <span className={styles["entry-point"]}>
-            {trimString(info.getValue(), 55)}{" "}
+            {trimString(info.getValue(), 45)}{" "}
           </span>
           {/* <ChipX label={info.row.original.protocol} /> */}
         </div>
@@ -39,7 +39,7 @@ export const INCIDENT_COLUMNS = [
   }),
   helper.accessor("latency_ns", {
     header: "DURATION",
-    size: DEFAULT_COL_WIDTH / 2,
+    size: DEFAULT_COL_WIDTH / 1.5,
     cell: (info) => {
       return (
         <span>
