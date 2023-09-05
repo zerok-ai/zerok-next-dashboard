@@ -7,7 +7,7 @@ html {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  color:$grey-200;
+  color:#ddd;
   font-weight:400;
 }
 
@@ -19,9 +19,11 @@ p {
   line-height: $default-line-height;
 }
 
-// p,span {
-//   color:$grey-300;
-// }
+p, div, a, span {
+  color:#ddd !important;
+  font-weight: 350;
+  letter-spacing: 10%;
+}
 
 h1 {
   font-size: 40px;
