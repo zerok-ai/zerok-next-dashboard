@@ -20,6 +20,7 @@ env:
   APP_NAME:  ${{ vars.APP_NAME }}
   DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
   HOST_NAME: ${{ vars.HOST_NAME }}
+  PROJECT_ID: ${{ vars.PROJECT_ID }}
   BUILD_AND_PUSH: true
   DEPLOY: true
 
@@ -61,7 +62,6 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -106,7 +106,6 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENV: ${{ needs.init.outputs.ENVIRONMENT }}
-      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     runs-on: zk-self-hosted
