@@ -1,4 +1,5 @@
 @import "styles/variables.module.scss";
+@import "styles/mixins";
 .container {
     overflow-y: auto;
     border:1px solid $grey-800;
@@ -8,14 +9,7 @@
 
 
 .header {
-    background-color: $grey-900;
-    padding:$sp-base * 3 $sp-base * 5;
-    border-radius: $sp-base * 2 0 0 0;
-    h5 {
-        color:$white;
-        font-weight: 400;
-        margin:0;
-    }
+    @include card-header;
 }
 
 // entry point

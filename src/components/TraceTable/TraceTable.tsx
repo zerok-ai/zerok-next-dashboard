@@ -1,8 +1,10 @@
+// import { type SortingState } from "@tanstack/react-table";
+import TableFilter from "components/TableFilter";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
@@ -11,7 +13,7 @@ import { TRACES_PAGE_SIZE } from "utils/scenarios/constants";
 import { GET_SCENARIO_TRACES_ENDPOINT } from "utils/scenarios/endpoints";
 
 import styles from "./TraceTable.module.scss";
-import { INCIDENT_COLUMNS } from "./TraceTable.utils";
+import { INCIDENT_COL_FILTERS, INCIDENT_COLUMNS } from "./TraceTable.utils";
 
 interface TracesStateDetail {
   trace_det_list: TraceMetadataDetail[];
@@ -39,6 +41,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
 
   const page = parseInt((router.query.page as string) ?? 1);
+  const [sortBy, setSortBy] = useState<string>(INCIDENT_COL_FILTERS[0].value);
   const {
     data: traces,
     fetchData: fetchTraces,
@@ -71,6 +74,15 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h5>Traces:</h5>
+        <div className={styles["header-actions"]}>
+          <TableFilter
+            value={sortBy}
+            options={INCIDENT_COL_FILTERS}
+            onChange={(va) => {
+              setSortBy(va);
+            }}
+          />
+        </div>
       </div>
       <div className={styles["table-container"]}>
         <TableX
