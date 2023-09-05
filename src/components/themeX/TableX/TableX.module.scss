@@ -9,3 +9,18 @@
     height:100px;
     padding-left: $sp-base * 3;
 }
+
+.sort-icon {
+    font-size: $font-lg;
+    color:$primary-500;
+}
+
+.th-content {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base;
+}
+
+.skeleton {
+    width:100%;
+}

@@ -49,10 +49,14 @@
 }
 
 .table-header {
-    background-color: $grey-925;
-    color:$grey-25;
     th {
-        letter-spacing: 1.5px;
+        border:none;
+        background-color: $grey-925;
+       div {
+        
+        color:$grey-25;
+            letter-spacing: 1.5px;
+       }
     }
 }
 

@@ -1,9 +1,5 @@
 import { Button, IconButton } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import cx from "classnames";
 import CodeBlock from "components/CodeBlock";
 import CustomSkeleton from "components/CustomSkeleton";
@@ -156,11 +152,6 @@ const ApiKeys = () => {
     ];
   }, [apiKeys]);
 
-  const table = useReactTable({
-    data: apiKeys ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -187,7 +178,7 @@ const ApiKeys = () => {
         {loading ? (
           <CustomSkeleton len={8} />
         ) : (
-          <TableX table={table} data={apiKeys ?? []} />
+          <TableX columns={columns} data={apiKeys ?? null} />
         )}
         {/* Delete key dialog */}
         <DialogX

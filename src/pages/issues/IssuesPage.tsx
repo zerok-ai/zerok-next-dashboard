@@ -1,6 +1,4 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import CustomSkeleton from "components/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
@@ -72,12 +70,6 @@ const IssuesPage = () => {
     return getIssueColumns();
   }, [data?.issues]);
 
-  const table = useReactTable<IssueDetail>({
-    columns,
-    data: data?.issues ?? [],
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   const removeService = (label: string) => {
     if (services != null) {
       const filtered = services.filter((sv) => sv !== label);
@@ -124,14 +116,8 @@ const IssuesPage = () => {
       </div>
       <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}
-        {selectedCluster !== null && data?.issues ? (
-          <TableX table={table} data={data?.issues ?? []} />
-        ) : (
-          <CustomSkeleton
-            containerClass={styles["skeleton-container"]}
-            skeletonClass={styles.skeleton}
-            len={10}
-          />
+        {selectedCluster && (
+          <TableX data={data?.issues ?? null} columns={columns} />
         )}
       </div>
       {data?.issues && (
