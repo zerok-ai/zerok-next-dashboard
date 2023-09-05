@@ -25,6 +25,7 @@ export const INCIDENT_COLUMNS = [
   helper.accessor("entry_path", {
     header: "REQUEST ENTRY POINT",
     size: DEFAULT_COL_WIDTH * 2.5,
+    enableSorting: false,
     cell: (info) => {
       return (
         <div className={styles["entry-point-container"]}>
@@ -40,6 +41,7 @@ export const INCIDENT_COLUMNS = [
   helper.accessor("latency_ns", {
     header: "DURATION",
     size: DEFAULT_COL_WIDTH / 1.5,
+    enableSorting: true,
     cell: (info) => {
       return (
         <span>
@@ -52,6 +54,10 @@ export const INCIDENT_COLUMNS = [
   }),
   helper.accessor("incident_collection_time", {
     header: "TIMESTAMP",
+    enableSorting: true,
+    // sortingFn: (a: string, b: string) => {
+    //   return dayjs(a).unix() - dayjs(b).unix();
+    // },
     size: DEFAULT_COL_WIDTH * 1.2,
     cell: (info) => {
       return <span>{getFormattedTime(info.getValue())}</span>;

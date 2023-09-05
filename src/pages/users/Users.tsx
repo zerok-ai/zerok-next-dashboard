@@ -1,11 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import { Button, Chip, IconButton } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import CustomSkeleton from "components/CustomSkeleton";
+import { createColumnHelper } from "@tanstack/react-table";
 // custom
 import InviteUserForm from "components/forms/InviteUserForm";
 import PageHeader from "components/helpers/PageHeader";
@@ -36,11 +31,10 @@ import { type UserDetail } from "utils/types";
 import styles from "./Users.module.scss";
 
 const Users = () => {
-  const {
-    data: users,
-    fetchData,
-    loading,
-  } = useFetch<UserDetail[]>("users", GET_USERS_ENDPOINT);
+  const { data: users, fetchData } = useFetch<UserDetail[]>(
+    "users",
+    GET_USERS_ENDPOINT
+  );
 
   const { renderTrigger } = useSelector(clusterSelector);
 
@@ -172,11 +166,6 @@ const Users = () => {
       },
     }),
   ];
-  const table = useReactTable({
-    data: users ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
 
   const AddUserButton = () => {
     return (
@@ -200,11 +189,7 @@ const Users = () => {
         alignExtras="right"
       />
       <div className={styles["table-container"]}>
-        {loading ? (
-          <CustomSkeleton len={8} />
-        ) : (
-          <TableX table={table} data={users ?? []} />
-        )}
+        <TableX columns={columns} data={users ?? null} />
       </div>
       <ModalX
         isOpen={isFormOpen}
