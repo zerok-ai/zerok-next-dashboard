@@ -9,15 +9,10 @@ on:
         description: 'Docker Image Tag'
         required: true
         default: 'dev'
-      GKE_CLUSTER:
-        description: 'Cluster Name'
-        required: true
-        default: 'devcloud01'
       
 env:
   NS: ${{ vars.NS }}
   DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
-  GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
   GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
   GKE_ZONE : ${{ vars.GKE_ZONE }}
   DOCKER_REG: ${{ vars.DOCKER_REG }}
@@ -30,9 +25,9 @@ env:
 
 jobs:
   init:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-dev-init.yml@main
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-prod-init.yml@main
     with:
-      GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
+      ENVIRONMENT: ${{ github.event.inputs.ENV }}
       GIT_TAG: ${{ github.ref }}
       DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
 
