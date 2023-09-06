@@ -14,7 +14,6 @@ import styles from "./IntegrationsPage.module.scss";
 
 const IntegrationsPage = () => {
   const [selectedTab, setSelectedTab] = useState(INTEGRATION_CATEGORIES[0]);
-
   return (
     <div className={styles.container}>
       <PageHeader
@@ -49,8 +48,8 @@ const IntegrationsPage = () => {
           })}
         </Tabs>
         <div className={styles["tab-content"]}>
-          {INTEGRATION_LIST.filter(
-            (integration) => integration.category === selectedTab
+          {INTEGRATION_LIST.filter((integration) =>
+            integration.tags.includes(selectedTab)
           ).map((integration) => {
             return (
               <IntegrationCard

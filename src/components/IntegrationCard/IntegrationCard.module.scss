@@ -1,3 +1,90 @@
 @import "styles/variables.module.scss";
 .container {
+    background-color: $bg-dark;
+    border:1px solid $grey-900;
+    border-radius: $sp-base * 2;
+    width: 400px;
+    padding:$sp-base * 4;
+    h5 {
+        font-weight: 400;
+        color:$grey-25;
+    }
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: $sp-base *2;
+    border-bottom: 1px solid $grey-900;
+    a {
+        color:$grey-400;
+        text-decoration: underline;
+    }
+}
+
+.content {
+    padding:$sp-base * 2;
+}
+
+.name-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base;
+}
+
+.logo-container {
+    width:36px;
+    height:36px;
+    > img {
+        width:100%;
+        height:100%;
+    }
+}
+
+.actions {
+    margin-top: $sp-base * 8;
+    display: flex;
+    column-gap: $sp-base * 3;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+    font-size: $font-md;
+}
+
+.action-icon {
+    font-size: $font-lg + 2;
+}
+
+.chip-label {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+    font-size: $font-sm;
+}
+
+.status-success, .status-inactive {
+
+    width:8px;
+    height:8px;
+    border-radius: 16px;
+    padding:$sp-base;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.status-success {
+    background-color: $success-700;
+}
+.status-inactive {
+    background-color: $grey-600;
+}
+
+.status-icon {
+    color:$white;
+    font-size: $font-lg;
 }
