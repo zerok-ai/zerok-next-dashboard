@@ -27,6 +27,7 @@ const PageHeader = ({
   htmlTitle,
   showBreadcrumb = false,
 }: PageHeaderProps) => {
+  const hasExtras = leftExtras ?? rightExtras;
   return (
     <div className={styles.container}>
       {htmlTitle && (
@@ -39,23 +40,25 @@ const PageHeader = ({
       </div>
       <div className={cx(styles["top-row"])}>
         <h3>{title}</h3>
-        <div className={styles["top-row-extras"]}>
-          <div className={cx(styles["left-extras"])}>
-            {showRange && <TimeSelector />}
-            {showRefresh && <ClusterRefreshButton />}
-            {leftExtras &&
-              leftExtras.map((ex) => {
-                return ex;
-              })}
-          </div>
-          {rightExtras && (
-            <div className={cx(styles["right-extras"])}>
-              {rightExtras.map((el) => {
-                return el;
-              })}
+        {hasExtras && (
+          <div className={styles["top-row-extras"]}>
+            <div className={cx(styles["left-extras"])}>
+              {showRange && <TimeSelector />}
+              {showRefresh && <ClusterRefreshButton />}
+              {leftExtras &&
+                leftExtras.map((ex) => {
+                  return ex;
+                })}
             </div>
-          )}
-        </div>
+            {rightExtras && (
+              <div className={cx(styles["right-extras"])}>
+                {rightExtras.map((el) => {
+                  return el;
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className={styles["bottom-row"]}>{bottomRow && bottomRow}</div>
     </div>
