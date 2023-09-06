@@ -8,10 +8,9 @@ import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import queryString from "query-string";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
@@ -110,12 +109,8 @@ const IssuesPage = () => {
 
   return (
     <div>
-      <Fragment>
-        <Head>
-          <title>ZeroK Dashboard | Issues</title>
-        </Head>
-      </Fragment>
       <PageHeader
+        htmlTitle="Issues"
         title="Issues"
         showRange={true}
         showRefresh={true}

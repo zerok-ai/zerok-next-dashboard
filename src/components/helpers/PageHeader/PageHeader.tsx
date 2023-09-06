@@ -2,6 +2,7 @@ import cx from "classnames";
 import ClusterRefreshButton from "components/ClusterRefreshButton";
 import BreadcrumbX from "components/themeX/BreadcrumbX";
 import TimeSelector from "components/TimeSelector";
+import Head from "next/head";
 
 import styles from "./PageHeader.module.scss";
 
@@ -13,6 +14,7 @@ interface PageHeaderProps {
   showBreadcrumb?: boolean;
   leftExtras?: React.ReactNode[];
   rightExtras?: React.ReactNode[];
+  htmlTitle?: string;
 }
 
 const PageHeader = ({
@@ -22,10 +24,16 @@ const PageHeader = ({
   leftExtras,
   rightExtras,
   bottomRow,
+  htmlTitle,
   showBreadcrumb = false,
 }: PageHeaderProps) => {
   return (
     <div className={styles.container}>
+      {htmlTitle && (
+        <Head>
+          <title>ZeroK Dashboard | {htmlTitle}</title>
+        </Head>
+      )}
       <div className={styles["breadcrumb-container"]}>
         {showBreadcrumb && <BreadcrumbX />}
       </div>
