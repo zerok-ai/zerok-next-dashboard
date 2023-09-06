@@ -13,7 +13,7 @@ interface PageHeaderProps {
   bottomRow?: React.ReactNode;
   showBreadcrumb?: boolean;
   align?: "left" | "right";
-  alignExtras?: "left" | "right";
+  alignExtras?: "left" | "right" | "justify";
 }
 
 const PageHeader = ({
@@ -44,13 +44,18 @@ const PageHeader = ({
             styles["top-row-actions"]
           )}
         >
-          <div className={styles["top-row-actions"]}>
+          <div>
             {showRange && <TimeSelector />}
             {showRefresh && <ClusterRefreshButton />}
           </div>
           <div>
             {extras && (
-              <div className={styles.extras}>
+              <div
+                className={cx(
+                  styles.extras,
+                  alignExtras === "justify" && styles.justify
+                )}
+              >
                 {extras.map((el) => {
                   return el;
                 })}

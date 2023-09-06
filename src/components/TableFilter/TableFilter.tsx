@@ -1,22 +1,40 @@
 import { MenuItem, Select } from "@mui/material";
+import { type ColumnSort } from "@tanstack/react-table";
 import { type TableSortOptions } from "utils/tables/types";
 
 import styles from "./TableFilter.module.scss";
 
 interface TableFilterProps {
   options: TableSortOptions[];
-  value: string;
-  onChange: (value: string) => void;
+  sortBy: ColumnSort;
+  onChange: (value: ColumnSort) => void;
+  size?: "small" | "medium";
 }
 
-const TableFilter = ({ options, value, onChange }: TableFilterProps) => {
+const TableFilter = ({ options, sortBy, onChange, size }: TableFilterProps) => {
   return (
     <div className={styles.container}>
       <Select
-        value={value}
+        className={styles.select}
+        size={size ?? "small"}
+        value={`${sortBy.id}:${sortBy.desc ? "desc" : "asc"}`}
+        renderValue={(selected) => {
+          const label = options.find(
+            (option) => option.value === selected
+          )?.label;
+          return (
+            <span className={styles["select-label-prefix"]}>
+              Sort by {label}
+            </span>
+          );
+        }}
         onChange={(e) => {
           if (e.target && e.target.value) {
-            onChange(e.target.value);
+            const [id, desc] = e.target.value.split(":");
+            onChange({
+              id,
+              desc: desc === "desc",
+            });
           }
         }}
       >

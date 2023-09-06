@@ -1,4 +1,5 @@
 // import { type SortingState } from "@tanstack/react-table";
+import { type ColumnSort } from "@tanstack/react-table";
 import TableFilter from "components/TableFilter";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
@@ -33,6 +34,11 @@ const transformTraces = (data: TracesStateDetail) => {
   return newTraces;
 };
 
+const DEFAULT_SORT: ColumnSort = {
+  id: INCIDENT_COL_FILTERS[0].value.split(":")[0],
+  desc: INCIDENT_COL_FILTERS[0].value.split(":")[1] === "desc",
+};
+
 const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
@@ -41,7 +47,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
 
   const page = parseInt((router.query.page as string) ?? 1);
-  const [sortBy, setSortBy] = useState<string>(INCIDENT_COL_FILTERS[0].value);
+  const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
   const {
     data: traces,
     fetchData: fetchTraces,
@@ -76,10 +82,10 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
         <h5>Traces:</h5>
         <div className={styles["header-actions"]}>
           <TableFilter
-            value={sortBy}
+            sortBy={sortBy[0]}
             options={INCIDENT_COL_FILTERS}
             onChange={(va) => {
-              setSortBy(va);
+              setSortBy([va]);
             }}
           />
         </div>
@@ -87,6 +93,8 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
       <div className={styles["table-container"]}>
         <TableX
           columns={INCIDENT_COLUMNS}
+          sortBy={sortBy}
+          onSortingChange={setSortBy}
           data={traces?.trace_det_list ?? null}
           headerClassName={styles["table-header"]}
           rowClassName={styles["table-row"]}

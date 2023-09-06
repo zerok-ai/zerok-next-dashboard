@@ -20,6 +20,7 @@
     display: flex;
     column-gap: $sp-base * 3;
     align-items: center;
+    width:100%;
 }
 
 .extras-right {
@@ -33,6 +34,7 @@
 }
 
 .extras {
+    width:100%;
     display: flex;
     column-gap: $sp-base * 3;
     align-items: center;
@@ -45,5 +47,10 @@
 }
 
 .top-row-right {
+    justify-content: space-between;
+}
+
+.justify {
+    display: flex;
     justify-content: space-between;
 }

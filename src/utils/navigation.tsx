@@ -1,9 +1,7 @@
-import { useMemo } from "react";
 import { HiLightningBolt } from "react-icons/hi";
 
 import { ICON_BASE_PATH, ICONS } from "./images";
 import { type DrawerNavItemType } from "./types";
-console.log(useMemo);
 const HealthNormal = () => {
   return <img src={`${ICON_BASE_PATH}/${ICONS["chart-up"]}`} />;
 };
