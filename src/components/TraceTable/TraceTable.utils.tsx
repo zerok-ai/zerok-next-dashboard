@@ -78,12 +78,12 @@ export const INCIDENT_COL_FILTERS: TableSortOptions[] = [
     sort: "asc",
   },
   {
-    label: "Longest first",
+    label: "Latency high to low ",
     value: "latency_ns:desc",
     sort: "desc",
   },
   {
-    label: "Shortest first",
+    label: "Latency low to high",
     value: "latency_ns:asc",
     sort: "asc",
   },
