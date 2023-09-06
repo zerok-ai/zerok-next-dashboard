@@ -158,9 +158,8 @@ const ApiKeys = () => {
         <PageHeader
           title="API Keys"
           showRange={false}
-          align="right"
           showRefresh={false}
-          extras={[
+          rightExtras={[
             <Button
               color="primary"
               variant="contained"

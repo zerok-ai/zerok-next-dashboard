@@ -185,8 +185,7 @@ const Users = () => {
         title="Users"
         showRange={false}
         showRefresh={true}
-        extras={[<AddUserButton key={"add-btn"} />]}
-        alignExtras="right"
+        rightExtras={[<AddUserButton key={"add-btn"} />]}
       />
       <div className={styles["table-container"]}>
         <TableX columns={columns} data={users ?? null} />
