@@ -94,7 +94,6 @@ export const IssueMetadata = () => {
         showBreadcrumb={true}
         title={trimString(getTitleFromIssue(issue.issue_title), 80)}
         showRange={false}
-        align="right"
         showRefresh={false}
         bottomRow={<IssueTimes />}
       />
