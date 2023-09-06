@@ -8,4 +8,6 @@ export interface IntegrationListType {
   url: string;
   logo: string;
   category: IntegrationCategoriesType;
+  integrated: boolean;
+  tags: IntegrationCategoriesType[];
 }
