@@ -9,59 +9,44 @@ interface PageHeaderProps {
   showRange: boolean;
   showRefresh: boolean;
   title: string;
-  extras?: React.ReactNode[];
   bottomRow?: React.ReactNode;
   showBreadcrumb?: boolean;
-  align?: "left" | "right";
-  alignExtras?: "left" | "right" | "justify";
+  leftExtras?: React.ReactNode[];
+  rightExtras?: React.ReactNode[];
 }
 
 const PageHeader = ({
   showRange,
   showRefresh,
   title,
-  extras,
+  leftExtras,
+  rightExtras,
   bottomRow,
   showBreadcrumb = false,
-  align = "left",
-  alignExtras = "left",
 }: PageHeaderProps) => {
   return (
     <div className={styles.container}>
       <div className={styles["breadcrumb-container"]}>
         {showBreadcrumb && <BreadcrumbX />}
       </div>
-      <div
-        className={cx(
-          styles["top-row"],
-          align === "right" && styles["top-row-right"]
-        )}
-      >
+      <div className={cx(styles["top-row"])}>
         <h3>{title}</h3>
-        <div
-          className={cx(
-            alignExtras === "right" && styles["extras-right"],
-            styles["top-row-actions"]
-          )}
-        >
-          <div className={styles["top-row-actions"]}>
+        <div className={styles["top-row-extras"]}>
+          <div className={cx(styles["left-extras"])}>
             {showRange && <TimeSelector />}
             {showRefresh && <ClusterRefreshButton />}
+            {leftExtras &&
+              leftExtras.map((ex) => {
+                return ex;
+              })}
           </div>
-          <div>
-            {extras && (
-              <div
-                className={cx(
-                  styles.extras,
-                  alignExtras === "justify" && styles.justify
-                )}
-              >
-                {extras.map((el) => {
-                  return el;
-                })}
-              </div>
-            )}
-          </div>
+          {rightExtras && (
+            <div className={cx(styles["right-extras"])}>
+              {rightExtras.map((el) => {
+                return el;
+              })}
+            </div>
+          )}
         </div>
       </div>
       <div className={styles["bottom-row"]}>{bottomRow && bottomRow}</div>
