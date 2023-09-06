@@ -44,7 +44,7 @@ const PageHeader = ({
             styles["top-row-actions"]
           )}
         >
-          <div>
+          <div className={styles["top-row-actions"]}>
             {showRange && <TimeSelector />}
             {showRefresh && <ClusterRefreshButton />}
           </div>
