@@ -50,7 +50,8 @@
 
 .chart-container {
     display: flex;
-    justify-content: center;
+    // justify-content: center;
+    padding:$sp-base * 7 $sp-base * 4;
 }
 
 .line-chart {

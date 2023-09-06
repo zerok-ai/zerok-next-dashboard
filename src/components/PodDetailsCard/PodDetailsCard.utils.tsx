@@ -84,11 +84,13 @@ export const PodChart = ({
   const series = getChartData();
   return (
     <div className={styles["chart-container"]}>
-      <ResponsiveContainer width="95%" height={500}>
+      <ResponsiveContainer width="90%" height={500}>
         <LineChart data={series} className={styles["line-chart"]}>
           <CartesianGrid opacity={1} stroke={cssVars.grey900} />
           <XAxis
             dataKey="x"
+            scale="time"
+            // ticks={getTicks()}
             axisLine={{
               stroke: cssVars.grey600,
             }}
