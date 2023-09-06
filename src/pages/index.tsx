@@ -81,7 +81,7 @@ const Home = () => {
         title="Health"
         showRange={true}
         showRefresh={true}
-        extras={healthyCluster ? getExtras() : []}
+        leftExtras={healthyCluster ? getExtras() : []}
       />
       {isHealthMap ? (
         <ServiceMapPage

@@ -16,16 +16,18 @@
     }
 }
 
-.top-row-actions {
+.top-row-extras {
+    width:100%;
     display: flex;
     column-gap: $sp-base * 3;
     align-items: center;
+    justify-content: space-between;
 }
 
-.extras-right {
+.left-extras, .right-extras {
     display: flex;
-    width:100%;
-    justify-content: space-between;
+    column-gap: $sp-base * 3;
+    align-items: center;
 }
 
 .bottom-row {
