@@ -10,9 +10,6 @@ export const ServiceCardStatusIcon = ({
   const HealthyStatus = () => {
     return (
       <div className={styles["healthy-status"]}>
-        {/* <div className={styles["healthy-status-connected-icon"]}>
-          <img src={`${ICON_BASE_PATH}/${ICONS.world}`} alt="connected_icon" />
-        </div> */}
         <span className={styles["healthy-status-green-dot-icon"]}></span>
       </div>
     );

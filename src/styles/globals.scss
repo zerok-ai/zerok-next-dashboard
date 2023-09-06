@@ -1,14 +1,19 @@
 @import "./variables.module.scss";
 body,
 html {
-  font-family: "Karla", sans-serif;
+  font-family: "Noto Sans", sans-serif;
   background-color: $bg-dark;
   box-sizing: border-box;
 }
 
+p,div,a,span,button,select,input {
+  letter-spacing: 0.2px;
+}
+
 h1,h2,h3,h4,h5,h6 {
-  color:$grey-200;
   font-weight:400;
+  letter-spacing: 0.5px;
+  color:$grey-300;
 }
 
 h3,h5 {
@@ -19,9 +24,6 @@ p {
   line-height: $default-line-height;
 }
 
-// p,span {
-//   color:$grey-300;
-// }
 
 h1 {
   font-size: 40px;
@@ -103,7 +105,7 @@ a {
 
 .object-key {
   span {
-    color:$grey-100 !important;
+    color:$grey-400 !important;
   }
 }
 
