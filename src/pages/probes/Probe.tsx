@@ -11,7 +11,6 @@ import DialogX from "components/themeX/DialogX";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
-import { nanoid } from "nanoid";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -353,33 +352,40 @@ const Probe = () => {
     }),
   ];
 
-  const extras = [
-    <TableFilter
-      key={nanoid()}
-      sortBy={sortBy[0]}
-      options={PROBE_SORT_OPTIONS}
-      onChange={(val) => {
-        setSortBy([val]);
-      }}
-    />,
-    <Link href="/probes/create" key={nanoid()}>
-      <Button
-        className={styles["new-probe-btn"]}
-        variant="contained"
-        size="medium"
-      >
-        New Probe <HiOutlinePlus />
-      </Button>
-    </Link>,
-  ];
+  const leftExtras = useMemo(() => {
+    return [
+      <TableFilter
+        key={"probe-table-filter"}
+        sortBy={sortBy[0]}
+        options={PROBE_SORT_OPTIONS}
+        onChange={(val) => {
+          setSortBy([val]);
+        }}
+      />,
+    ];
+  }, [sortBy]);
+
+  const rightExtras = useMemo(() => {
+    return [
+      <Link href="/probes/create" key={"new-probe-btn"}>
+        <Button
+          className={styles["new-probe-btn"]}
+          variant="contained"
+          size="medium"
+        >
+          New Probe <HiOutlinePlus />
+        </Button>
+      </Link>,
+    ];
+  }, []);
   return (
     <div className={styles.container}>
       <PageHeader
         title="Probes"
         showRange={false}
         showRefresh
-        extras={extras}
-        alignExtras="justify"
+        leftExtras={leftExtras}
+        rightExtras={rightExtras}
         // alignExtras="right"
       />
       <DialogX

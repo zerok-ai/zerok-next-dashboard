@@ -95,6 +95,19 @@ const IssuesPage = () => {
     }
   };
 
+  const leftExtras = useMemo(() => {
+    return [
+      <TableFilter
+        key={"table-filter"}
+        options={ISSUE_SORT_OPTIONS}
+        sortBy={sortBy[0]}
+        onChange={(value) => {
+          setSortBy([value]);
+        }}
+      />,
+    ];
+  }, [sortBy]);
+
   return (
     <div>
       <Fragment>
@@ -106,17 +119,7 @@ const IssuesPage = () => {
         title="Issues"
         showRange={true}
         showRefresh={true}
-        extras={[
-          <TableFilter
-            key={"table-filter"}
-            options={ISSUE_SORT_OPTIONS}
-            sortBy={sortBy[0]}
-            onChange={(value) => {
-              setSortBy([value]);
-            }}
-          />,
-        ]}
-        // extras={[<ServicesFilter serviceList={serviceList} key={nanoid()} />]}
+        leftExtras={leftExtras}
       />
       {/* Rendering filters */}
       <div className={styles["active-filters"]}>
