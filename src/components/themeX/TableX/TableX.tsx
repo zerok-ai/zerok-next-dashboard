@@ -5,21 +5,22 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  type OnChangeFn,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import cx from "classnames";
 import CustomSkeleton from "components/CustomSkeleton";
-import { useState } from "react";
 
 import styles from "./TableX.module.scss";
-import { AscSortIcon, DescSortIcon } from "./TableX.utils";
 
 interface TableXProps<T extends object> {
   data: T[] | null;
   columns: Array<ColumnDef<T, any>>;
   headerClassName?: string;
   rowClassName?: string;
+  sortBy?: SortingState;
+  onSortingChange?: OnChangeFn<SortingState>;
   onRowClick?: (row: T) => void;
   borderRadius?: boolean;
 }
@@ -30,21 +31,21 @@ const TableX = <T extends object>({
   headerClassName,
   rowClassName,
   onRowClick,
+  sortBy,
+  onSortingChange,
   borderRadius = true,
 }: TableXProps<T>) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     columns,
     data: data ?? [],
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onSortingChange: setSorting,
+    onSortingChange,
     getSortedRowModel: getSortedRowModel(),
     state: {
-      sorting,
+      sorting: sortBy,
     },
   });
-  console.log({ sorting });
   if (!data) {
     return <CustomSkeleton len={10} />;
   }
@@ -56,23 +57,10 @@ const TableX = <T extends object>({
             return (
               <tr key={gr.id}>
                 {gr.headers.map((header) => {
-                  const isSorted = header.column.getIsSorted();
-                  const renderSortIcon = () => {
-                    if (!isSorted) return null;
-                    return isSorted === "desc" ? (
-                      <AscSortIcon />
-                    ) : (
-                      <DescSortIcon />
-                    );
-                  };
                   return (
                     <th
                       key={header.id}
-                      className={cx(
-                        "table-th",
-
-                        header.column.getCanSort() ? "cursor-pointer" : ""
-                      )}
+                      className={cx("table-th")}
                       colSpan={header.colSpan}
                       style={{
                         width: header.getSize(),
@@ -86,7 +74,6 @@ const TableX = <T extends object>({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {renderSortIcon()}
                       </div>
                     </th>
                   );

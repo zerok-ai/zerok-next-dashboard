@@ -1,14 +1,11 @@
 import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { createColumnHelper, type SortingState } from "@tanstack/react-table";
 import cx from "classnames";
 import CustomSkeleton from "components/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
+import TableFilter from "components/TableFilter";
 import ChipX from "components/themeX/ChipX";
 import DialogX from "components/themeX/DialogX";
 import PaginationX from "components/themeX/PaginationX";
@@ -46,8 +43,14 @@ import {
   type ScenarioDetail,
   type ScenarioDetailType,
 } from "utils/scenarios/types";
+import { PROBE_SORT_OPTIONS } from "utils/tables/sort";
 
 import styles from "./Probe.module.scss";
+
+const DEFAULT_SORT = {
+  id: PROBE_SORT_OPTIONS[0].value.split(":")[0],
+  desc: PROBE_SORT_OPTIONS[0].value.split(":")[1] === "desc",
+};
 
 const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
@@ -58,6 +61,7 @@ const Probe = () => {
     loading: boolean;
     deleting: boolean;
   }>(null);
+  const [sortBy, setSortBy] = useState<SortingState>([DEFAULT_SORT]);
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
@@ -349,15 +353,21 @@ const Probe = () => {
     }),
   ];
 
-  const table = useReactTable({
-    data: scenarios ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   const extras = [
+    <TableFilter
+      key={nanoid()}
+      sortBy={sortBy[0]}
+      options={PROBE_SORT_OPTIONS}
+      onChange={(val) => {
+        setSortBy([val]);
+      }}
+    />,
     <Link href="/probes/create" key={nanoid()}>
-      <Button className={styles["new-probe-btn"]} variant="contained">
+      <Button
+        className={styles["new-probe-btn"]}
+        variant="contained"
+        size="medium"
+      >
         New Probe <HiOutlinePlus />
       </Button>
     </Link>,
@@ -369,7 +379,8 @@ const Probe = () => {
         showRange={false}
         showRefresh
         extras={extras}
-        alignExtras="right"
+        alignExtras="justify"
+        // alignExtras="right"
       />
       <DialogX
         isOpen={!!(selectedProbe && selectedProbe.deleting)}
@@ -389,7 +400,12 @@ const Probe = () => {
       </DialogX>
       <div className={styles.table}>
         {scenarios ? (
-          <TableX table={table} data={scenarios ?? []} />
+          <TableX
+            data={scenarios ?? null}
+            columns={columns}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
+          />
         ) : (
           <CustomSkeleton len={8} />
         )}

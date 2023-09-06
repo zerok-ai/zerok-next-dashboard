@@ -1,7 +1,9 @@
 import { nanoid } from "@reduxjs/toolkit";
+import { type ColumnSort } from "@tanstack/react-table";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
+import TableFilter from "components/TableFilter";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
@@ -9,7 +11,7 @@ import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import queryString from "query-string";
-import { Fragment, useEffect, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
@@ -18,12 +20,17 @@ import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
-import { getIssueColumns } from "./IssuesPage.utils";
+import { getIssueColumns, ISSUE_SORT_OPTIONS } from "./IssuesPage.utils";
 
 interface IssuesDataType {
   issues: IssueDetail[];
   total_records: number;
 }
+
+const DEFAULT_SORT: ColumnSort = {
+  id: ISSUE_SORT_OPTIONS[0].value.split(":")[0],
+  desc: ISSUE_SORT_OPTIONS[0].value.split(":")[1] === "desc",
+};
 
 const IssuesPage = () => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
@@ -41,6 +48,8 @@ const IssuesPage = () => {
   const { query } = router;
   const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
+
+  const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
 
   useEffect(() => {
     if (selectedCluster) {
@@ -97,6 +106,16 @@ const IssuesPage = () => {
         title="Issues"
         showRange={true}
         showRefresh={true}
+        extras={[
+          <TableFilter
+            key={"table-filter"}
+            options={ISSUE_SORT_OPTIONS}
+            sortBy={sortBy[0]}
+            onChange={(value) => {
+              setSortBy([value]);
+            }}
+          />,
+        ]}
         // extras={[<ServicesFilter serviceList={serviceList} key={nanoid()} />]}
       />
       {/* Rendering filters */}
@@ -117,7 +136,12 @@ const IssuesPage = () => {
       <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}
         {selectedCluster && (
-          <TableX data={data?.issues ?? null} columns={columns} />
+          <TableX
+            data={data?.issues ?? null}
+            columns={columns}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
+          />
         )}
       </div>
       {data?.issues && (

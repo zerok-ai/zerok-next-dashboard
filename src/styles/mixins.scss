@@ -64,6 +64,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  h5 {
+    font-weight: 400;
+    color:$grey-25;
+  }
   h6 {
     color:$white;
     font-weight: 400;
