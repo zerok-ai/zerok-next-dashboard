@@ -5,19 +5,22 @@
                 "host": "http://localhost:8080",
                 "cluster": "devclient04",
                 "integration_date": "2023-09-01T00:00:00Z",
-                "id": "devclient04"
+                "id": "devclient04",
+                "name": "Service Prom 1"
             },
             {
                 "host": "http://localhost:8080",
                 "cluster": "devclient01",
                 "integration_date": "2023-09-02T00:00:00Z",
-                "id": "devclient01"
+                "id": "devclient01",
+                "name": "Service Prom 4"
             },
             {
                 "host": "http://localhost:8080",
                 "cluster": "devclient02",
                 "integration_date": "2023-09-02T00:00:00Z",
-                "id": "devclient02"
+                "id": "devclient02",
+                "name": "Service Prom 6"
             }
         ]
     }
