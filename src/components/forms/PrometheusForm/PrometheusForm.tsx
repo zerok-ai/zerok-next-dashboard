@@ -1,6 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, FormHelperText, MenuItem, Select } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import raxios from "utils/raxios";
+import { type GenericObject } from "utils/types";
 
 import styles from "./PrometheusForm.module.scss";
 import {
@@ -10,11 +14,13 @@ import {
   type PromFormSchemaType,
 } from "./PrometheusForm.utils";
 
-const PrometheusForm = () => {
+const PrometheusForm = ({ edit }: { edit: boolean }) => {
+  const router = useRouter();
   const {
     formState: { errors },
     register,
     setValue,
+    reset,
     watch,
     handleSubmit,
   } = useForm<PromFormSchemaType>({
@@ -23,6 +29,28 @@ const PrometheusForm = () => {
     },
     resolver: zodResolver(PromFormSchema),
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await raxios.get("/prometheus.json");
+      const prom = res.data.payload.clusters.find(
+        (p: GenericObject) => p.id.toString() === router.query.id
+      );
+      console.log(res.data, router.query.id);
+      if (prom) {
+        reset({
+          name: prom.name,
+          url: prom.url,
+          username: prom.authentication.username,
+          password: prom.authentication.password,
+          level: prom.level,
+        });
+      }
+    };
+    if (edit && router.query.name) {
+      fetchData();
+    }
+  }, [router]);
+
   const onSubmit = (values: PromFormSchemaType) => {
     console.log({ values });
   };

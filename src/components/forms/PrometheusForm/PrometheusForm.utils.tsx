@@ -5,10 +5,10 @@ import { z } from "zod";
 
 import styles from "./PrometheusForm.module.scss";
 
-export const PROMETHEUS_LEVELS = ["cluster", "org"] as const;
+export const PROMETHEUS_LEVELS = ["CLUSTER", "ORG"] as const;
 
 export const PromFormSchema = z.object({
-  name: z.string().nonempty("Name cannot be empty"),
+  name: z.string(),
   url: z
     .string()
     .nonempty("URL cannot be empty")
@@ -18,7 +18,7 @@ export const PromFormSchema = z.object({
     ),
   username: z.string(),
   password: z.string(),
-  level: z.enum(["cluster", "org"]),
+  level: z.enum([...PROMETHEUS_LEVELS]),
 });
 
 export type PromFormSchemaType = z.infer<typeof PromFormSchema>;
@@ -28,11 +28,11 @@ export const PROM_LEVEL_OPTIONS: Array<{
   label: string;
 }> = [
   {
-    value: "cluster",
+    value: "CLUSTER",
     label: "Cluster",
   },
   {
-    value: "org",
+    value: "ORG",
     label: "Organization",
   },
 ];
