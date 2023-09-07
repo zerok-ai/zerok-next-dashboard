@@ -24,6 +24,9 @@ const PrometheusTable = () => {
   }, [selectedCluster, renderTrigger]);
   const helper = createColumnHelper<PrometheusListType>();
   const columns = [
+    helper.accessor("name", {
+      header: "Name",
+    }),
     helper.accessor("host", {
       header: "Host",
     }),

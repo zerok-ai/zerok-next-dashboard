@@ -28,7 +28,7 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
     );
   };
   const handleRoute = (page: string) => {
-    router.push(`/integrations/${name}/${page}`);
+    router.push(`/integrations/prometheus/${page}`);
   };
   return (
     <div className={styles.container}>
@@ -66,7 +66,7 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
               // size="small"
               className={styles["action-button"]}
               onClick={() => {
-                handleRoute("new");
+                handleRoute("create");
               }}
             >
               <HiOutlinePlus className={styles["action-icon"]} />

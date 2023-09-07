@@ -14,6 +14,7 @@ export interface IntegrationListType {
 }
 
 export interface PrometheusListType {
+  name: string;
   host: string;
   cluster: string;
   integration_date: string;
