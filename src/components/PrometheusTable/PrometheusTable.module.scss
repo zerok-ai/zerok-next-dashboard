@@ -1,0 +1,12 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.actions {
+    display: flex;
+    column-gap: $sp-base * 2;
+}
+
+.action-icon {
+    color:$grey-100;
+}

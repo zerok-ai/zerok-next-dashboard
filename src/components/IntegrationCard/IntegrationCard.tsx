@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import cx from "classnames";
 import ChipX from "components/themeX/ChipX";
+import { useRouter } from "next/router";
 import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineCog6Tooth } from "react-icons/hi2";
 import { type IntegrationListType } from "utils/integrations/types";
@@ -12,7 +13,8 @@ interface IntegrationCardProps {
 }
 
 const IntegrationCard = ({ integration }: IntegrationCardProps) => {
-  const { name, logo, description, integrated } = integration;
+  const { name, label, logo, description, integrated } = integration;
+  const router = useRouter();
   const ChipLabel = () => {
     return (
       <span className={styles["chip-label"]}>
@@ -25,17 +27,15 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
       </span>
     );
   };
+  const handleRoute = (page: string) => {
+    router.push(`/integrations/${name}/${page}`);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles["name-container"]}>
-          <h5>{name}</h5>
+          <h6>{label}</h6>
           <ChipX label={<ChipLabel />} upperCase={false} color={"secondary"} />
-          {/* <small>
-            <a href={url} rel="noreferrer" target="_blank">
-              {url}
-            </a>
-          </small> */}
         </div>
         <div className={styles["logo-container"]}>
           <img src={logo} alt={name} />
@@ -47,6 +47,9 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
         </p>
         <div className={styles.actions}>
           <Button
+            onClick={() => {
+              handleRoute("list");
+            }}
             variant={"contained"}
             color={!integrated ? "primary" : "secondary"}
             // size="small"
@@ -62,6 +65,9 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
               color={"primary"}
               // size="small"
               className={styles["action-button"]}
+              onClick={() => {
+                handleRoute("new");
+              }}
             >
               <HiOutlinePlus className={styles["action-icon"]} />
               {"Add new"}

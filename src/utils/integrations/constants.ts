@@ -6,7 +6,8 @@ export const INTEGRATION_CATEGORIES = ["All", "Data sources", "Communication"];
 
 export const INTEGRATION_LIST: IntegrationListType[] = [
   {
-    name: "Prometheus",
+    name: "prometheus",
+    label: "Prometheus",
     description: "Integrate with Prometheus connect K8s metrics to ZeroK.",
     url: "https://prometheus.io/",
     logo: BRAND_LOGOS.PROMETHEUS,
@@ -15,7 +16,8 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     tags: ["All", "Data sources"],
   },
   {
-    name: "Slack",
+    name: "slack",
+    label: "Slack",
     description: "Integrate with Slack to send notifications to your team.",
     url: "https://slack.com/",
     logo: BRAND_LOGOS.SLACK,

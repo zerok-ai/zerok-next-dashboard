@@ -1,0 +1,24 @@
+{
+    "payload": {
+        "clusters": [
+            {
+                "host": "http://localhost:8080",
+                "cluster": "devclient04",
+                "integration_date": "2023-09-01T00:00:00Z",
+                "id": "devclient04"
+            },
+            {
+                "host": "http://localhost:8080",
+                "cluster": "devclient01",
+                "integration_date": "2023-09-02T00:00:00Z",
+                "id": "devclient01"
+            },
+            {
+                "host": "http://localhost:8080",
+                "cluster": "devclient02",
+                "integration_date": "2023-09-02T00:00:00Z",
+                "id": "devclient02"
+            }
+        ]
+    }
+}

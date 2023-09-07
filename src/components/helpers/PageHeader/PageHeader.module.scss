@@ -4,6 +4,7 @@
     flex-direction: column;
     width:100%;
 }
+
 .top-row {
     display: flex;
     column-gap: $sp-base * 3;
@@ -13,12 +14,12 @@
     h3 {
         color:$white;
         margin-right: $sp-base * 2;
+        // flex:1;
         width:fit-content;
     }
 }
 
 .top-row-extras {
-    width:100%;
     display: flex;
     column-gap: $sp-base * 3;
     align-items: center;

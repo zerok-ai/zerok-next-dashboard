@@ -3,7 +3,16 @@
 .tabs {
     display: flex;
     align-items: center;
+    .tab {
+        color:$grey-300;
+        font-weight: 500;
+    }
+    .selected {
+        color:$grey-25;
+    }
+    
 }
+
 
 .tab-content {
     padding:$sp-base * 4;

@@ -1,3 +1,4 @@
+import { Skeleton } from "@mui/material";
 import cx from "classnames";
 import ClusterRefreshButton from "components/ClusterRefreshButton";
 import BreadcrumbX from "components/themeX/BreadcrumbX";
@@ -15,6 +16,7 @@ interface PageHeaderProps {
   leftExtras?: React.ReactNode[];
   rightExtras?: React.ReactNode[];
   htmlTitle?: string;
+  loading?: boolean;
 }
 
 const PageHeader = ({
@@ -25,11 +27,17 @@ const PageHeader = ({
   rightExtras,
   bottomRow,
   htmlTitle,
+  loading,
   showBreadcrumb = false,
 }: PageHeaderProps) => {
-  const hasExtras = leftExtras ?? rightExtras;
+  const checkForExtras = () => {
+    if (leftExtras || rightExtras || showRange || showRefresh) {
+      return true;
+    }
+    return false;
+  };
   return (
-    <div className={styles.container}>
+    <div className={cx(styles.container)}>
       {htmlTitle && (
         <Head>
           <title>ZeroK Dashboard | {htmlTitle}</title>
@@ -39,8 +47,10 @@ const PageHeader = ({
         {showBreadcrumb && <BreadcrumbX />}
       </div>
       <div className={cx(styles["top-row"])}>
-        <h3>{title}</h3>
-        {hasExtras && (
+        <h3>
+          {loading ?? !title ? <Skeleton width="50vw" height="50px" /> : title}
+        </h3>
+        {checkForExtras() && (
           <div className={styles["top-row-extras"]}>
             <div className={cx(styles["left-extras"])}>
               {showRange && <TimeSelector />}
