@@ -26,3 +26,5 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     tags: ["All", "Communication"],
   },
 ];
+
+export const INTEGRATIONS_PAGE_SIZE = 10;

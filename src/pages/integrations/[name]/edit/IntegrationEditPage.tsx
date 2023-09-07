@@ -1,3 +1,4 @@
+import CustomSkeleton from "components/CustomSkeleton";
 import PrometheusForm from "components/forms/PrometheusForm";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
@@ -6,41 +7,36 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { type GenericObject } from "utils/types";
 
-import styles from "./IntegrationCreatePage.module.scss";
+import styles from "./IntegrationEditPage.module.scss";
 
 const PAGE_MAP: GenericObject = {
-  prometheus: "Prometheus",
+  prometheus: <PrometheusForm edit={true} />,
 };
 
-const TITLE_MAP: GenericObject = {
-  prometheus: "Add a new Prometheus cluster",
-};
-
-const IntegrationCreatePage = () => {
+const IntegrationEditPage = () => {
   const router = useRouter();
   const { name } = router.query;
-  const [page, setPage] = useState<null | string>(null);
+  const [page, setPage] = useState<string | null>(null);
   useEffect(() => {
     if (router.isReady && PAGE_MAP[name as string]) {
-      setPage(PAGE_MAP[name as string]);
+      setPage(name as string);
     }
   }, [router]);
+
   return (
     <div className={styles.container}>
       <PageHeader
-        htmlTitle={page ? TITLE_MAP[name as string] : ""}
-        title={page ? TITLE_MAP[name as string] : ""}
+        title={`Edit ${name as string} integration`}
         loading={!page}
         showRange={false}
         showRefresh={false}
-        showBreadcrumb={true}
       />
-      <PrometheusForm edit={false} />
+      {page ? PAGE_MAP[page] : <CustomSkeleton len={10} />}
     </div>
   );
 };
 
-IntegrationCreatePage.getLayout = function getLayout(page: React.ReactNode) {
+IntegrationEditPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
       <PageLayout>{page}</PageLayout>
@@ -48,4 +44,4 @@ IntegrationCreatePage.getLayout = function getLayout(page: React.ReactNode) {
   );
 };
 
-export default IntegrationCreatePage;
+export default IntegrationEditPage;

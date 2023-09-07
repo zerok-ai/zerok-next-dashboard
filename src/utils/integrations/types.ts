@@ -12,10 +12,18 @@ export interface IntegrationListType {
   integrated: boolean;
   tags: IntegrationCategoriesType[];
 }
-
 export interface PrometheusListType {
-  name: string;
-  host: string;
-  cluster: string;
-  integration_date: string;
+  id: number;
+  cluster_id: string;
+  type: "PROMETHEUS";
+  url: string;
+  authentication: {
+    password: string;
+    username: string;
+  };
+  level: "ORG" | "CLUSTER";
+  created_at: string;
+  updated_at: string;
+  deleted: boolean;
+  disabled: boolean;
 }
