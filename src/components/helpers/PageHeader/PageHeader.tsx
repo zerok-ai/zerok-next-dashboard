@@ -36,6 +36,7 @@ const PageHeader = ({
     }
     return false;
   };
+
   return (
     <div className={cx(styles.container)}>
       {htmlTitle && (

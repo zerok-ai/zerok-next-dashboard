@@ -29,6 +29,7 @@ const IntegrationEditPage = () => {
         title={`Edit ${name as string} integration`}
         htmlTitle={`Edit ${name as string} integration`}
         loading={!page}
+        showBreadcrumb={true}
         showRange={false}
         showRefresh={false}
       />

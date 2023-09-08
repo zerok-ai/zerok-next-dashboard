@@ -210,10 +210,11 @@ const PrometheusTable = () => {
   return (
     <div>
       <PageHeader
-        title={"Prometheus clusters"}
+        title={"Prometheus integrations"}
         htmlTitle="Prometheus integrations"
         showRange={false}
         showRefresh={true}
+        showBreadcrumb={true}
         leftExtras={[
           <TableFilter
             sortBy={sortBy[0]}
