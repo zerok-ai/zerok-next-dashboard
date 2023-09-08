@@ -89,18 +89,25 @@ export const PodChart = ({
           <CartesianGrid opacity={1} stroke={cssVars.grey900} />
           <XAxis
             dataKey="x"
-            scale="time"
+            scale="point"
             // ticks={getTicks()}
             axisLine={{
               stroke: cssVars.grey600,
             }}
             stroke={cssVars.grey200}
+            style={{
+              fontSize: "smaller",
+            }}
             tickFormatter={(tick) => {
               return dayjs(tick).format("HH:mm");
             }}
           />
           <YAxis
             dataKey="zk-wsp-client"
+            style={{
+              fontSize: "smaller",
+              color: cssVars.grey900,
+            }}
             axisLine={{
               stroke: cssVars.grey600,
             }}
