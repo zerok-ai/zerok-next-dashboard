@@ -50,13 +50,16 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
             onClick={() => {
               handleRoute("list");
             }}
+            disabled={!integrated}
             variant={"contained"}
             color={!integrated ? "primary" : "secondary"}
             // size="small"
             className={styles["action-button"]}
           >
-            <HiOutlineCog6Tooth className={styles["action-icon"]} />
-            {integrated ? "Manage" : "Configure"}
+            {integrated && (
+              <HiOutlineCog6Tooth className={styles["action-icon"]} />
+            )}
+            {integrated ? "Manage" : "Coming soon"}
           </Button>
           {/* New */}
           {integrated && (
