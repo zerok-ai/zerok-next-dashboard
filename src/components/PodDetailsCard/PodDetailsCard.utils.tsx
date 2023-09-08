@@ -12,7 +12,8 @@ import {
   YAxis,
 } from "recharts";
 import cssVars from "styles/variables.module.scss";
-import { type PodDetailResponseType } from "utils/pods/types";
+import { formatCPUUsage, getMBfromBytes } from "utils/charts/functions";
+import { type PodDetailResponseType, type PodInfoType } from "utils/pods/types";
 import { type GenericObject } from "utils/types";
 
 import styles from "./PodDetailsCard.module.scss";
@@ -36,14 +37,27 @@ export const POD_METADATA = "pod-metadata";
 export const CPU_USAGE = "cpu-usage";
 export const MEMORY_USAGE = "memory-usage";
 
-export const PodMetadata = ({ pod }: { pod: PodDetailResponseType }) => {
+const lineChartColors: string[] = [
+  "#8884d8", // Purple-Blue
+  "#82ca9d", // Green
+  "#8C82D7", // Lavender Blue
+  "#FF5733", // Red-Orange
+  "#66CDAA", // Medium Aquamarine
+  "#FF6B81", // Blush
+  "#4169E1", // Royal Blue
+  "#FFAA33", // Amber
+  "#32CD32", // Lime Green
+  "#FF8C94", // Salmon Pink
+];
+
+export const PodMetadata = ({ pod }: { pod: PodInfoType }) => {
   if (!pod) return null;
-  const keys = Object.keys(pod.metadata);
+  const keys = Object.keys(pod);
   return (
     <div className={styles["pod-metadata"]}>
       {keys.map((k) => {
         // @ts-expect-error annoying
-        const value = pod.metadata[k];
+        const value = pod[k];
         return (
           <div className={styles["pod-metadata-row"]} key={k}>
             <p className={styles["pod-metadata-key"]}>
@@ -62,35 +76,33 @@ export const PodChart = ({
   dataKey,
 }: {
   pod: PodDetailResponseType;
-  dataKey: "cpuUsage" | "memUsage";
+  dataKey: "cpu_usage" | "mem_usage";
 }) => {
-  const getChartData = () => {
+  const getChartData = (): [GenericObject[], string[]] => {
     const dataset = pod[dataKey];
     const series: GenericObject[] = [];
-    dataset.frames.map((fr) => {
-      const { schema, data } = fr;
-      data.values.map((val, idx) => {
-        series.push({
-          x: data.timeStamp[idx],
-          [schema.name]: val,
-          name: schema.name,
-        });
-        return true;
+    const keys = Object.keys(dataset);
+    const timestamps = dataset[keys[0]].time_stamp;
+    timestamps.forEach((time, i) => {
+      const obj: GenericObject = {
+        timestamps: time,
+      };
+      keys.forEach((key) => {
+        obj[key] = dataset[key].values[i];
       });
-      return true;
+      series.push(obj);
     });
-    return series;
+    return [series, keys];
   };
-  const series = getChartData();
+  const [series, keys] = getChartData();
   return (
     <div className={styles["chart-container"]}>
       <ResponsiveContainer width="90%" height={500}>
         <LineChart data={series} className={styles["line-chart"]}>
           <CartesianGrid opacity={1} stroke={cssVars.grey900} />
           <XAxis
-            dataKey="x"
+            dataKey="timestamps"
             scale="point"
-            // ticks={getTicks()}
             axisLine={{
               stroke: cssVars.grey600,
             }}
@@ -99,29 +111,50 @@ export const PodChart = ({
               fontSize: "smaller",
             }}
             tickFormatter={(tick) => {
-              return dayjs(tick).format("HH:mm");
+              return dayjs.unix(tick / 1000).format("HH:mm");
             }}
           />
           <YAxis
-            dataKey="zk-wsp-client"
             style={{
               fontSize: "smaller",
               color: cssVars.grey900,
             }}
+            tickFormatter={(tick) => {
+              return dataKey === "cpu_usage"
+                ? `${formatCPUUsage(tick)} %`
+                : `${getMBfromBytes(tick)} MB`;
+            }}
+            width={100}
             axisLine={{
               stroke: cssVars.grey600,
             }}
             stroke={cssVars.grey200}
           />
-          <Tooltip content={<ZkChartTooltip />} />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="zk-wsp-client"
-            stroke="#8884d8"
-            dot={false}
-            activeDot={{ r: 4 }}
+          <Tooltip
+            content={
+              <ZkChartTooltip
+                type={dataKey === `cpu_usage` ? `cpu` : `memory`}
+              />
+            }
           />
+          <Legend />
+          {keys.map((line, idx) => {
+            let color = lineChartColors[idx];
+            if (idx > lineChartColors.length - 1) {
+              color = lineChartColors[idx % lineChartColors.length];
+            }
+            return (
+              <Line
+                type="monotone"
+                dataKey={line}
+                name={line}
+                key={line}
+                stroke={color}
+                dot={false}
+                activeDot={{ r: 4 }}
+              />
+            );
+          })}
         </LineChart>
       </ResponsiveContainer>
     </div>
