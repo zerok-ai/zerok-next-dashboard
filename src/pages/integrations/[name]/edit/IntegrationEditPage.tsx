@@ -27,6 +27,7 @@ const IntegrationEditPage = () => {
     <div className={styles.container}>
       <PageHeader
         title={`Edit ${name as string} integration`}
+        htmlTitle={`Edit ${name as string} integration`}
         loading={!page}
         showRange={false}
         showRefresh={false}

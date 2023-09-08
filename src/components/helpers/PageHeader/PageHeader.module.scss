@@ -20,6 +20,7 @@
 }
 
 .top-row-extras {
+    flex:1;
     display: flex;
     column-gap: $sp-base * 3;
     align-items: center;

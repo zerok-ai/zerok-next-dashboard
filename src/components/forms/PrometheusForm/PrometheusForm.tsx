@@ -1,10 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, FormHelperText, MenuItem, Select } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { FormHelperText, MenuItem, Select } from "@mui/material";
+import CustomSkeleton from "components/CustomSkeleton";
+import { useFetch } from "hooks/useFetch";
+import useStatus from "hooks/useStatus";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
+import {
+  type PrometheusBaseType,
+  type PrometheusListType,
+} from "utils/integrations/types";
 import raxios from "utils/raxios";
-import { type GenericObject } from "utils/types";
 
 import styles from "./PrometheusForm.module.scss";
 import {
@@ -16,6 +26,10 @@ import {
 
 const PrometheusForm = ({ edit }: { edit: boolean }) => {
   const router = useRouter();
+  const { selectedCluster } = useSelector(clusterSelector);
+  const { data: defaultValues, fetchData } =
+    useFetch<PrometheusListType[]>("integrations");
+  const { status, setStatus } = useStatus();
   const {
     formState: { errors },
     register,
@@ -30,30 +44,95 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
     resolver: zodResolver(PromFormSchema),
   });
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await raxios.get("/prometheus.json");
-      const prom = res.data.payload.clusters.find(
-        (p: GenericObject) => p.id.toString() === router.query.id
+    const getInitialValues = async () => {
+      const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
       );
-      console.log(res.data, router.query.id);
-      if (prom) {
+      fetchData(endpoint);
+    };
+    if (edit && selectedCluster) {
+      getInitialValues();
+    }
+  }, [selectedCluster]);
+
+  useEffect(() => {
+    if (edit && defaultValues) {
+      const integ = defaultValues.find(
+        (i) => i.id === parseInt(router.query.id as string)
+      );
+      if (integ) {
         reset({
-          name: prom.name,
-          url: prom.url,
-          username: prom.authentication.username,
-          password: prom.authentication.password,
-          level: prom.level,
+          url: integ.url,
+          username: integ.authentication.username,
+          password: integ.authentication.password,
+          level: integ.level,
         });
       }
-    };
-    if (edit && router.query.name) {
-      fetchData();
     }
-  }, [router]);
+  }, [defaultValues]);
 
-  const onSubmit = (values: PromFormSchemaType) => {
-    console.log({ values });
+  const onSubmit = async (values: PromFormSchemaType) => {
+    setStatus({
+      loading: true,
+      error: null,
+    });
+    try {
+      const { url, username, password, level } = values;
+      const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
+      );
+      const common: PrometheusBaseType = {
+        type: "PROMETHEUS",
+        url,
+        authentication: {
+          username,
+          password,
+        },
+        level,
+      };
+      if (edit && defaultValues) {
+        const integ = defaultValues.find(
+          (i) => i.id === parseInt(router.query.id as string)
+        );
+        const { id, cluster_id, created_at, updated_at, disabled, deleted } =
+          integ as PrometheusListType;
+        const body: PrometheusListType = {
+          ...common,
+          id,
+          cluster_id,
+          created_at,
+          updated_at,
+          disabled,
+          deleted,
+        };
+        await raxios.post(endpoint, body);
+        router.push("/integrations/prometheus/list");
+      } else if (!edit) {
+        await raxios.post(endpoint, common);
+        router.push("/integrations/prometheus/list");
+      }
+    } catch (err) {
+      console.log({ err });
+      setStatus((old) => {
+        return {
+          ...old,
+          error: "Could not create integration. Please try again.",
+        };
+      });
+    } finally {
+      setStatus((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+    }
   };
+  if (edit && !defaultValues) {
+    return <CustomSkeleton len={10} />;
+  }
   return (
     <div>
       {/* Name */}
@@ -125,9 +204,14 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           </FormHelperText>
         </div>
         <div className={styles.divider}></div>
-        <Button type="submit" variant="contained" className={styles.button}>
+        <LoadingButton
+          loading={status.loading}
+          type="submit"
+          variant="contained"
+          className={styles.button}
+        >
           Add cluster
-        </Button>
+        </LoadingButton>
       </form>
     </div>
   );

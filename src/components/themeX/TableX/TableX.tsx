@@ -65,9 +65,6 @@ const TableX = <T extends object>({
                       style={{
                         width: header.getSize(),
                       }}
-                      {...{
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
                     >
                       <div className={cx(styles["th-content"], "table-th")}>
                         {flexRender(

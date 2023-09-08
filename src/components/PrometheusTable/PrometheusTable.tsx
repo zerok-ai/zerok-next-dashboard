@@ -1,20 +1,21 @@
-import { IconButton, Skeleton, Switch } from "@mui/material";
+import { Button, IconButton, Skeleton, Switch } from "@mui/material";
 import { type ColumnSort, createColumnHelper } from "@tanstack/react-table";
 import PageHeader from "components/helpers/PageHeader";
 import TableFilter from "components/TableFilter";
 import ChipX from "components/themeX/ChipX";
-import PaginationX from "components/themeX/PaginationX";
+import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
 import { useFetch } from "hooks/useFetch";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineTrash, HiWrenchScrewdriver } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getRelativeTime } from "utils/dateHelpers";
-import { INTEGRATIONS_PAGE_SIZE } from "utils/integrations/constants";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import { type PrometheusListType } from "utils/integrations/types";
 import raxios from "utils/raxios";
@@ -28,7 +29,8 @@ const DEFAULT_SORT = {
 };
 
 const PrometheusTable = () => {
-  const { data, fetchData, error } = useFetch<PrometheusListType[]>("clusters");
+  const { data, fetchData, error } =
+    useFetch<PrometheusListType[]>("integrations");
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
   const [selectedIntegration, setSelectedIntegration] = useState<{
@@ -37,14 +39,20 @@ const PrometheusTable = () => {
   } | null>(null);
   const router = useRouter();
   const { name } = router.query;
-  useEffect(() => {
+
+  const getData = () => {
     if (selectedCluster) {
       const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       );
-      console.log({ endpoint });
-      fetchData(`/prometheus.json`);
+      fetchData(endpoint);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedCluster) {
+      getData();
     }
     if (error) {
       setSelectedIntegration(null);
@@ -52,22 +60,19 @@ const PrometheusTable = () => {
   }, [selectedCluster, renderTrigger, error]);
   const helper = createColumnHelper<PrometheusListType>();
   const columns = [
-    helper.accessor("id", {
-      header: "ID",
-      cell: (cell) => {
-        if (cell.row.original.id === selectedIntegration?.id) {
-          return <Skeleton variant="text" width={"100%"} />;
-        }
-        return <span>{cell.getValue()}</span>;
-      },
-    }),
     helper.accessor("url", {
       header: "Host",
+      size: DEFAULT_COL_WIDTH * 4,
       cell: (cell) => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
         }
-        return <span>{cell.getValue()}</span>;
+        return (
+          <span className={styles["int-title"]}>
+            {cell.getValue()}
+            {cell.row.original.disabled && <ChipX label="Disabled" />}
+          </span>
+        );
       },
     }),
     helper.accessor("cluster_id", {
@@ -114,7 +119,11 @@ const PrometheusTable = () => {
         }
         return (
           <div className={styles.actions}>
-            <TooltipX title="Disable integration">
+            <TooltipX
+              title={`${
+                row.row.original.disabled ? "Enable" : "Disable"
+              } Integration`}
+            >
               <Switch
                 checked={!row.row.original.disabled}
                 size="small"
@@ -136,7 +145,15 @@ const PrometheusTable = () => {
               </Link>
             </TooltipX>
             <TooltipX title="Delete integration">
-              <IconButton size="small">
+              <IconButton
+                size="small"
+                onClick={() => {
+                  setSelectedIntegration({
+                    id: row.row.original.id,
+                    action: "delete",
+                  });
+                }}
+              >
                 <HiOutlineTrash className={styles["action-icon"]} />
               </IconButton>
             </TooltipX>
@@ -162,9 +179,32 @@ const PrometheusTable = () => {
           disabled: !enabled,
         }
       );
+      getData();
     } catch (err) {
-      setSelectedIntegration(null);
       console.log({ err });
+    } finally {
+      setSelectedIntegration(null);
+    }
+  };
+  const handleDelete = async () => {
+    if (!selectedIntegration || selectedIntegration.action !== "delete") return;
+    const integ = data!.find((i) => i.id === selectedIntegration.id);
+    try {
+      await raxios.post(
+        CREATE_INTEGRATION_ENDPOINT.replace(
+          "{cluster_id}",
+          selectedCluster as string
+        ),
+        {
+          ...integ,
+          deleted: true,
+        }
+      );
+      getData();
+    } catch (err) {
+      console.log({ err });
+    } finally {
+      setSelectedIntegration(null);
     }
   };
   return (
@@ -184,7 +224,39 @@ const PrometheusTable = () => {
             options={PROM_SORT_OPTIONS}
           />,
         ]}
+        rightExtras={[
+          <Button
+            key="add-btn"
+            variant="contained"
+            className={styles["add-btn"]}
+            onClick={() => {
+              router.push(`/integrations/${name as string}/create`);
+            }}
+          >
+            <HiOutlinePlus /> Add integration
+          </Button>,
+        ]}
       />
+      {selectedIntegration?.action === "delete" && (
+        <DialogX
+          isOpen={
+            !!selectedIntegration && selectedIntegration.action === "delete"
+          }
+          title="Delete Probe"
+          successText="Delete"
+          cancelText="Cancel"
+          onClose={() => {
+            setSelectedIntegration(null);
+          }}
+          onSuccess={handleDelete}
+          onCancel={() => {
+            setSelectedIntegration(null);
+          }}
+        >
+          <span>Are you sure you want to delete this integration?</span> <br />
+          <em>This action cannot be undone.</em>
+        </DialogX>
+      )}
       <div className={styles.table}>
         <TableX
           columns={columns}
@@ -194,7 +266,7 @@ const PrometheusTable = () => {
         />
       </div>
       <div className={styles.pagination}>
-        <PaginationX itemsPerPage={INTEGRATIONS_PAGE_SIZE} totalItems={25} />
+        {/* <PaginationX itemsPerPage={INTEGRATIONS_PAGE_SIZE} totalItems={25} /> */}
       </div>
     </div>
   );
