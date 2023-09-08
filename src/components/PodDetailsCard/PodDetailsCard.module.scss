@@ -36,11 +36,12 @@
 
 .pod-metadata-key {
     text-transform: capitalize;
-    color:$grey-300;
+    color:$grey-400;
+    font-weight: 400;
 }
 
 .pod-metadata-value {
-    color:$grey-50;
+    color:$grey-100;
 }
 
 

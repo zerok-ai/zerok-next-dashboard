@@ -1,19 +1,35 @@
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 import { type TooltipProps } from "recharts";
+import { formatCPUUsage, getMBfromBytes } from "utils/charts/functions";
 
 import styles from "./ZkChartTooltip.module.scss";
+
+interface ZkChartTooltipProps extends TooltipProps<number, string> {
+  type: "cpu" | "memory";
+}
+
+const TITLES = {
+  cpu: "CPU Usage",
+  memory: "Memory Usage",
+};
+
+const FORMATTER = {
+  cpu: (value: number) => `${formatCPUUsage(value)}%`,
+  memory: (value: number) => `${getMBfromBytes(value)} MB`,
+};
 
 const ZkChartTooltip = ({
   active,
   payload,
   label,
-}: TooltipProps<number, string>) => {
+  type,
+}: ZkChartTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className={styles["custom-tooltip"]}>
         <p className={styles.label}>
-          {dayjs.unix(label / 1000).format("hh:mm:ss A")}
+          {TITLES[type]} - {dayjs.unix(label / 1000).format("hh:mm:ss A")}
         </p>
         <ul className={styles["tooltip-list"]}>
           {payload.map((p) => {
@@ -23,10 +39,10 @@ const ZkChartTooltip = ({
                   className={styles["tooltip-list-item-label"]}
                   style={{ color: p.stroke }}
                 >
-                  {p.payload.name}:
+                  {p.dataKey}:
                 </span>
                 <span className={styles["tooltip-list-item-value"]}>
-                  {p.value?.toFixed(5)}
+                  {p.value && FORMATTER[type](p.value)}
                 </span>
               </li>
             );

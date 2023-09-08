@@ -1,0 +1,158 @@
+{
+    "payload": {
+        "zk_inferences": "zkInferences",
+        "pod_info": {
+            "app_kubernetes_io_component": "metrics",
+            "app_kubernetes_io_instance": "prometheus-graf",
+            "app_kubernetes_io_managed_by": "Helm",
+            "app_kubernetes_io_name": "kube-state-metrics",
+            "app_kubernetes_io_part_of": "kube-state-metrics",
+            "app_kubernetes_io_version": "2.9.2",
+            "created_by_kind": "ReplicaSet",
+            "created_by_name": "prometheus-graf-server-7578c479",
+            "helm_sh_chart": "kube-state-metrics-5.10.1",
+            "host_ip": "10.138.0.46",
+            "host_network": "false",
+            "instance": "10.40.1.15:8080",
+            "job": "kubernetes-service-endpoints",
+            "namespace": "monitoring",
+            "node": "gke-devclient03-default-pool-8baee670-8n5r",
+            "pod": "prometheus-graf-server-7578c479-jbwtz",
+            "pod_ip": "10.40.0.8",
+            "service": "prometheus-graf-kube-state-metrics",
+            "uid": "57ed7e0e-eae8-47e3-b92e-cda4a0784b07"
+        },
+        "container_info": [
+            {
+                "container": "prometheus-server",
+                "container_id": "containerd://6b4b378db3de9da956fc144a19e2aaf032cd1b1d92c5b92d7de529ad0463fe80",
+                "image": "quay.io/prometheus/prometheus:v2.46.0",
+                "image_id": "quay.io/prometheus/prometheus@sha256:d6ead9daf2355b9923479e24d7e93f246253ee6a5eb18a61b0f607219f341a80",
+                "image_spec": "quay.io/prometheus/prometheus:v2.46.0"
+            },
+            {
+                "container": "prometheus-server-configmap-reload",
+                "container_id": "containerd://f2f9286662cfea2a7f6125a58571a88613488ecc07d0135c284f253eacd4747c",
+                "image": "quay.io/prometheus-operator/prometheus-config-reloader:v0.67.0",
+                "image_id": "quay.io/prometheus-operator/prometheus-config-reloader@sha256:14feefde1b8015de2cbdee008a19891c2af09f91b650af854e584feda9869a39",
+                "image_spec": "quay.io/prometheus-operator/prometheus-config-reloader:v0.67.0"
+            }
+        ],
+        "cpu_usage": {
+            "prometheus-server": {
+                "time_stamp": [
+                    1694158710098,
+                    1694158770098,
+                    1694158830098,
+                    1694158890098,
+                    1694158950098,
+                    1694159010098,
+                    1694159070098,
+                    1694159130098,
+                    1694159190098,
+                    1694159250098,
+                    1694159310098
+                ],
+                "values": [
+                    0.009542002687545788,
+                    0.0099460054487336,
+                    0.00973184606196732,
+                    0.00997945200446746,
+                    0.009687373046964588,
+                    0.010086510293967005,
+                    0.009840147972541688,
+                    0.010042485994384892,
+                    0.009876740280031836,
+                    0.010081570611973525,
+                    0.00965350665465018
+                ]
+            },
+            "prometheus-server-configmap-reload": {
+                "time_stamp": [
+                    1694158710098,
+                    1694158770098,
+                    1694158830098,
+                    1694158890098,
+                    1694158950098,
+                    1694159010098,
+                    1694159070098,
+                    1694159130098,
+                    1694159190098,
+                    1694159250098,
+                    1694159310098
+                ],
+                "values": [
+                    0.00003245305473062809,
+                    0.00003368905318758828,
+                    0.0000343811747799532,
+                    0.000034172364875515047,
+                    0.00003452575749026701,
+                    0.00003415657722360648,
+                    0.00003396719730754621,
+                    0.000032240185274692794,
+                    0.00003274403847475596,
+                    0.00003285482936174422,
+                    0.00003111349252041146
+                ]
+            }
+        },
+        "mem_usage": {
+            "prometheus-server": {
+                "time_stamp": [
+                    1694158710098,
+                    1694158770098,
+                    1694158830098,
+                    1694158890098,
+                    1694158950098,
+                    1694159010098,
+                    1694159070098,
+                    1694159130098,
+                    1694159190098,
+                    1694159250098,
+                    1694159310098
+                ],
+                "values": [
+                    333152256,
+                    335577088,
+                    343007232,
+                    336494592,
+                    338636800,
+                    337797120,
+                    344268800,
+                    344317952,
+                    344330240,
+                    340086784,
+                    340094976
+                ]
+            },
+            "prometheus-server-configmap-reload": {
+                "time_stamp": [
+                    1694158710098,
+                    1694158770098,
+                    1694158830098,
+                    1694158890098,
+                    1694158950098,
+                    1694159010098,
+                    1694159070098,
+                    1694159130098,
+                    1694159190098,
+                    1694159250098,
+                    1694159310098
+                ],
+                "values": [
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376,
+                    9957376
+                ]
+            }
+        }
+    }
+}

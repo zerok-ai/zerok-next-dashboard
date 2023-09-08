@@ -2,7 +2,7 @@ import { MenuItem, Select, Tab, Tabs } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { type PodDetailResponseType } from "utils/pods/types";
+import { type PodDetailResponseType, type PodListType } from "utils/pods/types";
 
 import styles from "./PodDetailsCard.module.scss";
 import {
@@ -15,28 +15,34 @@ import {
 } from "./PodDetailsCard.utils";
 
 const PodDetailsCard = () => {
-  const { data: pods, fetchData: fetchPods } =
-    useFetch<PodDetailResponseType[]>("pods");
+  const { data: pods, fetchData: fetchPods } = useFetch<PodListType[]>("pods");
+  const { data: podDetails, fetchData: fetchPodDetails } =
+    useFetch<PodDetailResponseType>("");
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
+  const [selectedPod, setSelectedPod] = useState<null | string>(null);
   useEffect(() => {
     fetchPods(`/pods.json`);
   }, []);
   useEffect(() => {
     if (pods && pods.length) {
-      setSelectedPod(pods[0].podName);
+      setSelectedPod(pods[0].name);
     }
   }, [pods]);
-  const [selectedPod, setSelectedPod] = useState<null | string>(null);
+  useEffect(() => {
+    if (selectedPod) {
+      fetchPodDetails(`/pod_info.json`);
+    }
+  }, [selectedPod]);
+
   const renderTabContent = () => {
-    if (!pods?.length) return null;
-    const pod = pods.find((p) => p.podName === selectedPod);
+    if (!pods?.length || !podDetails) return null;
     switch (selectedTab) {
       case POD_METADATA:
-        return <PodMetadata pod={pod!} />;
+        return <PodMetadata pod={podDetails.pod_info} />;
       case CPU_USAGE:
-        return <PodChart pod={pod!} dataKey="cpuUsage" />;
+        return <PodChart pod={podDetails} dataKey="cpu_usage" />;
       case MEMORY_USAGE:
-        return <PodChart pod={pod!} dataKey="cpuUsage" />;
+        return <PodChart pod={podDetails} dataKey="mem_usage" />;
     }
   };
   return (
@@ -47,8 +53,8 @@ const PodDetailsCard = () => {
           {pods &&
             pods.map((p) => {
               return (
-                <MenuItem value={p.podName} key={nanoid()}>
-                  {p.podName}
+                <MenuItem value={p.name} key={nanoid()}>
+                  {p.name}
                 </MenuItem>
               );
             })}

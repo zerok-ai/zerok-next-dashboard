@@ -22,7 +22,6 @@ const BreadcrumbX = () => {
         separator={<HiArrowLongRight className={styles.seperator} />}
       >
         {breadcrumbs.crumbs.map((breadcrumb, idx) => {
-          console.log({ breadcrumb });
           if (idx === breadcrumbs.crumbs.length - 1) {
             return (
               <span key={nanoid()} className={styles.active}>
