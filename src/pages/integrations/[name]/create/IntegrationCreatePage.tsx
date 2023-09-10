@@ -13,7 +13,7 @@ const PAGE_MAP: GenericObject = {
 };
 
 const TITLE_MAP: GenericObject = {
-  prometheus: "Add a new Prometheus cluster",
+  prometheus: "Add a new Prometheus data source",
 };
 
 const IntegrationCreatePage = () => {

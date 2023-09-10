@@ -234,7 +234,7 @@ const PrometheusTable = () => {
               router.push(`/integrations/${name as string}/create`);
             }}
           >
-            <HiOutlinePlus /> Add integration
+            <HiOutlinePlus /> Add data source
           </Button>,
         ]}
       />
