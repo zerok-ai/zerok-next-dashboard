@@ -7,13 +7,20 @@ import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import {
+  GET_POD_CONTAINERS_ENDPOINT,
   GET_POD_METRICS_ENDPOINT,
   GET_PODS_ENDPOINT,
 } from "utils/pods/endpoints";
-import { type PodDetailResponseType, type PodInfoType } from "utils/pods/types";
+import {
+  type ContainerInfoType,
+  type PodDetailResponseType,
+  type PodInfoType,
+} from "utils/pods/types";
 
 import styles from "./PodDetailsCard.module.scss";
 import {
+  ContainerMetadata,
+  POD_CONTAINERS,
   POD_METADATA,
   POD_METRICS,
   POD_TABS,
@@ -26,6 +33,8 @@ const PodDetailsCard = () => {
     useFetch<PodInfoType[]>("pods_info");
   const { data: podDetails, fetchData: fetchPodDetails } =
     useFetch<PodDetailResponseType>("");
+  const { data: containers, fetchData: fetchContainers } =
+    useFetch<ContainerInfoType[]>("container_info");
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
   const [selectedPod, setSelectedPod] = useState<null | string>(null);
   const { selectedCluster } = useSelector(clusterSelector);
@@ -51,17 +60,21 @@ const PodDetailsCard = () => {
     if (selectedPod && trace && pods && selectedCluster) {
       const pod = pods.find((p) => p.pod === selectedPod);
       if (!pod) return;
-      const endpoint = GET_POD_METRICS_ENDPOINT.replace("{pod-id}", pod.pod)
+      const endpoint1 = GET_POD_METRICS_ENDPOINT.replace("{pod-id}", pod.pod)
         .replace("{cluster_id}", selectedCluster)
         .replace("{namespace}", pod.namespace);
-      fetchPodDetails(endpoint);
+      const endpoint2 = GET_POD_CONTAINERS_ENDPOINT.replace("{pod_id}", pod.pod)
+        .replace("{cluster_id}", selectedCluster)
+        .replace("{namespace}", pod.namespace);
+      fetchPodDetails(endpoint1);
+      fetchContainers(endpoint2);
     }
   }, [selectedPod, selectedCluster]);
 
   const renderTabContent = () => {
     if (!pods?.length || !podDetails) return <CustomSkeleton len={8} />;
     const pod = pods.find((p) => p.pod === selectedPod);
-    if (!pod) return;
+    if (!pod || !containers) return <CustomSkeleton len={8} />;
     switch (selectedTab) {
       case POD_METADATA:
         return <PodMetadata pod={pod} />;
@@ -72,6 +85,8 @@ const PodDetailsCard = () => {
             <PodChart pod={podDetails} dataKey="mem_usage" />
           </div>
         );
+      case POD_CONTAINERS:
+        return <ContainerMetadata containers={containers} />;
     }
   };
   return (

@@ -1,6 +1,7 @@
-// /* eslint-disable */
+import { MenuItem, Select } from "@mui/material";
 import ZkChartTooltip from "components/ZkChartTooltip";
 import dayjs from "dayjs";
+import { useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -13,7 +14,11 @@ import {
 } from "recharts";
 import cssVars from "styles/variables.module.scss";
 import { formatCPUUsage, getMBfromBytes } from "utils/charts/functions";
-import { type PodDetailResponseType, type PodInfoType } from "utils/pods/types";
+import {
+  type ContainerInfoType,
+  type PodDetailResponseType,
+  type PodInfoType,
+} from "utils/pods/types";
 import { type GenericObject } from "utils/types";
 
 import styles from "./PodDetailsCard.module.scss";
@@ -27,10 +32,15 @@ export const POD_TABS = [
     label: "Metrics",
     value: "pod-metrics",
   },
+  {
+    label: "Containers",
+    value: "pod-containers",
+  },
 ];
 
 export const POD_METADATA = "pod-metadata";
 export const POD_METRICS = "pod-metrics";
+export const POD_CONTAINERS = "pod-containers";
 
 const lineChartColors: string[] = [
   "#8884d8", // Purple-Blue
@@ -158,6 +168,52 @@ export const PodChart = ({
           })}
         </LineChart>
       </ResponsiveContainer>
+    </div>
+  );
+};
+
+export const ContainerMetadata = ({
+  containers,
+}: {
+  containers: ContainerInfoType[];
+}) => {
+  const [selectedContainer, setSelectedContainer] = useState<string>(
+    containers[0].container_id
+  );
+  const container = containers.find(
+    (c) => c.container_id === selectedContainer
+  );
+  return (
+    <div className={styles["containers-container"]}>
+      <Select
+        value={selectedContainer}
+        className={styles["container-select"]}
+        onChange={(e) => {
+          if (e.target && e.target.value) {
+            setSelectedContainer(e.target.value);
+          }
+        }}
+      >
+        {containers.map((c) => {
+          return (
+            <MenuItem value={c.container_id} key={c.container_id}>
+              {c.container}
+            </MenuItem>
+          );
+        })}
+      </Select>
+      <div className={styles["container-metadata"]}>
+        {Object.keys(container!).map((k) => {
+          // @ts-expect-error annoying
+          const value = container[k];
+          return (
+            <div className={styles["pod-metadata-row"]} key={k}>
+              <p className={styles["pod-metadata-key"]}>{k}:</p>
+              <p className={styles["pod-metadata-value"]}>{value}</p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
