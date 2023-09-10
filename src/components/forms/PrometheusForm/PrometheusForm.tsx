@@ -142,7 +142,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           errors={errors}
           label={"Name"}
           register={register}
-          helperText={"The name of the cluster on dashboard."}
+          helperText={"The name of the data source on dashboard."}
         />
         {/* URL */}
         <FormItem
