@@ -29,7 +29,8 @@ const ZkChartTooltip = ({
     return (
       <div className={styles["custom-tooltip"]}>
         <p className={styles.label}>
-          {TITLES[type]} - {dayjs.unix(label / 1000).format("hh:mm:ss A")}
+          {TITLES[type]} -{" "}
+          {dayjs.unix(label / 1000).format("MMM DD hh:mm:ss A")}
         </p>
         <ul className={styles["tooltip-list"]}>
           {payload.map((p) => {

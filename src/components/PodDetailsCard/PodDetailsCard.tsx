@@ -1,60 +1,98 @@
 import { MenuItem, Select, Tab, Tabs } from "@mui/material";
+import CustomSkeleton from "components/CustomSkeleton";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { type PodDetailResponseType, type PodListType } from "utils/pods/types";
+import { clusterSelector } from "redux/cluster";
+import { useSelector } from "redux/store";
+import {
+  GET_POD_METRICS_ENDPOINT,
+  GET_PODS_ENDPOINT,
+} from "utils/pods/endpoints";
+import { type PodDetailResponseType, type PodInfoType } from "utils/pods/types";
 
 import styles from "./PodDetailsCard.module.scss";
 import {
-  CPU_USAGE,
-  MEMORY_USAGE,
   POD_METADATA,
+  POD_METRICS,
   POD_TABS,
   PodChart,
   PodMetadata,
 } from "./PodDetailsCard.utils";
 
 const PodDetailsCard = () => {
-  const { data: pods, fetchData: fetchPods } = useFetch<PodListType[]>("pods");
+  const { data: pods, fetchData: fetchPods } =
+    useFetch<PodInfoType[]>("pods_info");
   const { data: podDetails, fetchData: fetchPodDetails } =
     useFetch<PodDetailResponseType>("");
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
   const [selectedPod, setSelectedPod] = useState<null | string>(null);
+  const { selectedCluster } = useSelector(clusterSelector);
+  const router = useRouter();
+  const { trace } = router.query;
   useEffect(() => {
-    fetchPods(`/pods.json`);
-  }, []);
+    if (trace && selectedCluster) {
+      const endpoint = GET_PODS_ENDPOINT.replace(
+        "{trace_id}",
+        trace as string
+      ).replace("{cluster_id}", selectedCluster);
+      fetchPods(endpoint);
+    }
+  }, [trace, selectedCluster]);
+
   useEffect(() => {
     if (pods && pods.length) {
-      setSelectedPod(pods[0].name);
+      setSelectedPod(pods[0].pod);
     }
   }, [pods]);
+
   useEffect(() => {
-    if (selectedPod) {
-      fetchPodDetails(`/pod_info.json`);
+    if (selectedPod && trace && pods && selectedCluster) {
+      const pod = pods.find((p) => p.pod === selectedPod);
+      if (!pod) return;
+      const endpoint = GET_POD_METRICS_ENDPOINT.replace("{pod-id}", pod.pod)
+        .replace("{cluster_id}", selectedCluster)
+        .replace("{namespace}", pod.namespace);
+      fetchPodDetails(endpoint);
     }
-  }, [selectedPod]);
+  }, [selectedPod, selectedCluster]);
 
   const renderTabContent = () => {
-    if (!pods?.length || !podDetails) return null;
+    if (!pods?.length || !podDetails) return <CustomSkeleton len={8} />;
+    const pod = pods.find((p) => p.pod === selectedPod);
+    if (!pod) return;
     switch (selectedTab) {
       case POD_METADATA:
-        return <PodMetadata pod={podDetails.pod_info} />;
-      case CPU_USAGE:
-        return <PodChart pod={podDetails} dataKey="cpu_usage" />;
-      case MEMORY_USAGE:
-        return <PodChart pod={podDetails} dataKey="mem_usage" />;
+        return <PodMetadata pod={pod} />;
+      case POD_METRICS:
+        return (
+          <div className={styles["metrics-container"]}>
+            <PodChart pod={podDetails} dataKey="cpu_usage" />
+            <PodChart pod={podDetails} dataKey="mem_usage" />
+          </div>
+        );
     }
   };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h6>Pods</h6>
-        <Select value={selectedPod} size="small" className={styles.select}>
+        <Select
+          value={selectedPod}
+          size="small"
+          className={styles.select}
+          onChange={(e) => {
+            if (e.target && e.target.value) {
+              setSelectedPod(e.target.value);
+            }
+          }}
+        >
           {pods &&
             pods.map((p) => {
               return (
-                <MenuItem value={p.name} key={nanoid()}>
-                  {p.name}
+                <MenuItem value={p.pod} key={nanoid()}>
+                  {p.pod}
                 </MenuItem>
               );
             })}

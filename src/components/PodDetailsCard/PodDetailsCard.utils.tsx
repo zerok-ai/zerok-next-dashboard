@@ -24,18 +24,13 @@ export const POD_TABS = [
     value: "pod-metadata",
   },
   {
-    label: "CPU Usage",
-    value: "cpu-usage",
-  },
-  {
-    label: "Memory Usage",
-    value: "memory-usage",
+    label: "Metrics",
+    value: "pod-metrics",
   },
 ];
 
 export const POD_METADATA = "pod-metadata";
-export const CPU_USAGE = "cpu-usage";
-export const MEMORY_USAGE = "memory-usage";
+export const POD_METRICS = "pod-metrics";
 
 const lineChartColors: string[] = [
   "#8884d8", // Purple-Blue
@@ -60,9 +55,7 @@ export const PodMetadata = ({ pod }: { pod: PodInfoType }) => {
         const value = pod[k];
         return (
           <div className={styles["pod-metadata-row"]} key={k}>
-            <p className={styles["pod-metadata-key"]}>
-              {k.split("_").join(" ")}:
-            </p>
+            <p className={styles["pod-metadata-key"]}>{k}:</p>
             <p className={styles["pod-metadata-value"]}>{value}</p>
           </div>
         );
@@ -97,12 +90,19 @@ export const PodChart = ({
   const [series, keys] = getChartData();
   return (
     <div className={styles["chart-container"]}>
-      <ResponsiveContainer width="90%" height={500}>
+      <ResponsiveContainer height={300}>
         <LineChart data={series} className={styles["line-chart"]}>
-          <CartesianGrid opacity={1} stroke={cssVars.grey900} />
+          <CartesianGrid
+            opacity={1}
+            stroke={cssVars.grey900}
+            strokeDasharray={"5 5"}
+          />
           <XAxis
             dataKey="timestamps"
-            scale="point"
+            interval={1}
+            overflow={"scroll"}
+            // scale="point"
+            // ticks={series.map((s) => s.timestamps)}
             axisLine={{
               stroke: cssVars.grey600,
             }}
@@ -115,6 +115,7 @@ export const PodChart = ({
             }}
           />
           <YAxis
+            tickCount={5}
             style={{
               fontSize: "smaller",
               color: cssVars.grey900,
@@ -124,7 +125,7 @@ export const PodChart = ({
                 ? `${formatCPUUsage(tick)} %`
                 : `${getMBfromBytes(tick)} MB`;
             }}
-            width={100}
+            width={70}
             axisLine={{
               stroke: cssVars.grey600,
             }}
