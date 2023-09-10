@@ -12,7 +12,7 @@
 }
 
 .select {
-    width:250px;
+    width:350px;
 }
 
 .tabs {
@@ -35,13 +35,13 @@
 }
 
 .pod-metadata-key {
-    text-transform: capitalize;
+    // text-transform: capitalize;
     color:$grey-400;
     font-weight: 400;
 }
 
 .pod-metadata-value {
-    color:$grey-100;
+    color:$grey-25;
 }
 
 
@@ -49,10 +49,16 @@
 
 // charts
 
+.metrics-container {
+    padding:$sp-base * 3 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: $sp-base * 4;
+}
+
 .chart-container {
     display: flex;
     // justify-content: center;
-    padding:$sp-base * 7 $sp-base * 4;
 }
 
 .line-chart {

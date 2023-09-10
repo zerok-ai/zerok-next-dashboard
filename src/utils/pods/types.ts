@@ -42,13 +42,6 @@ export interface MemUsageType {
 }
 
 export interface PodDetailResponseType {
-  pod_info: PodInfoType;
-  container_info: ContainerInfoType[];
   cpu_usage: Record<string, CpuUsageType>;
   mem_usage: Record<string, MemUsageType>;
-}
-
-export interface PodListType {
-  name: string;
-  namespace: string;
 }
