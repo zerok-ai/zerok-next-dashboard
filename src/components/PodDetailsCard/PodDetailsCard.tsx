@@ -35,8 +35,9 @@ const PodDetailsCard = () => {
     useFetch<PodDetailResponseType>("");
   const { data: containers, fetchData: fetchContainers } =
     useFetch<ContainerInfoType[]>("container_info");
+
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
-  const [selectedPod, setSelectedPod] = useState<null | string>(null);
+  const [selectedPod, setSelectedPod] = useState<string>("");
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
   const { trace } = router.query;
@@ -60,21 +61,21 @@ const PodDetailsCard = () => {
     if (selectedPod && trace && pods && selectedCluster) {
       const pod = pods.find((p) => p.pod === selectedPod);
       if (!pod) return;
-      const endpoint1 = GET_POD_METRICS_ENDPOINT.replace("{pod-id}", pod.pod)
+      const endpoint1 = GET_POD_METRICS_ENDPOINT.replace("{pod_id}", pod.pod)
         .replace("{cluster_id}", selectedCluster)
         .replace("{namespace}", pod.namespace);
-      const endpoint2 = GET_POD_CONTAINERS_ENDPOINT.replace("{pod_id}", pod.pod)
+      const endpoint = GET_POD_CONTAINERS_ENDPOINT.replace("{pod_id}", pod.pod)
         .replace("{cluster_id}", selectedCluster)
         .replace("{namespace}", pod.namespace);
+      fetchContainers(endpoint);
       fetchPodDetails(endpoint1);
-      fetchContainers(endpoint2);
     }
   }, [selectedPod, selectedCluster]);
 
   const renderTabContent = () => {
     if (!pods?.length || !podDetails) return <CustomSkeleton len={8} />;
     const pod = pods.find((p) => p.pod === selectedPod);
-    if (!pod || !containers) return <CustomSkeleton len={8} />;
+    if (!pod) return <CustomSkeleton len={8} />;
     switch (selectedTab) {
       case POD_METADATA:
         return <PodMetadata pod={pod} />;

@@ -1,7 +1,8 @@
 import { MenuItem, Select } from "@mui/material";
+import CustomSkeleton from "components/CustomSkeleton";
 import ZkChartTooltip from "components/ZkChartTooltip";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -175,14 +176,35 @@ export const PodChart = ({
 export const ContainerMetadata = ({
   containers,
 }: {
-  containers: ContainerInfoType[];
+  containers: ContainerInfoType[] | null;
 }) => {
-  const [selectedContainer, setSelectedContainer] = useState<string>(
-    containers[0].container_id
-  );
-  const container = containers.find(
-    (c) => c.container_id === selectedContainer
-  );
+  const [selectedContainer, setSelectedContainer] = useState<string>("");
+  useEffect(() => {
+    if (containers && containers.length) {
+      setSelectedContainer(containers[0].container_id);
+    }
+  }, [containers]);
+
+  if (!containers) return <CustomSkeleton len={8} />;
+
+  const renderMetadata = () => {
+    const container = containers.find(
+      (c) => c.container_id === selectedContainer
+    );
+    if (!container) {
+      return <CustomSkeleton len={8} />;
+    }
+    return Object.keys(container).map((k) => {
+      // @ts-expect-error annoying
+      const value = container[k];
+      return (
+        <div className={styles["pod-metadata-row"]} key={k}>
+          <p className={styles["pod-metadata-key"]}>{k}:</p>
+          <p className={styles["pod-metadata-value"]}>{value}</p>
+        </div>
+      );
+    });
+  };
   return (
     <div className={styles["containers-container"]}>
       <Select
@@ -194,26 +216,19 @@ export const ContainerMetadata = ({
           }
         }}
       >
-        {containers.map((c) => {
-          return (
-            <MenuItem value={c.container_id} key={c.container_id}>
-              {c.container}
-            </MenuItem>
-          );
-        })}
+        {containers ? (
+          containers.map((c) => {
+            return (
+              <MenuItem value={c.container_id} key={c.container_id}>
+                {c.container}
+              </MenuItem>
+            );
+          })
+        ) : (
+          <CustomSkeleton len={5} />
+        )}
       </Select>
-      <div className={styles["container-metadata"]}>
-        {Object.keys(container!).map((k) => {
-          // @ts-expect-error annoying
-          const value = container[k];
-          return (
-            <div className={styles["pod-metadata-row"]} key={k}>
-              <p className={styles["pod-metadata-key"]}>{k}:</p>
-              <p className={styles["pod-metadata-value"]}>{value}</p>
-            </div>
-          );
-        })}
-      </div>
+      <div className={styles["container-metadata"]}>{renderMetadata()}</div>
     </div>
   );
 };
