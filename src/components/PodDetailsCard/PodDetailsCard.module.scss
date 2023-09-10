@@ -44,7 +44,21 @@
     color:$grey-25;
 }
 
+.containers-container {
+    position: relative;
+    min-height: 350px;
+}
 
+.container-select {
+    position: absolute;
+    top:0;
+    right:0;
+    width:200px;
+}
+
+.container-metadata {
+    padding-top: $sp-base * 6;
+}
 
 
 // charts
