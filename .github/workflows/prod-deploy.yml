@@ -57,49 +57,15 @@ jobs:
 
   ##############
   build-and-push:
-    needs: init
-    runs-on: zk-self-hosted
-    env:
-      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@main
+    with:
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-    environment:
-      name: ${{ needs.init.outputs.ENVIRONMENT }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Download dependencies
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: yarn
-
-      - name: Build
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: yarn build
-
-      - name: Uploading Helm Charts (for deploy)
-        uses: actions/upload-artifact@v3
-        if: ${{ env.DEPLOY == 'true' }}
-        with:
-          name: helm-charts
-          path: |
-            helm-charts
-
-      - name: Docker build
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker build  --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" .
-
-      - name: Docker Tag
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$VERSION"
-
-      - name: Docker push
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA"
-          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$VERSION"
+      DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
+      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+    secrets:
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
+    needs: init
 
   deploy:
     needs: [ init,build-and-push ]
