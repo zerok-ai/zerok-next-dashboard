@@ -1,18 +1,14 @@
 import { Button, IconButton } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import cx from "classnames";
-import CodeBlock from "components/CodeBlock";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
+import CodeBlock from "components/helpers/CodeBlock";
 import PageHeader from "components/helpers/PageHeader";
+import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
+import PrivateRoute from "components/maps/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
-import VisibilityToggleButton from "components/VisibilityToggleButton";
 import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
@@ -156,20 +152,14 @@ const ApiKeys = () => {
     ];
   }, [apiKeys]);
 
-  const table = useReactTable({
-    data: apiKeys ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <PageHeader
           title="API Keys"
           showRange={false}
-          align="right"
           showRefresh={false}
-          extras={[
+          rightExtras={[
             <Button
               color="primary"
               variant="contained"
@@ -187,7 +177,7 @@ const ApiKeys = () => {
         {loading ? (
           <CustomSkeleton len={8} />
         ) : (
-          <TableX table={table} data={apiKeys ?? []} />
+          <TableX columns={columns} data={apiKeys ?? null} />
         )}
         {/* Delete key dialog */}
         <DialogX

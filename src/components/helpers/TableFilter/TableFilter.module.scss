@@ -1,0 +1,14 @@
+@import "styles/variables.module.scss";
+.container {
+    .select-label-prefix {
+        font-weight: 500;
+        color:$grey-200;
+    }
+    :global(.MuiOutlinedInput-notchedOutline ){
+        border-color: $grey-700;
+    }
+}
+
+.select {
+    // height:32px;
+}

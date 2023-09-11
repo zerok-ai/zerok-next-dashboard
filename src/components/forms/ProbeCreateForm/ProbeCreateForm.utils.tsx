@@ -4,7 +4,7 @@ import {
   type ScenarioCreationType,
   type WorkloadType,
 } from "utils/scenarios/types";
-import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
+import { type GenericObject, type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 export type ConditionRowStrings =
   | "property"
@@ -33,10 +33,6 @@ export interface ConditionCardType {
 }
 
 export const PROBE_TIME_RANGES = [
-  // {
-  //   label: "Forever",
-  //   value: "forever",
-  // },
   {
     label: "1 hour",
     value: "-1h",
@@ -109,7 +105,7 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     label: "Latency",
     value: "latency",
     type: "integer",
-    helpText: "Latency of the service in nanoseconds",
+    helpText: "Latency of the service in milliseconds",
   },
   {
     label: "Source service",
@@ -127,13 +123,13 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
   {
     label: "Request payload size",
     value: "req_body_size",
-    type: "int",
+    type: "integer",
     helpText: "Size of the request payload in bytes",
   },
   {
     label: "Response payload size",
     value: "resp_body_size",
-    type: "int",
+    type: "integer",
     helpText: "Size of the response payload in bytes",
   },
   {
@@ -185,7 +181,7 @@ export const SQL_PROPERTIES: ProbePropertyType[] = [
   {
     label: "MYSQL response status code",
     value: "resp_status",
-    type: "int",
+    type: "integer",
   },
 ];
 
@@ -368,6 +364,16 @@ export const SLACK_CHANNELS: SlackChannelType[] = [
   },
 ];
 
+export const inputMap: GenericObject = {
+  string: "string",
+  select: "string",
+  integer: "integer",
+  int: "integer",
+  double: "integer",
+};
+
+export const dataTypeMap = {};
+
 export const buildProbeBody = (
   cards: ConditionCardType[],
   title: string,
@@ -391,14 +397,17 @@ export const buildProbeBody = (
         type: "rule_group",
         condition: "AND",
         rules: card.conditions.map((condition) => {
+          if (condition.property === "latency") {
+            condition.value = (Number(condition.value) * 1000000).toString();
+          }
           return {
             type: "rule",
             id: condition.property,
             field: condition.property,
-            input: condition.datatype === "string" ? "string" : "integer",
+            input: inputMap[condition.datatype],
             operator: condition.operator,
             value: condition.value,
-            datatype: condition.datatype,
+            datatype: inputMap[condition.datatype],
           };
         }),
       },

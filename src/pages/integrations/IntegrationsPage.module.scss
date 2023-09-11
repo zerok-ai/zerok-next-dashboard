@@ -1,0 +1,21 @@
+@import "styles/variables.module.scss";
+
+.tabs {
+    display: flex;
+    align-items: center;
+    .tab {
+        color:$grey-300;
+        font-weight: 500;
+    }
+    .selected {
+        color:$grey-25;
+    }
+    
+}
+
+
+.tab-content {
+    padding:$sp-base * 4;
+    display: flex;
+    column-gap: $sp-base * 4;
+}

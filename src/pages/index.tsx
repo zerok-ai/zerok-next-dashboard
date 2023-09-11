@@ -3,12 +3,12 @@ import { Button } from "@mui/material";
 // redux
 import { nanoid } from "@reduxjs/toolkit";
 // custom
-import HealthCards from "components/HealthCards";
+import HealthCards from "components/health-page/HealthCards";
+import ServiceMapPage from "components/health-page/ServiceMapPage";
+import MapToggle from "components/helpers/MapToggle";
 import PageHeader from "components/helpers/PageHeader";
 import PageWrapper from "components/helpers/PageWrapper";
-import MapToggle from "components/MapToggle";
-import SearchBar from "components/SearchBar";
-import ServiceMapPage from "components/ServiceMapPage";
+import SearchBar from "components/helpers/SearchBar";
 // hooks
 import { useToggle } from "hooks/useToggle";
 // react
@@ -81,7 +81,7 @@ const Home = () => {
         title="Health"
         showRange={true}
         showRefresh={true}
-        extras={healthyCluster ? getExtras() : []}
+        leftExtras={healthyCluster ? getExtras() : []}
       />
       {isHealthMap ? (
         <ServiceMapPage

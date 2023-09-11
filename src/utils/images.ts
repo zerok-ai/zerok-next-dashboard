@@ -40,3 +40,9 @@ export const ZEROK_SOURCE_LOGO = "/images/brand/zerok_source_logo.svg";
 export const SLACK_LOGO = `/images/brand/slack_logo.svg`;
 
 export const GENERIC_AVATAR = "/images/vectors/Avatar.svg";
+
+export const BRAND_LOGOS = {
+  "zerok-minimal-light": ZEROK_MINIMAL_LOGO_LIGHT,
+  SLACK: "/images/brand/slack_logo.svg",
+  PROMETHEUS: `/images/brand/prometheus_logo.svg`,
+};
