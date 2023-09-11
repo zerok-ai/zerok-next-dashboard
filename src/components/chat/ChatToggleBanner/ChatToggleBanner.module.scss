@@ -1,13 +1,17 @@
 @import "styles/variables.module.scss";
 .container {
     display: grid;
-    background-color: $primary-500;
+    background-color: $grey-925;
     height:56px;
     padding:$sp-base * 4 $sp-base * 5;
     grid-template-columns: 1fr 8fr 0.5fr;
     h5 {
         color:$grey-25;
     }
+ }
+
+ .minimized {
+    background-color: $primary-500;
  }
 
  .close-icon {

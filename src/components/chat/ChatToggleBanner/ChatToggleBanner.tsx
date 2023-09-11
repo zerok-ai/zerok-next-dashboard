@@ -1,3 +1,4 @@
+import cx from "classnames";
 import { Fragment } from "react";
 import { HiX } from "react-icons/hi";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
@@ -14,7 +15,10 @@ const ChatToggleBanner = ({
   toggleMinimize,
 }: ChatToggleBannerProps) => {
   return (
-    <div className={styles.container} role={"button"}>
+    <div
+      className={cx(styles.container, minimized && styles.minimized)}
+      role={"button"}
+    >
       <div className={styles["chat-icon"]}>
         <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} alt="chat-icon" />
       </div>
