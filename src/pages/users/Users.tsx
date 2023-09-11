@@ -9,7 +9,7 @@ import PrivateRoute from "components/maps/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
 import ModalX from "components/themeX/ModalX";
 import TableX from "components/themeX/TableX";
-import UserProfilePicture from "components/UserProfilePicture";
+import UserProfilePicture from "components/users/UserProfilePicture";
 // hooks
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
