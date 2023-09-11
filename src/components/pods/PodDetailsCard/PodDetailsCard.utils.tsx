@@ -79,9 +79,12 @@ export const PodChart = ({
   pod,
   dataKey,
 }: {
-  pod: PodDetailResponseType;
+  pod: PodDetailResponseType | null;
   dataKey: "cpu_usage" | "mem_usage";
 }) => {
+  if (!pod) {
+    return <CustomSkeleton len={8} />;
+  }
   const getChartData = (): [GenericObject[], string[]] => {
     const dataset = pod[dataKey];
     const series: GenericObject[] = [];
