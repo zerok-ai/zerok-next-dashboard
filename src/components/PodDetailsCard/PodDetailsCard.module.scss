@@ -64,7 +64,7 @@
 // charts
 
 .metrics-container {
-    padding:$sp-base * 3 0;
+    padding:$sp-base * 3 $sp-base * 3;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: $sp-base * 4;

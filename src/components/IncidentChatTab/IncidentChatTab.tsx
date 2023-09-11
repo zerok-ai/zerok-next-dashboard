@@ -1,19 +1,13 @@
-// import { IconButton } from "@mui/material";
 import AIChatBox from "components/AIChatBox";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { Fragment, memo, useEffect, useRef, useState } from "react";
-// import { HiOutlineBugAnt } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
-import {
-  GPT_INCIDENT_ENDPOINT,
-  GPT_ISSUE_ENDPOINT,
-  // GPT_SCENARIO_ENDPOINT,
-} from "utils/gpt/endpoints";
+import { GPT_INCIDENT_ENDPOINT, GPT_ISSUE_ENDPOINT } from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
 import styles from "./IncidentChatTab.module.scss";
@@ -29,15 +23,9 @@ interface IncidentChatData {
 
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
-  const [enableChat] = useToggle(false);
+  const [enableChat] = useToggle(true);
   const router = useRouter();
-  const {
-    // issue: scenarioId,
-    issue_id: issueId,
-    trace: incidentId,
-  } = router.query;
-  // const { data: scenarioData, fetchData: fetchScenarioData } =
-  useFetch<string>("summary");
+  const { issue_id: issueId, trace: incidentId } = router.query;
   const {
     data: issueData,
     fetchData: fetchIssueData,
@@ -106,8 +94,6 @@ const IncidentChatTab = () => {
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 300);
-      // setStatus({ loading: true, error: null });
-      // const rdata = await raxios.get("/gpt2.json");
       try {
         const rdata = await raxios.post(endpoint, { query: val });
         setQueries((prev) =>

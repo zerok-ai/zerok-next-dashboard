@@ -8,7 +8,7 @@ import styles from "./PrometheusForm.module.scss";
 export const PROMETHEUS_LEVELS = ["CLUSTER", "ORG"] as const;
 
 export const PromFormSchema = z.object({
-  name: z.string(),
+  name: z.string().nonempty("Name cannot be empty"),
   url: z
     .string()
     .nonempty("URL cannot be empty")

@@ -13,6 +13,7 @@ export interface IntegrationListType {
   tags: IntegrationCategoriesType[];
 }
 export interface PrometheusBaseType {
+  alias: string;
   type: "PROMETHEUS";
   url: string;
   authentication: {
