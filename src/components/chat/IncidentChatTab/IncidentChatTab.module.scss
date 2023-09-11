@@ -1,23 +1,36 @@
 @import "styles/variables.module.scss";
+
 .container {
+    position: relative;
+    width:540px;
     height:100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     row-gap: $sp-base * 4;
-    padding:$sp-base * 5;
     overflow-y: auto;
+    transition:all 0.3 ease;
+    @media screen and (max-width: ($bp-desktop + 1)) {
+        width:500px;
+    }
+}
+
+.minimized {
+    width:64px;
 }
 
 .chat-box-container {
     // height:300px;
     height: 90%;
+    padding:$sp-base * 5;
+    padding-top: $sp-base;
     overflow-y: auto;
 }
 
 .chat-input-container {
     flex:1;
-    position: relative;;
+    position: relative;
+    padding:$sp-base * 5;
 }
 
 .input-container {
@@ -95,4 +108,19 @@
     color:$grey-100;
     // color:#1d9bd1;
     cursor: pointer;
+}
+
+.mini-icon {
+    position: absolute;
+    width:100%;
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.expand-icon {
+    font-size: $sp-base * 8;
+    color:$grey-25;
 }

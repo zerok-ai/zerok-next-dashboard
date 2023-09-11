@@ -1,15 +1,18 @@
+import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { Fragment, memo, useEffect, useRef, useState } from "react";
+import { HiChevronRight } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 import { GPT_INCIDENT_ENDPOINT, GPT_ISSUE_ENDPOINT } from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
+import ChatToggleBanner from "../ChatToggleBanner";
 import styles from "./IncidentChatTab.module.scss";
 import { UserInputField, UserQueryCard } from "./IncidentChatTab.utils";
 
@@ -24,6 +27,7 @@ interface IncidentChatData {
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const [enableChat] = useToggle(true);
+  const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const router = useRouter();
   const { issue_id: issueId, trace: incidentId } = router.query;
   const {
@@ -129,7 +133,7 @@ const IncidentChatTab = () => {
           {(issueData ?? issueLoading) && (
             <AIChatBox
               text={issueData}
-              animate={queries.length === 0}
+              animate={incidentData === null}
               blink={false}
               header="Issue summary"
             />
@@ -175,28 +179,47 @@ const IncidentChatTab = () => {
     }
   };
   return (
-    <div className={styles.container}>
-      <div className={styles["chat-box-container"]}>
-        {/* <IconButton size="small" onClick={toggleEnableChat}>
+    <div className={cx(styles.container, chatMinimized && styles.minimized)}>
+      <ChatToggleBanner
+        minimized={chatMinimized}
+        toggleMinimize={toggleChatMinimized}
+      />
+      {!chatMinimized ? (
+        <Fragment>
+          <div className={styles["chat-box-container"]}>
+            {/* <IconButton size="small" onClick={toggleEnableChat}>
           <HiOutlineBugAnt />
         </IconButton> */}
-        <div className={styles["text-container"]}>
-          {!enableChat && (
-            <AIChatBox
-              text={
-                "This functionality is disabled for your organization. Please contact ZeroK support to enable this."
-              }
-              animate={queries.length === 0}
-              blink={false}
-              header="Scenario summary"
+            <div className={styles["text-container"]}>
+              {!enableChat && (
+                <AIChatBox
+                  text={
+                    "This functionality is disabled for your organization. Please contact ZeroK support to enable this."
+                  }
+                  animate={queries.length === 0}
+                  blink={false}
+                  header="Scenario summary"
+                />
+              )}
+              {renderChat()}
+            </div>
+          </div>
+          <div className={styles["chat-input-container"]}>
+            <UserInputField
+              onSubmit={handleInputSubmit}
+              disabled={!enableChat}
             />
-          )}
-          {renderChat()}
+          </div>
+        </Fragment>
+      ) : (
+        <div
+          className={styles["mini-icon"]}
+          role="button"
+          onClick={toggleChatMinimized}
+        >
+          <HiChevronRight className={styles["expand-icon"]} />
         </div>
-      </div>
-      <div className={styles["chat-input-container"]}>
-        <UserInputField onSubmit={handleInputSubmit} disabled={!enableChat} />
-      </div>
+      )}
     </div>
   );
 };

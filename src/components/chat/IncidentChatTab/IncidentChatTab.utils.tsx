@@ -138,7 +138,6 @@ export const UserInputField = ({
         style={{ width: "0", height: "0", opacity: "0" }}
         id="chat-form-btn"
       ></button>
-
       <ChatCommandMenu
         input={userInput}
         onSelect={handleCommand}
