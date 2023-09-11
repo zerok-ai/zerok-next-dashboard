@@ -1,9 +1,11 @@
-import { MenuItem, Select, Tab, Tabs } from "@mui/material";
+import { MenuItem, Modal, Select, Tab, Tabs } from "@mui/material";
 import CustomSkeleton from "components/custom/CustomSkeleton";
+import ExpandIcon from "components/helpers/ExpandIcon";
 import { useFetch } from "hooks/useFetch";
+import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import {
@@ -31,13 +33,20 @@ import {
 const PodDetailsCard = () => {
   const { data: pods, fetchData: fetchPods } =
     useFetch<PodInfoType[]>("pods_info");
-  const { data: podDetails, fetchData: fetchPodDetails } =
-    useFetch<PodDetailResponseType>("");
-  const { data: containers, fetchData: fetchContainers } =
-    useFetch<ContainerInfoType[]>("container_info");
+  const {
+    data: podDetails,
+    fetchData: fetchPodDetails,
+    setData: setPodDetails,
+  } = useFetch<PodDetailResponseType>("");
+  const {
+    data: containers,
+    fetchData: fetchContainers,
+    setData: setContainers,
+  } = useFetch<ContainerInfoType[]>("container_info");
 
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
   const [selectedPod, setSelectedPod] = useState<string>("");
+  const [isExpanded, toggleExpanded] = useToggle(false);
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
   const { trace } = router.query;
@@ -67,6 +76,8 @@ const PodDetailsCard = () => {
       const endpoint = GET_POD_CONTAINERS_ENDPOINT.replace("{pod_id}", pod.pod)
         .replace("{cluster_id}", selectedCluster)
         .replace("{namespace}", pod.namespace);
+      setContainers(null);
+      setPodDetails(null);
       fetchContainers(endpoint);
       fetchPodDetails(endpoint1);
     }
@@ -90,49 +101,75 @@ const PodDetailsCard = () => {
         return <ContainerMetadata containers={containers} />;
     }
   };
+  const WrapperElement = ({ children }: { children: React.ReactElement }) => {
+    return isExpanded ? (
+      <Modal
+        open={true}
+        onClose={toggleExpanded}
+        keepMounted={true}
+        className={styles.modal}
+        hideBackdrop={true}
+      >
+        <Fragment>
+          <div className={styles.backdrop} onClick={toggleExpanded}></div>
+          {children}
+        </Fragment>
+      </Modal>
+    ) : (
+      <Fragment>{children}</Fragment>
+    );
+  };
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h6>Pods</h6>
-        <Select
-          value={selectedPod}
-          size="small"
-          className={styles.select}
-          onChange={(e) => {
-            if (e.target && e.target.value) {
-              setSelectedPod(e.target.value);
-            }
-          }}
-        >
-          {pods &&
-            pods.map((p) => {
-              return (
-                <MenuItem value={p.pod} key={nanoid()}>
-                  {p.pod}
-                </MenuItem>
-              );
-            })}
-        </Select>
-      </div>
-      <div className={styles.content}>
-        <div className={styles.tabs}>
-          <Tabs
-            value={selectedTab}
-            onChange={(e, value) => {
-              setSelectedTab(value);
-            }}
-          >
-            {POD_TABS.map((tab) => {
-              return (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              );
-            })}
-          </Tabs>
+    <WrapperElement>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h6>Pods</h6>
+          <div className={styles["header-actions"]}>
+            <Select
+              value={selectedPod}
+              size="small"
+              className={styles.select}
+              onChange={(e) => {
+                if (e.target && e.target.value) {
+                  setSelectedPod(e.target.value);
+                }
+              }}
+            >
+              {pods &&
+                pods.map((p) => {
+                  return (
+                    <MenuItem value={p.pod} key={nanoid()}>
+                      {p.pod}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+            <ExpandIcon
+              isExpanded={isExpanded}
+              toggleExpansion={toggleExpanded}
+            />
+          </div>
         </div>
+        <div className={styles.content}>
+          <div className={styles.tabs}>
+            <Tabs
+              value={selectedTab}
+              onChange={(e, value) => {
+                setSelectedTab(value);
+              }}
+            >
+              {POD_TABS.map((tab) => {
+                return (
+                  <Tab key={tab.value} label={tab.label} value={tab.value} />
+                );
+              })}
+            </Tabs>
+          </div>
 
-        <div className={styles["tab-content"]}>{renderTabContent()}</div>
+          <div className={styles["tab-content"]}>{renderTabContent()}</div>
+        </div>
       </div>
-    </div>
+    </WrapperElement>
   );
 };
 
