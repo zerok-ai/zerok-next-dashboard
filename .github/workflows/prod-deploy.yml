@@ -63,6 +63,7 @@ jobs:
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
       DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+      MAKE_TARGET: 'default'
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
     needs: init
