@@ -1,5 +1,5 @@
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
+import PrivateRoute from "components/maps/PrivateRoute";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 

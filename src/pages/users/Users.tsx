@@ -5,7 +5,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import InviteUserForm from "components/forms/InviteUserForm";
 import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
+import PrivateRoute from "components/maps/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
 import ModalX from "components/themeX/ModalX";
 import TableX from "components/themeX/TableX";

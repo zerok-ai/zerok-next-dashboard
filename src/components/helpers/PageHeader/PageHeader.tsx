@@ -1,8 +1,8 @@
 import { Skeleton } from "@mui/material";
 import cx from "classnames";
-import ClusterRefreshButton from "components/ClusterRefreshButton";
+import ClusterRefreshButton from "components/clusters/ClusterRefreshButton";
+import TimeSelector from "components/helpers/TimeSelector";
 import BreadcrumbX from "components/themeX/BreadcrumbX";
-import TimeSelector from "components/TimeSelector";
 import Head from "next/head";
 
 import styles from "./PageHeader.module.scss";
