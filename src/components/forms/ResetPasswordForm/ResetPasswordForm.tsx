@@ -3,7 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import { InputAdornment } from "@mui/material";
 import cx from "classnames";
 import TextFormField from "components/forms/TextFormField";
-import VisibilityToggleButton from "components/VisibilityToggleButton";
+import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import useStatus from "hooks/useStatus";
 import Link from "next/link";
 import { useRouter } from "next/router";

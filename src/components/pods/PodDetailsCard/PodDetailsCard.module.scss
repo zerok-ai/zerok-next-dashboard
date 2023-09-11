@@ -1,0 +1,80 @@
+@import "styles/variables.module.scss";
+@import "styles/mixins.scss";
+.container {
+
+    border-radius: $sp-base * 2;
+    border:1px solid $grey-800;
+    min-height: 300px;
+}
+
+.header {
+    @include card-header
+}
+
+.select {
+    width:350px;
+}
+
+.tabs {
+    padding:$sp-base * 2 $sp-base * 4;
+}
+
+.tab-content {
+    overflow-y: auto;
+    padding:0 $sp-base * 4;
+    padding-bottom: $sp-base * 6;
+}
+
+// metadata
+.pod-metadata-row {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 3;
+    padding:$sp-base * 3 0;
+    border-bottom: 1px solid $grey-900;
+}
+
+.pod-metadata-key {
+    // text-transform: capitalize;
+    color:$grey-400;
+    font-weight: 500;
+}
+
+.pod-metadata-value {
+    color:$grey-25;
+}
+
+.containers-container {
+    position: relative;
+}
+
+
+.container-metadata {
+    padding-top: $sp-base * 2;
+}
+
+
+// charts
+
+.metrics-container {
+    padding:$sp-base * 3 $sp-base * 6;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: $sp-base * 4;
+    border-bottom: 1px solid $grey-900;
+}
+
+.chart-container {
+    // display: flex;
+    // justify-content: center;
+    p {
+        text-align: center;
+        font-weight: 500;
+        color:$grey-300;
+    }
+}
+
+.line-chart {
+    margin:0px;
+    // padding:20px;
+}

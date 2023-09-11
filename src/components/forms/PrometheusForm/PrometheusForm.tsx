@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
 import { FormHelperText, MenuItem, Select } from "@mui/material";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";

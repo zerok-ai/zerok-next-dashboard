@@ -1,11 +1,11 @@
 import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
 import { createColumnHelper, type SortingState } from "@tanstack/react-table";
 import cx from "classnames";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
+import TableFilter from "components/helpers/TableFilter";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
-import TableFilter from "components/TableFilter";
+import PrivateRoute from "components/maps/PrivateRoute";
 import ChipX from "components/themeX/ChipX";
 import DialogX from "components/themeX/DialogX";
 import PaginationX from "components/themeX/PaginationX";
