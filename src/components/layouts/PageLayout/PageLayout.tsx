@@ -1,10 +1,10 @@
 import cx from "classnames";
-import ClusterSelector from "components/ClusterSelector";
-import DrawerToggleButton from "components/DrawerToggleButton";
+import ClusterSelector from "components/clusters/ClusterSelector";
 import ErrorBoundary from "components/ErrorBoundary";
-import MainDrawer from "components/MainDrawer";
-import UnderConstruction from "components/UnderConstruction";
-import UserPill from "components/UserPill";
+import DrawerToggleButton from "components/helpers/DrawerToggleButton";
+import UnderConstruction from "components/helpers/UnderConstruction";
+import MainDrawer from "components/layouts/MainDrawer";
+import UserPill from "components/users/UserPill";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment } from "react";

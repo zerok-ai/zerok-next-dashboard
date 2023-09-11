@@ -53,5 +53,6 @@ module.exports = {
     "@typescript-eslint/no-throw-literal": "off",
     "@typescript-eslint/prefer-optional-chain": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
   },
 };

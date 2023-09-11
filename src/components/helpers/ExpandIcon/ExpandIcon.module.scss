@@ -1,0 +1,10 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.expand-icon {
+    font-size: $font-lg + 2;
+}
+.expanded-btn {
+    background-color: $primary-500 !important;
+}

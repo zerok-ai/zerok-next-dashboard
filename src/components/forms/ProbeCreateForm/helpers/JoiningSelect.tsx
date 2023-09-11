@@ -1,6 +1,6 @@
 import { Button, Menu, MenuItem } from "@mui/material";
 import cx from "classnames";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";

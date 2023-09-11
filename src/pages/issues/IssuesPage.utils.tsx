@@ -5,6 +5,7 @@ import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { trimString } from "utils/functions";
 import { getTitleFromIssue } from "utils/issues/functions";
+import { type TableSortOptions } from "utils/tables/types";
 import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
@@ -73,35 +74,21 @@ export const getIssueColumns = () => {
         );
       },
     }),
-
-    // Velocity
-    // helper.accessor("velocity", {
-    //   header: "Velocity",
-    //   size: DEFAULT_COL_WIDTH / 2,
-    //   cell: (info) => {
-    //     const { velocity } = info.row.original;
-    //     return (
-    //       <div className={styles["issue-time-container"]}>
-    //         <span>{velocity ?? "0"}</span>
-    //       </div>
-    //     );
-    //   },
-    // }),
-    // Total events
-    // helper.accessor("total_count", {
-    //   header: "Total events",
-    //   size: DEFAULT_COL_WIDTH * 1.2,
-    //   cell: (info) => {
-    //     const { total_count } = info.row.original;
-    //     return (
-    //       <div className={styles["issue-time-container"]}>
-    //         <span>{total_count ?? "0"}</span>
-    //       </div>
-    //     );
-    //   },
-    // }),
   ];
 };
+
+export const ISSUE_SORT_OPTIONS: TableSortOptions[] = [
+  {
+    label: "Latest first",
+    value: "last_seen:desc",
+    sort: "desc",
+  },
+  {
+    label: "Earliest first",
+    value: "last_seen:asc",
+    sort: "asc",
+  },
+];
 
 const Dummy = () => <span>hey</span>;
 export default Dummy;

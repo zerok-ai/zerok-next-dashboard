@@ -1,0 +1,77 @@
+@import "styles/variables.module.scss";
+.container {
+    width:1040px;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 6;
+}
+
+.divider {
+    margin:$sp-base * 2 0;
+    border:1px solid $grey-900;
+}
+
+.form-group {
+    width:100%;
+    display: flex;
+    // flex-direction: column;
+    row-gap: $sp-base;
+    :global(.MuiOutlinedInput-notchedOutline){
+        border-color: $grey-800;
+        &:hover {
+            border-color: $grey-800;
+        }
+    }
+    :global(.MuiInputBase-root){
+        border-top-left-radius:0;
+        border-bottom-left-radius: 0;
+        width: 500px;
+    }
+    label {
+        // font-weight: 500;
+        background-color: $grey-900;
+        border-top-left-radius: $sp-base;
+        border-bottom-left-radius: $sp-base;
+        min-width: 150px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding:0 $sp-base * 2;
+        color:$grey-200;
+        font-size: $font-md;
+    }
+    .label-icon {
+        font-size: $font-xl;
+        color:$grey-400;
+    }
+    .select {
+        width:300px;
+    }
+    
+}
+.form-helper {
+    font-size: $font-sm - 1;
+    color:$grey-400;
+    font-weight: 500;
+}
+
+.form-group-container {
+    display: grid;
+    grid-template-columns: 450px 450px;
+    grid-gap: $sp-base * 6;
+}
+
+.form-group-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.button {
+    align-self: flex-start;
+    text-transform: none;
+}
+
+.error-text {
+    color:$error-500;
+}

@@ -1,20 +1,16 @@
 import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { createColumnHelper, type SortingState } from "@tanstack/react-table";
 import cx from "classnames";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
+import TableFilter from "components/helpers/TableFilter";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
+import PrivateRoute from "components/maps/PrivateRoute";
 import ChipX from "components/themeX/ChipX";
 import DialogX from "components/themeX/DialogX";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
-import { nanoid } from "nanoid";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -46,8 +42,14 @@ import {
   type ScenarioDetail,
   type ScenarioDetailType,
 } from "utils/scenarios/types";
+import { PROBE_SORT_OPTIONS } from "utils/tables/sort";
 
 import styles from "./Probe.module.scss";
+
+const DEFAULT_SORT = {
+  id: PROBE_SORT_OPTIONS[0].value.split(":")[0],
+  desc: PROBE_SORT_OPTIONS[0].value.split(":")[1] === "desc",
+};
 
 const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
@@ -58,6 +60,7 @@ const Probe = () => {
     loading: boolean;
     deleting: boolean;
   }>(null);
+  const [sortBy, setSortBy] = useState<SortingState>([DEFAULT_SORT]);
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
@@ -349,27 +352,41 @@ const Probe = () => {
     }),
   ];
 
-  const table = useReactTable({
-    data: scenarios ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const leftExtras = useMemo(() => {
+    return [
+      <TableFilter
+        key={"probe-table-filter"}
+        sortBy={sortBy[0]}
+        options={PROBE_SORT_OPTIONS}
+        onChange={(val) => {
+          setSortBy([val]);
+        }}
+      />,
+    ];
+  }, [sortBy]);
 
-  const extras = [
-    <Link href="/probes/create" key={nanoid()}>
-      <Button className={styles["new-probe-btn"]} variant="contained">
-        New Probe <HiOutlinePlus />
-      </Button>
-    </Link>,
-  ];
+  const rightExtras = useMemo(() => {
+    return [
+      <Link href="/probes/create" key={"new-probe-btn"}>
+        <Button
+          className={styles["new-probe-btn"]}
+          variant="contained"
+          size="medium"
+        >
+          New Probe <HiOutlinePlus />
+        </Button>
+      </Link>,
+    ];
+  }, []);
   return (
     <div className={styles.container}>
       <PageHeader
         title="Probes"
         showRange={false}
         showRefresh
-        extras={extras}
-        alignExtras="right"
+        leftExtras={leftExtras}
+        rightExtras={rightExtras}
+        // alignExtras="right"
       />
       <DialogX
         isOpen={!!(selectedProbe && selectedProbe.deleting)}
@@ -389,7 +406,12 @@ const Probe = () => {
       </DialogX>
       <div className={styles.table}>
         {scenarios ? (
-          <TableX table={table} data={scenarios ?? []} />
+          <TableX
+            data={scenarios ?? null}
+            columns={columns}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
+          />
         ) : (
           <CustomSkeleton len={8} />
         )}

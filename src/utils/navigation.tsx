@@ -1,9 +1,7 @@
-import { useMemo } from "react";
 import { HiLightningBolt } from "react-icons/hi";
 
 import { ICON_BASE_PATH, ICONS } from "./images";
 import { type DrawerNavItemType } from "./types";
-console.log(useMemo);
 const HealthNormal = () => {
   return <img src={`${ICON_BASE_PATH}/${ICONS["chart-up"]}`} />;
 };
@@ -18,6 +16,14 @@ const ProbeNormal = () => {
 
 const ProbeHighlight = () => {
   return <img src={`${ICON_BASE_PATH}/plate_highlight.svg`} />;
+};
+
+const IntegrationsNormal = () => {
+  return <img src={`${ICON_BASE_PATH}/${ICONS.code}`} />;
+};
+
+const IntegrationsHighlight = () => {
+  return <img src={`${ICON_BASE_PATH}/code_highlight.svg`} />;
 };
 
 export const NAV_LINKS_1: DrawerNavItemType[] = [
@@ -49,12 +55,13 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
 ];
 
 export const NAV_LINKS_2: DrawerNavItemType[] = [
-  // {
-  //   icon: `${ICONS.data}`,
-  //   label: "Settings",
-  //   path: "/api-keys",
-  //   type: "single",
-  // },
+  {
+    icon: <IntegrationsNormal />,
+    label: "Integrations",
+    path: "/integrations",
+    type: "single",
+    highlightIcon: <IntegrationsHighlight />,
+  },
 ];
 
 export const PATH_TO_LABEL = {

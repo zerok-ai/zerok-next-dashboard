@@ -1,26 +1,54 @@
-import { flexRender, type Table } from "@tanstack/react-table";
+/* eslint-disable @typescript-eslint/dot-notation */
+import {
+  type ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  type OnChangeFn,
+  type SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
 import cx from "classnames";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 
 import styles from "./TableX.module.scss";
 
 interface TableXProps<T extends object> {
-  table: Table<T>;
-  data: T[];
-  loading?: boolean;
+  data: T[] | null;
+  columns: Array<ColumnDef<T, any>>;
   headerClassName?: string;
   rowClassName?: string;
-  borderRadius?: boolean;
+  sortBy?: SortingState;
+  onSortingChange?: OnChangeFn<SortingState>;
   onRowClick?: (row: T) => void;
+  borderRadius?: boolean;
 }
 
 const TableX = <T extends object>({
-  table,
   data,
+  columns,
   headerClassName,
   rowClassName,
   onRowClick,
+  sortBy,
+  onSortingChange,
   borderRadius = true,
 }: TableXProps<T>) => {
+  const table = useReactTable({
+    columns,
+    data: data ?? [],
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting: sortBy,
+    },
+  });
+  if (!data) {
+    return <CustomSkeleton len={10} />;
+  }
   return (
     <div className={`table ${borderRadius ? `table-w-br` : ``}`}>
       <table className={cx(styles.table)}>
@@ -38,10 +66,12 @@ const TableX = <T extends object>({
                         width: header.getSize(),
                       }}
                     >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      <div className={cx(styles["th-content"], "table-th")}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </div>
                     </th>
                   );
                 })}
