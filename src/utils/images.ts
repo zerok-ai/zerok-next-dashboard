@@ -25,6 +25,7 @@ export const ICONS = {
   search: "search.svg",
   sparkle: "sparkle.svg",
   send: "send.svg",
+  "ai-magic": "ai-magic.svg",
 };
 
 export const ZEROK_MINIMAL_LOGO_LIGHT = "/images/brand/zerok_minimal_light.png";
