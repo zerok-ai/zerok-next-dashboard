@@ -101,7 +101,7 @@ export const PodChart = ({
   const [series, keys] = getChartData();
   return (
     <div className={styles["chart-container"]}>
-      <ResponsiveContainer height={300}>
+      <ResponsiveContainer height={300} width={"100%"}>
         <LineChart data={series} className={styles["line-chart"]}>
           <CartesianGrid
             opacity={1}
@@ -110,7 +110,7 @@ export const PodChart = ({
           />
           <XAxis
             dataKey="timestamps"
-            interval={1}
+            // interval={0}
             overflow={"scroll"}
             // scale="point"
             // ticks={series.map((s) => s.timestamps)}
@@ -121,6 +121,7 @@ export const PodChart = ({
             style={{
               fontSize: "smaller",
             }}
+            allowDataOverflow={true}
             tickFormatter={(tick) => {
               return dayjs.unix(tick / 1000).format("HH:mm");
             }}

@@ -1,6 +1,5 @@
 import CustomSkeleton from "components/CustomSkeleton";
 import PrometheusForm from "components/forms/PrometheusForm";
-import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import { useRouter } from "next/router";
@@ -25,14 +24,6 @@ const IntegrationEditPage = () => {
 
   return (
     <div className={styles.container}>
-      <PageHeader
-        title={`Edit ${name as string} integration`}
-        htmlTitle={`Edit ${name as string} integration`}
-        loading={!page}
-        showBreadcrumb={true}
-        showRange={false}
-        showRefresh={false}
-      />
       {page ? PAGE_MAP[page] : <CustomSkeleton len={10} />}
     </div>
   );

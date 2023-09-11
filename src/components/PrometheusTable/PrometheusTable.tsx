@@ -15,7 +15,7 @@ import { HiOutlineTrash, HiWrenchScrewdriver } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
-import { getRelativeTime } from "utils/dateHelpers";
+import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import { type PrometheusListType } from "utils/integrations/types";
 import raxios from "utils/raxios";
@@ -29,7 +29,7 @@ const DEFAULT_SORT = {
 };
 
 const PrometheusTable = () => {
-  const { data, fetchData, error } =
+  const { data, fetchData, error, setData } =
     useFetch<PrometheusListType[]>("integrations");
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
@@ -41,6 +41,7 @@ const PrometheusTable = () => {
   const { name } = router.query;
 
   const getData = () => {
+    setData(null);
     if (selectedCluster) {
       const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
         "{cluster_id}",
@@ -51,7 +52,7 @@ const PrometheusTable = () => {
   };
 
   useEffect(() => {
-    if (selectedCluster) {
+    if (selectedCluster && !error) {
       getData();
     }
     if (error) {
@@ -60,23 +61,28 @@ const PrometheusTable = () => {
   }, [selectedCluster, renderTrigger, error]);
   const helper = createColumnHelper<PrometheusListType>();
   const columns = [
-    helper.accessor("url", {
-      header: "Host",
+    helper.accessor("alias", {
+      header: "Name",
       size: DEFAULT_COL_WIDTH * 4,
       cell: (cell) => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
         }
         return (
-          <span className={styles["int-title"]}>
-            {cell.getValue()}
-            {cell.row.original.disabled && <ChipX label="Disabled" />}
-          </span>
+          <Link
+            href={`/integrations/prometheus/edit?id=${cell.row.original.id}`}
+          >
+            <span className={styles["int-title"]}>
+              {cell.getValue()}
+              {cell.row.original.disabled && <ChipX label="Disabled" />}
+            </span>
+          </Link>
         );
       },
     }),
-    helper.accessor("cluster_id", {
-      header: "Cluster",
+    helper.accessor("url", {
+      header: "Host",
+      size: DEFAULT_COL_WIDTH * 4,
       cell: (cell) => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
@@ -86,6 +92,7 @@ const PrometheusTable = () => {
     }),
     helper.accessor("level", {
       header: "Level",
+      size: DEFAULT_COL_WIDTH,
       cell: (cell) => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
@@ -99,7 +106,11 @@ const PrometheusTable = () => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
         }
-        return <span>{getRelativeTime(cell.getValue())}</span>;
+        return (
+          <TooltipX title={getFormattedTime(cell.getValue())}>
+            <span>{getRelativeTime(cell.getValue())}</span>
+          </TooltipX>
+        );
       },
     }),
     helper.accessor("updated_at", {
@@ -108,7 +119,11 @@ const PrometheusTable = () => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
         }
-        return <span>{getRelativeTime(cell.getValue())}</span>;
+        return (
+          <TooltipX title={getFormattedTime(cell.getValue())}>
+            <span>{getRelativeTime(cell.getValue())}</span>
+          </TooltipX>
+        );
       },
     }),
     helper.display({
@@ -210,8 +225,8 @@ const PrometheusTable = () => {
   return (
     <div>
       <PageHeader
-        title={"Prometheus integrations"}
-        htmlTitle="Prometheus integrations"
+        title={"Prometheus sources"}
+        htmlTitle="Prometheus sources"
         showRange={false}
         showRefresh={true}
         showBreadcrumb={true}

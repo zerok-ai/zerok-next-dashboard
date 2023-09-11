@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
 import { FormHelperText, MenuItem, Select } from "@mui/material";
 import CustomSkeleton from "components/CustomSkeleton";
+import PageHeader from "components/helpers/PageHeader";
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
 import { useRouter } from "next/router";
@@ -67,6 +68,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           username: integ.authentication.username,
           password: integ.authentication.password,
           level: integ.level,
+          name: integ.alias,
         });
       }
     }
@@ -78,12 +80,13 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
       error: null,
     });
     try {
-      const { url, username, password, level } = values;
+      const { url, username, password, level, name } = values;
       const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string
       );
       const common: PrometheusBaseType = {
+        alias: name,
         type: "PROMETHEUS",
         url,
         authentication: {
@@ -135,6 +138,13 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   }
   return (
     <div>
+      <PageHeader
+        title={`${edit ? `Edit` : `Add`} Prometheus source`}
+        htmlTitle={`${edit ? `Edit` : `Add`} Prometheus source`}
+        showBreadcrumb={true}
+        showRange={false}
+        showRefresh={false}
+      />
       {/* Name */}
       <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
         <FormItem
@@ -210,7 +220,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           variant="contained"
           className={styles.button}
         >
-          Add cluster
+          {edit ? `Done` : `Add data source`}
         </LoadingButton>
       </form>
     </div>

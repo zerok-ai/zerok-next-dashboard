@@ -105,7 +105,7 @@ export const HTTP_PROPERTIES: ProbePropertyType[] = [
     label: "Latency",
     value: "latency",
     type: "integer",
-    helpText: "Latency of the service in nanoseconds",
+    helpText: "Latency of the service in milliseconds",
   },
   {
     label: "Source service",
@@ -397,6 +397,9 @@ export const buildProbeBody = (
         type: "rule_group",
         condition: "AND",
         rules: card.conditions.map((condition) => {
+          if (condition.property === "latency") {
+            condition.value = (Number(condition.value) * 1000000).toString();
+          }
           return {
             type: "rule",
             id: condition.property,

@@ -1,5 +1,4 @@
 import PrometheusForm from "components/forms/PrometheusForm";
-import PageHeader from "components/helpers/PageHeader";
 import PageLayout from "components/layouts/PageLayout";
 import PrivateRoute from "components/PrivateRoute";
 import { useRouter } from "next/router";
@@ -12,10 +11,6 @@ const PAGE_MAP: GenericObject = {
   prometheus: "Prometheus",
 };
 
-const TITLE_MAP: GenericObject = {
-  prometheus: "Add a new Prometheus data source",
-};
-
 const IntegrationCreatePage = () => {
   const router = useRouter();
   const { name } = router.query;
@@ -25,16 +20,9 @@ const IntegrationCreatePage = () => {
       setPage(PAGE_MAP[name as string]);
     }
   }, [router]);
+  console.log({ page });
   return (
     <div className={styles.container}>
-      <PageHeader
-        htmlTitle={page ? TITLE_MAP[name as string] : ""}
-        title={page ? TITLE_MAP[name as string] : ""}
-        loading={!page}
-        showRange={false}
-        showRefresh={false}
-        showBreadcrumb={true}
-      />
       <PrometheusForm edit={false} />
     </div>
   );
