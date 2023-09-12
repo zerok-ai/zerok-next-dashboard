@@ -37,7 +37,7 @@
     width:10%;
     display: flex;
     align-items: center;
-    color:$grey-100;
+    color:$grey-300;
 }
 
 .data {
@@ -62,10 +62,10 @@
     padding:$sp-base*2 $sp-base * 5;
     border-bottom:1px solid $grey-900;
     span {
-        color:$grey-25;
+        color:$grey-100;
     }
     .exception-helper-text {
-        color:$grey-200;
+        color:$grey-400;
     }
 }
 

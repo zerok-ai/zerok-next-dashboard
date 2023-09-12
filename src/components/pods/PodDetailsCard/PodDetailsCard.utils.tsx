@@ -104,7 +104,7 @@ export const PodChart = ({
   const [series, keys] = getChartData();
   return (
     <div className={styles["chart-container"]}>
-      <ResponsiveContainer height={300} width={"100%"}>
+      <ResponsiveContainer height={300} width={"99%"}>
         <LineChart data={series} className={styles["line-chart"]}>
           <CartesianGrid
             opacity={1}

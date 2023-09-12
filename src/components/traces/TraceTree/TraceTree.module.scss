@@ -200,7 +200,10 @@
     border-radius: $sp-base / 2;
     line-height: 20px;
     height:20px;
-    font-size: $font-xs;
+    font-size: $font-xs + 1;
+    @media only screen and (max-width: $bp-desktop) {
+        font-size: $font-xs;
+    }
 }
 
 .span-route {

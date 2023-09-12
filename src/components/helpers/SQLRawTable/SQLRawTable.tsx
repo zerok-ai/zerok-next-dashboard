@@ -8,6 +8,7 @@ interface SQLRawTableProps {
 const SQLRawTable = ({ value }: SQLRawTableProps) => {
   // remove resultset rows string from the start
   // splitting on delimiter
+  if (!value) return <div>No data.</div>;
   const [rowText, values] = value.split(" > ");
   const rowCount = rowText.includes(" = ") ? rowText.split(" = ")[1] : "";
   const rows = values.split(" | ");
