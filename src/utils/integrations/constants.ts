@@ -8,7 +8,7 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
   {
     name: "prometheus",
     label: "Prometheus",
-    description: "Integrate with Prometheus connect K8s metrics to ZeroK.",
+    description: "Integrate with Prometheus to connect K8s metrics to ZeroK.",
     url: "https://prometheus.io/",
     logo: BRAND_LOGOS.PROMETHEUS,
     category: "Data sources",

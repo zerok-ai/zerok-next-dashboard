@@ -79,7 +79,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h5>Traces:</h5>
+        <h5>Requests:</h5>
         <div className={styles["header-actions"]}>
           <TableFilter
             sortBy={sortBy[0]}

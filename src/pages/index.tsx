@@ -53,7 +53,7 @@ const Home = () => {
         }}
         key="search-bar"
         inputState={cardFilter}
-        placeholder="Filter by service name"
+        placeholder="Search by service name"
       />
     );
   }, [cardFilter]);
@@ -78,8 +78,8 @@ const Home = () => {
   return (
     <div>
       <PageHeader
-        title="Health"
-        showRange={true}
+        title="Services"
+        showRange={isHealthMap}
         showRefresh={true}
         leftExtras={healthyCluster ? getExtras() : []}
       />

@@ -47,7 +47,7 @@ export const getIssueColumns = () => {
       },
     }),
     helper.accessor("last_seen", {
-      header: "Last seen",
+      header: "Last collected",
       size: DEFAULT_COL_WIDTH * 2.4,
       cell: (info) => {
         const { last_seen } = info.row.original;
@@ -61,7 +61,7 @@ export const getIssueColumns = () => {
       },
     }),
     helper.accessor("first_seen", {
-      header: "First seen",
+      header: "First collected",
       size: DEFAULT_COL_WIDTH * 1.5,
       cell: (info) => {
         const { first_seen } = info.row.original;

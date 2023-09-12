@@ -30,7 +30,7 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
     icon: <HealthNormal />,
     highlightIcon: <HealthHighlight />,
-    label: "Health",
+    label: "Services",
     path: "/",
     type: "single",
   },

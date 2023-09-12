@@ -139,8 +139,8 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   return (
     <div>
       <PageHeader
-        title={`${edit ? `Edit` : `Add`} Prometheus source`}
-        htmlTitle={`${edit ? `Edit` : `Add`} Prometheus source`}
+        title={`${edit ? `Edit` : `Add`} Prometheus data source`}
+        htmlTitle={`${edit ? `Edit` : `Add`} Prometheus data source`}
         showBreadcrumb={true}
         showRange={false}
         showRefresh={false}

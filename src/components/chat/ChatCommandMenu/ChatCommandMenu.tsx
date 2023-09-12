@@ -8,7 +8,7 @@ import {
   CHAT_TAG_CHARACTER,
 } from "utils/gpt/constants";
 import { type ChatCommandType, type ChatTagType } from "utils/gpt/types";
-import { ZEROK_SOURCE_LOGO } from "utils/images";
+import { ZEROK_DRAWER_LOGO_MINIMIZED } from "utils/images";
 
 import styles from "./ChatCommandMenu.module.scss";
 
@@ -37,7 +37,7 @@ const ChatCommandMenu = ({
     return (
       <div className={styles["command-container"]}>
         <span className={styles["command-logo"]}>
-          <img src={ZEROK_SOURCE_LOGO} />
+          <img src={ZEROK_DRAWER_LOGO_MINIMIZED} />
         </span>
         <div className={styles["command-description"]}>
           <p className={styles["command-title"]}>{cmd.label}</p>
