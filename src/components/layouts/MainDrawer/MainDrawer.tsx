@@ -34,8 +34,6 @@ const MainDrawer = () => {
     );
   };
 
-  const drawerHeader = useMemo(() => <DrawerHeader />, [isDrawerMinimized]);
-
   const renderLinks = useCallback(
     (links: DrawerNavItemType[]) => {
       return links.map((nav) => {
@@ -57,7 +55,7 @@ const MainDrawer = () => {
       sx={{ width: cssVars.mainDrawerWidth }}
     >
       <div>
-        {drawerHeader}
+        {<DrawerHeader />}
         <nav className={styles["navigation-container"]}>
           {renderLinks(NAV_LINKS_1)}
           <Divider />

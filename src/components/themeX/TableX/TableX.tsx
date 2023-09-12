@@ -47,7 +47,7 @@ const TableX = <T extends object>({
     },
   });
   if (!data) {
-    return <CustomSkeleton len={10} />;
+    return <CustomSkeleton len={12} />;
   }
   return (
     <div className={`table ${borderRadius ? `table-w-br` : ``}`}>
