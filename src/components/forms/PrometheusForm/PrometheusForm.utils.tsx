@@ -29,11 +29,11 @@ export const PROM_LEVEL_OPTIONS: Array<{
 }> = [
   {
     value: "CLUSTER",
-    label: "Cluster",
+    label: "Cluster specific",
   },
   {
     value: "ORG",
-    label: "Organization",
+    label: "Organization wide",
   },
 ];
 

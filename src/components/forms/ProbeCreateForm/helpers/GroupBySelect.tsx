@@ -63,7 +63,9 @@ const GroupBySelect = ({
             errors[key] && styles["error-text"]
           )}
         >
-          {errors[key] ? `Please select a ${key} to group by` : `Service name`}
+          {errors[key]
+            ? `Please select a ${key} to group by`
+            : `Group by ${key}`}
         </FormHelperText>
       );
     } else {

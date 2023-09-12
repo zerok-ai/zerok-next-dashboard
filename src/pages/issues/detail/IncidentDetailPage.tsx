@@ -80,7 +80,7 @@ const IncidentDetailPage = () => {
                   },
                 });
               }}
-              title="Back to traces"
+              title="Back to requests"
             />
           )}
           {trace ? (
