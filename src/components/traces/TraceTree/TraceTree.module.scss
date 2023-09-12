@@ -100,7 +100,7 @@
 }
 
 .latency {
-    color:$grey-25;
+    color:$grey-200;
     width:100px;
 }
 .accordion-details {
@@ -109,7 +109,6 @@
     padding-right: 0;
     background-color: $bg-dark;
 }
-
 
 .close-button {
     position: absolute;
@@ -201,11 +200,12 @@
     border-radius: $sp-base / 2;
     line-height: 20px;
     height:20px;
-
+    font-size: $font-xs;
 }
 
 .span-route {
     font-weight: 400;
-    // font-style: italic;
-    color:$grey-50 !important;
+    font-style: italic;
+    color:$grey-300 !important;
+    font-size: smaller;
 }

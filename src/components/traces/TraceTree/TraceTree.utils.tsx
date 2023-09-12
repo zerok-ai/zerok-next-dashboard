@@ -248,6 +248,7 @@ export const getSpanName = (span: SpanDetail) => {
       </span>
     );
   };
+  console.log({ protocol, kind, method, route });
   if (protocol === "http") {
     switch (kind) {
       case "SERVER":

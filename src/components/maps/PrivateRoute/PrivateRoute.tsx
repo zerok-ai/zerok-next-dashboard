@@ -12,7 +12,7 @@ interface PrivateRouteProps {
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const auth = useSelector((state) => state.auth);
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(auth.isLoggedIn);
   const { selectedCluster, empty } = useSelector(clusterSelector);
   const { isLoggedIn, token } = auth;
   const dispatch = useDispatch();
