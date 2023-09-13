@@ -2,10 +2,10 @@
 
 # Default target (runs when you just type "make" without specifying a target)
 .PHONY: default
-default: yarn build
+default: yarn-install-and-build
 
-# Run 'yarn' to install dependencies and 'yarn build' to build the Next.js application
-.PHONY: yarn build
-yarn build:
+# Install dependencies and build the Next.js application
+.PHONY: yarn-install-and-build
+yarn-install-and-build:
 	yarn install
 	yarn build
