@@ -37,7 +37,6 @@ import {
   LIST_SCENARIOS_ENDPOINT,
   UPDATE_PROBE_STATUS_ENDPOINT,
 } from "utils/scenarios/endpoints";
-import { getScenarioString } from "utils/scenarios/functions";
 import {
   type ScenarioDetail,
   type ScenarioDetailType,
@@ -160,9 +159,8 @@ const Probe = () => {
   const columns = [
     helper.accessor("scenario.scenario_title", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 7,
+      size: DEFAULT_COL_WIDTH * 6,
       cell: (info) => {
-        const ruleString = getScenarioString(info.row.original.scenario);
         if (
           selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
         ) {
@@ -174,16 +172,14 @@ const Probe = () => {
           <div className={styles["scenario-title-container"]}>
             {
               <Fragment>
-                <TooltipX title={ruleString}>
-                  <span
-                    className={cx(
-                      styles["scenario-title"],
-                      disabled_at && styles.disabled
-                    )}
-                  >
-                    {trimString(scenario_title, 100)}
-                  </span>
-                </TooltipX>
+                <span
+                  className={cx(
+                    styles["scenario-title"],
+                    disabled_at && styles.disabled
+                  )}
+                >
+                  {trimString(scenario_title, 100)}
+                </span>
                 <div className={styles["scenario-title-chips"]}>
                   {scenario_type === "SYSTEM" && <ChipX label="System" />}
                   {disabled_at && <ChipX label="Disabled" />}
@@ -217,7 +213,7 @@ const Probe = () => {
     }),
     helper.accessor("created_at", {
       header: "Created",
-      size: DEFAULT_COL_WIDTH * 1.5,
+      size: DEFAULT_COL_WIDTH,
       cell: (info) => {
         const { created_at } = info.row.original;
         if (
@@ -238,7 +234,7 @@ const Probe = () => {
     }),
     helper.accessor("scenario.sources", {
       header: "Impacted services",
-      size: DEFAULT_COL_WIDTH * 3,
+      size: DEFAULT_COL_WIDTH * 2.5,
       cell: (info) => {
         const { sources, scenario_id } = info.row.original.scenario;
         if (selectedProbe?.scenario_id === scenario_id) {
@@ -292,7 +288,7 @@ const Probe = () => {
     }),
     helper.display({
       header: "Actions",
-      size: 70,
+      size: DEFAULT_COL_WIDTH,
       cell: (info) => {
         if (
           selectedProbe?.scenario_id === info.row.original.scenario.scenario_id

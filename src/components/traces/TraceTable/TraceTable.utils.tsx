@@ -25,7 +25,7 @@ const helper = createColumnHelper<TraceMetadataDetail>();
 export const INCIDENT_COLUMNS = [
   helper.accessor("entry_path", {
     header: "REQUEST ENTRY POINT",
-    size: DEFAULT_COL_WIDTH * 2.5,
+    size: DEFAULT_COL_WIDTH * 2,
     enableSorting: false,
     cell: (info) => {
       return (

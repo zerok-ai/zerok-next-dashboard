@@ -12,6 +12,9 @@
         margin-bottom: $sp-base * 2;
         border-bottom: 1px solid $grey-800;
     }
+    @media screen and (max-width: ($bp-desktop)) {
+        padding:$sp-base * 3;
+    }
 }
 .chatbox-logo {
     width:36px;
