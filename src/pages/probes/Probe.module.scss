@@ -11,6 +11,12 @@
     column-gap: $sp-base * 3;
 }
 
+.scenario-title {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 3;
+}
+
 .scenario-title-chips {
     display: flex;
     align-items: center;

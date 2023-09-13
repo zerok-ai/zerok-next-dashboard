@@ -22,7 +22,6 @@ const SearchBar = ({ onChange, inputState, placeholder }: SearchBarProps) => {
       <OutlinedInput
         placeholder={placeholder ?? "Search"}
         value={inputState}
-        autoFocus
         name="search-bar"
         fullWidth
         className={styles.input}

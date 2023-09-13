@@ -34,7 +34,7 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles["name-container"]}>
-          <h6>{label}</h6>
+          <h5>{label}</h5>
           <ChipX label={<ChipLabel />} upperCase={false} color={"secondary"} />
         </div>
         <div className={styles["logo-container"]}>

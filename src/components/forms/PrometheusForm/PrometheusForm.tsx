@@ -62,6 +62,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
       const integ = defaultValues.find(
         (i) => i.id === parseInt(router.query.id as string)
       );
+      console.log({ integ });
       if (integ) {
         reset({
           url: integ.url,

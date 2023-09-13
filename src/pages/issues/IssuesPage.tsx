@@ -117,20 +117,22 @@ const IssuesPage = () => {
         leftExtras={leftExtras}
       />
       {/* Rendering filters */}
-      <div className={styles["active-filters"]}>
-        {services !== null &&
-          services.length > 0 &&
-          services.map((sv) => {
-            return (
-              <TagX
-                label={sv}
-                onClose={removeService}
-                closable={true}
-                key={nanoid()}
-              />
-            );
-          })}
-      </div>
+      {services && (
+        <div className={styles["active-filters"]}>
+          {services !== null &&
+            services.length > 0 &&
+            services.map((sv) => {
+              return (
+                <TagX
+                  label={sv}
+                  onClose={removeService}
+                  closable={true}
+                  key={nanoid()}
+                />
+              );
+            })}
+        </div>
+      )}
       <div className={styles["page-content"]}>
         {/* @TODO - add error state here */}
         {selectedCluster && (

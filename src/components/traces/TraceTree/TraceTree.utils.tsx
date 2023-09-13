@@ -134,10 +134,14 @@ export const checkForVisibleChildren = (span: SpanDetail) => {
 export const getWidthByLevel = (
   level: number,
   leaf: boolean = false,
-  expand = true
+  expand = true,
+  isTopRoot: boolean
 ) => {
   const defaultWidth = expand ? 600 : 450;
   const width = defaultWidth - level * 9;
+  if (isTopRoot) {
+    return `${width + 8}px`;
+  }
   return leaf ? `${width + 10}px` : `${width}px`;
 };
 
@@ -170,7 +174,12 @@ export const AccordionLabel = ({
       <p
         className={styles["accordion-label-container"]}
         style={{
-          width: getWidthByLevel(span.level ?? 0, isLastChild, isModalOpen),
+          width: getWidthByLevel(
+            span.level ?? 0,
+            isLastChild,
+            isModalOpen,
+            isTopRoot
+          ),
         }}
       >
         <TooltipX title={name}>

@@ -41,7 +41,7 @@ const PaginationX = ({ itemsPerPage, totalItems }: PaginationXProps) => {
         onClick={next}
         size="small"
         className={styles["next-prev-btns"]}
-        disabled={currentPage === maxPage}
+        disabled={currentPage === maxPage || maxPage === 0}
       >
         Next
       </Button>
