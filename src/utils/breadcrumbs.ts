@@ -14,7 +14,7 @@ export const BREADCRUMB_ROUTES: Record<
         path: "/issues",
       },
       {
-        name: "Issue Detail",
+        name: "Issue Details",
         path: "issues/detail",
       },
     ],

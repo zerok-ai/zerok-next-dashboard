@@ -179,10 +179,10 @@ const Probe = () => {
                   )}
                 >
                   {trimString(scenario_title, 100)}
+                  {disabled_at && <ChipX label="Disabled" />}
                 </span>
                 <div className={styles["scenario-title-chips"]}>
                   {scenario_type === "SYSTEM" && <ChipX label="System" />}
-                  {disabled_at && <ChipX label="Disabled" />}
                 </div>
               </Fragment>
             }

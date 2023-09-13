@@ -1,8 +1,5 @@
 @import "styles/variables.module.scss";
 .container {
-    h3 {
-        margin-bottom: $sp-base * 5;
-    }
 }
 
 .issue-path {
@@ -59,10 +56,11 @@
 
 // content
 .page-content {
-    height:70vh;
+    min-height:70vh;
     overflow: auto;
     // border-bottom:1px solid $grey-900;
     border-radius: $sp-base * 2;
+    margin-bottom: $sp-base * 4;
 }
 
 .pagination-container {

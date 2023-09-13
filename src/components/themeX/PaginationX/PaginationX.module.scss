@@ -3,6 +3,9 @@
     display: flex;
     column-gap: $sp-base * 2;
     align-items: center;
+    :global(.Mui-disabled){
+        color:$grey-500 !important;
+    }
 }
 
 .pagination {
@@ -10,15 +13,20 @@
         background-color:$primary-500;
         color:$white !important;
     }
+
     button {
         border:1px solid $grey-700;
         color:$grey-100;
+        
    }
 }
 
 .next-prev-btns {
+    padding:$sp-base $sp-base * 4;
+    color:$grey-200;
     &:hover {
         color:$primary-500;
         background-color: $grey-900;
     }
+    
 }
