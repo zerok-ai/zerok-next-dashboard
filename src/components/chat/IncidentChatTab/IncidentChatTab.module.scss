@@ -2,7 +2,7 @@
 
 .container {
     position: relative;
-    width:540px;
+    width:500px;
     height:100%;
     display: flex;
     flex-direction: column;
@@ -10,8 +10,8 @@
     row-gap: $sp-base * 4;
     overflow-y: auto;
     transition:all 0.3 ease;
-    @media screen and (max-width: ($bp-desktop + 1)) {
-        width:500px;
+    @media screen and (max-width: ($bp-desktop)) {
+        width:450px;
     }
 }
 
@@ -25,6 +25,9 @@
     padding:$sp-base * 5;
     padding-top: $sp-base;
     overflow-y: auto;
+    @media screen and (max-width: ($bp-desktop)) {
+        padding:$sp-base * 3;
+    }
 }
 
 .chat-input-container {

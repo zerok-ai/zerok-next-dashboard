@@ -6,6 +6,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     column-gap: $sp-base * 5;
     row-gap: $sp-base * 7;
+
 }
 
 .skeleton-container {
@@ -18,4 +19,14 @@
 .skeleton {
     height:220px;
     width:100%;
+}
+
+@media only screen and (max-width: $bp-desktop) {
+    .services-container {
+        padding:0 $sp-base * 5;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .skeleton-container {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
 }
