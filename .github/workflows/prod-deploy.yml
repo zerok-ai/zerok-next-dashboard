@@ -61,7 +61,7 @@ jobs:
     with:
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      DOCKER_IDENTIFIER: ${{ vars.DEPLOYMENT_CLUSTER }}
+      DOCKER_IDENTIFIER: ${{ needs.init.outputs.ENVIRONMENT }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
       MAKE_TARGET: 'default'
     secrets:

@@ -31,6 +31,7 @@ import { type UserDetail } from "utils/types";
 import styles from "./Users.module.scss";
 
 const Users = () => {
+  console.log("Users.tsx");
   const { data: users, fetchData } = useFetch<UserDetail[]>(
     "users",
     GET_USERS_ENDPOINT
