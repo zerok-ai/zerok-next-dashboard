@@ -73,6 +73,7 @@ jobs:
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENV: ${{ needs.init.outputs.ENVIRONMENT }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_PROD }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     runs-on: zk-self-hosted
