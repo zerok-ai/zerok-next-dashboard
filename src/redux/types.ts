@@ -40,3 +40,10 @@ export interface IncidentIDReduxType {
   loading: boolean;
   error: boolean;
 }
+
+export interface SnackbarReduxType {
+  key?: string;
+  type?: "error" | "success" | "info";
+  message?: string;
+  open: boolean;
+}

@@ -43,7 +43,7 @@
 }
 
 .table {
-    height:72vh;
+    min-height:70vh;
     overflow-y: auto;
     border-radius: $sp-base * 2;
     margin-bottom: $sp-base * 6;
