@@ -34,7 +34,7 @@ const PrometheusTable = () => {
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
   const [selectedIntegration, setSelectedIntegration] = useState<{
-    id: number;
+    id: string;
     action: "disable" | "delete";
   } | null>(null);
   const router = useRouter();
@@ -177,7 +177,7 @@ const PrometheusTable = () => {
       },
     }),
   ];
-  const handleSwitch = async (id: number, enabled: boolean) => {
+  const handleSwitch = async (id: string, enabled: boolean) => {
     setSelectedIntegration({
       id,
       action: "disable",

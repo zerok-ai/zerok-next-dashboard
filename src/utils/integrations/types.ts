@@ -23,7 +23,7 @@ export interface PrometheusBaseType {
   level: "ORG" | "CLUSTER";
 }
 export interface PrometheusListType extends PrometheusBaseType {
-  id: number;
+  id: string;
   cluster_id: string;
   created_at: string;
   updated_at: string;

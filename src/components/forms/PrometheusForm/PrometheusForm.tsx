@@ -9,7 +9,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch, useSelector } from "redux/store";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import {
   type PrometheusBaseType,
@@ -31,6 +32,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   const { data: defaultValues, fetchData } =
     useFetch<PrometheusListType[]>("integrations");
   const { status, setStatus } = useStatus();
+  const dispatch = useDispatch();
   const {
     formState: { errors },
     register,
@@ -59,10 +61,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
 
   useEffect(() => {
     if (edit && defaultValues) {
-      const integ = defaultValues.find(
-        (i) => i.id === parseInt(router.query.id as string)
-      );
-      console.log({ integ });
+      const integ = defaultValues.find((i) => i.id === router.query.id);
       if (integ) {
         reset({
           url: integ.url,
@@ -97,9 +96,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
         level,
       };
       if (edit && defaultValues) {
-        const integ = defaultValues.find(
-          (i) => i.id === parseInt(router.query.id as string)
-        );
+        const integ = defaultValues.find((i) => i.id === router.query.id);
         const { id, cluster_id, created_at, updated_at, disabled, deleted } =
           integ as PrometheusListType;
         const body: PrometheusListType = {
@@ -113,6 +110,14 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
         };
         await raxios.post(endpoint, body);
         router.push("/integrations/prometheus/list");
+        dispatch(
+          showSnackbar({
+            message: `Data source ${
+              edit ? "updated" : "created"
+            } successfully.`,
+            type: "success",
+          })
+        );
       } else if (!edit) {
         await raxios.post(endpoint, common);
         router.push("/integrations/prometheus/list");
