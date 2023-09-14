@@ -13,6 +13,7 @@ interface ChatBoxDisplayProps {
   onTypeEnd?: () => void;
   header?: string;
   blink?: boolean;
+  footer?: React.ReactElement;
 }
 
 const AIChatBox = ({
@@ -20,6 +21,7 @@ const AIChatBox = ({
   blink = true,
   header,
   animate,
+  footer,
 }: ChatBoxDisplayProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -42,15 +44,15 @@ const AIChatBox = ({
   };
   return (
     <div className={styles.container}>
-      <div className={styles["logo-container"]}>
+      <div className={styles.header}>
         <div className={styles["chatbox-logo"]}>
           <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
         </div>
+        {header && <h5>{header}</h5>}
       </div>
 
       {text ? (
         <div className={styles["text-container"]}>
-          {header && <h6>{header}</h6>}
           {animate ? (
             <TypeAnimation
               cursor={blink}
@@ -71,6 +73,7 @@ const AIChatBox = ({
           ) : (
             text
           )}
+          <div className={styles.footer}>{footer}</div>
           <div ref={bottomRef}></div>
         </div>
       ) : (
