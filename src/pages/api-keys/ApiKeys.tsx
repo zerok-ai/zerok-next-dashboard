@@ -15,6 +15,8 @@ import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useMemo, useState } from "react";
 import { HiOutlineKey, HiOutlineTrash } from "react-icons/hi2";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch } from "redux/store";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   APIKEY_CREATE_ENDPOINT,
@@ -47,6 +49,7 @@ const ApiKeys = () => {
     APIKEYS_ENDPOINT,
     addToggle
   );
+  const dispatch = useDispatch();
 
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
 
@@ -81,7 +84,19 @@ const ApiKeys = () => {
         APIKEY_ID_ENDPOINT.replace("{id}", deletingKey as string)
       );
       setDeletingKey(null);
+      dispatch(
+        showSnackbar({
+          message: "API key deleted successfully",
+          type: "success",
+        })
+      );
     } catch (err) {
+      dispatch(
+        showSnackbar({
+          message: "Could not delete API key",
+          type: "error",
+        })
+      );
       // @TODO - error handling
     }
   };
@@ -90,7 +105,20 @@ const ApiKeys = () => {
     try {
       await raxios.get(APIKEY_CREATE_ENDPOINT);
       fetchData(APIKEYS_ENDPOINT);
-    } catch (err) {}
+      dispatch(
+        showSnackbar({
+          message: "API key created successfully",
+          type: "success",
+        })
+      );
+    } catch (err) {
+      dispatch(
+        showSnackbar({
+          message: "Could not create API key",
+          type: "error",
+        })
+      );
+    }
   };
 
   const colHelper = createColumnHelper<ApiKeyDetailWithToggle>();

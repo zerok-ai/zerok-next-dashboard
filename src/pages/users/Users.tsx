@@ -20,7 +20,8 @@ import { useEffect, useState } from "react";
 // react-icons
 import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch, useSelector } from "redux/store";
 // utils
 import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
@@ -37,6 +38,8 @@ const Users = () => {
   );
 
   const { renderTrigger } = useSelector(clusterSelector);
+
+  const dispatch = useDispatch();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
@@ -59,11 +62,23 @@ const Users = () => {
       await raxios.delete(endpoint);
       clearDeletingUser();
       fetchData(GET_USERS_ENDPOINT);
+      dispatch(
+        showSnackbar({
+          message: "Deleted user successfully",
+          type: "success",
+        })
+      );
     } catch (err) {
       setStatus({
         loading: false,
         error: "Could not delete user, please try again",
       });
+      dispatch(
+        showSnackbar({
+          message: "Could not delete user",
+          type: "error",
+        })
+      );
     } finally {
       clearDeletingUser();
     }
@@ -81,8 +96,20 @@ const Users = () => {
         familyName: lastName,
         email,
       });
+      dispatch(
+        showSnackbar({
+          message: "User invite sent successfully",
+          type: "success",
+        })
+      );
     } catch (err) {
       console.log({ err });
+      dispatch(
+        showSnackbar({
+          message: "Could not send user invite",
+          type: "error",
+        })
+      );
     } finally {
       setInvitingUser(null);
       setStatus((old) => ({ ...old, loading: false }));

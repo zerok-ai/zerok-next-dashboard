@@ -5,6 +5,8 @@ import TextFormField from "components/forms/TextFormField";
 import Link from "next/link";
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch } from "redux/store";
 import { FORGOT_PASSWORD_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
 import { z } from "zod";
@@ -27,6 +29,8 @@ const ForgotPasswordForm = () => {
 
   const [done, setDone] = useState(false);
 
+  const dispatch = useDispatch();
+
   const [error, setError] = useState<null | string>(null);
 
   const onSubmit: SubmitHandler<ForgotPasswordSchemaType> = async (values) => {
@@ -38,6 +42,12 @@ const ForgotPasswordForm = () => {
         FORGOT_PASSWORD_ENDPOINT.replace("{email}", values.email)
       );
       setDone(true);
+      dispatch(
+        showSnackbar({
+          message: "Sent recovery email successfully",
+          type: "success",
+        })
+      );
     } catch (err) {
       setError(
         "Could not send recovery email, please try again or contact support."
