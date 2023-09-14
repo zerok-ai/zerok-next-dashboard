@@ -1,15 +1,18 @@
 import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
-import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, memo, useEffect, useRef, useState } from "react";
 import { HiChevronRight } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
-import { GPT_INCIDENT_ENDPOINT } from "utils/gpt/endpoints";
+import {
+  GPT_INCIDENT_ENDPOINT,
+  GPT_INCIDENT_ENDPOINT_OLD,
+} from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
 import ChatToggleBanner from "../ChatToggleBanner";
@@ -24,31 +27,51 @@ interface IncidentChatData {
   tagCard?: boolean;
 }
 
+interface IncidentSummaryType {
+  inference: {
+    data: string | null;
+    anamolies: string | null;
+    summary: string | null;
+  };
+  incidentId: string;
+  issueId: string;
+}
+
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const [enableChat] = useToggle(true);
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const router = useRouter();
-  const { issue_id: issueId, trace: incidentId } = router.query;
   const {
-    data: incidentData,
-    fetchData: fetchIncidentData,
-    loading: incidentLoading,
-  } = useFetch<string>("rca");
+    issue_id: issueId,
+    trace: incidentId,
+    issue: scenarioId,
+  } = router.query;
+  const [incidentData, setIncidentData] = useState<null | IncidentSummaryType>(
+    null
+  );
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
 
-  useEffect(() => {
-    if (selectedCluster && incidentId) {
+  const getIncidentSummary = async () => {
+    try {
       const endpoint = GPT_INCIDENT_ENDPOINT.replace(
         "{cluster_id}",
-        selectedCluster
-      )
-        .replace("{issue_id}", issueId as string)
-        .replace("{incident_id}", incidentId as string);
-      setQueries([]);
-      fetchIncidentData(endpoint);
+        selectedCluster as string
+      );
+      const rdata = await raxios.post(endpoint, {
+        issueId,
+      });
+      setIncidentData(rdata.data.payload);
+    } catch (err) {
+      console.log({ err });
+    }
+  };
+
+  useEffect(() => {
+    if (selectedCluster) {
+      getIncidentSummary();
     }
   }, [selectedCluster]);
 
@@ -70,7 +93,7 @@ const IncidentChatTab = () => {
       return;
     }
     if (selectedCluster) {
-      const endpoint = GPT_INCIDENT_ENDPOINT.replace(
+      const endpoint = GPT_INCIDENT_ENDPOINT_OLD.replace(
         "{cluster_id}",
         selectedCluster
       )
@@ -109,20 +132,53 @@ const IncidentChatTab = () => {
       }
     }
   };
+
+  const renderLikelyCause = () => {
+    const text = incidentData
+      ? incidentData.inference.summary ?? incidentData.inference.data
+      : null;
+    const ChatFooter = () => {
+      if (!incidentData) return null;
+      return (
+        <span>
+          Based on trace -{" "}
+          <Link
+            href={`/issues/detail?issue_id=${issueId as string}&trace=${
+              incidentData.incidentId
+            }&issue=${scenarioId as string}`}
+          >
+            {incidentData.incidentId}
+          </Link>
+        </span>
+      );
+    };
+    return (
+      <Fragment>
+        <AIChatBox
+          header="Likely cause"
+          text={text}
+          animate={queries.length === 0}
+          footer={<ChatFooter />}
+        />
+        {incidentData?.inference.anamolies && (
+          <AIChatBox
+            header="Anamolies"
+            text={text}
+            animate={queries.length === 0}
+            footer={<ChatFooter />}
+          />
+        )}
+      </Fragment>
+    );
+  };
+
   const renderChat = () => {
     if (!enableChat) {
       return null;
     } else {
       return (
         <Fragment>
-          {(incidentData ?? incidentLoading) && (
-            <AIChatBox
-              text={incidentData}
-              animate={queries.length === 0}
-              blink={queries.length === 0}
-              header="Likely cause"
-            />
-          )}
+          {renderLikelyCause()}
           <div className={styles["text-boxes"]}>
             {queries.map((qa, idx) => {
               const { query, reply, tagCard } = qa;
