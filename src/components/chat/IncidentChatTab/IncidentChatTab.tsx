@@ -9,7 +9,7 @@ import { HiChevronRight } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
-import { GPT_INCIDENT_ENDPOINT, GPT_ISSUE_ENDPOINT } from "utils/gpt/endpoints";
+import { GPT_INCIDENT_ENDPOINT } from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
 import ChatToggleBanner from "../ChatToggleBanner";
@@ -31,11 +31,6 @@ const IncidentChatTab = () => {
   const router = useRouter();
   const { issue_id: issueId, trace: incidentId } = router.query;
   const {
-    data: issueData,
-    fetchData: fetchIssueData,
-    loading: issueLoading,
-  } = useFetch<string>("summary");
-  const {
     data: incidentData,
     fetchData: fetchIncidentData,
     loading: incidentLoading,
@@ -43,16 +38,6 @@ const IncidentChatTab = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [queries, setQueries] = useState<IncidentChatData[]>([]);
-
-  useEffect(() => {
-    if (issueId && selectedCluster) {
-      const endpoint = GPT_ISSUE_ENDPOINT.replace(
-        "{issue_id}",
-        issueId as string
-      ).replace("{cluster_id}", selectedCluster);
-      fetchIssueData(endpoint);
-    }
-  }, [issueId, selectedCluster]);
 
   useEffect(() => {
     if (selectedCluster && incidentId) {
@@ -65,7 +50,7 @@ const IncidentChatTab = () => {
       setQueries([]);
       fetchIncidentData(endpoint);
     }
-  }, [selectedCluster, incidentId]);
+  }, [selectedCluster]);
 
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
@@ -130,20 +115,12 @@ const IncidentChatTab = () => {
     } else {
       return (
         <Fragment>
-          {(issueData ?? issueLoading) && (
-            <AIChatBox
-              text={issueData}
-              animate={incidentData === null}
-              blink={false}
-              header="Issue summary"
-            />
-          )}
           {(incidentData ?? incidentLoading) && (
             <AIChatBox
               text={incidentData}
               animate={queries.length === 0}
               blink={queries.length === 0}
-              header="Cause"
+              header="Likely cause"
             />
           )}
           <div className={styles["text-boxes"]}>

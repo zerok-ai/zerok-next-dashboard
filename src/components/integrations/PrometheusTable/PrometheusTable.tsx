@@ -13,7 +13,8 @@ import { useEffect, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineTrash, HiWrenchScrewdriver } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch, useSelector } from "redux/store";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
@@ -38,6 +39,7 @@ const PrometheusTable = () => {
     action: "disable" | "delete";
   } | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch();
   const { name } = router.query;
 
   const getData = () => {
@@ -63,7 +65,7 @@ const PrometheusTable = () => {
   const columns = [
     helper.accessor("alias", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 4,
+      size: DEFAULT_COL_WIDTH * 3,
       cell: (cell) => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
@@ -82,7 +84,7 @@ const PrometheusTable = () => {
     }),
     helper.accessor("url", {
       header: "Host",
-      size: DEFAULT_COL_WIDTH * 4,
+      size: DEFAULT_COL_WIDTH * 6,
       cell: (cell) => {
         if (cell.row.original.id === selectedIntegration?.id) {
           return <Skeleton variant="text" width={"100%"} />;
@@ -195,8 +197,22 @@ const PrometheusTable = () => {
         }
       );
       getData();
+      dispatch(
+        showSnackbar({
+          message: `Data source ${
+            enabled ? "enabled" : "disabled"
+          } successfully`,
+          type: "success",
+        })
+      );
     } catch (err) {
       console.log({ err });
+      dispatch(
+        showSnackbar({
+          message: `Failed to update status`,
+          type: "error",
+        })
+      );
     } finally {
       setSelectedIntegration(null);
     }
@@ -216,8 +232,19 @@ const PrometheusTable = () => {
         }
       );
       getData();
+      dispatch(
+        showSnackbar({
+          message: `Data source deleted successfully`,
+          type: "success",
+        })
+      );
     } catch (err) {
-      console.log({ err });
+      dispatch(
+        showSnackbar({
+          message: `Could not delete data source`,
+          type: "error",
+        })
+      );
     } finally {
       setSelectedIntegration(null);
     }

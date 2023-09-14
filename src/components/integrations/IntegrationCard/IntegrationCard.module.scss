@@ -6,6 +6,8 @@
     width: 400px;
     padding:$sp-base * 4;
     background-color: $grey-925;
+    display: flex;
+    flex-direction: column;
     h6 {
         font-weight: 400;
         color:$grey-25;
@@ -23,11 +25,17 @@
 
 .content {
     padding:$sp-base * 2;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: $sp-base;
 }
 
 .name-container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     row-gap: $sp-base;
 }
 

@@ -13,7 +13,7 @@ interface IntegrationCardProps {
 }
 
 const IntegrationCard = ({ integration }: IntegrationCardProps) => {
-  const { name, label, logo, description, integrated, dummy } = integration;
+  const { name, label, logo, description, integrated } = integration;
   const router = useRouter();
   const ChipLabel = () => {
     return (
@@ -45,40 +45,39 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
         <p>
           {description} <br />
         </p>
-        {!dummy && (
-          <div className={styles.actions}>
+
+        <div className={styles.actions}>
+          <Button
+            onClick={() => {
+              handleRoute("list");
+            }}
+            disabled={!integrated}
+            variant={"contained"}
+            color={!integrated ? "primary" : "secondary"}
+            // size="small"
+            className={styles["action-button"]}
+          >
+            {integrated && (
+              <HiOutlineCog6Tooth className={styles["action-icon"]} />
+            )}
+            {integrated ? "Manage" : "Coming soon"}
+          </Button>
+          {/* New */}
+          {integrated && (
             <Button
-              onClick={() => {
-                handleRoute("list");
-              }}
-              disabled={!integrated}
-              variant={"contained"}
-              color={!integrated ? "primary" : "secondary"}
+              // variant={"normal"}
+              color={"primary"}
               // size="small"
               className={styles["action-button"]}
+              onClick={() => {
+                handleRoute("create");
+              }}
             >
-              {integrated && (
-                <HiOutlineCog6Tooth className={styles["action-icon"]} />
-              )}
-              {integrated ? "Manage" : "Coming soon"}
+              <HiOutlinePlus className={styles["action-icon"]} />
+              {"Add new"}
             </Button>
-            {/* New */}
-            {integrated && (
-              <Button
-                // variant={"normal"}
-                color={"primary"}
-                // size="small"
-                className={styles["action-button"]}
-                onClick={() => {
-                  handleRoute("create");
-                }}
-              >
-                <HiOutlinePlus className={styles["action-icon"]} />
-                {"Add new"}
-              </Button>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
