@@ -4,6 +4,7 @@ import ErrorBoundary from "components/ErrorBoundary";
 import DrawerToggleButton from "components/helpers/DrawerToggleButton";
 import UnderConstruction from "components/helpers/UnderConstruction";
 import MainDrawer from "components/layouts/MainDrawer";
+import ZkSnackbar from "components/themeX/ZkSnackbar";
 import UserPill from "components/users/UserPill";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -36,12 +37,14 @@ const PageLayout = ({ children }: PageLayoutProps) => {
     CLUSTER_BLOCKED_ROUTES.includes(router.pathname);
   const renderChildren = () => {
     if (empty) {
-      return <Fragment>
-        <Head>
-          <title>ZeroK Dashboard - Add a cluster</title>
-        </Head>
-        <UnderConstruction altTitle="Please add a cluster to continue." />
-      </Fragment>;
+      return (
+        <Fragment>
+          <Head>
+            <title>ZeroK Dashboard - Add a cluster</title>
+          </Head>
+          <UnderConstruction altTitle="Please add a cluster to continue." />
+        </Fragment>
+      );
     } else if (blockRoute) {
       return (
         <Fragment>
@@ -80,6 +83,8 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           className={`${styles["page-content"]} hidden-scroll`}
           id="global-container"
         >
+          {" "}
+          <ZkSnackbar />
           <ErrorBoundary>{renderChildren()}</ErrorBoundary>
         </main>
       </div>

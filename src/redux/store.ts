@@ -10,12 +10,14 @@ import authReducer from "./authSlice";
 import clusterReducer from "./cluster";
 import drawerReducer from "./drawer";
 import incidentListReducer from "./incidentList";
+import snackbarSlice from "./snackbar";
 
 const reducers = {
   auth: authReducer,
   drawer: drawerReducer,
   cluster: clusterReducer,
   incidentList: incidentListReducer,
+  snackbar: snackbarSlice,
 };
 
 const store = configureStore({

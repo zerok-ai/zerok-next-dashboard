@@ -18,7 +18,8 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineTrash } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch, useSelector } from "redux/store";
 import { DEFAULT_COL_WIDTH, DEFAULT_TIME_RANGE } from "utils/constants";
 import {
   getFormattedTimeFromEpoc,
@@ -54,6 +55,7 @@ const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
   const [totalScenarios, setTotalScenarios] = useState<number>(0);
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const dispatch = useDispatch();
   const [selectedProbe, setSelectedProbe] = useState<null | {
     scenario_id: string;
     loading: boolean;
@@ -125,8 +127,19 @@ const Probe = () => {
       await raxios.put(endpoint, {
         action: enable ? "enable" : "disable",
       });
+      dispatch(
+        showSnackbar({
+          message: `Probe ${enable ? "enabled" : "disabled"} successfully`,
+          type: "success",
+        })
+      );
     } catch (err) {
-      console.log({ err });
+      dispatch(
+        showSnackbar({
+          message: `Failed to ${enable ? "enable" : "disable"} probe`,
+          type: "error",
+        })
+      );
     } finally {
       getData();
     }
@@ -145,9 +158,15 @@ const Probe = () => {
       const endpoint = DELETE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string
-      ).replace("{scenario_id}", scenario_id);
+      ).replace("{scenarixo_id}", scenario_id);
       await raxios.delete(endpoint);
     } catch (err) {
+      dispatch(
+        showSnackbar({
+          message: `Failed to delete probe`,
+          type: "error",
+        })
+      );
       console.log({ err });
     } finally {
       getData();
@@ -213,7 +232,7 @@ const Probe = () => {
     }),
     helper.accessor("created_at", {
       header: "Created",
-      size: DEFAULT_COL_WIDTH,
+      size: DEFAULT_COL_WIDTH * 1.5,
       cell: (info) => {
         const { created_at } = info.row.original;
         if (

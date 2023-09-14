@@ -1,12 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoadingButton } from "@mui/lab";
 import { Button } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
+import useStatus from "hooks/useStatus";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiOutlinePlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch, useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import {
@@ -107,11 +110,13 @@ const ProbeCreateForm = () => {
   });
   const { setValue, watch, getValues, handleSubmit } = probeForm;
   const { selectedCluster } = useSelector(clusterSelector);
+  const { status, setStatus } = useStatus();
   const {
     data: services,
     fetchData: fetchServices,
     loading: loadingServices,
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
+  const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
@@ -150,6 +155,10 @@ const ProbeCreateForm = () => {
 
   const { cards, groupBy, sampling } = watch();
   const onSubmit = () => {
+    setStatus({
+      loading: true,
+      error: null,
+    });
     const body = buildProbeBody(cards, getValues("name"), groupBy, sampling);
     const endpoint = CREATE_PROBE_ENDPOINT.replace(
       "{cluster_id}",
@@ -158,10 +167,23 @@ const ProbeCreateForm = () => {
     raxios
       .post(endpoint, body)
       .then((res) => {
+        setStatus({
+          loading: false,
+          error: null,
+        });
         router.push("/probes");
+        dispatch(
+          showSnackbar({
+            message: "Probe created successfully",
+            type: "success",
+          })
+        );
       })
       .catch((err) => {
-        console.log(err);
+        setStatus({
+          loading: false,
+          error: err,
+        });
       });
   };
 
@@ -225,13 +247,14 @@ const ProbeCreateForm = () => {
       <Sampling form={probeForm} />
       <div className={styles.divider}></div>
       <NameAndTimeForm form={probeForm} />
-      <Button
+      <LoadingButton
         variant="contained"
         className={styles["create-button"]}
         type="submit"
+        loading={status.loading}
       >
         Submit
-      </Button>
+      </LoadingButton>
     </form>
   );
 };
