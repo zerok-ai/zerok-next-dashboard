@@ -25,6 +25,29 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     integrated: false,
     tags: ["All", "Communication"],
   },
+  {
+    name: "otel",
+    label: "OpenTelemetry",
+    description: "Connect Open Telemetry data with ZeroK.",
+    url: "https://opentelemetry.io/",
+    logo: BRAND_LOGOS.OPENTELEMETRY,
+    category: "Data sources",
+    integrated: true,
+    dummy: true,
+    tags: ["All", "Data sources"],
+  },
+  {
+    name: "ebpf",
+    label: "eBPF",
+    description:
+      "Integrate ZeroK with eBPF agent to fetch request/response payload data.",
+    url: "https://ebpf.io/",
+    integrated: true,
+    logo: BRAND_LOGOS.EBPF,
+    category: "Data sources",
+    dummy: true,
+    tags: ["All", "Data sources"],
+  },
 ];
 
 export const INTEGRATIONS_PAGE_SIZE = 10;

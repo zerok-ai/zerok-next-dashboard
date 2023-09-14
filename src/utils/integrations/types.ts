@@ -10,6 +10,7 @@ export interface IntegrationListType {
   logo: string;
   category: IntegrationCategoriesType;
   integrated: boolean;
+  dummy?: boolean;
   tags: IntegrationCategoriesType[];
 }
 export interface PrometheusBaseType {

@@ -46,4 +46,6 @@ export const BRAND_LOGOS = {
   "zerok-minimal-light": ZEROK_MINIMAL_LOGO_LIGHT,
   SLACK: "/images/brand/slack_logo.svg",
   PROMETHEUS: `/images/brand/prometheus_logo.svg`,
+  OPENTELEMETRY: `/images/brand/otel_logo.svg`,
+  EBPF: `/images/brand/ebpf_logo.svg`,
 };
