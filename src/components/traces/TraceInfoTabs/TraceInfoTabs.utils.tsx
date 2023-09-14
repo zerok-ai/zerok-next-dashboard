@@ -117,6 +117,10 @@ export const DEFAULT_TABS = [
           value: `${convertNanoToMilliSeconds(metadata.latency)}`,
         },
         {
+          label: "Route",
+          value: metadata.route,
+        },
+        {
           label: "Span ID",
           value: metadata.span_id,
         },

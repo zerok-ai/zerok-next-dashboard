@@ -46,6 +46,24 @@ export const getRootSpan = (spans: SpanResponse) => {
   return rootSpan;
 };
 
+export const findNearestVisibleParent = (
+  spans: SpanResponse,
+  span: SpanDetail
+): SpanDetail | null => {
+  const keys = Object.keys(spans);
+  const parentSpan = keys.find((key) => {
+    return spans[key].span_id === span.parent_span_id;
+  });
+  if (parentSpan && spans[parentSpan].destination) {
+    return spans[parentSpan];
+  }
+  if (!parentSpan) {
+    return null;
+  } else {
+    return findNearestVisibleParent(spans, spans[parentSpan]);
+  }
+};
+
 export const spanTransformer = (spanData: SpanResponse) => {
   const formattedSpans: SpanResponse = {};
   const topKeys = Object.keys(spanData);
@@ -61,9 +79,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
 
       formattedSpans[rootSpan] = spanData[rootSpan];
 
-      const exceptionParent = topKeys.find((k) => {
-        return k === span.parent_span_id;
-      });
+      const exceptionParent = findNearestVisibleParent(spanData, span);
       formattedSpans[rootSpan] = {
         ...formattedSpans[rootSpan],
         exceptionSpan: key,
@@ -71,7 +87,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
       if (exceptionParent) {
         formattedSpans[rootSpan] = {
           ...formattedSpans[rootSpan],
-          exceptionParent,
+          exceptionParent: exceptionParent.span_id,
         };
       }
     } else {
