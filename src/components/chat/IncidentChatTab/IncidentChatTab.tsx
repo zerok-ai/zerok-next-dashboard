@@ -38,7 +38,11 @@ interface IncidentSummaryType {
   issueId: string;
 }
 
-const IncidentChatTab = () => {
+interface IncidentChatTabProps {
+  updateChatTrace: (trace: string) => void;
+}
+
+const IncidentChatTab = ({ updateChatTrace }: IncidentChatTabProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
   const [enableChat] = useToggle(true);
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
@@ -65,6 +69,7 @@ const IncidentChatTab = () => {
         issueId,
       });
       setIncidentData(rdata.data.payload);
+      updateChatTrace(rdata.data.payload.incidentId);
     } catch (err) {
       console.log({ err });
     }

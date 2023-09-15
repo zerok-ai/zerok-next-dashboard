@@ -14,7 +14,7 @@ import { TRACES_PAGE_SIZE } from "utils/scenarios/constants";
 import { GET_SCENARIO_TRACES_ENDPOINT } from "utils/scenarios/endpoints";
 
 import styles from "./TraceTable.module.scss";
-import { INCIDENT_COL_FILTERS, INCIDENT_COLUMNS } from "./TraceTable.utils";
+import { getTraceColumns, INCIDENT_COL_FILTERS } from "./TraceTable.utils";
 
 interface TracesStateDetail {
   trace_det_list: TraceMetadataDetail[];
@@ -22,7 +22,7 @@ interface TracesStateDetail {
 }
 
 interface TraceTableProps {
-  updateChatTrace: (trace: TraceMetadataDetail) => void;
+  chatTrace: string | null;
 }
 
 const transformTraces = (data: TracesStateDetail) => {
@@ -39,7 +39,7 @@ const DEFAULT_SORT: ColumnSort = {
   desc: INCIDENT_COL_FILTERS[0].value.split(":")[1] === "desc",
 };
 
-const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
+const TraceTable = ({ chatTrace }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const scenario = router.query.issue;
@@ -70,12 +70,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
     }
   }, [selectedCluster, renderTrigger, router.query]);
 
-  useEffect(() => {
-    if (traces) {
-      updateChatTrace(traces.trace_det_list[0]);
-    }
-  }, [traces]);
-
+  const columns = getTraceColumns(chatTrace);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -92,7 +87,7 @@ const TraceTable = ({ updateChatTrace }: TraceTableProps) => {
       </div>
       <div className={styles["table-container"]}>
         <TableX
-          columns={INCIDENT_COLUMNS}
+          columns={columns}
           sortBy={sortBy}
           onSortingChange={setSortBy}
           data={traces?.trace_det_list ?? null}

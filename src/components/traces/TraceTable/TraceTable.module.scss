@@ -30,14 +30,15 @@
 
 .entry-point-container {
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-base * 4;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+.entry-point {
+    
     &:hover {
-        .entry-point {
-            color:$primary-500;
-        }
+        color:$primary-500;
     }
 }
 
@@ -55,12 +56,15 @@
 
 .entry-point {
     cursor: pointer;
+    display: flex;
+
 }
 
 .pagination-container {
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    column-gap: $sp-base * 2;
     padding:$sp-base * 5 0;
 }
 

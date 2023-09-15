@@ -120,8 +120,6 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     return <HiChevronRight className={styles["expand-icon"]} />;
   }, []);
 
-  console.log({ spanTree });
-
   const renderSpanTree = () => {
     if (!spanTree || !referenceTime) {
       return <CustomSkeleton len={8} />;
