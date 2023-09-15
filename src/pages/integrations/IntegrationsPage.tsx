@@ -1,9 +1,9 @@
 import { Tab, Tabs } from "@mui/material";
 import cx from "classnames";
 import PageHeader from "components/helpers/PageHeader";
+import PrivateRoute from "components/helpers/PrivateRoute";
 import IntegrationCard from "components/integrations/IntegrationCard";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/maps/PrivateRoute";
 import { useState } from "react";
 import {
   INTEGRATION_CATEGORIES,

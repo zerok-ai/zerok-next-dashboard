@@ -1,7 +1,7 @@
 import ProbeCreateForm from "components/forms/ProbeCreateForm";
 import PageHeader from "components/helpers/PageHeader";
+import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/maps/PrivateRoute";
 import Head from "next/head";
 
 import styles from "./Probes.module.scss";

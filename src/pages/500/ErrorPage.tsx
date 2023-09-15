@@ -1,6 +1,6 @@
+import PrivateRoute from "components/helpers/PrivateRoute";
 import UnderConstruction from "components/helpers/UnderConstruction";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/maps/PrivateRoute";
 import Head from "next/head";
 
 const ErrorPage = () => {

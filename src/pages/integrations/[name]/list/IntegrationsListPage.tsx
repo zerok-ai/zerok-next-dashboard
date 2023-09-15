@@ -1,7 +1,7 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
+import PrivateRoute from "components/helpers/PrivateRoute";
 import PrometheusTable from "components/integrations/PrometheusTable";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/maps/PrivateRoute";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { type GenericObject } from "utils/types";

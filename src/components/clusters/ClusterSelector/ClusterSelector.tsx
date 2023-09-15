@@ -29,8 +29,16 @@ const ClusterSelector = () => {
 
   const [isDefaultOpen, setIsDefaultOpen] = useState(false);
 
+  const CLUSTER_BLOCKED_ROUTES = [
+    "/",
+    "/probes",
+    "/probes/create",
+    "/issues",
+    "/issues/detail",
+  ];
+
   useEffect(() => {
-    if (empty) {
+    if (empty && CLUSTER_BLOCKED_ROUTES.includes(router.pathname)) {
       setIsModalVisible(true);
     }
   }, [empty]);
