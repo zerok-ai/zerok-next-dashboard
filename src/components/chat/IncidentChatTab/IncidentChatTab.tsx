@@ -212,22 +212,31 @@ const IncidentChatTab = () => {
       );
     }
   };
+  const WrapperElement = ({ children }: { children: React.ReactNode }) => {
+    return chatMinimized ? (
+      <Fragment>{children}</Fragment>
+    ) : (
+      <Resizable
+        defaultSize={{
+          width: 550,
+          height: "100%",
+        }}
+        minWidth={"400px"}
+        maxWidth={"900px"}
+        enable={{
+          top: false,
+          right: true,
+          bottom: false,
+          left: false,
+        }}
+        className={styles.resizable}
+      >
+        {children}
+      </Resizable>
+    );
+  };
   return (
-    <Resizable
-      defaultSize={{
-        width: 550,
-        height: "100%",
-      }}
-      minWidth={"400px"}
-      maxWidth={"900px"}
-      enable={{
-        top: false,
-        right: true,
-        bottom: false,
-        left: false,
-      }}
-      className={styles.resizable}
-    >
+    <WrapperElement>
       <div className={cx(styles.container, chatMinimized && styles.minimized)}>
         <ChatToggleBanner
           minimized={chatMinimized}
@@ -270,7 +279,7 @@ const IncidentChatTab = () => {
           </div>
         )}
       </div>
-    </Resizable>
+    </WrapperElement>
   );
 };
 
