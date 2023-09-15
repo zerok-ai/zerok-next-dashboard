@@ -4,6 +4,7 @@ import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Resizable } from "re-resizable";
 import { Fragment, memo, useEffect, useRef, useState } from "react";
 import { HiChevronRight } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
@@ -212,48 +213,64 @@ const IncidentChatTab = () => {
     }
   };
   return (
-    <div className={cx(styles.container, chatMinimized && styles.minimized)}>
-      <ChatToggleBanner
-        minimized={chatMinimized}
-        toggleMinimize={toggleChatMinimized}
-      />
-      {!chatMinimized ? (
-        <Fragment>
-          <div className={styles["chat-box-container"]}>
-            {/* <IconButton size="small" onClick={toggleEnableChat}>
+    <Resizable
+      defaultSize={{
+        width: 550,
+        height: "100%",
+      }}
+      minWidth={"400px"}
+      maxWidth={"900px"}
+      enable={{
+        top: false,
+        right: true,
+        bottom: false,
+        left: false,
+      }}
+      className={styles.resizable}
+    >
+      <div className={cx(styles.container, chatMinimized && styles.minimized)}>
+        <ChatToggleBanner
+          minimized={chatMinimized}
+          toggleMinimize={toggleChatMinimized}
+        />
+        {!chatMinimized ? (
+          <Fragment>
+            <div className={styles["chat-box-container"]}>
+              {/* <IconButton size="small" onClick={toggleEnableChat}>
           <HiOutlineBugAnt />
         </IconButton> */}
-            <div className={styles["text-container"]}>
-              {!enableChat && (
-                <AIChatBox
-                  text={
-                    "This functionality is disabled for your organization. Please contact ZeroK support to enable this."
-                  }
-                  animate={queries.length === 0}
-                  blink={false}
-                  header="Scenario summary"
-                />
-              )}
-              {renderChat()}
+              <div className={styles["text-container"]}>
+                {!enableChat && (
+                  <AIChatBox
+                    text={
+                      "This functionality is disabled for your organization. Please contact ZeroK support to enable this."
+                    }
+                    animate={queries.length === 0}
+                    blink={false}
+                    header="Scenario summary"
+                  />
+                )}
+                {renderChat()}
+              </div>
             </div>
+            <div className={styles["chat-input-container"]}>
+              <UserInputField
+                onSubmit={handleInputSubmit}
+                disabled={!enableChat}
+              />
+            </div>
+          </Fragment>
+        ) : (
+          <div
+            className={styles["mini-icon"]}
+            role="button"
+            onClick={toggleChatMinimized}
+          >
+            <HiChevronRight className={styles["expand-icon"]} />
           </div>
-          <div className={styles["chat-input-container"]}>
-            <UserInputField
-              onSubmit={handleInputSubmit}
-              disabled={!enableChat}
-            />
-          </div>
-        </Fragment>
-      ) : (
-        <div
-          className={styles["mini-icon"]}
-          role="button"
-          onClick={toggleChatMinimized}
-        >
-          <HiChevronRight className={styles["expand-icon"]} />
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </Resizable>
   );
 };
 
