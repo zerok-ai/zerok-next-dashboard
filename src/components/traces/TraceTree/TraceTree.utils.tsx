@@ -78,8 +78,10 @@ export const spanTransformer = (spanData: SpanResponse) => {
       formattedSpans[key] = { ...span, span_id: key, exception: true };
 
       formattedSpans[rootSpan] = spanData[rootSpan];
-
-      const exceptionParent = findNearestVisibleParent(spanData, span);
+      const exceptionParent = topKeys.find((k) => {
+        return k === span.parent_span_id;
+      });
+      const highlightException = findNearestVisibleParent(spanData, span);
       formattedSpans[rootSpan] = {
         ...formattedSpans[rootSpan],
         exceptionSpan: key,
@@ -87,7 +89,8 @@ export const spanTransformer = (spanData: SpanResponse) => {
       if (exceptionParent) {
         formattedSpans[rootSpan] = {
           ...formattedSpans[rootSpan],
-          exceptionParent: exceptionParent.span_id,
+          exceptionParent,
+          highlightException: highlightException?.span_id,
         };
       }
     } else {

@@ -116,6 +116,7 @@ export interface SpanDetail {
   root?: boolean;
   exceptionParent?: string;
   exceptionSpan?: string;
+  highlightException?: string | null;
   totalTime?: number;
 }
 

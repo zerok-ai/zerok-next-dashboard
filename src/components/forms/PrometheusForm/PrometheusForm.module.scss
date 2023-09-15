@@ -75,3 +75,17 @@
 .error-text {
     color:$error-500;
 }
+
+.text-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.text-label {
+    // font-weight: 500;
+}
+
+.radio-group {
+    display: flex;
+    column-gap: $sp-base * 3;
+}

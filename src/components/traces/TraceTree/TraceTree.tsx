@@ -120,18 +120,20 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     return <HiChevronRight className={styles["expand-icon"]} />;
   }, []);
 
+  console.log({ spanTree });
+
   const renderSpanTree = () => {
     if (!spanTree || !referenceTime) {
       return <CustomSkeleton len={8} />;
     }
-    const exceptionParent = spanTree.exceptionParent;
+    const exceptionSpan = spanTree.highlightException;
 
     const renderSpan = (
       span: SpanDetail,
       isTopRoot: boolean = false,
       isLastChild: boolean = false
     ) => {
-      const exSpan = exceptionParent ? spans![exceptionParent] : null;
+      const exSpan = exceptionSpan ? spans![exceptionSpan] : null;
       const highlight = exSpan?.span_id === span.span_id;
       const hasVisibleChildren = checkForVisibleChildren(span);
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
