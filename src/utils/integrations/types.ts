@@ -30,4 +30,5 @@ export interface PrometheusListType extends PrometheusBaseType {
   updated_at: string;
   deleted: boolean;
   disabled: boolean;
+  metric_server: boolean;
 }
