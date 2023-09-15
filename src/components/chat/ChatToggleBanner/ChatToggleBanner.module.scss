@@ -1,10 +1,10 @@
 @import "styles/variables.module.scss";
 .container {
-    display: grid;
+    display: flex;
     background-color: $grey-925;
     height:56px;
     padding:$sp-base * 4 $sp-base * 5;
-    grid-template-columns: 1fr 8fr 0.5fr;
+    justify-content: space-between;
     h5 {
         color:$grey-25;
     }
@@ -18,4 +18,10 @@
     color:$grey-25;
     font-size: 6 * $sp-base;
     cursor: pointer;
+ }
+
+ .chat-icon {
+   display: flex;
+   align-items: center;
+   column-gap: $sp-base * 4;
  }

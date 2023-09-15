@@ -158,8 +158,14 @@ const Probe = () => {
       const endpoint = DELETE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string
-      ).replace("{scenarixo_id}", scenario_id);
+      ).replace("{scenario_id}", scenario_id);
       await raxios.delete(endpoint);
+      dispatch(
+        showSnackbar({
+          message: `Probe deleted successfully`,
+          type: "success",
+        })
+      );
     } catch (err) {
       dispatch(
         showSnackbar({

@@ -2,16 +2,17 @@
 
 .container {
     position: relative;
-    width:500px;
+    width:100%;
     height:100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    overflow-y: auto;
+    overflow: hidden;
     transition:all 0.3 ease;
-    @media screen and (max-width: ($bp-desktop)) {
-        width:450px;
-    }
+}
+
+.resizable {
+    overflow: hidden;
 }
 
 .minimized {
@@ -20,7 +21,7 @@
 
 .chat-box-container {
     // height:300px;
-    height: 90%;
+    height: calc(100vh - 100px);
     padding:$sp-base * 5;
     overflow-y: auto;
     @media screen and (max-width: ($bp-desktop)) {

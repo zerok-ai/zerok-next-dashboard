@@ -70,7 +70,7 @@ export const BREADCRUMB_ROUTES: Record<
         path: "/integrations/prometheus/list",
       },
       {
-        name: "Add new integration",
+        name: "Add new data source",
         path: "/integrations/prometheus/create",
       },
     ],

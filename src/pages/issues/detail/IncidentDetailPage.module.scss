@@ -52,7 +52,7 @@
 .chat-container{
     border-radius: $sp-base * 2;
     height:calc(100vh - $header-height - $sp-base * 40);
-    overflow: auto;
+    overflow: hidden;
     border:1px solid $grey-800;
     transition:width 0.3s ease;
 }
