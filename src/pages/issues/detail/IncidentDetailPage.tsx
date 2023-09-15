@@ -12,7 +12,6 @@ import TraceTree from "components/traces/TraceTree";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { type TraceMetadataDetail } from "utils/issues/types";
 import { type SpanResponse } from "utils/types";
 
 // import { type SpanResponse } from "utils/types";
@@ -20,7 +19,7 @@ import styles from "./IncidentDetailPage.module.scss";
 import { IssueMetadata } from "./IncidentDetails.utils";
 
 const IncidentDetailPage = () => {
-  const [chatTrace, setChatTrace] = useState<null | TraceMetadataDetail>(null);
+  const [chatTrace, setChatTrace] = useState<null | string>(null);
   const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
   const [spans, setSpans] = useState<null | SpanResponse>(null);
   const router = useRouter();
@@ -65,7 +64,11 @@ const IncidentDetailPage = () => {
       </div>
       <div className={styles["content-container"]}>
         <div className={styles["chat-container"]}>
-          <IncidentChatTab />
+          <IncidentChatTab
+            updateChatTrace={(trace) => {
+              setChatTrace(trace);
+            }}
+          />
         </div>
         <div className={styles["detail-container"]}>
           {trace && (
@@ -112,13 +115,7 @@ const IncidentDetailPage = () => {
           ) : (
             <div className={styles["table-container"]}>
               {issue_id ? (
-                <TraceTable
-                  updateChatTrace={(trace) => {
-                    if (!chatTrace) {
-                      setChatTrace(trace);
-                    }
-                  }}
-                />
+                <TraceTable chatTrace={chatTrace} />
               ) : (
                 <TraceGroups />
               )}

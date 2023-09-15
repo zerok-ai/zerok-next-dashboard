@@ -1,5 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import SpanEntryPoint from "components/helpers/SpanEntryPoint";
+import ChipX from "components/themeX/ChipX";
 import { DEFAULT_COL_WIDTH, type HTTP_METHODS } from "utils/constants";
 import { formatDuration, getFormattedTime } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds, trimString } from "utils/functions";
@@ -22,49 +22,53 @@ export const HttpActionRender = ({
 };
 
 const helper = createColumnHelper<TraceMetadataDetail>();
-export const INCIDENT_COLUMNS = [
-  helper.accessor("entry_path", {
-    header: "REQUEST ENTRY POINT",
-    size: DEFAULT_COL_WIDTH * 2,
-    enableSorting: false,
-    cell: (info) => {
-      return (
-        <div className={styles["entry-point-container"]}>
-          <SpanEntryPoint action={info.row.original.action} />
-          <span className={styles["entry-point"]}>
-            {trimString(info.getValue(), 45)}{" "}
+
+export const getTraceColumns = (chatTrace: string | null) => {
+  return [
+    helper.accessor("entry_path", {
+      header: "REQUEST ENTRY POINT",
+      size: DEFAULT_COL_WIDTH * 2,
+      enableSorting: false,
+      cell: (info) => {
+        return (
+          <div className={styles["entry-point-container"]}>
+            <span className={styles["entry-point"]}>
+              {trimString(info.getValue(), 30)}{" "}
+            </span>
+            {chatTrace === info.row.original.incident_id && (
+              <ChipX label="Inferred" color="primary" />
+            )}
+          </div>
+        );
+      },
+    }),
+    helper.accessor("latency_ns", {
+      header: "DURATION",
+      size: DEFAULT_COL_WIDTH / 1.5,
+      enableSorting: true,
+      cell: (info) => {
+        return (
+          <span>
+            {formatDuration(
+              convertNanoToMilliSeconds(info.getValue(), false) as number
+            )}
           </span>
-          {/* <ChipX label={info.row.original.protocol} /> */}
-        </div>
-      );
-    },
-  }),
-  helper.accessor("latency_ns", {
-    header: "DURATION",
-    size: DEFAULT_COL_WIDTH / 1.5,
-    enableSorting: true,
-    cell: (info) => {
-      return (
-        <span>
-          {formatDuration(
-            convertNanoToMilliSeconds(info.getValue(), false) as number
-          )}
-        </span>
-      );
-    },
-  }),
-  helper.accessor("incident_collection_time", {
-    header: "TIMESTAMP",
-    enableSorting: true,
-    // sortingFn: (a: string, b: string) => {
-    //   return dayjs(a).unix() - dayjs(b).unix();
-    // },
-    size: DEFAULT_COL_WIDTH * 1.2,
-    cell: (info) => {
-      return <span>{getFormattedTime(info.getValue())}</span>;
-    },
-  }),
-];
+        );
+      },
+    }),
+    helper.accessor("incident_collection_time", {
+      header: "TIMESTAMP",
+      enableSorting: true,
+      // sortingFn: (a: string, b: string) => {
+      //   return dayjs(a).unix() - dayjs(b).unix();
+      // },
+      size: DEFAULT_COL_WIDTH * 1.2,
+      cell: (info) => {
+        return <span>{getFormattedTime(info.getValue())}</span>;
+      },
+    }),
+  ];
+};
 
 export const INCIDENT_COL_FILTERS: TableSortOptions[] = [
   {

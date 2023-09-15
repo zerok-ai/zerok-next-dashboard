@@ -1,17 +1,18 @@
 @import "styles/variables.module.scss";
 .container {
-    height:22px;
+    // height:22px;
     width:fit-content;
-    padding:$sp-base / 2 $sp-base * 2;
+    padding:$sp-base / 2 $sp-base * 3;
     border-radius: $sp-base;
     font-weight: 500;
     font-size: $font-sm;
     color:$grey-300;
     letter-spacing: 0.5px;
+    background-color: $grey-800;
 }
 
 .upper {
-    text-transform: uppercase;
+    // text-transform: uppercase;
 }
 
 .secondary {
@@ -19,7 +20,9 @@
 }
 
 .primary {
-    background-color: $primary-500;
+    background-color: $grey-900;
+    color:$primary-500;
+    border:1px solid $primary-700;
 }
 
 .success {
