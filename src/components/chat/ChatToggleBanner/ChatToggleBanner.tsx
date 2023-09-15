@@ -21,7 +21,7 @@ const ChatToggleBanner = ({
     >
       <div className={styles["chat-icon"]}>
         <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} alt="chat-icon" />
-        <h5>Issue Synthesis</h5>
+        {!minimized && <h5>Issue Synthesis</h5>}
       </div>
       {!minimized && (
         <Fragment>
