@@ -1,5 +1,5 @@
+import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/maps/PrivateRoute";
 import Head from "next/head";
 
 interface PageWrapperProps {

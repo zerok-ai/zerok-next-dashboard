@@ -1,6 +1,6 @@
 import PrometheusForm from "components/forms/PrometheusForm";
+import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/maps/PrivateRoute";
 
 import styles from "./IntegrationCreatePage.module.scss";
 
