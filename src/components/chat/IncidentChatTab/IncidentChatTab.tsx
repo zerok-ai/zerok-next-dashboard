@@ -2,82 +2,39 @@ import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { Resizable } from "re-resizable";
-import { Fragment, memo, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef } from "react";
 import { HiChevronRight } from "react-icons/hi";
+import { addInvalidCard, chatSelector, fetchLikelyCause } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
-import { CHAT_TAG_CHARACTER } from "utils/gpt/constants";
-import {
-  GPT_INCIDENT_ENDPOINT,
-  GPT_INCIDENT_ENDPOINT_OLD,
-} from "utils/gpt/endpoints";
-import raxios from "utils/raxios";
+import { useDispatch, useSelector } from "redux/store";
 
 import ChatToggleBanner from "../ChatToggleBanner";
+import GptLikelyCauseBox from "../GptLikelyCauseBox";
 import styles from "./IncidentChatTab.module.scss";
 import { UserInputField, UserQueryCard } from "./IncidentChatTab.utils";
 
-interface IncidentChatData {
-  query: string;
-  loading: boolean;
-  reply: null | string;
-  doneTyping: boolean;
-  tagCard?: boolean;
-}
-
-interface IncidentSummaryType {
-  inference: {
-    data: string | null;
-    anamolies: string | null;
-    summary: string | null;
-  };
-  incidentId: string;
-  issueId: string;
-}
-
-interface IncidentChatTabProps {
-  updateChatTrace: (trace: string) => void;
-}
-
-const IncidentChatTab = ({ updateChatTrace }: IncidentChatTabProps) => {
+const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const [enableChat] = useToggle(true);
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
+  const dispatch = useDispatch();
   const router = useRouter();
-  const {
-    issue_id: issueId,
-    trace: incidentId,
-    issue: scenarioId,
-  } = router.query;
-  const [incidentData, setIncidentData] = useState<null | IncidentSummaryType>(
-    null
-  );
+  const { issue_id: issueId, trace: incidentId } = router.query;
   const bottomRef = useRef<HTMLDivElement>(null);
-
-  const [queries, setQueries] = useState<IncidentChatData[]>([]);
-
-  const getIncidentSummary = async () => {
-    try {
-      const endpoint = GPT_INCIDENT_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster as string
-      );
-      const rdata = await raxios.post(endpoint, {
-        issueId,
-      });
-      setIncidentData(rdata.data.payload);
-      updateChatTrace(rdata.data.payload.incidentId);
-    } catch (err) {
-      console.log({ err });
-    }
-  };
+  const { likelyCause, queries } = useSelector(chatSelector);
+  console.log("rerender chat tab");
 
   useEffect(() => {
-    if (selectedCluster) {
-      getIncidentSummary();
+    console.log("in useeffect");
+    if (selectedCluster && issueId) {
+      dispatch(
+        fetchLikelyCause({
+          selectedCluster,
+          issueId: issueId as string,
+        })
+      );
     }
   }, [selectedCluster]);
 
@@ -85,138 +42,48 @@ const IncidentChatTab = ({ updateChatTrace }: IncidentChatTabProps) => {
     if (!enableChat) {
       return;
     }
-    if (val.includes(CHAT_TAG_CHARACTER)) {
-      setQueries((prev) => [
-        ...prev,
-        {
-          query: val,
-          loading: false,
-          reply: null,
-          doneTyping: false,
-          tagCard: true,
-        },
-      ]);
-      return;
-    }
     if (selectedCluster) {
-      const endpoint = GPT_INCIDENT_ENDPOINT_OLD.replace(
-        "{cluster_id}",
-        selectedCluster
-      )
-        .replace("{issue_id}", issueId as string)
-        .replace("{incident_id}", incidentId as string);
-      setQueries((prev) => [
-        ...prev,
-        { query: val, loading: true, reply: null, doneTyping: false },
-      ]);
-      setTimeout(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 300);
-      try {
-        const rdata = await raxios.post(endpoint, { query: val });
-        setQueries((prev) =>
-          prev.map((qa, idx) => {
-            if (idx === prev.length - 1) {
-              return {
-                ...qa,
-                loading: false,
-                reply: rdata.data.payload.answer,
-              };
-            }
-            return qa;
-          })
-        );
-      } catch (err) {
-        setQueries((prev) =>
-          prev.map((qa, idx) => {
-            if (idx === prev.length - 1) {
-              return { ...qa, loading: false, reply: "Something went wrong" };
-            }
-            return qa;
-          })
-        );
+      if (val === "/context") {
+        if (!incidentId) {
+          dispatch(addInvalidCard("Please select an incident first"));
+        }
       }
     }
   };
 
-  const renderLikelyCause = () => {
-    const text = incidentData
-      ? incidentData.inference.summary ?? incidentData.inference.data
-      : null;
-    const ChatFooter = () => {
-      if (!incidentData) return null;
-      return (
-        <span>
-          Based on trace -{" "}
-          <Link
-            href={`/issues/detail?issue_id=${issueId as string}&trace=${
-              incidentData.incidentId
-            }&issue=${scenarioId as string}`}
-          >
-            {incidentData.incidentId}
-          </Link>
-        </span>
-      );
-    };
-    return (
-      <Fragment>
-        <AIChatBox
-          header="Likely cause"
-          text={text}
-          animate={queries.length === 0}
-          footer={<ChatFooter />}
-        />
-        {incidentData?.inference.anamolies && (
-          <AIChatBox
-            header="Anamolies"
-            text={text}
-            animate={queries.length === 0}
-            footer={<ChatFooter />}
-          />
-        )}
-      </Fragment>
-    );
-  };
+  console.log({ queries });
 
-  const renderChat = () => {
+  const renderChat = useCallback(() => {
     if (!enableChat) {
       return null;
     } else {
       return (
         <Fragment>
-          {renderLikelyCause()}
           <div className={styles["text-boxes"]}>
+            <GptLikelyCauseBox />
             {queries.map((qa, idx) => {
-              const { query, reply, tagCard } = qa;
-              if (tagCard) {
+              const { type } = qa;
+              if (type === "invalid") {
                 return (
-                  <div className={styles["query-container"]} key={nanoid()}>
-                    <div className={styles.query}>
-                      <UserQueryCard text={query} tagCard={true} />
-                    </div>
-                  </div>
+                  <UserQueryCard
+                    text={`Please select a request to continue with this command.`}
+                    tagCard={false}
+                    key={nanoid()}
+                  />
                 );
               }
               return (
-                <div className={styles["query-container"]} key={nanoid()}>
-                  <div className={styles.query}>
-                    <UserQueryCard text={query} tagCard={false} />
-                  </div>
-                  <div className={styles.reply}>
-                    <AIChatBox
-                      text={reply}
-                      animate={idx === queries.length - 1 && !qa.doneTyping}
-                    />
-                  </div>
-                </div>
+                <Fragment key={nanoid()}>
+                  <div ref={bottomRef}></div>
+                </Fragment>
               );
             })}
-            <div ref={bottomRef}></div>
           </div>
         </Fragment>
       );
     }
-  };
+  }, [queries, likelyCause]);
+
   const WrapperElement = ({ children }: { children: React.ReactNode }) => {
     return chatMinimized ? (
       <Fragment>{children}</Fragment>
@@ -288,4 +155,4 @@ const IncidentChatTab = ({ updateChatTrace }: IncidentChatTabProps) => {
   );
 };
 
-export default memo(IncidentChatTab);
+export default IncidentChatTab;

@@ -104,8 +104,10 @@ export const UserInputField = ({
   }, [userInput]);
 
   const handleCommand = (command: string) => {
+    console.log({ command });
     if (userInput[0] === CHAT_COMMAND_CHARACTER) {
       setUserInput("");
+      onSubmit(command);
       setMenuOpen(false);
     } else {
       setUserInput((old) => {
@@ -166,6 +168,7 @@ export const UserInputField = ({
           inputRef.current?.focus();
         }}
         className={styles["chat-input"]}
+        autoComplete={"false"}
         placeholder="Ask a query"
         endAdornment={
           <span

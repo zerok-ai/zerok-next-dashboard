@@ -47,3 +47,49 @@ export interface SnackbarReduxType {
   message?: string;
   open: boolean;
 }
+
+export interface ChatQueryType {
+  type: "query";
+  query: string;
+  id: string;
+  response: {
+    summary: string | null;
+    data: string;
+    anamolies: string | null;
+  };
+}
+
+export interface ChatContextEventType {
+  type: "context";
+  oldIncidentID: string;
+  newIncidentID: string;
+  id: string;
+}
+
+export interface ChatInferType {
+  type: "infer";
+  response: {
+    summary: string | null;
+    data: string;
+    anamolies: string | null;
+  };
+  incidentId: string;
+  issueId: string;
+  typing: boolean;
+  id: string;
+}
+
+export interface ChatInvalidCardType {
+  type: "invalid";
+  response: string;
+  id: string;
+}
+
+export interface ChatReduxType {
+  loading: boolean;
+  error: boolean;
+  likelyCause: null | ChatInferType;
+  queries: Array<
+    ChatQueryType | ChatContextEventType | ChatInferType | ChatInvalidCardType
+  >;
+}
