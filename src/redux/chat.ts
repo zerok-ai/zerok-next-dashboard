@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { nanoid } from "nanoid";
+import { sleep } from "utils/functions";
 import { GPT_INCIDENT_ENDPOINT } from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
-import { type RootState } from "./store";
+import store, { type RootState } from "./store";
 import { type ChatReduxType } from "./types";
 
 const initialState: ChatReduxType = {
@@ -11,13 +13,20 @@ const initialState: ChatReduxType = {
   error: false,
   queries: [],
   likelyCause: null,
+  contextIncident: null,
 };
 
 interface ChatEventActionType {
   payload: {
     type: "CONTEXT";
-    oldIncidentID: string;
     newIncidentID: string;
+  };
+}
+
+interface ChatQueryActionType {
+  payload: {
+    query: string;
+    key: string;
   };
 }
 
@@ -36,20 +45,55 @@ export const fetchLikelyCause = createAsyncThunk(
   }
 );
 
+export const fetchQueryResponse = createAsyncThunk(
+  "chat/fetchQueryResponse",
+  async (values: {
+    query: string;
+    issueId: string;
+    incidentId: string;
+    selectedCluster: string;
+  }) => {
+    const key = nanoid();
+    store.dispatch(
+      addQuery({
+        query: values.query,
+        key,
+      })
+    );
+    await sleep(2000);
+    const rdata = await axios.get("/gpt.json");
+    return {
+      inference: rdata.data.payload,
+      key,
+    };
+  }
+);
+
 export const chatSlice = createSlice({
-  name: "snackbar",
+  name: "chat",
   initialState,
   reducers: {
     addEvent: (state, { payload }: ChatEventActionType) => {
-      const { type, oldIncidentID, newIncidentID } = payload;
+      const { type, newIncidentID } = payload;
       if (type === "CONTEXT") {
         state.queries.push({
           type: "context",
-          oldIncidentID,
+          oldIncidentID: state.contextIncident!,
           newIncidentID,
           id: nanoid(),
         });
+        state.contextIncident = newIncidentID;
       } else return state;
+    },
+    addQuery: (state, { payload }: ChatQueryActionType) => {
+      state.queries.push({
+        type: "query",
+        query: payload.query,
+        id: payload.key,
+        typing: false,
+        incidentId: null,
+        response: null,
+      });
     },
     addInvalidCard: (state, { payload }: { payload: string }) => {
       state.queries.push({
@@ -83,17 +127,31 @@ export const chatSlice = createSlice({
         };
         state.loading = false;
         state.error = false;
+        state.contextIncident = incidentId;
       })
       .addCase(fetchLikelyCause.rejected, (state) => {
         state.loading = false;
         state.error = true;
+      })
+      // queries
+      .addCase(fetchQueryResponse.fulfilled, (state, { payload }) => {
+        const { inference, key } = payload;
+        const query = state.queries.find((q) => q.id === key);
+        if (query && query.type === "query") {
+          query.response = inference.eventResponse;
+          query.typing = true;
+          query.incidentId = state.contextIncident;
+        }
+      })
+      .addCase(fetchQueryResponse.rejected, (state, { payload }) => {
+        console.log("heer");
       });
   },
 });
 
 // Action creators are generated for each case reducer function
 
-export const { addEvent, addInvalidCard, stopLikelyCauseTyping } =
+export const { addEvent, addInvalidCard, stopLikelyCauseTyping, addQuery } =
   chatSlice.actions;
 
 export const chatSelector = (state: RootState): ChatReduxType => state.chat;

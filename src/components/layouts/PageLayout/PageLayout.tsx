@@ -8,7 +8,7 @@ import ZkSnackbar from "components/themeX/ZkSnackbar";
 import UserPill from "components/users/UserPill";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Fragment, useCallback } from "react";
+import { Fragment } from "react";
 import { clusterSelector } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useSelector } from "redux/store";
@@ -36,7 +36,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
     status !== CLUSTER_STATES.HEALTHY &&
     CLUSTER_BLOCKED_ROUTES.includes(router.pathname);
 
-  const renderChildren = useCallback(() => {
+  const renderChildren = () => {
     if (empty && CLUSTER_BLOCKED_ROUTES.includes(router.pathname)) {
       return (
         <Fragment>
@@ -58,7 +58,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
     } else {
       return children;
     }
-  }, [blockRoute]);
+  };
 
   return (
     <div className={styles.container}>

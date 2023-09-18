@@ -45,17 +45,17 @@ import {
 } from "./TraceTree.utils";
 
 interface TraceTreeProps {
-  updateExceptionSpan: (id: string) => void;
-  updateSpans: (spans: SpanResponse) => void;
+  updateExceptionSpan: (id: string | null) => void;
+  updateSpans: (spans: SpanResponse | null) => void;
 }
 
 const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
   const router = useRouter();
-  const { data: spans, fetchData: fetchSpans } = useFetch<SpanResponse>(
-    "spans",
-    null,
-    spanTransformer
-  );
+  const {
+    data: spans,
+    fetchData: fetchSpans,
+    setData: setSpans,
+  } = useFetch<SpanResponse>("spans", null, spanTransformer);
   const { selectedCluster } = useSelector(clusterSelector);
   // const [debugMode, toggleDebugMode] = useToggle(false);
 
@@ -74,6 +74,11 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
 
   useEffect(() => {
     if (selectedCluster) {
+      setSpans(null);
+      setSpanTree(null);
+      setSelectedSpan(null);
+      updateExceptionSpan(null);
+      updateSpans(null);
       const endpoint = LIST_SPANS_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
@@ -83,7 +88,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
       // const endpoint = `/fake_spans.json`;
       fetchSpans(endpoint);
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, router]);
 
   useEffect(() => {
     if (spans) {

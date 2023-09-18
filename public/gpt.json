@@ -1,0 +1,9 @@
+{
+    "payload": {
+        "issueId": "3be840ab3ba0d809e91aff66e766ea81",
+        "incidentId": "b8cfd34c965d9ab4fa1cd102b5f4d81d",
+        "eventType": "EVENT_TYPE_ENUM : values [QNA,INFERENCE,USER_ADDED..etc]",
+        "eventRequest": "user query will be only sent for QNA event types for now",
+        "eventResponse": "Based on the provided information, the most likely cause of the high latency issue in the  module is a slow database query. The spans related to retrieving inventory and product data from the MySQL database have relatively low latency. However, without the exception stack trace, it is not possible to identify any specific errors or performance bottlenecks. No anomalies or errors were found in the request and response payload data."
+    }
+}

@@ -69,10 +69,10 @@ const SpanCards = () => {
             )}
           >
             <TraceTree
-              updateSpans={(spans: SpanResponse) => {
+              updateSpans={(spans: SpanResponse | null) => {
                 setSpans(spans);
               }}
-              updateExceptionSpan={(id: string) => {
+              updateExceptionSpan={(id: string | null) => {
                 setExceptionSpan(id);
               }}
             />
