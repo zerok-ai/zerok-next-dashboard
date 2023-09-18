@@ -52,6 +52,9 @@ const PodDetailsCard = () => {
   const { trace } = router.query;
   useEffect(() => {
     if (trace && selectedCluster) {
+      setPodDetails(null);
+      setContainers(null);
+      setSelectedPod("");
       const endpoint = GET_PODS_ENDPOINT.replace(
         "{trace_id}",
         trace as string

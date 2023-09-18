@@ -1,28 +1,23 @@
 // import cssVars from "styles/variables.module.scss";
 import CustomSkeleton from "components/custom/CustomSkeleton";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
+import { chatSelector } from "redux/chat";
+import { useSelector } from "redux/store";
+import { type ChatQueryType } from "redux/types";
+import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
 import styles from "./ChatBoxDisplay.module.scss";
 
 interface ChatBoxDisplayProps {
-  text: string | null;
-  animate: boolean;
-  onTypeStart?: () => void;
-  onTypeEnd?: () => void;
-  header?: string;
-  blink?: boolean;
-  footer?: React.ReactElement;
+  query: ChatQueryType;
 }
 
-const AIChatBox = ({
-  text,
-  blink = true,
-  header,
-  animate,
-  footer,
-}: ChatBoxDisplayProps) => {
+const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
+  const { queries } = useSelector(chatSelector);
   const bottomRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const onTypeStart = () => {
@@ -32,6 +27,7 @@ const AIChatBox = ({
       });
     }, 100);
   };
+  const router = useRouter();
   const onTypeEnd = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -42,20 +38,20 @@ const AIChatBox = ({
       inline: "nearest",
     });
   };
+  const text = query?.response ?? null;
+  const queryIndex = queries.findIndex((q) => q.id === query.id);
+  const animate = query.typing && queryIndex === queries.length - 1;
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles["chatbox-logo"]}>
-          <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
-        </div>
-        {header && <h5>{header}</h5>}
+      <div className={styles["chatbox-logo"]}>
+        <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
       </div>
 
       {text ? (
         <div className={styles["text-container"]}>
           {animate ? (
             <TypeAnimation
-              cursor={blink}
+              cursor={false}
               sequence={[
                 () => {
                   onTypeStart();
@@ -73,7 +69,12 @@ const AIChatBox = ({
           ) : (
             text
           )}
-          <div className={styles.footer}>{footer}</div>
+          <div className={styles.footer}>
+            Based on trace -{" "}
+            <Link href={getSpanPageLinkFromIncident(query.incidentId!, router)}>
+              {query.incidentId}
+            </Link>
+          </div>
           <div ref={bottomRef}></div>
         </div>
       ) : (

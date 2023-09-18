@@ -157,3 +157,8 @@ export const setClusterToLocalStorage = (cluster: string) => {
   localStorage.setItem(CLUSTER_LOCALSTORAGE_NAME, cluster);
   return true;
 };
+
+export const sleep = async (ms: number) => {
+  // eslint-disable-next-line @typescript-eslint/return-await
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

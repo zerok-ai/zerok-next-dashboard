@@ -52,11 +52,9 @@ export interface ChatQueryType {
   type: "query";
   query: string;
   id: string;
-  response: {
-    summary: string | null;
-    data: string;
-    anamolies: string | null;
-  };
+  response: string | null;
+  typing: boolean;
+  incidentId: string | null;
 }
 
 export interface ChatContextEventType {
@@ -88,6 +86,7 @@ export interface ChatInvalidCardType {
 export interface ChatReduxType {
   loading: boolean;
   error: boolean;
+  contextIncident: string | null;
   likelyCause: null | ChatInferType;
   queries: Array<
     ChatQueryType | ChatContextEventType | ChatInferType | ChatInvalidCardType
