@@ -21,10 +21,6 @@ interface TracesStateDetail {
   total_records: number;
 }
 
-interface TraceTableProps {
-  chatTrace: string | null;
-}
-
 const transformTraces = (data: TracesStateDetail) => {
   const newTraces = data;
   newTraces.trace_det_list = data.trace_det_list.filter((trace) => {
@@ -39,7 +35,7 @@ const DEFAULT_SORT: ColumnSort = {
   desc: INCIDENT_COL_FILTERS[0].value.split(":")[1] === "desc",
 };
 
-const TraceTable = ({ chatTrace }: TraceTableProps) => {
+const TraceTable = () => {
   const router = useRouter();
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const scenario = router.query.issue;
@@ -70,7 +66,7 @@ const TraceTable = ({ chatTrace }: TraceTableProps) => {
     }
   }, [selectedCluster, renderTrigger, router.query]);
 
-  const columns = getTraceColumns(chatTrace);
+  const columns = getTraceColumns("something");
   return (
     <div className={styles.container}>
       <div className={styles.header}>
