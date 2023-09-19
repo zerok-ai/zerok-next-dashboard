@@ -36,7 +36,7 @@ export const getTraceColumns = (chatTrace: string | null) => {
               {trimString(info.getValue(), 30)}{" "}
             </span>
             {chatTrace === info.row.original.incident_id && (
-              <ChipX label="Inferred" color="primary" />
+              <ChipX label="Inferred" color="primary" upperCase={false} />
             )}
           </div>
         );

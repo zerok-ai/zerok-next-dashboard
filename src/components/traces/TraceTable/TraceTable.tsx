@@ -6,6 +6,7 @@ import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { chatSelector } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
@@ -41,6 +42,7 @@ const TraceTable = () => {
   const scenario = router.query.issue;
   const issue_id = router.query.issue_id;
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
+  const { likelyCause } = useSelector(chatSelector);
 
   const page = parseInt((router.query.page as string) ?? 1);
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
@@ -66,7 +68,7 @@ const TraceTable = () => {
     }
   }, [selectedCluster, renderTrigger, router.query]);
 
-  const columns = getTraceColumns("something");
+  const columns = getTraceColumns(likelyCause?.incidentId as string);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
