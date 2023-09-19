@@ -133,8 +133,9 @@
 }
 
 .delete-card-button {
-    right:$sp-base * 8;
-    top:$sp-base;
+    position: absolute;
+    right:$sp-base * 6;
+    top:-$sp-base * 2;
 }
 
 .delete-condition-button {
@@ -184,7 +185,7 @@
 
 .root-condition-selects {
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-base;
 }
 
 // group by form
