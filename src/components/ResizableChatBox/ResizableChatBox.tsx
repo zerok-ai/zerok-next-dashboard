@@ -6,12 +6,14 @@ interface ResizableChatBoxProps {
   children: React.ReactNode;
   width: number;
   updateWidth: (width: number) => void;
+  minimized: boolean;
 }
 
 const ResizableChatBox = ({
   children,
   width,
   updateWidth,
+  minimized,
 }: ResizableChatBoxProps) => {
   return (
     <Resizable
@@ -19,7 +21,11 @@ const ResizableChatBox = ({
         width,
         height: "100%",
       }}
-      minWidth={"400px"}
+      size={{
+        width,
+        height: "100%",
+      }}
+      minWidth={minimized ? "64px" : "400px"}
       maxWidth={"900px"}
       enable={{
         top: false,

@@ -14,6 +14,7 @@ const initialState: ChatReduxType = {
   queries: [],
   likelyCause: null,
   contextIncident: null,
+  typing: false,
 };
 
 interface ChatEventActionType {
@@ -142,6 +143,7 @@ export const chatSlice = createSlice({
       });
     },
     stopLikelyCauseTyping: (state) => {
+      state.typing = false;
       if (state.likelyCause) {
         state.likelyCause.typing = false;
       }
@@ -153,6 +155,10 @@ export const chatSlice = createSlice({
         query.typing = false;
         state.queries[queryIndex] = query;
       }
+      state.typing = false;
+    },
+    resetChat: (state) => {
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -173,6 +179,7 @@ export const chatSlice = createSlice({
           id: nanoid(),
         };
         state.loading = false;
+        state.typing = true;
         state.error = false;
         state.contextIncident = incidentId;
       })
@@ -214,6 +221,7 @@ export const {
   stopLikelyCauseTyping,
   addQuery,
   stopTyping,
+  resetChat,
 } = chatSlice.actions;
 
 export const chatSelector = (state: RootState): ChatReduxType => state.chat;

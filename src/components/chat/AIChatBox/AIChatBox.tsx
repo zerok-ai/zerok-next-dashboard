@@ -27,9 +27,9 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
       clearInterval(timerRef.current);
     }
     dispatch(stopTyping(query.id));
-    // bottomRef.current?.scrollIntoView({
-    //   behavior: "smooth",
-    // });
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
   const text = query?.response ?? null;
   const queryIndex = queries.findIndex((q) => q.id === query.id);

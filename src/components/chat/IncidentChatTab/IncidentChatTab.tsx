@@ -3,7 +3,6 @@ import AIChatBox from "components/chat/AIChatBox";
 import GptInferenceBox from "components/GptInferenceBox";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
-import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
@@ -36,17 +35,7 @@ const IncidentChatTab = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { likelyCause, queries, contextIncident } = useSelector(chatSelector);
   const [width, setWidth] = useState(550);
-  console.log("rerender chat tab");
-
   useEffect(() => {
-    if (bottomRef.current) {
-      console.log("firing");
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [queries]);
-
-  useEffect(() => {
-    console.log("in useeffect");
     if (selectedCluster && issueId) {
       dispatch(
         fetchLikelyCause({
@@ -56,6 +45,8 @@ const IncidentChatTab = () => {
       );
     }
   }, [selectedCluster]);
+
+  console.log("rerendering chat tab");
 
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
@@ -98,6 +89,11 @@ const IncidentChatTab = () => {
     if (!enableChat) {
       return null;
     } else {
+      if (bottomRef.current) {
+        bottomRef.current.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
       return (
         <Fragment>
           <div className={styles["text-boxes"]}>
@@ -158,7 +154,7 @@ const IncidentChatTab = () => {
                 );
               }
               return (
-                <Fragment key={nanoid()}>
+                <Fragment key={"some"}>
                   <span></span>
                 </Fragment>
               );
@@ -169,33 +165,35 @@ const IncidentChatTab = () => {
     }
   }, [queries, likelyCause]);
 
-  const WrapperElement = ({ children }: { children: React.ReactNode }) => {
-    return chatMinimized ? (
-      <Fragment>{children}</Fragment>
-    ) : (
-      <ResizableChatBox
-        width={width}
-        updateWidth={(w) => {
-          setWidth(w);
-        }}
-      >
-        {children}
-      </ResizableChatBox>
-    );
-  };
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [queries.length]);
   return (
-    <WrapperElement>
+    <ResizableChatBox
+      width={width}
+      minimized={chatMinimized}
+      updateWidth={(w) => {
+        setWidth(w);
+      }}
+    >
       <div className={cx(styles.container, chatMinimized && styles.minimized)}>
         <ChatToggleBanner
           minimized={chatMinimized}
-          toggleMinimize={toggleChatMinimized}
+          toggleMinimize={() => {
+            toggleChatMinimized();
+            setWidth(64);
+          }}
         />
         {!chatMinimized ? (
           <Fragment>
             <div className={styles["chat-box-container"]}>
               <div className={styles["text-container"]}>
                 {renderChat()}
-                <div ref={bottomRef}></div>
+                <div ref={bottomRef} className={styles.bottom}></div>
               </div>
             </div>
             <div className={styles["chat-input-container"]}>
@@ -215,7 +213,7 @@ const IncidentChatTab = () => {
           </div>
         )}
       </div>
-    </WrapperElement>
+    </ResizableChatBox>
   );
 };
 

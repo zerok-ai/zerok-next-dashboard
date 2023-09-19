@@ -11,7 +11,7 @@ import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import styles from "./GptLikelyCauseBox.module.scss";
 
 const GptLikelyCauseBox = () => {
-  const { likelyCause, queries } = useSelector(chatSelector);
+  const { likelyCause, queries, typing } = useSelector(chatSelector);
   const text =
     likelyCause?.response?.summary ?? likelyCause?.response?.data ?? null;
   const router = useRouter();
@@ -27,7 +27,7 @@ const GptLikelyCauseBox = () => {
 
       {text ? (
         <div className={styles["text-container"]}>
-          {likelyCause!.typing && queries.length === 0 ? (
+          {typing && queries.length === 0 ? (
             <TypeAnimation
               cursor={false}
               sequence={[
