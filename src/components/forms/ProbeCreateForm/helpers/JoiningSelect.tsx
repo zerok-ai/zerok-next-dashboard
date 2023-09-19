@@ -57,8 +57,8 @@ const JoiningSelect = ({
         variant="contained"
         onClick={handleClick}
         size="small"
+        color="secondary"
         className={cx(
-          color === "blue" ? styles.blue : styles.purple,
           styles["joining-select"],
           buttonMode && styles["no-button"]
         )}

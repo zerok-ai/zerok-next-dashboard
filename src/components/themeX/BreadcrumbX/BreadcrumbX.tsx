@@ -13,7 +13,10 @@ const BreadcrumbX = () => {
   const isNestedRouter = pathname.split("/").length > 1;
 
   if (!isNestedRouter) return null;
-  const breadcrumbs = BREADCRUMB_ROUTES[asPath] || BREADCRUMB_ROUTES[pathname];
+  console.log(asPath, pathname, router);
+  const breadcrumbs =
+    BREADCRUMB_ROUTES[asPath.split("?")[0] ?? asPath] ||
+    BREADCRUMB_ROUTES[pathname];
   if (!breadcrumbs) return null;
   return (
     <div className={styles.container}>
