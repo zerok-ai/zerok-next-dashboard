@@ -24,10 +24,16 @@ interface ChatEventActionType {
 }
 
 interface ChatQueryActionType {
-  payload: {
-    query: string;
-    key: string;
-  };
+  payload:
+    | {
+        type: "query";
+        query: string;
+        key: string;
+      }
+    | {
+        type: "infer";
+        key: string;
+      };
 }
 
 export const fetchLikelyCause = createAsyncThunk(
@@ -58,6 +64,7 @@ export const fetchQueryResponse = createAsyncThunk(
       addQuery({
         query: values.query,
         key,
+        type: "query",
       })
     );
     await sleep(2000);
@@ -66,6 +73,26 @@ export const fetchQueryResponse = createAsyncThunk(
       inference: rdata.data.payload,
       key,
     };
+  }
+);
+
+export const fetchNewInference = createAsyncThunk(
+  "chat/fetchNewInference",
+  async (values: {
+    issueId: string;
+    incidentId: string;
+    selectedCluster: string;
+  }) => {
+    store.dispatch(
+      addQuery({
+        type: "infer",
+        key: nanoid(),
+      })
+    );
+    await sleep(2000);
+
+    const rdata = await axios.get("/gpt.json");
+    return rdata.data.payload;
   }
 );
 
@@ -86,14 +113,26 @@ export const chatSlice = createSlice({
       } else return state;
     },
     addQuery: (state, { payload }: ChatQueryActionType) => {
-      state.queries.push({
-        type: "query",
-        query: payload.query,
-        id: payload.key,
-        typing: false,
-        incidentId: null,
-        response: null,
-      });
+      if (payload.type === "query") {
+        state.queries.push({
+          type: "query",
+          query: payload.query,
+          id: payload.key,
+          typing: false,
+          incidentId: null,
+          issueId: null,
+          response: null,
+        });
+      } else {
+        state.queries.push({
+          type: "infer",
+          id: payload.key,
+          typing: false,
+          incidentId: null,
+          response: null,
+          issueId: null,
+        });
+      }
     },
     addInvalidCard: (state, { payload }: { payload: string }) => {
       state.queries.push({
@@ -105,6 +144,14 @@ export const chatSlice = createSlice({
     stopLikelyCauseTyping: (state) => {
       if (state.likelyCause) {
         state.likelyCause.typing = false;
+      }
+    },
+    stopTyping: (state, { payload }: { payload: string }) => {
+      const queryIndex = state.queries.findIndex((q) => q.id === payload);
+      const query = state.queries[queryIndex];
+      if (query && query.type === "query") {
+        query.typing = false;
+        state.queries[queryIndex] = query;
       }
     },
   },
@@ -145,14 +192,29 @@ export const chatSlice = createSlice({
       })
       .addCase(fetchQueryResponse.rejected, (state, { payload }) => {
         console.log("heer");
+      })
+      // inference
+      .addCase(fetchNewInference.fulfilled, (state, { payload }) => {
+        const infer = state.queries.find((q) => q.type === "infer");
+        if (infer && infer.type === "infer") {
+          infer.response = payload.eventResponse;
+          infer.typing = true;
+          infer.incidentId = payload.incidentId;
+          infer.issueId = payload.issueId;
+        }
       });
   },
 });
 
 // Action creators are generated for each case reducer function
 
-export const { addEvent, addInvalidCard, stopLikelyCauseTyping, addQuery } =
-  chatSlice.actions;
+export const {
+  addEvent,
+  addInvalidCard,
+  stopLikelyCauseTyping,
+  addQuery,
+  stopTyping,
+} = chatSlice.actions;
 
 export const chatSelector = (state: RootState): ChatReduxType => state.chat;
 

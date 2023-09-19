@@ -48,14 +48,24 @@ export interface SnackbarReduxType {
   open: boolean;
 }
 
-export interface ChatQueryType {
-  type: "query";
-  query: string;
-  id: string;
-  response: string | null;
-  typing: boolean;
-  incidentId: string | null;
-}
+export type ChatQueryType =
+  | {
+      type: "query";
+      query: string;
+      id: string;
+      response: string | null;
+      typing: boolean;
+      incidentId: string | null;
+      issueId: string | null;
+    }
+  | {
+      type: "infer";
+      id: string;
+      response: null | string;
+      typing: boolean;
+      incidentId: string | null;
+      issueId: string | null;
+    };
 
 export interface ChatContextEventType {
   type: "context";
@@ -64,7 +74,7 @@ export interface ChatContextEventType {
   id: string;
 }
 
-export interface ChatInferType {
+export interface ChatLikelyCauseType {
   type: "infer";
   response: {
     summary: string | null;
@@ -87,8 +97,6 @@ export interface ChatReduxType {
   loading: boolean;
   error: boolean;
   contextIncident: string | null;
-  likelyCause: null | ChatInferType;
-  queries: Array<
-    ChatQueryType | ChatContextEventType | ChatInferType | ChatInvalidCardType
-  >;
+  likelyCause: null | ChatLikelyCauseType;
+  queries: Array<ChatQueryType | ChatContextEventType | ChatInvalidCardType>;
 }

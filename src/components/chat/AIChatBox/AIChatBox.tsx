@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { chatSelector } from "redux/chat";
-import { useSelector } from "redux/store";
+import { chatSelector, stopTyping } from "redux/chat";
+import { useDispatch, useSelector } from "redux/store";
 import { type ChatQueryType } from "redux/types";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
@@ -20,23 +20,16 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
   const { queries } = useSelector(chatSelector);
   const bottomRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const onTypeStart = () => {
-    timerRef.current = setInterval(() => {
-      bottomRef.current?.scrollIntoView({
-        behavior: "smooth",
-      });
-    }, 100);
-  };
+  const dispatch = useDispatch();
   const router = useRouter();
   const onTypeEnd = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    bottomRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-      inline: "nearest",
-    });
+    dispatch(stopTyping(query.id));
+    // bottomRef.current?.scrollIntoView({
+    //   behavior: "smooth",
+    // });
   };
   const text = query?.response ?? null;
   const queryIndex = queries.findIndex((q) => q.id === query.id);
@@ -53,9 +46,6 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
             <TypeAnimation
               cursor={false}
               sequence={[
-                () => {
-                  onTypeStart();
-                },
                 text,
                 () => {
                   onTypeEnd();
