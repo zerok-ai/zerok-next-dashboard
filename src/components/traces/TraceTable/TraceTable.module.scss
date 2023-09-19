@@ -63,10 +63,6 @@
 }
 
 .pagination-container {
-    position: absolute;
-    bottom:$sp-base * 7;
-    left:50%;
-    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: flex-end;
