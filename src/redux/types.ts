@@ -95,6 +95,7 @@ export interface ChatInvalidCardType {
 
 export interface ChatReduxType {
   loading: boolean;
+  typing: boolean;
   error: boolean;
   contextIncident: string | null;
   likelyCause: null | ChatLikelyCauseType;
