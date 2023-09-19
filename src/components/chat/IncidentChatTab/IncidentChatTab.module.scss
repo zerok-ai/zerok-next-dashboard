@@ -25,16 +25,18 @@
     // height:300px;
     height: calc(100vh - 100px);
     padding:$sp-base * 5;
+    padding-bottom: 0;
     overflow-y: auto;
-    border-bottom: 1px solid $grey-800;
     @media screen and (max-width: ($bp-desktop)) {
         padding:$sp-base * 3;
+        padding-bottom: 0;
     }
 }
 
 .chat-input-container {
     flex:1;
     padding:$sp-base * 5;
+    padding-top: $sp-base * 3;
 }
 
 

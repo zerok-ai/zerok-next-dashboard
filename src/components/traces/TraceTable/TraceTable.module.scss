@@ -2,9 +2,10 @@
 @import "styles/mixins";
 .container {
     overflow-y: auto;
+    position: relative;
     border:1px solid $grey-800;
     border-radius: $sp-base * 2;
-    min-height: 100%;
+    min-height: calc(100vh - 60px - 160px);
 }
 
 
@@ -19,7 +20,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 62vh;
+    min-height: 600px;
+    // margin-bottom: $sp-base;
     span,td {
         color:$grey-50;
     }
@@ -61,11 +63,14 @@
 }
 
 .pagination-container {
+    position: absolute;
+    bottom:$sp-base * 7;
+    left:50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: flex-end;
     column-gap: $sp-base * 2;
-    padding:$sp-base * 5 0;
 }
 
 .skeleton-container {

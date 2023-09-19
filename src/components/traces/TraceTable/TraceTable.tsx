@@ -89,6 +89,7 @@ const TraceTable = () => {
           data={traces?.trace_det_list ?? null}
           headerClassName={styles["table-header"]}
           rowClassName={styles["table-row"]}
+          bodyClassName={styles["table-body"]}
           onRowClick={(row) => {
             router.push({
               pathname: router.pathname,

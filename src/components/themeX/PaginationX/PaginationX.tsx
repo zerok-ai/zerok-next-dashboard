@@ -27,6 +27,7 @@ const PaginationX = ({ itemsPerPage, totalItems }: PaginationXProps) => {
       <Pagination
         count={maxPage}
         page={currentPage}
+        boundaryCount={1}
         color="primary"
         shape="rounded"
         hidePrevButton

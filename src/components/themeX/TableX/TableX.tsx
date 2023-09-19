@@ -18,6 +18,7 @@ interface TableXProps<T extends object> {
   data: T[] | null;
   columns: Array<ColumnDef<T, any>>;
   headerClassName?: string;
+  bodyClassName?: string;
   rowClassName?: string;
   sortBy?: SortingState;
   onSortingChange?: OnChangeFn<SortingState>;
@@ -33,6 +34,7 @@ const TableX = <T extends object>({
   onRowClick,
   sortBy,
   onSortingChange,
+  bodyClassName,
   borderRadius = true,
 }: TableXProps<T>) => {
   const table = useReactTable({
@@ -79,7 +81,7 @@ const TableX = <T extends object>({
             );
           })}
         </thead>
-        <tbody>
+        <tbody className={cx(bodyClassName)}>
           {data.length ? (
             table.getRowModel().rows.map((row) => {
               return (

@@ -6,6 +6,9 @@
     :global(.Mui-disabled){
         color:$grey-500 !important;
     }
+    ul {
+       flex-wrap: nowrap;
+    }
 }
 
 .pagination {
