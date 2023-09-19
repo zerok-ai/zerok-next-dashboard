@@ -7,11 +7,16 @@
     border-spacing: 0;
     border: 1px solid $grey-900;
     overflow-x: auto;
-  }
-}
+    border-top-left-radius: $sp-base;
+    border-top-right-radius: $sp-base;
+    border-bottom-left-radius: $sp-base * 2;
+    border-bottom-right-radius: $sp-base * 2;
+    box-shadow: -18px 0px 0px -17px rgba(0, 0, 0, 0.06);
 
-.table-w-br {
-  border-radius: $sp-base * 2;
+    tbody:last-child {
+      border-bottom: none;
+    }
+  }
 }
 
 .table-thead {

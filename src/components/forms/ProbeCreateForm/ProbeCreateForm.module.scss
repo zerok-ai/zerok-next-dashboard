@@ -147,7 +147,7 @@
 
 .add-condition-button {
     color:$primary-500;
-    margin-top: $sp-base * 7;
+    margin-top: $sp-base * 4;
     cursor: pointer;
     &:hover {
         color:$primary-600;
@@ -168,20 +168,6 @@
     cursor: auto;
 }
 
-.blue {
-    background-color: #1E7BC2;
-    &:hover {
-        background-color: #1E7BC2;
-    }
-}
-
-.purple {
-    background-color: #5925DC;
-    &:hover {
-        background-color: #5925DC;
-    }
-}
-
 .joining-select-menu {
     :global(.MuiPaper-root){
         margin-top: $sp-base * 2;
@@ -193,12 +179,7 @@
 
 // root-condition
 .root-condition-container {
-    position: absolute;
-    top: -$sp-base * 4;
-    left: $sp-base * 4;display: flex;
-    column-gap: $sp-base * 3;
-    justify-content: space-between;
-    width:100%;
+   margin-bottom: $sp-base * 4;
 }
 
 .root-condition-selects {
