@@ -1,17 +1,19 @@
 import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
+import GptInferenceBox from "components/GptInferenceBox";
+import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Resizable } from "re-resizable";
-import { Fragment, useCallback, useEffect, useRef } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { HiChevronRight } from "react-icons/hi";
 import {
   addEvent,
   addInvalidCard,
   chatSelector,
   fetchLikelyCause,
+  fetchNewInference,
   fetchQueryResponse,
 } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
@@ -33,7 +35,15 @@ const IncidentChatTab = () => {
   const { issue_id: issueId, trace: incidentId } = router.query;
   const bottomRef = useRef<HTMLDivElement>(null);
   const { likelyCause, queries, contextIncident } = useSelector(chatSelector);
+  const [width, setWidth] = useState(550);
   console.log("rerender chat tab");
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      console.log("firing");
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [queries]);
 
   useEffect(() => {
     console.log("in useeffect");
@@ -52,17 +62,25 @@ const IncidentChatTab = () => {
       return;
     }
     if (selectedCluster) {
+      if ((val === "/context" || val === "/infer") && !incidentId) {
+        dispatch(addInvalidCard("Please select an incident first"));
+        return;
+      }
       if (val === "/context") {
-        if (!incidentId) {
-          dispatch(addInvalidCard("Please select an incident first"));
-        } else {
-          dispatch(
-            addEvent({
-              type: "CONTEXT",
-              newIncidentID: incidentId as string,
-            })
-          );
-        }
+        dispatch(
+          addEvent({
+            type: "CONTEXT",
+            newIncidentID: incidentId as string,
+          })
+        );
+      } else if (val === "/infer") {
+        dispatch(
+          fetchNewInference({
+            selectedCluster,
+            issueId: issueId as string,
+            incidentId: incidentId as string,
+          })
+        );
       } else {
         dispatch(
           fetchQueryResponse({
@@ -132,9 +150,16 @@ const IncidentChatTab = () => {
                   </Fragment>
                 );
               }
+              if (type === "infer") {
+                return (
+                  <Fragment key={qa.id}>
+                    <GptInferenceBox query={qa} />
+                  </Fragment>
+                );
+              }
               return (
                 <Fragment key={nanoid()}>
-                  <div ref={bottomRef}></div>
+                  <span></span>
                 </Fragment>
               );
             })}
@@ -148,23 +173,14 @@ const IncidentChatTab = () => {
     return chatMinimized ? (
       <Fragment>{children}</Fragment>
     ) : (
-      <Resizable
-        defaultSize={{
-          width: 550,
-          height: "100%",
+      <ResizableChatBox
+        width={width}
+        updateWidth={(w) => {
+          setWidth(w);
         }}
-        minWidth={"400px"}
-        maxWidth={"900px"}
-        enable={{
-          top: false,
-          right: true,
-          bottom: false,
-          left: false,
-        }}
-        className={styles.resizable}
       >
         {children}
-      </Resizable>
+      </ResizableChatBox>
     );
   };
   return (
@@ -177,21 +193,9 @@ const IncidentChatTab = () => {
         {!chatMinimized ? (
           <Fragment>
             <div className={styles["chat-box-container"]}>
-              {/* <IconButton size="small" onClick={toggleEnableChat}>
-          <HiOutlineBugAnt />
-        </IconButton> */}
               <div className={styles["text-container"]}>
-                {/* {!enableChat && (
-                  <AIChatBox
-                    text={
-                      "This functionality is disabled for your organization. Please contact ZeroK support to enable this."
-                    }
-                    animate={queries.length === 0}
-                    blink={false}
-                    header="Scenario summary"
-                  />
-                )} */}
                 {renderChat()}
+                <div ref={bottomRef}></div>
               </div>
             </div>
             <div className={styles["chat-input-container"]}>

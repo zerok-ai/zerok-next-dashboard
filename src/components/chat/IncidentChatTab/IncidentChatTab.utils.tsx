@@ -137,7 +137,7 @@ export const UserInputField = ({
     >
       <button
         type="submit"
-        style={{ width: "0", height: "0", opacity: "0" }}
+        style={{ width: "0", height: "0", opacity: "0", display: "none" }}
         id="chat-form-btn"
       ></button>
       <ChatCommandMenu
@@ -168,7 +168,10 @@ export const UserInputField = ({
           inputRef.current?.focus();
         }}
         className={styles["chat-input"]}
-        autoComplete={"false"}
+        autoComplete={"off"}
+        autoFocus={false}
+        autoCorrect="false"
+        autoCapitalize="false"
         placeholder="Ask a query"
         endAdornment={
           <span

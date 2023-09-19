@@ -5,16 +5,22 @@ import { useRouter } from "next/router";
 import { TypeAnimation } from "react-type-animation";
 import { chatSelector, stopLikelyCauseTyping } from "redux/chat";
 import { useDispatch, useSelector } from "redux/store";
+import { type ChatQueryType } from "redux/types";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
-import styles from "./GptLikelyCauseBox.module.scss";
+import styles from "./GptInferenceBox.module.scss";
 
-const GptLikelyCauseBox = () => {
-  const { likelyCause, queries } = useSelector(chatSelector);
-  const text =
-    likelyCause?.response?.summary ?? likelyCause?.response?.data ?? null;
+interface GptInferenceBoxProps {
+  query: ChatQueryType;
+}
+
+const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
+  const { queries } = useSelector(chatSelector);
+  const text = query.response ?? null;
   const router = useRouter();
+
+  const queryIndex = queries.findIndex((q) => q.id === query.id);
   const dispatch = useDispatch();
   return (
     <div className={styles.container}>
@@ -22,12 +28,12 @@ const GptLikelyCauseBox = () => {
         <div className={styles["chatbox-logo"]}>
           <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
         </div>
-        <h5>Likely cause</h5>
+        <h5>Inference</h5>
       </div>
 
       {text ? (
         <div className={styles["text-container"]}>
-          {likelyCause!.typing && queries.length === 0 ? (
+          {queryIndex === queries.length - 1 ? (
             <TypeAnimation
               cursor={false}
               sequence={[
@@ -48,11 +54,11 @@ const GptLikelyCauseBox = () => {
             Based on trace -{" "}
             <Link
               href={getSpanPageLinkFromIncident(
-                likelyCause?.incidentId as string,
+                query.incidentId as string,
                 router
               )}
             >
-              {likelyCause?.incidentId}
+              {query.incidentId}
             </Link>
           </div>
         </div>
@@ -67,4 +73,4 @@ const GptLikelyCauseBox = () => {
   );
 };
 
-export default GptLikelyCauseBox;
+export default GptInferenceBox;
