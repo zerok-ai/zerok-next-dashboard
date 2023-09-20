@@ -35,6 +35,7 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     integrated: true,
     dummy: true,
     tags: ["All", "Data sources"],
+    triggerClusterModal: true,
   },
   {
     name: "ebpf",
@@ -47,6 +48,7 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     category: "Data sources",
     dummy: true,
     tags: ["All", "Data sources"],
+    triggerClusterModal: true,
   },
 ];
 

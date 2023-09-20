@@ -1,19 +1,21 @@
 import CreateClusterForm from "components/forms/CreateClusterForm";
 import ModalX from "components/themeX/ModalX";
+import { closeClusterModal, clusterSelector } from "redux/cluster";
+import { useDispatch, useSelector } from "redux/store";
 
-interface ClusterCreateModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const ClusterCreateModal = ({ isOpen, onClose }: ClusterCreateModalProps) => {
-  if (!isOpen) {
+const ClusterCreateModal = () => {
+  const { isClusterModalOpen } = useSelector(clusterSelector);
+  const dispatch = useDispatch();
+  if (!isClusterModalOpen) {
     return null;
   }
+
   return (
     <ModalX
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={isClusterModalOpen}
+      onClose={() => {
+        dispatch(closeClusterModal());
+      }}
       keepMounted={true}
       title="Create a new cluster"
     >

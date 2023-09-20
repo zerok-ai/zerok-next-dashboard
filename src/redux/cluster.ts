@@ -19,6 +19,7 @@ const initialState: ClusterReduxType = {
   selectedCluster: "",
   status: "",
   renderTrigger: nanoid(),
+  isClusterModalOpen: false,
 };
 
 export const getClusters = createAsyncThunk("cluster/getClusters", async () => {
@@ -42,6 +43,12 @@ export const clusterSlice = createSlice({
     },
     triggerRefetch: (state) => {
       state.renderTrigger = nanoid();
+    },
+    openClusterModal: (state) => {
+      state.isClusterModalOpen = true;
+    },
+    closeClusterModal: (state) => {
+      state.isClusterModalOpen = false;
     },
   },
   extraReducers: (builder) => {
@@ -97,6 +104,11 @@ export const clusterSlice = createSlice({
 export const clusterSelector = (state: RootState): ClusterReduxType =>
   state.cluster;
 
-export const { setSelectedCluster, triggerRefetch } = clusterSlice.actions;
+export const {
+  setSelectedCluster,
+  triggerRefetch,
+  openClusterModal,
+  closeClusterModal,
+} = clusterSlice.actions;
 
 export default clusterSlice.reducer;
