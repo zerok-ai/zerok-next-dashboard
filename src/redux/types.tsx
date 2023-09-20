@@ -93,7 +93,7 @@ export interface ChatInvalidCardType {
   issueId?: string | null;
   event: {
     type: typeof CHAT_EVENTS.INVALID;
-    message: string;
+    message?: string;
   };
 }
 

@@ -3,7 +3,10 @@ import axios from "axios";
 import { nanoid } from "nanoid";
 import { sleep } from "utils/functions";
 import { type CHAT_EVENT_ENUM, CHAT_EVENTS } from "utils/gpt/constants";
-import { GPT_INCIDENT_ENDPOINT } from "utils/gpt/endpoints";
+import {
+  GPT_EVENTS_ENDPOINT,
+  GPT_INCIDENT_ENDPOINT,
+} from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
 import store, { type RootState } from "./store";
@@ -38,6 +41,26 @@ interface ChatQueryActionType {
       };
 }
 
+interface ChatEventRequestBaseType {
+  issueId: string;
+  incidentId: string;
+}
+
+interface ChatContextRequestType extends ChatEventRequestBaseType {
+  event: {
+    type: typeof CHAT_EVENTS.CONTEXT_SWITCH;
+    newIncidentID: string;
+    oldIncidentID: string;
+  };
+}
+
+interface ChatQueryRequestType extends ChatEventRequestBaseType {
+  event: {
+    type: typeof CHAT_EVENTS.QUERY;
+    query: string;
+  };
+}
+
 export const fetchLikelyCause = createAsyncThunk(
   "chat/fetchLikelyCause",
   async (values: { issueId: string; selectedCluster: string }) => {
@@ -55,12 +78,29 @@ export const fetchLikelyCause = createAsyncThunk(
 
 export const fetchQueryResponse = createAsyncThunk(
   "chat/fetchQueryResponse",
-  async (values: {
-    query: string;
-    issueId: string;
-    incidentId: string;
-    selectedCluster: string;
-  }) => {
+  async (
+    values: {
+      query: string;
+      issueId: string;
+      selectedCluster: string;
+    },
+    { getState }
+  ) => {
+    const { issueId, selectedCluster } = values;
+    const state: ChatReduxType = getState() as ChatReduxType;
+    const endpoint = GPT_EVENTS_ENDPOINT.replace(
+      "{cluster_id}",
+      selectedCluster
+    );
+    const body: ChatQueryRequestType = {
+      issueId,
+      incidentId: state.contextIncident!,
+      event: {
+        type: CHAT_EVENTS.QUERY,
+        query: values.query,
+      },
+    };
+    console.log({ body, endpoint });
     const key = nanoid();
     store.dispatch(
       addQuery({
@@ -72,8 +112,43 @@ export const fetchQueryResponse = createAsyncThunk(
     await sleep(2000);
     const rdata = await axios.get("/gpt.json");
     return {
-      inference: rdata.data.payload,
+      ...rdata.data.payload,
       key,
+    };
+  }
+);
+
+export const postContextEvent = createAsyncThunk(
+  "chat/postContextEvent",
+  async (
+    values: {
+      issueId: string;
+      incidentId: string;
+      selectedCluster: string;
+    },
+    { getState }
+  ) => {
+    const { issueId, incidentId, selectedCluster } = values;
+    const state: ChatReduxType = getState() as ChatReduxType;
+    const endpoint = GPT_EVENTS_ENDPOINT.replace(
+      "{cluster_id}",
+      selectedCluster
+    );
+    const body: ChatContextRequestType = {
+      issueId,
+      incidentId,
+      event: {
+        type: CHAT_EVENTS.CONTEXT_SWITCH,
+        newIncidentID: incidentId,
+        oldIncidentID: state.contextIncident!,
+      },
+    };
+    console.log(body, endpoint);
+    await sleep(2000);
+    const rdata = await axios.get("/gpt.json");
+    console.log({ rdata });
+    return {
+      ...body,
     };
   }
 );
@@ -230,6 +305,13 @@ export const chatSlice = createSlice({
           infer.typing = true;
           infer.incidentId = payload.incidentId;
           infer.issueId = payload.issueId;
+        }
+      })
+      // context
+      .addCase(postContextEvent.fulfilled, (state, { payload }) => {
+        if (payload.event.type === CHAT_EVENTS.CONTEXT_SWITCH) {
+          // @ts-expect-error - TS gymnastics
+          state.queries.push({ ...payload, id: nanoid(), typing: false });
         }
       });
   },
