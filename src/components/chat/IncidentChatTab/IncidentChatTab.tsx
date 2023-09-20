@@ -1,6 +1,6 @@
 import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
-import GptInferenceBox from "components/GptInferenceBox";
+import GptInferenceBox from "components/chat/GptInferenceBox";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
 import Link from "next/link";
@@ -17,6 +17,11 @@ import {
 } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
+import {
+  type ChatInferenceEventType,
+  type ChatQueryEventType,
+} from "redux/types";
+import { CHAT_EVENTS } from "utils/gpt/constants";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 
 import ChatEventCard from "../ChatEventCard";
@@ -53,18 +58,22 @@ const IncidentChatTab = () => {
       return;
     }
     if (selectedCluster) {
-      if ((val === "/context" || val === "/infer") && !incidentId) {
+      if (
+        (val === `/${CHAT_EVENTS.CONTEXT_SWITCH}` ||
+          val === `/${CHAT_EVENTS.INFERENCE}`) &&
+        !incidentId
+      ) {
         dispatch(addInvalidCard("Please select an incident first"));
         return;
       }
-      if (val === "/context") {
+      if (val === `/${CHAT_EVENTS.CONTEXT_SWITCH}`) {
         dispatch(
           addEvent({
-            type: "CONTEXT",
+            type: CHAT_EVENTS.CONTEXT_SWITCH,
             newIncidentID: incidentId as string,
           })
         );
-      } else if (val === "/infer") {
+      } else if (val === `/${CHAT_EVENTS.INFERENCE}`) {
         dispatch(
           fetchNewInference({
             selectedCluster,
@@ -99,8 +108,8 @@ const IncidentChatTab = () => {
           <div className={styles["text-boxes"]}>
             <GptLikelyCauseBox />
             {queries.map((qa, idx) => {
-              const { type } = qa;
-              if (type === "invalid") {
+              const { type } = qa.event;
+              if (type === CHAT_EVENTS.INVALID) {
                 return (
                   <ChatEventCard
                     text="Please select a request from the right to continue."
@@ -108,7 +117,7 @@ const IncidentChatTab = () => {
                   />
                 );
               }
-              if (type === "context") {
+              if (type === CHAT_EVENTS.CONTEXT_SWITCH) {
                 const DisplayText = () => {
                   return (
                     <span>
@@ -138,18 +147,18 @@ const IncidentChatTab = () => {
                   <ChatEventCard render={() => <DisplayText />} key={qa.id} />
                 );
               }
-              if (type === "query") {
+              if (type === CHAT_EVENTS.QUERY) {
                 return (
                   <Fragment key={qa.id}>
-                    <ChatEventCard text={qa.query} />
-                    <AIChatBox query={qa} />
+                    <ChatEventCard text={qa.event.query} />
+                    <AIChatBox query={qa as ChatQueryEventType} />
                   </Fragment>
                 );
               }
-              if (type === "infer") {
+              if (type === CHAT_EVENTS.INFERENCE) {
                 return (
                   <Fragment key={qa.id}>
-                    <GptInferenceBox query={qa} />
+                    <GptInferenceBox query={qa as ChatInferenceEventType} />
                   </Fragment>
                 );
               }
