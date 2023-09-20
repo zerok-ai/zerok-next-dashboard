@@ -3,21 +3,21 @@ import CustomSkeleton from "components/custom/CustomSkeleton";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { TypeAnimation } from "react-type-animation";
-import { chatSelector, stopLikelyCauseTyping } from "redux/chat";
+import { chatSelector, stopTyping } from "redux/chat";
 import { useDispatch, useSelector } from "redux/store";
-import { type ChatQueryType } from "redux/types";
+import { type ChatInferenceEventType } from "redux/types";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
 import styles from "./GptInferenceBox.module.scss";
 
 interface GptInferenceBoxProps {
-  query: ChatQueryType;
+  query: ChatInferenceEventType;
 }
 
 const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
   const { queries } = useSelector(chatSelector);
-  const text = query.response ?? null;
+  const text = query.event.response ? query.event.response.data : null;
   const router = useRouter();
 
   const queryIndex = queries.findIndex((q) => q.id === query.id);
@@ -33,13 +33,13 @@ const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
 
       {text ? (
         <div className={styles["text-container"]}>
-          {queryIndex === queries.length - 1 ? (
+          {query.typing && queryIndex === queries.length - 1 ? (
             <TypeAnimation
               cursor={false}
               sequence={[
                 text,
                 () => {
-                  dispatch(stopLikelyCauseTyping());
+                  dispatch(stopTyping(query.id));
                 },
               ]}
               repeat={0}

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import { sleep } from "utils/functions";
+import { type CHAT_EVENT_ENUM, CHAT_EVENTS } from "utils/gpt/constants";
 import { GPT_INCIDENT_ENDPOINT } from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
@@ -19,7 +20,7 @@ const initialState: ChatReduxType = {
 
 interface ChatEventActionType {
   payload: {
-    type: "CONTEXT";
+    type: (typeof CHAT_EVENT_ENUM)[number];
     newIncidentID: string;
   };
 }
@@ -27,7 +28,7 @@ interface ChatEventActionType {
 interface ChatQueryActionType {
   payload:
     | {
-        type: "query";
+        type: typeof CHAT_EVENTS.QUERY;
         query: string;
         key: string;
       }
@@ -65,7 +66,7 @@ export const fetchQueryResponse = createAsyncThunk(
       addQuery({
         query: values.query,
         key,
-        type: "query",
+        type: CHAT_EVENTS.QUERY,
       })
     );
     await sleep(2000);
@@ -103,43 +104,58 @@ export const chatSlice = createSlice({
   reducers: {
     addEvent: (state, { payload }: ChatEventActionType) => {
       const { type, newIncidentID } = payload;
-      if (type === "CONTEXT") {
+      if (type === CHAT_EVENTS.CONTEXT_SWITCH) {
         state.queries.push({
-          type: "context",
-          oldIncidentID: state.contextIncident!,
-          newIncidentID,
+          incidentId: newIncidentID,
+          issueId: null,
           id: nanoid(),
+          loading: false,
+          typing: false,
+          event: {
+            type: CHAT_EVENTS.CONTEXT_SWITCH,
+            newIncidentID,
+            oldIncidentID: state.contextIncident!,
+          },
         });
         state.contextIncident = newIncidentID;
       } else return state;
     },
     addQuery: (state, { payload }: ChatQueryActionType) => {
-      if (payload.type === "query") {
+      if (payload.type === CHAT_EVENTS.QUERY) {
         state.queries.push({
-          type: "query",
-          query: payload.query,
-          id: payload.key,
-          typing: false,
-          incidentId: null,
+          incidentId: state.contextIncident,
           issueId: null,
-          response: null,
+          id: payload.key,
+          loading: false,
+          typing: true,
+          event: {
+            type: CHAT_EVENTS.QUERY,
+            query: payload.query,
+            response: null,
+          },
         });
       } else {
         state.queries.push({
-          type: "infer",
-          id: payload.key,
-          typing: false,
-          incidentId: null,
-          response: null,
+          incidentId: state.contextIncident,
           issueId: null,
+          id: payload.key,
+          loading: false,
+          typing: true,
+          event: {
+            type: CHAT_EVENTS.INFERENCE,
+            response: null,
+          },
         });
       }
     },
     addInvalidCard: (state, { payload }: { payload: string }) => {
       state.queries.push({
-        type: "invalid",
-        response: payload,
         id: nanoid(),
+        typing: false,
+        event: {
+          type: CHAT_EVENTS.INVALID,
+          message: payload,
+        },
       });
     },
     stopLikelyCauseTyping: (state) => {
@@ -151,7 +167,7 @@ export const chatSlice = createSlice({
     stopTyping: (state, { payload }: { payload: string }) => {
       const queryIndex = state.queries.findIndex((q) => q.id === payload);
       const query = state.queries[queryIndex];
-      if (query && query.type === "query") {
+      if (query) {
         query.typing = false;
         state.queries[queryIndex] = query;
       }
@@ -171,7 +187,7 @@ export const chatSlice = createSlice({
         const { issueId, incidentId, inference } = payload;
         const typing = state.queries.length === 0;
         state.likelyCause = {
-          type: "infer",
+          type: CHAT_EVENTS.LIKELY_CAUSE,
           response: inference,
           incidentId,
           issueId,
@@ -191,8 +207,8 @@ export const chatSlice = createSlice({
       .addCase(fetchQueryResponse.fulfilled, (state, { payload }) => {
         const { inference, key } = payload;
         const query = state.queries.find((q) => q.id === key);
-        if (query && query.type === "query") {
-          query.response = inference.eventResponse;
+        if (query && query.event.type === CHAT_EVENTS.QUERY) {
+          query.event.response = inference.eventResponse;
           query.typing = true;
           query.incidentId = state.contextIncident;
         }
@@ -202,9 +218,15 @@ export const chatSlice = createSlice({
       })
       // inference
       .addCase(fetchNewInference.fulfilled, (state, { payload }) => {
-        const infer = state.queries.find((q) => q.type === "infer");
-        if (infer && infer.type === "infer") {
-          infer.response = payload.eventResponse;
+        const infer = state.queries.find(
+          (q) => q.event.type === CHAT_EVENTS.INFERENCE
+        );
+        if (infer && infer.event.type === CHAT_EVENTS.INFERENCE) {
+          infer.event.response = {
+            data: payload.eventResponse as string,
+            anamolies: null,
+            summary: null,
+          };
           infer.typing = true;
           infer.incidentId = payload.incidentId;
           infer.issueId = payload.issueId;

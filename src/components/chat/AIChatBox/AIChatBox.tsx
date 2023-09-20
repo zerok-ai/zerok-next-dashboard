@@ -6,14 +6,14 @@ import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { chatSelector, stopTyping } from "redux/chat";
 import { useDispatch, useSelector } from "redux/store";
-import { type ChatQueryType } from "redux/types";
+import { type ChatQueryEventType } from "redux/types";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
 import styles from "./ChatBoxDisplay.module.scss";
 
 interface ChatBoxDisplayProps {
-  query: ChatQueryType;
+  query: ChatQueryEventType;
 }
 
 const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
@@ -31,7 +31,7 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
       behavior: "smooth",
     });
   };
-  const text = query?.response ?? null;
+  const text = query?.event.response ?? null;
   const queryIndex = queries.findIndex((q) => q.id === query.id);
   const animate = query.typing && queryIndex === queries.length - 1;
   return (

@@ -1,3 +1,5 @@
+import { type CHAT_EVENTS } from "utils/gpt/constants";
+
 export interface UserProfileType {
   id: string;
   email: string;
@@ -49,34 +51,60 @@ export interface SnackbarReduxType {
   open: boolean;
 }
 
-export type ChatQueryType =
-  | {
-      type: "query";
-      query: string;
-      id: string;
-      response: string | null;
-      typing: boolean;
-      incidentId: string | null;
-      issueId: string | null;
-    }
-  | {
-      type: "infer";
-      id: string;
-      response: null | string;
-      typing: boolean;
-      incidentId: string | null;
-      issueId: string | null;
-    };
-
-export interface ChatContextEventType {
-  type: "context";
-  oldIncidentID: string;
-  newIncidentID: string;
+export interface ChatEventBaseType {
   id: string;
+  incidentId: string | null;
+  issueId: string | null;
+  loading: boolean;
+  typing: boolean;
 }
 
+export interface ChatQueryEventType extends ChatEventBaseType {
+  event: {
+    type: typeof CHAT_EVENTS.QUERY;
+    query: string;
+    response: string | null;
+  };
+}
+
+export interface ChatInferenceEventType extends ChatEventBaseType {
+  event: {
+    type: typeof CHAT_EVENTS.INFERENCE;
+    response: {
+      summary: string | null;
+      data: string;
+      anamolies: string | null;
+    } | null;
+  };
+}
+
+export interface ChatContextSwitchEventType extends ChatEventBaseType {
+  event: {
+    type: typeof CHAT_EVENTS.CONTEXT_SWITCH;
+    oldIncidentID: string;
+    newIncidentID: string;
+  };
+}
+
+export interface ChatInvalidCardType {
+  id: string;
+  typing: false;
+  incidentId?: string | null;
+  issueId?: string | null;
+  event: {
+    type: typeof CHAT_EVENTS.INVALID;
+    message: string;
+  };
+}
+
+export type ChatEventType =
+  | ChatQueryEventType
+  | ChatInferenceEventType
+  | ChatContextSwitchEventType
+  | ChatInvalidCardType;
+
 export interface ChatLikelyCauseType {
-  type: "infer";
+  type: typeof CHAT_EVENTS.LIKELY_CAUSE;
   response: {
     summary: string | null;
     data: string;
@@ -88,17 +116,11 @@ export interface ChatLikelyCauseType {
   id: string;
 }
 
-export interface ChatInvalidCardType {
-  type: "invalid";
-  response: string;
-  id: string;
-}
-
 export interface ChatReduxType {
   loading: boolean;
   typing: boolean;
   error: boolean;
   contextIncident: string | null;
   likelyCause: null | ChatLikelyCauseType;
-  queries: Array<ChatQueryType | ChatContextEventType | ChatInvalidCardType>;
+  queries: ChatEventType[];
 }
