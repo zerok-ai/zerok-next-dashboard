@@ -1,24 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { nanoid } from "nanoid";
-import { sleep } from "utils/functions";
 import { type CHAT_EVENT_ENUM, CHAT_EVENTS } from "utils/gpt/constants";
 import {
   GPT_EVENTS_ENDPOINT,
+  GPT_HISTORY_ENDPOINT,
   GPT_INCIDENT_ENDPOINT,
 } from "utils/gpt/endpoints";
 import raxios from "utils/raxios";
 
 import store, { type RootState } from "./store";
-import { type ChatReduxType } from "./types";
+import { type ChatQueryEventType, type ChatReduxType } from "./types";
 
 const initialState: ChatReduxType = {
   loading: false,
   error: false,
   queries: [],
+  history: [],
   likelyCause: null,
   contextIncident: null,
   typing: false,
+  eventLoading: false,
+  chatLoading: false,
+  historyLoading: false,
+  pastEventCount: 0,
 };
 
 interface ChatEventActionType {
@@ -49,15 +53,25 @@ interface ChatEventRequestBaseType {
 interface ChatContextRequestType extends ChatEventRequestBaseType {
   event: {
     type: typeof CHAT_EVENTS.CONTEXT_SWITCH;
-    newIncidentID: string;
-    oldIncidentID: string;
+    request: {
+      newIncident: string;
+      oldIncident: string;
+    };
   };
 }
 
 interface ChatQueryRequestType extends ChatEventRequestBaseType {
   event: {
     type: typeof CHAT_EVENTS.QUERY;
-    query: string;
+    request: {
+      query: string;
+    };
+  };
+}
+
+interface ChatInferenceRequestType extends ChatEventRequestBaseType {
+  event: {
+    type: typeof CHAT_EVENTS.INFERENCE;
   };
 }
 
@@ -87,20 +101,21 @@ export const fetchQueryResponse = createAsyncThunk(
     { getState }
   ) => {
     const { issueId, selectedCluster } = values;
-    const state: ChatReduxType = getState() as ChatReduxType;
+    const state: RootState = getState() as RootState;
     const endpoint = GPT_EVENTS_ENDPOINT.replace(
       "{cluster_id}",
       selectedCluster
     );
     const body: ChatQueryRequestType = {
       issueId,
-      incidentId: state.contextIncident!,
+      incidentId: state.chat.contextIncident!,
       event: {
         type: CHAT_EVENTS.QUERY,
-        query: values.query,
+        request: {
+          query: values.query,
+        },
       },
     };
-    console.log({ body, endpoint });
     const key = nanoid();
     store.dispatch(
       addQuery({
@@ -109,8 +124,7 @@ export const fetchQueryResponse = createAsyncThunk(
         type: CHAT_EVENTS.QUERY,
       })
     );
-    await sleep(2000);
-    const rdata = await axios.get("/gpt.json");
+    const rdata = await raxios.post(endpoint, body);
     return {
       ...rdata.data.payload,
       key,
@@ -129,24 +143,24 @@ export const postContextEvent = createAsyncThunk(
     { getState }
   ) => {
     const { issueId, incidentId, selectedCluster } = values;
-    const state: ChatReduxType = getState() as ChatReduxType;
+    const state: RootState = getState() as RootState;
     const endpoint = GPT_EVENTS_ENDPOINT.replace(
       "{cluster_id}",
       selectedCluster
     );
+    store.dispatch(startLoading("event"));
     const body: ChatContextRequestType = {
       issueId,
       incidentId,
       event: {
         type: CHAT_EVENTS.CONTEXT_SWITCH,
-        newIncidentID: incidentId,
-        oldIncidentID: state.contextIncident!,
+        request: {
+          newIncident: incidentId,
+          oldIncident: state.chat.contextIncident!,
+        },
       },
     };
-    console.log(body, endpoint);
-    await sleep(2000);
-    const rdata = await axios.get("/gpt.json");
-    console.log({ rdata });
+    await raxios.post(endpoint, body);
     return {
       ...body,
     };
@@ -160,16 +174,55 @@ export const fetchNewInference = createAsyncThunk(
     incidentId: string;
     selectedCluster: string;
   }) => {
+    const { issueId, incidentId, selectedCluster } = values;
     store.dispatch(
       addQuery({
         type: "infer",
         key: nanoid(),
       })
     );
-    await sleep(2000);
+    const endpoint = GPT_EVENTS_ENDPOINT.replace(
+      "{cluster_id}",
+      selectedCluster
+    );
+    const body: ChatInferenceRequestType = {
+      issueId,
+      incidentId,
+      event: {
+        type: CHAT_EVENTS.INFERENCE,
+      },
+    };
 
-    const rdata = await axios.get("/gpt.json");
+    const rdata = await raxios.post(endpoint, body);
     return rdata.data.payload;
+  }
+);
+
+interface ChatQueryEventResponseType extends ChatQueryEventType {
+  created_at: string;
+}
+
+export const fetchPastEvents = createAsyncThunk(
+  "chat/fetchPastEvents",
+  async (
+    values: { issueId: string; selectedCluster: string },
+    { getState }
+  ) => {
+    const { issueId, selectedCluster } = values;
+    const state: RootState = getState() as RootState;
+    const endpoint = GPT_HISTORY_ENDPOINT.replace(
+      "{cluster_id}",
+      selectedCluster
+    )
+      .replace("{issue_hash}", issueId)
+      .replace("{offset}", state.chat.history.length.toString());
+    store.dispatch(startLoading("history"));
+    const rdata = await raxios.get(endpoint);
+    return rdata.data.payload as {
+      issueId: string;
+      total_count: number;
+      events: ChatQueryEventResponseType[];
+    };
   }
 );
 
@@ -251,6 +304,22 @@ export const chatSlice = createSlice({
     resetChat: (state) => {
       return initialState;
     },
+    startLoading: (
+      state,
+      { payload }: { payload: "event" | "history" | "chat" }
+    ) => {
+      if (payload === "event") state.eventLoading = true;
+      if (payload === "history") state.historyLoading = true;
+      if (payload === "chat") state.chatLoading = true;
+    },
+    stopLoading: (
+      state,
+      { payload }: { payload: "event" | "history" | "chat" }
+    ) => {
+      if (payload === "event") state.eventLoading = false;
+      if (payload === "history") state.historyLoading = false;
+      if (payload === "chat") state.chatLoading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -280,16 +349,16 @@ export const chatSlice = createSlice({
       })
       // queries
       .addCase(fetchQueryResponse.fulfilled, (state, { payload }) => {
-        const { inference, key } = payload;
+        const { key } = payload;
         const query = state.queries.find((q) => q.id === key);
         if (query && query.event.type === CHAT_EVENTS.QUERY) {
-          query.event.response = inference.eventResponse;
+          query.event.response = payload.event.response;
           query.typing = true;
           query.incidentId = state.contextIncident;
         }
       })
       .addCase(fetchQueryResponse.rejected, (state, { payload }) => {
-        console.log("heer");
+        console.log("here");
       })
       // inference
       .addCase(fetchNewInference.fulfilled, (state, { payload }) => {
@@ -297,11 +366,7 @@ export const chatSlice = createSlice({
           (q) => q.event.type === CHAT_EVENTS.INFERENCE
         );
         if (infer && infer.event.type === CHAT_EVENTS.INFERENCE) {
-          infer.event.response = {
-            data: payload.eventResponse as string,
-            anamolies: null,
-            summary: null,
-          };
+          infer.event.response = payload.event.response;
           infer.typing = true;
           infer.incidentId = payload.incidentId;
           infer.issueId = payload.issueId;
@@ -312,7 +377,26 @@ export const chatSlice = createSlice({
         if (payload.event.type === CHAT_EVENTS.CONTEXT_SWITCH) {
           // @ts-expect-error - TS gymnastics
           state.queries.push({ ...payload, id: nanoid(), typing: false });
+          state.contextIncident = payload.event.request.newIncident;
+          state.eventLoading = false;
         }
+      })
+      .addCase(postContextEvent.rejected, (state) => {
+        state.eventLoading = false;
+      })
+      // history
+      .addCase(fetchPastEvents.fulfilled, (state, { payload }) => {
+        const queries = payload.events.map((e) => {
+          return {
+            ...e,
+            id: nanoid(),
+            typing: false,
+          };
+        });
+        state.queries = [...queries, ...state.queries];
+        state.pastEventCount = payload.total_count;
+        state.history = payload.events;
+        state.historyLoading = false;
       });
   },
 });
@@ -326,6 +410,8 @@ export const {
   addQuery,
   stopTyping,
   resetChat,
+  stopLoading,
+  startLoading,
 } = chatSlice.actions;
 
 export const chatSelector = (state: RootState): ChatReduxType => state.chat;

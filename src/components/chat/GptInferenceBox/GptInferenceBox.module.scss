@@ -69,4 +69,6 @@
     padding-top: $sp-base * 3;
     font-size: smaller;
     color:$grey-400;
+    display: flex;
+    justify-content: space-between;
 }

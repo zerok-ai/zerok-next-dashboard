@@ -6,6 +6,7 @@ import { TypeAnimation } from "react-type-animation";
 import { chatSelector, stopTyping } from "redux/chat";
 import { useDispatch, useSelector } from "redux/store";
 import { type ChatInferenceEventType } from "redux/types";
+import { getFormattedTime } from "utils/dateHelpers";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
@@ -17,7 +18,9 @@ interface GptInferenceBoxProps {
 
 const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
   const { queries } = useSelector(chatSelector);
-  const text = query.event.response ? query.event.response.data : null;
+  const text = query.event.response
+    ? query.event.response.summary ?? query.event.response.data
+    : null;
   const router = useRouter();
 
   const queryIndex = queries.findIndex((q) => q.id === query.id);
@@ -51,15 +54,20 @@ const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
             text
           )}
           <div className={styles.footer}>
-            Based on trace -{" "}
-            <Link
-              href={getSpanPageLinkFromIncident(
-                query.incidentId as string,
-                router
-              )}
-            >
-              {query.incidentId}
-            </Link>
+            <span>
+              Based on{" "}
+              <Link
+                href={getSpanPageLinkFromIncident(
+                  query.incidentId as string,
+                  router
+                )}
+              >
+                this request
+              </Link>
+            </span>
+            <span>
+              {query.created_at && getFormattedTime(query.created_at)}
+            </span>
           </div>
         </div>
       ) : (

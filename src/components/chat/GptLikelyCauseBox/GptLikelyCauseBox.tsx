@@ -45,7 +45,7 @@ const GptLikelyCauseBox = () => {
             text
           )}
           <div className={styles.footer}>
-            Based on trace -{" "}
+            Based on request{" "}
             <Link
               href={getSpanPageLinkFromIncident(
                 likelyCause?.incidentId as string,

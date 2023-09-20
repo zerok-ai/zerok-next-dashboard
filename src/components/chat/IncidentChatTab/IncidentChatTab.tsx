@@ -1,19 +1,23 @@
+import { Button } from "@mui/material";
 import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
 import GptInferenceBox from "components/chat/GptInferenceBox";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { AiOutlineHistory } from "react-icons/ai";
 import { HiChevronRight } from "react-icons/hi";
 import {
-  addEvent,
   addInvalidCard,
   chatSelector,
   fetchLikelyCause,
   fetchNewInference,
+  fetchPastEvents,
   fetchQueryResponse,
+  postContextEvent,
 } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
@@ -38,7 +42,15 @@ const IncidentChatTab = () => {
   const router = useRouter();
   const { issue_id: issueId, trace: incidentId } = router.query;
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { likelyCause, queries, contextIncident } = useSelector(chatSelector);
+  const {
+    likelyCause,
+    queries,
+    contextIncident,
+    eventLoading,
+    historyLoading,
+    history,
+    pastEventCount,
+  } = useSelector(chatSelector);
   const [width, setWidth] = useState(550);
   useEffect(() => {
     if (selectedCluster && issueId) {
@@ -50,8 +62,6 @@ const IncidentChatTab = () => {
       );
     }
   }, [selectedCluster]);
-
-  console.log("rerendering chat tab");
 
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
@@ -68,9 +78,10 @@ const IncidentChatTab = () => {
       }
       if (val === `/${CHAT_EVENTS.CONTEXT_SWITCH}`) {
         dispatch(
-          addEvent({
-            type: CHAT_EVENTS.CONTEXT_SWITCH,
-            newIncidentID: incidentId as string,
+          postContextEvent({
+            selectedCluster,
+            issueId: issueId as string,
+            incidentId: incidentId as string,
           })
         );
       } else if (val === `/${CHAT_EVENTS.INFERENCE}`) {
@@ -87,7 +98,6 @@ const IncidentChatTab = () => {
             selectedCluster,
             query: val,
             issueId: issueId as string,
-            incidentId: incidentId as string,
           })
         );
       }
@@ -106,7 +116,27 @@ const IncidentChatTab = () => {
       return (
         <Fragment>
           <div className={styles["text-boxes"]}>
-            <GptLikelyCauseBox />
+            <div className={styles["likely-cause-container"]}>
+              <Button
+                variant="text"
+                color="primary"
+                disabled={
+                  pastEventCount > 0 && history.length === pastEventCount
+                }
+                onClick={() => {
+                  dispatch(
+                    fetchPastEvents({
+                      selectedCluster: selectedCluster as string,
+                      issueId: issueId as string,
+                    })
+                  );
+                }}
+              >
+                <AiOutlineHistory /> Get older conversations
+              </Button>
+              <GptLikelyCauseBox />
+            </div>
+
             {queries.map((qa, idx) => {
               const { type } = qa.event;
               if (type === CHAT_EVENTS.INVALID) {
@@ -121,14 +151,14 @@ const IncidentChatTab = () => {
                 const DisplayText = () => {
                   return (
                     <span>
-                      Chat context changed from{" "}
+                      Chat context changed from the{" "}
                       <Link
                         href={getSpanPageLinkFromIncident(
                           contextIncident!,
                           router
                         )}
                       >
-                        this
+                        old request
                       </Link>{" "}
                       to the{" "}
                       <Link
@@ -202,6 +232,8 @@ const IncidentChatTab = () => {
             <div className={styles["chat-box-container"]}>
               <div className={styles["text-container"]}>
                 {renderChat()}
+                {historyLoading && <CustomSkeleton len={8} />}
+                {eventLoading && <ChatEventCard loading={true} />}
                 <div ref={bottomRef} className={styles.bottom}></div>
               </div>
             </div>

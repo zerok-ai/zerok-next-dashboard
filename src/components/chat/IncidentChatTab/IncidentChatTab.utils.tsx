@@ -104,7 +104,6 @@ export const UserInputField = ({
   }, [userInput]);
 
   const handleCommand = (command: string) => {
-    console.log({ command });
     if (userInput[0] === CHAT_COMMAND_CHARACTER) {
       setUserInput("");
       onSubmit(command);
