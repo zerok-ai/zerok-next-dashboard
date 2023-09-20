@@ -1,11 +1,18 @@
+import { Skeleton } from "@mui/material";
+
 import styles from "./ChatEventCard.module.scss";
 
 interface ChatEventCardProps {
   render?: () => React.ReactElement;
   text?: string;
+  loading?: boolean;
 }
 
-const ChatEventCard = ({ text, render }: ChatEventCardProps) => {
+const ChatEventCard = ({
+  text,
+  render,
+  loading = false,
+}: ChatEventCardProps) => {
   return (
     <div className={styles["chat-event-card"]}>
       <div className={styles["chat-event-icon"]}>
@@ -16,6 +23,7 @@ const ChatEventCard = ({ text, render }: ChatEventCardProps) => {
       </div>
       {text && <p className={styles["chat-event-text"]}>{text}</p>}
       {render && render()}
+      {loading && <Skeleton variant="rectangular" width={"100%"} height={20} />}
     </div>
   );
 };

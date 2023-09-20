@@ -26,7 +26,7 @@ const ResizableChatBox = ({
         height: "100%",
       }}
       minWidth={minimized ? "64px" : "400px"}
-      maxWidth={"900px"}
+      maxWidth={"1200px"}
       enable={{
         top: false,
         right: true,

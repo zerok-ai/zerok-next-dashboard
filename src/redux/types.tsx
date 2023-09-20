@@ -57,6 +57,7 @@ export interface ChatEventBaseType {
   issueId: string | null;
   loading: boolean;
   typing: boolean;
+  created_at?: string;
 }
 
 export interface ChatQueryEventType extends ChatEventBaseType {
@@ -122,5 +123,10 @@ export interface ChatReduxType {
   error: boolean;
   contextIncident: string | null;
   likelyCause: null | ChatLikelyCauseType;
+  history: ChatEventType[];
   queries: ChatEventType[];
+  eventLoading: boolean;
+  chatLoading: boolean;
+  historyLoading: boolean;
+  pastEventCount: number;
 }

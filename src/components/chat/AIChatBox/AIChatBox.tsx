@@ -7,6 +7,7 @@ import { TypeAnimation } from "react-type-animation";
 import { chatSelector, stopTyping } from "redux/chat";
 import { useDispatch, useSelector } from "redux/store";
 import { type ChatQueryEventType } from "redux/types";
+import { getFormattedTime } from "utils/dateHelpers";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
@@ -60,10 +61,17 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
             text
           )}
           <div className={styles.footer}>
-            Based on trace -{" "}
-            <Link href={getSpanPageLinkFromIncident(query.incidentId!, router)}>
-              {query.incidentId}
-            </Link>
+            <span>
+              Based on{" "}
+              <Link
+                href={getSpanPageLinkFromIncident(query.incidentId!, router)}
+              >
+                this request
+              </Link>
+            </span>
+            <span>
+              {query.created_at && getFormattedTime(query.created_at)}
+            </span>
           </div>
           <div ref={bottomRef}></div>
         </div>

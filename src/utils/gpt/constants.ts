@@ -33,3 +33,5 @@ export const CHAT_COMMANDS: ChatCommandType[] = [
     value: `/${CHAT_EVENTS.INFERENCE}`,
   },
 ];
+
+export const GPT_PAST_EVENT_PAGE_COUNT = 20;
