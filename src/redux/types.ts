@@ -32,6 +32,7 @@ export interface ClusterReduxType {
   status: string;
   selectedCluster: null | string;
   renderTrigger: string;
+  isClusterModalOpen: boolean;
 }
 
 export interface IncidentIDReduxType {

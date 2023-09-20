@@ -4,6 +4,8 @@ import ChipX from "components/themeX/ChipX";
 import { useRouter } from "next/router";
 import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineCog6Tooth } from "react-icons/hi2";
+import { openClusterModal } from "redux/cluster";
+import { useDispatch } from "redux/store";
 import { type IntegrationListType } from "utils/integrations/types";
 
 import styles from "./IntegrationCard.module.scss";
@@ -13,7 +15,9 @@ interface IntegrationCardProps {
 }
 
 const IntegrationCard = ({ integration }: IntegrationCardProps) => {
-  const { name, label, logo, description, integrated } = integration;
+  const { name, label, logo, description, integrated, triggerClusterModal } =
+    integration;
+  const dispatch = useDispatch();
   const router = useRouter();
   const ChipLabel = () => {
     return (
@@ -70,7 +74,11 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
               // size="small"
               className={styles["action-button"]}
               onClick={() => {
-                handleRoute("create");
+                if (!triggerClusterModal) {
+                  handleRoute("create");
+                } else {
+                  dispatch(openClusterModal());
+                }
               }}
             >
               <HiOutlinePlus className={styles["action-icon"]} />

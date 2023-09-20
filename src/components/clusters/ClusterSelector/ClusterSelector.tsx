@@ -7,6 +7,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import {
   clusterSelector,
   getClusters,
+  openClusterModal,
   setSelectedCluster,
   triggerRefetch,
 } from "redux/cluster";
@@ -21,7 +22,6 @@ const ClusterSelector = () => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const clusterSlice = useSelector(clusterSelector);
   const { clusters, selectedCluster, empty, status, loading } = clusterSlice;
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -39,7 +39,7 @@ const ClusterSelector = () => {
 
   useEffect(() => {
     if (empty && CLUSTER_BLOCKED_ROUTES.includes(router.pathname)) {
-      setIsModalVisible(true);
+      dispatch(openClusterModal());
     }
   }, [empty]);
 
@@ -49,14 +49,6 @@ const ClusterSelector = () => {
     }
     setIsDefaultOpen(false);
   }, [status]);
-
-  const toggleModal = () => {
-    setIsModalVisible((old) => !old);
-  };
-
-  const handleModalClose = () => {
-    setIsModalVisible(false);
-  };
 
   const refreshClusters = () => {
     dispatch(getClusters());
@@ -130,7 +122,9 @@ const ClusterSelector = () => {
         <Divider />
         <MenuItem
           className={styles["new-cluster-item"]}
-          onClick={toggleModal}
+          onClick={() => {
+            dispatch(openClusterModal());
+          }}
           value={""}
         >
           {" "}
@@ -140,7 +134,7 @@ const ClusterSelector = () => {
       </Select>
 
       {/* Modal */}
-      <ClusterCreateModal isOpen={isModalVisible} onClose={handleModalClose} />
+      <ClusterCreateModal />
     </div>
   );
 };

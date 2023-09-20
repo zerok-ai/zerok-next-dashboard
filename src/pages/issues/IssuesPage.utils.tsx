@@ -20,7 +20,7 @@ export const getIssueColumns = () => {
       cell: (info) => {
         const { issue_title, issue_hash, scenario_id } = info.row.original;
 
-        const title = trimString(getTitleFromIssue(issue_title), 120);
+        const title = trimString(getTitleFromIssue(issue_title), 100);
         return (
           <div className={styles["issue-container"]}>
             <div>
