@@ -33,7 +33,6 @@ export interface ClusterReduxType {
   clusters: ClusterType[];
   status: string;
   selectedCluster: null | string;
-  renderTrigger: string;
   isClusterModalOpen: boolean;
 }
 

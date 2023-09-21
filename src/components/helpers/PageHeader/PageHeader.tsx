@@ -17,6 +17,7 @@ interface PageHeaderProps {
   rightExtras?: React.ReactNode[];
   htmlTitle?: string;
   loading?: boolean;
+  onRefresh?: () => void;
 }
 
 const PageHeader = ({
@@ -28,6 +29,7 @@ const PageHeader = ({
   bottomRow,
   htmlTitle,
   loading,
+  onRefresh,
   showBreadcrumb = false,
 }: PageHeaderProps) => {
   const checkForExtras = () => {
@@ -55,7 +57,7 @@ const PageHeader = ({
           <div className={styles["top-row-extras"]}>
             <div className={cx(styles["left-extras"])}>
               {showRange && <TimeSelector />}
-              {showRefresh && <ClusterRefreshButton />}
+              {showRefresh && <ClusterRefreshButton onRefresh={onRefresh} />}
               {leftExtras &&
                 leftExtras.map((ex) => {
                   return ex;

@@ -38,7 +38,7 @@ const DEFAULT_SORT: ColumnSort = {
 
 const TraceTable = () => {
   const router = useRouter();
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const { selectedCluster } = useSelector(clusterSelector);
   const scenario = router.query.issue;
   const issue_id = router.query.issue_id;
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
@@ -66,7 +66,7 @@ const TraceTable = () => {
         .replace("{range}", range);
       fetchTraces(endpoint);
     }
-  }, [selectedCluster, renderTrigger, router.query]);
+  }, [selectedCluster, router.query]);
 
   const columns = getTraceColumns(likelyCause?.incidentId as string);
   return (

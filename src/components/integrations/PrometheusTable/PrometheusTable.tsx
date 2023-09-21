@@ -7,6 +7,7 @@ import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
 import { useFetch } from "hooks/useFetch";
+import { useTrigger } from "hooks/useTrigger";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -32,8 +33,9 @@ const DEFAULT_SORT = {
 const PrometheusTable = () => {
   const { data, fetchData, error, setData } =
     useFetch<PrometheusListType[]>("integrations");
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const { selectedCluster } = useSelector(clusterSelector);
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
+  const { trigger, changeTrigger } = useTrigger();
   const [selectedIntegration, setSelectedIntegration] = useState<{
     id: string;
     action: "disable" | "delete";
@@ -60,7 +62,7 @@ const PrometheusTable = () => {
     if (error) {
       setSelectedIntegration(null);
     }
-  }, [selectedCluster, renderTrigger, error]);
+  }, [selectedCluster, trigger, error]);
   const helper = createColumnHelper<PrometheusListType>();
   const columns = [
     helper.accessor("alias", {
@@ -257,6 +259,7 @@ const PrometheusTable = () => {
         showRange={false}
         showRefresh={true}
         showBreadcrumb={true}
+        onRefresh={changeTrigger}
         leftExtras={[
           <TableFilter
             sortBy={sortBy[0]}

@@ -15,16 +15,17 @@ import styles from "./HealthCards.module.scss";
 
 interface HealthCardProps {
   filter: string;
+  trigger: string;
 }
 
-const HealthCards = ({ filter }: HealthCardProps) => {
+const HealthCards = ({ filter, trigger }: HealthCardProps) => {
   const {
     data: services,
     fetchData: fetchServices,
     loading,
     error,
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const { selectedCluster } = useSelector(clusterSelector);
 
   const router = useRouter();
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
@@ -38,7 +39,7 @@ const HealthCards = ({ filter }: HealthCardProps) => {
         )
       );
     }
-  }, [selectedCluster, renderTrigger]);
+  }, [selectedCluster, trigger]);
 
   const skeletons = new Array(8).fill("skeleton");
 

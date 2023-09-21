@@ -18,13 +18,6 @@ const GptLikelyCauseBox = () => {
   const dispatch = useDispatch();
   return (
     <div className={styles.container}>
-      <div className={styles["meta-container"]}>
-        {likelyCause?.incidentId && (
-          <small className={styles["meta-incident-link"]}>
-            {likelyCause?.incidentId}
-          </small>
-        )}
-      </div>
       <div className={styles["likely-cause-box"]}>
         <div className={styles.header}>
           <div className={styles["chatbox-logo"]}>
