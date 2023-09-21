@@ -13,15 +13,15 @@ import UserProfilePicture from "components/users/UserProfilePicture";
 // hooks
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
+import { useTrigger } from "hooks/useTrigger";
 // next
 import Head from "next/head";
 // react
 import { useEffect, useState } from "react";
 // react-icons
 import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
-import { clusterSelector } from "redux/cluster";
 import { showSnackbar } from "redux/snackbar";
-import { useDispatch, useSelector } from "redux/store";
+import { useDispatch } from "redux/store";
 // utils
 import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
@@ -37,7 +37,7 @@ const Users = () => {
     GET_USERS_ENDPOINT
   );
 
-  const { renderTrigger } = useSelector(clusterSelector);
+  const { trigger, changeTrigger } = useTrigger();
 
   const dispatch = useDispatch();
 
@@ -53,7 +53,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchData(GET_USERS_ENDPOINT);
-  }, [renderTrigger]);
+  }, [trigger]);
 
   const deleteUser = async () => {
     const endpoint = GET_USERS_ENDPOINT + `/${deletingUser!.id}`;
@@ -212,6 +212,7 @@ const Users = () => {
         title="Users"
         showRange={false}
         showRefresh={true}
+        onRefresh={changeTrigger}
         rightExtras={[<AddUserButton key={"add-btn"} />]}
       />
       <div className={styles["table-container"]}>

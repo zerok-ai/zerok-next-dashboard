@@ -192,11 +192,7 @@ const IncidentChatTab = () => {
                   </Fragment>
                 );
               }
-              return (
-                <Fragment key={"some"}>
-                  <span></span>
-                </Fragment>
-              );
+              return null;
             })}
           </div>
         </Fragment>

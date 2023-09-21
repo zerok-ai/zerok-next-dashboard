@@ -1,19 +1,23 @@
 import { IconButton } from "@mui/material";
 import TooltipX from "components/themeX/TooltipX";
-import { triggerRefetch } from "redux/cluster";
-import { useDispatch } from "redux/store";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./ClusterRefreshButton.module.scss";
 
-const ClusterRefreshButton = () => {
-  const dispatch = useDispatch();
+interface ClusterRefreshButtonProps {
+  onRefresh?: () => void;
+}
+
+const ClusterRefreshButton = ({ onRefresh }: ClusterRefreshButtonProps) => {
   return (
     <TooltipX title="Refresh data">
       <IconButton
         className={styles.container}
         size="large"
-        onClick={async () => dispatch(triggerRefetch())}
+        onClick={() => {
+          // dispatch(triggerRefetch());
+          onRefresh && onRefresh();
+        }}
       >
         <img src={`${ICON_BASE_PATH}/${ICONS.refresh}`} alt="refresh" />
       </IconButton>

@@ -44,10 +44,15 @@ const formatServiceMapData = (smap: ServiceMapDetail[]) => {
 interface ServiceMapPage {
   isFilterOpen: boolean;
   toggleDrawer: () => void;
+  trigger: string;
 }
 
-const ServiceMap = ({ isFilterOpen, toggleDrawer }: ServiceMapPage) => {
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+const ServiceMap = ({
+  isFilterOpen,
+  toggleDrawer,
+  trigger,
+}: ServiceMapPage) => {
+  const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
   const { data, fetchData, setData, error } = useFetch<ServiceMapDetail[]>(
     "results",
@@ -69,7 +74,7 @@ const ServiceMap = ({ isFilterOpen, toggleDrawer }: ServiceMapPage) => {
           params
       );
     }
-  }, [selectedCluster, router, renderTrigger]);
+  }, [selectedCluster, router, trigger]);
 
   return (
     <div className={styles.container}>
