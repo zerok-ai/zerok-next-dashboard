@@ -121,7 +121,7 @@ const IncidentChatTab = () => {
                 variant="text"
                 color="primary"
                 disabled={
-                  pastEventCount > 0 && history.length === pastEventCount
+                  pastEventCount !== null && history.length === pastEventCount
                 }
                 onClick={() => {
                   dispatch(

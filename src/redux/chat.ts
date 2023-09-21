@@ -22,7 +22,7 @@ const initialState: ChatReduxType = {
   eventLoading: false,
   chatLoading: false,
   historyLoading: false,
-  pastEventCount: 0,
+  pastEventCount: null,
 };
 
 interface ChatEventActionType {
