@@ -4,18 +4,18 @@
     display: flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom: $sp-base * 6;
+    margin-bottom: $sp-xxl;
 }
 .key-button {
     @include button-icon;
 }
 .key-icon {
-    font-size: $sp-base * 4;
+    font-size: $sp-lg;
 }
 
 .api-icons-container {
   display: flex;
-  column-gap: $sp-base * 4;
+  column-gap: $sp-lg;
 }
 
 .delete-button {

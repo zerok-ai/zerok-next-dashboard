@@ -4,11 +4,11 @@
   width: fit-content;
   height:fit-content;
   background-color: $grey-900;
-  border-radius: $sp-base * 2;
+  border-radius: $sp-sm;
 }
 
 .modal-content {
-  padding: $sp-base * 4 $sp-base * 6;
+  padding: $sp-lg $sp-xxl;
 }
 
 .modal {
@@ -20,7 +20,7 @@
 .modal-header {
   display: flex;
   justify-content: space-between;
-  padding: $sp-base * 4 $sp-base * 6;
+  padding: $sp-lg $sp-xxl;
   border-bottom: 1px solid $grey-700;
   align-items: center;
 }

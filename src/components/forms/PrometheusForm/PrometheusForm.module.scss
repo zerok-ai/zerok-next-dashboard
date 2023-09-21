@@ -3,11 +3,11 @@
     width:1040px;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 6;
+    row-gap: $sp-xxl;
 }
 
 .divider {
-    margin:$sp-base * 2 0;
+    margin:$sp-sm 0;
     border:1px solid $grey-900;
 }
 
@@ -36,7 +36,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding:0 $sp-base * 2;
+        padding:0 $sp-sm;
         color:$grey-200;
         font-size: $font-md;
     }
@@ -58,7 +58,7 @@
 .form-group-container {
     display: grid;
     grid-template-columns: 450px 450px;
-    grid-gap: $sp-base * 6;
+    grid-gap: $sp-xxl;
 }
 
 .form-group-horizontal {
@@ -87,5 +87,5 @@
 
 .radio-group {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }

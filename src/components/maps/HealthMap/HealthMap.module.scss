@@ -3,23 +3,23 @@
 .container {
     width:100%;
     height:100%;
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
 }
 
 .skeleton-container {
     height:100%;
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
 }
 
 .react-flow {
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
 }
 
 .selected-service {
     position: absolute;
     z-index:1000;
     background-color: $grey-900;
-    border-radius: 2 * $sp-base;
+    border-radius: $sp-sm;
     width:300px;
     opacity: 1;
 }
@@ -33,10 +33,10 @@
     border:1px solid $grey-600;
     background-color: $grey-900;
     border-radius: $sp-base;
-    padding:$sp-base * 4 $sp-base * 4;
+    padding:$sp-lg $sp-lg;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 5;
+    row-gap: $sp-xl;
     position: relative;
     a {
        width: fit-content;
@@ -55,8 +55,8 @@
 .service-card-items {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    column-gap: $sp-base * 4;
-    row-gap: $sp-base * 3;
+    column-gap: $sp-lg;
+    row-gap: $sp-md;
 }
 
 
@@ -69,7 +69,7 @@
 
 .status-icon {
   position: absolute;  
-  right:$sp-base * 2;
+  right:$sp-sm;
   top:- $sp-base;
 }
 
@@ -81,7 +81,7 @@
 .healthy-status-connected-icon {
   @include icon-xs;
   background-color: $white;
-  border-radius: $sp-base * 5; 
+  border-radius: $sp-xl; 
 }
 
 .healthy-status-green-dot-icon {
