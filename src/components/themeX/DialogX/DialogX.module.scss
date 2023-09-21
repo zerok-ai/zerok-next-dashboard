@@ -4,7 +4,7 @@
         min-width: 600px;
         background-color: $grey-925;
         border:1px solid $grey-900;
-        border-radius: $sp-base * 2;
+        border-radius: $sp-sm;
       }
   :global(.MuiDialog-paper){
     background-image: none;
@@ -14,11 +14,11 @@
 
 .dialog-content {
     border-top: 1px solid $grey-500;
-    padding: $sp-base * 4 $sp-base * 6;
+    padding: $sp-lg $sp-xxl;
     color: $grey-50;
   }
 .dialog-actions {
-  padding-bottom: $sp-base * 4;;
+  padding-bottom: $sp-lg;;
 }
 
 .title {

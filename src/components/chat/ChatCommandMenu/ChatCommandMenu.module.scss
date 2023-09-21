@@ -23,7 +23,7 @@
 
 .command-container {
     display: flex;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-lg;
     align-items: center;
     p,div,span {
         color:$grey-50;

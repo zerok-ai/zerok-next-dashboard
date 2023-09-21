@@ -1,9 +1,9 @@
 @import "styles/variables.module.scss";
 .container {
 
-    padding:$sp-base $sp-base * 2;
+    padding:$sp-base $sp-sm;
     border-radius: $sp-base;
-    min-height: $sp-base * 8;
+    min-height: $sp-32;
     position: relative;
     .code {
         width:90%;
@@ -16,7 +16,7 @@
     code {
         display: flex;
        
-        justify-content:space-between;column-gap: $sp-base * 2;
+        justify-content:space-between;column-gap: $sp-sm;
     }
     pre {
         overflow-x: auto;

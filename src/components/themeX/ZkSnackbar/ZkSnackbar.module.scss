@@ -2,12 +2,12 @@
 .container {
     box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.56), 0px 24px 24px -6px rgba(0, 0, 0, 0.64);
     :global(.MuiPaper-root){
-        bottom: - $sp-base * 4;
+        bottom: - $sp-lg;
         background-color: $grey-800;
         color:$grey-25;
-        border-radius: $sp-base * 2;
+        border-radius: $sp-sm;
         width:360px;
-        padding: 4 * $sp-base;
+        padding: $sp-md;
         div,p {
         font-size: $font-md;
         line-height: $default-line-height;
@@ -24,7 +24,7 @@
 .message {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     > img {
         width:24px;
         height:24px;

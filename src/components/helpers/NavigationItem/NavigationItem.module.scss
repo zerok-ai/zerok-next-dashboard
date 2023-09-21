@@ -7,9 +7,9 @@
 }
 .nav-item {
     display: flex;
-    padding: $sp-xs * 2.5 $sp-xs * 5;
+    padding: $sp-md $sp-xl;
     align-items: center;
-    column-gap: $sp-xs * 2.5;
+    column-gap: $sp-md;
     transition: all 0.2s ease;
     cursor: pointer;
     &:hover {
@@ -64,7 +64,7 @@
 
 .group-item {
     cursor: pointer;
-    padding:$sp-base * 3 $sp-base * 16;
+    padding:$sp-md $sp-base * 16;
     &:hover {
         background-color: $grey-900;
     }

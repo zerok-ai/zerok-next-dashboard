@@ -1,11 +1,11 @@
 @import "styles/variables.module.scss";
 .container {
     position: absolute;
-    bottom:$sp-base * 7;
+    bottom:$sp-xxxl;
     left:50%;
     transform: translateX(-50%);
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     align-items: center;
     :global(.Mui-disabled){
         color:$grey-500 !important;
@@ -29,7 +29,7 @@
 }
 
 .next-prev-btns {
-    padding:$sp-base $sp-base * 4;
+    padding:$sp-base $sp-lg;
     color:$grey-200;
     &:hover {
         color:$primary-500;

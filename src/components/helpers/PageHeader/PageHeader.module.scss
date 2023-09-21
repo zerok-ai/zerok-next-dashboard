@@ -7,13 +7,13 @@
 
 .top-row {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
     align-items: center;
     width:100%;
     justify-content: flex-start;
     h3 {
         color:$white;
-        margin-right: $sp-base * 2;
+        margin-right: $sp-sm;
         // flex:1;
         width:fit-content;
     }
@@ -22,29 +22,29 @@
 .top-row-extras {
     flex:1;
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
     align-items: center;
     justify-content: space-between;
 }
 
 .left-extras, .right-extras {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
     align-items: center;
 }
 
 .bottom-row {
-    margin-bottom: $sp-base * 5;
+    margin-bottom: $sp-xl;
 }
 
 .extras {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
     align-items: center;
 }
 
 .top-row-actions {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
     align-items: center;
 }

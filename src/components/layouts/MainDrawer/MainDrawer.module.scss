@@ -10,7 +10,7 @@
 .logo-container {
   width: 100%;
   // height:70px;
-  padding: 4 * $sp-base;
+  padding: $sp-lg;
 
   > img {
     width: auto;
@@ -19,8 +19,8 @@
 }
 
 .navigation-container {
-  padding-top: 2 * $sp-base;
+  padding-top: $sp-sm;
   display: flex;
   flex-direction: column;
-  row-gap: $sp-base * 2;
+  row-gap: $sp-sm;
 }

@@ -2,9 +2,9 @@
 .container {
     background-color: $bg-dark;
     border:1px solid $grey-800;
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
     width: 400px;
-    padding:$sp-base * 4;
+    padding:$sp-lg;
     background-color: $grey-925;
     display: flex;
     flex-direction: column;
@@ -24,7 +24,7 @@
 }
 
 .content {
-    padding:$sp-base * 2;
+    padding:$sp-sm;
     flex:1;
     display: flex;
     flex-direction: column;
@@ -49,15 +49,15 @@
 }
 
 .actions {
-    margin-top: $sp-base * 8;
+    margin-top: $sp-32;
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }
 
 .action-button {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     font-size: $font-md;
 }
 
@@ -68,7 +68,7 @@
 .chip-label {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     font-size: $font-sm;
 }
 

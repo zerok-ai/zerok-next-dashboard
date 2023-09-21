@@ -3,14 +3,14 @@
     display: flex;
     border-radius: $sp-base;
     border:1px solid $grey-900;
-    padding:$sp-base * 5;
-    column-gap: $sp-base * 5;
+    padding:$sp-xl;
+    column-gap: $sp-xl;
     h6 {
         color:$grey-100;
         
     }
     @media screen and (max-width: ($bp-desktop)) {
-        padding:$sp-base * 3;
+        padding:$sp-md;
     }
 }
 
@@ -44,7 +44,7 @@
 
 .skeleton-container {
     display: flex;
-    row-gap: $sp-base * 3;
+    row-gap: $sp-md;
     flex-direction: column;
     width:100%;
 }
@@ -56,8 +56,8 @@
 
 .footer {
     border-top: 1px solid $grey-800;
-    margin-top: $sp-base * 3;
-    padding-top: $sp-base * 3;
+    margin-top: $sp-md;
+    padding-top: $sp-md;
     font-size: smaller;
     color:$grey-400;
     display: flex;

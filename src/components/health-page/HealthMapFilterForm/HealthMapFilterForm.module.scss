@@ -6,17 +6,17 @@
     height:100%;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 2;
+    row-gap: $sp-sm;
 }
 
 .form-search-container {
-    padding:$sp-base * 5;
+    padding:$sp-xl;
 }
 
 .form-group-title {
     background-color: $grey-700;
     color:$grey-50;
-    padding:$sp-base $sp-base * 5;
+    padding:$sp-base $sp-xl;
     line-height: $default-line-height;
 }
 
@@ -28,9 +28,9 @@
 
 .form-group-item {
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     align-items: center;
-    padding: $sp-base * 2 $sp-base * 3;
+    padding: $sp-sm $sp-md;
     color:$grey-25;
     cursor: pointer;
     &:hover {
@@ -43,14 +43,14 @@
 }
 
 .form-actions {
-    margin-bottom: $sp-base * 5;
-    padding:0 $sp-base * 5;
+    margin-bottom: $sp-xl;
+    padding:0 $sp-xl;
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
 }
 
 .empty-text {
-    padding:$sp-base * 4 $sp-base * 5;
+    padding:$sp-lg $sp-xl;
 }
 
 .clear-btn {

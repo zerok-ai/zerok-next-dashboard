@@ -4,16 +4,16 @@
 .services-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    column-gap: $sp-base * 5;
-    row-gap: $sp-base * 7;
+    column-gap: $sp-xl;
+    row-gap: $sp-xxxl;
 
 }
 
 .skeleton-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    column-gap: $sp-base * 5;
-    row-gap: $sp-base * 7;
+    column-gap: $sp-xl;
+    row-gap: $sp-xxxl;
     width:100%;
 }
 .skeleton {
@@ -23,7 +23,7 @@
 
 @media only screen and (max-width: $bp-desktop) {
     .services-container {
-        padding:0 $sp-base * 5;
+        padding:0 $sp-xl;
         grid-template-columns: 1fr 1fr 1fr;
     }
     .skeleton-container {

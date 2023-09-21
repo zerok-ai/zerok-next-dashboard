@@ -1,13 +1,13 @@
 @import "styles/variables.module.scss";
 .map-controls {
     display: flex;
-    column-gap: $sp-base * 2;
-    right:$sp-base * 4;
-    top:$sp-base * 2;
+    column-gap: $sp-sm;
+    right:$sp-lg;
+    top:$sp-sm;
     position: absolute;
     button {
-        width:$sp-base * 6;
-        height:$sp-base * 6;
+        width:$sp-xxl;
+        height:$sp-xxl;
         background-color: $grey-900;
         border:1px solid $grey-600;
         border-radius: $sp-base;
