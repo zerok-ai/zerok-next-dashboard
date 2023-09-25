@@ -10,6 +10,7 @@ import { nanoid } from "nanoid";
 import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
+import { type AttributeStateType } from "utils/probes/types";
 import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
@@ -34,6 +35,7 @@ interface ConditionCardProps {
   form: UseFormReturn<ProbeFormType, any, undefined>;
   loadingServices: boolean;
   currentCardKey: string;
+  attributes: AttributeStateType | null;
 }
 
 const ConditionCard = ({
@@ -42,6 +44,7 @@ const ConditionCard = ({
   services,
   form,
   currentCardKey,
+  attributes,
 }: ConditionCardProps) => {
   const {
     setValue,
@@ -191,6 +194,14 @@ const ConditionCard = ({
             return property?.options ?? [];
           };
           const errors = getConditionErrors(index);
+          const attributeOptions = attributes
+            ? attributes.http
+                .map((at) => {
+                  return [...at.attribute_list];
+                })
+                .flat()
+            : [];
+          console.log({ attributeOptions });
           return (
             <div
               className={cx(
@@ -227,7 +238,7 @@ const ConditionCard = ({
                     updateProperty(index, value.target.value);
                   }}
                 >
-                  {properties.map((prt) => {
+                  {/* {properties.map((prt) => {
                     if (prt.groupByOnly) {
                       return null;
                     }
@@ -238,6 +249,13 @@ const ConditionCard = ({
                         key={nanoid()}
                       >
                         {prt.label}
+                      </MenuItem>
+                    );
+                  })} */}
+                  {attributeOptions.map((at) => {
+                    return (
+                      <MenuItem value={at.id} key={at.id}>
+                        {at.field}
                       </MenuItem>
                     );
                   })}

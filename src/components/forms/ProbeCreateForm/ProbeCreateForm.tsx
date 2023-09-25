@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiOutlinePlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
@@ -17,6 +17,12 @@ import {
   getFormattedServiceName,
   getNamespace,
 } from "utils/functions";
+import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
+import { PROBE_ATTRIBUTES_ENDPOINT } from "utils/probes/endpoints";
+import {
+  type AttributeResponseType,
+  type AttributeStateType,
+} from "utils/probes/types";
 import raxios from "utils/raxios";
 import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
 // import raxios from "utils/raxios";
@@ -118,6 +124,47 @@ const ProbeCreateForm = () => {
   } = useFetch<ServiceDetail[]>("results", null, filterServices);
   const dispatch = useDispatch();
   const router = useRouter();
+  const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
+
+  const fetchAttributesForProtocol = async (
+    protocol: (typeof ATTRIBUTE_PROTOCOLS)[number]
+  ) => {
+    if (!selectedCluster) return;
+    if (attributes && attributes[protocol]) return;
+    try {
+      const endpoint = PROBE_ATTRIBUTES_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster
+      ).replace("{protocol}", protocol);
+      const res = await raxios.get(endpoint);
+      const attrList: AttributeResponseType =
+        res.data.payload.attributes_list[0];
+      attrList.attribute_details = attrList.attribute_details.map((attr) => {
+        attr.attribute_list = attr.attribute_list.filter((a) => {
+          return a.field && a.input && a.id;
+        });
+        return attr;
+      });
+      attrList.attribute_details = attrList.attribute_details.map((attr) => {
+        attr.attribute_list = attr.attribute_list.map((a) => {
+          return { ...a, executor: attr.executor };
+        });
+        return attr;
+      });
+      const attrMap: AttributeStateType = {
+        [protocol]: attrList.attribute_details,
+      };
+      setAttributes((prev) => ({ ...prev, ...attrMap }));
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  useEffect(() => {
+    if (selectedCluster) {
+      fetchAttributesForProtocol("http");
+    }
+  }, [selectedCluster]);
 
   useEffect(() => {
     if (selectedCluster) {
@@ -199,6 +246,7 @@ const ProbeCreateForm = () => {
               key={c.key}
               currentCardKey={c.key}
               services={formattedServices}
+              attributes={attributes}
             />
           );
         })}
