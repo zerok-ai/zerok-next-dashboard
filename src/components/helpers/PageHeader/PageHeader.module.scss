@@ -1,4 +1,5 @@
 @import "styles/variables.module.scss";
+@import "styles/mixins.scss";
 .container {
     display: flex;
     flex-direction: column;
@@ -6,9 +7,7 @@
 }
 
 .top-row {
-    display: flex;
-    column-gap: $sp-md;
-    align-items: center;
+    @include flex-center-md;
     width:100%;
     justify-content: flex-start;
     h3 {
@@ -21,30 +20,14 @@
 
 .top-row-extras {
     flex:1;
-    display: flex;
-    column-gap: $sp-md;
-    align-items: center;
+    @include flex-center-md;
     justify-content: space-between;
 }
 
-.left-extras, .right-extras {
-    display: flex;
-    column-gap: $sp-md;
-    align-items: center;
+.left-extras, .right-extras, .extras, .top-row-actions {
+   @include flex-center-md;
 }
 
 .bottom-row {
     margin-bottom: $sp-xl;
-}
-
-.extras {
-    display: flex;
-    column-gap: $sp-md;
-    align-items: center;
-}
-
-.top-row-actions {
-    display: flex;
-    column-gap: $sp-md;
-    align-items: center;
 }
