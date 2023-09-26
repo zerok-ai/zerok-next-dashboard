@@ -98,6 +98,7 @@ const ProbeCreateForm = () => {
           service: null,
           property: "",
           protocol: "",
+          executor: "",
         },
       ],
       name: "",
@@ -198,22 +199,25 @@ const ProbeCreateForm = () => {
 
   const { cards, groupBy, sampling } = watch();
   const onSubmit = async () => {
-    setStatus({
-      loading: true,
-      error: null,
-    });
-    const body = buildProbeBody(cards, getValues("name"), groupBy, sampling);
-    const endpoint = CREATE_PROBE_ENDPOINT.replace(
-      "{cluster_id}",
-      selectedCluster as string
-    );
     try {
-      await raxios.post(endpoint, body);
+      setStatus({
+        loading: true,
+        error: null,
+      });
+      const body = buildProbeBody(cards, getValues("name"), groupBy, sampling);
+      const endpoint = CREATE_PROBE_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster as string
+      );
+
+      console.log({ body, endpoint, router });
+
+      // await raxios.post(endpoint, body);
       setStatus({
         loading: false,
         error: null,
       });
-      router.push("/probes");
+      // router.push("/probes");
       dispatch(
         showSnackbar({
           message: "Probe created successfully",

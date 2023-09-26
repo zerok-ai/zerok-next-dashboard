@@ -1,5 +1,4 @@
 import { nanoid } from "nanoid";
-import { HTTP_METHODS } from "utils/constants";
 import {
   type ATTRIBUTE_EXECUTORS,
   type ATTRIBUTE_PROTOCOLS,
@@ -21,6 +20,7 @@ export interface GroupByType {
   property: string;
   key: string;
   protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
+  executor: (typeof ATTRIBUTE_EXECUTORS)[number] | "";
 }
 export interface ConditionRowType {
   property: string;
@@ -38,58 +38,6 @@ export interface ConditionCardType {
   key: string;
 }
 
-export const PROBE_TIME_RANGES = [
-  {
-    label: "1 hour",
-    value: "-1h",
-  },
-  {
-    label: "3 hours",
-    value: "-3h",
-  },
-  {
-    label: "6 hours",
-    value: "-6h",
-  },
-  {
-    label: "12 hours",
-    value: "-12h",
-  },
-  {
-    label: "24 hours",
-    value: "-24h",
-  },
-  {
-    label: "3 days",
-    value: "-3d",
-  },
-  {
-    label: "1 week",
-    value: "-7d",
-  },
-];
-
-export const HTTP_OPTIONS = HTTP_METHODS.map((m) => ({ label: m, value: m }));
-
-export const MYSQL_OPTIONS = [
-  {
-    label: "SELECT",
-    value: "SELECT",
-  },
-  {
-    label: "INSERT",
-    value: "INSERT",
-  },
-  {
-    label: "UPDATE",
-    value: "UPDATE",
-  },
-  {
-    label: "DELETE",
-    value: "DELETE",
-  },
-];
-
 export interface ProbePropertyType {
   label: string;
   value: string;
@@ -98,91 +46,6 @@ export interface ProbePropertyType {
   helpText?: string;
   groupByOnly?: boolean;
 }
-
-export const HTTP_PROPERTIES: ProbePropertyType[] = [
-  {
-    label: "Latency",
-    value: "latency",
-    type: "integer",
-    helpText: "Latency of the service in milliseconds",
-  },
-  {
-    label: "Source service",
-    value: "source",
-    type: "select",
-    helpText: "Service that initiated the request",
-  },
-  {
-    label: "Destination service",
-    value: "destination",
-    type: "select",
-    helpText: "Service that received the request",
-    groupByOnly: true,
-  },
-  {
-    label: "Request payload size",
-    value: "req_body_size",
-    type: "integer",
-    helpText: "Size of the request payload in bytes",
-  },
-  {
-    label: "Response payload size",
-    value: "resp_body_size",
-    type: "integer",
-    helpText: "Size of the response payload in bytes",
-  },
-  {
-    label: "Request method",
-    value: "req_method",
-    type: "select",
-    options: HTTP_OPTIONS,
-    helpText: "HTTP method of the request",
-  },
-  {
-    label: "Request path",
-    value: "req_path",
-    type: "string",
-    helpText: "Path of the request",
-  },
-  {
-    label: "Response status",
-    value: "resp_status",
-    type: "integer",
-    helpText: "HTTP status code of the response",
-  },
-];
-
-export const SQL_PROPERTIES: ProbePropertyType[] = [
-  {
-    label: "Latency",
-    value: "latency",
-    type: "integer",
-    helpText: "Latency of the service in milliseconds",
-  },
-  {
-    label: "Requester service",
-    value: "source",
-    type: "string",
-    helpText: "Service that initiated the request",
-  },
-
-  {
-    label: "MYSQL request command",
-    value: "req_cmd",
-    type: "select",
-    options: MYSQL_OPTIONS,
-  },
-  {
-    label: "MYSQL request body",
-    value: "req_body",
-    type: "string",
-  },
-  {
-    label: "MYSQL response status code",
-    value: "resp_status",
-    type: "integer",
-  },
-];
 
 export const CONDITIONS = [
   {
@@ -266,6 +129,7 @@ export const getEmptyGroupBy = (): GroupByType => {
     property: "",
     key: nanoid(),
     protocol: "",
+    executor: "",
   };
 };
 
@@ -332,38 +196,6 @@ export const CUSTOM_TYPES = [
   },
 ];
 
-export interface SlackChannelType {
-  type: "channel" | "person";
-  value: string;
-}
-
-export const SLACK_CHANNELS: SlackChannelType[] = [
-  {
-    type: "channel",
-    value: "zerok",
-  },
-  {
-    type: "person",
-    value: "Varun",
-  },
-  {
-    type: "channel",
-    value: "tech",
-  },
-  {
-    type: "person",
-    value: "Shivam",
-  },
-  {
-    type: "person",
-    value: "Samyukktha",
-  },
-  {
-    type: "channel",
-    value: "oncall",
-  },
-];
-
 export const inputMap: GenericObject = {
   string: "string",
   select: "string",
@@ -371,8 +203,6 @@ export const inputMap: GenericObject = {
   int: "integer",
   double: "integer",
 };
-
-export const dataTypeMap = {};
 
 export const buildProbeBody = (
   cards: ConditionCardType[],
@@ -384,38 +214,56 @@ export const buildProbeBody = (
     metric: "m" | "s" | "h" | "d";
   }
 ): ScenarioCreationType => {
-  const workloads = cards.map((card): WorkloadType => {
+  const workloads: WorkloadType[] = [] as WorkloadType[];
+  cards.forEach((card) => {
+    type ExecutorWorkloadType = {
+      [key in (typeof ATTRIBUTE_EXECUTORS)[number]]: ConditionRowType[];
+    };
     let service = card.rootProperty;
     if (card.rootProperty.includes("*/*")) {
       service = "*/*";
     }
-    return {
-      service,
-      trace_role: "server",
-      protocol: card.protocol.toUpperCase(),
-      rule: {
-        type: "rule_group",
-        condition: "AND",
-        rules: card.conditions.map((condition) => {
-          if (condition.property === "latency") {
-            condition.value = (Number(condition.value) * 1000000).toString();
-          }
-          return {
-            type: "rule",
-            id: condition.property,
-            field: condition.property,
-            input: inputMap[condition.datatype],
-            operator: condition.operator,
-            value: condition.value,
-            datatype: inputMap[condition.datatype],
-          };
-        }),
-      },
-    };
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const executorWorkload = {} as ExecutorWorkloadType;
+    card.conditions.forEach((condition) => {
+      if (!executorWorkload[condition.executor!]) {
+        executorWorkload[condition.executor!] = [];
+      }
+      executorWorkload[condition.executor!].push(condition);
+    });
+    Object.keys(executorWorkload).forEach((executor) => {
+      const workload: WorkloadType = {
+        service,
+        executor: executor as (typeof ATTRIBUTE_EXECUTORS)[number],
+        trace_role: "server",
+        protocol: card.protocol.toUpperCase(),
+        rule: {
+          type: "rule_group",
+          condition: "AND",
+          rules: card.conditions.map((condition) => {
+            if (condition.property === "latency") {
+              condition.value = (Number(condition.value) * 1000000).toString();
+            }
+            return {
+              type: "rule",
+              id: condition.property,
+              field: condition.property,
+              input: inputMap[condition.datatype],
+              operator: condition.operator,
+              value: condition.value,
+              datatype: inputMap[condition.datatype],
+            };
+          }),
+        },
+      };
+      workloads.push(workload);
+    });
   });
   const groupByObject = groupBy.map((g) => {
     return {
-      workload_index: cards.findIndex((c) => c.rootProperty === g.service),
+      workload_index: cards.findIndex(
+        (c) => c.rootProperty === g.service && c.protocol === g.protocol
+      ),
       title: g.property,
       hash: g.property,
     };
@@ -447,4 +295,4 @@ export interface ProbeFormType {
     duration: number;
     metric: "m" | "s" | "h" | "d";
   };
-};
+}

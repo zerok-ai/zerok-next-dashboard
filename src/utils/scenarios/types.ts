@@ -1,3 +1,5 @@
+import { type ATTRIBUTE_EXECUTORS } from "utils/probes/constants";
+
 export interface RuleType {
   type: "rule" | "rule_group";
   field: string;
@@ -15,6 +17,7 @@ export interface RuleGroupType {
 export interface WorkloadType {
   service: string;
   trace_role: "server";
+  executor: (typeof ATTRIBUTE_EXECUTORS)[number];
   protocol: string;
   rule: RuleGroupType;
 }

@@ -44,6 +44,14 @@ const GroupBySelect = ({
     if (key === "service") {
       const service = services.find((s) => s.value === value);
       setValue(`groupBy.${currentGroupByIndex}.protocol`, service!.protocol);
+    } else {
+      const attribute = attributeOptions.find(
+        (a) => a.id === value
+      );
+      setValue(
+        `groupBy.${currentGroupByIndex}.executor`,
+        attribute!.executor
+      );
     }
   };
 

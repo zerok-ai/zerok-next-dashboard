@@ -9,7 +9,7 @@ export type AttributeType =
       field: string;
       data_type: "int" | "string" | "string[]" | "bool";
       input: "int" | "string" | "string[]";
-      executor?: (typeof ATTRIBUTE_EXECUTORS)[number];
+      executor: (typeof ATTRIBUTE_EXECUTORS)[number];
     }
   | {
       id: string;
@@ -17,7 +17,7 @@ export type AttributeType =
       data_type: "int" | "string" | "string[]" | "bool";
       input: "select";
       values: string;
-      executor?: (typeof ATTRIBUTE_EXECUTORS)[number];
+      executor: (typeof ATTRIBUTE_EXECUTORS)[number];
     };
 
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
