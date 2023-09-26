@@ -7,15 +7,16 @@ export type AttributeType =
   | {
       id: string;
       field: string;
-      data_type: "int" | "string" | "string[]";
+      data_type: "int" | "string" | "string[]" | "bool";
       input: "int" | "string" | "string[]";
       executor?: (typeof ATTRIBUTE_EXECUTORS)[number];
     }
   | {
       id: string;
       field: string;
+      data_type: "int" | "string" | "string[]" | "bool";
       input: "select";
-      options: string;
+      values: string;
       executor?: (typeof ATTRIBUTE_EXECUTORS)[number];
     };
 

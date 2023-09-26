@@ -1,10 +1,14 @@
 import { nanoid } from "nanoid";
 import { HTTP_METHODS } from "utils/constants";
 import {
+  type ATTRIBUTE_EXECUTORS,
+  type ATTRIBUTE_PROTOCOLS,
+} from "utils/probes/constants";
+import {
   type ScenarioCreationType,
   type WorkloadType,
 } from "utils/scenarios/types";
-import { type GenericObject, type SPAN_PROTOCOLS_TYPE } from "utils/types";
+import { type GenericObject } from "utils/types";
 
 export type ConditionRowStrings =
   | "property"
@@ -16,18 +20,20 @@ export interface GroupByType {
   service: string | null;
   property: string;
   key: string;
+  protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
 }
 export interface ConditionRowType {
   property: string;
   operator: string;
   value: string;
   datatype: string;
+  executor?: (typeof ATTRIBUTE_EXECUTORS)[number];
   key: string;
 }
 
 export interface ConditionCardType {
   rootProperty: string;
-  protocol: string;
+  protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
   conditions: ConditionRowType[];
   key: string;
 }
@@ -83,13 +89,6 @@ export const MYSQL_OPTIONS = [
     value: "DELETE",
   },
 ];
-
-export const getPropertyByType = (type: SPAN_PROTOCOLS_TYPE | null) => {
-  if (!type || !type.length) {
-    return HTTP_PROPERTIES;
-  }
-  return type === "http" ? HTTP_PROPERTIES : SQL_PROPERTIES;
-};
 
 export interface ProbePropertyType {
   label: string;
@@ -266,6 +265,7 @@ export const getEmptyGroupBy = (): GroupByType => {
     service: null,
     property: "",
     key: nanoid(),
+    protocol: "",
   };
 };
 
