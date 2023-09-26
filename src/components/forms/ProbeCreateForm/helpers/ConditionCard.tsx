@@ -115,8 +115,6 @@ const ConditionCard = ({
     );
   };
 
-  console.log(form.watch());
-
   const updateOperator = (conditionIndex: number, value: string) => {
     setValue(
       `cards.${currentCardIndex}.conditions.${conditionIndex}.operator`,

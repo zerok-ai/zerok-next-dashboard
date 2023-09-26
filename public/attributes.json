@@ -1,0 +1,354 @@
+{
+    "payload": {
+        "attributes_list": [
+            {
+                "protocol": "http",
+                "attribute_details": [
+                    {
+                        "key_set_name": "common attr",
+                        "executor": "otel",
+                        "attribute_list": [
+                            {
+                                "id": "\"span_kind\"",
+                                "field": "Span Kind",
+                                "input": "select",
+                                "values": "[\"SERVER\", \"CLIENT\"]",
+                                "data_type": "string",
+                                "examples": "SERVER"
+                            },
+                            {
+                                "id": "\"parent_span_id\"",
+                                "field": "Parent Span Id",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "\"0000000000000000\""
+                            },
+                            {
+                                "id": "\"exception.hash\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "",
+                                "examples": "ff7b757a187ff3b3451bf6437269e70c4ec1448727deb87ec95ecc44246b59cc"
+                            },
+                            {
+                                "id": "\"exception.type\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "",
+                                "examples": "java.lang.IllegalArgumentException"
+                            },
+                            {
+                                "id": "\"exception.message\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "",
+                                "examples": "item not in stock"
+                            },
+                            {
+                                "id": "\"error\"",
+                                "field": "Error",
+                                "input": "bool",
+                                "data_type": "bool",
+                                "examples": "exists(error)"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.method\"",
+                                "field": "Request Method",
+                                "input": "select",
+                                "values": "[\"GET\", \"PUT\", \"POST\", \"DELETE\", \"PATCH\"]",
+                                "data_type": "string",
+                                "examples": "POST"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.request_content_length\"",
+                                "field": "Request Content Length",
+                                "input": "int",
+                                "data_type": "int",
+                                "examples": "boolean"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.route\"",
+                                "field": "Route",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "/api/order"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.scheme\"",
+                                "field": "Scheme",
+                                "input": "select",
+                                "values": "[\"HTTP\", \"HTTPS\"]",
+                                "data_type": "string",
+                                "examples": "http"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.response.status_code\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "int",
+                                "examples": "200"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.request.method_original\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "GeT; ACL; foo"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.request.body.size\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "int",
+                                "examples": "3495"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.response.body.size\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "int",
+                                "examples": "3495"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.request.method\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "GET; POST; HEAD"
+                            },
+                            {
+                                "id": "\"attributes\".\"network.protocol.name\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "http; spdy"
+                            },
+                            {
+                                "id": "\"attributes\".\"network.protocol.version\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "1.0; 1.1; 2.0"
+                            },
+                            {
+                                "id": "\"attributes\".\"network.transport\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "tcp; udp"
+                            },
+                            {
+                                "id": "\"attributes\".\"network.type\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "ipv4; ipv6"
+                            },
+                            {
+                                "id": "\"attributes\".\"user_agent.original\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "CERN-LineMode/2.15 libwww/2.17b3"
+                            }
+                        ]
+                    },
+                    {
+                        "key_set_name": "HTTP request and response headers",
+                        "executor": "ebpf",
+                        "attribute_list": [
+                            {
+                                "id": "\"attributes\".\"http.status_code\"",
+                                "field": "Response Status",
+                                "input": "int",
+                                "data_type": "int",
+                                "examples": "500"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.target\"",
+                                "field": "Target",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "/api/order"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.request.header.<key\".\"\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string[]",
+                                "examples": "http.request.header.content_type=[\"application/json\"]; http.request.header.x_forwarded_for=[\"1.2.3.4\", \"1.2.3.5\"]"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.response.header.<key\".\"\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string[]",
+                                "examples": "http.response.header.content_type=[\"application/json\"]; http.response.header.my_custom_header=[\"abc\", \"def\"]"
+                            }
+                        ]
+                    },
+                    {
+                        "key_set_name": "HTTP client",
+                        "executor": "ebpf",
+                        "attribute_list": [
+                            {
+                                "id": "\"attributes\".\"net.host.name\"",
+                                "field": "Host Name",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "sofa-shop.mysql.devclient04.getanton.com"
+                            },
+                            {
+                                "id": "\"attributes\".\"net.protocol.name\"",
+                                "field": "Protocol",
+                                "input": "select",
+                                "values": "[\"HTTP\", \"MYSQL\"]",
+                                "data_type": "string",
+                                "examples": "http"
+                            },
+                            {
+                                "id": "\"attributes\".\"net.protocol.version\"",
+                                "field": "Protocol Version",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "1.1"
+                            },
+                            {
+                                "id": "\"attributes\".\"net.sock.host.addr\"",
+                                "field": "Host Address",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "10.60.0.22"
+                            },
+                            {
+                                "id": "\"attributes\".\"net.sock.host.port\"",
+                                "field": "Host Port",
+                                "input": "int",
+                                "data_type": "int",
+                                "examples": "8080"
+                            },
+                            {
+                                "id": "\"attributes\".\"net.sock.peer.addr\"",
+                                "field": "Source Address",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "10.60.0.14"
+                            },
+                            {
+                                "id": "\"attributes\".\"net.sock.peer.port\"",
+                                "field": "Source Port",
+                                "input": "int",
+                                "data_type": "int",
+                                "examples": "36474"
+                            },
+                            {
+                                "id": "\"attributes\".\"http.resend_count\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "int",
+                                "examples": "3"
+                            },
+                            {
+                                "id": "\"attributes\".\"server.address\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "example.com"
+                            },
+                            {
+                                "id": "\"attributes\".\"server.port\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "int",
+                                "examples": "80; 8080; 443"
+                            },
+                            {
+                                "id": "\"attributes\".\"server.socket.address\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "10.5.3.2"
+                            },
+                            {
+                                "id": "\"attributes\".\"server.socket.domain\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "proxy.example.com"
+                            },
+                            {
+                                "id": "\"attributes\".\"server.socket.port\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "int",
+                                "examples": "16456"
+                            },
+                            {
+                                "id": "\"attributes\".\"url.full\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "string",
+                                "examples": "https://www.foo.bar/search?q=OpenTelemetry#SemConv; //localhost"
+                            }
+                        ]
+                    },
+                    {
+                        "key_set_name": "",
+                        "executor": "otel",
+                        "attribute_list": [
+                            {
+                                "id": "\"attributes\".\"thread.id\"",
+                                "field": "Thread Id",
+                                "input": "int",
+                                "data_type": "int",
+                                "examples": "28"
+                            },
+                            {
+                                "id": "\"attributes\".\"thread.name\"",
+                                "field": "Thread Name",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "http-nio-8080-exec-2"
+                            },
+                            {
+                                "id": "\"attributes\".\"user_agent.original\"",
+                                "field": "Agent",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+                            },
+                            {
+                                "id": "\"start_ns\"",
+                                "field": "",
+                                "input": "",
+                                "data_type": "",
+                                "examples": "1695189360953420500"
+                            },
+                            {
+                                "id": "\"latency_ns\"",
+                                "field": "Latency in Nano Seconds",
+                                "input": "int",
+                                "data_type": "int",
+                                "examples": "898976543"
+                            },
+                            {
+                                "id": "\"source_ip\"",
+                                "field": "Source IP",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "10.60.0.14"
+                            },
+                            {
+                                "id": "\"dest_ip\"",
+                                "field": "Destination IP",
+                                "input": "string",
+                                "data_type": "string",
+                                "examples": "10.60.0.22"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

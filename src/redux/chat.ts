@@ -358,7 +358,6 @@ export const chatSlice = createSlice({
         }
       })
       .addCase(fetchQueryResponse.rejected, (state, { payload }) => {
-        console.log("here");
       })
       // inference
       .addCase(fetchNewInference.fulfilled, (state, { payload }) => {
