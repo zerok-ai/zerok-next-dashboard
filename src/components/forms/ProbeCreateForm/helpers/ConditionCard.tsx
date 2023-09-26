@@ -10,8 +10,8 @@ import { nanoid } from "nanoid";
 import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
+import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
 import { type AttributeStateType } from "utils/probes/types";
-import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
@@ -19,7 +19,6 @@ import {
   getEmptyCondition,
   getInputTypeByDatatype,
   getOperatorByType,
-  getPropertyByType,
   type ProbeFormType,
 } from "../ProbeCreateForm.utils";
 import JoiningSelect from "./JoiningSelect";
@@ -28,7 +27,7 @@ interface ConditionCardProps {
   services: Array<{
     label: string;
     value: string;
-    protocol: SPAN_PROTOCOLS_TYPE;
+    protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
     rootOnly?: boolean;
   }>;
   includeAnd: boolean;
@@ -54,13 +53,17 @@ const ConditionCard = ({
   const cards = getValues("cards");
   const currentCardIndex = cards.findIndex((c) => c.key === currentCardKey);
   const currentCard = cards[currentCardIndex];
+  const { protocol } = currentCard;
+  const attributeOptions =
+    attributes && protocol && attributes[protocol]
+      ? attributes[protocol]
+          .map((at) => {
+            return [...at.attribute_list];
+          })
+          .flat()
+      : [];
 
   const { rootProperty, conditions } = currentCard;
-
-  const properties = getPropertyByType(
-    services.find((s) => s.value === rootProperty)?.protocol ?? null
-  );
-
   const getServicesForRootProperty = () => {
     return services.filter((s) => {
       const cardRoots = cards.map((c) => c.rootProperty);
@@ -87,7 +90,9 @@ const ConditionCard = ({
   };
 
   const updateProperty = (conditionIndex: number, value: string) => {
-    const datatype = properties.find((p) => p.value === value)?.type ?? "";
+    const attribute = attributeOptions.find((at) => at.id === value);
+    const datatype = attribute!.data_type;
+    const executor = attribute!.executor;
     setValue(
       `cards.${currentCardIndex}.conditions.${conditionIndex}.property`,
       value
@@ -104,7 +109,13 @@ const ConditionCard = ({
       `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
       ""
     );
+    setValue(
+      `cards.${currentCardIndex}.conditions.${conditionIndex}.executor`,
+      executor
+    );
   };
+
+  console.log(form.watch());
 
   const updateOperator = (conditionIndex: number, value: string) => {
     setValue(
@@ -174,34 +185,23 @@ const ConditionCard = ({
       <div className={styles["condition-rows"]}>
         {conditions.map((condition, index) => {
           const operators = getOperatorByType(condition.datatype);
-          const property = properties.find((p) => {
-            return p.value === condition.property;
+          const property = attributeOptions.find((p) => {
+            return p.id === condition.property;
           });
-          const valueType = property?.type ?? "input";
-          const helpText = property?.helpText ?? "";
+          const valueType = property?.input ?? "input";
+          const helpText = "";
           const getSelectValues = () => {
-            if (
-              property?.value === "destination" ||
-              property?.value === "source"
-            ) {
-              return services.map((s) => {
-                return {
-                  label: s.label,
-                  value: s.value,
-                };
-              });
+            if (property?.input === "select") {
+              try {
+                return JSON.parse(property.values);
+              } catch (err) {
+                console.log({ err });
+                return [];
+              }
             }
-            return property?.options ?? [];
+            return [];
           };
           const errors = getConditionErrors(index);
-          const attributeOptions = attributes
-            ? attributes.http
-                .map((at) => {
-                  return [...at.attribute_list];
-                })
-                .flat()
-            : [];
-          console.log({ attributeOptions });
           return (
             <div
               className={cx(
@@ -238,20 +238,6 @@ const ConditionCard = ({
                     updateProperty(index, value.target.value);
                   }}
                 >
-                  {/* {properties.map((prt) => {
-                    if (prt.groupByOnly) {
-                      return null;
-                    }
-                    return (
-                      <MenuItem
-                        className={styles["menu-item"]}
-                        value={prt.value}
-                        key={nanoid()}
-                      >
-                        {prt.label}
-                      </MenuItem>
-                    );
-                  })} */}
                   {attributeOptions.map((at) => {
                     return (
                       <MenuItem value={at.id} key={at.id}>
@@ -323,17 +309,17 @@ const ConditionCard = ({
                       updateValue(index, e.target.value);
                     }}
                   >
-                    {getSelectValues().map((v) => {
-                      if (v.value.includes("*/*")) {
+                    {getSelectValues().map((v: string) => {
+                      if (v.includes("*/*")) {
                         return null;
                       }
                       return (
                         <MenuItem
-                          value={v.value}
+                          value={v}
                           key={nanoid()}
                           className={styles["menu-item"]}
                         >
-                          {v.label}
+                          {v}
                         </MenuItem>
                       );
                     })}

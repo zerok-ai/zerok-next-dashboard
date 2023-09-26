@@ -62,7 +62,7 @@ export interface ServiceDetail {
   http_error_rate_in: number;
   inbound_conns: number;
   outerHeight: number;
-  protocol: "http" | "mysql";
+  protocol: "http" | "";
 }
 
 export interface PodStatusDetail {

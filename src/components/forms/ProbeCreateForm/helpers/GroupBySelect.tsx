@@ -1,16 +1,13 @@
 import { FormHelperText, IconButton, MenuItem, Select } from "@mui/material";
 import cx from "classnames";
-import { nanoid } from "nanoid";
 import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash } from "react-icons/hi";
-import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
+import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
+import { type AttributeStateType } from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
-import {
-  getPropertyByType,
-  type ProbeFormType,
-} from "../ProbeCreateForm.utils";
+import { type ProbeFormType } from "../ProbeCreateForm.utils";
 
 interface GroupBySelectProps {
   form: UseFormReturn<ProbeFormType, any, undefined>;
@@ -18,15 +15,17 @@ interface GroupBySelectProps {
   services: Array<{
     label: string;
     value: string;
-    protocol: SPAN_PROTOCOLS_TYPE;
+    protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
     rootOnly?: boolean;
   }>;
+  attributes: AttributeStateType | null;
 }
 
 const GroupBySelect = ({
   form,
   services,
   currentGroupByKey,
+  attributes,
 }: GroupBySelectProps) => {
   const { setValue, getValues, formState } = form;
   const { cards, groupBy } = getValues();
@@ -36,17 +35,16 @@ const GroupBySelect = ({
   const values = getValues(`groupBy.${currentGroupByIndex}`);
   const emptyCard =
     cards.filter((card) => card.rootProperty !== "").length === 0;
-  const cardProperties = getPropertyByType(
-    services.find((s, idx) => {
-      return s.value === values.service;
-    })?.protocol ?? null
-  );
 
   const errors = formState.errors.groupBy?.[currentGroupByIndex] ?? {};
   const isFirstIndex = currentGroupByIndex === 0;
 
   const updateValue = (key: "property" | "service", value: string) => {
     setValue(`groupBy.${currentGroupByIndex}.${key}`, value);
+    if (key === "service") {
+      const service = services.find((s) => s.value === value);
+      setValue(`groupBy.${currentGroupByIndex}.protocol`, service!.protocol);
+    }
   };
 
   const deleteGroupBy = () => {
@@ -80,6 +78,16 @@ const GroupBySelect = ({
       );
     }
   };
+  const attributeOptions =
+    attributes && values.protocol && attributes[values.protocol]
+      ? attributes[values.protocol]
+          .map((attr) => {
+            return attr.attribute_list.filter(
+              (a) => a.input === "string" || a.input === "select"
+            );
+          })
+          .flat()
+      : [];
   return (
     <div
       className={cx(
@@ -129,18 +137,13 @@ const GroupBySelect = ({
           className={styles["group-by-select"]}
           disabled={values.service === null}
         >
-          {cardProperties.length > 0 &&
-            cardProperties.map((pr) => {
-              return (
-                <MenuItem
-                  value={pr.value}
-                  key={nanoid()}
-                  className={styles["menu-item"]}
-                >
-                  {pr.label}
-                </MenuItem>
-              );
-            })}
+          {attributeOptions.map((attr) => {
+            return (
+              <MenuItem value={attr.id} key={attr.id}>
+                {attr.field}
+              </MenuItem>
+            );
+          })}
         </Select>
         {renderHelperText("property")}
       </div>

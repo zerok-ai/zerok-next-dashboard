@@ -44,19 +44,13 @@ import {
 const ALL_PROTOCOL_SERVICES: Array<{
   label: string;
   value: string;
-  protocol: "http" | "mysql";
+  protocol: "http" | "";
   rootOnly?: boolean;
 }> = [
   {
     label: "All HTTP services",
     value: "*/*_http",
     protocol: "http",
-    rootOnly: true,
-  },
-  {
-    label: "All MYSQL services",
-    value: "*/*_mysql",
-    protocol: "mysql",
     rootOnly: true,
   },
 ];
@@ -103,6 +97,7 @@ const ProbeCreateForm = () => {
           key: "group-by-1",
           service: null,
           property: "",
+          protocol: "",
         },
       ],
       name: "",
@@ -114,6 +109,7 @@ const ProbeCreateForm = () => {
       },
     },
   });
+
   const { setValue, watch, getValues, handleSubmit } = probeForm;
   const { selectedCluster } = useSelector(clusterSelector);
   const { status, setStatus } = useStatus();
@@ -201,7 +197,7 @@ const ProbeCreateForm = () => {
   ];
 
   const { cards, groupBy, sampling } = watch();
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setStatus({
       loading: true,
       error: null,
@@ -211,27 +207,26 @@ const ProbeCreateForm = () => {
       "{cluster_id}",
       selectedCluster as string
     );
-    raxios
-      .post(endpoint, body)
-      .then((res) => {
-        setStatus({
-          loading: false,
-          error: null,
-        });
-        router.push("/probes");
-        dispatch(
-          showSnackbar({
-            message: "Probe created successfully",
-            type: "success",
-          })
-        );
-      })
-      .catch((err) => {
-        setStatus({
-          loading: false,
-          error: err,
-        });
+    try {
+      await raxios.post(endpoint, body);
+      setStatus({
+        loading: false,
+        error: null,
       });
+      router.push("/probes");
+      dispatch(
+        showSnackbar({
+          message: "Probe created successfully",
+          type: "success",
+        })
+      );
+    } catch (err) {
+      console.log({ err });
+      setStatus({
+        loading: false,
+        error: "Something went wrong",
+      });
+    }
   };
 
   return (
@@ -276,6 +271,7 @@ const ProbeCreateForm = () => {
                 key={gr.key}
                 services={formattedServices}
                 form={probeForm}
+                attributes={attributes}
               />
             );
           })}
