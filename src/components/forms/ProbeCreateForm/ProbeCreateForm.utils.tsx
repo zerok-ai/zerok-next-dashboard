@@ -219,10 +219,7 @@ export const buildProbeBody = (
     type ExecutorWorkloadType = {
       [key in (typeof ATTRIBUTE_EXECUTORS)[number]]: ConditionRowType[];
     };
-    let service = card.rootProperty;
-    if (card.rootProperty.includes("*/*")) {
-      service = "*/*";
-    }
+
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const executorWorkload = {} as ExecutorWorkloadType;
     card.conditions.forEach((condition) => {
@@ -232,6 +229,10 @@ export const buildProbeBody = (
       executorWorkload[condition.executor!].push(condition);
     });
     Object.keys(executorWorkload).forEach((executor) => {
+      let service = card.rootProperty;
+      if (card.rootProperty.includes("*/*")) {
+        service = "*/*";
+      }
       const workload: WorkloadType = {
         service,
         executor: executor as (typeof ATTRIBUTE_EXECUTORS)[number],
@@ -240,7 +241,9 @@ export const buildProbeBody = (
         rule: {
           type: "rule_group",
           condition: "AND",
-          rules: card.conditions.map((condition) => {
+          rules: executorWorkload[
+            executor as (typeof ATTRIBUTE_EXECUTORS)[number]
+          ].map((condition) => {
             if (condition.property === "latency") {
               condition.value = (Number(condition.value) * 1000000).toString();
             }
@@ -261,9 +264,16 @@ export const buildProbeBody = (
   });
   const groupByObject = groupBy.map((g) => {
     return {
-      workload_index: cards.findIndex(
-        (c) => c.rootProperty === g.service && c.protocol === g.protocol
-      ),
+      workload_index: workloads.findIndex((c) => {
+        if (
+          c.service.includes("*/*") &&
+          g.service?.includes("*/*") &&
+          c.executor === g.executor
+        ) {
+          return true;
+        }
+        return c.service === g.service && c.executor === g.executor;
+      }),
       title: g.property,
       hash: g.property,
     };
