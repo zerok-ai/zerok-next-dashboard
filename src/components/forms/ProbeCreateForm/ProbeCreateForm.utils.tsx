@@ -104,8 +104,32 @@ export const NUMBER_OPERATORS = [
   },
 ];
 
+export const BOOLEAN_ATTRIBUTES = [
+  {
+    label: "Equal to",
+    value: "equal",
+  },
+  {
+    label: "Not Equal to",
+    value: "not_equal",
+  },
+  {
+    label: "Exists",
+    value: "exists",
+  },
+  {
+    label: "Not Exists",
+    value: "not_exists",
+  },
+];
+
+export const BOOLEAN_VALUES = ["true", "false"];
+
 export const getOperatorByType = (type: string) => {
   if (!type) return [];
+  if (type === "bool") {
+    return BOOLEAN_ATTRIBUTES;
+  }
   if (type === "select") {
     return STRING_OPERATORS;
   }
