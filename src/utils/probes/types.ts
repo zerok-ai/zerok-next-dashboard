@@ -3,6 +3,10 @@ import {
   type ATTRIBUTE_PROTOCOLS,
 } from "./constants";
 
+export type AttributeProtocolType = (typeof ATTRIBUTE_PROTOCOLS)[number];
+
+export type AttributeExecutorType = (typeof ATTRIBUTE_EXECUTORS)[number];
+
 export type AttributeType =
   | {
       id: string;

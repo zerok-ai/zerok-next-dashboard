@@ -17,9 +17,14 @@ import {
   getFormattedServiceName,
   getNamespace,
 } from "utils/functions";
-import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
+import {
+  type ATTRIBUTE_EXECUTORS,
+  type ATTRIBUTE_PROTOCOLS,
+} from "utils/probes/constants";
 import { PROBE_ATTRIBUTES_ENDPOINT } from "utils/probes/endpoints";
 import {
+  type AttributeExecutorType,
+  type AttributeProtocolType,
   type AttributeResponseType,
   type AttributeStateType,
 } from "utils/probes/types";
@@ -122,6 +127,9 @@ const ProbeCreateForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
+  const [executors, setExecutors] = useState<
+    Array<(typeof ATTRIBUTE_EXECUTORS)[number]>
+  >([]);
 
   const fetchAttributesForProtocol = async (
     protocol: (typeof ATTRIBUTE_PROTOCOLS)[number]
@@ -173,6 +181,20 @@ const ProbeCreateForm = () => {
     }
   }, [selectedCluster]);
 
+  useEffect(() => {
+    if (attributes) {
+      const executors = new Set<AttributeExecutorType>();
+      Object.keys(attributes).forEach((key) => {
+        const protocol = key as AttributeProtocolType;
+        const list = attributes[protocol];
+        list.forEach((attr) => {
+          executors.add(attr.executor);
+        });
+      });
+      setExecutors(Array.from(executors));
+    }
+  }, [attributes]);
+
   const {
     formState: { errors },
   } = probeForm;
@@ -204,7 +226,13 @@ const ProbeCreateForm = () => {
         loading: true,
         error: null,
       });
-      const body = buildProbeBody(cards, getValues("name"), groupBy, sampling);
+      const body = buildProbeBody(
+        cards,
+        getValues("name"),
+        groupBy,
+        sampling,
+        attributes!
+      );
       const endpoint = CREATE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string
@@ -229,6 +257,10 @@ const ProbeCreateForm = () => {
       setStatus({
         loading: false,
         error: "Something went wrong",
+      });
+      showSnackbar({
+        message: "Something went wrong",
+        type: "error",
       });
     }
   };
@@ -275,6 +307,7 @@ const ProbeCreateForm = () => {
                 key={gr.key}
                 services={formattedServices}
                 form={probeForm}
+                executors={executors}
                 attributes={attributes}
               />
             );
