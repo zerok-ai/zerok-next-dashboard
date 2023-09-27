@@ -4,7 +4,10 @@ import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash } from "react-icons/hi";
 import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
-import { type AttributeStateType } from "utils/probes/types";
+import {
+  type AttributeExecutorType,
+  type AttributeStateType,
+} from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import { type ProbeFormType } from "../ProbeCreateForm.utils";
@@ -19,12 +22,14 @@ interface GroupBySelectProps {
     rootOnly?: boolean;
   }>;
   attributes: AttributeStateType | null;
+  executors: AttributeExecutorType[];
 }
 
 const GroupBySelect = ({
   form,
   services,
   currentGroupByKey,
+  executors,
   attributes,
 }: GroupBySelectProps) => {
   const { setValue, getValues, formState } = form;
@@ -45,13 +50,8 @@ const GroupBySelect = ({
       const service = services.find((s) => s.value === value);
       setValue(`groupBy.${currentGroupByIndex}.protocol`, service!.protocol);
     } else {
-      const attribute = attributeOptions.find(
-        (a) => a.id === value
-      );
-      setValue(
-        `groupBy.${currentGroupByIndex}.executor`,
-        attribute!.executor
-      );
+      const attribute = attributeOptions.find((a) => a.id === value);
+      setValue(`groupBy.${currentGroupByIndex}.executor`, attribute!.executor);
     }
   };
 
@@ -91,7 +91,9 @@ const GroupBySelect = ({
       ? attributes[values.protocol]
           .map((attr) => {
             return attr.attribute_list.filter(
-              (a) => a.input === "string" || a.input === "select"
+              (a) =>
+                (a.input === "string" || a.input === "select") &&
+                executors.includes(a.executor)
             );
           })
           .flat()

@@ -4,6 +4,10 @@ import {
   type ATTRIBUTE_PROTOCOLS,
 } from "utils/probes/constants";
 import {
+  type AttributeProtocolType,
+  type AttributeStateType,
+} from "utils/probes/types";
+import {
   type ScenarioCreationType,
   type WorkloadType,
 } from "utils/scenarios/types";
@@ -212,14 +216,16 @@ export const buildProbeBody = (
     samples: number;
     duration: number;
     metric: "m" | "s" | "h" | "d";
-  }
+  },
+  attributes: AttributeStateType
 ): ScenarioCreationType => {
   const workloads: WorkloadType[] = [] as WorkloadType[];
   cards.forEach((card) => {
     type ExecutorWorkloadType = {
       [key in (typeof ATTRIBUTE_EXECUTORS)[number]]: ConditionRowType[];
     };
-
+    const protocolAttributes =
+      attributes[card.protocol as AttributeProtocolType];
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const executorWorkload = {} as ExecutorWorkloadType;
     card.conditions.forEach((condition) => {
@@ -229,6 +235,13 @@ export const buildProbeBody = (
       executorWorkload[condition.executor!].push(condition);
     });
     Object.keys(executorWorkload).forEach((executor) => {
+      const attributes = protocolAttributes
+        .map((attribute) => {
+          return attribute.attribute_list.map((a) => {
+            return a;
+          });
+        })
+        .flat();
       let service = card.rootProperty;
       if (card.rootProperty.includes("*/*")) {
         service = "*/*";
@@ -244,17 +257,17 @@ export const buildProbeBody = (
           rules: executorWorkload[
             executor as (typeof ATTRIBUTE_EXECUTORS)[number]
           ].map((condition) => {
-            if (condition.property === "latency") {
-              condition.value = (Number(condition.value) * 1000000).toString();
-            }
+            const attribute = attributes.find(
+              (a) => a.id === condition.property
+            );
             return {
               type: "rule",
               id: condition.property,
-              field: condition.property,
-              input: inputMap[condition.datatype],
+              field: attribute!.field,
+              input: attribute!.input,
               operator: condition.operator,
               value: condition.value,
-              datatype: inputMap[condition.datatype],
+              datatype: condition.datatype,
             };
           }),
         },
@@ -262,6 +275,7 @@ export const buildProbeBody = (
       workloads.push(workload);
     });
   });
+
   const groupByObject = groupBy.map((g) => {
     return {
       workload_index: workloads.findIndex((c) => {
