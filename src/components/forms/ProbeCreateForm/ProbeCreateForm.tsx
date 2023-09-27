@@ -166,10 +166,8 @@ const ProbeCreateForm = () => {
   };
 
   useEffect(() => {
-    if (selectedCluster) {
-      fetchAttributesForProtocol("http");
-    }
-  }, [selectedCluster]);
+    fetchAttributesForProtocol("http");
+  }, []);
 
   useEffect(() => {
     if (selectedCluster) {
@@ -237,15 +235,12 @@ const ProbeCreateForm = () => {
         "{cluster_id}",
         selectedCluster as string
       );
-
-      console.log({ body, endpoint, router });
-
-      // await raxios.post(endpoint, body);
+      await raxios.post(endpoint, body);
       setStatus({
         loading: false,
         error: null,
       });
-      // router.push("/probes");
+      router.push("/probes");
       dispatch(
         showSnackbar({
           message: "Probe created successfully",
