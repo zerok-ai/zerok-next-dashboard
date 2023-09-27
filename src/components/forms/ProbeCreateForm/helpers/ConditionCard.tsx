@@ -124,6 +124,12 @@ const ConditionCard = ({
       `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
       ""
     );
+    if (value === "exists" || value === "not_exists") {
+      setValue(
+        `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
+        value
+      );
+    }
   };
 
   const updateValue = (conditionIndex: number, value: string) => {
@@ -196,10 +202,16 @@ const ConditionCard = ({
                 console.log({ err });
                 return [];
               }
+            } else if (property?.input === "bool") {
+              return ["true", "false"];
             }
             return [];
           };
           const errors = getConditionErrors(index);
+          const hideValueField =
+            condition.datatype === "bool" &&
+            (condition.operator === "exists" ||
+              condition.operator === "not_exists");
           return (
             <div
               className={cx(
@@ -277,56 +289,58 @@ const ConditionCard = ({
                   })}
                 </Select>
               </div>
-              <div
-                className={cx(
-                  styles["condition-item-container"],
-                  errors?.value && styles["error-input"]
-                )}
-              >
-                {valueType !== "select" ? (
-                  <Input
-                    name="value"
-                    fullWidth
-                    className={cx(styles["value-input"])}
-                    placeholder="Value"
-                    type={getInputTypeByDatatype(conditions[index].datatype)}
-                    disabled={!conditions[index].operator.length}
-                    value={conditions[index].value}
-                    onChange={(e) => {
-                      updateValue(index, e.target.value);
-                    }}
-                  />
-                ) : (
-                  <Select
-                    name="value"
-                    fullWidth
-                    variant="standard"
-                    disabled={!conditions[index].operator.length}
-                    value={conditions[index].value}
-                    onChange={(e) => {
-                      updateValue(index, e.target.value);
-                    }}
-                  >
-                    {getSelectValues().map((v: string) => {
-                      if (v.includes("*/*")) {
-                        return null;
-                      }
-                      return (
-                        <MenuItem
-                          value={v}
-                          key={nanoid()}
-                          className={styles["menu-item"]}
-                        >
-                          {v}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                )}
-                {helpText.length > 0 && !errors?.value && (
-                  <FormHelperText>{helpText}</FormHelperText>
-                )}
-              </div>
+              {!hideValueField && (
+                <div
+                  className={cx(
+                    styles["condition-item-container"],
+                    errors?.value && styles["error-input"]
+                  )}
+                >
+                  {valueType !== "select" && valueType !== "bool" ? (
+                    <Input
+                      name="value"
+                      fullWidth
+                      className={cx(styles["value-input"])}
+                      placeholder="Value"
+                      type={getInputTypeByDatatype(conditions[index].datatype)}
+                      disabled={!conditions[index].operator.length}
+                      value={conditions[index].value}
+                      onChange={(e) => {
+                        updateValue(index, e.target.value);
+                      }}
+                    />
+                  ) : (
+                    <Select
+                      name="value"
+                      fullWidth
+                      variant="standard"
+                      disabled={!conditions[index].operator.length}
+                      value={conditions[index].value}
+                      onChange={(e) => {
+                        updateValue(index, e.target.value);
+                      }}
+                    >
+                      {getSelectValues().map((v: string) => {
+                        if (v.includes("*/*")) {
+                          return null;
+                        }
+                        return (
+                          <MenuItem
+                            value={v}
+                            key={nanoid()}
+                            className={styles["menu-item"]}
+                          >
+                            {v}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  )}
+                  {helpText.length > 0 && !errors?.value && (
+                    <FormHelperText>{helpText}</FormHelperText>
+                  )}
+                </div>
+              )}
               {index !== 0 && (
                 <HiOutlineX
                   role="button"

@@ -12,7 +12,7 @@ export type AttributeType =
       id: string;
       field: string;
       data_type: "int" | "string" | "string[]" | "bool";
-      input: "int" | "string" | "string[]";
+      input: "int" | "string" | "string[]" | "bool";
       executor: (typeof ATTRIBUTE_EXECUTORS)[number];
     }
   | {
