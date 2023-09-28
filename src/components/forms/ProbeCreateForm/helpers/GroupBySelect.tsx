@@ -6,6 +6,7 @@ import { HiOutlineTrash } from "react-icons/hi";
 import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
 import {
   type AttributeExecutorType,
+  type AttributeProtocolType,
   type AttributeStateType,
 } from "utils/probes/types";
 
@@ -86,9 +87,10 @@ const GroupBySelect = ({
       );
     }
   };
+  const protocol = values.protocol.toUpperCase() as AttributeProtocolType;
   const attributeOptions =
-    attributes && values.protocol && attributes[values.protocol]
-      ? attributes[values.protocol]
+    attributes && protocol && attributes[protocol]
+      ? attributes[protocol]
           .map((attr) => {
             return attr.attribute_list.filter(
               (a) =>
