@@ -128,5 +128,5 @@ export interface ChatReduxType {
   eventLoading: boolean;
   chatLoading: boolean;
   historyLoading: boolean;
-  pastEventCount: number;
+  pastEventCount: number | null;
 }

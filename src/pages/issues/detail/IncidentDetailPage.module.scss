@@ -1,6 +1,4 @@
 @import "styles/variables.module.scss";
-
-
 .incident-metadata-container {
     display: flex;
     align-items: center;
@@ -44,4 +42,6 @@
 }
 
 
-
+.lock-scroll {
+    overflow: hidden;
+}

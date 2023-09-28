@@ -18,51 +18,53 @@ const GptLikelyCauseBox = () => {
   const dispatch = useDispatch();
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles["chatbox-logo"]}>
-          <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
-        </div>
-        <h5>Likely cause</h5>
-      </div>
-
-      {text ? (
-        <div className={styles["text-container"]}>
-          {typing && queries.length === 0 ? (
-            <TypeAnimation
-              cursor={false}
-              sequence={[
-                text,
-                () => {
-                  dispatch(stopLikelyCauseTyping());
-                },
-              ]}
-              repeat={0}
-              wrapper="p"
-              speed={{ type: "keyStrokeDelayInMs", value: 3 }}
-              preRenderFirstString={false}
-            />
-          ) : (
-            text
-          )}
-          <div className={styles.footer}>
-            Based on request{" "}
-            <Link
-              href={getSpanPageLinkFromIncident(
-                likelyCause?.incidentId as string,
-                router
-              )}
-            >
-              {likelyCause?.incidentId}
-            </Link>
+      <div className={styles["likely-cause-box"]}>
+        <div className={styles.header}>
+          <div className={styles["chatbox-logo"]}>
+            <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
           </div>
+          <h5>Likely cause</h5>
         </div>
-      ) : (
-        <CustomSkeleton
-          containerClass={styles["skeleton-container"]}
-          skeletonClass={styles.skeleton}
-          len={1}
-        />
-      )}
+
+        {text ? (
+          <div className={styles["text-container"]}>
+            {typing && queries.length === 0 ? (
+              <TypeAnimation
+                cursor={false}
+                sequence={[
+                  text,
+                  () => {
+                    dispatch(stopLikelyCauseTyping());
+                  },
+                ]}
+                repeat={0}
+                wrapper="p"
+                speed={{ type: "keyStrokeDelayInMs", value: 3 }}
+                preRenderFirstString={false}
+              />
+            ) : (
+              text
+            )}
+            <div className={styles.footer}>
+              Based on request{" "}
+              <Link
+                href={getSpanPageLinkFromIncident(
+                  likelyCause?.incidentId as string,
+                  router
+                )}
+              >
+                {likelyCause?.incidentId}
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <CustomSkeleton
+            containerClass={styles["skeleton-container"]}
+            skeletonClass={styles.skeleton}
+            len={1}
+          />
+        )}
+      </div>
     </div>
   );
 };
