@@ -15,7 +15,7 @@ export const getTraceColumns = ({
   chatTrace,
   currentTrace,
 }: {
-  chatTrace: string;
+  chatTrace: string | null;
   currentTrace: string;
 }) => {
   return [

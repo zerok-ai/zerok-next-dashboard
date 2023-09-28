@@ -82,7 +82,7 @@ const TraceTable = ({ visible, onClose }: TraceTableProps) => {
   }, [router]);
 
   const columns = getTraceColumns({
-    chatTrace: likelyCause!.incidentId,
+    chatTrace: likelyCause?.incidentId ?? null,
     currentTrace: router.query.trace as string,
   });
   return (
