@@ -1,5 +1,6 @@
 import { MenuItem, Select } from "@mui/material";
 import { type ColumnSort } from "@tanstack/react-table";
+import cx from "classnames";
 import { type TableSortOptions } from "utils/tables/types";
 
 import styles from "./TableFilter.module.scss";
@@ -15,7 +16,7 @@ const TableFilter = ({ options, sortBy, onChange, size }: TableFilterProps) => {
   return (
     <div className={styles.container}>
       <Select
-        className={styles.select}
+        className={cx(styles.select, size === "small" && styles.small)}
         size={size ?? "small"}
         value={`${sortBy.id}:${sortBy.desc ? "desc" : "asc"}`}
         renderValue={(selected) => {
