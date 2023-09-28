@@ -1,16 +1,52 @@
 @import "styles/variables.module.scss";
 @import "styles/mixins";
 .container {
-    overflow-y: auto;
+    overflow-y: hidden;
     position: relative;
     border:1px solid $grey-800;
-    border-radius: $sp-base * 2;
+    border-radius:$sp-base  / 2;
+    width:600px;
     min-height: calc(100vh - 60px - 160px);
+    z-index: 2;
+}
+
+.backdrop {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index: 2;
+    background-color: rgba(0,0,0,0.2);
+    backdrop-filter: blur(1px);
+    padding:$sp-base * 5;
+    border-radius: $sp-base * 2;
 }
 
 
 .header {
     @include card-header;
+    background-color: $grey-700;
+    border-radius: 0 0 0 0;
+    h5 {
+        display: flex;
+        align-items: center;
+        column-gap: $sp-base * 2;
+        font-weight: 400;
+    }
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+}
+
+.close-icon {
+    cursor: pointer;
+    height:20px;
+    width:20px;
+    color:$grey-200;
 }
 
 // entry point
@@ -36,6 +72,10 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    .active {
+        color:$primary-500;
+    }
 }
 .entry-point {
     

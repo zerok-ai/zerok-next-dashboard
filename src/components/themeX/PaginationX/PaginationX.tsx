@@ -6,18 +6,39 @@ import styles from "./PaginationX.module.scss";
 interface PaginationXProps {
   itemsPerPage: number;
   totalItems: number;
+  externalCurrentPage?: number;
+  onNext?: () => void;
+  onPrev?: () => void;
+  onJump?: (page: number) => void;
 }
 
-const PaginationX = ({ itemsPerPage, totalItems }: PaginationXProps) => {
-  const { next, prev, jump, currentPage, maxPage } = usePagination(
-    itemsPerPage,
-    totalItems
-  );
+const PaginationX = ({
+  itemsPerPage,
+  externalCurrentPage,
+  onNext,
+  onPrev,
+  totalItems,
+  onJump,
+}: PaginationXProps) => {
+  const {
+    next,
+    prev,
+    jump,
+    currentPage: internalCurrentPage,
+    maxPage,
+  } = usePagination(itemsPerPage, totalItems);
+  const currentPage = externalCurrentPage ?? internalCurrentPage;
   return (
     <div className={styles.container}>
       <Button
         color="secondary"
-        onClick={prev}
+        onClick={() => {
+          if (onPrev) {
+            onPrev();
+          } else {
+            prev();
+          }
+        }}
         size="small"
         className={styles["next-prev-btns"]}
         disabled={currentPage === 1}
@@ -33,13 +54,23 @@ const PaginationX = ({ itemsPerPage, totalItems }: PaginationXProps) => {
         hidePrevButton
         hideNextButton
         onChange={(_, page) => {
-          jump(page);
+          if (onJump) {
+            onJump(page);
+          } else {
+            jump(page);
+          }
         }}
         className={styles.pagination}
       />
       <Button
         color="secondary"
-        onClick={next}
+        onClick={() => {
+          if (onNext) {
+            onNext();
+          } else {
+            next();
+          }
+        }}
         size="small"
         className={styles["next-prev-btns"]}
         disabled={currentPage === maxPage || maxPage === 0}

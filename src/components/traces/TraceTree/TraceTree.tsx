@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
   IconButton,
   Modal,
 } from "@mui/material";
@@ -22,13 +23,16 @@ import {
 import {
   HiChevronRight,
   HiOutlineArrowsExpand,
+  HiOutlineMenu,
   HiOutlineX,
 } from "react-icons/hi";
 import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
+import { fetchNewInference } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { useDispatch, useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { convertNanoToMilliSeconds } from "utils/functions";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./TraceTree.module.scss";
@@ -47,9 +51,14 @@ import {
 interface TraceTreeProps {
   updateExceptionSpan: (id: string | null) => void;
   updateSpans: (spans: SpanResponse | null) => void;
+  toggleTraceTable: () => void;
 }
 
-const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
+const TraceTree = ({
+  updateExceptionSpan,
+  updateSpans,
+  toggleTraceTable,
+}: TraceTreeProps) => {
   const router = useRouter();
   const {
     data: spans,
@@ -61,12 +70,14 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
+  const dispatch = useDispatch();
+
   const [referenceTime, setReferenceTime] = useState<null | {
     totalTime: number;
     startTime: string;
   }>(null);
 
-  const { issue, trace } = router.query;
+  const { issue, trace, issue_id: issueId } = router.query;
 
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
@@ -261,8 +272,38 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
     <Wrapper>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h6>Spans</h6>
+          <h5>
+            Spans
+            <Button
+              variant="contained"
+              size="extraSmall"
+              className={styles["synth-btn"]}
+              onClick={() => {
+                dispatch(
+                  fetchNewInference({
+                    incidentId: trace as string,
+                    issueId: issueId as string,
+                    selectedCluster: selectedCluster as string,
+                  })
+                );
+              }}
+            >
+              Synthesis trace{" "}
+              <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} />
+            </Button>
+          </h5>
           <div className={styles["header-actions"]}>
+            {!isModalOpen && (
+              <Button
+                className={styles["trace-btn"]}
+                color="secondary"
+                variant="outlined"
+                size="small"
+                onClick={toggleTraceTable}
+              >
+                All requests <HiOutlineMenu />
+              </Button>
+            )}
             <IconButton
               size="small"
               className={
@@ -276,6 +317,7 @@ const TraceTree = ({ updateExceptionSpan, updateSpans }: TraceTreeProps) => {
                 <HiOutlineArrowsExpand className={styles["expand-icon"]} />
               )}
             </IconButton>
+
             {/* <IconButton
               size="small"
               className={styles["expand-btn"]}
