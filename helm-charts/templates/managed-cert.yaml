@@ -1,9 +1,0 @@
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-  name: "zerok-next-dashboard"
-  labels:
-  {{- include "helm-charts.labels" . | nindent 4 }}
-spec:
-  domains:
-  - {{ .Values.global.domain }}
