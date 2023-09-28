@@ -10,13 +10,9 @@ import { HiOutlinePlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
 import { showSnackbar } from "redux/snackbar";
 import { useDispatch, useSelector } from "redux/store";
-import { DEFAULT_TIME_RANGE } from "utils/constants";
+import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
-import {
-  filterServices,
-  getFormattedServiceName,
-  getNamespace,
-} from "utils/functions";
+import { getFormattedServiceName, getNamespace } from "utils/functions";
 import {
   type ATTRIBUTE_EXECUTORS,
   type ATTRIBUTE_PROTOCOLS,
@@ -30,9 +26,8 @@ import {
 } from "utils/probes/types";
 import raxios from "utils/raxios";
 import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
-// import raxios from "utils/raxios";
-import { type ServiceDetail } from "utils/types";
 
+// import raxios from "utils/raxios";
 import ConditionCard from "./helpers/ConditionCard";
 import GroupBySelect from "./helpers/GroupBySelect";
 import NameAndTimeForm from "./helpers/NameAndTimeForm";
@@ -49,18 +44,23 @@ import {
 const ALL_PROTOCOL_SERVICES: Array<{
   label: string;
   value: string;
-  protocol: "http" | "";
+  protocol: AttributeProtocolType | "";
   rootOnly?: boolean;
 }> = [
   {
     label: "All HTTP services",
     value: "*/*_http",
-    protocol: "http",
+    protocol: "HTTP",
     rootOnly: true,
   },
 ];
 
-const formatServices = (services: ServiceDetail[]) => {
+const formatServices = (
+  services: Array<{
+    service: string;
+    protocol?: AttributeProtocolType;
+  }>
+) => {
   const filter = services.filter((sv) => sv.protocol);
   return filter.map((sv) => {
     return {
@@ -70,9 +70,20 @@ const formatServices = (services: ServiceDetail[]) => {
       value: `${getNamespace(sv.service)}/${getFormattedServiceName(
         sv.service
       )}`,
-      protocol: sv.protocol ?? "http",
+      protocol: sv.protocol ?? "HTTP",
     };
   });
+};
+
+type ProbeServiceType = Array<{
+  service: string;
+  protocol?: AttributeProtocolType;
+}>;
+
+const filterServices = (services: ProbeServiceType): ProbeServiceType => {
+  return services.filter(
+    (sv) => !IGNORED_SERVICES_PREFIXES.includes(getNamespace(sv.service))
+  );
 };
 
 const ProbeCreateForm = () => {
@@ -123,7 +134,7 @@ const ProbeCreateForm = () => {
     data: services,
     fetchData: fetchServices,
     loading: loadingServices,
-  } = useFetch<ServiceDetail[]>("results", null, filterServices);
+  } = useFetch<ProbeServiceType>("results", null, filterServices);
   const dispatch = useDispatch();
   const router = useRouter();
   const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
@@ -134,13 +145,12 @@ const ProbeCreateForm = () => {
   const fetchAttributesForProtocol = async (
     protocol: (typeof ATTRIBUTE_PROTOCOLS)[number]
   ) => {
-    if (!selectedCluster) return;
     if (attributes && attributes[protocol]) return;
     try {
       const endpoint = PROBE_ATTRIBUTES_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster
-      ).replace("{protocol}", protocol);
+        "{protocol}",
+        protocol
+      );
       const res = await raxios.get(endpoint);
       const attrList: AttributeResponseType =
         res.data.payload.attributes_list[0];
@@ -166,7 +176,7 @@ const ProbeCreateForm = () => {
   };
 
   useEffect(() => {
-    fetchAttributesForProtocol("http");
+    fetchAttributesForProtocol("HTTP");
   }, []);
 
   useEffect(() => {

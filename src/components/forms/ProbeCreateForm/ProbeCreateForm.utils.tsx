@@ -75,6 +75,46 @@ export const STRING_OPERATORS = [
     label: "is not equal to",
     value: "not_equal",
   },
+  {
+    label: "contains",
+    value: "contains",
+  },
+  {
+    label: "does not contain",
+    value: "does_not_contain",
+  },
+  {
+    label: "begins with",
+    value: "begins_with",
+  },
+  {
+    label: "ends with",
+    value: "ends_with",
+  },
+  {
+    label: "does not begin with",
+    value: "does_not_begin_with",
+  },
+  {
+    label: "does not end with",
+    value: "does_not_end_with",
+  },
+  {
+    label: "in",
+    value: "in",
+  },
+  {
+    label: "not in",
+    value: "not_in",
+  },
+  {
+    label: "matches",
+    value: "matches",
+  },
+  {
+    label: "does not match",
+    value: "does_not_match",
+  },
 ];
 
 export const NUMBER_OPERATORS = [
@@ -249,7 +289,7 @@ export const buildProbeBody = (
       [key in (typeof ATTRIBUTE_EXECUTORS)[number]]: ConditionRowType[];
     };
     const protocolAttributes =
-      attributes[card.protocol as AttributeProtocolType];
+      attributes[card.protocol.toUpperCase() as AttributeProtocolType];
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const executorWorkload = {} as ExecutorWorkloadType;
     card.conditions.forEach((condition) => {

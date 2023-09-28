@@ -11,7 +11,10 @@ import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
 import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
-import { type AttributeStateType } from "utils/probes/types";
+import {
+  type AttributeProtocolType,
+  type AttributeStateType,
+} from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
@@ -53,7 +56,7 @@ const ConditionCard = ({
   const cards = getValues("cards");
   const currentCardIndex = cards.findIndex((c) => c.key === currentCardKey);
   const currentCard = cards[currentCardIndex];
-  const { protocol } = currentCard;
+  const protocol = currentCard.protocol.toUpperCase() as AttributeProtocolType;
   const attributeOptions =
     attributes && protocol && attributes[protocol]
       ? attributes[protocol]

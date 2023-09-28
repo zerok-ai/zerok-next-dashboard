@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 
 import { type HTTP_METHODS, type SPAN_PROTOCOLS } from "./constants";
+import { type AttributeProtocolType } from "./probes/types";
 
 export interface ChildrenType {
   children: React.ReactNode;
@@ -62,7 +63,7 @@ export interface ServiceDetail {
   http_error_rate_in: number;
   inbound_conns: number;
   outerHeight: number;
-  protocol: "http" | "";
+  protocol: "http" | "" | AttributeProtocolType;
 }
 
 export interface PodStatusDetail {
