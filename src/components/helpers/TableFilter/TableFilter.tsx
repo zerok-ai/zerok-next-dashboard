@@ -23,8 +23,9 @@ const TableFilter = ({ options, sortBy, onChange, size }: TableFilterProps) => {
             (option) => option.value === selected
           )?.label;
           return (
-            <span className={styles["select-label-prefix"]}>
-              Sort by {label}
+            <span className={styles["select-label"]}>
+              <span className={styles["select-label-prefix"]}>Sort by</span>{" "}
+              {label}
             </span>
           );
         }}
