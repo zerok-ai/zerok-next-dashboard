@@ -92,6 +92,14 @@ export const STRING_OPERATORS = [
     value: "ends_with",
   },
   {
+    label: "exists",
+    value: "exists",
+  },
+  {
+    label: "not exists",
+    value: "not_exists",
+  },
+  {
     label: "does not begin with",
     value: "does_not_begin_with",
   },
@@ -118,6 +126,14 @@ export const STRING_OPERATORS = [
 ];
 
 export const NUMBER_OPERATORS = [
+  {
+    label: "exists",
+    value: "exists",
+  },
+  {
+    label: "Not exists",
+    value: "not_exists",
+  },
   {
     label: "is equal to",
     value: "equal",
@@ -146,19 +162,19 @@ export const NUMBER_OPERATORS = [
 
 export const BOOLEAN_ATTRIBUTES = [
   {
-    label: "Equal to",
+    label: "equal to",
     value: "equal",
   },
   {
-    label: "Not Equal to",
+    label: "not equal to",
     value: "not_equal",
   },
   {
-    label: "Exists",
+    label: "exists",
     value: "exists",
   },
   {
-    label: "Not Exists",
+    label: "not exists",
     value: "not_exists",
   },
 ];
@@ -296,6 +312,7 @@ export const buildProbeBody = (
       if (!executorWorkload[condition.executor!]) {
         executorWorkload[condition.executor!] = [];
       }
+
       executorWorkload[condition.executor!].push(condition);
     });
     Object.keys(executorWorkload).forEach((executor) => {
@@ -324,6 +341,15 @@ export const buildProbeBody = (
             const attribute = attributes.find(
               (a) => a.id === condition.property
             );
+            if (
+              condition.operator === "exists" ||
+              condition.operator === "not_exists"
+            ) {
+              condition.value = "";
+              condition.datatype = "";
+              // @ts-expect-error ignore this
+              attribute!.input = "";
+            }
             return {
               type: "rule",
               id: condition.property,

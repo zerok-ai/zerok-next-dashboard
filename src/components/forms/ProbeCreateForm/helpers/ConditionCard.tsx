@@ -212,9 +212,8 @@ const ConditionCard = ({
           };
           const errors = getConditionErrors(index);
           const hideValueField =
-            condition.datatype === "bool" &&
-            (condition.operator === "exists" ||
-              condition.operator === "not_exists");
+            condition.operator === "exists" ||
+            condition.operator === "not_exists";
           return (
             <div
               className={cx(
