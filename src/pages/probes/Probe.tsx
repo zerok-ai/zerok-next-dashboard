@@ -73,15 +73,13 @@ const Probe = () => {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
         "{limit}",
         PROBE_PAGE_SIZE.toString()
-      ).replace(
-        "{offset}",
-        ((parseInt(page as string) - 1) * PROBE_PAGE_SIZE).toString()
-      );
-      const rdata = await raxios.get(endpoint, {
-        headers: {
-          "Cluster-Id": selectedCluster as string,
-        },
-      });
+      )
+        .replace(
+          "{offset}",
+          ((parseInt(page as string) - 1) * PROBE_PAGE_SIZE).toString()
+        )
+        .replace("{cluster_id}", selectedCluster as string);
+      const rdata = await raxios.get(endpoint);
       setTotalScenarios(rdata.data.payload.total_rows);
       const allScenarios = rdata.data.payload.scenarios as ScenarioDetailType[];
       const idList = allScenarios.map((s) => s.scenario.scenario_id);
