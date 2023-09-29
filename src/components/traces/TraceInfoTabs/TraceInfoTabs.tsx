@@ -15,27 +15,32 @@ import { DEFAULT_TABS, getTabs } from "./TraceInfoTabs.utils";
 interface TraceInfoTabsProps {
   selectedSpan: string;
   allSpans: SpanResponse;
+  incidentId: string | null;
 }
 
-const TraceInfoTabs = ({ selectedSpan, allSpans }: TraceInfoTabsProps) => {
+const TraceInfoTabs = ({
+  selectedSpan,
+  allSpans,
+  incidentId,
+}: TraceInfoTabsProps) => {
   const { data: rawResponse, fetchData: fetchRawData } =
     useFetch<SpanRawDataResponse>("span_raw_data_details", null);
   const router = useRouter();
-  const { issue, trace } = router.query;
+  const { issue } = router.query;
   const { selectedCluster } = useSelector(clusterSelector);
   const [activeTab, setActiveTab] = useState(DEFAULT_TABS[0].value);
   useEffect(() => {
-    if (selectedCluster && selectedSpan) {
+    if (selectedCluster && selectedSpan && incidentId) {
       const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       )
         .replace("{issue_id}", issue as string)
-        .replace("{incident_id}", trace as string)
+        .replace("{incident_id}", incidentId)
         .replace("{span_id}", selectedSpan);
       fetchRawData(endpoint);
     }
-  }, [selectedSpan]);
+  }, [selectedSpan, incidentId]);
   const rawData = rawResponse ? rawResponse[selectedSpan] : null;
   if (!rawResponse || !rawData) {
     return <TabSkeletons />;

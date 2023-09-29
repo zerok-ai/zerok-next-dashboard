@@ -52,12 +52,14 @@ interface TraceTreeProps {
   updateExceptionSpan: (id: string | null) => void;
   updateSpans: (spans: SpanResponse | null) => void;
   toggleTraceTable: () => void;
+  incidentId: string | null;
 }
 
 const TraceTree = ({
   updateExceptionSpan,
   updateSpans,
   toggleTraceTable,
+  incidentId,
 }: TraceTreeProps) => {
   const router = useRouter();
   const {
@@ -82,9 +84,8 @@ const TraceTree = ({
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
   const [isModalOpen, toggleModal] = useToggle(false);
-
   useEffect(() => {
-    if (selectedCluster) {
+    if (selectedCluster && incidentId) {
       setSpans(null);
       setSpanTree(null);
       setSelectedSpan(null);
@@ -95,11 +96,11 @@ const TraceTree = ({
         selectedCluster
       )
         .replace("{issue_id}", issue as string)
-        .replace("{incident_id}", trace as string);
+        .replace("{incident_id}", incidentId);
       // const endpoint = `/fake_spans.json`;
       fetchSpans(endpoint);
     }
-  }, [selectedCluster, router]);
+  }, [selectedCluster, incidentId]);
 
   useEffect(() => {
     if (spans) {
@@ -352,6 +353,7 @@ const TraceTree = ({
           )}
           {spans && selectedSpan && (
             <TraceInfoDrawer
+              incidentId={incidentId}
               selectedSpan={selectedSpan}
               onClose={resetSpan}
               anchorContainer="trace-tree-container"

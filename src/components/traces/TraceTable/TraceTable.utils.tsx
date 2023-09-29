@@ -32,7 +32,7 @@ export const getTraceColumns = ({
                 currentTrace === info.row.original.incident_id && styles.active
               )}
             >
-              {trimString(info.getValue(), 30)}{" "}
+              {trimString(info.getValue(), 25)}{" "}
             </span>
             {chatTrace === info.row.original.incident_id && (
               <ChipX label="Inferred" color="primary" upperCase={false} />
@@ -43,7 +43,7 @@ export const getTraceColumns = ({
     }),
     helper.accessor("latency_ns", {
       header: "DURATION",
-      size: DEFAULT_COL_WIDTH / 1.5,
+      size: DEFAULT_COL_WIDTH / 2,
       enableSorting: true,
       cell: (info) => {
         return (
@@ -61,7 +61,7 @@ export const getTraceColumns = ({
       // sortingFn: (a: string, b: string) => {
       //   return dayjs(a).unix() - dayjs(b).unix();
       // },
-      size: DEFAULT_COL_WIDTH * 1.5,
+      size: DEFAULT_COL_WIDTH,
       cell: (info) => {
         return <span>{getFormattedTime(info.getValue())}</span>;
       },

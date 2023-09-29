@@ -22,7 +22,6 @@
 .row {
     display: flex;
     display: flex;
-    column-gap: $sp-base * 8;
     padding:$sp-base * 3;
     border-bottom: 1px solid $grey-900;
     align-items: flex-start;
@@ -34,10 +33,11 @@
     overflow-x: hidden;
 }
 .label {
-    width:10%;
+    width:120px;
     display: flex;
     align-items: center;
     color:$grey-300;
+    margin-right: 0;
 }
 
 .data {
@@ -67,8 +67,4 @@
     .exception-helper-text {
         color:$grey-400;
     }
-}
-
-.label {
-    width:120px;
 }
