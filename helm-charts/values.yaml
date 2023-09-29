@@ -12,8 +12,8 @@ zerokNextDashboard:
         cpu: 500m
         memory: 128Mi
 image:
-  repository: us-west1-docker.pkg.dev/zerok-dev/zerok-dashboard/zerok-next-dashboard
-  tag: dev
+  repo: "zerok-dashboard"
+  tag: "latest"
   imagePullPolicy: Always
 global:
   host: ""
