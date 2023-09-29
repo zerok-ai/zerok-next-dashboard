@@ -42,9 +42,10 @@ const DEFAULT_SORT: ColumnSort = {
 interface TraceTableProps {
   visible: boolean;
   onClose: () => void;
+  incidentId: string | null;
 }
 
-const TraceTable = ({ onClose }: TraceTableProps) => {
+const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   const scenario = router.query.issue;
@@ -78,7 +79,7 @@ const TraceTable = ({ onClose }: TraceTableProps) => {
 
   const columns = getTraceColumns({
     chatTrace: likelyCause?.incidentId ?? null,
-    currentTrace: router.query.trace as string,
+    currentTrace: incidentId as string,
   });
   return (
     <div className={styles.wrapper}>
@@ -132,12 +133,12 @@ const TraceTable = ({ onClose }: TraceTableProps) => {
               bodyClassName={styles["table-body"]}
               onRowClick={(row) => {
                 onClose();
+                const query = router.query;
+                delete query.latest;
+                query.trace = row.incident_id;
                 router.push({
                   pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    trace: row.incident_id,
-                  },
+                  query,
                 });
               }}
             />

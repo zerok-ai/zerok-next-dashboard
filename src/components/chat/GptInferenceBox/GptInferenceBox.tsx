@@ -55,14 +55,14 @@ const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
           )}
           <div className={styles.footer}>
             <span>
-              Based on{" "}
+              Based on request{" "}
               <Link
                 href={getSpanPageLinkFromIncident(
                   query.incidentId as string,
                   router
                 )}
               >
-                this request
+                {query.incidentId}
               </Link>
             </span>
             <span>

@@ -62,11 +62,11 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
           )}
           <div className={styles.footer}>
             <span>
-              Based on{" "}
+              Based on request{" "}
               <Link
                 href={getSpanPageLinkFromIncident(query.incidentId!, router)}
               >
-                this request
+                {query.incidentId}
               </Link>
             </span>
             <span>
