@@ -12,7 +12,7 @@ zerokNextDashboard:
         cpu: 500m
         memory: 128Mi
 image:
-  repo: "zerok-dashboard"
+  repo: "zerok-next-dashboard"
   tag: "latest"
   imagePullPolicy: Always
 global:
