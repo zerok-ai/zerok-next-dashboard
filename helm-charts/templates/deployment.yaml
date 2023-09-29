@@ -20,7 +20,7 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+        image: "{{ index .Values.global.dockerBase}}/{{ index .Values.image.repo}}:{{ index .Values.image.tag}}"
         imagePullPolicy: {{ .Values.image.imagePullPolicy }}
         name: "zerok-next-dashboard"
         ports:

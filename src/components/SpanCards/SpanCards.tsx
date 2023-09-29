@@ -53,6 +53,7 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
       });
     }
   }, [spans]);
+  console.log("deployed sandbox");
   return (
     <div className={styles["detail-container"]}>
       <div className={styles["cards-container"]}>
@@ -81,7 +82,9 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
           <PodDetailsCard />
         </div>
       </div>
-      <TraceTable visible={isTraceTableVisible} onClose={toggleTraceTable} />
+      {isTraceTableVisible && (
+        <TraceTable visible={isTraceTableVisible} onClose={toggleTraceTable} />
+      )}
     </div>
   );
 };

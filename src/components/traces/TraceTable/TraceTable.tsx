@@ -44,8 +44,7 @@ interface TraceTableProps {
   onClose: () => void;
 }
 
-const TraceTable = ({ visible, onClose }: TraceTableProps) => {
-  if (!visible) return null;
+const TraceTable = ({ onClose }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   const scenario = router.query.issue;
@@ -76,10 +75,6 @@ const TraceTable = ({ visible, onClose }: TraceTableProps) => {
       fetchTraces(endpoint);
     }
   }, [selectedCluster, page]);
-
-  useEffect(() => {
-    onClose();
-  }, [router]);
 
   const columns = getTraceColumns({
     chatTrace: likelyCause?.incidentId ?? null,
@@ -136,6 +131,7 @@ const TraceTable = ({ visible, onClose }: TraceTableProps) => {
               rowClassName={cx(styles["table-row"])}
               bodyClassName={styles["table-body"]}
               onRowClick={(row) => {
+                onClose();
                 router.push({
                   pathname: router.pathname,
                   query: {
