@@ -1,25 +1,39 @@
 import cx from "classnames";
-import BackLink from "components/helpers/BackLink";
 import PodDetailsCard from "components/pods/PodDetailsCard";
 import ExceptionTab from "components/traces/ExceptionCard";
-import TraceGroups from "components/traces/TraceGroups";
 import TraceTable from "components/traces/TraceTable";
 import TraceTree from "components/traces/TraceTree";
+import { useToggle } from "hooks/useToggle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { chatSelector } from "redux/chat";
+import { useSelector } from "redux/store";
 import { type SpanResponse } from "utils/types";
 
 import styles from "./SpanCards.module.scss";
 
-const SpanCards = () => {
+interface SpanCardsProps {
+  lockScroll: (val: boolean) => void;
+}
+
+const SpanCards = ({ lockScroll }: SpanCardsProps) => {
   const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
+  const [incidentId, setIncidentId] = useState<null | string>(null);
   const [spans, setSpans] = useState<null | SpanResponse>(null);
+  const [isTraceTableVisible, toggleTraceTable] = useToggle(false);
+  const { likelyCause } = useSelector(chatSelector);
   const router = useRouter();
-  const trace = router.query.trace;
-  const issue_id = router.query.issue_id;
   useEffect(() => {
     setExceptionSpan(null);
   }, [router]);
+
+  useEffect(() => {
+    if (isTraceTableVisible) {
+      lockScroll(true);
+    } else {
+      lockScroll(false);
+    }
+  }, [isTraceTableVisible]);
 
   useEffect(() => {
     if (spans) {
@@ -43,53 +57,51 @@ const SpanCards = () => {
       });
     }
   }, [spans]);
+
+  useEffect(() => {
+    if (router.query.trace) {
+      setIncidentId(router.query.trace as string);
+    } else if (likelyCause) {
+      setIncidentId(likelyCause.incidentId);
+    } else {
+      setIncidentId(null);
+    }
+  }, [likelyCause, router.query.trace]);
   return (
     <div className={styles["detail-container"]}>
-      {trace && (
-        <BackLink
-          onBack={() => {
-            const old = router.query;
-            delete old.trace;
-            router.push({
-              pathname: router.pathname,
-              query: {
-                ...old,
-              },
-            });
-          }}
-          title="Back to requests"
-        />
-      )}
-      {trace ? (
-        <div className={styles["cards-container"]}>
-          <div
-            className={cx(
-              styles["tree-container"],
-              exceptionSpan && styles["tree-container-minimal"]
-            )}
-          >
-            <TraceTree
-              updateSpans={(spans: SpanResponse | null) => {
-                setSpans(spans);
-              }}
-              updateExceptionSpan={(id: string | null) => {
-                setExceptionSpan(id);
-              }}
-            />
-          </div>
-          {exceptionSpan && (
-            <div className={styles["exception-container"]}>
-              <ExceptionTab spanKey={exceptionSpan} />
-            </div>
+      <div className={styles["cards-container"]}>
+        <div
+          className={cx(
+            styles["tree-container"],
+            exceptionSpan && styles["tree-container-minimal"]
           )}
-          <div className={styles["pod-container"]}>
-            <PodDetailsCard />
+        >
+          <TraceTree
+            updateSpans={(spans: SpanResponse | null) => {
+              setSpans(spans);
+            }}
+            updateExceptionSpan={(id: string | null) => {
+              setExceptionSpan(id);
+            }}
+            toggleTraceTable={toggleTraceTable}
+            incidentId={incidentId}
+          />
+        </div>
+        {exceptionSpan && (
+          <div className={styles["exception-container"]}>
+            <ExceptionTab spanKey={exceptionSpan} incidentId={incidentId} />
           </div>
+        )}
+        <div className={styles["pod-container"]}>
+          <PodDetailsCard incidentId={incidentId} />
         </div>
-      ) : (
-        <div className={styles["table-container"]}>
-          {issue_id ? <TraceTable /> : <TraceGroups />}
-        </div>
+      </div>
+      {isTraceTableVisible && (
+        <TraceTable
+          visible={isTraceTableVisible}
+          onClose={toggleTraceTable}
+          incidentId={incidentId}
+        />
       )}
     </div>
   );

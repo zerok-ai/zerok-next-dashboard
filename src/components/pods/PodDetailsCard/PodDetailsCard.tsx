@@ -4,7 +4,6 @@ import ExpandIcon from "components/helpers/ExpandIcon";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
-import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -30,7 +29,11 @@ import {
   PodMetadata,
 } from "./PodDetailsCard.utils";
 
-const PodDetailsCard = () => {
+interface PodDetailsCardProps {
+  incidentId: string | null;
+}
+
+const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
   const { data: pods, fetchData: fetchPods } =
     useFetch<PodInfoType[]>("pods_info");
   const {
@@ -48,20 +51,18 @@ const PodDetailsCard = () => {
   const [selectedPod, setSelectedPod] = useState<string>("");
   const [isExpanded, toggleExpanded] = useToggle(false);
   const { selectedCluster } = useSelector(clusterSelector);
-  const router = useRouter();
-  const { trace } = router.query;
   useEffect(() => {
-    if (trace && selectedCluster) {
+    if (incidentId && selectedCluster) {
       setPodDetails(null);
       setContainers(null);
       setSelectedPod("");
       const endpoint = GET_PODS_ENDPOINT.replace(
         "{trace_id}",
-        trace as string
+        incidentId
       ).replace("{cluster_id}", selectedCluster);
       fetchPods(endpoint);
     }
-  }, [trace, selectedCluster]);
+  }, [incidentId, selectedCluster]);
 
   useEffect(() => {
     if (pods && pods.length) {
@@ -70,7 +71,7 @@ const PodDetailsCard = () => {
   }, [pods]);
 
   useEffect(() => {
-    if (selectedPod && trace && pods && selectedCluster) {
+    if (selectedPod && incidentId && pods && selectedCluster) {
       const pod = pods.find((p) => p.pod === selectedPod);
       if (!pod) return;
       const endpoint1 = GET_POD_METRICS_ENDPOINT.replace("{pod_id}", pod.pod)

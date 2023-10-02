@@ -10,12 +10,14 @@ interface TraceInfoDrawerProps {
   onClose: () => void;
   anchorContainer: string;
   allSpans: SpanResponse;
+  incidentId: string | null;
 }
 
 const TraceInfoDrawer = ({
   selectedSpan,
   onClose,
   anchorContainer,
+  incidentId,
   allSpans,
 }: TraceInfoDrawerProps) => {
   return (
@@ -40,7 +42,13 @@ const TraceInfoDrawer = ({
         }}
         transitionDuration={0}
       >
-        <TraceInfoTabs selectedSpan={selectedSpan} allSpans={allSpans} />
+        {selectedSpan && (
+          <TraceInfoTabs
+            selectedSpan={selectedSpan}
+            allSpans={allSpans}
+            incidentId={incidentId}
+          />
+        )}
       </Drawer>
     </div>
   );
