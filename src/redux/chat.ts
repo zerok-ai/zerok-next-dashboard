@@ -175,10 +175,11 @@ export const fetchNewInference = createAsyncThunk(
     selectedCluster: string;
   }) => {
     const { issueId, incidentId, selectedCluster } = values;
+    const id = nanoid();
     store.dispatch(
       addQuery({
         type: "infer",
-        key: nanoid(),
+        key: id,
       })
     );
     const endpoint = GPT_EVENTS_ENDPOINT.replace(
@@ -194,7 +195,7 @@ export const fetchNewInference = createAsyncThunk(
     };
 
     const rdata = await raxios.post(endpoint, body);
-    return rdata.data.payload;
+    return { ...rdata.data.payload, id };
   }
 );
 
@@ -357,12 +358,11 @@ export const chatSlice = createSlice({
           query.incidentId = state.contextIncident;
         }
       })
-      .addCase(fetchQueryResponse.rejected, (state, { payload }) => {
-      })
+      .addCase(fetchQueryResponse.rejected, (state, { payload }) => {})
       // inference
       .addCase(fetchNewInference.fulfilled, (state, { payload }) => {
         const infer = state.queries.find(
-          (q) => q.event.type === CHAT_EVENTS.INFERENCE
+          (q) => q.event.type === CHAT_EVENTS.INFERENCE && q.id === payload.id
         );
         if (infer && infer.event.type === CHAT_EVENTS.INFERENCE) {
           infer.event.response = payload.event.response;

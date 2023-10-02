@@ -18,14 +18,15 @@ export const getIssueColumns = () => {
       header: "Issue",
       size: DEFAULT_COL_WIDTH * 8,
       cell: (info) => {
-        const { issue_title, issue_hash, scenario_id } = info.row.original;
+        const { issue_title, issue_hash, scenario_id, incidents } =
+          info.row.original;
 
         const title = trimString(getTitleFromIssue(issue_title), 100);
         return (
           <div className={styles["issue-container"]}>
             <div>
               <Link
-                href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}`}
+                href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}&latest=${incidents[0]}`}
                 className={"hover-link"}
               >
                 <span className={styles["issue-title-container"]}>{title}</span>

@@ -12,9 +12,10 @@ import styles from "./ExceptionTab.module.scss";
 
 interface ExceptionTabProps {
   spanKey: string;
+  incidentId: string | null;
 }
 
-const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
+const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
   const { data: exceptionSpan, fetchData } = useFetch<SpanRawDataResponse>(
     "span_raw_data_details",
     null
@@ -22,20 +23,20 @@ const ExceptionTab = ({ spanKey }: ExceptionTabProps) => {
 
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
-  const { trace, issue } = router.query;
+  const { issue } = router.query;
 
   useEffect(() => {
-    if (selectedCluster) {
+    if (selectedCluster && incidentId) {
       const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       )
         .replace("{issue_id}", issue as string)
-        .replace("{incident_id}", trace as string)
+        .replace("{incident_id}", incidentId)
         .replace("{span_id}", spanKey);
       fetchData(endpoint);
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, incidentId]);
 
   if (!exceptionSpan) {
     return (

@@ -1,11 +1,14 @@
 // import { type SortingState } from "@tanstack/react-table";
+import { Drawer } from "@mui/material";
 import { type ColumnSort } from "@tanstack/react-table";
+import cx from "classnames";
 import TableFilter from "components/helpers/TableFilter";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import { chatSelector } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -36,7 +39,13 @@ const DEFAULT_SORT: ColumnSort = {
   desc: INCIDENT_COL_FILTERS[0].value.split(":")[1] === "desc",
 };
 
-const TraceTable = () => {
+interface TraceTableProps {
+  visible: boolean;
+  onClose: () => void;
+  incidentId: string | null;
+}
+
+const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   const scenario = router.query.issue;
@@ -44,7 +53,7 @@ const TraceTable = () => {
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
   const { likelyCause } = useSelector(chatSelector);
 
-  const page = parseInt((router.query.page as string) ?? 1);
+  const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
   const {
     data: traces,
@@ -66,49 +75,92 @@ const TraceTable = () => {
         .replace("{range}", range);
       fetchTraces(endpoint);
     }
-  }, [selectedCluster, router.query]);
+  }, [selectedCluster, page]);
 
-  const columns = getTraceColumns(likelyCause?.incidentId as string);
+  const columns = getTraceColumns({
+    chatTrace: likelyCause?.incidentId ?? null,
+    currentTrace: incidentId as string,
+  });
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h5>Requests:</h5>
-        <div className={styles["header-actions"]}>
-          <TableFilter
-            sortBy={sortBy[0]}
-            options={INCIDENT_COL_FILTERS}
-            onChange={(va) => {
-              setSortBy([va]);
-            }}
-          />
+    <div className={styles.wrapper}>
+      <div className={styles.backdrop} role="dialog" onClick={onClose}></div>
+      <Drawer
+        onClose={onClose}
+        className={styles.drawer}
+        transitionDuration={0}
+        variant="persistent"
+        open={true}
+        sx={{
+          "& .MuiDrawer-root": {
+            position: "absolute",
+          },
+          "& .MuiPaper-root": {
+            position: "absolute",
+          },
+        }}
+        anchor="right"
+      >
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <h5>
+              <HiOutlineMenu
+                onClick={() => {
+                  onClose();
+                }}
+              />{" "}
+              Requests:
+            </h5>
+            <div className={styles["header-actions"]}>
+              <TableFilter
+                sortBy={sortBy[0]}
+                options={INCIDENT_COL_FILTERS}
+                onChange={(va) => {
+                  setSortBy([va]);
+                }}
+                size="small"
+              />
+              <HiOutlineX className={styles["close-icon"]} onClick={onClose} />
+            </div>
+          </div>
+          <div className={styles["table-container"]}>
+            <TableX
+              columns={columns}
+              sortBy={sortBy}
+              onSortingChange={setSortBy}
+              data={traces?.trace_det_list ?? null}
+              headerClassName={styles["table-header"]}
+              rowClassName={cx(styles["table-row"])}
+              bodyClassName={styles["table-body"]}
+              onRowClick={(row) => {
+                onClose();
+                const query = router.query;
+                delete query.latest;
+                query.trace = row.incident_id;
+                router.push({
+                  pathname: router.pathname,
+                  query,
+                });
+              }}
+            />
+            <div className={styles["pagination-container"]}>
+              <PaginationX
+                itemsPerPage={TRACES_PAGE_SIZE}
+                totalItems={traces?.total_records ?? TRACES_PAGE_SIZE}
+                externalCurrentPage={page}
+                onJump={(page: number) => {
+                  setPage(page);
+                }}
+                onNext={() => {
+                  setPage(page + 1);
+                }}
+                onPrev={() => {
+                  setPage(page - 1);
+                }}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      <div className={styles["table-container"]}>
-        <TableX
-          columns={columns}
-          sortBy={sortBy}
-          onSortingChange={setSortBy}
-          data={traces?.trace_det_list ?? null}
-          headerClassName={styles["table-header"]}
-          rowClassName={styles["table-row"]}
-          bodyClassName={styles["table-body"]}
-          onRowClick={(row) => {
-            router.push({
-              pathname: router.pathname,
-              query: {
-                ...router.query,
-                trace: row.incident_id,
-              },
-            });
-          }}
-        />
-        <div className={styles["pagination-container"]}>
-          <PaginationX
-            itemsPerPage={TRACES_PAGE_SIZE}
-            totalItems={traces?.total_records ?? TRACES_PAGE_SIZE}
-          />
-        </div>
-      </div>
+      </Drawer>
     </div>
   );
 };

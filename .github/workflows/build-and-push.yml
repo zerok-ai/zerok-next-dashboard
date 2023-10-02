@@ -59,89 +59,40 @@ jobs:
 
   ##############
   build-and-push:
-    needs: init
-    runs-on: zk-self-hosted
-    env:
-      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@main
+    with:
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-    environment:
-      name: ${{ needs.init.outputs.ENVIRONMENT }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
+      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+      MAKE_TARGET: "default"
+    secrets:
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
+    needs: init
 
-      - name: Download dependencies
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: yarn
-
-      - name: Build
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: yarn build
-
-      - name: Uploading Helm Charts (for deploy)
-        uses: actions/upload-artifact@v3
-        if: ${{ env.DEPLOY == 'true' }}
-        with:
-          name: helm-charts
-          path: |
-            helm-charts
-
-      - name: Docker build
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker build  --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" .
-
-      - name: Docker Tag
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$VERSION"
-
-      - name: Docker push
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA"
-          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$VERSION"
+  # build helm charts and publish to helm repository
+  helm-push:
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-helm-publish.yml@main
+    with:
+      HELM_VERSION: ${{ needs.init.outputs.VERSION }}
+      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
+      DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
+      HELM_BUCKET_NAME: ${{ needs.init.outputs.HELM_BUCKET_NAME }}
+      HELM_BUCKET_URL: ${{ needs.init.outputs.HELM_BUCKET_URL }}
+      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+    secrets:
+      AWS_ACCESS_ID: ${{ secrets.AWS_ACCESS_ID }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+    needs: [init,build-and-push]
 
   deploy:
-    needs: [ init,build-and-push ]
-    env:
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-deploy.yml@main
+    with:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
-      ENV: ${{ needs.init.outputs.ENVIRONMENT }}
-    environment:
-      name: ${{ needs.init.outputs.ENVIRONMENT }}
-    runs-on: zk-self-hosted
-    steps:
-
-      - id: 'auth'
-        if: ${{ env.DEPLOY == 'true' }}
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: '${{ env.GKE_SA_KEY }}'
-
-      - id: 'get-credentials'
-        if: ${{ env.DEPLOY == 'true' }}
-        uses: 'google-github-actions/get-gke-credentials@v1'
-        with:
-          cluster_name: '${{ env.CLUSTERNAME }}'
-          location: '${{ env.GKE_ZONE }}'
-
-      - uses: actions/download-artifact@v3
-        if: ${{ env.DEPLOY == 'true' }}
-        with:
-          name: helm-charts
-
-      - name: Deploy
-        if: ${{ env.DEPLOY == 'true' }}
-        run: |-
-          helm --install  \
-          --set=image.repository=$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME \
-          --set=image.tag=$GITHUB_SHA \
-          --set=global.host="dashboard.$CLUSTERNAME.$DOMAIN_NAME" \
-          --set=global.domain=$DOMAIN_NAME \
-          upgrade $APP_NAME \
-           -f ./helm-charts/$ENV.yaml ./helm-charts/ \
-           --create-namespace \
-           --namespace $NS
+      MIGRATION_VERSION: ${{ needs.init.outputs.VERSION }}
+      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
+    secrets:
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
+    needs: [init,build-and-push]
