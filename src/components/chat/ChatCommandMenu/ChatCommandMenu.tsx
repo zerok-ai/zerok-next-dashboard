@@ -88,16 +88,10 @@ const ChatCommandMenu = ({
 
   return (
     <div className={styles.container}>
-      {/* <Autocomplete renderInput={()=><span>} */}
       <Menu
         anchorEl={menuRef.current}
         open={isMenuOpen}
         onClose={toggleMenu}
-        hideBackdrop
-        disableEnforceFocus
-        disableAutoFocusItem
-        disableAutoFocus
-        autoFocus={false}
         transitionDuration={0}
         // disableAutoFocus
         className={styles.menu}

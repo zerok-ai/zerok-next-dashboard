@@ -5,18 +5,15 @@
 
 .menu {
     :global(.MuiMenu-paper){
-        // position: absolute;
         background-color: $grey-925;
         width:515px;
         margin-top: - $sp-base * 20;
-        // top:72vh !important;
-        // height:fit-content;
-        // top:0 !important;
+        border:1px solid $grey-800;
     }
     :global(.MuiMenuItem-root){
         background-color: $grey-925;
         &:hover, &:focus, &:enabled {
-            background-color:$primary-700;
+            background-color:$grey-800;
         }
     }
 }

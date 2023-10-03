@@ -40,7 +40,7 @@ const IncidentChatTab = () => {
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { issue_id: issueId, trace: incidentId } = router.query;
+  const { issue_id: issueId } = router.query;
   const bottomRef = useRef<HTMLDivElement>(null);
   const {
     likelyCause,
@@ -51,6 +51,7 @@ const IncidentChatTab = () => {
     history,
     pastEventCount,
   } = useSelector(chatSelector);
+  const incidentId = router.query.trace ?? likelyCause?.incidentId ?? null;
   const [width, setWidth] = useState(550);
   useEffect(() => {
     if (selectedCluster && issueId) {
