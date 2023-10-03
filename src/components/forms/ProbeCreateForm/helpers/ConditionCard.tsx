@@ -38,6 +38,7 @@ interface ConditionCardProps {
   loadingServices: boolean;
   currentCardKey: string;
   attributes: AttributeStateType | null;
+  resetGroupBy: () => void;
 }
 
 const ConditionCard = ({
@@ -47,6 +48,7 @@ const ConditionCard = ({
   form,
   currentCardKey,
   attributes,
+  resetGroupBy,
 }: ConditionCardProps) => {
   const {
     setValue,
@@ -116,6 +118,7 @@ const ConditionCard = ({
       `cards.${currentCardIndex}.conditions.${conditionIndex}.executor`,
       executor
     );
+    resetGroupBy();
   };
 
   const updateOperator = (conditionIndex: number, value: string) => {

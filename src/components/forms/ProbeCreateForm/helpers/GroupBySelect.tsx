@@ -5,7 +5,6 @@ import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash } from "react-icons/hi";
 import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
 import {
-  type AttributeExecutorType,
   type AttributeProtocolType,
   type AttributeStateType,
 } from "utils/probes/types";
@@ -23,14 +22,12 @@ interface GroupBySelectProps {
     rootOnly?: boolean;
   }>;
   attributes: AttributeStateType | null;
-  executors: AttributeExecutorType[];
 }
 
 const GroupBySelect = ({
   form,
   services,
   currentGroupByKey,
-  executors,
   attributes,
 }: GroupBySelectProps) => {
   const { setValue, getValues, formState } = form;
@@ -44,6 +41,8 @@ const GroupBySelect = ({
 
   const errors = formState.errors.groupBy?.[currentGroupByIndex] ?? {};
   const isFirstIndex = currentGroupByIndex === 0;
+
+  const protocol = values.protocol.toUpperCase() as AttributeProtocolType;
 
   const updateValue = (key: "property" | "service", value: string) => {
     setValue(`groupBy.${currentGroupByIndex}.${key}`, value);
@@ -87,7 +86,11 @@ const GroupBySelect = ({
       );
     }
   };
-  const protocol = values.protocol.toUpperCase() as AttributeProtocolType;
+
+  const existingExecutors = cards
+    .map((card) => card.conditions.map((condition) => condition.executor))
+    .flat()
+    .filter((e) => !!e);
   const attributeOptions =
     attributes && protocol && attributes[protocol]
       ? attributes[protocol]
@@ -95,7 +98,7 @@ const GroupBySelect = ({
             return attr.attribute_list.filter(
               (a) =>
                 (a.input === "string" || a.input === "select") &&
-                executors.includes(a.executor)
+                existingExecutors.includes(a.executor)
             );
           })
           .flat()
@@ -139,6 +142,7 @@ const GroupBySelect = ({
       <div className={styles["group-by-select-container"]}>
         <Select
           defaultValue=""
+          value={values.property ?? ""}
           fullWidth
           variant="outlined"
           name="group-property"

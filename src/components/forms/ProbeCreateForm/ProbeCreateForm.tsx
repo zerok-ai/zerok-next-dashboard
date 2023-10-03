@@ -13,13 +13,9 @@ import { useDispatch, useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
-import {
-  type ATTRIBUTE_EXECUTORS,
-  type ATTRIBUTE_PROTOCOLS,
-} from "utils/probes/constants";
+import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
 import { PROBE_ATTRIBUTES_ENDPOINT } from "utils/probes/endpoints";
 import {
-  type AttributeExecutorType,
   type AttributeProtocolType,
   type AttributeResponseType,
   type AttributeStateType,
@@ -127,7 +123,13 @@ const ProbeCreateForm = () => {
     },
   });
 
-  const { setValue, watch, getValues, handleSubmit } = probeForm;
+  const {
+    setValue,
+    watch,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = probeForm;
   const { selectedCluster } = useSelector(clusterSelector);
   const { status, setStatus } = useStatus();
   const {
@@ -138,9 +140,6 @@ const ProbeCreateForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
-  const [executors, setExecutors] = useState<
-    Array<(typeof ATTRIBUTE_EXECUTORS)[number]>
-  >([]);
 
   const fetchAttributesForProtocol = async (
     protocol: (typeof ATTRIBUTE_PROTOCOLS)[number]
@@ -189,31 +188,13 @@ const ProbeCreateForm = () => {
     }
   }, [selectedCluster]);
 
-  useEffect(() => {
-    if (attributes) {
-      const executors = new Set<AttributeExecutorType>();
-      Object.keys(attributes).forEach((key) => {
-        const protocol = key as AttributeProtocolType;
-        const list = attributes[protocol];
-        list.forEach((attr) => {
-          executors.add(attr.executor);
-        });
-      });
-      setExecutors(Array.from(executors));
-    }
-  }, [attributes]);
-
-  const {
-    formState: { errors },
-  } = probeForm;
-
+  const { cards, groupBy, sampling } = watch();
   useEffect(() => {
     if (Object.keys(errors).length) {
       // scroll to top smoothly
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [errors]);
-
   const addCard = () => {
     setValue("cards", [...getValues("cards"), getEmptyCard()]);
   };
@@ -222,12 +203,14 @@ const ProbeCreateForm = () => {
     setValue("groupBy", [...getValues("groupBy"), getEmptyGroupBy()]);
   };
 
+  const resetGroupBy = () => {
+    setValue("groupBy", [getEmptyGroupBy()]);
+  };
+
   const formattedServices = [
     ...ALL_PROTOCOL_SERVICES,
     ...formatServices(services ?? []),
   ];
-
-  const { cards, groupBy, sampling } = watch();
   const onSubmit = async () => {
     try {
       setStatus({
@@ -283,6 +266,7 @@ const ProbeCreateForm = () => {
               currentCardKey={c.key}
               services={formattedServices}
               attributes={attributes}
+              resetGroupBy={resetGroupBy}
             />
           );
         })}
@@ -312,7 +296,6 @@ const ProbeCreateForm = () => {
                 key={gr.key}
                 services={formattedServices}
                 form={probeForm}
-                executors={executors}
                 attributes={attributes}
               />
             );
@@ -339,6 +322,12 @@ const ProbeCreateForm = () => {
       >
         Submit
       </LoadingButton>
+      {status.error && (
+        <p className={styles["error-text"]}>
+          Could not create probe, please check the form and try again or contact
+          support.
+        </p>
+      )}
     </form>
   );
 };
