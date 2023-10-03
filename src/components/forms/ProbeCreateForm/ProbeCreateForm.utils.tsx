@@ -131,7 +131,7 @@ export const NUMBER_OPERATORS = [
     value: "exists",
   },
   {
-    label: "Not exists",
+    label: "not exists",
     value: "not_exists",
   },
   {
@@ -365,23 +365,28 @@ export const buildProbeBody = (
       workloads.push(workload);
     });
   });
-
+  let groupByError = false;
   const groupByObject = groupBy.map((g) => {
+    const index = workloads.findIndex((c) => {
+      if (
+        c.service.includes("*/*") &&
+        g.service?.includes("*/*") &&
+        c.executor === g.executor
+      ) {
+        return true;
+      }
+      return c.service === g.service && c.executor === g.executor;
+    });
+    if (index < 0) groupByError = true;
     return {
-      workload_index: workloads.findIndex((c) => {
-        if (
-          c.service.includes("*/*") &&
-          g.service?.includes("*/*") &&
-          c.executor === g.executor
-        ) {
-          return true;
-        }
-        return c.service === g.service && c.executor === g.executor;
-      }),
+      workload_index: index,
       title: g.property,
       hash: g.property,
     };
   });
+  if (groupByError) {
+    throw "Invalid group by configuration";
+  }
 
   const rateLimit = [
     {
