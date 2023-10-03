@@ -327,8 +327,6 @@ const ProbeCreateForm = () => {
         </p>
       </div>
 
-      {/* <div className={styles.divider}></div>
-      <NotificationForm /> */}
       <div className={styles.divider}></div>
       <Sampling form={probeForm} />
       <div className={styles.divider}></div>

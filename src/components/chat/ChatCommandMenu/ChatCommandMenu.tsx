@@ -93,11 +93,7 @@ const ChatCommandMenu = ({
         anchorEl={menuRef.current}
         open={isMenuOpen}
         onClose={toggleMenu}
-        hideBackdrop
-        disableEnforceFocus
-        disableAutoFocusItem
-        disableAutoFocus
-        autoFocus={false}
+        // hideBackdrop
         transitionDuration={0}
         // disableAutoFocus
         className={styles.menu}
