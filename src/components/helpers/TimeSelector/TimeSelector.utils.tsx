@@ -39,4 +39,8 @@ export const TIME_OPTIONS = [
     label: "1w",
     value: "-7d",
   },
+  {
+    label: "3w",
+    value: "-21d",
+  },
 ];
