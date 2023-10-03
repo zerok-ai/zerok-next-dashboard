@@ -289,7 +289,7 @@ const TraceTree = ({
                 );
               }}
             >
-              Synthesis trace{" "}
+              Synthesis request{" "}
               <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} />
             </Button>
           </h5>
