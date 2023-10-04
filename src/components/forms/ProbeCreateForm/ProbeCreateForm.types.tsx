@@ -10,6 +10,10 @@ export const probeFormSchema = z.object({
           datatype: z.string().min(1, "Datatype cannot be empty"),
           operator: z.string().min(1, "Operator cannot be empty"),
           value: z.string().min(1, "Value cannot be empty"),
+          json_path: z
+            .string()
+            .regex(/^(\w+\.)*\w+$/, "Please enter a valid JSON path")
+            .optional(),
         })
       ),
     })

@@ -8,7 +8,13 @@
     transition:background-color 0.1s ease-in-out;
     position: relative;
 }
-
+.small {
+    width:16px;
+    height:16px;
+    .icon {
+        font-size: 12px;
+    }
+}
 .checked {
     background-color: $primary-500;
 }

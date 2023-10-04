@@ -1,15 +1,7 @@
-import {
-  FormHelperText,
-  IconButton,
-  Input,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import cx from "classnames";
-import { nanoid } from "nanoid";
+import { IconButton } from "@mui/material";
 import React from "react";
 import { type UseFormReturn } from "react-hook-form";
-import { HiOutlineTrash, HiOutlineX } from "react-icons/hi";
+import { HiOutlineTrash } from "react-icons/hi";
 import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
 import {
   type AttributeProtocolType,
@@ -18,12 +10,10 @@ import {
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
-  CONDITIONS,
   getEmptyCondition,
-  getInputTypeByDatatype,
-  getOperatorByType,
   type ProbeFormType,
 } from "../ProbeCreateForm.utils";
+import ConditionRow from "./ConditionRow";
 import JoiningSelect from "./JoiningSelect";
 
 interface ConditionCardProps {
@@ -43,18 +33,13 @@ interface ConditionCardProps {
 
 const ConditionCard = ({
   loadingServices,
-  includeAnd,
   services,
   form,
   currentCardKey,
   attributes,
   resetGroupBy,
 }: ConditionCardProps) => {
-  const {
-    setValue,
-    getValues,
-    formState: { errors },
-  } = form;
+  const { setValue, getValues } = form;
   const cards = getValues("cards");
   const currentCardIndex = cards.findIndex((c) => c.key === currentCardKey);
   const currentCard = cards[currentCardIndex];
@@ -81,75 +66,6 @@ const ConditionCard = ({
     setValue("cards", newCards);
   };
 
-  const getConditionErrors = (conditionIndex: number) => {
-    if (
-      errors.cards &&
-      errors.cards[currentCardIndex] &&
-      errors.cards[currentCardIndex]?.conditions &&
-      errors.cards[currentCardIndex]?.conditions![conditionIndex]
-    ) {
-      return errors.cards[currentCardIndex]?.conditions![conditionIndex];
-    } else {
-      return {};
-    }
-  };
-
-  const updateProperty = (conditionIndex: number, value: string) => {
-    const attribute = attributeOptions.find((at) => at.id === value);
-    const datatype = attribute!.data_type;
-    const executor = attribute!.executor;
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.property`,
-      value
-    );
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.datatype`,
-      datatype
-    );
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.operator`,
-      ""
-    );
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
-      ""
-    );
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.executor`,
-      executor
-    );
-    resetGroupBy();
-  };
-
-  const updateOperator = (conditionIndex: number, value: string) => {
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.operator`,
-      value
-    );
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
-      ""
-    );
-    if (value === "exists" || value === "not_exists") {
-      setValue(
-        `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
-        value
-      );
-    }
-  };
-
-  const updateValue = (conditionIndex: number, value: string) => {
-    setValue(
-      `cards.${currentCardIndex}.conditions.${conditionIndex}.value`,
-      value
-    );
-  };
-
-  const deleteCondition = (conditionKey: string) => {
-    const newConditions = conditions.filter((c) => c.key !== conditionKey);
-    setValue(`cards.${currentCardIndex}.conditions`, newConditions);
-  };
-
   const addConditon = () => {
     const newConditions = [...conditions, getEmptyCondition()];
     setValue(`cards.${currentCardIndex}.conditions`, newConditions);
@@ -159,15 +75,6 @@ const ConditionCard = ({
     <div className={styles["condition-card"]}>
       <div className={styles["root-condition-container"]}>
         <div className={styles["root-condition-selects"]}>
-          {includeAnd && (
-            <JoiningSelect
-              value="And"
-              buttonMode={true}
-              list={CONDITIONS}
-              color="purple"
-              onSelect={null}
-            />
-          )}
           <JoiningSelect
             loading={loadingServices}
             buttonMode={false}
@@ -193,169 +100,17 @@ const ConditionCard = ({
         )}
       </div>
       <div className={styles["condition-rows"]}>
-        {conditions.map((condition, index) => {
-          const operators = getOperatorByType(condition.datatype);
-          const property = attributeOptions.find((p) => {
-            return p.id === condition.property;
-          });
-          const valueType = property?.input ?? "input";
-          const helpText = "";
-          const getSelectValues = () => {
-            if (property?.input === "select") {
-              try {
-                return JSON.parse(property.values);
-              } catch (err) {
-                console.log({ err });
-                return [];
-              }
-            } else if (property?.input === "bool") {
-              return ["true", "false"];
-            }
-            return [];
-          };
-          const errors = getConditionErrors(index);
-          const hideValueField =
-            condition.operator === "exists" ||
-            condition.operator === "not_exists";
+        {currentCard.conditions.map((cond, idx) => {
           return (
-            <div
-              className={cx(
-                styles["condition-card-item"],
-                index === 0 && styles["condition-row-1"]
-              )}
-              key={condition.key}
-            >
-              {index > 0 && (
-                <JoiningSelect
-                  list={CONDITIONS}
-                  color="purple"
-                  value="And"
-                  onSelect={null}
-                  buttonMode={true}
-                />
-              )}
-              <div
-                className={cx(
-                  styles["condition-item-container"],
-                  errors?.property && styles["error-input"]
-                )}
-              >
-                <Select
-                  fullWidth
-                  disabled={!rootProperty.length}
-                  defaultValue=""
-                  variant="standard"
-                  name="property"
-                  className={cx(styles["property-select"])}
-                  placeholder="Choose a property"
-                  value={conditions[index].property}
-                  onChange={(value) => {
-                    updateProperty(index, value.target.value);
-                  }}
-                >
-                  {attributeOptions.map((at) => {
-                    return (
-                      <MenuItem value={at.id} key={at.id}>
-                        {at.field}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </div>
-              <div
-                className={cx(
-                  styles["condition-item-container"],
-                  errors?.operator && styles["error-input"]
-                )}
-              >
-                <Select
-                  variant="standard"
-                  defaultValue=""
-                  fullWidth
-                  name="operator"
-                  disabled={!conditions[index].property.length}
-                  className={cx(styles["operator-select"])}
-                  placeholder="Choose"
-                  value={conditions[index].operator}
-                  onChange={(value) => {
-                    updateOperator(index, value.target.value);
-                  }}
-                >
-                  {operators.map((prt) => {
-                    return (
-                      <MenuItem
-                        value={prt.value}
-                        key={nanoid()}
-                        className={styles["menu-item"]}
-                      >
-                        {prt.label}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </div>
-              {!hideValueField && (
-                <div
-                  className={cx(
-                    styles["condition-item-container"],
-                    errors?.value && styles["error-input"]
-                  )}
-                >
-                  {valueType !== "select" && valueType !== "bool" ? (
-                    <Input
-                      name="value"
-                      fullWidth
-                      className={cx(styles["value-input"])}
-                      placeholder="Value"
-                      type={getInputTypeByDatatype(conditions[index].datatype)}
-                      disabled={!conditions[index].operator.length}
-                      value={conditions[index].value}
-                      onChange={(e) => {
-                        updateValue(index, e.target.value);
-                      }}
-                    />
-                  ) : (
-                    <Select
-                      name="value"
-                      fullWidth
-                      variant="standard"
-                      disabled={!conditions[index].operator.length}
-                      value={conditions[index].value}
-                      onChange={(e) => {
-                        updateValue(index, e.target.value);
-                      }}
-                    >
-                      {getSelectValues().map((v: string) => {
-                        if (v.includes("*/*")) {
-                          return null;
-                        }
-                        return (
-                          <MenuItem
-                            value={v}
-                            key={nanoid()}
-                            className={styles["menu-item"]}
-                          >
-                            {v}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  )}
-                  {helpText.length > 0 && !errors?.value && (
-                    <FormHelperText>{helpText}</FormHelperText>
-                  )}
-                </div>
-              )}
-              {index !== 0 && (
-                <HiOutlineX
-                  role="button"
-                  className={styles["delete-condition-button"]}
-                  onClick={() => {
-                    deleteCondition(condition.key);
-                  }}
-                />
-              )}
-            </div>
+            <ConditionRow
+              condition={cond}
+              conditionIndex={idx}
+              key={cond.key}
+              currentCardKey={currentCardKey}
+              attributeOptions={attributeOptions}
+              form={form}
+              resetGroupBy={resetGroupBy}
+            />
           );
         })}
       </div>

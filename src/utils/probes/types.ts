@@ -1,11 +1,15 @@
 import {
   type ATTRIBUTE_EXECUTORS,
   type ATTRIBUTE_PROTOCOLS,
+  type ATTRIBUTE_SUPPORTED_FORMATS,
 } from "./constants";
 
 export type AttributeProtocolType = (typeof ATTRIBUTE_PROTOCOLS)[number];
 
 export type AttributeExecutorType = (typeof ATTRIBUTE_EXECUTORS)[number];
+
+export type AttributeSupportedType =
+  (typeof ATTRIBUTE_SUPPORTED_FORMATS)[number];
 
 export type AttributeType =
   | {
@@ -13,6 +17,7 @@ export type AttributeType =
       field: string;
       data_type: "int" | "string" | "string[]" | "bool";
       input: "int" | "string" | "string[]" | "bool";
+      supported_formats?: AttributeSupportedType[];
       executor: (typeof ATTRIBUTE_EXECUTORS)[number];
     }
   | {
@@ -21,6 +26,8 @@ export type AttributeType =
       data_type: "int" | "string" | "string[]" | "bool";
       input: "select";
       values: string;
+      json_key?: boolean;
+      supported_formats?: AttributeSupportedType[];
       executor: (typeof ATTRIBUTE_EXECUTORS)[number];
     };
 

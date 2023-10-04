@@ -8,9 +8,14 @@ interface CustomCheckboxProps {
   defaultChecked?: boolean;
   checked?: boolean;
   onChange?: (checked: boolean) => void;
+  size?: "small" | "medium" | "large";
 }
 
-const CustomCheckbox = ({ defaultChecked, onChange }: CustomCheckboxProps) => {
+const CustomCheckbox = ({
+  defaultChecked,
+  onChange,
+  size = "medium",
+}: CustomCheckboxProps) => {
   const [checked, setChecked] = useState(defaultChecked);
   const updateVal = (val: boolean) => {
     setChecked(val);
@@ -19,7 +24,13 @@ const CustomCheckbox = ({ defaultChecked, onChange }: CustomCheckboxProps) => {
     }
   };
   return (
-    <div className={cx(styles.container, checked && styles.checked)}>
+    <div
+      className={cx(
+        styles.container,
+        checked && styles.checked,
+        size === "small" && styles.small
+      )}
+    >
       {checked && <HiOutlineCheck className={styles.icon} />}
       <input
         className={styles.checkbox}
