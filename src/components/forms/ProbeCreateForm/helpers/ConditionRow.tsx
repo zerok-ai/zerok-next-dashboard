@@ -105,7 +105,7 @@ const ConditionRow = ({
   const valueType = property?.input ?? "input";
   const helpText = "";
   const isJsonKeyAttribute =
-    property?.supported_formats && property.supported_formats.includes(" JSON");
+    property?.supported_formats && property.supported_formats.includes("JSON");
   const getSelectValues = () => {
     if (property?.input === "select") {
       try {

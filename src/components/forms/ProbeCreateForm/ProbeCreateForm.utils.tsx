@@ -348,7 +348,7 @@ export const buildProbeBody = (
             let jsonPath = {};
             if (
               condition.json_path &&
-              attribute?.supported_formats?.includes(" JSON")
+              attribute?.supported_formats?.includes("JSON")
             ) {
               jsonPath = {
                 json_path: (condition.json_path as string).split("."),

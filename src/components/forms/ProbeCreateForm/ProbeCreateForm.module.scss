@@ -162,6 +162,9 @@
 }
 
 // joining-select {
+.joining-select-container {
+    align-self: flex-start;
+}
 .joining-select {
     display: flex;
     align-items: center;
