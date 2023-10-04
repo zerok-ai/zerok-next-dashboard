@@ -32,6 +32,7 @@ export interface ConditionRowType {
   value: string;
   datatype: string;
   executor?: (typeof ATTRIBUTE_EXECUTORS)[number];
+  json_path?: string | string[];
   key: string;
 }
 
@@ -289,16 +290,10 @@ export const inputMap: GenericObject = {
 };
 
 export const buildProbeBody = (
-  cards: ConditionCardType[],
-  title: string,
-  groupBy: GroupByType[],
-  sampling: {
-    samples: number;
-    duration: number;
-    metric: "m" | "s" | "h" | "d";
-  },
+  values: ProbeFormType,
   attributes: AttributeStateType
 ): ScenarioCreationType => {
+  const { cards, groupBy, name: title, sampling } = values;
   const workloads: WorkloadType[] = [] as WorkloadType[];
   cards.forEach((card) => {
     type ExecutorWorkloadType = {
@@ -350,6 +345,15 @@ export const buildProbeBody = (
               // @ts-expect-error ignore this
               attribute!.input = "";
             }
+            let jsonPath = {};
+            if (
+              condition.json_path &&
+              attribute?.supported_formats?.includes(" JSON")
+            ) {
+              jsonPath = {
+                json_path: (condition.json_path as string).split("."),
+              };
+            }
             return {
               type: "rule",
               id: condition.property,
@@ -358,6 +362,7 @@ export const buildProbeBody = (
               operator: condition.operator,
               value: condition.value,
               datatype: condition.datatype,
+              ...jsonPath,
             };
           }),
         },

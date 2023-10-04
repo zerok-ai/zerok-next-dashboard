@@ -173,7 +173,6 @@ const ProbeCreateForm = () => {
       console.log({ error });
     }
   };
-
   useEffect(() => {
     fetchAttributesForProtocol("HTTP");
   }, []);
@@ -188,7 +187,7 @@ const ProbeCreateForm = () => {
     }
   }, [selectedCluster]);
 
-  const { cards, groupBy, sampling } = watch();
+  const { cards, groupBy } = watch();
   useEffect(() => {
     if (Object.keys(errors).length) {
       // scroll to top smoothly
@@ -217,13 +216,7 @@ const ProbeCreateForm = () => {
         loading: true,
         error: null,
       });
-      const body = buildProbeBody(
-        cards,
-        getValues("name"),
-        groupBy,
-        sampling,
-        attributes!
-      );
+      const body = buildProbeBody(probeForm.watch(), attributes!);
       const endpoint = CREATE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string

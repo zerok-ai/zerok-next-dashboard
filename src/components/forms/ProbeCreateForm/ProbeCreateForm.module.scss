@@ -98,6 +98,12 @@
     flex-direction: column;
 }
 
+.json-path-enabled {
+    // align-self: flex-end;
+    align-items: flex-end !important;
+    // justify-content: flex-end;
+}
+
 .error-input {
     :global(.MuiInputBase-root:before){
         border-bottom:1px solid $error-500 !important;
@@ -311,4 +317,25 @@
 
 .error-text {
     color:$error-300;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-xs;
+    margin-top: $sp-lg;
+    font-weight: 500;
+
+}
+
+.json-path-input {
+    margin-top: $sp-md;
+    .condition-card-item {
+        position: relative;
+        margin-bottom: $sp-xl;
+    }
+}
+
+.json-help-text {
+    position: absolute;
 }
