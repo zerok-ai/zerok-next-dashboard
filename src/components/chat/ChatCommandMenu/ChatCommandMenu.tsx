@@ -1,7 +1,12 @@
 import { Divider, Menu, MenuItem } from "@mui/material";
-import { CHAT_COMMANDS } from "utils/gpt/constants";
+import {
+  CHAT_COMMANDS,
+  CHAT_TAG_CHARACTER,
+  SLACK_ITEMS,
+} from "utils/gpt/constants";
 import { type ChatCommandType, type ChatTagType } from "utils/gpt/types";
 import { ZEROK_DRAWER_LOGO_MINIMIZED } from "utils/images";
+import { type GenericObject } from "utils/types";
 
 import styles from "./ChatCommandMenu.module.scss";
 
@@ -20,7 +25,6 @@ const ChatCommandMenu = ({
   input,
   onSelect,
   menuRef,
-  inputRef,
   lastItemRef,
   isMenuOpen,
   toggleMenu,
@@ -40,17 +44,13 @@ const ChatCommandMenu = ({
     );
   };
 
-  const selectItem = (label: string) => {
-    onSelect(label);
-    setMenuOpen(false);
-  };
-
   const handleMouseClick = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>,
     item: ChatCommandType | ChatTagType
   ) => {
     e.preventDefault();
-    selectItem(item.value);
+    onSelect(item.value);
+    setMenuOpen(false);
   };
 
   const EmptyItem = () => {
@@ -64,26 +64,55 @@ const ChatCommandMenu = ({
 
   const renderCommands = () => {
     if (!input || !isMenuOpen) return null;
-    const search = input.substring(1);
-    const fields = CHAT_COMMANDS.filter((cmd) =>
-      cmd.label.toLowerCase().includes(search.toLowerCase())
-    );
-    if (fields.length === 0) return <EmptyItem />;
-    return fields.map((cmd, idx) => {
-      const isLastItem = idx === fields.length - 1;
-      return (
-        <MenuItem
-          key={cmd.value}
-          className={styles["menu-item"]}
-          onClick={(e) => {
-            handleMouseClick(e, cmd);
-          }}
-          ref={isLastItem ? lastItemRef : null}
-        >
-          {renderCommand(cmd)}
-        </MenuItem>
+    if (input[0] === CHAT_TAG_CHARACTER) {
+      return SLACK_ITEMS.map((item: GenericObject, idx: number) => {
+        if (item.disabled) {
+          return (
+            <MenuItem key={idx} disabled>
+              {item.label}
+            </MenuItem>
+          );
+        }
+        if (item.divider) {
+          return <Divider key={idx} />;
+        }
+        return (
+          <MenuItem
+            key={idx}
+            className={styles["menu-item"]}
+            onClick={(e) => {
+              handleMouseClick(e, {
+                label: item.label,
+                value: `${CHAT_TAG_CHARACTER}${item.label as string}`,
+              });
+            }}
+          >
+            {item.label}
+          </MenuItem>
+        );
+      });
+    } else {
+      const search = input.substring(1);
+      const fields = CHAT_COMMANDS.filter((cmd) =>
+        cmd.label.toLowerCase().includes(search.toLowerCase())
       );
-    });
+      if (fields.length === 0) return <EmptyItem />;
+      return fields.map((cmd, idx) => {
+        const isLastItem = idx === fields.length - 1;
+        return (
+          <MenuItem
+            key={cmd.value}
+            className={styles["menu-item"]}
+            onClick={(e) => {
+              handleMouseClick(e, cmd);
+            }}
+            ref={isLastItem ? lastItemRef : null}
+          >
+            {renderCommand(cmd)}
+          </MenuItem>
+        );
+      });
+    }
   };
 
   return (
@@ -93,6 +122,10 @@ const ChatCommandMenu = ({
         open={isMenuOpen}
         onClose={toggleMenu}
         transitionDuration={0}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
         // disableAutoFocus
         className={styles.menu}
       >

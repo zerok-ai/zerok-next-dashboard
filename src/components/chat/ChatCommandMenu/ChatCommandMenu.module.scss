@@ -7,7 +7,8 @@
     :global(.MuiMenu-paper){
         background-color: $grey-925;
         width:515px;
-        margin-top: - $sp-base * 20;
+        margin-top: -$sp-base * 24;
+        // margin-top: - $sp-base * 28;
         border:1px solid $grey-800;
     }
     :global(.MuiMenuItem-root){
