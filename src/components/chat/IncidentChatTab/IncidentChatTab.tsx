@@ -12,6 +12,7 @@ import { AiOutlineHistory } from "react-icons/ai";
 import { HiChevronRight } from "react-icons/hi";
 import {
   addInvalidCard,
+  addTagCard,
   chatSelector,
   fetchLikelyCause,
   fetchNewInference,
@@ -25,10 +26,11 @@ import {
   type ChatInferenceEventType,
   type ChatQueryEventType,
 } from "redux/types";
-import { CHAT_EVENTS } from "utils/gpt/constants";
+import { CHAT_EVENTS, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 
 import ChatEventCard from "../ChatEventCard";
+import ChatTagCard from "../ChatTagCard";
 import ChatToggleBanner from "../ChatToggleBanner";
 import GptLikelyCauseBox from "../GptLikelyCauseBox";
 import styles from "./IncidentChatTab.module.scss";
@@ -93,6 +95,8 @@ const IncidentChatTab = () => {
             incidentId: incidentId as string,
           })
         );
+      } else if (val.includes(`${CHAT_TAG_CHARACTER}`)) {
+        dispatch(addTagCard(val));
       } else {
         dispatch(
           fetchQueryResponse({
@@ -193,11 +197,14 @@ const IncidentChatTab = () => {
                   </Fragment>
                 );
               }
-              return (
-                <Fragment key={"some"}>
-                  <span></span>
-                </Fragment>
-              );
+              if (type === CHAT_EVENTS.TAG) {
+                return (
+                  <Fragment key={qa.id}>
+                    <ChatTagCard tag={qa.event.tag} />
+                  </Fragment>
+                );
+              }
+              return null;
             })}
           </div>
         </Fragment>

@@ -10,55 +10,6 @@ import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./IncidentChatTab.module.scss";
 
-export const UserQueryCard = ({
-  text,
-  tagCard,
-}: {
-  text: string;
-  tagCard: boolean;
-}) => {
-  const getText = () => {
-    if (!tagCard) {
-      return text;
-    }
-    const words = text.split(" ");
-    return (
-      <span>
-        {words.map((word, index) => {
-          if (word[0] === CHAT_TAG_CHARACTER) {
-            if (words.length === 1) {
-              return (
-                <span key={index}>
-                  <span className={styles["tag-text"]}>{word}</span> has entered
-                  the workspace.
-                </span>
-              );
-            }
-            return (
-              <span key={index} className={styles["tag-text"]}>
-                {word}
-              </span>
-            );
-          }
-          return <span key={index}> {word} </span>;
-        })}
-      </span>
-    );
-  };
-
-  return (
-    <div className={styles["user-query-card"]}>
-      <div className={styles["user-query-icon"]}>
-        <img
-          src={`/images/vectors/ai-user-avatar.svg`}
-          alt={`user-avatar-icon`}
-        />
-      </div>
-      <p className={styles["user-query-text"]}>{getText()}</p>
-    </div>
-  );
-};
-
 export const UserInputField = ({
   onSubmit,
   disabled,
@@ -77,6 +28,10 @@ export const UserInputField = ({
       setMenuOpen(true);
       return;
     }
+    if (userInput[0] === CHAT_TAG_CHARACTER && userInput.length === 1) {
+      setMenuOpen(true);
+      return;
+    }
     if (userInput.length === 0) {
       setMenuOpen(false);
       inputRef.current?.focus();
@@ -87,6 +42,9 @@ export const UserInputField = ({
     if (userInput[0] === CHAT_COMMAND_CHARACTER) {
       setUserInput("");
       onSubmit(command);
+      setMenuOpen(false);
+    } else if (userInput[0] === CHAT_TAG_CHARACTER) {
+      setUserInput(command.trim());
       setMenuOpen(false);
     } else {
       setUserInput((old) => {

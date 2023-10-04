@@ -287,6 +287,19 @@ export const chatSlice = createSlice({
         },
       });
     },
+    addTagCard: (state, { payload }: { payload: string }) => {
+      state.queries.push({
+        id: nanoid(),
+        typing: false,
+        incidentId: null,
+        issueId: null,
+        loading: false,
+        event: {
+          type: CHAT_EVENTS.TAG,
+          tag: payload,
+        },
+      });
+    },
     stopLikelyCauseTyping: (state) => {
       state.typing = false;
       if (state.likelyCause) {
@@ -411,6 +424,7 @@ export const {
   resetChat,
   stopLoading,
   startLoading,
+  addTagCard,
 } = chatSlice.actions;
 
 export const chatSelector = (state: RootState): ChatReduxType => state.chat;
