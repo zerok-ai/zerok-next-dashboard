@@ -53,7 +53,11 @@ const IncidentChatTab = () => {
     history,
     pastEventCount,
   } = useSelector(chatSelector);
-  const incidentId = router.query.trace ?? likelyCause?.incidentId ?? null;
+  const incidentId =
+    router.query.trace ??
+    likelyCause?.incidentId ??
+    router.query.latest ??
+    null;
   const [width, setWidth] = useState(550);
   useEffect(() => {
     if (selectedCluster && issueId) {
@@ -65,7 +69,6 @@ const IncidentChatTab = () => {
       );
     }
   }, [selectedCluster]);
-
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
@@ -147,7 +150,7 @@ const IncidentChatTab = () => {
               if (type === CHAT_EVENTS.INVALID) {
                 return (
                   <ChatEventCard
-                    text="Please select a request from the right to continue."
+                    text="Please select a request to continue."
                     key={qa.id}
                   />
                 );
