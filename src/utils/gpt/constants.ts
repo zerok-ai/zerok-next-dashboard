@@ -38,7 +38,7 @@ export const CHAT_COMMANDS: ChatCommandType[] = [
   },
 ];
 
-export const GPT_PAST_EVENT_PAGE_COUNT = 20;
+export const GPT_PAST_EVENT_PAGE_COUNT = 50;
 
 export const SLACK_ITEMS: GenericObject = [
   {
