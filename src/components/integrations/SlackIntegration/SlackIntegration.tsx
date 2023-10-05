@@ -20,13 +20,29 @@ const SlackIntegration = () => {
   const columns = [
     helper.accessor("name", {
       header: "Workspace",
-      size: DEFAULT_COL_WIDTH * 6,
+      size: DEFAULT_COL_WIDTH * 5,
     }),
     helper.accessor("created_at", {
       header: "Created",
       size: DEFAULT_COL_WIDTH * 2,
       cell: (cell) => {
         return <span>{getFormattedTime(cell.row.original.created_at)}</span>;
+      },
+    }),
+    helper.display({
+      header: "Actions",
+      size: DEFAULT_COL_WIDTH * 1,
+      cell: (cell) => {
+        return (
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            className={styles["disconnect-btn"]}
+          >
+            Disconnect
+          </Button>
+        );
       },
     }),
   ];
