@@ -88,7 +88,8 @@
     color:$grey-400 !important;
     opacity: 1 !important;
     font-weight: 500;
-    padding:$sp-sm $sp-md;
+    font-size: $font-md;
+    padding:$sp-xs $sp-md;
 }
 
 .condition-rows {
@@ -330,7 +331,7 @@
     color:$grey-50;
     display: flex;
     column-gap: $sp-md;
-    align-items: flex-start;
+    align-items: flex-end;
 }
 
 .sampling-select {
