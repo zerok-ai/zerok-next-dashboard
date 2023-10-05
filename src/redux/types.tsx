@@ -86,6 +86,13 @@ export interface ChatContextSwitchEventType extends ChatEventBaseType {
   };
 }
 
+export interface ChatTagEventType extends ChatEventBaseType {
+  event: {
+    type: typeof CHAT_EVENTS.TAG;
+    tag: string;
+  };
+}
+
 export interface ChatInvalidCardType {
   id: string;
   typing: false;
@@ -101,7 +108,8 @@ export type ChatEventType =
   | ChatQueryEventType
   | ChatInferenceEventType
   | ChatContextSwitchEventType
-  | ChatInvalidCardType;
+  | ChatInvalidCardType
+  | ChatTagEventType;
 
 export interface ChatLikelyCauseType {
   type: typeof CHAT_EVENTS.LIKELY_CAUSE;

@@ -2,7 +2,7 @@ import { OutlinedInput } from "@mui/material";
 import ChatCommandMenu from "components/chat/ChatCommandMenu";
 import { useToggle } from "hooks/useToggle";
 import { useEffect, useRef, useState } from "react";
-import { CHAT_COMMAND_CHARACTER } from "utils/gpt/constants";
+import { CHAT_COMMAND_CHARACTER, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./IncidentChatTab.module.scss";
@@ -25,6 +25,10 @@ export const UserInputField = ({
       setMenuOpen(true);
       return;
     }
+    if (userInput[0] === CHAT_TAG_CHARACTER && userInput.length === 1) {
+      setMenuOpen(true);
+      return;
+    }
     if (userInput.length === 0) {
       setMenuOpen(false);
       inputRef.current?.focus();
@@ -35,6 +39,19 @@ export const UserInputField = ({
     if (userInput[0] === CHAT_COMMAND_CHARACTER) {
       setUserInput("");
       onSubmit(command);
+      setMenuOpen(false);
+    } else if (userInput[0] === CHAT_TAG_CHARACTER) {
+      setUserInput(command.trim());
+      setMenuOpen(false);
+    } else {
+      setUserInput((old) => {
+        const lastIndex =
+          old.lastIndexOf(CHAT_TAG_CHARACTER) >= 0
+            ? old.lastIndexOf(CHAT_TAG_CHARACTER)
+            : 0;
+        const preCommand = old.substring(0, lastIndex);
+        return `${preCommand}@${command}`;
+      });
       setMenuOpen(false);
     }
   };
