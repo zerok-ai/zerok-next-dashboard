@@ -6,12 +6,15 @@ import {
 import {
   type AttributeProtocolType,
   type AttributeStateType,
+  type AttributeSupportedType,
 } from "utils/probes/types";
 import {
   type ScenarioCreationType,
   type WorkloadType,
 } from "utils/scenarios/types";
 import { type GenericObject } from "utils/types";
+
+import { type ConditionOperatorType } from "./ProbeCreateForm.types";
 
 export type ConditionRowStrings =
   | "property"
@@ -64,6 +67,16 @@ export const CONDITIONS = [
   {
     label: "not",
     value: "not",
+  },
+];
+
+export const SUPPORTED_FORMAT_OPERATORS: Array<{
+  label: string;
+  value: AttributeSupportedType;
+}> = [
+  {
+    label: "JSON",
+    value: "JSON",
   },
 ];
 
@@ -182,8 +195,46 @@ export const BOOLEAN_ATTRIBUTES = [
 
 export const BOOLEAN_VALUES = ["true", "false"];
 
-export const getOperatorByType = (type: string) => {
-  if (!type) return [];
+export const getOperatorByType = (
+  type: string,
+  supported_formats: AttributeSupportedType[]
+): ConditionOperatorType[] => {
+  if (!type || !type.length) return [];
+  switch (type) {
+    case "bool":
+      return BOOLEAN_ATTRIBUTES;
+    case "select":
+      return STRING_OPERATORS;
+    case "int":
+    case "integer":
+    case "double":
+      return NUMBER_OPERATORS;
+    case "string": {
+      if (supported_formats.includes("JSON")) {
+        const operators: ConditionOperatorType[] = [
+          {
+            title: "Evaluate as",
+            disabled: true,
+          },
+
+          ...SUPPORTED_FORMAT_OPERATORS,
+          {
+            divider: true,
+          },
+          {
+            title: "Operators",
+            disabled: true,
+          },
+          ...STRING_OPERATORS,
+        ];
+        return operators;
+      }
+      return STRING_OPERATORS.filter(
+        (op) => !["in", "not_in"].includes(op.value)
+      );
+    }
+  }
+
   if (type === "bool") {
     return BOOLEAN_ATTRIBUTES;
   }

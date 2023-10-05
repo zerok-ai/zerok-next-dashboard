@@ -100,6 +100,7 @@ const ProbeCreateForm = () => {
               operator: "",
               value: "",
               datatype: "",
+              json_path: "",
             },
           ],
         },

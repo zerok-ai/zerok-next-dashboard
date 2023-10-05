@@ -1,14 +1,21 @@
-import { FormHelperText, Input, MenuItem, Select } from "@mui/material";
+import {
+  Divider,
+  FormHelperText,
+  Input,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import cx from "classnames";
-import CustomCheckbox from "components/custom/CustomCheckbox";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineX } from "react-icons/hi";
+import { ATTRIBUTE_SUPPORTED_FORMATS } from "utils/probes/constants";
 import { type AttributeType } from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
+import { type ConditionOperatorType } from "../ProbeCreateForm.types";
 import {
   type ConditionRowType,
   CONDITIONS,
@@ -44,7 +51,10 @@ const ConditionRow = ({
   const cardIndex = cards.findIndex((c) => c.key === currentCardKey);
   const currentCard = cards[cardIndex];
   const { rootProperty, conditions } = currentCard;
-  const [jsonPathEnabled, toggleJsonPathEnabled] = useToggle(false);
+  const [jsonPathEnabled, , setJsonpathEnabled] = useToggle(false);
+  const [attributeFormat, setAttributeFormat] = useState<AttributeType | "">(
+    ""
+  );
   const getConditionErrors = (conditionIndex: number) => {
     if (
       formErrors.cards &&
@@ -75,11 +85,31 @@ const ConditionRow = ({
     resetGroupBy();
   };
 
-  const updateOperator = (value: string) => {
-    setValue(`cards.${cardIndex}.conditions.${conditionIndex}.operator`, value);
-    setValue(`cards.${cardIndex}.conditions.${conditionIndex}.value`, "");
-    if (value === "exists" || value === "not_exists") {
-      setValue(`cards.${cardIndex}.conditions.${conditionIndex}.value`, value);
+  const updateOperator = (
+    value: string | AttributeType,
+    type: "all" | "data"
+  ) => {
+    // @ts-expect-error expected
+    if (ATTRIBUTE_SUPPORTED_FORMATS.includes(value)) {
+      setJsonpathEnabled(true);
+      setAttributeFormat(value as AttributeType);
+      setValue(`cards.${cardIndex}.conditions.${conditionIndex}.operator`, "");
+    } else {
+      if (type === "all") {
+        setJsonpathEnabled(false);
+        setAttributeFormat("");
+      }
+      setValue(
+        `cards.${cardIndex}.conditions.${conditionIndex}.operator`,
+        value as string
+      );
+      setValue(`cards.${cardIndex}.conditions.${conditionIndex}.value`, "");
+      if (value === "exists" || value === "not_exists") {
+        setValue(
+          `cards.${cardIndex}.conditions.${conditionIndex}.value`,
+          value
+        );
+      }
     }
   };
 
@@ -98,10 +128,14 @@ const ConditionRow = ({
     const newConditions = conditions.filter((c) => c.key !== conditionKey);
     setValue(`cards.${cardIndex}.conditions`, newConditions);
   };
-  const operators = getOperatorByType(condition.datatype);
   const property = attributeOptions.find((p) => {
     return p.id === condition.property;
   });
+  const allOperators = getOperatorByType(
+    condition.datatype,
+    property?.supported_formats ?? []
+  );
+  const dataOperators = getOperatorByType(condition.datatype, []);
   const valueType = property?.input ?? "input";
   const helpText = "";
   const isJsonKeyAttribute =
@@ -122,6 +156,65 @@ const ConditionRow = ({
   const errors = getConditionErrors(cardIndex);
   const hideValueField =
     condition.operator === "exists" || condition.operator === "not_exists";
+
+  const renderOperatorSelect = (
+    list: ConditionOperatorType[],
+    type: "all" | "data"
+  ) => {
+    const value =
+      type === "all"
+        ? (attributeFormat as string).length
+          ? attributeFormat
+          : condition.operator
+        : condition.operator;
+    return (
+      <Select
+        variant="standard"
+        defaultValue=""
+        fullWidth
+        MenuProps={{
+          disableAutoFocus: true,
+        }}
+        name="operator"
+        disabled={!condition.property.length}
+        className={cx(styles["operator-select"])}
+        placeholder="Choose"
+        value={value}
+        onChange={(value) => {
+          updateOperator(value.target.value as string, type);
+        }}
+      >
+        {list.map((prt) => {
+          if (prt.divider) {
+            return <Divider key={nanoid()} />;
+          }
+          if (prt.title) {
+            return (
+              <p
+                key={nanoid()}
+                autoFocus={false}
+                className={styles["menu-item-title"]}
+              >
+                {prt.title}
+              </p>
+            );
+          }
+          if (prt.value) {
+            return (
+              <MenuItem
+                value={prt.value}
+                key={nanoid()}
+                className={styles["menu-item"]}
+              >
+                {prt.label}
+              </MenuItem>
+            );
+          }
+          return null;
+        })}
+      </Select>
+    );
+  };
   return (
     <div
       className={cx(
@@ -169,47 +262,19 @@ const ConditionRow = ({
             );
           })}
         </Select>
-        {isJsonKeyAttribute && (
+        {jsonPathEnabled && (
           <div className={cx(errors?.json_path && styles["error-input"])}>
-            <div className={styles["checkbox-container"]}>
-              <CustomCheckbox
-                size="small"
-                onChange={() => {
-                  if (jsonPathEnabled) {
-                    setValue(
-                      `cards.${cardIndex}.conditions.${conditionIndex}.json_path`,
-                      ""
-                    );
-                  }
-                  toggleJsonPathEnabled();
-                }}
-                defaultChecked={jsonPathEnabled}
-              />{" "}
-              <small>Valuate this attribute with a JSON path</small>
-            </div>
-            {jsonPathEnabled && (
-              <Fragment>
-                <Input
-                  name="json_path"
-                  fullWidth
-                  className={cx(styles["json-path-input"])}
-                  placeholder="Enter the JSON path to access the key"
-                  type={"text"}
-                  defaultValue={""}
-                  value={condition.json_path}
-                  onChange={(e) => {
-                    updateJsonpath(e.target.value);
-                  }}
-                />
-                <FormHelperText
-                  className={cx(styles["error-text"], styles["json-help-text"])}
-                >
-                  {errors?.json_path && (
-                    <span>Please enter a valid json path.</span>
-                  )}
-                </FormHelperText>
-              </Fragment>
-            )}
+            <Input
+              name="json_path"
+              fullWidth
+              className={cx(styles["json-path-input"])}
+              placeholder="Enter the JSON path to access the key"
+              type={"text"}
+              value={condition.json_path}
+              onChange={(e) => {
+                updateJsonpath(e.target.value);
+              }}
+            />
           </div>
         )}
       </div>
@@ -220,37 +285,21 @@ const ConditionRow = ({
           errors?.operator && styles["error-input"]
         )}
       >
-        <Select
-          variant="standard"
-          defaultValue=""
-          fullWidth
-          name="operator"
-          disabled={!condition.property.length}
-          className={cx(styles["operator-select"])}
-          placeholder="Choose"
-          value={condition.operator}
-          onChange={(value) => {
-            updateOperator(value.target.value);
-          }}
-        >
-          {operators.map((prt) => {
-            return (
-              <MenuItem
-                value={prt.value}
-                key={nanoid()}
-                className={styles["menu-item"]}
-              >
-                {prt.label}
-              </MenuItem>
-            );
-          })}
-        </Select>
+        <div className={styles["all-operators"]}>
+          {renderOperatorSelect(allOperators, "all")}
+        </div>
+        <div className={styles["data-operators"]}>
+          {(attributeFormat as string).length > 0 &&
+            jsonPathEnabled &&
+            renderOperatorSelect(dataOperators, "data")}
+        </div>
       </div>
       {!hideValueField && (
         <div
           className={cx(
             styles["condition-item-container"],
-            errors?.value && styles["error-input"]
+            errors?.value && styles["error-input"],
+            styles["value-container"]
           )}
         >
           {valueType !== "select" && valueType !== "bool" ? (

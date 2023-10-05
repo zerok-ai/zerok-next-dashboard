@@ -83,6 +83,14 @@
     }
 }
 
+.menu-item-title {
+    background-color: $grey-925;
+    color:$grey-400 !important;
+    opacity: 1 !important;
+    font-weight: 500;
+    padding:$sp-sm $sp-md;
+}
+
 .condition-rows {
     margin-top: $sp-sm;
     overflow-y: auto;
@@ -93,16 +101,26 @@
 }
 
 .condition-item-container {
+    display: grid;
     width:100%;
-    display: flex;
-    flex-direction: column;
+    row-gap: $sp-md;
 }
 
+
+
 .json-path-enabled {
-    // align-self: flex-end;
-    align-items: flex-end !important;
-    // justify-content: flex-end;
+    justify-content: space-between;
+    .condition-item-container {
+        // justify-content: space-between !important;
+    }
+    .all-operators {
+        align-self: flex-start;
+    }
+    .value-container {
+        align-self: flex-end !important;
+    }
 }
+
 
 .error-input {
     :global(.MuiInputBase-root:before){
@@ -136,6 +154,7 @@
 .condition-row-1 {
     grid-template-columns: 2fr 1fr 2fr;
     align-items: flex-start;
+    // padding-left: 52px;
 }
 
 .delete-card-button {
@@ -332,13 +351,6 @@
 }
 
 .json-path-input {
-    margin-top: $sp-md;
-    .condition-card-item {
-        position: relative;
-        margin-bottom: $sp-xl;
-    }
-}
-
-.json-help-text {
-    position: absolute;
+    // margin-top: $sp-md;
+    
 }
