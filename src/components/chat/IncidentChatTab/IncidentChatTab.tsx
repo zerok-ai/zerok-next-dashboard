@@ -12,6 +12,7 @@ import { AiOutlineHistory } from "react-icons/ai";
 import { HiChevronRight } from "react-icons/hi";
 import {
   addInvalidCard,
+  addTagCard,
   chatSelector,
   fetchLikelyCause,
   fetchNewInference,
@@ -25,10 +26,11 @@ import {
   type ChatInferenceEventType,
   type ChatQueryEventType,
 } from "redux/types";
-import { CHAT_EVENTS } from "utils/gpt/constants";
+import { CHAT_EVENTS, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 
 import ChatEventCard from "../ChatEventCard";
+import ChatTagCard from "../ChatTagCard";
 import ChatToggleBanner from "../ChatToggleBanner";
 import GptLikelyCauseBox from "../GptLikelyCauseBox";
 import styles from "./IncidentChatTab.module.scss";
@@ -51,7 +53,11 @@ const IncidentChatTab = () => {
     history,
     pastEventCount,
   } = useSelector(chatSelector);
-  const incidentId = router.query.trace ?? likelyCause?.incidentId ?? null;
+  const incidentId =
+    router.query.trace ??
+    likelyCause?.incidentId ??
+    router.query.latest ??
+    null;
   const [width, setWidth] = useState(550);
   useEffect(() => {
     if (selectedCluster && issueId) {
@@ -63,7 +69,6 @@ const IncidentChatTab = () => {
       );
     }
   }, [selectedCluster]);
-
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
@@ -93,6 +98,8 @@ const IncidentChatTab = () => {
             incidentId: incidentId as string,
           })
         );
+      } else if (val.includes(`${CHAT_TAG_CHARACTER}`)) {
+        dispatch(addTagCard(val));
       } else {
         dispatch(
           fetchQueryResponse({
@@ -143,7 +150,7 @@ const IncidentChatTab = () => {
               if (type === CHAT_EVENTS.INVALID) {
                 return (
                   <ChatEventCard
-                    text="Please select a request from the right to continue."
+                    text="Please select a request to continue."
                     key={qa.id}
                   />
                 );
@@ -190,6 +197,13 @@ const IncidentChatTab = () => {
                 return (
                   <Fragment key={qa.id}>
                     <GptInferenceBox query={qa as ChatInferenceEventType} />
+                  </Fragment>
+                );
+              }
+              if (type === CHAT_EVENTS.TAG) {
+                return (
+                  <Fragment key={qa.id}>
+                    <ChatTagCard tag={qa.event.tag} />
                   </Fragment>
                 );
               }
