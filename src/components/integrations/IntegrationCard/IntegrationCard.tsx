@@ -41,7 +41,7 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
     );
   };
   const handleRoute = (page: string) => {
-    router.push(`/integrations/prometheus/${page}`);
+    router.push(`/integrations/${name}/${page}`);
   };
   return (
     <div className={styles.container}>

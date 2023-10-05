@@ -1,9 +1,14 @@
-import { type INTEGRATION_CATEGORIES } from "./constants";
+import {
+  type INTEGRATION_APPS,
+  type INTEGRATION_CATEGORIES,
+} from "./constants";
 
 export type IntegrationCategoriesType = (typeof INTEGRATION_CATEGORIES)[number];
 
+export type IntegrationAppType = (typeof INTEGRATION_APPS)[number];
+
 export interface IntegrationListType {
-  name: string;
+  name: IntegrationAppType;
   label: string;
   description: string;
   url: string;
@@ -36,4 +41,10 @@ export interface PrometheusListType extends PrometheusBaseType {
   deleted: boolean;
   disabled: boolean;
   metric_server: boolean;
+}
+
+export interface SlackListType {
+  id: string;
+  name: string;
+  created_at: string;
 }
