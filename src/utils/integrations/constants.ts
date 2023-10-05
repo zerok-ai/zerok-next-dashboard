@@ -4,6 +4,13 @@ import { type IntegrationListType } from "./types";
 
 export const INTEGRATION_CATEGORIES = ["All", "Data sources", "Communication"];
 
+export const INTEGRATION_APPS = [
+  "slack",
+  "prometheus",
+  "otel",
+  "ebpf",
+] as const;
+
 export const INTEGRATION_LIST: IntegrationListType[] = [
   {
     name: "prometheus",
@@ -22,7 +29,7 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     url: "https://slack.com/",
     logo: BRAND_LOGOS.SLACK,
     category: "Communication",
-    integrated: false,
+    integrated: true,
     tags: ["All", "Communication"],
     disabledText: "Coming soon",
   },

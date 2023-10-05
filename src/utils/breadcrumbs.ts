@@ -55,6 +55,18 @@ export const BREADCRUMB_ROUTES: Record<
       },
     ],
   },
+  "/integrations/slack/list": {
+    crumbs: [
+      {
+        name: "Integrations",
+        path: "/integrations",
+      },
+      {
+        name: "Slack",
+        path: "/integrations/slack/list",
+      },
+    ],
+  },
   "/integrations/prometheus/edit": {
     crumbs: [
       {
