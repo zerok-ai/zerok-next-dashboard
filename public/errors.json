@@ -1,122 +1,4 @@
 {
-    "debug": {
-        "rawResponse": {
-            "attributes_list": [
-                {
-                    "protocol": "HTTP",
-                    "attribute_details": [
-                        {
-                            "key_set_name": "HTTP Common Attributes",
-                            "executor": "EBPF",
-                            "attribute_list": [
-                                {
-                                    "id": "\"http_response_body\"",
-                                    "field": "HTTP Response Body",
-                                    "input": "string",
-                                    "values": "Along with JSON Path",
-                                    "data_type": "string",
-                                    "json_path": true,
-                                    "description": "HTTP Response body",
-                                    "examples": "{ \"is_error\": true, \"payload\"{\"error.message\": \"1\"} }"
-                                },
-                                {
-                                    "id": "\"http_request_body\"",
-                                    "field": "HTTP Request Body",
-                                    "input": "string",
-                                    "values": "Along with JSON Path",
-                                    "data_type": "string",
-                                    "description": "HTTP Request body",
-                                    "json_key": true
-                                }
-                            ]
-                        },
-                        {
-                            "key_set_name": "HTTP Common Attributes",
-                            "executor": "OTEL",
-                            "attribute_list": [
-                                {
-                                    "id": "\"http_response_status_code\"",
-                                    "field": "Status Code",
-                                    "input": "int",
-                                    "data_type": "int",
-                                    "description": "HTTP response status code.",
-                                    "examples": "200"
-                                },
-                                {
-                                    "id": "\"http_request_method\"",
-                                    "field": "Method",
-                                    "input": "select",
-                                    "values": "[\"GET\", \"PUT\", \"POST\", \"DELETE\", \"PATCH\"]",
-                                    "data_type": "string",
-                                    "description": "HTTP request method.",
-                                    "examples": "GET; POST; HEAD"
-                                }
-                            ]
-                        },
-                        {
-                            "key_set_name": "HTTP Request And Response Headers",
-                            "executor": "OTEL",
-                            "attribute_list": [
-                                {
-                                    "id": "\"http_request_header\"",
-                                    "field": "Request Header",
-                                    "input": "string",
-                                    "data_type": "string",
-                                    "description": "HTTP request headers, <key> being the normalized HTTP Header name (lowercase, with - characters replaced by _), the value being the header values.",
-                                    "examples": "http.request.header.content_type=[\"application/json\"]; http.request.header.x_forwarded_for=[\"1.2.3.4\", \"1.2.3.5\"]"
-                                },
-                                {
-                                    "id": "\"http_response_header\"",
-                                    "field": "Response Header",
-                                    "input": "string",
-                                    "data_type": "string",
-                                    "description": "HTTP response headers, <key> being the normalized HTTP Header name (lowercase, with - characters replaced by _), the value being the header values.",
-                                    "examples": "http.response.header.content_type=[\"application/json\"]; http.response.header.my_custom_header=[\"abc\", \"def\"]"
-                                }
-                            ]
-                        },
-                        {
-                            "key_set_name": "HTTP Client",
-                            "executor": "OTEL",
-                            "attribute_list": [
-                                {
-                                    "id": "\"url_full\"",
-                                    "field": "URL",
-                                    "input": "string",
-                                    "data_type": "string",
-                                    "description": "Full HTTP request URL in the form scheme://host[:port]/path?query[#fragment]. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.",
-                                    "examples": "https://www.foo.bar/search?q=OpenTelemetry#SemConv"
-                                }
-                            ]
-                        },
-                        {
-                            "key_set_name": "HTTP Server",
-                            "executor": "OTEL",
-                            "attribute_list": [
-                                {
-                                    "id": "\"http_route\"",
-                                    "field": "Route",
-                                    "input": "string",
-                                    "data_type": "string",
-                                    "description": "The matched route (path template in the format used by the respective server framework).",
-                                    "examples": "/users/:userID?; {controller}/{action}/{id?}"
-                                },
-                                {
-                                    "id": "\"url_scheme\"",
-                                    "field": "Scheme",
-                                    "input": "select",
-                                    "values": "[\"HTTP\",\"HTTPS\"]",
-                                    "data_type": "string",
-                                    "description": "The URI scheme identifying the used protocol.",
-                                    "examples": "http; https"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    },
     "payload": {
         "attributes_list": [
             {
@@ -159,7 +41,7 @@
                                 "examples": "200"
                             },
                             {
-                                "id": "\"http_request_method\"",
+                                "id": "req_method",
                                 "field": "Method",
                                 "input": "select",
                                 "values": "[\"GET\", \"PUT\", \"POST\", \"DELETE\", \"PATCH\"]",
@@ -196,7 +78,7 @@
                         "executor": "OTEL",
                         "attribute_list": [
                             {
-                                "id": "\"url_full\"",
+                                "id": "req_path",
                                 "field": "URL",
                                 "input": "string",
                                 "data_type": "string",

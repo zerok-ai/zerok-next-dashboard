@@ -32,10 +32,12 @@ interface ConditionRowProps {
   resetGroupBy: () => void;
   condition: ConditionRowType;
   conditionIndex: number;
+  disabled?: boolean;
 }
 
 const ConditionRow = ({
   attributeOptions,
+  disabled = false,
   form,
   currentCardKey,
   resetGroupBy,
@@ -172,11 +174,11 @@ const ConditionRow = ({
         variant="standard"
         defaultValue=""
         fullWidth
+        disabled={!condition.property.length || disabled}
         MenuProps={{
           disableAutoFocus: true,
         }}
         name="operator"
-        disabled={!condition.property.length}
         className={cx(styles["operator-select"])}
         placeholder="Choose"
         value={value}
@@ -243,7 +245,7 @@ const ConditionRow = ({
       >
         <Select
           fullWidth
-          disabled={!rootProperty.length}
+          disabled={!rootProperty.length || disabled}
           defaultValue=""
           variant="standard"
           name="property"
@@ -271,6 +273,7 @@ const ConditionRow = ({
               placeholder="Enter the JSON path to access the key"
               type={"text"}
               value={condition.json_path}
+              disabled={disabled}
               onChange={(e) => {
                 updateJsonpath(e.target.value);
               }}
@@ -320,7 +323,7 @@ const ConditionRow = ({
               name="value"
               fullWidth
               variant="standard"
-              disabled={!condition.operator.length}
+              disabled={!condition.operator.length || disabled}
               value={condition.value}
               onChange={(e) => {
                 updateValue(e.target.value);

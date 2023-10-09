@@ -124,7 +124,12 @@ const GroupBySelect = ({
           }}
         >
           {cards.map((card, idx) => {
-            const service = services.find((s) => s.value === card.rootProperty);
+            const service = services.find(
+              (s) =>
+                s.value === card.rootProperty ||
+                s.value === card.rootProperty.toLowerCase()
+            );
+            console.log({ card, services });
             const label = service?.label;
             return (
               <MenuItem

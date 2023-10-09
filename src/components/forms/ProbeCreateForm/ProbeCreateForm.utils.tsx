@@ -377,7 +377,7 @@ export const buildProbeBody = (
         service,
         executor: executor as (typeof ATTRIBUTE_EXECUTORS)[number],
         trace_role: "server",
-        protocol: card.protocol.toUpperCase(),
+        protocol: card.protocol.toUpperCase() as AttributeProtocolType,
         rule: {
           type: "rule_group",
           condition: "AND",

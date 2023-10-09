@@ -29,6 +29,7 @@ interface ConditionCardProps {
   currentCardKey: string;
   attributes: AttributeStateType | null;
   resetGroupBy: () => void;
+  disabled?: boolean;
 }
 
 const ConditionCard = ({
@@ -38,6 +39,7 @@ const ConditionCard = ({
   currentCardKey,
   attributes,
   resetGroupBy,
+  disabled = false,
 }: ConditionCardProps) => {
   const { setValue, getValues } = form;
   const cards = getValues("cards");
@@ -94,6 +96,7 @@ const ConditionCard = ({
             className={styles["delete-card-button"]}
             onClick={deleteCard}
             size="small"
+            disabled={disabled}
           >
             <HiOutlineTrash />
           </IconButton>
@@ -103,6 +106,7 @@ const ConditionCard = ({
         {currentCard.conditions.map((cond, idx) => {
           return (
             <ConditionRow
+              disabled={disabled}
               condition={cond}
               conditionIndex={idx}
               key={cond.key}

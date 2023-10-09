@@ -37,6 +37,10 @@ import {
   type ProbeFormType,
 } from "./ProbeCreateForm.utils";
 
+interface ProbeCreateFormProps {
+  edit: false | ProbeFormType;
+}
+
 const ALL_PROTOCOL_SERVICES: Array<{
   label: string;
   value: string;
@@ -82,46 +86,49 @@ const filterServices = (services: ProbeServiceType): ProbeServiceType => {
   );
 };
 
-const ProbeCreateForm = () => {
+const initialValues: ProbeFormType = {
+  cards: [
+    // @TODO - check why adding a function triggers infinite loop
+    {
+      key: "card-1",
+      rootProperty: "",
+      protocol: "",
+      conditions: [
+        {
+          key: "condition-1",
+          property: "",
+          operator: "",
+          value: "",
+          datatype: "",
+          json_path: "",
+        },
+      ],
+    },
+  ],
+  groupBy: [
+    {
+      key: "group-by-1",
+      service: null,
+      property: "",
+      protocol: "",
+      executor: "",
+    },
+  ],
+  name: "",
+  time: DEFAULT_TIME_RANGE,
+  sampling: {
+    samples: 10,
+    duration: 1,
+    metric: "m",
+  },
+};
+
+const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
   const probeForm = useForm<ProbeFormType>({
     resolver: zodResolver(probeFormSchema),
     reValidateMode: "onChange",
-    values: {
-      cards: [
-        // @TODO - check why adding a function triggers infinite loop
-        {
-          key: "card-1",
-          rootProperty: "",
-          protocol: "",
-          conditions: [
-            {
-              key: "condition-1",
-              property: "",
-              operator: "",
-              value: "",
-              datatype: "",
-              json_path: "",
-            },
-          ],
-        },
-      ],
-      groupBy: [
-        {
-          key: "group-by-1",
-          service: null,
-          property: "",
-          protocol: "",
-          executor: "",
-        },
-      ],
-      name: "",
-      time: DEFAULT_TIME_RANGE,
-      sampling: {
-        samples: 10,
-        duration: 1,
-        metric: "m",
-      },
-    },
+    // eslint-disable-next-line no-unneeded-ternary
+    values: edit ? edit : initialValues,
   });
 
   const {
@@ -141,7 +148,6 @@ const ProbeCreateForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
-
   const fetchAttributesForProtocol = async (
     protocol: (typeof ATTRIBUTE_PROTOCOLS)[number]
   ) => {
@@ -151,7 +157,8 @@ const ProbeCreateForm = () => {
         "{protocol}",
         protocol
       );
-      const res = await raxios.get(endpoint);
+      console.log({ endpoint });
+      const res = await raxios.get("/errors.json");
       const attrList: AttributeResponseType =
         res.data.payload.attributes_list[0];
       attrList.attribute_details = attrList.attribute_details.map((attr) => {
@@ -246,13 +253,14 @@ const ProbeCreateForm = () => {
       });
     }
   };
-
+  console.log(!!edit);
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles["cards-container"]}>
         {cards.map((c, idx) => {
           return (
             <ConditionCard
+              disabled={!!edit}
               form={probeForm}
               includeAnd={idx > 0}
               loadingServices={loadingServices}
