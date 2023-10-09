@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import PageHeader from "components/helpers/PageHeader";
 import TableX from "components/themeX/TableX";
+import { nanoid } from "nanoid";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime } from "utils/dateHelpers";
 import { BRAND_LOGOS } from "utils/images";
@@ -15,6 +16,7 @@ const SlackIntegration = () => {
     {
       name: "ZeroKelvin",
       created_at: "2021-09-09T12:00:00.000Z",
+      id: nanoid(),
     },
   ];
   const columns = [
