@@ -169,24 +169,25 @@ const Probe = () => {
         const { scenario, disabled_at } = info.row.original;
         const { scenario_title, scenario_type } = scenario;
         return (
-          <div className={styles["scenario-title-container"]}>
-            {
-              <Fragment>
-                <span
-                  className={cx(
-                    styles["scenario-title"],
-                    disabled_at && styles.disabled
-                  )}
-                >
-                  {trimString(scenario_title, 100)}
-                  {disabled_at && <ChipX label="Disabled" />}
-                </span>
-                <div className={styles["scenario-title-chips"]}>
-                  {scenario_type === "SYSTEM" && <ChipX label="System" />}
-                </div>
-              </Fragment>
-            }
-          </div>
+          <Link
+            className={styles["scenario-link"]}
+            href={`/probes/view?id=${scenario.scenario_id}`}
+          >
+            <div className={styles["scenario-title-container"]}>
+              <span
+                className={cx(
+                  styles["scenario-title"],
+                  disabled_at && styles.disabled
+                )}
+              >
+                {trimString(scenario_title, 100)}
+                {disabled_at && <ChipX label="Disabled" />}
+              </span>
+              <div className={styles["scenario-title-chips"]}>
+                {scenario_type === "SYSTEM" && <ChipX label="System" />}
+              </div>
+            </div>
+          </Link>
         );
       },
     }),
