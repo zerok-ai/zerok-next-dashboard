@@ -55,7 +55,6 @@ const JoiningSelect = ({
       return value ?? "Select a service";
     }
   };
-  console.log({ disabled });
   return (
     <div className={styles["joining-select-container"]}>
       <Button

@@ -26,15 +26,19 @@ const ProbeEditPage = () => {
     const { id } = router.query;
     if (router.isReady && selectedCluster && id) {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
-        "{limit}",
-        PROBE_PAGE_SIZE.toString()
-      ).replace("{offset}", "0".replace("{cluster_id}", selectedCluster));
+        "{cluster_id}",
+        selectedCluster
+      )
+        .replace("{limit}", PROBE_PAGE_SIZE.toString())
+        .replace("{offset}", "0".replace("{cluster_id}", selectedCluster));
       fetchProbes(endpoint);
     }
     if (router.isReady && !id) {
       router.push("/probes");
     }
   }, [router, selectedCluster]);
+
+  console.log({ probe });
 
   useEffect(() => {
     if (probes?.length) {

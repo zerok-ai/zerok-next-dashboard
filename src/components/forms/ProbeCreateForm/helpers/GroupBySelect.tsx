@@ -97,10 +97,10 @@ const GroupBySelect = ({
     attributes && protocol && attributes[protocol]
       ? attributes[protocol]
           .map((attr) => {
-            return attr.attribute_list.filter(
-              (a) =>
-                (a.input === "string" || a.input === "select") &&
-                existingExecutors.includes(a.executor)
+            return attr.attribute_list.filter((a) =>
+              (a.input === "string" || a.input === "select") && !disabled
+                ? existingExecutors.includes(a.executor)
+                : true
             );
           })
           .flat()

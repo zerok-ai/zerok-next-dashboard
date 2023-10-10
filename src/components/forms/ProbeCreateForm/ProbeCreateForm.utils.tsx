@@ -199,7 +199,7 @@ export const getOperatorByType = (
   type: string,
   supported_formats: AttributeSupportedType[]
 ): ConditionOperatorType[] => {
-  if (!type || !type.length) return [];
+  if (!type || !type.length) return STRING_OPERATORS;
   switch (type) {
     case "bool":
       return BOOLEAN_ATTRIBUTES;
@@ -234,14 +234,7 @@ export const getOperatorByType = (
       );
     }
   }
-
-  if (type === "bool") {
-    return BOOLEAN_ATTRIBUTES;
-  }
-  if (type === "select") {
-    return STRING_OPERATORS;
-  }
-  return type === "string" ? STRING_OPERATORS : NUMBER_OPERATORS;
+  return STRING_OPERATORS;
 };
 
 export const getInputTypeByDatatype = (type: string) => {

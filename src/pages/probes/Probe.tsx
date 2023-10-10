@@ -159,7 +159,7 @@ const Probe = () => {
   const columns = [
     helper.accessor("scenario.scenario_title", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 6,
+      size: DEFAULT_COL_WIDTH * 5,
       cell: (info) => {
         if (
           selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
@@ -245,24 +245,24 @@ const Probe = () => {
           const scenario = scenarios?.find(
             (s) => s.scenario.scenario_id === scenario_id
           );
-          let sourceString = ``;
+          let sourceString: string[] = [];
           const keys = Object.keys(scenario!.scenario.workloads);
           keys.forEach((k, idx) => {
             const workload = scenario!.scenario.workloads[k];
-            const comma = idx === keys.length - 1 ? ` ` : `, `;
             if (workload?.service === "*/*") {
-              sourceString += `All ${workload?.protocol} services${comma}`;
+              sourceString.push(`All ${workload?.protocol} services`);
             } else {
-              sourceString += `${workload.service}${comma}`;
+              sourceString.push(`${workload.service}`);
             }
           });
+          sourceString = [...new Set(sourceString)];
           return (
-            <TooltipX title={sourceString}>
+            <TooltipX title={sourceString.join(", ")}>
               <span
                 className={cx(info.row.original.disabled_at && styles.disabled)}
               >
                 {" "}
-                {trimString(sourceString, 45)}{" "}
+                {trimString(sourceString.join(", "), 45)}{" "}
               </span>
             </TooltipX>
           );

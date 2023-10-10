@@ -92,7 +92,7 @@ const ConditionCard = ({
             }}
           />
         </div>
-        {currentCardIndex !== 0 && (
+        {currentCardIndex !== 0 && !disabled && (
           <IconButton
             className={styles["delete-card-button"]}
             onClick={deleteCard}
