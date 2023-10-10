@@ -78,6 +78,7 @@ const ConditionCard = ({
       <div className={styles["root-condition-container"]}>
         <div className={styles["root-condition-selects"]}>
           <JoiningSelect
+            disabled={disabled}
             loading={loadingServices}
             buttonMode={false}
             list={getServicesForRootProperty()}
@@ -118,13 +119,15 @@ const ConditionCard = ({
           );
         })}
       </div>
-      <p
-        className={styles["add-condition-button"]}
-        role="button"
-        onClick={addConditon}
-      >
-        + Condition
-      </p>
+      {!disabled && (
+        <p
+          className={styles["add-condition-button"]}
+          role="button"
+          onClick={addConditon}
+        >
+          + Condition
+        </p>
+      )}
     </div>
   );
 };

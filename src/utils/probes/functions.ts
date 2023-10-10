@@ -38,7 +38,6 @@ export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
       key: nanoid(),
     });
   });
-  console.log({ scenario });
 
   scenario.scenario.group_by.forEach((group) => {
     const { title, workload_id } = group;
@@ -52,7 +51,7 @@ export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
       property: title,
       protocol: workload.protocol,
       key: nanoid(),
-      executor: "OTEL",
+      executor: "",
     });
   });
   const title = scenario.scenario.scenario_title;

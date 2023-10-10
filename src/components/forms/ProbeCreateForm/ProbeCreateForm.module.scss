@@ -2,6 +2,9 @@
 .container {
     width:1040px;
     margin-top: $sp-md;
+    :global(.Mui-disabled){
+        -webkit-text-fill-color:$grey-300 !important;
+    }
 }
 
 .cards-container {
@@ -105,6 +108,7 @@
     display: grid;
     width:100%;
     row-gap: $sp-md;
+    
 }
 
 
@@ -169,6 +173,14 @@
     &:hover {
         color:$primary-500;
         cursor: pointer;
+    }
+}
+
+.delete-condition-button-disabled {
+    color:$grey-800;
+    &:hover {
+        color:$grey-800;
+        cursor: auto;
     }
 }
 

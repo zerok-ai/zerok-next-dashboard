@@ -39,7 +39,7 @@ export const BREADCRUMB_ROUTES: Record<
       },
       {
         name: "View Probe",
-        path: "probes/view",
+        path: "/probes/view",
       },
     ],
   },

@@ -8,11 +8,14 @@ import {
 import cx from "classnames";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineX } from "react-icons/hi";
 import { ATTRIBUTE_SUPPORTED_FORMATS } from "utils/probes/constants";
-import { type AttributeType } from "utils/probes/types";
+import {
+  type AttributeSupportedType,
+  type AttributeType,
+} from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import { type ConditionOperatorType } from "../ProbeCreateForm.types";
@@ -54,9 +57,10 @@ const ConditionRow = ({
   const currentCard = cards[cardIndex];
   const { rootProperty, conditions } = currentCard;
   const [jsonPathEnabled, , setJsonpathEnabled] = useToggle(false);
-  const [attributeFormat, setAttributeFormat] = useState<AttributeType | "">(
-    ""
-  );
+  const [attributeFormat, setAttributeFormat] = useState<
+    AttributeSupportedType | ""
+  >("");
+
   const getConditionErrors = (conditionIndex: number) => {
     if (
       formErrors.cards &&
@@ -94,7 +98,7 @@ const ConditionRow = ({
     // @ts-expect-error expected
     if (ATTRIBUTE_SUPPORTED_FORMATS.includes(value)) {
       setJsonpathEnabled(true);
-      setAttributeFormat(value as AttributeType);
+      setAttributeFormat(value as AttributeSupportedType);
       setValue(`cards.${cardIndex}.conditions.${conditionIndex}.operator`, "");
     } else {
       if (type === "all") {
@@ -125,6 +129,17 @@ const ConditionRow = ({
       value
     );
   };
+
+  useEffect(() => {
+    if (disabled && condition.json_path) {
+      setAttributeFormat("JSON");
+      setJsonpathEnabled(true);
+      setValue(
+        `cards.${cardIndex}.conditions.${conditionIndex}.json_path`,
+        (condition.json_path as string[]).join(".")
+      );
+    }
+  }, [condition]);
 
   const deleteCondition = (conditionKey: string) => {
     const newConditions = conditions.filter((c) => c.key !== conditionKey);
@@ -183,7 +198,7 @@ const ConditionRow = ({
         placeholder="Choose"
         value={value}
         onChange={(value) => {
-          updateOperator(value.target.value as string, type);
+          updateOperator(value.target.value, type);
         }}
       >
         {list.map((prt) => {
@@ -234,6 +249,7 @@ const ConditionRow = ({
           value="And"
           onSelect={null}
           buttonMode={true}
+          disabled={disabled}
         />
       )}
       {/* PROPERTY / ATTRIBUTE with JSON path */}
@@ -312,7 +328,7 @@ const ConditionRow = ({
               className={cx(styles["value-input"])}
               placeholder="Value"
               type={getInputTypeByDatatype(condition.datatype)}
-              disabled={!condition.operator.length}
+              disabled={!condition.operator.length || disabled}
               value={condition.value}
               onChange={(e) => {
                 updateValue(e.target.value);
@@ -354,9 +370,14 @@ const ConditionRow = ({
       {conditionIndex !== 0 && (
         <HiOutlineX
           role="button"
-          className={styles["delete-condition-button"]}
+          className={cx(
+            styles["delete-condition-button"],
+            disabled && styles["delete-condition-button-disabled"]
+          )}
           onClick={() => {
-            deleteCondition(condition.key);
+            if (!disabled) {
+              deleteCondition(condition.key);
+            }
           }}
         />
       )}

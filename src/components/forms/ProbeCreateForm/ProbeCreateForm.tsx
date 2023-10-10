@@ -253,7 +253,9 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
       });
     }
   };
-  console.log(!!edit);
+  const handleEditSubmit = () => {
+    router.push("/probes");
+  };
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles["cards-container"]}>
@@ -278,7 +280,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         variant="contained"
         className={styles["add-card-btn"]}
         onClick={addCard}
-        disabled={cards.length === formattedServices.length}
+        disabled={cards.length === formattedServices.length || !!edit}
       >
         Add service <HiOutlinePlus />
       </Button>
@@ -299,30 +301,36 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
                 services={formattedServices}
                 form={probeForm}
                 attributes={attributes}
+                disabled={!!edit}
               />
             );
           })}
         </div>
-        <p
-          role="button"
-          className={styles["add-group-by-button"]}
-          onClick={addGroupBy}
-        >
-          + Group by another property
-        </p>
+        {!edit && (
+          <p
+            role="button"
+            className={styles["add-group-by-button"]}
+            onClick={addGroupBy}
+          >
+            + Group by another property
+          </p>
+        )}
       </div>
 
       <div className={styles.divider}></div>
-      <Sampling form={probeForm} />
+      <Sampling form={probeForm} disabled={!!edit} />
       <div className={styles.divider}></div>
-      <NameAndTimeForm form={probeForm} />
+      <NameAndTimeForm form={probeForm} disabled={!!edit} />
       <LoadingButton
         variant="contained"
         className={styles["create-button"]}
-        type="submit"
+        type={edit ? "button" : "submit"}
+        onClick={() => {
+          edit ? handleEditSubmit() : handleSubmit(onSubmit);
+        }}
         loading={status.loading}
       >
-        Submit
+        {edit ? "Done" : "Submit"}
       </LoadingButton>
       {status.error && (
         <p className={styles["error-text"]}>

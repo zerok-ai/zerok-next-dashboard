@@ -8,9 +8,10 @@ import { type ProbeFormType } from "../ProbeCreateForm.utils";
 
 interface SamplingProps {
   form: UseFormReturn<ProbeFormType, any, undefined>;
+  disabled: boolean;
 }
 
-const Sampling = ({ form }: SamplingProps) => {
+const Sampling = ({ form, disabled = false }: SamplingProps) => {
   const {
     formState: { errors },
   } = form;
@@ -21,6 +22,7 @@ const Sampling = ({ form }: SamplingProps) => {
         <Input
           {...form.register("sampling.samples", { valueAsNumber: true })}
           type="number"
+          disabled={disabled}
         />
       </div>{" "}
       samples per{" "}
@@ -28,6 +30,7 @@ const Sampling = ({ form }: SamplingProps) => {
         <Input
           {...form.register("sampling.duration", { valueAsNumber: true })}
           type="number"
+          disabled={disabled}
         />{" "}
       </div>
       <div className={cx(errors.sampling?.metric && styles["error-input"])}>
@@ -36,6 +39,7 @@ const Sampling = ({ form }: SamplingProps) => {
           value={form.watch("sampling.metric")}
           {...form.register("sampling.metric")}
           className={cx(styles["sampling-select"])}
+          disabled={disabled}
         >
           <MenuItem value="s">seconds</MenuItem>
           <MenuItem value="m">minutes</MenuItem>
