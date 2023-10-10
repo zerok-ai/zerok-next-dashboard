@@ -148,6 +148,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
+
   const fetchAttributesForProtocol = async (
     protocol: (typeof ATTRIBUTE_PROTOCOLS)[number]
   ) => {
@@ -157,8 +158,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         "{protocol}",
         protocol
       );
-      console.log({ endpoint });
-      const res = await raxios.get("/errors.json");
+      const res = await raxios.get(endpoint);
       const attrList: AttributeResponseType =
         res.data.payload.attributes_list[0];
       attrList.attribute_details = attrList.attribute_details.map((attr) => {

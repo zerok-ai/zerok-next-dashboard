@@ -17,12 +17,12 @@ export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
     const rules = workload.rule.rules;
     const conditions: ConditionRowType[] = [];
     rules.forEach((rule) => {
-      const { value, operator, type, json_path, id } = rule;
+      const { value, operator, json_path, id, input } = rule;
       conditions.push({
         property: id,
         operator,
         value,
-        datatype: type,
+        datatype: input,
         key: nanoid(),
         json_path: json_path || [],
       });
@@ -51,7 +51,7 @@ export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
       property: title,
       protocol: workload.protocol,
       key: nanoid(),
-      executor: "",
+      executor: workload.executor,
     });
   });
   const title = scenario.scenario.scenario_title;

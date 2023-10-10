@@ -129,14 +129,13 @@ const ConditionRow = ({
       value
     );
   };
-
   useEffect(() => {
-    if (disabled && condition.json_path) {
+    if (disabled && condition.json_path && condition.json_path.length > 0) {
       setAttributeFormat("JSON");
       setJsonpathEnabled(true);
       setValue(
         `cards.${cardIndex}.conditions.${conditionIndex}.json_path`,
-        (condition.json_path as string[]).join(".")
+        condition.json_path
       );
     }
   }, [condition]);
