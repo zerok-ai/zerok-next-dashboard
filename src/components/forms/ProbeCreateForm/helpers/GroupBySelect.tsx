@@ -22,6 +22,7 @@ interface GroupBySelectProps {
     rootOnly?: boolean;
   }>;
   attributes: AttributeStateType | null;
+  disabled: boolean;
 }
 
 const GroupBySelect = ({
@@ -29,6 +30,7 @@ const GroupBySelect = ({
   services,
   currentGroupByKey,
   attributes,
+  disabled = false,
 }: GroupBySelectProps) => {
   const { setValue, getValues, formState } = form;
   const { cards, groupBy } = getValues();
@@ -112,7 +114,7 @@ const GroupBySelect = ({
     >
       <div className={styles["group-by-select-container"]}>
         <Select
-          disabled={emptyCard}
+          disabled={emptyCard || disabled}
           defaultValue={""}
           fullWidth
           value={values.service ?? ""}
@@ -129,7 +131,6 @@ const GroupBySelect = ({
                 s.value === card.rootProperty ||
                 s.value === card.rootProperty.toLowerCase()
             );
-            console.log({ card, services });
             const label = service?.label;
             return (
               <MenuItem
@@ -156,7 +157,7 @@ const GroupBySelect = ({
           }}
           placeholder="Start typing..."
           className={styles["group-by-select"]}
-          disabled={values.service === null}
+          disabled={values.service === null || disabled}
         >
           {attributeOptions.map((attr) => {
             return (
@@ -168,7 +169,7 @@ const GroupBySelect = ({
         </Select>
         {renderHelperText("property")}
       </div>
-      {!isFirstIndex && (
+      {!isFirstIndex && !disabled && (
         <IconButton
           size="small"
           className={styles["delete-group-by-button"]}
