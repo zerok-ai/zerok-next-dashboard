@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
-import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
+import { ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
 import { PROBE_ATTRIBUTES_ENDPOINT } from "utils/probes/endpoints";
 import {
   type AttributeProtocolType,
@@ -150,40 +150,48 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
   const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
 
   const fetchAttributesForProtocol = async (
-    protocol: (typeof ATTRIBUTE_PROTOCOLS)[number]
+    protocol: Array<(typeof ATTRIBUTE_PROTOCOLS)[number]>
   ) => {
-    if (attributes && attributes[protocol]) return;
+    if (attributes) return;
     try {
       const endpoint = PROBE_ATTRIBUTES_ENDPOINT.replace(
         "{protocol}",
-        protocol
+        protocol.join(",")
       );
       const res = await raxios.get(endpoint);
-      const attrList: AttributeResponseType =
-        res.data.payload.attributes_list[0];
-      attrList.attribute_details = attrList.attribute_details.map((attr) => {
-        attr.attribute_list = attr.attribute_list.filter((a) => {
-          return a.field && a.input && a.id;
+      const attrList: AttributeResponseType[] =
+        res.data.payload.attributes_list;
+      attrList.map((attr) => {
+        attr.attribute_details = attr.attribute_details.map((attr) => {
+          attr.attribute_list = attr.attribute_list.filter((a) => {
+            return a.field && a.input && a.id;
+          });
+          return attr;
+        });
+        attr.attribute_details = attr.attribute_details.map((attr) => {
+          attr.attribute_list = attr.attribute_list.map((a) => {
+            return { ...a, executor: attr.executor };
+          });
+          return attr;
         });
         return attr;
       });
-      attrList.attribute_details = attrList.attribute_details.map((attr) => {
-        attr.attribute_list = attr.attribute_list.map((a) => {
-          return { ...a, executor: attr.executor };
-        });
-        return attr;
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const attrMap = {} as AttributeStateType;
+      attrList.forEach((attr) => {
+        attrMap[attr.protocol] = attr.attribute_details;
       });
-      const attrMap: AttributeStateType = {
-        [protocol]: attrList.attribute_details,
-      };
       setAttributes((prev) => ({ ...prev, ...attrMap }));
     } catch (error) {
       console.log({ error });
     }
   };
+
   useEffect(() => {
-    fetchAttributesForProtocol("HTTP");
+    fetchAttributesForProtocol([...ATTRIBUTE_PROTOCOLS]);
   }, []);
+
+  console.log({ attributes });
 
   useEffect(() => {
     if (selectedCluster) {
@@ -275,15 +283,17 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
           );
         })}
       </div>
-      <Button
-        color="secondary"
-        variant="contained"
-        className={styles["add-card-btn"]}
-        onClick={addCard}
-        disabled={cards.length === formattedServices.length || !!edit}
-      >
-        Add service <HiOutlinePlus />
-      </Button>
+      {!edit && (
+        <Button
+          color="secondary"
+          variant="contained"
+          className={styles["add-card-btn"]}
+          onClick={addCard}
+          disabled={cards.length === formattedServices.length}
+        >
+          Add service <HiOutlinePlus />
+        </Button>
+      )}
       <div className={styles.divider}></div>
       <div className={styles["group-by-container"]}>
         <p className={styles["group-by-title"]}>

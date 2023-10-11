@@ -32,7 +32,6 @@ export type AttributeType =
     };
 
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export type AttributeStateType = {
   [key in (typeof ATTRIBUTE_PROTOCOLS)[number]]: Array<{
     executor: (typeof ATTRIBUTE_EXECUTORS)[number];

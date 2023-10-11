@@ -161,7 +161,6 @@ const ConditionRow = ({
       try {
         return JSON.parse(property.values);
       } catch (err) {
-        console.log({ err });
         return [];
       }
     } else if (property?.input === "bool") {
