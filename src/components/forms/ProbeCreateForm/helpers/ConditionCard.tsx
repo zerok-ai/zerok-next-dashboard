@@ -48,11 +48,12 @@ const ConditionCard = ({
   const protocol = currentCard.protocol.toUpperCase() as AttributeProtocolType;
   const attributeOptions =
     attributes && protocol && attributes[protocol]
-      ? attributes[protocol]
-          .map((at) => {
+      ? [
+          ...attributes[protocol].map((at) => {
             return [...at.attribute_list];
-          })
-          .flat()
+          }),
+          ...attributes.GENERAL.map((at) => [...at.attribute_list]),
+        ].flat()
       : [];
 
   const { rootProperty, conditions } = currentCard;

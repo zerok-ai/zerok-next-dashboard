@@ -2,31 +2,34 @@
 .container {
     // height:22px;
     width:fit-content;
-    padding:$sp-base / 2 $sp-md;
+    padding:$sp-base $sp-sm;
     border-radius: $sp-base;
     font-weight: 500;
     font-size: $font-sm;
-    color:$grey-300;
+    color:$grey-50;
     letter-spacing: 0.5px;
-    background-color: $grey-800;
+    background-color: $grey-950;
+    border:1px solid $grey-700;
+    text-transform: capitalize;
+    line-height: 16px;
 }
 
-.upper {
-    text-transform: uppercase;
+.small {
+    font-size: smaller;
 }
 
 .secondary {
-    background-color: $grey-900;
+    background-color: $grey-925;
 }
 
 .primary {
-    background-color: $grey-900;
+    background-color: $grey-950;
     color:$primary-500;
     border:1px solid $primary-700;
 }
 
 .success {
-    background-color: $primary-700;
+    background-color: $grey-925;
 }
 
 .warning {

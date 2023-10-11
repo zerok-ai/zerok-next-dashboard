@@ -95,15 +95,16 @@ const GroupBySelect = ({
     .filter((e) => !!e);
   const attributeOptions =
     attributes && protocol && attributes[protocol]
-      ? attributes[protocol]
-          .map((attr) => {
+      ? [
+          ...attributes[protocol].map((attr) => {
             return attr.attribute_list.filter((a) =>
               (a.input === "string" || a.input === "select") && !disabled
                 ? existingExecutors.includes(a.executor)
                 : true
             );
-          })
-          .flat()
+          }),
+          ...attributes.GENERAL.map((at) => [...at.attribute_list]),
+        ].flat()
       : [];
   return (
     <div

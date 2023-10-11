@@ -3,6 +3,7 @@ import ProbeCreateForm from "components/forms/ProbeCreateForm";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
+import ChipX from "components/themeX/ChipX";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -60,6 +61,9 @@ const ProbeEditPage = () => {
         loading={!probe}
         showRefresh={false}
         showBreadcrumb
+        bottomRow={[
+          <ChipX label="Read-only" key="chip-x-read-only" size="small" />,
+        ]}
       />
       {probe ? (
         <ProbeCreateForm edit={scenarioToProbeForm(probe)} />
