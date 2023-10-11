@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
-import cx from "classnames";
 import TextFormField from "components/forms/TextFormField";
 import Link from "next/link";
 import { useState } from "react";
@@ -15,7 +14,10 @@ import styles from "./ForgotPasswordForm.module.scss";
 
 const ForgotPasswordForm = () => {
   const ForgotPasswordSchema = z.object({
-    email: z.string().email().min(1, "Email cannot be empty"),
+    email: z
+      .string()
+      .email("Please enter a valid email")
+      .min(1, "Email cannot be empty"),
   });
   type ForgotPasswordSchemaType = z.infer<typeof ForgotPasswordSchema>;
   const {
@@ -59,10 +61,7 @@ const ForgotPasswordForm = () => {
 
   return (
     <div className={styles.container}>
-      <form
-        className={cx("form", styles.form)}
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         {/* Email field */}
         <TextFormField
           name="email"

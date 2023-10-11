@@ -88,3 +88,10 @@
   align-items: center;
   column-gap: $sp-sm;
 }
+
+@mixin form-base {
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-xl;
+  margin-bottom: $sp-sm;  
+}
