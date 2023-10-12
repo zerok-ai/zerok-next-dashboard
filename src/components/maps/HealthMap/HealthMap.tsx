@@ -1,4 +1,5 @@
 import { Skeleton } from "@mui/material";
+import { ServiceMapCard } from "components/health-page/ServiceMapCard/ServiceMapCard";
 import ExceptionNode from "components/maps/ExceptionNode";
 import MapControls from "components/maps/MapControls";
 import { useRouter } from "next/router";
@@ -11,6 +12,7 @@ import ReactFlow, {
   useEdgesState,
   useNodesState,
 } from "reactflow";
+import { NODE_WIDTH } from "utils/constants";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
 import { type ServiceMapDetail } from "utils/health/types";
 import { getLayoutedElements } from "utils/mapHelpers";
@@ -20,7 +22,6 @@ import {
   getEdgesFromServiceMap,
   getNodesFromServiceMap,
   HEALTHMAP_EDGETYPES,
-  ServiceMapCard,
 } from "./HealthMap.utils";
 
 const proOptions = { hideAttribution: true };
@@ -107,9 +108,10 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   const onNodeClick = (e: MouseEvent, node: Node) => {
     const target = e.target as HTMLElement;
     const pos = target.getBoundingClientRect();
+    console.log({ pos });
     setSelectedService({
       ...node,
-      position: { x: pos.left, y: pos.top },
+      position: { x: pos.x - NODE_WIDTH / 2, y: pos.y },
     });
   };
 
