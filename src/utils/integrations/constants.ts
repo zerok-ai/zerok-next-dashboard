@@ -43,12 +43,12 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     description:
       "Integrate ZeroK with eBPF agent to fetch request/response payload data.",
     url: "https://ebpf.io/",
-    integrated: true,
+    integrated: false,
     logo: BRAND_LOGOS.EBPF,
     category: "Data sources",
     dummy: true,
     tags: ["All", "Data sources"],
-    triggerClusterModal: true,
+    // triggerClusterModal: true,
   },
 ];
 

@@ -38,7 +38,7 @@ import { UserInputField } from "./IncidentChatTab.utils";
 
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
-  const [enableChat] = useToggle(true);
+  const [enableChat] = useToggle(false);
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const dispatch = useDispatch();
   const router = useRouter();

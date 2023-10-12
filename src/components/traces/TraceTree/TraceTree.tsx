@@ -27,12 +27,12 @@ import {
   HiOutlineX,
 } from "react-icons/hi";
 import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
-import { fetchNewInference } from "redux/chat";
+// import { fetchNewInference } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
-import { useDispatch, useSelector } from "redux/store";
+import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { convertNanoToMilliSeconds } from "utils/functions";
-import { ICON_BASE_PATH, ICONS } from "utils/images";
+// import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./TraceTree.module.scss";
@@ -72,7 +72,7 @@ const TraceTree = ({
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [referenceTime, setReferenceTime] = useState<null | {
     totalTime: number;
@@ -80,6 +80,7 @@ const TraceTree = ({
   }>(null);
 
   const { issue, trace, issue_id: issueId } = router.query;
+  console.log({ trace, issueId });
 
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
@@ -275,7 +276,7 @@ const TraceTree = ({
         <div className={styles.header}>
           <h5>
             Spans
-            <Button
+            {/* <Button
               variant="contained"
               size="extraSmall"
               className={styles["synth-btn"]}
@@ -291,7 +292,7 @@ const TraceTree = ({
             >
               Synthesis request{" "}
               <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} />
-            </Button>
+            </Button> */}
           </h5>
           <div className={styles["header-actions"]}>
             {!isModalOpen && (
