@@ -5,9 +5,7 @@ import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import SpanCards from "components/SpanCards";
 import Head from "next/head";
-import { Fragment, useEffect, useState } from "react";
-import { resetChat } from "redux/chat";
-import { useDispatch } from "redux/store";
+import { Fragment, useState } from "react";
 
 // import { type SpanResponse } from "utils/types";
 import styles from "./IncidentDetailPage.module.scss";
@@ -15,12 +13,12 @@ import { IssueMetadata } from "./IncidentDetails.utils";
 
 const IncidentDetailPage = () => {
   const [isScrollLocked, setIsScrollLocked] = useState(false);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    return () => {
-      dispatch(resetChat());
-    };
-  }, []);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(resetChat());
+  //   };
+  // }, []);
   return (
     <div>
       <Fragment>
