@@ -184,7 +184,9 @@ const Probe = () => {
                 {disabled_at && <ChipX label="Disabled" />}
               </span>
               <div className={styles["scenario-title-chips"]}>
-                {scenario_type === "SYSTEM" && <ChipX label="System" />}
+                {scenario_type === "SYSTEM" && (
+                  <ChipX label="System" upperCase={false} />
+                )}
               </div>
             </div>
           </Link>
