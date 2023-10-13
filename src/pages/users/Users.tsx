@@ -170,11 +170,13 @@ const Users = () => {
         return (
           <div className={styles["actions-container"]}>
             <LoadingButton
-              variant="outlined"
+              variant="contained"
               size="small"
+              color="secondary"
               onClick={async () => {
                 await inviteUser(info.row.original);
               }}
+              className={styles["resend-button"]}
               loading={invitingUser?.id === info.row.original.id}
             >
               Resend Invite

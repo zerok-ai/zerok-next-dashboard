@@ -13,6 +13,8 @@ export interface IntegrationListType {
   dummy?: boolean;
   tags: IntegrationCategoriesType[];
   triggerClusterModal?: boolean;
+  disableAddNew?: boolean;
+  disableManage?: boolean;
 }
 export interface PrometheusBaseType {
   alias: string;
