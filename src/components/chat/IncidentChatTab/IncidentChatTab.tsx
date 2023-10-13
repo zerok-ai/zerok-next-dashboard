@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
 import GptInferenceBox from "components/chat/GptInferenceBox";
+import ChatDisabledCard from "components/ChatDisabledCard";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
@@ -14,7 +15,7 @@ import {
   addInvalidCard,
   addTagCard,
   chatSelector,
-  fetchLikelyCause,
+  // fetchLikelyCause,
   fetchNewInference,
   fetchPastEvents,
   fetchQueryResponse,
@@ -59,16 +60,16 @@ const IncidentChatTab = () => {
     router.query.latest ??
     null;
   const [width, setWidth] = useState(550);
-  useEffect(() => {
-    if (selectedCluster && issueId) {
-      dispatch(
-        fetchLikelyCause({
-          selectedCluster,
-          issueId: issueId as string,
-        })
-      );
-    }
-  }, [selectedCluster]);
+  // useEffect(() => {
+  //   if (selectedCluster && issueId) {
+  //     dispatch(
+  //       fetchLikelyCause({
+  //         selectedCluster,
+  //         issueId: issueId as string,
+  //       })
+  //     );
+  //   }
+  // }, [selectedCluster]);
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
@@ -114,7 +115,9 @@ const IncidentChatTab = () => {
 
   const renderChat = useCallback(() => {
     if (!enableChat) {
-      return null;
+      return (
+        <ChatDisabledCard text="This feature is disabled for your organisation. Please contact ZeroK to know more." />
+      );
     } else {
       if (bottomRef.current) {
         bottomRef.current.scrollIntoView({

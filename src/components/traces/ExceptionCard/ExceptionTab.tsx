@@ -16,10 +16,11 @@ interface ExceptionTabProps {
 }
 
 const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
-  const { data: exceptionSpan, fetchData } = useFetch<SpanRawDataResponse>(
-    "span_raw_data_details",
-    null
-  );
+  const {
+    data: exceptionSpan,
+    fetchData,
+    error,
+  } = useFetch<SpanRawDataResponse>("span_raw_data_details", null);
 
   const { selectedCluster } = useSelector(clusterSelector);
   const router = useRouter();
@@ -28,7 +29,7 @@ const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
   useEffect(() => {
     if (selectedCluster && incidentId) {
       const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
-        "{cluster_id}",
+        "{cluster_sid}",
         selectedCluster
       )
         .replace("{issue_id}", issue as string)
@@ -38,19 +39,28 @@ const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
     }
   }, [selectedCluster, incidentId]);
 
-  if (!exceptionSpan) {
+  if (!exceptionSpan && !error) {
     return (
       <div className={styles.container}>
         <CustomSkeleton len={5} />
       </div>
     );
   }
-  const exceptionData = exceptionSpan[Object.keys(exceptionSpan)[0]];
+  const exceptionData =
+    exceptionSpan && exceptionSpan[Object.keys(exceptionSpan)[0]];
   const data = exceptionData?.req_body as string;
-  if (!data) {
+  if (!data || error) {
     return (
       <div className={styles.container}>
-        <CustomSkeleton len={5} />
+        <div className={styles.header}>
+          <h6>Exception</h6>
+        </div>
+        <div className={styles.content}>
+          <div className={styles.row}>
+            This feature is disabled for your organisation. Please contact ZeroK
+            to know more.
+          </div>
+        </div>
       </div>
     );
   }
