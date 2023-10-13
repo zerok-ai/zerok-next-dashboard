@@ -15,8 +15,15 @@ interface IntegrationCardProps {
 }
 
 const IntegrationCard = ({ integration }: IntegrationCardProps) => {
-  const { name, label, logo, description, integrated, triggerClusterModal } =
-    integration;
+  const {
+    name,
+    label,
+    logo,
+    description,
+    integrated,
+    triggerClusterModal,
+    disableManage,
+  } = integration;
   const dispatch = useDispatch();
   const router = useRouter();
   const ChipLabel = () => {
@@ -51,21 +58,23 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
         </p>
 
         <div className={styles.actions}>
-          <Button
-            onClick={() => {
-              handleRoute("list");
-            }}
-            disabled={!integrated}
-            variant={"contained"}
-            color={!integrated ? "primary" : "secondary"}
-            // size="small"
-            className={styles["action-button"]}
-          >
-            {integrated && (
-              <HiOutlineCog6Tooth className={styles["action-icon"]} />
-            )}
-            {integrated ? "Manage" : "Coming soon"}
-          </Button>
+          {!disableManage && (
+            <Button
+              onClick={() => {
+                handleRoute("list");
+              }}
+              disabled={!integrated}
+              variant={"contained"}
+              color={!integrated ? "primary" : "secondary"}
+              // size="small"
+              className={styles["action-button"]}
+            >
+              {integrated && (
+                <HiOutlineCog6Tooth className={styles["action-icon"]} />
+              )}
+              {integrated ? "Manage" : "Coming soon"}
+            </Button>
+          )}
           {/* New */}
           {integrated && (
             <Button

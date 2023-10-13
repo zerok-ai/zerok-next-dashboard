@@ -36,6 +36,7 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     dummy: true,
     tags: ["All", "Data sources"],
     triggerClusterModal: true,
+    disableManage: true,
   },
   {
     name: "ebpf",

@@ -29,7 +29,7 @@ const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
   useEffect(() => {
     if (selectedCluster && incidentId) {
       const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
-        "{cluster_sid}",
+        "{cluster_id}",
         selectedCluster
       )
         .replace("{issue_id}", issue as string)

@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
+import ChatDisabledCard from "components/chat/ChatDisabledCard";
 import GptInferenceBox from "components/chat/GptInferenceBox";
-import ChatDisabledCard from "components/ChatDisabledCard";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
@@ -15,6 +15,7 @@ import {
   addInvalidCard,
   addTagCard,
   chatSelector,
+  fetchLikelyCause,
   // fetchLikelyCause,
   fetchNewInference,
   fetchPastEvents,
@@ -60,16 +61,16 @@ const IncidentChatTab = () => {
     router.query.latest ??
     null;
   const [width, setWidth] = useState(550);
-  // useEffect(() => {
-  //   if (selectedCluster && issueId) {
-  //     dispatch(
-  //       fetchLikelyCause({
-  //         selectedCluster,
-  //         issueId: issueId as string,
-  //       })
-  //     );
-  //   }
-  // }, [selectedCluster]);
+  useEffect(() => {
+    if (selectedCluster && issueId && enableChat) {
+      dispatch(
+        fetchLikelyCause({
+          selectedCluster,
+          issueId: issueId as string,
+        })
+      );
+    }
+  }, [selectedCluster]);
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;

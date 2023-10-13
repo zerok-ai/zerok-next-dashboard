@@ -101,7 +101,7 @@ export const DEFAULT_TABS = [
           label: "Protocol",
           value: metadata.protocol,
           customRender: () => {
-            return <ChipX label={metadata.protocol} />;
+            return <ChipX label={metadata.protocol} upperCase={true} />;
           },
         },
         {
