@@ -109,7 +109,10 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
     const pos = target.getBoundingClientRect();
     setSelectedService({
       ...node,
-      position: { x: pos.left, y: pos.top },
+      position: {
+        x: pos.left,
+        y: pos.top,
+      },
     });
   };
 

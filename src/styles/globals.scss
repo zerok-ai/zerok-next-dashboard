@@ -85,6 +85,12 @@ a {
   }
 }
 
+fieldset {
+  outline:0;
+  border:none;
+  padding:0;
+}
+
 
 // Material ui overrides
 .MuiFormHelperText-root {

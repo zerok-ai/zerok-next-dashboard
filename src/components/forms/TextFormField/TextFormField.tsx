@@ -15,6 +15,7 @@ interface TextFormFieldProps {
   errorText: undefined | string;
   helperText?: string;
   endAdornment?: ReactNode;
+  autoComplete?: "off" | "on";
 }
 
 const TextFormField = ({
@@ -28,9 +29,10 @@ const TextFormField = ({
   customClassName,
   register,
   endAdornment,
+  autoComplete = "off",
 }: TextFormFieldProps) => {
   return (
-    <div className={cx("form-item", customClassName)}>
+    <fieldset className={cx("form-item", customClassName)}>
       <InputLabel htmlFor={name} className={cx("form-label")}>
         {label}
       </InputLabel>
@@ -42,10 +44,11 @@ const TextFormField = ({
         {...register(name)}
         placeholder={placeholder}
         error={error}
+        autoComplete={autoComplete}
         helperText={errorText && error ? errorText : helperText}
         InputProps={{ endAdornment: endAdornment ?? null }}
       />
-    </div>
+    </fieldset>
   );
 };
 
