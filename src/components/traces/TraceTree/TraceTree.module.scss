@@ -3,7 +3,7 @@
 
 .container {
     border:1px solid $grey-800;
-    border-radius: $sp-base * 2;display: flex;
+    border-radius: $sp-sm;display: flex;
     flex-direction: column;
     width:100%;
     background-color: $bg-dark;
@@ -46,12 +46,12 @@
 }
 
 .expanded {
-    padding:$sp-base * 4;
+    padding:$sp-lg;
 }
 .tree {
     position: relative;
     flex:1;
-    padding:$sp-base $sp-base * 2;
+    padding:$sp-base $sp-sm;
     overflow-y: auto;
     :global(.Mui-expanded){
         margin:0;
@@ -64,7 +64,7 @@
         margin-bottom:0;
     }
     border-bottom: 1px solid $grey-800;
-    padding-bottom: $sp-base * 7;
+    padding-bottom: $sp-xxxl;
 }
 
 .accordion {
@@ -106,7 +106,7 @@
     z-index:1000;
     line-height: 20px;
     padding-top: $sp-base / 2;
-    margin-left: $sp-base * 2;
+    margin-left: $sp-sm;
     &:hover {
         color:$primary-500;
     }
@@ -114,7 +114,7 @@
 
 .accordion-label-container {
     display: flex;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-lg;
 }
 
 .latency {
@@ -123,14 +123,14 @@
 }
 .accordion-details {
     border:none;
-    padding:0 $sp-base * 2;
+    padding:0 $sp-sm;
     padding-right: 0;
     background-color: $bg-dark;
 }
 
 .close-button {
     position: absolute;
-    top: $sp-base * 3;
+    top: $sp-md;
     right: 840px;
     cursor: pointer;
     z-index: 500;
@@ -163,7 +163,7 @@
 }
 
 .last-child {
-    padding: 0 $sp-base * 3;  
+    padding: 0 $sp-md;  
     padding-bottom: $sp-base / 2;
     display: flex;
 }
@@ -205,7 +205,7 @@
 .span-name {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
 }
 
 .span-method {

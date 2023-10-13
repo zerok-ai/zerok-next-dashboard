@@ -11,6 +11,7 @@ import PageWrapper from "components/helpers/PageWrapper";
 import SearchBar from "components/helpers/SearchBar";
 // hooks
 import { useToggle } from "hooks/useToggle";
+import { useTrigger } from "hooks/useTrigger";
 // react
 import { Fragment, useCallback, useMemo, useState } from "react";
 // icons
@@ -31,6 +32,9 @@ const Home = () => {
   const healthyCluster = selectedCluster
     ? status === CLUSTER_STATES.HEALTHY
     : true;
+  const { trigger: cardTrigger, changeTrigger: changeCardTrigger } =
+    useTrigger();
+  const { trigger: mapTrigger, changeTrigger: changeMapTrigger } = useTrigger();
   const MapFilterButton = useMemo(() => {
     return (
       <Button
@@ -82,14 +86,18 @@ const Home = () => {
         showRange={isHealthMap}
         showRefresh={true}
         leftExtras={healthyCluster ? getExtras() : []}
+        onRefresh={() => {
+          isHealthMap ? changeMapTrigger() : changeCardTrigger();
+        }}
       />
       {isHealthMap ? (
         <ServiceMapPage
           toggleDrawer={toggleMapFilter}
           isFilterOpen={isMapFilterOpen}
+          trigger={mapTrigger}
         />
       ) : (
-        <HealthCards filter={cardFilter} />
+        <HealthCards filter={cardFilter} trigger={cardTrigger} />
       )}
     </Fragment>
   );

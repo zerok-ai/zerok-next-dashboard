@@ -34,6 +34,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
       return service.service;
     }
   };
+
   return (
     <div className={cx(styles.container)}>
       <ServiceCardStatusIcon status={isHealthy ? "healthy" : "error"} />

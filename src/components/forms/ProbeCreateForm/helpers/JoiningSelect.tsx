@@ -18,6 +18,7 @@ interface JoiningSelectProps {
   value?: string;
   onSelect: ((value: string) => void) | null;
   loading?: boolean;
+  disabled: boolean;
 }
 
 const JoiningSelect = ({
@@ -27,10 +28,13 @@ const JoiningSelect = ({
   value,
   onSelect,
   loading,
+  disabled,
 }: JoiningSelectProps) => {
   const [btnRef, setBtnRef] = useState<HTMLButtonElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setBtnRef(event.currentTarget);
+    if (!disabled) {
+      setBtnRef(event.currentTarget);
+    }
   };
   const handleClose = () => {
     setBtnRef(null);
@@ -57,6 +61,7 @@ const JoiningSelect = ({
         variant="contained"
         onClick={handleClick}
         size="small"
+        disabled={disabled}
         color="secondary"
         className={cx(
           styles["joining-select"],

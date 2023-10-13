@@ -9,8 +9,8 @@
     overflow-x: auto;
     border-top-left-radius: $sp-base;
     border-top-right-radius: $sp-base;
-    border-bottom-left-radius: $sp-base * 2;
-    border-bottom-right-radius: $sp-base * 2;
+    border-bottom-left-radius: $sp-sm;
+    border-bottom-right-radius: $sp-sm;
     box-shadow: -18px 0px 0px -17px rgba(0, 0, 0, 0.06);
 
     tbody:last-child {
@@ -24,7 +24,7 @@
   th {
     div {
       line-height: $line-height-small;
-    padding: $sp-base * 3 $sp-base * 3;
+    padding: $sp-md $sp-md;
     text-align: start;
     font-size: $font-sm;
     box-shadow: -18px 0px 0px -17px rgba(0, 0, 0, 0.06);
@@ -35,7 +35,7 @@
 }
 
 .table-body-td {
-    padding:$sp-base * 3;
+    padding:$sp-md;
     color:$grey-25;
     border-bottom: 1px solid $grey-900;
 }

@@ -24,35 +24,35 @@
 .likely-cause-container {
     padding-bottom: $sp-base *5;
     border-bottom:1px solid $grey-400;
-    margin-bottom: $sp-base * 3;
+    margin-bottom: $sp-md;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 3;
+    row-gap: $sp-md;
     button {
         align-self: flex-end;
         text-transform: none;
         display: flex;
         align-items: center;
-        column-gap: $sp-base * 2;
+        column-gap: $sp-sm;
     }
 }
 
 .chat-box-container {
     // height:300px;
     height: calc(100vh - 100px);
-    padding:$sp-base * 5;
+    padding:$sp-xl;
     padding-bottom: 0;
     overflow-y: auto;
     @media screen and (max-width: ($bp-desktop)) {
-        padding:$sp-base * 3;
+        padding:$sp-md;
         padding-bottom: 0;
     }
 }
 
 .chat-input-container {
     flex:1;
-    padding:$sp-base * 5;
-    padding-top: $sp-base * 3;
+    padding:$sp-xl;
+    padding-top: $sp-md;
 }
 
 
@@ -69,7 +69,7 @@
     hyphens: auto;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 3;
+    row-gap: $sp-md;
 }
 
 .chat-input {
@@ -88,13 +88,13 @@
 }
 
 .chat-qa-container {
-    padding:0 $sp-base * 4;
+    padding:0 $sp-lg;
 }
 
 
 .text-boxes {
     display: flex;
-    row-gap: $sp-base * 2;
+    row-gap: $sp-xl;
     flex-direction: column;
 }
 
@@ -108,6 +108,6 @@
 }
 
 .expand-icon {
-    font-size: $sp-base * 8;
+    font-size: $sp-32;
     color:$grey-25;
 }

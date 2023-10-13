@@ -4,3 +4,7 @@
 .remove-icon-styles {
     @include remove-icon-btn-styles;
 }
+
+.form {
+    @include form-base;
+}

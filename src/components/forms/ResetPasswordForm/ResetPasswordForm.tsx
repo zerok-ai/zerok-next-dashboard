@@ -16,14 +16,15 @@ import { z } from "zod";
 
 import styles from "./ResetPasswordForm.module.scss";
 
+const ResetPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(1, "Password cannot be empty")
+    .min(5, "Password must be at least 5 characters long"),
+});
+type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;
+
 const ResetPasswordForm = () => {
-  const ResetPasswordSchema = z.object({
-    password: z
-      .string()
-      .min(1, "Password cannot be empty")
-      .min(4, "Password must be at least 5 characters long"),
-  });
-  type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;
   const {
     register,
     handleSubmit,

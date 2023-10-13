@@ -31,6 +31,18 @@ export const BREADCRUMB_ROUTES: Record<
       },
     ],
   },
+  "/probes/view": {
+    crumbs: [
+      {
+        name: "Probes",
+        path: "/probes",
+      },
+      {
+        name: "View Probe",
+        path: "/probes/view",
+      },
+    ],
+  },
   "/integrations/prometheus/list": {
     crumbs: [
       {

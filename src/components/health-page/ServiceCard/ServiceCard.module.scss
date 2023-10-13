@@ -4,10 +4,10 @@
     border:1px solid $grey-600;
     background-color: $grey-900;
     border-radius: $sp-base;
-    padding:$sp-base * 4;
+    padding:$sp-lg;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 5;
+    row-gap: $sp-xl;
     position: relative;
     height:220px;
     a {
@@ -41,7 +41,7 @@
 
 .status-icon {
   position: absolute;  
-  right:$sp-base * 2;
+  right:$sp-sm;
   top:- $sp-base;
 }
 
@@ -53,7 +53,7 @@
 .healthy-status-connected-icon {
   @include icon-xs;
   background-color: $white;
-  border-radius: $sp-base * 5; 
+  border-radius: $sp-xl; 
 }
 
 .healthy-status-green-dot-icon {
@@ -69,6 +69,6 @@
     @include icon-xs;
     border-radius: 50%;
     background-color: $error-700;
-    top:- 2 * $sp-base;
+    top:- $sp-sm;
     right: $sp-base;
 }

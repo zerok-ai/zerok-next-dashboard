@@ -68,7 +68,7 @@
 
 .entry-point-container {
     display: flex;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-lg;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -106,12 +106,12 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
 }
 
 .skeleton-container {
-    padding:$sp-base * 3;
-    row-gap: $sp-base * 3;
+    padding:$sp-md;
+    row-gap: $sp-md;
 }
 
 .skeleton {

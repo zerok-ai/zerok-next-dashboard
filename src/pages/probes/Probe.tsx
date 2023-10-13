@@ -11,6 +11,7 @@ import DialogX from "components/themeX/DialogX";
 // import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
+import { useTrigger } from "hooks/useTrigger";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,7 +21,7 @@ import { HiOutlineTrash } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { showSnackbar } from "redux/snackbar";
 import { useDispatch, useSelector } from "redux/store";
-import { DEFAULT_COL_WIDTH, DEFAULT_TIME_RANGE } from "utils/constants";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   getFormattedTimeFromEpoc,
   getRelativeTimeFromEpoc,
@@ -34,14 +35,10 @@ import raxios from "utils/raxios";
 import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
 import {
   DELETE_PROBE_ENDPOINT,
-  GET_SCENARIO_DETAILS_ENDPOINT,
   LIST_SCENARIOS_ENDPOINT,
   UPDATE_PROBE_STATUS_ENDPOINT,
 } from "utils/scenarios/endpoints";
-import {
-  type ScenarioDetail,
-  type ScenarioDetailType,
-} from "utils/scenarios/types";
+import { type ScenarioDetailType } from "utils/scenarios/types";
 import { PROBE_SORT_OPTIONS } from "utils/tables/sort";
 
 import styles from "./Probe.module.scss";
@@ -54,7 +51,7 @@ const DEFAULT_SORT = {
 const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
   // const [totalScenarios, setTotalScenarios] = useState<number>(0);
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const { selectedCluster } = useSelector(clusterSelector);
   const dispatch = useDispatch();
   const [selectedProbe, setSelectedProbe] = useState<null | {
     scenario_id: string;
@@ -63,8 +60,8 @@ const Probe = () => {
   }>(null);
   const [sortBy, setSortBy] = useState<SortingState>([DEFAULT_SORT]);
   const router = useRouter();
-  const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
+  const { trigger, changeTrigger } = useTrigger();
   const resetSelectedProbe = () => {
     setSelectedProbe(null);
   };
@@ -81,27 +78,7 @@ const Probe = () => {
         .replace("{cluster_id}", selectedCluster as string);
       const rdata = await raxios.get(endpoint);
       // setTotalScenarios(rdata.data.payload.total_rows);
-      const allScenarios = rdata.data.payload.scenarios as ScenarioDetailType[];
-      const idList = allScenarios.map((s) => s.scenario.scenario_id);
-      const sdata = await raxios.get(
-        GET_SCENARIO_DETAILS_ENDPOINT.replace(
-          "{scenario_id_list}",
-          idList.join(",")
-        )
-          .replace("{cluster_id}", selectedCluster as string)
-          .replace("{range}", range as string)
-      );
-      const scenarioMetadata = sdata.data.payload.scenarios as ScenarioDetail[];
-      const finalSlist = allScenarios.map((sd) => {
-        const scen = scenarioMetadata.find(
-          (s) => s.scenario_id === sd.scenario.scenario_id
-        );
-        if (scen) {
-          return { ...sd, ...scen };
-        }
-        return sd;
-      });
-      setScenarios(finalSlist);
+      setScenarios(rdata.data.payload.scenarios);
     } catch (err) {
       console.log({ err });
     } finally {
@@ -113,7 +90,7 @@ const Probe = () => {
       setScenarios(null);
       getData();
     }
-  }, [selectedCluster, router, renderTrigger]);
+  }, [selectedCluster, router, trigger]);
 
   const handleSwitchChange = async (scenario_id: string, enable: boolean) => {
     setSelectedProbe({ scenario_id, loading: true, deleting: false });
@@ -182,7 +159,7 @@ const Probe = () => {
   const columns = [
     helper.accessor("scenario.scenario_title", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 6,
+      size: DEFAULT_COL_WIDTH * 5,
       cell: (info) => {
         if (
           selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
@@ -192,24 +169,25 @@ const Probe = () => {
         const { scenario, disabled_at } = info.row.original;
         const { scenario_title, scenario_type } = scenario;
         return (
-          <div className={styles["scenario-title-container"]}>
-            {
-              <Fragment>
-                <span
-                  className={cx(
-                    styles["scenario-title"],
-                    disabled_at && styles.disabled
-                  )}
-                >
-                  {trimString(scenario_title, 100)}
-                  {disabled_at && <ChipX label="Disabled" />}
-                </span>
-                <div className={styles["scenario-title-chips"]}>
-                  {scenario_type === "SYSTEM" && <ChipX label="System" />}
-                </div>
-              </Fragment>
-            }
-          </div>
+          <Link
+            className={styles["scenario-link"]}
+            href={`/probes/view?id=${scenario.scenario_id}`}
+          >
+            <div className={styles["scenario-title-container"]}>
+              <span
+                className={cx(
+                  styles["scenario-title"],
+                  disabled_at && styles.disabled
+                )}
+              >
+                {trimString(scenario_title, 100)}
+                {disabled_at && <ChipX label="Disabled" />}
+              </span>
+              <div className={styles["scenario-title-chips"]}>
+                {scenario_type === "SYSTEM" && <ChipX label="System" />}
+              </div>
+            </div>
+          </Link>
         );
       },
     }),
@@ -267,24 +245,24 @@ const Probe = () => {
           const scenario = scenarios?.find(
             (s) => s.scenario.scenario_id === scenario_id
           );
-          let sourceString = ``;
+          let sourceString: string[] = [];
           const keys = Object.keys(scenario!.scenario.workloads);
           keys.forEach((k, idx) => {
             const workload = scenario!.scenario.workloads[k];
-            const comma = idx === keys.length - 1 ? ` ` : `, `;
             if (workload?.service === "*/*") {
-              sourceString += `All ${workload?.protocol} services${comma}`;
+              sourceString.push(`All ${workload?.protocol} services`);
             } else {
-              sourceString += `${workload.service}${comma}`;
+              sourceString.push(`${workload.service}`);
             }
           });
+          sourceString = [...new Set(sourceString)];
           return (
-            <TooltipX title={sourceString}>
+            <TooltipX title={sourceString.join(", ")}>
               <span
                 className={cx(info.row.original.disabled_at && styles.disabled)}
               >
                 {" "}
-                {trimString(sourceString, 45)}{" "}
+                {trimString(sourceString.join(", "), 45)}{" "}
               </span>
             </TooltipX>
           );
@@ -405,6 +383,7 @@ const Probe = () => {
         showRefresh
         leftExtras={leftExtras}
         rightExtras={rightExtras}
+        onRefresh={changeTrigger}
         // alignExtras="right"
       />
       <DialogX

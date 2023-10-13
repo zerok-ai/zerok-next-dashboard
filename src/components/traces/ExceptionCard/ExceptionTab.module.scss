@@ -13,10 +13,10 @@
     height:400px;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 4;
+    row-gap: $sp-lg;
     border:1px solid $grey-800;
-    border-radius: $sp-base * 2;
-// column-gap: $sp-base * 6;
+    border-radius: $sp-sm;
+// column-gap: $sp-xxl;
 }
 
 .row {
@@ -59,7 +59,7 @@
 }
 
 .exception-row {
-    padding:$sp-base*2 $sp-base * 5;
+    padding:$sp-base*2 $sp-xl;
     border-bottom:1px solid $grey-900;
     span {
         color:$grey-100;

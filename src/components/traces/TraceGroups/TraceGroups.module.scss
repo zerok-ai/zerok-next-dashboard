@@ -2,7 +2,7 @@
 @import 'styles/mixins';
 .container {
     height:100%;
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
     border:1px solid $grey-800;
 }
 
@@ -13,9 +13,9 @@
 .groups {
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 4;
-    padding:$sp-base * 3;
-    padding-bottom: $sp-base * 6;
+    row-gap: $sp-lg;
+    padding:$sp-md;
+    padding-bottom: $sp-xxl;
     
     :global(.Mui-expanded){
         margin:0;
@@ -30,16 +30,16 @@
 }
 
 .group-card-container {
-    padding-bottom: $sp-base * 4;
+    padding-bottom: $sp-lg;
     border-bottom: 1px solid $grey-900;
 }
 
 .group-card {
     cursor: pointer;
     border:1px solid $grey-900;
-    border-radius: $sp-base * 2;
-    padding: $sp-base * 2;
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
+    padding: $sp-sm;
+    border-radius: $sp-sm;
     display: grid;
     grid-template-columns: 1.3fr repeat(4,1fr);
     background-color: $grey-925;
@@ -67,13 +67,13 @@
 
 .accordion-details {
     border:none;
-    padding: $sp-base * 2 ;
+    padding: $sp-sm ;
     // border-left: 1px solid $grey-700;
     background-color: $bg-dark;
 }
 
 .accordion-summary-content {
-    margin-left: $sp-base * 2;
+    margin-left: $sp-sm;
     color:$grey-25;
     &:hover {
         color:$primary-500;

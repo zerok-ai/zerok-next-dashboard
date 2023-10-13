@@ -2,7 +2,7 @@
 .incident-metadata-container {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     span {
         font-size: $font-sm;
         color:$grey-200;
@@ -20,7 +20,7 @@
 
 .content-container {
     display: flex;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-lg;
     height:calc(100vh - $header-height - $sp-base * 40);
 }
 
@@ -30,7 +30,7 @@
 }
 
 .chat-container{
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
     height:calc(100vh - $header-height - $sp-base * 40);
     overflow: hidden;
     border:1px solid $grey-800;
