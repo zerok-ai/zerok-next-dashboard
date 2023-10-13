@@ -1,0 +1,30 @@
+@import "styles/variables.module.scss";
+.container {
+    display: flex;
+    border-radius: $sp-base;
+    border:1px solid $grey-900;
+    padding:$sp-base * 5;
+    column-gap: $sp-base * 5;
+    h5 {
+        color:$grey-100;
+        border-bottom: 1px solid $grey-700; 
+        padding-bottom: $sp-md;
+        margin-bottom: $sp-md;
+    }
+    @media screen and (max-width: ($bp-desktop)) {
+        padding:$sp-base * 3;
+    }
+}
+
+.chatbox-logo {
+    display: flex;
+    width:40px;
+    height:40px;
+    align-items: center;
+    justify-content: center;
+    border:1px solid $grey-900;
+    > img {
+        width:32px;
+        height: 32px;
+    }
+}
