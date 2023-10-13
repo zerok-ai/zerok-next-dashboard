@@ -3,7 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import cx from "classnames";
 import TextFormField from "components/forms/TextFormField";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { showSnackbar } from "redux/snackbar";
 import { useDispatch } from "redux/store";
@@ -58,7 +58,7 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <Fragment>
       <form
         className={cx("form", styles.form)}
         onSubmit={handleSubmit(onSubmit)}
@@ -72,6 +72,7 @@ const ForgotPasswordForm = () => {
           customClassName={styles["form-field"]}
           error={!!errors.email}
           errorText={errors.email?.message}
+          autoComplete="on"
         />
         {/* Submit button */}
         <LoadingButton
@@ -93,7 +94,7 @@ const ForgotPasswordForm = () => {
       <Link href="/login" className={"form-end-link"}>
         Login
       </Link>
-    </div>
+    </Fragment>
   );
 };
 

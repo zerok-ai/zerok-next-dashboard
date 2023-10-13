@@ -7,7 +7,7 @@ import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import useStatus from "hooks/useStatus";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { SET_USER_PASSWORD_ENDPOINT } from "utils/endpoints";
 import { maskPassword } from "utils/functions";
@@ -75,7 +75,7 @@ const ResetPasswordForm = () => {
   }, [router, query]);
 
   return (
-    <div className={styles.container}>
+    <Fragment>
       <form
         className={cx("form", styles.form)}
         onSubmit={handleSubmit(onSubmit)}
@@ -118,7 +118,7 @@ const ResetPasswordForm = () => {
       <Link href="/login" className={"form-end-link"}>
         Login
       </Link>
-    </div>
+    </Fragment>
   );
 };
 

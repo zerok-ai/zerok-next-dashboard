@@ -6,7 +6,7 @@ import TextFormField from "components/forms/TextFormField";
 import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { loginUser } from "redux/authSlice";
 import { useDispatch, useSelector } from "redux/store";
@@ -55,7 +55,7 @@ const LoginForm = () => {
   }, [auth.token, auth.isLoggedIn]);
 
   return (
-    <div className={styles.container}>
+    <Fragment>
       <form
         className={cx("form", styles.form)}
         onSubmit={handleSubmit(onSubmit)}
@@ -69,6 +69,7 @@ const LoginForm = () => {
           customClassName={styles["form-field"]}
           error={!!errors.email}
           errorText={errors.email?.message}
+          autoComplete="on"
         />
         {/* Password field */}
         <TextFormField
@@ -112,7 +113,7 @@ const LoginForm = () => {
       <br />
       {/* Form error - Login issue */}
       {auth.error && <p className="form-error">{auth.error}</p>}
-    </div>
+    </Fragment>
   );
 };
 

@@ -8,17 +8,14 @@ import { Fragment } from "react";
 
 const ForgotPassword = () => {
   return (
-    <div>
-      {/* Head / Meta tags */}
-      <Fragment>
-        <Head>
-          <title>ZeroK Dashboard | Forgot Password</title>
-        </Head>
-      </Fragment>
+    <Fragment>
+      <Head>
+        <title>ZeroK Dashboard | Forgot Password</title>
+      </Head>
       <AuthFormCard title="Forgot password">
         <ForgotPasswordForm />
       </AuthFormCard>
-    </div>
+    </Fragment>
   );
 };
 

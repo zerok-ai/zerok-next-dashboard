@@ -6,17 +6,14 @@ import { Fragment } from "react";
 
 const ResetPassword = () => {
   return (
-    <div>
-      {/* Head / Meta tags */}
-      <Fragment>
-        <Head>
-          <title>ZeroK Dashboard | Reset Password</title>
-        </Head>
-      </Fragment>
+    <Fragment>
+      <Head>
+        <title>ZeroK Dashboard | Reset Password</title>
+      </Head>
       <AuthFormCard title="Set new password">
         <ResetPasswordForm />
       </AuthFormCard>
-    </div>
+    </Fragment>
   );
 };
 
