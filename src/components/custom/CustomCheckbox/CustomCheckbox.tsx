@@ -8,9 +8,14 @@ interface CustomCheckboxProps {
   defaultChecked?: boolean;
   checked?: boolean;
   onChange?: (checked: boolean) => void;
+  name: string;
 }
 
-const CustomCheckbox = ({ defaultChecked, onChange }: CustomCheckboxProps) => {
+const CustomCheckbox = ({
+  defaultChecked,
+  onChange,
+  name,
+}: CustomCheckboxProps) => {
   const [checked, setChecked] = useState(defaultChecked);
   const updateVal = (val: boolean) => {
     setChecked(val);
@@ -24,6 +29,8 @@ const CustomCheckbox = ({ defaultChecked, onChange }: CustomCheckboxProps) => {
       <input
         className={styles.checkbox}
         type="checkbox"
+        name={name}
+        id={name}
         // defaultChecked={defaultChecked}
         checked={checked}
         onChange={(e) => {

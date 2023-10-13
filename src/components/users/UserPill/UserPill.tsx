@@ -20,7 +20,7 @@ const UserPill = () => {
     setAnchorEl(null);
   };
   return (
-    <div>
+    <nav>
       <div className={styles.container} role="button" onClick={handleMouseOver}>
         <HiOutlineUser className={styles.icon} />
         Settings
@@ -64,7 +64,7 @@ const UserPill = () => {
           </MenuItem>
         </Link>
       </Menu>
-    </div>
+    </nav>
   );
 };
 

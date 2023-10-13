@@ -1,13 +1,12 @@
 import { Tab, Tabs } from "@mui/material";
-import TabSkeletons from "components/helpers/TabSkeletons";
-import { useFetch } from "hooks/useFetch";
+// import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 // import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 // import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
-import { type SpanRawDataResponse, type SpanResponse } from "utils/types";
+import { type SpanResponse } from "utils/types";
 
 import styles from "./TraceInfoTabs.module.scss";
 import { DEFAULT_TABS, getTabs } from "./TraceInfoTabs.utils";
@@ -23,10 +22,10 @@ const TraceInfoTabs = ({
   allSpans,
   incidentId,
 }: TraceInfoTabsProps) => {
-  const { data: rawResponse } = useFetch<SpanRawDataResponse>(
-    "span_raw_data_details",
-    null
-  );
+  // const { data: rawResponse } = useFetch<SpanRawDataResponse>(
+  //   "span_raw_data_details",
+  //   null
+  // );
   // const router = useRouter();
   // const { issue } = router.query;
   const { selectedCluster } = useSelector(clusterSelector);
@@ -43,12 +42,12 @@ const TraceInfoTabs = ({
       // fetchRawData(endpoint);
     }
   }, [selectedSpan, incidentId]);
-  const rawData = rawResponse ? rawResponse[selectedSpan] : null;
-  if (!rawResponse || !rawData) {
-    return <TabSkeletons />;
-  }
+  // const rawData = rawResponse ? rawResponse[selectedSpan] : null;
+  // if (!rawResponse || !rawData) {
+  //   return <TabSkeletons />;
+  // }
 
-  const tabs = getTabs(rawData.protocol);
+  const tabs = getTabs("http");
 
   const renderTab = () => {
     const tab = tabs.find((t) => t.value === activeTab);

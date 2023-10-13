@@ -70,7 +70,7 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
   return (
     <div className={styles["detail-container"]}>
       <div className={styles["cards-container"]}>
-        <div
+        <section
           className={cx(
             styles["tree-container"],
             exceptionSpan && styles["tree-container-minimal"]
@@ -86,15 +86,15 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
             toggleTraceTable={toggleTraceTable}
             incidentId={incidentId}
           />
-        </div>
+        </section>
         {exceptionSpan && (
           <div className={styles["exception-container"]}>
             <ExceptionTab spanKey={exceptionSpan} incidentId={incidentId} />
           </div>
         )}
-        <div className={styles["pod-container"]}>
+        <section className={styles["pod-container"]}>
           <PodDetailsCard incidentId={incidentId} />
-        </div>
+        </section>
       </div>
       {isTraceTableVisible && (
         <TraceTable

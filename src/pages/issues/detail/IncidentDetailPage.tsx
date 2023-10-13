@@ -20,20 +20,16 @@ const IncidentDetailPage = () => {
   //   };
   // }, []);
   return (
-    <div>
-      <Fragment>
-        <Head>
-          <title>ZeroK Dashboard | Incident Detail</title>
-        </Head>
-      </Fragment>
-      <div className="page-title">
-        <IssueMetadata />
-      </div>
+    <Fragment>
+      <Head>
+        <title>ZeroK Dashboard | Incident Detail</title>
+      </Head>
+      <IssueMetadata />
       <div className={styles["content-container"]}>
-        <div className={styles["chat-container"]}>
+        <section className={styles["chat-container"]}>
           <IncidentChatTab />
-        </div>
-        <div
+        </section>
+        <section
           className={cx(
             styles["detail-container"],
             isScrollLocked && styles["lock-scroll"]
@@ -44,9 +40,9 @@ const IncidentDetailPage = () => {
               setIsScrollLocked(val);
             }}
           />
-        </div>
+        </section>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

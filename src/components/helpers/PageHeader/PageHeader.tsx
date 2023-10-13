@@ -44,10 +44,10 @@ const PageHeader = ({
           <title>ZeroK Dashboard | {htmlTitle}</title>
         </Head>
       )}
-      <div className={styles["breadcrumb-container"]}>
-        {showBreadcrumb && <BreadcrumbX />}
-      </div>
-      <div className={cx(styles["top-row"])}>
+      {showBreadcrumb && (
+        <nav className={styles["breadcrumb-container"]}>{<BreadcrumbX />}</nav>
+      )}
+      <header className={cx(styles["top-row"])}>
         <h3>
           {loading ?? !title ? <Skeleton width="50vw" height="50px" /> : title}
         </h3>
@@ -70,7 +70,7 @@ const PageHeader = ({
             )}
           </div>
         )}
-      </div>
+      </header>
       <div className={styles["bottom-row"]}>{bottomRow && bottomRow}</div>
     </div>
   );

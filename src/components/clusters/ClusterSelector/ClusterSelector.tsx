@@ -64,7 +64,7 @@ const ClusterSelector = () => {
     });
   }, []);
   return (
-    <div
+    <fieldset
       className={cx(styles.container, isDrawerMinimized && styles.minimized)}
     >
       {/* <InputLabel htmlFor="cluster-list">Cluster</InputLabel> */}
@@ -135,7 +135,7 @@ const ClusterSelector = () => {
 
       {/* Modal */}
       <ClusterCreateModal />
-    </div>
+    </fieldset>
   );
 };
 

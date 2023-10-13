@@ -5,7 +5,7 @@ import DrawerX from "components/themeX/DrawerX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import queryString from "query-string";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
@@ -72,7 +72,7 @@ const ServiceMap = ({ isFilterOpen, toggleDrawer }: ServiceMapPage) => {
   }, [selectedCluster, router, renderTrigger]);
 
   return (
-    <div className={styles.container}>
+    <Fragment>
       <ServiceMapFilterDisplay />
       {!error ? (
         <div className={styles.content}>
@@ -86,7 +86,7 @@ const ServiceMap = ({ isFilterOpen, toggleDrawer }: ServiceMapPage) => {
           <HealthMapFilterForm serviceList={data} onFinish={toggleDrawer} />
         </DrawerX>
       )}
-    </div>
+    </Fragment>
   );
 };
 

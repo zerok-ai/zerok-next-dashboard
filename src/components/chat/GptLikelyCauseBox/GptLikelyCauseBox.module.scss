@@ -8,7 +8,6 @@
     column-gap: $sp-base * 5;
     h6 {
         color:$grey-100;
-        
     }
     @media screen and (max-width: ($bp-desktop)) {
         padding:$sp-base * 3;
@@ -35,11 +34,6 @@
         height: 32px;
     }
 }
-
-.logo-container {
-
-}
-
 .text-container {
     width:100%;
     overflow-y: auto;
