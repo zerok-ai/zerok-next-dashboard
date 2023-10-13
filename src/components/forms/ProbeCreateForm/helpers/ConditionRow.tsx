@@ -326,7 +326,7 @@ const ConditionRow = ({
               className={cx(styles["value-input"])}
               placeholder="Value"
               type={getInputTypeByDatatype(condition.datatype)}
-              disabled={!condition.operator.length || disabled}
+              disabled={!condition.operator?.length || disabled}
               value={condition.value}
               onChange={(e) => {
                 updateValue(e.target.value);
@@ -337,7 +337,7 @@ const ConditionRow = ({
               name="value"
               fullWidth
               variant="standard"
-              disabled={!condition.operator.length || disabled}
+              disabled={!condition.operator?.length || disabled}
               value={condition.value}
               onChange={(e) => {
                 updateValue(e.target.value);
