@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PrometheusTable from "components/integrations/PrometheusTable";
@@ -24,13 +23,6 @@ const IntegrationsListPage = () => {
 
   return (
     <div className={styles.container}>
-      <Button
-        onClick={(e) => {
-          throw new Error("Test Error");
-        }}
-      >
-        Throw
-      </Button>
       <div className={styles.content}>
         {page ? PAGE_MAP[page] : <CustomSkeleton len={15} />}
       </div>
