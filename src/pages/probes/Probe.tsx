@@ -8,7 +8,7 @@ import TableFilter from "components/helpers/TableFilter";
 import PageLayout from "components/layouts/PageLayout";
 import ChipX from "components/themeX/ChipX";
 import DialogX from "components/themeX/DialogX";
-import PaginationX from "components/themeX/PaginationX";
+// import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
 import Head from "next/head";
@@ -53,7 +53,7 @@ const DEFAULT_SORT = {
 
 const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
-  const [totalScenarios, setTotalScenarios] = useState<number>(0);
+  // const [totalScenarios, setTotalScenarios] = useState<number>(0);
   const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
   const dispatch = useDispatch();
   const [selectedProbe, setSelectedProbe] = useState<null | {
@@ -80,7 +80,7 @@ const Probe = () => {
         )
         .replace("{cluster_id}", selectedCluster as string);
       const rdata = await raxios.get(endpoint);
-      setTotalScenarios(rdata.data.payload.total_rows);
+      // setTotalScenarios(rdata.data.payload.total_rows);
       const allScenarios = rdata.data.payload.scenarios as ScenarioDetailType[];
       const idList = allScenarios.map((s) => s.scenario.scenario_id);
       const sdata = await raxios.get(
@@ -435,12 +435,12 @@ const Probe = () => {
           <CustomSkeleton len={8} />
         )}
       </div>
-      <div className={styles.pagination}>
+      {/* <div className={styles.pagination}>
         <PaginationX
           totalItems={totalScenarios ?? PROBE_PAGE_SIZE}
           itemsPerPage={PROBE_PAGE_SIZE}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

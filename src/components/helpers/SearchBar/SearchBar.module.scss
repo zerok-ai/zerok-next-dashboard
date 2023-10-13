@@ -1,7 +1,11 @@
 @import "styles/variables.module.scss";
 .container {
-    // margin-top: -5px;
-   
+    :global(.MuiOutlinedInput-notchedOutline ) {
+        border-color: $grey-700;
+        &:hover {
+            border-color: $grey-300;
+        }
+    }
 }
 
 .search-icon {
@@ -17,7 +21,5 @@
     & ::placeholder {
         color:$white !important;
     }
-    input {
-        
-       }
+    
 }

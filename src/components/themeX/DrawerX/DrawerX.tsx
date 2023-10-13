@@ -17,18 +17,22 @@ const DrawerX = ({ onClose, title, children }: DrawerXProps) => {
       className={styles.drawer}
       anchor="right"
     >
-      <div className={styles.container}>
-        <div className={styles.header}>
+      <section className={styles.container}>
+        <header className={styles.header}>
           <h6>{title}</h6>
-          <span className={styles["close-btn"]} onClick={onClose}>
+          <figure
+            className={styles["close-btn"]}
+            onClick={onClose}
+            role="button"
+          >
             <img
               src={`${ICON_BASE_PATH}/${ICONS["close-circle"]}`}
               alt="close icon"
             />
-          </span>
-        </div>
+          </figure>
+        </header>
         <div className={styles.content}>{children}</div>
-      </div>
+      </section>
     </Drawer>
   );
 };

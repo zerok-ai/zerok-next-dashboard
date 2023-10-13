@@ -10,7 +10,7 @@ import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import queryString from "query-string";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
@@ -108,7 +108,7 @@ const IssuesPage = () => {
   }, [sortBy]);
 
   return (
-    <div>
+    <Fragment>
       <PageHeader
         htmlTitle="Issues"
         title="Issues"
@@ -145,14 +145,14 @@ const IssuesPage = () => {
         )}
       </div>
       {data?.issues && (
-        <div className={styles["pagination-container"]}>
+        <footer className={styles["pagination-container"]}>
           <PaginationX
             totalItems={data.total_records}
             itemsPerPage={ISSUES_PAGE_SIZE}
           />
-        </div>
+        </footer>
       )}
-    </div>
+    </Fragment>
   );
 };
 

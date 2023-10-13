@@ -3,12 +3,11 @@ import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import Head from "next/head";
-
-import styles from "./Probes.module.scss";
+import { Fragment } from "react";
 
 const Probes = () => {
   return (
-    <div className={styles.container}>
+    <Fragment>
       <PageHeader
         showRange={false}
         title="Create a new probe"
@@ -16,7 +15,7 @@ const Probes = () => {
         showBreadcrumb
       />
       <ProbeCreateForm />
-    </div>
+    </Fragment>
   );
 };
 

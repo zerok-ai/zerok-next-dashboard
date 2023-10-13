@@ -1,6 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import cx from "classnames";
-import ChipX from "components/themeX/ChipX";
+// import ChipX from "components/themeX/ChipX";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { formatDuration, getFormattedTime } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds, trimString } from "utils/functions";
@@ -34,9 +34,9 @@ export const getTraceColumns = ({
             >
               {trimString(info.getValue(), 25)}{" "}
             </span>
-            {chatTrace === info.row.original.incident_id && (
+            {/* {chatTrace === info.row.original.incident_id && (
               <ChipX label="Inferred" color="primary" upperCase={false} />
-            )}
+            )} */}
           </div>
         );
       },

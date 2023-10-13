@@ -24,14 +24,12 @@ export const getIssueColumns = () => {
         const title = trimString(getTitleFromIssue(issue_title), 100);
         return (
           <div className={styles["issue-container"]}>
-            <div>
-              <Link
-                href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}&latest=${incidents[0]}`}
-                className={"hover-link"}
-              >
-                <span className={styles["issue-title-container"]}>{title}</span>
-              </Link>
-            </div>
+            <Link
+              href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}&trace=${incidents[0]}`}
+              className={"hover-link"}
+            >
+              <span className={styles["issue-title-container"]}>{title}</span>
+            </Link>
           </div>
         );
       },
@@ -40,10 +38,10 @@ export const getIssueColumns = () => {
       header: "Reporting source",
       cell: () => {
         return (
-          <div className={styles.source}>
+          <figure className={styles.source}>
             <img src={`/images/brand/zerok_source_logo.png`} alt="zerok_logo" />
             <span>ZeroK</span>
-          </div>
+          </figure>
         );
       },
     }),

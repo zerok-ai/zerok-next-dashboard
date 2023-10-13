@@ -17,14 +17,14 @@ export const ServiceCardStatusIcon = ({
 
   const ErrorStatus = () => {
     return (
-      <div className={styles["error-status"]}>
+      <figure className={styles["error-status"]}>
         <img src={`${ICON_BASE_PATH}/${ICONS.minus}`} alt="error_icon" />
-      </div>
+      </figure>
     );
   };
   return (
-    <div className={styles["status-icon"]}>
+    <figure className={styles["status-icon"]}>
       {status === "healthy" ? <HealthyStatus /> : <ErrorStatus />}
-    </div>
+    </figure>
   );
 };

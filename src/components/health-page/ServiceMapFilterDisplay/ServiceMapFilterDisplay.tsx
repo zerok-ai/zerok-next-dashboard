@@ -37,13 +37,13 @@ const ServiceMapFilterDisplay = () => {
     }
   };
   return nameSpaceFilters.length > 0 || serviceNameFilters.length > 0 ? (
-    <div className={styles.container}>
+    <section className={styles.container}>
       {[...nameSpaceFilters, ...serviceNameFilters].map((fil) => {
         return (
           <TagX label={fil} closable onClose={filterRemoval} key={nanoid()} />
         );
       })}
-    </div>
+    </section>
   ) : null;
 };
 

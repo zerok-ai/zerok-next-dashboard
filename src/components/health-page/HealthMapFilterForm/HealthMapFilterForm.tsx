@@ -151,17 +151,17 @@ const HealthMapFilterForm = ({
       }}
     >
       <div className={styles["form-items"]}>
-        <div className={styles["form-search-container"]}>
+        <fieldset className={styles["form-search-container"]}>
           <SearchBar
             onChange={(s) => {
               setSearchValue(s);
             }}
             inputState={searchValue}
           />
-        </div>
+        </fieldset>
         {FILTER_GROUPS.map((fg) => {
           return (
-            <div className={styles["form-group"]} key={nanoid()}>
+            <fieldset className={styles["form-group"]} key={nanoid()}>
               <p className={styles["form-group-title"]}>{fg.title}</p>
               <div className={styles["form-group-items"]}>
                 {fg.list.length ? (
@@ -171,12 +171,14 @@ const HealthMapFilterForm = ({
                         className={styles["form-group-item"]}
                         key={nm}
                         role="menuitem"
+                        id={nm}
                         onClick={() => {
                           handleClick(fg.key, nm);
                         }}
                       >
                         <CustomCheckbox
                           defaultChecked={filters[fg.key].includes(nm)}
+                          name={nm}
                         />
                         <label>{nm}</label>
                       </MenuItem>
@@ -188,7 +190,7 @@ const HealthMapFilterForm = ({
                   </p>
                 )}
               </div>
-            </div>
+            </fieldset>
           );
         })}
       </div>

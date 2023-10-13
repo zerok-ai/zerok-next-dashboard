@@ -12,7 +12,7 @@ import SearchBar from "components/helpers/SearchBar";
 // hooks
 import { useToggle } from "hooks/useToggle";
 // react
-import { useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 // icons
 import { HiPlus } from "react-icons/hi";
 // redux
@@ -76,7 +76,7 @@ const Home = () => {
   }, [isHealthMap, cardFilter]);
 
   return (
-    <div>
+    <Fragment>
       <PageHeader
         title="Services"
         showRange={isHealthMap}
@@ -91,7 +91,7 @@ const Home = () => {
       ) : (
         <HealthCards filter={cardFilter} />
       )}
-    </div>
+    </Fragment>
   );
 };
 

@@ -1,4 +1,3 @@
-// import cssVars from "styles/variables.module.scss";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,12 +19,11 @@ const GptLikelyCauseBox = () => {
     <div className={styles.container}>
       <div className={styles["likely-cause-box"]}>
         <div className={styles.header}>
-          <div className={styles["chatbox-logo"]}>
+          <figure className={styles["chatbox-logo"]}>
             <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
-          </div>
+          </figure>
           <h5>Likely cause</h5>
         </div>
-
         {text ? (
           <div className={styles["text-container"]}>
             {typing && queries.length === 0 ? (
