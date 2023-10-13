@@ -1,8 +1,0 @@
-name: CICD - TO_BE_DELETED
-on:
-  workflow_dispatch:
-jobs:
-  build:
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v2

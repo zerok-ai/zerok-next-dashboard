@@ -28,7 +28,7 @@ const CLUSTER_BLOCKED_ROUTES = [
 ];
 
 const PageLayout = ({ children }: PageLayoutProps) => {
-  const { status, empty } = useSelector(clusterSelector);
+  const { status, empty, error } = useSelector(clusterSelector);
   const router = useRouter();
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const blockRoute =
@@ -53,6 +53,15 @@ const PageLayout = ({ children }: PageLayoutProps) => {
             <title>ZeroK Dashboard - Unhealthy cluster</title>
           </Head>
           <UnderConstruction altTitle="Please select a healthy cluster to continue." />
+        </Fragment>
+      );
+    } else if (error) {
+      return (
+        <Fragment>
+          <Head>
+            <title>ZeroK Dashboard - Error</title>
+          </Head>
+          <UnderConstruction altTitle="Error loading cluster data." />
         </Fragment>
       );
     } else {

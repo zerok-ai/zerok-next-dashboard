@@ -2,10 +2,10 @@
 .container {
     // background-color: $grey-800;
     cursor: pointer;
-    padding:$sp-base * 2 $sp-base * 3;
+    padding:$sp-sm $sp-md;
     display: flex;
-    column-gap: $sp-base * 2;
-    border-radius: $sp-base * 2;
+    column-gap: $sp-sm;
+    border-radius: $sp-sm;
     color:$grey-50;
     // border-radius: 50%;
     display: flex;
@@ -33,5 +33,5 @@
 .menu-item {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }

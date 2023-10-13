@@ -10,6 +10,10 @@
         margin-top: -$sp-base * 24;
         // margin-top: - $sp-base * 28;
         border:1px solid $grey-800;
+        left:$sp-lg;
+        // top:72vh !important;
+        // height:fit-content;
+        // top:0 !important;
     }
     :global(.MuiMenuItem-root){
         background-color: $grey-925;
@@ -21,7 +25,7 @@
 
 .command-container {
     display: flex;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-lg;
     align-items: center;
     p,div,span {
         color:$grey-50;

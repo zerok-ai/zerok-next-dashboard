@@ -15,7 +15,10 @@ import { z } from "zod";
 import styles from "./LoginForm.module.scss";
 
 const loginSchema = z.object({
-  email: z.string().email().min(1, "Email cannot be empty"),
+  email: z
+    .string()
+    .email("Please enter a valid email")
+    .min(1, "Email cannot be empty"),
   password: z.string().min(1, "Password cannot be empty"),
 });
 

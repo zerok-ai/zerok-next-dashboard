@@ -3,7 +3,7 @@
     display: flex;
     background-color: $grey-925;
     height:56px;
-    padding:$sp-base * 4 $sp-base * 5;
+    padding:$sp-lg $sp-xl;
     justify-content: space-between;
     h5 {
         color:$grey-25;
@@ -16,12 +16,12 @@
 
  .close-icon {
     color:$grey-25;
-    font-size: 6 * $sp-base;
+    font-size: $sp-xl;
     cursor: pointer;
  }
 
  .chat-icon {
    display: flex;
    align-items: center;
-   column-gap: $sp-base * 4;
+   column-gap: $sp-lg;
  }

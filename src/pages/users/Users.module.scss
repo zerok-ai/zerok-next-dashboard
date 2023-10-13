@@ -6,17 +6,17 @@
 .header {
     display: flex;
     justify-content: space-between;
-    padding-bottom: $sp-base * 6;
+    padding-bottom: $sp-xxl;
 }
 
 .member-container {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }
 
 .actions-container {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }
 
 .user-button {
@@ -25,5 +25,5 @@
 
 .form-container {
     min-width: 450px;
-    padding-bottom: $sp-base * 6;
+    padding-bottom: $sp-xxl;
 }

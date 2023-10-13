@@ -2,10 +2,7 @@ import { OutlinedInput } from "@mui/material";
 import ChatCommandMenu from "components/chat/ChatCommandMenu";
 import { useToggle } from "hooks/useToggle";
 import { useEffect, useRef, useState } from "react";
-import {
-  CHAT_COMMAND_CHARACTER,
-  CHAT_TAG_CHARACTER,
-} from "utils/gpt/constants";
+import { CHAT_COMMAND_CHARACTER, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./IncidentChatTab.module.scss";

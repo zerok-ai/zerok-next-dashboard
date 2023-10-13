@@ -14,7 +14,7 @@ const Probes = () => {
         showRefresh={false}
         showBreadcrumb
       />
-      <ProbeCreateForm />
+      <ProbeCreateForm edit={false} />
     </Fragment>
   );
 };

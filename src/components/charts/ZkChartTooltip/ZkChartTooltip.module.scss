@@ -9,7 +9,7 @@
 .label {
     font-weight: 500;
     border-bottom: 1px solid $grey-900;
-    padding:$sp-base $sp-base * 2;
+    padding:$sp-base $sp-sm;
     color:$grey-100;
 }
 
@@ -30,6 +30,6 @@
 .tooltip-list-item {
     display: flex;
     column-gap: $sp-base;
-    padding:0 $sp-base * 2;
+    padding:0 $sp-sm;
     margin:$sp-base 0;
 }

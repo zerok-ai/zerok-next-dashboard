@@ -1,10 +1,20 @@
 import { nanoid } from "nanoid";
-import { HTTP_METHODS } from "utils/constants";
+import {
+  type ATTRIBUTE_EXECUTORS,
+  type ATTRIBUTE_PROTOCOLS,
+} from "utils/probes/constants";
+import {
+  type AttributeProtocolType,
+  type AttributeStateType,
+  type AttributeSupportedType,
+} from "utils/probes/types";
 import {
   type ScenarioCreationType,
   type WorkloadType,
 } from "utils/scenarios/types";
-import { type GenericObject, type SPAN_PROTOCOLS_TYPE } from "utils/types";
+import { type GenericObject } from "utils/types";
+
+import { type ConditionOperatorType } from "./ProbeCreateForm.types";
 
 export type ConditionRowStrings =
   | "property"
@@ -16,80 +26,25 @@ export interface GroupByType {
   service: string | null;
   property: string;
   key: string;
+  protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
+  executor: (typeof ATTRIBUTE_EXECUTORS)[number] | "";
 }
 export interface ConditionRowType {
   property: string;
   operator: string;
   value: string;
   datatype: string;
+  executor?: (typeof ATTRIBUTE_EXECUTORS)[number];
+  json_path?: string | string[];
   key: string;
 }
 
 export interface ConditionCardType {
   rootProperty: string;
-  protocol: string;
+  protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
   conditions: ConditionRowType[];
   key: string;
 }
-
-export const PROBE_TIME_RANGES = [
-  {
-    label: "1 hour",
-    value: "-1h",
-  },
-  {
-    label: "3 hours",
-    value: "-3h",
-  },
-  {
-    label: "6 hours",
-    value: "-6h",
-  },
-  {
-    label: "12 hours",
-    value: "-12h",
-  },
-  {
-    label: "24 hours",
-    value: "-24h",
-  },
-  {
-    label: "3 days",
-    value: "-3d",
-  },
-  {
-    label: "1 week",
-    value: "-7d",
-  },
-];
-
-export const HTTP_OPTIONS = HTTP_METHODS.map((m) => ({ label: m, value: m }));
-
-export const MYSQL_OPTIONS = [
-  {
-    label: "SELECT",
-    value: "SELECT",
-  },
-  {
-    label: "INSERT",
-    value: "INSERT",
-  },
-  {
-    label: "UPDATE",
-    value: "UPDATE",
-  },
-  {
-    label: "DELETE",
-    value: "DELETE",
-  },
-];
-
-export const getPropertyByType = (type: SPAN_PROTOCOLS_TYPE | null) => {
-  if (!type || !type.length) {
-    return HTTP_PROPERTIES;
-  }
-  return type === "http" ? HTTP_PROPERTIES : SQL_PROPERTIES;
-};
 
 export interface ProbePropertyType {
   label: string;
@@ -99,91 +54,6 @@ export interface ProbePropertyType {
   helpText?: string;
   groupByOnly?: boolean;
 }
-
-export const HTTP_PROPERTIES: ProbePropertyType[] = [
-  {
-    label: "Latency",
-    value: "latency",
-    type: "integer",
-    helpText: "Latency of the service in milliseconds",
-  },
-  {
-    label: "Source service",
-    value: "source",
-    type: "select",
-    helpText: "Service that initiated the request",
-  },
-  {
-    label: "Destination service",
-    value: "destination",
-    type: "select",
-    helpText: "Service that received the request",
-    groupByOnly: true,
-  },
-  {
-    label: "Request payload size",
-    value: "req_body_size",
-    type: "integer",
-    helpText: "Size of the request payload in bytes",
-  },
-  {
-    label: "Response payload size",
-    value: "resp_body_size",
-    type: "integer",
-    helpText: "Size of the response payload in bytes",
-  },
-  {
-    label: "Request method",
-    value: "req_method",
-    type: "select",
-    options: HTTP_OPTIONS,
-    helpText: "HTTP method of the request",
-  },
-  {
-    label: "Request path",
-    value: "req_path",
-    type: "string",
-    helpText: "Path of the request",
-  },
-  {
-    label: "Response status",
-    value: "resp_status",
-    type: "integer",
-    helpText: "HTTP status code of the response",
-  },
-];
-
-export const SQL_PROPERTIES: ProbePropertyType[] = [
-  {
-    label: "Latency",
-    value: "latency",
-    type: "integer",
-    helpText: "Latency of the service in milliseconds",
-  },
-  {
-    label: "Requester service",
-    value: "source",
-    type: "string",
-    helpText: "Service that initiated the request",
-  },
-
-  {
-    label: "MYSQL request command",
-    value: "req_cmd",
-    type: "select",
-    options: MYSQL_OPTIONS,
-  },
-  {
-    label: "MYSQL request body",
-    value: "req_body",
-    type: "string",
-  },
-  {
-    label: "MYSQL response status code",
-    value: "resp_status",
-    type: "integer",
-  },
-];
 
 export const CONDITIONS = [
   {
@@ -200,6 +70,16 @@ export const CONDITIONS = [
   },
 ];
 
+export const SUPPORTED_FORMAT_OPERATORS: Array<{
+  label: string;
+  value: AttributeSupportedType;
+}> = [
+  {
+    label: "JSON",
+    value: "JSON",
+  },
+];
+
 export const STRING_OPERATORS = [
   {
     label: "is equal to",
@@ -209,9 +89,65 @@ export const STRING_OPERATORS = [
     label: "is not equal to",
     value: "not_equal",
   },
+  {
+    label: "contains",
+    value: "contains",
+  },
+  {
+    label: "does not contain",
+    value: "does_not_contain",
+  },
+  {
+    label: "begins with",
+    value: "begins_with",
+  },
+  {
+    label: "ends with",
+    value: "ends_with",
+  },
+  {
+    label: "exists",
+    value: "exists",
+  },
+  {
+    label: "not exists",
+    value: "not_exists",
+  },
+  {
+    label: "does not begin with",
+    value: "does_not_begin_with",
+  },
+  {
+    label: "does not end with",
+    value: "does_not_end_with",
+  },
+  {
+    label: "in",
+    value: "in",
+  },
+  {
+    label: "not in",
+    value: "not_in",
+  },
+  {
+    label: "matches",
+    value: "matches",
+  },
+  {
+    label: "does not match",
+    value: "does_not_match",
+  },
 ];
 
 export const NUMBER_OPERATORS = [
+  {
+    label: "exists",
+    value: "exists",
+  },
+  {
+    label: "not exists",
+    value: "not_exists",
+  },
   {
     label: "is equal to",
     value: "equal",
@@ -238,12 +174,67 @@ export const NUMBER_OPERATORS = [
   },
 ];
 
-export const getOperatorByType = (type: string) => {
-  if (!type) return [];
-  if (type === "select") {
-    return STRING_OPERATORS;
+export const BOOLEAN_ATTRIBUTES = [
+  {
+    label: "equal to",
+    value: "equal",
+  },
+  {
+    label: "not equal to",
+    value: "not_equal",
+  },
+  {
+    label: "exists",
+    value: "exists",
+  },
+  {
+    label: "not exists",
+    value: "not_exists",
+  },
+];
+
+export const BOOLEAN_VALUES = ["true", "false"];
+
+export const getOperatorByType = (
+  type: string,
+  supported_formats: AttributeSupportedType[]
+): ConditionOperatorType[] => {
+  if (!type || !type.length) return STRING_OPERATORS;
+  switch (type) {
+    case "bool":
+      return BOOLEAN_ATTRIBUTES;
+    case "select":
+      return STRING_OPERATORS;
+    case "int":
+    case "integer":
+    case "double":
+      return NUMBER_OPERATORS;
+    case "string": {
+      if (supported_formats.includes("JSON")) {
+        const operators: ConditionOperatorType[] = [
+          {
+            title: "Evaluate as",
+            disabled: true,
+          },
+
+          ...SUPPORTED_FORMAT_OPERATORS,
+          {
+            divider: true,
+          },
+          {
+            title: "Operators",
+            disabled: true,
+          },
+          ...STRING_OPERATORS,
+        ];
+        return operators;
+      }
+      return STRING_OPERATORS.filter(
+        (op) => !["in", "not_in"].includes(op.value)
+      );
+    }
   }
-  return type === "string" ? STRING_OPERATORS : NUMBER_OPERATORS;
+  return STRING_OPERATORS;
 };
 
 export const getInputTypeByDatatype = (type: string) => {
@@ -266,6 +257,8 @@ export const getEmptyGroupBy = (): GroupByType => {
     service: null,
     property: "",
     key: nanoid(),
+    protocol: "",
+    executor: "",
   };
 };
 
@@ -332,38 +325,6 @@ export const CUSTOM_TYPES = [
   },
 ];
 
-export interface SlackChannelType {
-  type: "channel" | "person";
-  value: string;
-}
-
-export const SLACK_CHANNELS: SlackChannelType[] = [
-  {
-    type: "channel",
-    value: "zerok",
-  },
-  {
-    type: "person",
-    value: "Varun",
-  },
-  {
-    type: "channel",
-    value: "tech",
-  },
-  {
-    type: "person",
-    value: "Shivam",
-  },
-  {
-    type: "person",
-    value: "Samyukktha",
-  },
-  {
-    type: "channel",
-    value: "oncall",
-  },
-];
-
 export const inputMap: GenericObject = {
   string: "string",
   select: "string",
@@ -372,54 +333,109 @@ export const inputMap: GenericObject = {
   double: "integer",
 };
 
-export const dataTypeMap = {};
-
 export const buildProbeBody = (
-  cards: ConditionCardType[],
-  title: string,
-  groupBy: GroupByType[],
-  sampling: {
-    samples: number;
-    duration: number;
-    metric: "m" | "s" | "h" | "d";
-  }
+  values: ProbeFormType,
+  attributes: AttributeStateType
 ): ScenarioCreationType => {
-  const workloads = cards.map((card): WorkloadType => {
-    let service = card.rootProperty;
-    if (card.rootProperty.includes("*/*")) {
-      service = "*/*";
-    }
-    return {
-      service,
-      trace_role: "server",
-      protocol: card.protocol.toUpperCase(),
-      rule: {
-        type: "rule_group",
-        condition: "AND",
-        rules: card.conditions.map((condition) => {
-          if (condition.property === "latency") {
-            condition.value = (Number(condition.value) * 1000000).toString();
-          }
-          return {
-            type: "rule",
-            id: condition.property,
-            field: condition.property,
-            input: inputMap[condition.datatype],
-            operator: condition.operator,
-            value: condition.value,
-            datatype: inputMap[condition.datatype],
-          };
-        }),
-      },
+  const { cards, groupBy, name: title, sampling } = values;
+  const workloads: WorkloadType[] = [] as WorkloadType[];
+  cards.forEach((card) => {
+    type ExecutorWorkloadType = {
+      [key in (typeof ATTRIBUTE_EXECUTORS)[number]]: ConditionRowType[];
     };
+    const protocolAttributes =
+      attributes[card.protocol.toUpperCase() as AttributeProtocolType];
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const executorWorkload = {} as ExecutorWorkloadType;
+    card.conditions.forEach((condition) => {
+      if (!executorWorkload[condition.executor!]) {
+        executorWorkload[condition.executor!] = [];
+      }
+
+      executorWorkload[condition.executor!].push(condition);
+    });
+    Object.keys(executorWorkload).forEach((executor) => {
+      const attributes = protocolAttributes
+        .map((attribute) => {
+          return attribute.attribute_list.map((a) => {
+            return a;
+          });
+        })
+        .flat();
+      let service = card.rootProperty;
+      if (card.rootProperty.includes("*/*")) {
+        service = "*/*";
+      }
+      const workload: WorkloadType = {
+        service,
+        executor: executor as (typeof ATTRIBUTE_EXECUTORS)[number],
+        trace_role: "server",
+        protocol: card.protocol.toUpperCase() as AttributeProtocolType,
+        rule: {
+          type: "rule_group",
+          condition: "AND",
+          rules: executorWorkload[
+            executor as (typeof ATTRIBUTE_EXECUTORS)[number]
+          ].map((condition) => {
+            const attribute = attributes.find(
+              (a) => a.id === condition.property
+            );
+            if (
+              condition.operator === "exists" ||
+              condition.operator === "not_exists"
+            ) {
+              condition.value = "";
+              condition.datatype = "";
+              // @ts-expect-error ignore this
+              attribute!.input = "";
+            }
+            let jsonPath = {};
+            if (
+              condition.json_path &&
+              attribute?.supported_formats?.includes("JSON")
+            ) {
+              jsonPath = {
+                json_path: (condition.json_path as string).split("."),
+              };
+            }
+            return {
+              type: "rule",
+              id: condition.property,
+              field: attribute!.field,
+              input: attribute!.input,
+              operator: condition.operator,
+              value: condition.value,
+              datatype: condition.datatype,
+              ...jsonPath,
+            };
+          }),
+        },
+      };
+      workloads.push(workload);
+    });
   });
+  let groupByError = false;
   const groupByObject = groupBy.map((g) => {
+    const index = workloads.findIndex((c) => {
+      if (
+        c.service.includes("*/*") &&
+        g.service?.includes("*/*") &&
+        c.executor === g.executor
+      ) {
+        return true;
+      }
+      return c.service === g.service && c.executor === g.executor;
+    });
+    if (index < 0) groupByError = true;
     return {
-      workload_index: cards.findIndex((c) => c.rootProperty === g.service),
+      workload_index: index,
       title: g.property,
       hash: g.property,
     };
   });
+  if (groupByError) {
+    throw "Invalid group by configuration";
+  }
 
   const rateLimit = [
     {
@@ -447,4 +463,4 @@ export interface ProbeFormType {
     duration: number;
     metric: "m" | "s" | "h" | "d";
   };
-};
+}

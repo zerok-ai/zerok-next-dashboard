@@ -9,7 +9,6 @@ import {
   getClusters,
   openClusterModal,
   setSelectedCluster,
-  triggerRefetch,
 } from "redux/cluster";
 import { drawerSelector } from "redux/drawer";
 import { useDispatch, useSelector } from "redux/store";
@@ -84,7 +83,7 @@ const ClusterSelector = () => {
             if (!isRootPath) {
               router.push(`/${router.pathname.split("/")[1]}`);
             } else {
-              dispatch(triggerRefetch());
+              router.reload();
             }
             dispatch(setSelectedCluster({ id: val.target.value }));
           }

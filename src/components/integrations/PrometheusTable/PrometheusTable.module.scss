@@ -4,7 +4,7 @@
 
 .actions {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
     align-items: center;
     :global(.MuiSwitch-root){
         margin-right: 0;
@@ -21,12 +21,12 @@
     border-top: 1px solid $grey-900;
     display: flex;
     justify-content: center;
-    padding-top: $sp-base * 4;
+    padding-top: $sp-lg;
 }
 
 .add-btn {
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     align-items: center;
 }
 

@@ -19,7 +19,7 @@
 .menu-header {
   color:$grey-25;
   font-size: $font-md;
-  padding:$sp-base $sp-base * 3;
+  padding:$sp-base $sp-md;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,18 +45,18 @@
 
 .new-cluster-item {
   display: flex;
-  column-gap: $sp-base * 2;
+  column-gap: $sp-sm;
   color: $grey-50;
 }
 
 .menu-divider {
-  margin-bottom: $sp-base * 2;
+  margin-bottom: $sp-sm;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  column-gap: $sp-base * 2;
+  column-gap: $sp-sm;
 }
 
 .healthy-icon,.error-icon {

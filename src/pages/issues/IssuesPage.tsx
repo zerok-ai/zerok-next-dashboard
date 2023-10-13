@@ -8,6 +8,7 @@ import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
+import { useTrigger } from "hooks/useTrigger";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 import { Fragment, useEffect, useMemo, useState } from "react";
@@ -32,7 +33,7 @@ const DEFAULT_SORT: ColumnSort = {
 };
 
 const IssuesPage = () => {
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const { selectedCluster } = useSelector(clusterSelector);
 
   // const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
 
@@ -48,6 +49,7 @@ const IssuesPage = () => {
   const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
 
+  const { trigger, changeTrigger } = useTrigger();
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const IssuesPage = () => {
         `${params.length ? `&${params}` : ""}`;
       fetchIssues(endpoint);
     }
-  }, [selectedCluster, router.query, renderTrigger]);
+  }, [selectedCluster, router.query, trigger]);
 
   // @TODO - add types for filters here
   const services =
@@ -115,6 +117,7 @@ const IssuesPage = () => {
         showRange={true}
         showRefresh={true}
         leftExtras={leftExtras}
+        onRefresh={changeTrigger}
       />
       {/* Rendering filters */}
       {services && (

@@ -5,11 +5,10 @@
 .chat-event-card {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 5;
-    margin-bottom: $sp-base * 2;
+    column-gap: $sp-xl;
     background-color: $grey-900;
     border-radius: $sp-base;
-    padding:$sp-base * 4 $sp-base * 5;
+    padding:$sp-lg $sp-xl;
     border:1px solid #32343A;
     p {
         color:$grey-200;

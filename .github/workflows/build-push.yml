@@ -1,8 +1,8 @@
-name: release
+name: build-push
 on:
   push:
     tags: #r/<CLUSTER-NAME>/<DOCKER-TAG-OR-VERSION>
-      - 'r/**'
+      - 'push/**'
   workflow_dispatch:
     inputs:
       DOCKER_TAG:
@@ -69,30 +69,3 @@ jobs:
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
     needs: init
-
-  # build helm charts and publish to helm repository
-  helm-push:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-helm-publish.yml@main
-    with:
-      HELM_VERSION: ${{ needs.init.outputs.VERSION }}
-      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
-      HELM_BUCKET_NAME: ${{ needs.init.outputs.HELM_BUCKET_NAME }}
-      HELM_BUCKET_URL: ${{ needs.init.outputs.HELM_BUCKET_URL }}
-      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
-    secrets:
-      AWS_ACCESS_ID: ${{ secrets.AWS_ACCESS_ID }}
-      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-    needs: [init,build-and-push]
-
-  deploy:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-deploy.yml@main
-    with:
-      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
-      VERSION: ${{ needs.init.outputs.VERSION }}
-      MIGRATION_VERSION: ${{ needs.init.outputs.VERSION }}
-      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
-      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-    secrets:
-      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
-    needs: [init,build-and-push]

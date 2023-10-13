@@ -6,8 +6,8 @@
 .key-value-container {
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 4;
-    padding:$sp-base * 4 0;
+    row-gap: $sp-lg;
+    padding:$sp-lg 0;
     justify-content: flex-start;
 }
 

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
 import { CLUSTER_STATES } from "utils/constants";
 import { CLUSTER_ENDPOINT } from "utils/endpoints";
 import {
@@ -18,7 +17,6 @@ const initialState: ClusterReduxType = {
   error: false,
   selectedCluster: "",
   status: "",
-  renderTrigger: nanoid(),
   isClusterModalOpen: false,
 };
 
@@ -40,9 +38,6 @@ export const clusterSlice = createSlice({
       const cluster = state.clusters.find((c) => c.id === id);
       setClusterToLocalStorage(cluster ? cluster.id : "");
       state.status = cluster ? cluster.status : "";
-    },
-    triggerRefetch: (state) => {
-      state.renderTrigger = nanoid();
     },
     openClusterModal: (state) => {
       state.isClusterModalOpen = true;
@@ -104,11 +99,7 @@ export const clusterSlice = createSlice({
 export const clusterSelector = (state: RootState): ClusterReduxType =>
   state.cluster;
 
-export const {
-  setSelectedCluster,
-  triggerRefetch,
-  openClusterModal,
-  closeClusterModal,
-} = clusterSlice.actions;
+export const { setSelectedCluster, openClusterModal, closeClusterModal } =
+  clusterSlice.actions;
 
 export default clusterSlice.reducer;

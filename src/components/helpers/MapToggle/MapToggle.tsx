@@ -15,6 +15,7 @@ const MapToggle = ({ active, onChange, title }: MapToggleProps) => {
   return (
     <TooltipX title={title}>
       <IconButton
+        size="large"
         className={cx(styles.container, active && styles.active)}
         onClick={onChange}
       >
