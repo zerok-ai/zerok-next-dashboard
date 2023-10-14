@@ -76,13 +76,16 @@ export const spanTransformer = (spanData: SpanResponse) => {
     return {};
   }
   const errors: SpanErrorDetail[] = [];
+  const errorSet = new Set();
   topKeys.forEach((key) => {
     const span = spanData[key];
     formattedSpans[key] = { ...span };
     // check for exceptions span
     if (span.errors && span.errors.length > 0) {
-      span.errors.forEach((error) => {
-        if (error.message && error.hash) {
+      span.errors = JSON.parse(span.errors as string);
+      (span.errors as SpanErrorDetail[]).forEach((error) => {
+        if (error.message && error.hash && !errorSet.has(error.hash)) {
+          errorSet.add(error.hash);
           errors.push({ ...error, span_id: span.span_id });
         }
       });

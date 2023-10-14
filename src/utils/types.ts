@@ -127,7 +127,7 @@ export interface SpanDetail {
   exceptionSpan?: string;
   highlightException?: string | null;
   totalTime?: number;
-  errors?: SpanErrorDetail[];
+  errors?: SpanErrorDetail[] | string;
 }
 
 export type SpanResponse = Record<string, SpanDetail>;
