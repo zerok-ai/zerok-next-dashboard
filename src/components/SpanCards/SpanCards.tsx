@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { chatSelector } from "redux/chat";
 import { useSelector } from "redux/store";
-import { type SpanDetail } from "utils/types";
+import { type SpanDetail, type SpanErrorDetail } from "utils/types";
 
 import styles from "./SpanCards.module.scss";
 
@@ -54,7 +54,7 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
         </section>
         {spans?.errors && spans?.errors.length > 0 && (
           <div className={styles["exception-container"]}>
-            <ExceptionTab errors={spans.errors} />
+            <ExceptionTab errors={spans.errors as SpanErrorDetail[]} />
           </div>
         )}
         <section className={styles["pod-container"]}>
