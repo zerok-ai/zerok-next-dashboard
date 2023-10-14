@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { Fragment, memo, useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
+import { GET_ERROR_DETAILS_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
 import { type SpanErrorDetail } from "utils/types";
 
@@ -12,7 +13,6 @@ import styles from "./ExceptionTab.module.scss";
 interface ExceptionTabProps {
   errors: SpanErrorDetail[];
 }
-
 interface ErrorDataType {
   id: string;
   data: string;
@@ -23,16 +23,17 @@ const ExceptionTab = ({ errors }: ExceptionTabProps) => {
   const [activeTab, setActiveTab] = useState(errors[0].hash);
   const [errorData, setErrorData] = useState<ErrorDataType[] | null>(null);
   const [disabledCard] = useState(false);
-
+  console.log({ errors });
   const fetchErrors = async () => {
     try {
-      // const endpoint = GET_ERROR_DETAILS_ENDPOINT;
-      // const body = {
-      //   id_list: errors.map((er) => er.hash),
-      // };
-
-      // console.log({ endpoint, body });
-      const rdata = await raxios.get("/errors.json");
+      const endpoint = GET_ERROR_DETAILS_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster!
+      );
+      const body = {
+        id_list: errors.map((er) => er.hash),
+      };
+      const rdata = await raxios.post(endpoint, body);
       setErrorData(rdata.data.payload.errors);
     } catch (err) {
       console.log({ err });
