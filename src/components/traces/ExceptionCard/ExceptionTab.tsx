@@ -23,7 +23,6 @@ const ExceptionTab = ({ errors }: ExceptionTabProps) => {
   const [activeTab, setActiveTab] = useState(errors[0].hash);
   const [errorData, setErrorData] = useState<ErrorDataType[] | null>(null);
   const [disabledCard] = useState(false);
-  console.log({ errors });
   const fetchErrors = async () => {
     try {
       const endpoint = GET_ERROR_DETAILS_ENDPOINT.replace(
@@ -131,16 +130,12 @@ const ExceptionTab = ({ errors }: ExceptionTabProps) => {
     if (!activeError) {
       return null;
     }
-    const { message, error_type, exception_type } = activeError;
+    const { message, exception_type } = activeError;
     return (
       <div className={styles["tab-content"]}>
         <div className={styles.row}>
           <label className={styles.label}>Message:</label>
           <div className={styles.data}>{message}</div>
-        </div>
-        <div className={styles.row}>
-          <label className={styles.label}>Error Type:</label>
-          <div className={styles.data}>{error_type}</div>
         </div>
         <div className={styles.row}>
           <label className={styles.label}>Exception Type:</label>
@@ -168,7 +163,11 @@ const ExceptionTab = ({ errors }: ExceptionTabProps) => {
         >
           {errors.map((er, idx) => {
             return (
-              <Tab label={`Error ${idx + 1}`} key={er.hash} value={er.hash} />
+              <Tab
+                label={er.source ? er.source : `Error ${idx + 1}`}
+                key={er.hash}
+                value={er.hash}
+              />
             );
           })}
         </Tabs>

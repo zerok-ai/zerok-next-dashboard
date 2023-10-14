@@ -87,7 +87,12 @@ export const spanTransformer = (spanData: SpanResponse) => {
        (span.errors as SpanErrorDetail[]).forEach((error) => {
          if (error.message && error.hash && !errorSet.has(error.hash)) {
            errorSet.add(error.hash);
-           errors.push({ ...error, span_id: span.span_id });
+           errors.push({
+             ...error,
+             span_id: span.span_id,
+             source: span.source,
+             destination: span.destination,
+           });
          }
        });
      } catch (err) {

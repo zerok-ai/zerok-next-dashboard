@@ -15,6 +15,8 @@ export interface IntegrationListType {
   triggerClusterModal?: boolean;
   disableAddNew?: boolean;
   disableManage?: boolean;
+  disabledText?: string;
+  helperText?: string;
 }
 export interface PrometheusBaseType {
   alias: string;
