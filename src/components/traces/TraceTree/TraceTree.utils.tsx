@@ -82,13 +82,17 @@ export const spanTransformer = (spanData: SpanResponse) => {
     formattedSpans[key] = { ...span };
     // check for exceptions span
     if (span.errors && span.errors.length > 0) {
-      span.errors = JSON.parse(span.errors as string);
-      (span.errors as SpanErrorDetail[]).forEach((error) => {
-        if (error.message && error.hash && !errorSet.has(error.hash)) {
-          errorSet.add(error.hash);
-          errors.push({ ...error, span_id: span.span_id });
-        }
-      });
+     try {
+       span.errors = JSON.parse(span.errors as string);
+       (span.errors as SpanErrorDetail[]).forEach((error) => {
+         if (error.message && error.hash && !errorSet.has(error.hash)) {
+           errorSet.add(error.hash);
+           errors.push({ ...error, span_id: span.span_id });
+         }
+       });
+     } catch (err) {
+       span.errors = [];
+     }
     }
     return true;
   });
