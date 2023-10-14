@@ -23,8 +23,8 @@ const CLUSTER_BLOCKED_ROUTES = [
   "/",
   // "/probes",
   // "/probes/create",
-  "/issues",
-  "/issues/detail",
+  // "/issues",
+  // "/issues/detail",
 ];
 
 const PageLayout = ({ children }: PageLayoutProps) => {

@@ -93,6 +93,14 @@ export interface IssueDetail {
   last_seen: string;
   incidents: string[];
 }
+
+export interface SpanErrorDetail {
+  exception_type: string;
+  message: string;
+  error_type: string;
+  hash: string;
+  span_id?: string;
+}
 export interface SpanDetail {
   source: string;
   destination: string;
@@ -119,6 +127,7 @@ export interface SpanDetail {
   exceptionSpan?: string;
   highlightException?: string | null;
   totalTime?: number;
+  errors?: SpanErrorDetail[];
 }
 
 export type SpanResponse = Record<string, SpanDetail>;

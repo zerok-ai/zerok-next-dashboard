@@ -32,8 +32,8 @@ const ClusterSelector = () => {
     "/",
     // "/probes",
     // "/probes/create",
-    "/issues",
-    "/issues/detail",
+    // "/issues",
+    // "/issues/detail",
   ];
 
   useEffect(() => {

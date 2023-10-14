@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { chatSelector } from "redux/chat";
 import { useSelector } from "redux/store";
-import { type SpanResponse } from "utils/types";
+import { type SpanDetail } from "utils/types";
 
 import styles from "./SpanCards.module.scss";
 
@@ -17,15 +17,11 @@ interface SpanCardsProps {
 }
 
 const SpanCards = ({ lockScroll }: SpanCardsProps) => {
-  const [exceptionSpan, setExceptionSpan] = useState<null | string>(null);
   const [incidentId, setIncidentId] = useState<null | string>(null);
-  const [spans, setSpans] = useState<null | SpanResponse>(null);
+  const [spans, setSpans] = useState<null | SpanDetail>(null);
   const [isTraceTableVisible, toggleTraceTable] = useToggle(false);
   const { likelyCause } = useSelector(chatSelector);
   const router = useRouter();
-  useEffect(() => {
-    setExceptionSpan(null);
-  }, [router]);
 
   useEffect(() => {
     if (isTraceTableVisible) {
@@ -34,29 +30,6 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
       lockScroll(false);
     }
   }, [isTraceTableVisible]);
-
-  useEffect(() => {
-    if (spans) {
-      const memo = new Set<string>();
-      Object.keys(spans).forEach((key) => {
-        const span = spans[key];
-        if (
-          span.source &&
-          !span.source.includes("zk-client") &&
-          !memo.has(span.source)
-        ) {
-          memo.add(span.source);
-        }
-        if (
-          span.destination &&
-          !span.destination.includes("zk-client") &&
-          !memo.has(span.destination)
-        ) {
-          memo.add(span.destination);
-        }
-      });
-    }
-  }, [spans]);
 
   useEffect(() => {
     if (router.query.trace) {
@@ -70,26 +43,18 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
   return (
     <div className={styles["detail-container"]}>
       <div className={styles["cards-container"]}>
-        <section
-          className={cx(
-            styles["tree-container"],
-            exceptionSpan && styles["tree-container-minimal"]
-          )}
-        >
+        <section className={cx(styles["tree-container"])}>
           <TraceTree
-            updateSpans={(spans: SpanResponse | null) => {
+            updateSpans={(spans: SpanDetail | null) => {
               setSpans(spans);
-            }}
-            updateExceptionSpan={(id: string | null) => {
-              setExceptionSpan(id);
             }}
             toggleTraceTable={toggleTraceTable}
             incidentId={incidentId}
           />
         </section>
-        {exceptionSpan && (
+        {spans?.errors && spans?.errors.length > 0 && (
           <div className={styles["exception-container"]}>
-            <ExceptionTab spanKey={exceptionSpan} incidentId={incidentId} />
+            <ExceptionTab errors={spans.errors} />
           </div>
         )}
         <section className={styles["pod-container"]}>

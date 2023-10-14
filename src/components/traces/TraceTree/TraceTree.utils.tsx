@@ -4,7 +4,11 @@ import dayjs from "dayjs";
 import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds } from "utils/functions";
-import { type SpanDetail, type SpanResponse } from "utils/types";
+import {
+  type SpanDetail,
+  type SpanErrorDetail,
+  type SpanResponse,
+} from "utils/types";
 
 import styles from "./TraceTree.module.scss";
 
@@ -71,38 +75,23 @@ export const spanTransformer = (spanData: SpanResponse) => {
   if (!rootSpan) {
     return {};
   }
-  topKeys.map((key) => {
+  const errors: SpanErrorDetail[] = [];
+  topKeys.forEach((key) => {
     const span = spanData[key];
-    // check for exception span
-    if (span.path.includes("exception")) {
-      formattedSpans[key] = { ...span, span_id: key, exception: true };
-
-      formattedSpans[rootSpan] = spanData[rootSpan];
-      const exceptionParent = topKeys.find((k) => {
-        return k === span.parent_span_id;
+    formattedSpans[key] = { ...span };
+    // check for exceptions span
+    if (span.errors && span.errors.length > 0) {
+      span.errors.forEach((error) => {
+        if (error.message && error.hash) {
+          errors.push({ ...error, span_id: span.span_id });
+        }
       });
-      const highlightException = findNearestVisibleParent(spanData, span);
-      formattedSpans[rootSpan] = {
-        ...formattedSpans[rootSpan],
-        exceptionSpan: key,
-      };
-      if (exceptionParent) {
-        formattedSpans[rootSpan] = {
-          ...formattedSpans[rootSpan],
-          exceptionParent,
-          highlightException: highlightException?.span_id,
-        };
-      }
-    } else {
-      // check if span already exists, so as to not override exception span
-      if (!formattedSpans[key]) {
-        formattedSpans[key] = { ...span };
-      }
     }
     return true;
   });
   // get the total spanlength in milliseconds
   const rootSpanInfo = formattedSpans[rootSpan];
+  rootSpanInfo.errors = errors;
   const rootStartTime = new Date(rootSpanInfo.start_time).getTime();
   const rootLatency = convertNanoToMilliSeconds(
     rootSpanInfo.latency,
