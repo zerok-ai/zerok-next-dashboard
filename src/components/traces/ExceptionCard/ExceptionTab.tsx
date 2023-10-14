@@ -1,62 +1,60 @@
+import { Tab, Tabs } from "@mui/material";
 import CustomSkeleton from "components/custom/CustomSkeleton";
-import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
-import { useRouter } from "next/router";
-import { memo, useEffect } from "react";
+import { Fragment, memo, useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
-import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
-import { type SpanRawDataResponse } from "utils/types";
+import raxios from "utils/raxios";
+import { type SpanErrorDetail } from "utils/types";
 
 import styles from "./ExceptionTab.module.scss";
 
 interface ExceptionTabProps {
-  spanKey: string;
-  incidentId: string | null;
+  errors: SpanErrorDetail[];
 }
 
-const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
-  const {
-    data: exceptionSpan,
-    fetchData,
-    error,
-  } = useFetch<SpanRawDataResponse>("span_raw_data_details", null);
+interface ErrorDataType {
+  id: string;
+  data: string;
+}
 
+const ExceptionTab = ({ errors }: ExceptionTabProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
-  const router = useRouter();
-  const { issue } = router.query;
+  const [activeTab, setActiveTab] = useState(errors[0].hash);
+  const [errorData, setErrorData] = useState<ErrorDataType[] | null>(null);
+  const [disabledCard] = useState(false);
+
+  const fetchErrors = async () => {
+    try {
+      // const endpoint = GET_ERROR_DETAILS_ENDPOINT;
+      // const body = {
+      //   id_list: errors.map((er) => er.hash),
+      // };
+
+      // console.log({ endpoint, body });
+      const rdata = await raxios.get("/errors.json");
+      setErrorData(rdata.data.payload.errors);
+    } catch (err) {
+      console.log({ err });
+    }
+  };
 
   useEffect(() => {
-    if (selectedCluster && incidentId) {
-      const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster
-      )
-        .replace("{issue_id}", issue as string)
-        .replace("{incident_id}", incidentId)
-        .replace("{span_id}", spanKey);
-      fetchData(endpoint);
+    if (selectedCluster && activeTab) {
+      fetchErrors();
     }
-  }, [selectedCluster, incidentId]);
-
-  if (!exceptionSpan && !error) {
-    return (
-      <div className={styles.container}>
-        <CustomSkeleton len={5} />
-      </div>
-    );
-  }
-  const exceptionData =
-    exceptionSpan && exceptionSpan[Object.keys(exceptionSpan)[0]];
-  const data = exceptionData?.req_body as string;
-  if (!data || error) {
+  }, [selectedCluster, activeTab, errors]);
+  // const exceptionData =
+  // exceptionSpan && exceptionSpan[Object.keys(exceptionSpan)[0]];
+  // const data = exceptionData?.req_body as string;
+  if (disabledCard) {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
-          <h6>Exception</h6>
+          <h6>Exceptions</h6>
         </div>
         <div className={styles.content}>
-          <div className={styles.row}>
+          <div className={styles.tabs}>
             This feature is disabled for your organisation. Please contact ZeroK
             to know more.
           </div>
@@ -64,32 +62,117 @@ const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
       </div>
     );
   }
-  const messagePos = data.indexOf("], message=");
-  const traceStr = data.substring(13, messagePos);
-  const traceMsg = data.substring(messagePos + 11, data.length - 1);
-  const stacktrace = traceStr.split(",");
+  // const messagePos = data.indexOf("], message=");
+  // const traceStr = data.substring(13, messagePos);
+  // const traceMsg = data.substring(messagePos + 11, data.length - 1);
+  // const stacktrace = traceStr.split(",");
   const splitTrace = (trace: string) => {
-    const regex = /^(.*)[(](.*)(:(.*))?[)]$/;
-
-    const traceItems = regex.exec(trace);
-    if (!traceItems) {
+    const regex = /([a-zA-Z_.]+)\(([^:]+):(\d+)\)/;
+    const match = trace.match(regex);
+    if (match) {
+      const text = match[1].replace(`(${match[2]})`, "");
+      const file = match[2];
+      const line = parseInt(match[3], 10);
+      return {
+        text,
+        file,
+        line,
+      };
+    } else {
       return {
         text: trace,
       };
     }
-    return {
-      text: traceItems[1],
-      file: traceItems[2].split(":")[0],
-      line: traceItems[2].split(":")[1],
-    };
+  };
+  const renderExceptionData = () => {
+    const exception = errorData?.find((er) => er.id === activeTab);
+    if (!exception) {
+      return <CustomSkeleton len={8} />;
+    } else {
+      try {
+        const data = JSON.parse(exception.data);
+        const stacktrace: string[] = data.stacktrace.split("\tat");
+        return (
+          <div className={styles["exception-rows"]}>
+            {stacktrace.map((trace: string) => {
+              const { text, file, line } = splitTrace(trace);
+              text.replace("\t", "");
+              return (
+                <span key={nanoid()} className={styles["exception-row"]}>
+                  <span>{text}</span>
+                  {file && (
+                    <Fragment>
+                      <span className={styles["exception-helper"]}> in </span>
+                      <span>{file}</span>
+                    </Fragment>
+                  )}
+                  {line && (
+                    <Fragment>
+                      <span className={styles["exception-helper"]}>
+                        {" "}
+                        at line{" "}
+                      </span>
+                      <span>{line}</span>
+                    </Fragment>
+                  )}
+                </span>
+              );
+            })}
+          </div>
+        );
+      } catch (err) {
+        return <p>{exception.data}</p>;
+      }
+    }
+  };
+  const renderTab = () => {
+    const activeError = errors.find((er) => er.hash === activeTab);
+    if (!activeError) {
+      return null;
+    }
+    const { message, error_type, exception_type } = activeError;
+    return (
+      <div className={styles["tab-content"]}>
+        <div className={styles.row}>
+          <label className={styles.label}>Message:</label>
+          <div className={styles.data}>{message}</div>
+        </div>
+        <div className={styles.row}>
+          <label className={styles.label}>Error Type:</label>
+          <div className={styles.data}>{error_type}</div>
+        </div>
+        <div className={styles.row}>
+          <label className={styles.label}>Exception Type:</label>
+          <div className={styles.data}>{exception_type}</div>
+        </div>
+        <div className={styles.row}>
+          <label>Exception:</label>
+          <div className={styles.data}>{renderExceptionData()}</div>
+        </div>
+      </div>
+    );
   };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h6>Exception</h6>
+        <h6>Exceptions</h6>
       </div>
       <div className={styles.content}>
-        <div className={styles.row}>
+        <Tabs
+          className={styles.tabs}
+          value={activeTab}
+          onChange={(e, val) => {
+            setActiveTab(val);
+          }}
+        >
+          {errors.map((er, idx) => {
+            return (
+              <Tab label={`Error ${idx + 1}`} key={er.hash} value={er.hash} />
+            );
+          })}
+        </Tabs>
+        <div className={styles["tab-content"]}>{renderTab()}</div>
+        {/* <div className={styles.row}>
           <label className={styles.label}>Message:</label>
           <div className={styles.data}>{traceMsg}</div>
         </div>
@@ -117,7 +200,7 @@ const ExceptionTab = ({ spanKey, incidentId }: ExceptionTabProps) => {
               );
             })}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

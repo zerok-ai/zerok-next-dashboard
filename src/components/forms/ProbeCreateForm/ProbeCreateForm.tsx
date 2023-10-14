@@ -191,8 +191,6 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
     fetchAttributesForProtocol([...ATTRIBUTE_PROTOCOLS]);
   }, []);
 
-  console.log({ attributes });
-
   useEffect(() => {
     if (selectedCluster) {
       const endpoint = LIST_SERVICES_ENDPOINT.replace(

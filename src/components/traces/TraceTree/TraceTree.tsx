@@ -49,14 +49,12 @@ import {
 } from "./TraceTree.utils";
 
 interface TraceTreeProps {
-  updateExceptionSpan: (id: string | null) => void;
-  updateSpans: (spans: SpanResponse | null) => void;
+  updateSpans: (spans: SpanDetail | null) => void;
   toggleTraceTable: () => void;
   incidentId: string | null;
 }
 
 const TraceTree = ({
-  updateExceptionSpan,
   updateSpans,
   toggleTraceTable,
   incidentId,
@@ -79,36 +77,38 @@ const TraceTree = ({
     startTime: string;
   }>(null);
 
-  const { issue, trace, issue_id: issueId } = router.query;
-  console.log({ trace, issueId });
+  const { issue_id: issueId } = router.query;
 
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
   const [isModalOpen, toggleModal] = useToggle(false);
+
   useEffect(() => {
     if (selectedCluster && incidentId) {
       setSpans(null);
       setSpanTree(null);
       setSelectedSpan(null);
-      updateExceptionSpan(null);
       updateSpans(null);
       const endpoint = LIST_SPANS_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       )
-        .replace("{issue_id}", issue as string)
+        .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId);
-      // const endpoint = `/fake_spans.json`;
-      fetchSpans(endpoint);
+      // // const endpoint = `/fake_spans.json`;
+      console.log({ endpoint });
+      fetchSpans("/dummy.json");
     }
   }, [selectedCluster, incidentId]);
 
   useEffect(() => {
     if (spans) {
       const root = getRootSpan(spans);
-      updateSpans(spans);
+
       if (root) {
-        setSpanTree(buildSpanTree(spans, spans[root]));
+        const spanTree = buildSpanTree(spans, spans[root]);
+        setSpanTree(spanTree);
+        updateSpans(spanTree);
       }
     }
   }, [spans]);
@@ -122,9 +122,6 @@ const TraceTree = ({
         ) as number,
         startTime: spanTree.start_time,
       });
-      if (spanTree.exceptionSpan) {
-        updateExceptionSpan(spanTree.exceptionSpan);
-      }
     }
   }, [spanTree]);
 
@@ -142,15 +139,13 @@ const TraceTree = ({
     if (!spanTree || !referenceTime) {
       return <CustomSkeleton len={8} />;
     }
-    const exceptionSpan = spanTree.highlightException;
 
     const renderSpan = (
       span: SpanDetail,
       isTopRoot: boolean = false,
       isLastChild: boolean = false
     ) => {
-      const exSpan = exceptionSpan ? spans![exceptionSpan] : null;
-      const highlight = exSpan?.span_id === span.span_id;
+      const highlight = !!span.errors && span.errors.length > 0;
       const hasVisibleChildren = checkForVisibleChildren(span);
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
         return isLastChild || !hasVisibleChildren ? (

@@ -107,7 +107,6 @@ const HealthMap = ({ serviceMap }: HealthMapProps) => {
   const onNodeClick = (e: MouseEvent, node: Node) => {
     const target = e.target as HTMLElement;
     const pos = target.getBoundingClientRect();
-    console.log({ pos });
     setSelectedService({
       ...node,
       position: {

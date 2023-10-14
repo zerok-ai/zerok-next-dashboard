@@ -1,116 +1,13 @@
 {
     "payload": {
-        "attributes_list": [
+        "errors": [
             {
-                "protocol": "HTTP",
-                "attribute_details": [
-                    {
-                        "key_set_name": "HTTP Common Attributes",
-                        "executor": "EBPF",
-                        "attribute_list": [
-                            {
-                                "id": "\"http_response_body\"",
-                                "field": "HTTP Response Body",
-                                "input": "string",
-                                "values": "Along with JSON Path",
-                                "data_type": "string",
-                                "description": "HTTP Response body",
-                                "examples": "{ \"is_error\": true, \"payload\"{\"error.message\": \"1\"} }"
-                            },
-                            {
-                                "id": "\"http_request_body\"",
-                                "field": "HTTP Request Body",
-                                "input": "string",
-                                "values": "Along with JSON Path",
-                                "data_type": "string",
-                                "description": "HTTP Request body",
-                                "examples": "{ \"customer_id\": 12345 }"
-                            }
-                        ]
-                    },
-                    {
-                        "key_set_name": "HTTP Common Attributes",
-                        "executor": "OTEL",
-                        "attribute_list": [
-                            {
-                                "id": "\"http_response_status_code\"",
-                                "field": "Status Code",
-                                "input": "int",
-                                "data_type": "int",
-                                "description": "HTTP response status code.",
-                                "examples": "200"
-                            },
-                            {
-                                "id": "req_method",
-                                "field": "Method",
-                                "input": "select",
-                                "values": "[\"GET\", \"PUT\", \"POST\", \"DELETE\", \"PATCH\"]",
-                                "data_type": "string",
-                                "description": "HTTP request method.",
-                                "examples": "GET; POST; HEAD"
-                            }
-                        ]
-                    },
-                    {
-                        "key_set_name": "HTTP Request And Response Headers",
-                        "executor": "OTEL",
-                        "attribute_list": [
-                            {
-                                "id": "\"http_request_header\"",
-                                "field": "Request Header",
-                                "input": "string",
-                                "data_type": "string",
-                                "description": "HTTP request headers, <key> being the normalized HTTP Header name (lowercase, with - characters replaced by _), the value being the header values.",
-                                "examples": "http.request.header.content_type=[\"application/json\"]; http.request.header.x_forwarded_for=[\"1.2.3.4\", \"1.2.3.5\"]"
-                            },
-                            {
-                                "id": "\"http_response_header\"",
-                                "field": "Response Header",
-                                "input": "string",
-                                "data_type": "string",
-                                "description": "HTTP response headers, <key> being the normalized HTTP Header name (lowercase, with - characters replaced by _), the value being the header values.",
-                                "examples": "http.response.header.content_type=[\"application/json\"]; http.response.header.my_custom_header=[\"abc\", \"def\"]"
-                            }
-                        ]
-                    },
-                    {
-                        "key_set_name": "HTTP Client",
-                        "executor": "OTEL",
-                        "attribute_list": [
-                            {
-                                "id": "req_path",
-                                "field": "URL",
-                                "input": "string",
-                                "data_type": "string",
-                                "description": "Full HTTP request URL in the form scheme://host[:port]/path?query[#fragment]. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.",
-                                "examples": "https://www.foo.bar/search?q=OpenTelemetry#SemConv"
-                            }
-                        ]
-                    },
-                    {
-                        "key_set_name": "HTTP Server",
-                        "executor": "OTEL",
-                        "attribute_list": [
-                            {
-                                "id": "\"http_route\"",
-                                "field": "Route",
-                                "input": "string",
-                                "data_type": "string",
-                                "description": "The matched route (path template in the format used by the respective server framework).",
-                                "examples": "/users/:userID?; {controller}/{action}/{id?}"
-                            },
-                            {
-                                "id": "\"url_scheme\"",
-                                "field": "Scheme",
-                                "input": "select",
-                                "values": "[\"HTTP\",\"HTTPS\"]",
-                                "data_type": "string",
-                                "description": "The URI scheme identifying the used protocol.",
-                                "examples": "http; https"
-                            }
-                        ]
-                    }
-                ]
+                "id": "8d309b3e66068cb437164af2c21aadb4436ec86edc2964263b5b276d228bd25b",
+                "data": "{\"message\":\"item not in stock\",\"stacktrace\":\"java.lang.IllegalArgumentException: item not in stock\\n\\tat ai.zerok.order.service.OrderService.checkStockInInventory(OrderService.java:182)\\n\\tat ai.zerok.order.service.OrderService.placeOrder(OrderService.java:67)\\n\\tat jdk.internal.reflect.GeneratedMethodAccessor49.invoke(Unknown Source)\\n\\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\\n\\tat java.base/java.lang.reflect.Method.invoke(Method.java:568)\\n\\tat org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)\\n\\tat org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)\\n\\tat org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)\\n\\tat org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:752)\\n\\tat org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)\\n\\tat org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)\\n\\tat org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)\\n\\tat org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)\\n\\tat org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:752)\\n\\tat org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)\\n\\tat ai.zerok.order.service.OrderService$$SpringCGLIB$$0.placeOrder(\\u003cgenerated\\u003e)\\n\\tat ai.zerok.order.controller.OrderController.placeOrder(OrderController.java:22)\\n\\tat jdk.internal.reflect.GeneratedMethodAccessor48.invoke(Unknown Source)\\n\\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\\n\\tat java.base/java.lang.reflect.Method.invoke(Method.java:568)\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:207)\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:152)\\n\\tat org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)\\n\\tat org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)\\n\\tat org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1080)\\n\\tat org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:973)\\n\\tat org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)\\n\\tat org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)\\n\\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:731)\\n\\tat org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)\\n\\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:814)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:223)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.servlet.v6_0.OpenTelemetryHandlerMappingFilter.doFilter(OpenTelemetryHandlerMappingFilter.java:76)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:177)\\n\\tat org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)\\n\\tat org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:542)\\n\\tat org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:119)\\n\\tat org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)\\n\\tat org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)\\n\\tat org.apache.catalina.valves.RemoteIpValve.invoke(RemoteIpValve.java:741)\\n\\tat org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357)\\n\\tat org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:400)\\n\\tat org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)\\n\\tat org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:859)\\n\\tat org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1734)\\n\\tat org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)\\n\\tat org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)\\n\\tat org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)\\n\\tat org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)\\n\\tat java.base/java.lang.Thread.run(Thread.java:833)\\n\",\"type\":\"java.lang.IllegalArgumentException\"}"
+            },
+            {
+                "id": "8d309b3e66068fb437164af2c21aadb4436ec86edc2964263b5b276d228bd25b",
+                "data": "{\"message\":\"item not in stock\",\"stacktrace\":\"java.lang.IllegalArgumentException: item not in stock\\n\\tat ai.zerok.order.service.OrderService.checkStockInInventory(OrderService.java:182)\\n\\tat ai.zerok.order.service.OrderService.placeOrder(OrderService.java:67)\\n\\tat jdk.internal.reflect.GeneratedMethodAccessor49.invoke(Unknown Source)\\n\\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\\n\\tat java.base/java.lang.reflect.Method.invoke(Method.java:568)\\n\\tat org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)\\n\\tat org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)\\n\\tat org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)\\n\\tat org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:752)\\n\\tat org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)\\n\\tat org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)\\n\\tat org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)\\n\\tat org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)\\n\\tat org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:752)\\n\\tat org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)\\n\\tat ai.zerok.order.service.OrderService$$SpringCGLIB$$0.placeOrder(\\u003cgenerated\\u003e)\\n\\tat ai.zerok.order.controller.OrderController.placeOrder(OrderController.java:22)\\n\\tat jdk.internal.reflect.GeneratedMethodAccessor48.invoke(Unknown Source)\\n\\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\\n\\tat java.base/java.lang.reflect.Method.invoke(Method.java:568)\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:207)\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:152)\\n\\tat org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)\\n\\tat org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)\\n\\tat org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1080)\\n\\tat org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:973)\\n\\tat org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)\\n\\tat org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)\\n\\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:731)\\n\\tat org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)\\n\\tat jakarta.servlet.http.HttpServlet.service(HttpServlet.java:814)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:223)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.servlet.v6_0.OpenTelemetryHandlerMappingFilter.doFilter(OpenTelemetryHandlerMappingFilter.java:76)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:185)\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:158)\\n\\tat org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:177)\\n\\tat org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)\\n\\tat org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:542)\\n\\tat org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:119)\\n\\tat org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)\\n\\tat org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)\\n\\tat org.apache.catalina.valves.RemoteIpValve.invoke(RemoteIpValve.java:741)\\n\\tat org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357)\\n\\tat org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:400)\\n\\tat org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)\\n\\tat org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:859)\\n\\tat org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1734)\\n\\tat org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)\\n\\tat org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)\\n\\tat org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)\\n\\tat org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)\\n\\tat java.base/java.lang.Thread.run(Thread.java:833)\\n\",\"type\":\"java.lang.IllegalArgumentException\"}"
             }
         ]
     }
