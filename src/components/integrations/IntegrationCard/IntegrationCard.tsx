@@ -22,6 +22,8 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
     description,
     integrated,
     triggerClusterModal,
+    disabledText,
+    // helperText,
     disableManage,
   } = integration;
   const dispatch = useDispatch();
@@ -56,24 +58,26 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
         <p>
           {description} <br />
         </p>
-
         <div className={styles.actions}>
           {!disableManage && (
-            <Button
-              onClick={() => {
-                handleRoute("list");
-              }}
-              disabled={!integrated}
-              variant={"contained"}
-              color={!integrated ? "primary" : "secondary"}
-              // size="small"
-              className={styles["action-button"]}
-            >
-              {integrated && (
-                <HiOutlineCog6Tooth className={styles["action-icon"]} />
-              )}
-              {integrated ? "Manage" : "Coming soon"}
-            </Button>
+            <div>
+              <Button
+                onClick={() => {
+                  handleRoute("list");
+                }}
+                disabled={!integrated}
+                variant={"contained"}
+                color={!integrated ? "primary" : "secondary"}
+                // size="small"
+                className={styles["action-button"]}
+              >
+                {integrated && (
+                  <HiOutlineCog6Tooth className={styles["action-icon"]} />
+                )}
+                {integrated ? "Manage" : disabledText}
+              </Button>
+              {/* {helperText && <small>{helperText}</small>} */}
+            </div>
           )}
           {/* New */}
           {integrated && (

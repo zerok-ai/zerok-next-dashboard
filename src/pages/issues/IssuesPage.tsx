@@ -40,6 +40,7 @@ const IssuesPage = () => {
   const {
     data,
     fetchData: fetchIssues,
+    error,
     setData,
   } = useFetch<IssuesDataType>("", null);
 
@@ -137,8 +138,9 @@ const IssuesPage = () => {
         </div>
       )}
       <div className={styles["page-content"]}>
+        {error && <p>Error fetching issues. Please try again later.</p>}
         {/* @TODO - add error state here */}
-        {selectedCluster && (
+        {selectedCluster && !error && (
           <TableX
             data={data?.issues ?? null}
             columns={columns}

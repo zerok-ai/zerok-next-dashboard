@@ -127,8 +127,8 @@ const ClusterSelector = () => {
           value={""}
         >
           {" "}
-          <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Add a
-          new cluster
+          <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Add an
+          Open Telemetry integration
         </MenuItem>
       </Select>
 

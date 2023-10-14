@@ -24,10 +24,11 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     category: "Communication",
     integrated: false,
     tags: ["All", "Communication"],
+    disabledText: "Coming soon",
   },
   {
     name: "otel",
-    label: "OpenTelemetry",
+    label: "Open Telemetry",
     description: "Connect Open Telemetry data with ZeroK.",
     url: "https://opentelemetry.io/",
     logo: BRAND_LOGOS.OPENTELEMETRY,
@@ -48,7 +49,9 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     logo: BRAND_LOGOS.EBPF,
     category: "Data sources",
     dummy: true,
+    disabledText: "Disabled",
     tags: ["All", "Data sources"],
+    helperText: "Please contact ZeroK support for more details",
     // triggerClusterModal: true,
   },
 ];

@@ -5,6 +5,7 @@
     border-radius: $sp-sm;
     border:1px solid $grey-800;
     background-color: $bg-dark;
+    min-height: 200px;
 }
 
 .header {
@@ -31,6 +32,10 @@
     padding-bottom: $sp-xxl;
     height:450px;
     overflow-y: auto;
+}
+
+.error-content {
+    padding:$sp-lg $sp-xl;
 }
 
 // metadata

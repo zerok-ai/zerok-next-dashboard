@@ -96,7 +96,6 @@ const TraceTree = ({
         .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId);
       // // const endpoint = `/fake_spans.json`;
-      console.log({ endpoint });
       fetchSpans(endpoint);
     }
   }, [selectedCluster, incidentId]);
@@ -134,7 +133,6 @@ const TraceTree = ({
   const AccordionIcon = useMemo(() => {
     return <HiChevronRight className={styles["expand-icon"]} />;
   }, []);
-  console.log({ spanTree, referenceTime });
   const renderSpanTree = () => {
     if (!spanTree || !referenceTime) {
       return <CustomSkeleton len={8} />;

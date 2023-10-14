@@ -39,8 +39,6 @@ const ProbeEditPage = () => {
     }
   }, [router, selectedCluster]);
 
-  console.log({ probe });
-
   useEffect(() => {
     if (probes?.length) {
       const { id } = router.query;

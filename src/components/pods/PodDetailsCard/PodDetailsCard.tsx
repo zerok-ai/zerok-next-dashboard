@@ -4,6 +4,7 @@ import ExpandIcon from "components/helpers/ExpandIcon";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
+import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -34,8 +35,12 @@ interface PodDetailsCardProps {
 }
 
 const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
-  const { data: pods, fetchData: fetchPods } =
-    useFetch<PodInfoType[]>("pods_info");
+  const {
+    data: pods,
+    fetchData: fetchPods,
+    errorData: podsErrorData,
+    error: podsError,
+  } = useFetch<PodInfoType[]>("pods_info");
   const {
     data: podDetails,
     fetchData: fetchPodDetails,
@@ -50,6 +55,7 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
   const [selectedPod, setSelectedPod] = useState<string>("");
   const [isExpanded, toggleExpanded] = useToggle(false);
+
   const { selectedCluster } = useSelector(clusterSelector);
   useEffect(() => {
     if (incidentId && selectedCluster) {
@@ -86,7 +92,45 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
       fetchPodDetails(endpoint1);
     }
   }, [selectedPod, selectedCluster]);
-
+  if (podsError) {
+    const message = podsErrorData?.response?.data?.error?.info?.error;
+    const renderMessage = () => {
+      if (message.includes("No metric server found")) {
+        return (
+          <span>
+            K8s metrics data is not being sent to the Prometheus instance you
+            have integrated ZeroK with. Please{" "}
+            <Link href="/integrations/prometheus/list">integrate ZeroK</Link>{" "}
+            with the Prometheus instance which contains K8s metrics
+          </span>
+        );
+      } else if (!message) {
+        return (
+          <span>
+            Something went wrong while fetching pod details, please try again
+            later or contact support.
+          </span>
+        );
+      } else {
+        return (
+          <span>
+            Please{" "}
+            <Link href="/integrations/prometheus/list">
+              integrate ZeroK with Prometheus
+            </Link>{" "}
+            to automatically query pod metrics and events with the Prometheus
+            instance which contains K8s metrics
+          </span>
+        );
+      }
+    };
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>Pods</div>
+        <div className={styles["error-content"]}>{renderMessage()}</div>
+      </div>
+    );
+  }
   const renderTabContent = () => {
     if (!pods?.length || !podDetails) return <CustomSkeleton len={8} />;
     const pod = pods.find((p) => p.pod === selectedPod);

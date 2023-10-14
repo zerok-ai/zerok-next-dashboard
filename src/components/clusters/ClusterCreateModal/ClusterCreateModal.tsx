@@ -17,7 +17,7 @@ const ClusterCreateModal = () => {
         dispatch(closeClusterModal());
       }}
       keepMounted={true}
-      title="Create a new cluster"
+      title="Integrate with Open Telemetry"
     >
       {" "}
       <CreateClusterForm />

@@ -117,7 +117,7 @@ const IncidentChatTab = () => {
   const renderChat = useCallback(() => {
     if (!enableChat) {
       return (
-        <ChatDisabledCard text="This feature is disabled for your organisation. Please contact ZeroK to know more." />
+        <ChatDisabledCard text="This feature is disabled for your organisation. Please contact ZeroK support for more details." />
       );
     } else {
       if (bottomRef.current) {

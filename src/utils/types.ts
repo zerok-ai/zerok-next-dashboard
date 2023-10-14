@@ -100,6 +100,8 @@ export interface SpanErrorDetail {
   error_type: string;
   hash: string;
   span_id?: string;
+  source?: string;
+  destination?: string;
 }
 export interface SpanDetail {
   source: string;
