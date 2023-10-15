@@ -22,6 +22,7 @@ import {
 } from "utils/probes/types";
 import raxios from "utils/raxios";
 import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
+import { sendError } from "utils/sentry";
 
 // import raxios from "utils/raxios";
 import ConditionCard from "./helpers/ConditionCard";
@@ -183,7 +184,8 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
       });
       setAttributes((prev) => ({ ...prev, ...attrMap }));
     } catch (error) {
-      console.log({ error });
+      sendError(error);
+      console.error({ error });
     }
   };
 
@@ -250,7 +252,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         })
       );
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       setStatus({
         loading: false,
         error: "Something went wrong",

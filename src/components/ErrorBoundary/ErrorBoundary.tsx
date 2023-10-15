@@ -10,7 +10,6 @@ interface ErrorBoundaryProps {
 }
 
 const ErrorFallback = () => {
-  // console.log("ERRO");
   return (
     <div className={styles.container}>
       <div className={styles["error-container"]}>

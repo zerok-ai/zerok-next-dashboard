@@ -2,7 +2,6 @@ const minimist = require("minimist");
 const fs = require("fs");
 const prettier = require("prettier");
 const objectPath = require("object-path");
-const log = console.log;
 
 
 const generateComponent = () => {

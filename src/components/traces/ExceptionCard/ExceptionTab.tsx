@@ -6,6 +6,7 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { GET_ERROR_DETAILS_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
+import { sendError } from "utils/sentry";
 import { type SpanErrorDetail } from "utils/types";
 
 import styles from "./ExceptionTab.module.scss";
@@ -35,7 +36,8 @@ const ExceptionTab = ({ errors }: ExceptionTabProps) => {
       const rdata = await raxios.post(endpoint, body);
       setErrorData(rdata.data.payload.errors);
     } catch (err) {
-      console.log({ err });
+      sendError(err);
+      console.error({ err });
     }
   };
 
