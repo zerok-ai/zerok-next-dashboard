@@ -1,9 +1,14 @@
+import { type ATTRIBUTE_EXECUTORS } from "utils/probes/constants";
+import { type AttributeProtocolType } from "utils/probes/types";
+
 export interface RuleType {
   type: "rule" | "rule_group";
   field: string;
   input: string;
+  id: string;
   operator: string;
   value: string;
+  json_path?: string[];
 }
 
 export interface RuleGroupType {
@@ -15,7 +20,8 @@ export interface RuleGroupType {
 export interface WorkloadType {
   service: string;
   trace_role: "server";
-  protocol: string;
+  executor: (typeof ATTRIBUTE_EXECUTORS)[number];
+  protocol: AttributeProtocolType;
   rule: RuleGroupType;
 }
 
@@ -51,10 +57,10 @@ export interface ScenarioDetail {
   velocity: number;
   sources: string[];
   destinations: string[];
-  rate_limit: Array<{
-    bucket_max_size: number;
-    bucket_refill_size: number;
-    tick_duration: string;
+  group_by: Array<{
+    hash: string;
+    title: string;
+    workload_id: string;
   }>;
   workloads: Record<string, WorkloadType>;
   filter: {
@@ -62,6 +68,11 @@ export interface ScenarioDetail {
     condition: "AND" | "OR";
     workload_ids: string[];
   };
+  rate_limit: Array<{
+    bucket_max_size: number;
+    bucket_refill_size: number;
+    tick_duration: string;
+  }>;
 }
 
 export interface ScenarioDetailType {

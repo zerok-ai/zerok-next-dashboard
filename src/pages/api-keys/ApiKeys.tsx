@@ -1,24 +1,24 @@
-import { Button, IconButton } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { LoadingButton } from "@mui/lab";
+import { IconButton } from "@mui/material";
+import { createColumnHelper } from "@tanstack/react-table";
 import cx from "classnames";
-import CodeBlock from "components/CodeBlock";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
+import CodeBlock from "components/helpers/CodeBlock";
 import PageHeader from "components/helpers/PageHeader";
+import PrivateRoute from "components/helpers/PrivateRoute";
+import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
-import VisibilityToggleButton from "components/VisibilityToggleButton";
 import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
+import { useTrigger } from "hooks/useTrigger";
 import { nanoid } from "nanoid";
 import Head from "next/head";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HiOutlineKey, HiOutlineTrash } from "react-icons/hi2";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch } from "redux/store";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   APIKEY_CREATE_ENDPOINT,
@@ -51,8 +51,12 @@ const ApiKeys = () => {
     APIKEYS_ENDPOINT,
     addToggle
   );
+  const dispatch = useDispatch();
+  const { trigger, changeTrigger } = useTrigger();
 
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
+
+  const [createLoading, setCreateLoading] = useState(false);
 
   const getApiKeyFromId = async (id: string, visibility: boolean) => {
     if (!apiKeys) return;
@@ -85,19 +89,52 @@ const ApiKeys = () => {
         APIKEY_ID_ENDPOINT.replace("{id}", deletingKey as string)
       );
       setDeletingKey(null);
+      dispatch(
+        showSnackbar({
+          message: "API key deleted successfully",
+          type: "success",
+        })
+      );
+      fetchData(APIKEYS_ENDPOINT);
     } catch (err) {
+      dispatch(
+        showSnackbar({
+          message: "Could not delete API key",
+          type: "error",
+        })
+      );
       // @TODO - error handling
     }
   };
 
   const createApiKey = async () => {
+    setCreateLoading(true);
     try {
       await raxios.get(APIKEY_CREATE_ENDPOINT);
       fetchData(APIKEYS_ENDPOINT);
-    } catch (err) {}
+      dispatch(
+        showSnackbar({
+          message: "API key created successfully",
+          type: "success",
+        })
+      );
+    } catch (err) {
+      dispatch(
+        showSnackbar({
+          message: "Could not create API key",
+          type: "error",
+        })
+      );
+    } finally {
+      setCreateLoading(false);
+    }
   };
 
   const colHelper = createColumnHelper<ApiKeyDetailWithToggle>();
+
+  useEffect(() => {
+    fetchData(APIKEYS_ENDPOINT);
+  }, [trigger]);
 
   const columns = useMemo(() => {
     return [
@@ -156,29 +193,25 @@ const ApiKeys = () => {
     ];
   }, [apiKeys]);
 
-  const table = useReactTable({
-    data: apiKeys ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <PageHeader
           title="API Keys"
           showRange={false}
-          align="right"
-          showRefresh={false}
-          extras={[
-            <Button
+          showRefresh={true}
+          onRefresh={changeTrigger}
+          rightExtras={[
+            <LoadingButton
               color="primary"
               variant="contained"
               className={styles["key-button"]}
               onClick={createApiKey}
               key={nanoid()}
+              loading={createLoading}
             >
               <HiOutlineKey className={styles["key-icon"]} /> Create new API key
-            </Button>,
+            </LoadingButton>,
           ]}
         />
       </div>
@@ -187,7 +220,7 @@ const ApiKeys = () => {
         {loading ? (
           <CustomSkeleton len={8} />
         ) : (
-          <TableX table={table} data={apiKeys ?? []} />
+          <TableX columns={columns} data={apiKeys ?? null} />
         )}
         {/* Delete key dialog */}
         <DialogX

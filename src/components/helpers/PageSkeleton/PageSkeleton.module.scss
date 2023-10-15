@@ -3,7 +3,7 @@
     display: grid;
     grid-template-columns: 0.5fr 9fr;
     height:100%;
-    column-gap: $sp-base * 6;
+    column-gap: $sp-xxl;
 }
 
 .drawer, .header,.content {
@@ -13,7 +13,7 @@
 .skeleton-content {
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 6;
+    row-gap: $sp-xxl;
 }
 
 .header{

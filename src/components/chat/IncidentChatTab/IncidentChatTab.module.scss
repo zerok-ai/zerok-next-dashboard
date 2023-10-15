@@ -1,0 +1,113 @@
+@import "styles/variables.module.scss";
+
+.container {
+    width:100%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // transition:all 0.3s ease;
+}
+
+.bottom {
+    bottom:0;
+}
+
+.resizable {
+    overflow: hidden;
+}
+
+.minimized {
+    width:64px;
+}
+
+.likely-cause-container {
+    padding-bottom: $sp-base *5;
+    border-bottom:1px solid $grey-400;
+    margin-bottom: $sp-md;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-md;
+    button {
+        align-self: flex-end;
+        text-transform: none;
+        display: flex;
+        align-items: center;
+        column-gap: $sp-sm;
+    }
+}
+
+.chat-box-container {
+    // height:300px;
+    height: calc(100vh - 100px);
+    padding:$sp-xl;
+    padding-bottom: 0;
+    overflow-y: auto;
+    @media screen and (max-width: ($bp-desktop)) {
+        padding:$sp-md;
+        padding-bottom: 0;
+    }
+}
+
+.chat-input-container {
+    flex:1;
+    padding:$sp-xl;
+    padding-top: $sp-md;
+}
+
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.text-container {
+    font-weight: 400;
+    line-height: $default-line-height;
+    white-space: pre-line;
+    word-break: break-word;
+    hyphens: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-md;
+}
+
+.chat-input {
+    background-color: $grey-925;
+    // border:1px solid $grey-600;
+    ::placeholder {
+        color:$grey-200 !important;
+    }  
+}
+
+.send-icon {
+    display: flex;
+    align-items: center;
+    margin-right: $sp-base * 1.5;
+    // cursor: pointer;
+}
+
+.chat-qa-container {
+    padding:0 $sp-lg;
+}
+
+
+.text-boxes {
+    display: flex;
+    row-gap: $sp-xl;
+    flex-direction: column;
+}
+
+.mini-icon {
+    position: absolute;
+    width:100%;
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.expand-icon {
+    font-size: $sp-32;
+    color:$grey-25;
+}

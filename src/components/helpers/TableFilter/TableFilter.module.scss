@@ -1,0 +1,22 @@
+@import "styles/variables.module.scss";
+.container {
+    
+    :global(.MuiOutlinedInput-notchedOutline ){
+        border-color: $grey-700;
+    }
+   
+}
+.small {
+    :global(.MuiSelect-select){
+        padding-top: $sp-base;
+        padding-bottom: $sp-base;
+    }
+}
+
+.select {
+    // height:32px;
+}
+.select-label-prefix {
+    font-weight: 400;
+    color:$grey-200;
+}

@@ -3,11 +3,11 @@ import { LoadingButton } from "@mui/lab";
 import { InputAdornment } from "@mui/material";
 import cx from "classnames";
 import TextFormField from "components/forms/TextFormField";
-import VisibilityToggleButton from "components/VisibilityToggleButton";
+import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import useStatus from "hooks/useStatus";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { SET_USER_PASSWORD_ENDPOINT } from "utils/endpoints";
 import { maskPassword } from "utils/functions";
@@ -16,14 +16,15 @@ import { z } from "zod";
 
 import styles from "./ResetPasswordForm.module.scss";
 
+const ResetPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(1, "Password cannot be empty")
+    .min(5, "Password must be at least 5 characters long"),
+});
+type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;
+
 const ResetPasswordForm = () => {
-  const ResetPasswordSchema = z.object({
-    password: z
-      .string()
-      .min(1, "Password cannot be empty")
-      .min(4, "Password must be at least 5 characters long"),
-  });
-  type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>;
   const {
     register,
     handleSubmit,
@@ -75,7 +76,7 @@ const ResetPasswordForm = () => {
   }, [router, query]);
 
   return (
-    <div className={styles.container}>
+    <Fragment>
       <form
         className={cx("form", styles.form)}
         onSubmit={handleSubmit(onSubmit)}
@@ -118,7 +119,7 @@ const ResetPasswordForm = () => {
       <Link href="/login" className={"form-end-link"}>
         Login
       </Link>
-    </div>
+    </Fragment>
   );
 };
 

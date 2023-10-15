@@ -6,17 +6,18 @@
 .header {
     display: flex;
     justify-content: space-between;
-    padding-bottom: $sp-base * 6;
+    padding-bottom: $sp-xxl;
 }
 
 .member-container {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }
 
 .actions-container {
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
+    align-items: flex-end;
 }
 
 .user-button {
@@ -25,5 +26,16 @@
 
 .form-container {
     min-width: 450px;
-    padding-bottom: $sp-base * 6;
+    padding-bottom: $sp-xxl;
+}
+
+.resend-button {
+    padding:$sp-base $sp-md;
+}
+
+.delete-button {
+    color:$white;
+    border:1px solid $grey-600;
+    height:32px;
+    width:32px;
 }

@@ -1,33 +1,8 @@
 @import "styles/variables.module.scss";
-
-.header {
-    background-color: $bg-dark;
-    z-index: 5000;
-    transition:all 0.3s ease;
-    h3 {
-        color:$white;
-    }
-}
-.sticky {
-  width: calc(100vw - $main-drawer-width-full - $sp-base * 12);
-  position: fixed;
-  top: 0;
-  transition:all 0.3s ease;
-}
-
-
-
-.header.sticky {
-    animation: slideDown 0.2s ease-out;
-    border-bottom: 1px solid $grey-900;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.32), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
-
-}
-
 .incident-metadata-container {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     span {
         font-size: $font-sm;
         color:$grey-200;
@@ -45,49 +20,28 @@
 
 .content-container {
     display: flex;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-lg;
     height:calc(100vh - $header-height - $sp-base * 40);
+}
+
+.detail-container {
+    height:100%;
+    overflow: auto;
 }
 
 .chat-container{
-    border-radius: $sp-base * 2;
-    width:540px;
+    border-radius: $sp-sm;
     height:calc(100vh - $header-height - $sp-base * 40);
-    overflow: auto;
+    overflow: hidden;
     border:1px solid $grey-800;
-    @media only screen and (min-width:$bp-desktop){
-        width:500px;
-    }
+    transition:width 0.3s ease;
 }
-.table-container {
-    height:calc(100vh - $header-height - $sp-base * 40);
-    overflow-y: auto;
-}
+
 .detail-container {
     flex:1;
-    height:calc(100vh - $header-height - $sp-base * 40);
-    overflow-y: auto;
 }
 
-.cards-container {
-    display: flex;
-    flex-direction: column;
-    row-gap: $sp-base * 4;
-}
-.tree-container {
-    min-height:400px;
-    display: grid;
-    position: relative;
-}
 
-.cards-container {
-    row-gap: $sp-base * 6;
-    display: flex;
-    flex-direction: column;
-    // overflow-y: auto;
+.lock-scroll {
+    overflow: hidden;
 }
-
-.pod-container {
-    min-height:200px;
-}
-

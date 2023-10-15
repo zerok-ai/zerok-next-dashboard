@@ -1,10 +1,11 @@
 import cx from "classnames";
-import ClusterSelector from "components/ClusterSelector";
-import DrawerToggleButton from "components/DrawerToggleButton";
+import ClusterSelector from "components/clusters/ClusterSelector";
 import ErrorBoundary from "components/ErrorBoundary";
-import MainDrawer from "components/MainDrawer";
-import UnderConstruction from "components/UnderConstruction";
-import UserPill from "components/UserPill";
+import DrawerToggleButton from "components/helpers/DrawerToggleButton";
+import UnderConstruction from "components/helpers/UnderConstruction";
+import MainDrawer from "components/layouts/MainDrawer";
+import ZkSnackbar from "components/themeX/ZkSnackbar";
+import UserPill from "components/users/UserPill";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
@@ -27,21 +28,24 @@ const CLUSTER_BLOCKED_ROUTES = [
 ];
 
 const PageLayout = ({ children }: PageLayoutProps) => {
-  const { status, empty } = useSelector(clusterSelector);
+  const { status, empty, error } = useSelector(clusterSelector);
   const router = useRouter();
   const { isDrawerMinimized } = useSelector(drawerSelector);
   const blockRoute =
     status.length &&
     status !== CLUSTER_STATES.HEALTHY &&
     CLUSTER_BLOCKED_ROUTES.includes(router.pathname);
+
   const renderChildren = () => {
-    if (empty) {
-      return <Fragment>
-        <Head>
-          <title>ZeroK Dashboard - Add a cluster</title>
-        </Head>
-        <UnderConstruction altTitle="Please add a cluster to continue." />
-      </Fragment>;
+    if (empty && CLUSTER_BLOCKED_ROUTES.includes(router.pathname)) {
+      return (
+        <Fragment>
+          <Head>
+            <title>ZeroK Dashboard - Add a cluster</title>
+          </Head>
+          <UnderConstruction altTitle="Please add a cluster to continue." />
+        </Fragment>
+      );
     } else if (blockRoute) {
       return (
         <Fragment>
@@ -49,6 +53,15 @@ const PageLayout = ({ children }: PageLayoutProps) => {
             <title>ZeroK Dashboard - Unhealthy cluster</title>
           </Head>
           <UnderConstruction altTitle="Please select a healthy cluster to continue." />
+        </Fragment>
+      );
+    } else if (error) {
+      return (
+        <Fragment>
+          <Head>
+            <title>ZeroK Dashboard - Error</title>
+          </Head>
+          <UnderConstruction altTitle="Error loading cluster data." />
         </Fragment>
       );
     } else {
@@ -80,6 +93,8 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           className={`${styles["page-content"]} hidden-scroll`}
           id="global-container"
         >
+          {" "}
+          <ZkSnackbar />
           <ErrorBoundary>{renderChildren()}</ErrorBoundary>
         </main>
       </div>

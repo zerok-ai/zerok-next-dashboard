@@ -10,35 +10,37 @@
   color: $grey-25;
   width:$node-width;
   height:$node-height;
-  font-size: $font-md;
+  font-size: $font-sm;
+  letter-spacing: 0.2px;
   border-radius: $sp-base;
   text-align: center;
-  padding:$sp-base * 2.5;
+  line-height: $default-line-height;
+  padding:$sp-sm;
 }
 
 @mixin logo-md {
-  width: 6 * $sp-base;
-  height: 6 * $sp-base;
+  width: $sp-xl;
+  height: $sp-xl;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0;
   > img {
-    width: 5 * $sp-base;
-    height: 5 * $sp-base;
+    width: $sp-xl;
+    height: $sp-xl;
   }
 }
 
 @mixin icon-xs {
-  width: 5 * $sp-base;
-  height: 5 * $sp-base;
+  width: $sp-md;
+  height: $sp-md;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0;
   > img {
-    width: 3 * $sp-base;
-    height: 3 * $sp-base;
+    width: $sp-md;
+    height: $sp-md;
   }
 }
 
@@ -53,19 +55,43 @@
 @mixin button-icon {
   display: flex;
   align-items: center;
-  column-gap: $sp-base * 2;
+  column-gap: $sp-sm;
 }
 
 
 @mixin card-header {
   background-color: $grey-900;
-  padding:$sp-base * 3;
-  border-radius: $sp-base * 2 0 0 0;
+  padding:$sp-md;
+  border-radius: $sp-sm 0 0 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  h5 {
+    font-weight: 400;
+    color:$grey-25;
+  }
   h6 {
     color:$white;
     font-weight: 400;
   }
+}
+
+// flex mixins
+@mixin flex-center-md {
+  display: flex;
+  align-items: center;
+  column-gap: $sp-md;
+}
+
+@mixin flex-center-sm {
+  display: flex;
+  align-items: center;
+  column-gap: $sp-sm;
+}
+
+@mixin form-base {
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-xl;
+  margin-bottom: $sp-sm;  
 }

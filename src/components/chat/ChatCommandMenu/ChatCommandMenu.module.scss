@@ -1,0 +1,53 @@
+@import "styles/variables.module.scss";
+.container {
+    position: relative;
+}
+
+.menu {
+    :global(.MuiMenu-paper){
+        background-color: $grey-925;
+        width:515px;
+        margin-top: -$sp-base * 24;
+        // margin-top: - $sp-base * 28;
+        border:1px solid $grey-800;
+        left:$sp-lg;
+        // top:72vh !important;
+        // height:fit-content;
+        // top:0 !important;
+    }
+    :global(.MuiMenuItem-root){
+        background-color: $grey-925;
+        &:hover, &:focus, &:enabled {
+            background-color:$grey-800;
+        }
+    }
+}
+
+.command-container {
+    display: flex;
+    column-gap: $sp-lg;
+    align-items: center;
+    p,div,span {
+        color:$grey-50;
+    }
+}
+
+.command-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.command-subtitle {
+    color:$grey-100;
+}
+
+.tag-container {
+    span {
+        color:$white;
+    }
+}
+
+.group-title {
+    font-weight: 500;
+    color:$grey-25 !important;
+}

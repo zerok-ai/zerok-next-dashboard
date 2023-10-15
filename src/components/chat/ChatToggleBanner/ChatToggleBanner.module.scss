@@ -1,0 +1,27 @@
+@import "styles/variables.module.scss";
+.container {
+    display: flex;
+    background-color: $grey-925;
+    height:56px;
+    padding:$sp-lg $sp-xl;
+    justify-content: space-between;
+    h5 {
+        color:$grey-25;
+    }
+ }
+
+ .minimized {
+    background-color: $primary-500;
+ }
+
+ .close-icon {
+    color:$grey-25;
+    font-size: $sp-xl;
+    cursor: pointer;
+ }
+
+ .chat-icon {
+   display: flex;
+   align-items: center;
+   column-gap: $sp-lg;
+ }

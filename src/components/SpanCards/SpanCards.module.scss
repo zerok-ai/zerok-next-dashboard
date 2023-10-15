@@ -1,0 +1,27 @@
+@import "styles/variables.module.scss";
+.detail-container {
+    position: relative;
+    overflow: auto;
+}
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-base * 4;
+    position: relative;
+}
+.tree-container {
+    min-height:400px;
+    display: grid;
+    position: relative;
+}
+
+.cards-container {
+    row-gap: $sp-xxl;
+    display: flex;
+    flex-direction: column;
+    // overflow-y: auto;
+}
+
+.pod-container {
+    min-height:200px;
+}

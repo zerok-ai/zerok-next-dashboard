@@ -1,14 +1,40 @@
 @import "styles/variables.module.scss";
 .container {
-    background-color: $grey-900;
+    // height:22px;
     width:fit-content;
-    padding:$sp-base / 2 $sp-base * 3;
+    padding:$sp-base $sp-sm;
     border-radius: $sp-base;
     font-weight: 500;
-    font-size: $font-xs + 1;
-    color:$grey-200;
+    font-size: $font-sm;
+    color:$grey-50;
+    letter-spacing: 0.5px;
+    background-color: $grey-950;
+    border:1px solid $grey-700;
+    text-transform: capitalize;
+    line-height: 16px;
+}
+.upper {
     text-transform: uppercase;
-    @media only screen and (min-width:1441px) {
-        font-size: $font-sm;
-    }
+}
+
+.small {
+    font-size: smaller;
+}
+
+.secondary {
+    background-color: $grey-925;
+}
+
+.primary {
+    background-color: $grey-950;
+    color:$primary-500;
+    border:1px solid $primary-700;
+}
+
+.success {
+    background-color: $grey-925;
+}
+
+.warning {
+    border:1px solid $warning-700;
 }

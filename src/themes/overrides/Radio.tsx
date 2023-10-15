@@ -10,19 +10,16 @@ import getColors from 'utils/mantis/getColors';
 
 function getColorStyle({ color, theme }: ExtendedStyleProps) {
   const colors = getColors(theme, color);
-  const { lighter, main, dark } = colors;
+  const { main, dark } = colors;
 
   return {
-    '& .dot': {
-      backgroundColor: main
+    "& .dot": {
+      backgroundColor: main,
     },
-    '&:hover': {
-      backgroundColor: lighter
-    },
-    '&.Mui-focusVisible': {
+    "&.Mui-focusVisible": {
       outline: `2px solid ${dark}`,
-      outlineOffset: -4
-    }
+      outlineOffset: -4,
+    },
   };
 }
 

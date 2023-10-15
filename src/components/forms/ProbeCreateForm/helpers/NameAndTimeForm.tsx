@@ -7,9 +7,10 @@ import { type ProbeFormType } from "../ProbeCreateForm.utils";
 
 interface NameAndTimeFormProps {
   form: UseFormReturn<ProbeFormType, any, undefined>;
+  disabled: boolean;
 }
 
-const NameAndTimeForm = ({ form }: NameAndTimeFormProps) => {
+const NameAndTimeForm = ({ form, disabled = false }: NameAndTimeFormProps) => {
   const {
     setValue,
     getValues,
@@ -26,6 +27,7 @@ const NameAndTimeForm = ({ form }: NameAndTimeFormProps) => {
             className={styles["name-input"]}
             id="title"
             value={name}
+            disabled={disabled}
             onChange={(e) => {
               setValue("name", e.target.value);
             }}

@@ -3,10 +3,10 @@ import { LoadingButton } from "@mui/lab";
 import { InputAdornment } from "@mui/material";
 import cx from "classnames";
 import TextFormField from "components/forms/TextFormField";
-import VisibilityToggleButton from "components/VisibilityToggleButton";
+import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { loginUser } from "redux/authSlice";
 import { useDispatch, useSelector } from "redux/store";
@@ -15,7 +15,10 @@ import { z } from "zod";
 import styles from "./LoginForm.module.scss";
 
 const loginSchema = z.object({
-  email: z.string().email().min(1, "Email cannot be empty"),
+  email: z
+    .string()
+    .email("Please enter a valid email")
+    .min(1, "Email cannot be empty"),
   password: z.string().min(1, "Password cannot be empty"),
 });
 
@@ -55,7 +58,7 @@ const LoginForm = () => {
   }, [auth.token, auth.isLoggedIn]);
 
   return (
-    <div className={styles.container}>
+    <Fragment>
       <form
         className={cx("form", styles.form)}
         onSubmit={handleSubmit(onSubmit)}
@@ -69,6 +72,7 @@ const LoginForm = () => {
           customClassName={styles["form-field"]}
           error={!!errors.email}
           errorText={errors.email?.message}
+          autoComplete="on"
         />
         {/* Password field */}
         <TextFormField
@@ -112,7 +116,7 @@ const LoginForm = () => {
       <br />
       {/* Form error - Login issue */}
       {auth.error && <p className="form-error">{auth.error}</p>}
-    </div>
+    </Fragment>
   );
 };
 

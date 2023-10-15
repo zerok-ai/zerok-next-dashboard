@@ -1,0 +1,29 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+
+.key-value-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-lg;
+    padding:$sp-lg 0;
+    justify-content: flex-start;
+}
+
+.key-value-row {
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+}
+
+.key-value-key,.key-value-value {
+    color:$grey-25;
+}
+
+.key-value-key {
+    min-width: 120px;
+}
+
+.full-width {
+    grid-template-columns: 1fr ;
+}

@@ -1,23 +1,26 @@
 @import "styles/variables.module.scss";
 .container {
     width:1040px;
-    margin-top: $sp-base * 3;
+    margin-top: $sp-md;
+    :global(.Mui-disabled){
+        -webkit-text-fill-color:$grey-300 !important;
+    }
 }
 
 .cards-container {
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 7;
+    row-gap: $sp-xxxl;
 }
 
 .add-card-btn {
-    margin-top: $sp-base * 7;
+    margin-top: $sp-xxxl;
     display: flex;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }
 
 .divider {
-    margin: $sp-base * 7 auto;
+    margin: $sp-xxxl auto;
     width: 100%;
     height:1px;
     background-color: $grey-300;
@@ -25,14 +28,14 @@
 
 // submit btn 
 .create-button {
-    margin-top: $sp-base * 7;
+    margin-top: $sp-xxxl;
 }
 
 // name-form
 .name-form-container {
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 7;
+    row-gap: $sp-xxxl;
     justify-content: center;
 }
 
@@ -66,9 +69,9 @@
 
 // condition-card 
 .condition-card {
-    padding: $sp-base * 7;
+    padding: $sp-xxxl;
     padding-right: 0;
-    border-radius: $sp-base * 2;
+    border-radius: $sp-sm;
     border:1px solid $grey-800;
     position: relative;
 }
@@ -83,21 +86,46 @@
     }
 }
 
+.menu-item-title {
+    background-color: $grey-925;
+    color:$grey-400 !important;
+    opacity: 1 !important;
+    font-weight: 500;
+    font-size: $font-md;
+    padding:$sp-xs $sp-md;
+}
+
 .condition-rows {
-    margin-top: $sp-base * 2;
-    max-height: 300px;
+    margin-top: $sp-sm;
     overflow-y: auto;
     display: flex;
-    row-gap: $sp-base * 6;
+    row-gap: $sp-xxl;
     justify-content: center;
     flex-direction: column;
 }
 
 .condition-item-container {
+    display: grid;
     width:100%;
-    display: flex;
-    flex-direction: column;
+    row-gap: $sp-md;
+    
 }
+
+
+
+.json-path-enabled {
+    justify-content: space-between;
+    .condition-item-container {
+        // justify-content: space-between !important;
+    }
+    .all-operators {
+        align-self: flex-start;
+    }
+    .value-container {
+        align-self: flex-end !important;
+    }
+}
+
 
 .error-input {
     :global(.MuiInputBase-root:before){
@@ -110,8 +138,8 @@
     align-items: center;
     grid-template-columns: 40px 2fr 1fr 2fr 0.2fr;
     align-items: flex-start;
-    column-gap: $sp-base * 4;
-    margin-right: $sp-base * 4;
+    column-gap: $sp-lg;
+    margin-right: $sp-lg;
     :global(.MuiInputBase-root:before){
         border-bottom: 1px solid $grey-700;
     }
@@ -119,8 +147,8 @@
 
 .close-button-container {
     position: absolute;
-    top: - $sp-base * 2;
-    right:$sp-base * 2;
+    top: - $sp-sm;
+    right:$sp-sm;
 }
 
 .close-button {
@@ -131,11 +159,13 @@
 .condition-row-1 {
     grid-template-columns: 2fr 1fr 2fr;
     align-items: flex-start;
+    // padding-left: 52px;
 }
 
 .delete-card-button {
-    right:$sp-base * 8;
-    top:$sp-base;
+    position: absolute;
+    right:$sp-xxl;
+    top:-$sp-sm;
 }
 
 .delete-condition-button {
@@ -146,9 +176,17 @@
     }
 }
 
+.delete-condition-button-disabled {
+    color:$grey-800;
+    &:hover {
+        color:$grey-800;
+        cursor: auto;
+    }
+}
+
 .add-condition-button {
     color:$primary-500;
-    margin-top: $sp-base * 7;
+    margin-top: $sp-lg;
     cursor: pointer;
     &:hover {
         color:$primary-600;
@@ -156,6 +194,9 @@
 }
 
 // joining-select {
+.joining-select-container {
+    align-self: flex-start;
+}
 .joining-select {
     display: flex;
     align-items: center;
@@ -169,23 +210,9 @@
     cursor: auto;
 }
 
-.blue {
-    background-color: #1E7BC2;
-    &:hover {
-        background-color: #1E7BC2;
-    }
-}
-
-.purple {
-    background-color: #5925DC;
-    &:hover {
-        background-color: #5925DC;
-    }
-}
-
 .joining-select-menu {
     :global(.MuiPaper-root){
-        margin-top: $sp-base * 2;
+        margin-top: $sp-sm;
     }
     :global(.MuiList-root) {
         min-width: 300px;
@@ -194,17 +221,12 @@
 
 // root-condition
 .root-condition-container {
-    position: absolute;
-    top: -$sp-base * 4;
-    left: $sp-base * 4;display: flex;
-    column-gap: $sp-base * 3;
-    justify-content: space-between;
-    width:100%;
+   margin-bottom: $sp-lg;
 }
 
 .root-condition-selects {
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-base;
 }
 
 // group by form
@@ -215,10 +237,10 @@
 }
 .group-by-row {
     display: grid;
-    padding-bottom: $sp-base * 3;
+    padding-bottom: $sp-md;
     grid-template-columns: 400px 300px 50px;
     align-items: center;
-    column-gap: $sp-base * 4;
+    column-gap: $sp-lg;
     :global(.MuiOutlinedInput-notchedOutline){
         border-color: $grey-700 !important;
         &:hover {
@@ -229,13 +251,13 @@
 }
 
 .delete-group-by-button {
-    margin-top: - $sp-base * 2;
+    margin-top: - $sp-sm;
 }
 
 .group-by-container, .notification-form-container {
     .add-group-by-button {
         color:$primary-500;
-        margin-top: $sp-base * 7;
+        margin-top: $sp-xxxl;
         cursor: pointer;
         &:hover {
             color:$primary-600;
@@ -250,20 +272,20 @@
     color:$primary-500;
     text-decoration: underline;
     cursor: pointer;
-    margin-left: $sp-base * 2;
+    margin-left: $sp-sm;
 }
 
 .group-by-select {
-    margin-top: $sp-base * 3;
+    margin-top: $sp-md;
 }
 
 // notification-form
 .email-container {
     width:100%;
-    margin-top: $sp-base * 4;
+    margin-top: $sp-lg;
     display: flex;
     flex-direction: column;
-    row-gap: $sp-base * 2;
+    row-gap: $sp-sm;
     label,.slack-title {
         display: flex;
         column-gap: $sp-base;
@@ -275,7 +297,7 @@
         border:none;
         // border-bottom: 1px solid $grey-700;
         color:$grey-50;
-        padding: $sp-base * 2;
+        padding: $sp-sm;
         box-shadow: none;
         transition:all 0.2s ease;
     }
@@ -290,7 +312,7 @@
     height:40px;
     border-bottom: 1px solid $grey-700;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
     flex-wrap: wrap;
     padding-bottom: $sp-base;
     min-width: 300px;
@@ -303,13 +325,13 @@
 .emails-container {
     display: flex;
     flex-wrap: wrap;
-    column-gap: $sp-base * 2;
-    row-gap: $sp-base * 2;
+    column-gap: $sp-sm;
+    row-gap: $sp-sm;
     max-width: 80%;
 }
 
 .email-icon {
-    font-size: $sp-base * 4;
+    font-size: $sp-lg;
 }
 
 .error-text {
@@ -320,10 +342,28 @@
 .sampling-container {
     color:$grey-50;
     display: flex;
-    column-gap: $sp-base * 3;
-    align-items: flex-start;
+    column-gap: $sp-md;
+    align-items: flex-end;
 }
 
 .sampling-select {
     width:100px;
+}
+
+.error-text {
+    color:$error-300;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-xs;
+    margin-top: $sp-lg;
+    font-weight: 500;
+
+}
+
+.json-path-input {
+    // margin-top: $sp-md;
+    
 }

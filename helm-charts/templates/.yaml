@@ -6,8 +6,5 @@ metadata:
   {{- include "helm-charts.labels" . | nindent 4 }}
 namespace: zkcloud
 resources:
-- Namespace.yaml
-- ManagedCertificate.yaml
-- Deployment.yaml
-- Service.yaml
-- Ingress.yaml
+- deployment.yaml
+- service.yaml

@@ -8,19 +8,30 @@
 .scenario-title-container {
     display: flex;
     align-items: center;justify-content: space-between;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
+    
+}
+
+.scenario-title {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-md;
+    &:hover {
+        cursor: pointer;
+        color:$primary-500;
+    }
 }
 
 .scenario-title-chips {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
 }
 
 .new-probe-btn {
     display: flex;
     align-items: center;
-    column-gap: $sp-base * 3;
+    column-gap: $sp-md;
 }
 
 .source {
@@ -28,8 +39,8 @@
     align-items: center;
     column-gap: $sp-base;
     >img {
-        height: $sp-base * 6;
-        width:$sp-base * 6;
+        height: $sp-xxl;
+        width:$sp-xxl;
     }
     span {
         color:$grey-50;
@@ -37,15 +48,14 @@
 }
 
 .table {
-    height:72vh;
+    min-height:70vh;
     overflow-y: auto;
-    border-radius: $sp-base * 2;
-    margin-bottom: $sp-base * 6;
+    border-radius: $sp-sm;
+    margin-bottom: $sp-xxl;
 }
 
 .pagination {
-    border-top: 1px solid $grey-800;
-    padding-top: $sp-base * 4;
+    padding-top: $sp-lg;
     display: flex;
     justify-content:center;
 }

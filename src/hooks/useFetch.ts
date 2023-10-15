@@ -1,6 +1,7 @@
 import objectPath from "object-path";
 import { useEffect, useState } from "react";
 import raxios from "utils/raxios";
+import { sendError } from "utils/sentry";
 
 export const useFetch = <T>(
   accessor: string,
@@ -12,19 +13,22 @@ export const useFetch = <T>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [errorData, setErrorData] = useState<any>(null); // @TODO - add type here
   const fetchData = async (endpoint: string) => {
     try {
       setLoading(true);
       setError(false);
+      setErrorData(null);
       const resp = await raxios.get(endpoint);
       const rdata = objectPath.get(resp.data.payload, accessor);
       if (replaceNull && rdata === null) setData([] as T);
       if (transformer != null) setData(transformer(rdata, data as T));
       else setData(rdata);
     } catch (err) {
-      console.log({ err })
+      console.error({ err });
       setError(true);
+      setErrorData(err);
+      sendError(err);
     } finally {
       setLoading(false);
     }
@@ -33,5 +37,5 @@ export const useFetch = <T>(
   useEffect(() => {
     if (url !== null && url !== undefined) fetchData(url);
   }, [url]);
-  return { data, loading, error, fetchData, setData };
+  return { data, loading, error, fetchData, setData, errorData };
 };

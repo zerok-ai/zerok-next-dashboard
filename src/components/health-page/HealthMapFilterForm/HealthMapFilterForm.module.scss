@@ -1,0 +1,57 @@
+@import "styles/variables.module.scss";
+
+.form {
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-sm;
+}
+
+.form-search-container {
+    padding:$sp-xl;
+}
+
+.form-group-title {
+    background-color: $grey-700;
+    color:$grey-50;
+    padding:$sp-base $sp-xl;
+    line-height: $default-line-height;
+}
+
+.form-group-items {
+    display: flex;
+    flex-direction: column;
+    padding:$sp-base 0; 
+}
+
+.form-group-item {
+    display: flex;
+    column-gap: $sp-sm;
+    align-items: center;
+    padding: $sp-sm $sp-md;
+    color:$grey-25;
+    cursor: pointer;
+    &:hover {
+        background-color: $grey-900;
+    }
+}
+.form-items {
+    height: calc(100vh - 132px);
+    overflow: auto;
+}
+
+.form-actions {
+    margin-bottom: $sp-xl;
+    padding:0 $sp-xl;
+    display: flex;
+    column-gap: $sp-sm;
+}
+
+.empty-text {
+    padding:$sp-lg $sp-xl;
+}
+
+.clear-btn {
+    background-color: $grey-950 !important;
+    color:$white;
+}

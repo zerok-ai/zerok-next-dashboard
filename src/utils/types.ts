@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 
 import { type HTTP_METHODS, type SPAN_PROTOCOLS } from "./constants";
+import { type AttributeProtocolType } from "./probes/types";
 
 export interface ChildrenType {
   children: React.ReactNode;
@@ -62,7 +63,7 @@ export interface ServiceDetail {
   http_error_rate_in: number;
   inbound_conns: number;
   outerHeight: number;
-  protocol: "http" | "mysql";
+  protocol: "http" | "" | AttributeProtocolType;
 }
 
 export interface PodStatusDetail {
@@ -92,6 +93,16 @@ export interface IssueDetail {
   last_seen: string;
   incidents: string[];
 }
+
+export interface SpanErrorDetail {
+  exception_type: string;
+  message: string;
+  error_type: string;
+  hash: string;
+  span_id?: string;
+  source?: string;
+  destination?: string;
+}
 export interface SpanDetail {
   source: string;
   destination: string;
@@ -116,7 +127,9 @@ export interface SpanDetail {
   root?: boolean;
   exceptionParent?: string;
   exceptionSpan?: string;
+  highlightException?: string | null;
   totalTime?: number;
+  errors?: SpanErrorDetail[] | string;
 }
 
 export type SpanResponse = Record<string, SpanDetail>;

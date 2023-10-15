@@ -9,10 +9,13 @@ import styles from "./BreadcrumbX.module.scss";
 
 const BreadcrumbX = () => {
   const router = useRouter();
-  const { pathname } = router;
+  const { pathname, asPath } = router;
   const isNestedRouter = pathname.split("/").length > 1;
+
   if (!isNestedRouter) return null;
-  const breadcrumbs = BREADCRUMB_ROUTES[pathname];
+  const breadcrumbs =
+    BREADCRUMB_ROUTES[asPath.split("?")[0] ?? asPath] ||
+    BREADCRUMB_ROUTES[pathname];
   if (!breadcrumbs) return null;
   return (
     <div className={styles.container}>

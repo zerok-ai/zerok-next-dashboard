@@ -1,34 +1,31 @@
 import { LoadingButton } from "@mui/lab";
 import { Button, Chip, IconButton } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import CustomSkeleton from "components/CustomSkeleton";
+import { createColumnHelper } from "@tanstack/react-table";
 // custom
 import InviteUserForm from "components/forms/InviteUserForm";
 import PageHeader from "components/helpers/PageHeader";
+import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
 import DialogX from "components/themeX/DialogX";
 import ModalX from "components/themeX/ModalX";
 import TableX from "components/themeX/TableX";
-import UserProfilePicture from "components/UserProfilePicture";
+import UserProfilePicture from "components/users/UserProfilePicture";
 // hooks
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
+import { useTrigger } from "hooks/useTrigger";
 // next
 import Head from "next/head";
 // react
 import { useEffect, useState } from "react";
 // react-icons
 import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
-import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch } from "redux/store";
 // utils
 import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
+import { sendError } from "utils/sentry";
 // types
 import { type UserDetail } from "utils/types";
 
@@ -36,13 +33,14 @@ import { type UserDetail } from "utils/types";
 import styles from "./Users.module.scss";
 
 const Users = () => {
-  const {
-    data: users,
-    fetchData,
-    loading,
-  } = useFetch<UserDetail[]>("users", GET_USERS_ENDPOINT);
+  const { data: users, fetchData } = useFetch<UserDetail[]>(
+    "users",
+    GET_USERS_ENDPOINT
+  );
 
-  const { renderTrigger } = useSelector(clusterSelector);
+  const { trigger, changeTrigger } = useTrigger();
+
+  const dispatch = useDispatch();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
@@ -56,7 +54,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchData(GET_USERS_ENDPOINT);
-  }, [renderTrigger]);
+  }, [trigger]);
 
   const deleteUser = async () => {
     const endpoint = GET_USERS_ENDPOINT + `/${deletingUser!.id}`;
@@ -65,11 +63,23 @@ const Users = () => {
       await raxios.delete(endpoint);
       clearDeletingUser();
       fetchData(GET_USERS_ENDPOINT);
+      dispatch(
+        showSnackbar({
+          message: "Deleted user successfully",
+          type: "success",
+        })
+      );
     } catch (err) {
       setStatus({
         loading: false,
         error: "Could not delete user, please try again",
       });
+      dispatch(
+        showSnackbar({
+          message: "Could not delete user",
+          type: "error",
+        })
+      );
     } finally {
       clearDeletingUser();
     }
@@ -87,8 +97,21 @@ const Users = () => {
         familyName: lastName,
         email,
       });
+      dispatch(
+        showSnackbar({
+          message: "User invite sent successfully",
+          type: "success",
+        })
+      );
     } catch (err) {
-      console.log({ err });
+      sendError(err);
+      console.error({ err });
+      dispatch(
+        showSnackbar({
+          message: "Could not send user invite",
+          type: "error",
+        })
+      );
     } finally {
       setInvitingUser(null);
       setStatus((old) => ({ ...old, loading: false }));
@@ -149,11 +172,13 @@ const Users = () => {
         return (
           <div className={styles["actions-container"]}>
             <LoadingButton
-              variant="outlined"
+              variant="contained"
               size="small"
+              color="secondary"
               onClick={async () => {
                 await inviteUser(info.row.original);
               }}
+              className={styles["resend-button"]}
               loading={invitingUser?.id === info.row.original.id}
             >
               Resend Invite
@@ -163,6 +188,9 @@ const Users = () => {
                 onClick={() => {
                   setDeletingUser(info.row.original);
                 }}
+                color="secondary"
+                className={styles["delete-button"]}
+                // size="small"
               >
                 <AiOutlineDelete />
               </IconButton>
@@ -172,11 +200,6 @@ const Users = () => {
       },
     }),
   ];
-  const table = useReactTable({
-    data: users ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
 
   const AddUserButton = () => {
     return (
@@ -196,15 +219,11 @@ const Users = () => {
         title="Users"
         showRange={false}
         showRefresh={true}
-        extras={[<AddUserButton key={"add-btn"} />]}
-        alignExtras="right"
+        onRefresh={changeTrigger}
+        rightExtras={[<AddUserButton key={"add-btn"} />]}
       />
       <div className={styles["table-container"]}>
-        {loading ? (
-          <CustomSkeleton len={8} />
-        ) : (
-          <TableX table={table} data={users ?? []} />
-        )}
+        <TableX columns={columns} data={users ?? null} />
       </div>
       <ModalX
         isOpen={isFormOpen}
