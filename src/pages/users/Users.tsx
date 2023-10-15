@@ -105,7 +105,6 @@ const Users = () => {
       );
     } catch (err) {
       sendError(err);
-      console.error({ err });
       dispatch(
         showSnackbar({
           message: "Could not send user invite",
