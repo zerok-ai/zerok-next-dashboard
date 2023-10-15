@@ -19,6 +19,7 @@ export type AttributeType =
       input: "int" | "string" | "string[]" | "bool";
       supported_formats?: AttributeSupportedType[];
       executor: (typeof ATTRIBUTE_EXECUTORS)[number];
+      type: "option";
     }
   | {
       id: string;
@@ -29,8 +30,10 @@ export type AttributeType =
       json_key?: boolean;
       supported_formats?: AttributeSupportedType[];
       executor: (typeof ATTRIBUTE_EXECUTORS)[number];
+      type: "option";
     };
 
+export type AttributeOptionType = AttributeType | { type: "divider" };
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export type AttributeStateType = {
   [key in (typeof ATTRIBUTE_PROTOCOLS)[number]]: Array<{

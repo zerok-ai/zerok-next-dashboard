@@ -466,3 +466,30 @@ export interface ProbeFormType {
     metric: "m" | "s" | "h" | "d";
   };
 }
+
+export const getAttributeSelectOptions = (
+  attributes: AttributeStateType | null,
+  protocol: AttributeProtocolType
+) => {
+  if (!attributes || !protocol || !attributes[protocol]) return [];
+  return [
+    ...attributes[protocol].map((at) => {
+      return [...at.attribute_list];
+    }),
+    { type: "divider" as const },
+    ...attributes.GENERAL.map((at) => [...at.attribute_list]),
+  ].flat();
+};
+
+export const getFlattenedAttributes = (
+  attributes: AttributeStateType | null,
+  protocol: AttributeProtocolType
+) => {
+  if (!attributes || !protocol || !attributes[protocol]) return [];
+  return [
+    ...attributes[protocol].map((at) => {
+      return [...at.attribute_list];
+    }),
+    ...attributes.GENERAL.map((at) => [...at.attribute_list]),
+  ].flat();
+};

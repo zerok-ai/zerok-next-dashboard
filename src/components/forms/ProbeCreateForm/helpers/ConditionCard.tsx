@@ -3,10 +3,7 @@ import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash } from "react-icons/hi";
 import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
-import {
-  type AttributeProtocolType,
-  type AttributeStateType,
-} from "utils/probes/types";
+import { type AttributeStateType } from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
@@ -45,16 +42,6 @@ const ConditionCard = ({
   const cards = getValues("cards");
   const currentCardIndex = cards.findIndex((c) => c.key === currentCardKey);
   const currentCard = cards[currentCardIndex];
-  const protocol = currentCard.protocol.toUpperCase() as AttributeProtocolType;
-  const attributeOptions =
-    attributes && protocol && attributes[protocol]
-      ? [
-          ...attributes[protocol].map((at) => {
-            return [...at.attribute_list];
-          }),
-          ...attributes.GENERAL.map((at) => [...at.attribute_list]),
-        ].flat()
-      : [];
 
   const { rootProperty, conditions } = currentCard;
   const getServicesForRootProperty = () => {
@@ -113,7 +100,7 @@ const ConditionCard = ({
               conditionIndex={idx}
               key={cond.key}
               currentCardKey={currentCardKey}
-              attributeOptions={attributeOptions}
+              attributes={attributes}
               form={form}
               resetGroupBy={resetGroupBy}
             />

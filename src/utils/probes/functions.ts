@@ -23,6 +23,7 @@ export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
         operator,
         value,
         datatype: input,
+        executor: workload.executor,
         key: nanoid(),
         json_path: json_path || [],
       });
