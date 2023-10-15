@@ -334,17 +334,16 @@ export const inputMap: GenericObject = {
 };
 
 export const buildProbeBody = (
-  values: ProbeFormType,
+  state: ProbeFormType,
   attributes: AttributeStateType
 ): ScenarioCreationType => {
+  const values = { ...state };
   const { cards, groupBy, name: title, sampling } = values;
   const workloads: WorkloadType[] = [] as WorkloadType[];
   cards.forEach((card) => {
     type ExecutorWorkloadType = {
       [key in (typeof ATTRIBUTE_EXECUTORS)[number]]: ConditionRowType[];
     };
-    const protocolAttributes =
-      attributes[card.protocol.toUpperCase() as AttributeProtocolType];
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const executorWorkload = {} as ExecutorWorkloadType;
     card.conditions.forEach((condition) => {
@@ -355,13 +354,16 @@ export const buildProbeBody = (
       executorWorkload[condition.executor!].push(condition);
     });
     Object.keys(executorWorkload).forEach((executor) => {
-      const attributes = protocolAttributes
-        .map((attribute) => {
-          return attribute.attribute_list.map((a) => {
-            return a;
-          });
-        })
-        .flat();
+      const { protocol } = card;
+      const attributeOptions =
+        attributes && protocol && attributes[protocol]
+          ? [
+              ...attributes[protocol].map((at) => {
+                return [...at.attribute_list];
+              }),
+              ...attributes.GENERAL.map((at) => [...at.attribute_list]),
+            ].flat()
+          : [];
       let service = card.rootProperty;
       if (card.rootProperty.includes("*/*")) {
         service = "*/*";
@@ -377,7 +379,7 @@ export const buildProbeBody = (
           rules: executorWorkload[
             executor as (typeof ATTRIBUTE_EXECUTORS)[number]
           ].map((condition) => {
-            const attribute = attributes.find(
+            const attribute = attributeOptions.find(
               (a) => a.id === condition.property
             );
             if (
@@ -405,7 +407,7 @@ export const buildProbeBody = (
               input: attribute!.input,
               operator: condition.operator,
               value: condition.value,
-              datatype: condition.datatype,
+              datatype: inputMap[condition.datatype],
               ...jsonPath,
             };
           }),

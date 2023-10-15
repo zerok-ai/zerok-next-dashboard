@@ -39,7 +39,7 @@ const HealthCards = ({ filter, trigger }: HealthCardProps) => {
         )
       );
     }
-  }, [selectedCluster, trigger]);
+  }, [selectedCluster, trigger, router.query.range]);
 
   const skeletons = new Array(8).fill("skeleton");
 

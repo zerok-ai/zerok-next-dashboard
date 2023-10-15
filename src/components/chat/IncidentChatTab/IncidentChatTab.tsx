@@ -60,7 +60,7 @@ const IncidentChatTab = () => {
     likelyCause?.incidentId ??
     router.query.latest ??
     null;
-  const [width, setWidth] = useState(550);
+  const [width, setWidth] = useState(450);
   useEffect(() => {
     if (selectedCluster && issueId && enableChat) {
       dispatch(

@@ -3,7 +3,7 @@ import TooltipX from "components/themeX/TooltipX";
 import dayjs from "dayjs";
 import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
-import { convertNanoToMilliSeconds } from "utils/functions";
+import { convertNanoToMilliSeconds, trimString } from "utils/functions";
 import {
   type SpanDetail,
   type SpanErrorDetail,
@@ -82,22 +82,22 @@ export const spanTransformer = (spanData: SpanResponse) => {
     formattedSpans[key] = { ...span };
     // check for exceptions span
     if (span.errors && span.errors.length > 0) {
-     try {
-       span.errors = JSON.parse(span.errors as string);
-       (span.errors as SpanErrorDetail[]).forEach((error) => {
-         if (error.message && error.hash && !errorSet.has(error.hash)) {
-           errorSet.add(error.hash);
-           errors.push({
-             ...error,
-             span_id: span.span_id,
-             source: span.source,
-             destination: span.destination,
-           });
-         }
-       });
-     } catch (err) {
-       span.errors = [];
-     }
+      try {
+        span.errors = JSON.parse(span.errors as string);
+        (span.errors as SpanErrorDetail[]).forEach((error) => {
+          if (error.message && error.hash && !errorSet.has(error.hash)) {
+            errorSet.add(error.hash);
+            errors.push({
+              ...error,
+              span_id: span.span_id,
+              source: span.source,
+              destination: span.destination,
+            });
+          }
+        });
+      } catch (err) {
+        span.errors = [];
+      }
     }
     return true;
   });
@@ -157,7 +157,7 @@ export const getWidthByLevel = (
   expand = true,
   isTopRoot: boolean
 ) => {
-  const defaultWidth = expand ? 600 : 450;
+  const defaultWidth = expand ? 700 : 450;
   const width = defaultWidth - level * 9;
   if (isTopRoot) {
     return `${width + 8}px`;
@@ -189,17 +189,19 @@ export const AccordionLabel = ({
     : span.destination;
   const service = name.includes("/") ? name.split("/")[1] : name;
   const spanName = getSpanName(span);
+  const width = getWidthByLevel(
+    span.level ?? 0,
+    isLastChild,
+    isModalOpen,
+    isTopRoot
+  );
   return (
     <div className={styles["accordion-summary-content"]}>
       <p
         className={styles["accordion-label-container"]}
         style={{
-          width: getWidthByLevel(
-            span.level ?? 0,
-            isLastChild,
-            isModalOpen,
-            isTopRoot
-          ),
+          width,
+          minWidth: width,
         }}
       >
         <TooltipX title={name}>
@@ -214,7 +216,7 @@ export const AccordionLabel = ({
               setSelectedSpan(span.span_id);
             }}
           >
-            {service}
+            {isModalOpen ? service : trimString(service, 30)}
           </span>
         </TooltipX>
         {spanName}

@@ -230,12 +230,14 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         loading: true,
         error: null,
       });
-      const body = buildProbeBody(probeForm.watch(), attributes!);
+
+      const body = buildProbeBody({ ...probeForm.getValues() }, attributes!);
       const endpoint = CREATE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string
       );
       await raxios.post(endpoint, body);
+
       setStatus({
         loading: false,
         error: null,
