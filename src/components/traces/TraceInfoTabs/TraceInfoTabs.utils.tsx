@@ -72,7 +72,6 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
     );
   }
   try {
-    console.log({ val });
     const json = JSON.parse(val as string);
     if (typeof json !== "object") {
       throw new Error("Not an object");

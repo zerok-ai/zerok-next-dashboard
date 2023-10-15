@@ -31,8 +31,9 @@ const UserPill = () => {
         onClose={closeMenu}
         className={styles.menu}
         disableAutoFocusItem
+        // hideBackdrop
         style={{
-          zIndex: 1,
+          zIndex: 1000,
         }}
       >
         <Link href="/api-keys">
