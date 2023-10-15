@@ -1,20 +1,17 @@
 import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { createColumnHelper, type SortingState } from "@tanstack/react-table";
 import cx from "classnames";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
+import PrivateRoute from "components/helpers/PrivateRoute";
+import TableFilter from "components/helpers/TableFilter";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
 import ChipX from "components/themeX/ChipX";
 import DialogX from "components/themeX/DialogX";
-import PaginationX from "components/themeX/PaginationX";
+// import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
-import { nanoid } from "nanoid";
+import { useTrigger } from "hooks/useTrigger";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -22,8 +19,9 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineTrash } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
-import { DEFAULT_COL_WIDTH, DEFAULT_TIME_RANGE } from "utils/constants";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch, useSelector } from "redux/store";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   getFormattedTimeFromEpoc,
   getRelativeTimeFromEpoc,
@@ -37,30 +35,34 @@ import raxios from "utils/raxios";
 import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
 import {
   DELETE_PROBE_ENDPOINT,
-  GET_SCENARIO_DETAILS_ENDPOINT,
   LIST_SCENARIOS_ENDPOINT,
   UPDATE_PROBE_STATUS_ENDPOINT,
 } from "utils/scenarios/endpoints";
-import { getScenarioString } from "utils/scenarios/functions";
-import {
-  type ScenarioDetail,
-  type ScenarioDetailType,
-} from "utils/scenarios/types";
+import { type ScenarioDetailType } from "utils/scenarios/types";
+import { sendError } from "utils/sentry";
+import { PROBE_SORT_OPTIONS } from "utils/tables/sort";
 
 import styles from "./Probe.module.scss";
 
+const DEFAULT_SORT = {
+  id: PROBE_SORT_OPTIONS[0].value.split(":")[0],
+  desc: PROBE_SORT_OPTIONS[0].value.split(":")[1] === "desc",
+};
+
 const Probe = () => {
   const [scenarios, setScenarios] = useState<ScenarioDetailType[] | null>(null);
-  const [totalScenarios, setTotalScenarios] = useState<number>(0);
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  // const [totalScenarios, setTotalScenarios] = useState<number>(0);
+  const { selectedCluster } = useSelector(clusterSelector);
+  const dispatch = useDispatch();
   const [selectedProbe, setSelectedProbe] = useState<null | {
     scenario_id: string;
     loading: boolean;
     deleting: boolean;
   }>(null);
+  const [sortBy, setSortBy] = useState<SortingState>([DEFAULT_SORT]);
   const router = useRouter();
-  const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const page = router.query.page ?? "1";
+  const { trigger, changeTrigger } = useTrigger();
   const resetSelectedProbe = () => {
     setSelectedProbe(null);
   };
@@ -69,39 +71,18 @@ const Probe = () => {
       const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
         "{limit}",
         PROBE_PAGE_SIZE.toString()
-      ).replace(
-        "{offset}",
-        ((parseInt(page as string) - 1) * PROBE_PAGE_SIZE).toString()
-      );
-      const rdata = await raxios.get(endpoint, {
-        headers: {
-          "Cluster-Id": selectedCluster as string,
-        },
-      });
-      setTotalScenarios(rdata.data.payload.total_rows);
-      const allScenarios = rdata.data.payload.scenarios as ScenarioDetailType[];
-      const idList = allScenarios.map((s) => s.scenario.scenario_id);
-      const sdata = await raxios.get(
-        GET_SCENARIO_DETAILS_ENDPOINT.replace(
-          "{scenario_id_list}",
-          idList.join(",")
+      )
+        .replace(
+          "{offset}",
+          ((parseInt(page as string) - 1) * PROBE_PAGE_SIZE).toString()
         )
-          .replace("{cluster_id}", selectedCluster as string)
-          .replace("{range}", range as string)
-      );
-      const scenarioMetadata = sdata.data.payload.scenarios as ScenarioDetail[];
-      const finalSlist = allScenarios.map((sd) => {
-        const scen = scenarioMetadata.find(
-          (s) => s.scenario_id === sd.scenario.scenario_id
-        );
-        if (scen) {
-          return { ...sd, ...scen };
-        }
-        return sd;
-      });
-      setScenarios(finalSlist);
+        .replace("{cluster_id}", selectedCluster as string);
+      const rdata = await raxios.get(endpoint);
+      // setTotalScenarios(rdata.data.payload.total_rows);
+      setScenarios(rdata.data.payload.scenarios);
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
+      sendError(err);
     } finally {
       resetSelectedProbe();
     }
@@ -111,7 +92,7 @@ const Probe = () => {
       setScenarios(null);
       getData();
     }
-  }, [selectedCluster, router, renderTrigger]);
+  }, [selectedCluster, router, trigger]);
 
   const handleSwitchChange = async (scenario_id: string, enable: boolean) => {
     setSelectedProbe({ scenario_id, loading: true, deleting: false });
@@ -123,8 +104,19 @@ const Probe = () => {
       await raxios.put(endpoint, {
         action: enable ? "enable" : "disable",
       });
+      dispatch(
+        showSnackbar({
+          message: `Probe ${enable ? "enabled" : "disabled"} successfully`,
+          type: "success",
+        })
+      );
     } catch (err) {
-      console.log({ err });
+      dispatch(
+        showSnackbar({
+          message: `Failed to ${enable ? "enable" : "disable"} probe`,
+          type: "error",
+        })
+      );
     } finally {
       getData();
     }
@@ -145,8 +137,21 @@ const Probe = () => {
         selectedCluster as string
       ).replace("{scenario_id}", scenario_id);
       await raxios.delete(endpoint);
+      dispatch(
+        showSnackbar({
+          message: `Probe deleted successfully`,
+          type: "success",
+        })
+      );
     } catch (err) {
-      console.log({ err });
+      dispatch(
+        showSnackbar({
+          message: `Failed to delete probe`,
+          type: "error",
+        })
+      );
+      console.error({ err });
+      sendError(err);
     } finally {
       getData();
     }
@@ -157,9 +162,8 @@ const Probe = () => {
   const columns = [
     helper.accessor("scenario.scenario_title", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 7,
+      size: DEFAULT_COL_WIDTH * 5,
       cell: (info) => {
-        const ruleString = getScenarioString(info.row.original.scenario);
         if (
           selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
         ) {
@@ -168,26 +172,27 @@ const Probe = () => {
         const { scenario, disabled_at } = info.row.original;
         const { scenario_title, scenario_type } = scenario;
         return (
-          <div className={styles["scenario-title-container"]}>
-            {
-              <Fragment>
-                <TooltipX title={ruleString}>
-                  <span
-                    className={cx(
-                      styles["scenario-title"],
-                      disabled_at && styles.disabled
-                    )}
-                  >
-                    {trimString(scenario_title, 100)}
-                  </span>
-                </TooltipX>
-                <div className={styles["scenario-title-chips"]}>
-                  {scenario_type === "SYSTEM" && <ChipX label="System" />}
-                  {disabled_at && <ChipX label="Disabled" />}
-                </div>
-              </Fragment>
-            }
-          </div>
+          <Link
+            className={styles["scenario-link"]}
+            href={`/probes/view?id=${scenario.scenario_id}`}
+          >
+            <div className={styles["scenario-title-container"]}>
+              <span
+                className={cx(
+                  styles["scenario-title"],
+                  disabled_at && styles.disabled
+                )}
+              >
+                {trimString(scenario_title, 100)}
+                {disabled_at && <ChipX label="Disabled" />}
+              </span>
+              <div className={styles["scenario-title-chips"]}>
+                {scenario_type === "SYSTEM" && (
+                  <ChipX label="System" upperCase={false} />
+                )}
+              </div>
+            </div>
+          </Link>
         );
       },
     }),
@@ -235,7 +240,7 @@ const Probe = () => {
     }),
     helper.accessor("scenario.sources", {
       header: "Impacted services",
-      size: DEFAULT_COL_WIDTH * 3,
+      size: DEFAULT_COL_WIDTH * 2.5,
       cell: (info) => {
         const { sources, scenario_id } = info.row.original.scenario;
         if (selectedProbe?.scenario_id === scenario_id) {
@@ -245,24 +250,24 @@ const Probe = () => {
           const scenario = scenarios?.find(
             (s) => s.scenario.scenario_id === scenario_id
           );
-          let sourceString = ``;
+          let sourceString: string[] = [];
           const keys = Object.keys(scenario!.scenario.workloads);
           keys.forEach((k, idx) => {
             const workload = scenario!.scenario.workloads[k];
-            const comma = idx === keys.length - 1 ? ` ` : `, `;
             if (workload?.service === "*/*") {
-              sourceString += `All ${workload?.protocol} services${comma}`;
+              sourceString.push(`All ${workload?.protocol} services`);
             } else {
-              sourceString += `${workload.service}${comma}`;
+              sourceString.push(`${workload.service}`);
             }
           });
+          sourceString = [...new Set(sourceString)];
           return (
-            <TooltipX title={sourceString}>
+            <TooltipX title={sourceString.join(", ")}>
               <span
                 className={cx(info.row.original.disabled_at && styles.disabled)}
               >
                 {" "}
-                {trimString(sourceString, 45)}{" "}
+                {trimString(sourceString.join(", "), 45)}{" "}
               </span>
             </TooltipX>
           );
@@ -289,7 +294,7 @@ const Probe = () => {
     }),
     helper.display({
       header: "Actions",
-      size: 70,
+      size: DEFAULT_COL_WIDTH,
       cell: (info) => {
         if (
           selectedProbe?.scenario_id === info.row.original.scenario.scenario_id
@@ -349,27 +354,42 @@ const Probe = () => {
     }),
   ];
 
-  const table = useReactTable({
-    data: scenarios ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const leftExtras = useMemo(() => {
+    return [
+      <TableFilter
+        key={"probe-table-filter"}
+        sortBy={sortBy[0]}
+        options={PROBE_SORT_OPTIONS}
+        onChange={(val) => {
+          setSortBy([val]);
+        }}
+      />,
+    ];
+  }, [sortBy]);
 
-  const extras = [
-    <Link href="/probes/create" key={nanoid()}>
-      <Button className={styles["new-probe-btn"]} variant="contained">
-        New Probe <HiOutlinePlus />
-      </Button>
-    </Link>,
-  ];
+  const rightExtras = useMemo(() => {
+    return [
+      <Link href="/probes/create" key={"new-probe-btn"}>
+        <Button
+          className={styles["new-probe-btn"]}
+          variant="contained"
+          size="medium"
+        >
+          New Probe <HiOutlinePlus />
+        </Button>
+      </Link>,
+    ];
+  }, []);
   return (
     <div className={styles.container}>
       <PageHeader
         title="Probes"
         showRange={false}
         showRefresh
-        extras={extras}
-        alignExtras="right"
+        leftExtras={leftExtras}
+        rightExtras={rightExtras}
+        onRefresh={changeTrigger}
+        // alignExtras="right"
       />
       <DialogX
         isOpen={!!(selectedProbe && selectedProbe.deleting)}
@@ -389,17 +409,22 @@ const Probe = () => {
       </DialogX>
       <div className={styles.table}>
         {scenarios ? (
-          <TableX table={table} data={scenarios ?? []} />
+          <TableX
+            data={scenarios ?? null}
+            columns={columns}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
+          />
         ) : (
           <CustomSkeleton len={8} />
         )}
       </div>
-      <div className={styles.pagination}>
+      {/* <div className={styles.pagination}>
         <PaginationX
           totalItems={totalScenarios ?? PROBE_PAGE_SIZE}
           itemsPerPage={PROBE_PAGE_SIZE}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

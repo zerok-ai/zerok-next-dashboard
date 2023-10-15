@@ -14,6 +14,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
   width:calc(100vw - $main-drawer-width-mini);
 }
 
@@ -23,19 +24,19 @@
 
 .header-left {
   display: flex;
-  column-gap: $sp-base * 3;
+  column-gap: $sp-md;
   align-items: center;
 }
 
 .header-right {
   display: flex;
-  column-gap: $sp-base * 3;
+  column-gap: $sp-md;
   align-items: center;
 }
 
 .header-container {
   width: 100%;
-  padding: 2 * $sp-base 6 * $sp-base;
+  padding: $sp-sm $sp-xl;
   display: flex;
   justify-content:space-between;
   align-items:center;
@@ -45,7 +46,7 @@
 
 .page-content {
   flex: 1;
-  padding:6 * $sp-base;
+  padding:$sp-xxl;
   min-width: calc(100vw - $main-drawer-width-full);
   max-width: calc(100vw - $main-drawer-width-mini);
 }

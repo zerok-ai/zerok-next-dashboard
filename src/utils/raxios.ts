@@ -7,7 +7,7 @@ import { HTTP_ERROR_CODES } from "./constants";
 // use this client for any API requests with the BASE_URL
 
 const raxios = axios.create({
-  timeout: 30000,
+  timeout: 60000,
   headers: {
     Accept: "application/json",
   },

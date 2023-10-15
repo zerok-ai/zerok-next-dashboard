@@ -5,6 +5,7 @@ import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { trimString } from "utils/functions";
 import { getTitleFromIssue } from "utils/issues/functions";
+import { type TableSortOptions } from "utils/tables/types";
 import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
@@ -17,19 +18,18 @@ export const getIssueColumns = () => {
       header: "Issue",
       size: DEFAULT_COL_WIDTH * 8,
       cell: (info) => {
-        const { issue_title, issue_hash, scenario_id } = info.row.original;
+        const { issue_title, issue_hash, scenario_id, incidents } =
+          info.row.original;
 
-        const title = trimString(getTitleFromIssue(issue_title), 120);
+        const title = trimString(getTitleFromIssue(issue_title), 100);
         return (
           <div className={styles["issue-container"]}>
-            <div>
-              <Link
-                href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}`}
-                className={"hover-link"}
-              >
-                <span className={styles["issue-title-container"]}>{title}</span>
-              </Link>
-            </div>
+            <Link
+              href={`/issues/detail?issue_id=${issue_hash}&issue=${scenario_id}&trace=${incidents[0]}`}
+              className={"hover-link"}
+            >
+              <span className={styles["issue-title-container"]}>{title}</span>
+            </Link>
           </div>
         );
       },
@@ -38,15 +38,15 @@ export const getIssueColumns = () => {
       header: "Reporting source",
       cell: () => {
         return (
-          <div className={styles.source}>
+          <figure className={styles.source}>
             <img src={`/images/brand/zerok_source_logo.png`} alt="zerok_logo" />
             <span>ZeroK</span>
-          </div>
+          </figure>
         );
       },
     }),
     helper.accessor("last_seen", {
-      header: "Last seen",
+      header: "Last collected",
       size: DEFAULT_COL_WIDTH * 2.4,
       cell: (info) => {
         const { last_seen } = info.row.original;
@@ -60,7 +60,7 @@ export const getIssueColumns = () => {
       },
     }),
     helper.accessor("first_seen", {
-      header: "First seen",
+      header: "First collected",
       size: DEFAULT_COL_WIDTH * 1.5,
       cell: (info) => {
         const { first_seen } = info.row.original;
@@ -73,35 +73,21 @@ export const getIssueColumns = () => {
         );
       },
     }),
-
-    // Velocity
-    // helper.accessor("velocity", {
-    //   header: "Velocity",
-    //   size: DEFAULT_COL_WIDTH / 2,
-    //   cell: (info) => {
-    //     const { velocity } = info.row.original;
-    //     return (
-    //       <div className={styles["issue-time-container"]}>
-    //         <span>{velocity ?? "0"}</span>
-    //       </div>
-    //     );
-    //   },
-    // }),
-    // Total events
-    // helper.accessor("total_count", {
-    //   header: "Total events",
-    //   size: DEFAULT_COL_WIDTH * 1.2,
-    //   cell: (info) => {
-    //     const { total_count } = info.row.original;
-    //     return (
-    //       <div className={styles["issue-time-container"]}>
-    //         <span>{total_count ?? "0"}</span>
-    //       </div>
-    //     );
-    //   },
-    // }),
   ];
 };
+
+export const ISSUE_SORT_OPTIONS: TableSortOptions[] = [
+  {
+    label: "Latest first",
+    value: "last_seen:desc",
+    sort: "desc",
+  },
+  {
+    label: "Earliest first",
+    value: "last_seen:asc",
+    sort: "asc",
+  },
+];
 
 const Dummy = () => <span>hey</span>;
 export default Dummy;

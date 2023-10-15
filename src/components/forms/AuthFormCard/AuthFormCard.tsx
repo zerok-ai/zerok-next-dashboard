@@ -8,9 +8,9 @@ interface AuthFormCardProps {
 const AuthFormCard = ({ children, title }: AuthFormCardProps) => {
   return (
     <main className={styles.container}>
-      <div className={styles["logo-container"]}>
+      <figure className={styles["logo-container"]}>
         <img src="/images/brand/zerok_logo_light.svg" alt="zerok_logo" />
-      </div>
+      </figure>
       <h4>{title}</h4>
       {children}
     </main>

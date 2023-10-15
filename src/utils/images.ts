@@ -25,6 +25,7 @@ export const ICONS = {
   search: "search.svg",
   sparkle: "sparkle.svg",
   send: "send.svg",
+  "ai-magic": "ai-magic.svg",
 };
 
 export const ZEROK_MINIMAL_LOGO_LIGHT = "/images/brand/zerok_minimal_light.png";
@@ -40,3 +41,11 @@ export const ZEROK_SOURCE_LOGO = "/images/brand/zerok_source_logo.svg";
 export const SLACK_LOGO = `/images/brand/slack_logo.svg`;
 
 export const GENERIC_AVATAR = "/images/vectors/Avatar.svg";
+
+export const BRAND_LOGOS = {
+  "zerok-minimal-light": ZEROK_MINIMAL_LOGO_LIGHT,
+  SLACK: "/images/brand/slack_logo.svg",
+  PROMETHEUS: `/images/brand/prometheus_logo.svg`,
+  OPENTELEMETRY: `/images/brand/otel_logo.svg`,
+  EBPF: `/images/brand/ebpf_logo.svg`,
+};

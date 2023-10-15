@@ -1,0 +1,19 @@
+import styles from "./UserProfilePicture.module.scss";
+
+interface UserProfilePictureProps {
+  name: string;
+}
+
+const UserProfilePicture = ({ name }: UserProfilePictureProps) => {
+  const displayString = name.trim()
+    ? name
+        .split(" ")
+        .map((word) => {
+          return word[0].toLocaleUpperCase();
+        })
+        .join("")
+    : "AD";
+  return <div className={styles.container}>{displayString}</div>;
+};
+
+export default UserProfilePicture;

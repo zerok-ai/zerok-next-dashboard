@@ -1,0 +1,40 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.actions {
+    display: flex;
+    column-gap: $sp-md;
+    align-items: center;
+    :global(.MuiSwitch-root){
+        margin-right: 0;
+    }
+}
+
+.action-icon {
+    color:$grey-100;
+}
+.table {
+    height:72vh;
+}
+.pagination {
+    border-top: 1px solid $grey-900;
+    display: flex;
+    justify-content: center;
+    padding-top: $sp-lg;
+}
+
+.add-btn {
+    display: flex;
+    column-gap: $sp-sm;
+    align-items: center;
+}
+
+.int-title {
+    display: flex;
+    justify-content: space-between;
+    &:hover {
+        cursor: pointer;
+        color:$primary-500;
+    }
+}

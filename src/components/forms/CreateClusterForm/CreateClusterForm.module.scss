@@ -1,0 +1,28 @@
+@import "styles/variables.module.scss";
+
+.container {
+  padding-bottom: $sp-lg;
+  width: 800px;
+  border:none;
+  outline: none;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-lg;
+  
+}
+
+.step-2 {
+  display: flex;
+  flex-direction: column;
+  row-gap: $sp-sm;
+}
+.step-buttons {
+  display: flex;
+  column-gap: $sp-sm;
+}
+.step-final {
+  padding:$sp-xxl 0;
+}

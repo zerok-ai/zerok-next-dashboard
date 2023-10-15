@@ -1,49 +1,33 @@
 @import "styles/variables.module.scss";
+@import "styles/mixins.scss";
 .container {
     display: flex;
     flex-direction: column;
     width:100%;
 }
+
 .top-row {
-    display: flex;
-    column-gap: $sp-base * 3;
-    align-items: center;
+    @include flex-center-md;
     width:100%;
     justify-content: flex-start;
     h3 {
         color:$white;
-        margin-right: $sp-base * 2;
+        margin-right: $sp-sm;
+        // flex:1;
+        width:fit-content;
     }
 }
 
-.top-row-actions {
-    display: flex;
-    column-gap: $sp-base * 3;
-    align-items: center;
+.top-row-extras {
+    flex:1;
+    @include flex-center-md;
+    justify-content: space-between;
 }
 
-.extras-right {
-    display: flex;
-    width:100%;
-    justify-content: space-between;
+.left-extras, .right-extras, .extras, .top-row-actions {
+   @include flex-center-md;
 }
 
 .bottom-row {
-    margin-bottom: $sp-base * 5;
-}
-
-.extras {
-    display: flex;
-    column-gap: $sp-base * 3;
-    align-items: center;
-}
-
-.top-row-actions {
-    display: flex;
-    column-gap: $sp-base * 3;
-    align-items: center;
-}
-
-.top-row-right {
-    justify-content: space-between;
+    margin-bottom: $sp-xl;
 }

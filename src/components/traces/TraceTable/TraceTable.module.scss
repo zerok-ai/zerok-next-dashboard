@@ -1,0 +1,119 @@
+@import "styles/variables.module.scss";
+@import "styles/mixins";
+.container {
+    overflow-y: hidden;
+    position: relative;
+    border:1px solid $grey-800;
+    border-radius:$sp-base  / 2;
+    width:700px;
+    min-height: calc(100vh - 60px - 160px);
+    z-index: 2;
+}
+
+.backdrop {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index: 2;
+    background-color: rgba(0,0,0,0.2);
+    backdrop-filter: blur(1px);
+    padding:$sp-base * 5;
+    border-radius: $sp-base * 2;
+}
+
+
+.header {
+    @include card-header;
+    background-color: $grey-700;
+    border-radius: 0 0 0 0;
+    h5 {
+        display: flex;
+        align-items: center;
+        column-gap: $sp-base * 2;
+        font-weight: 400;
+    }
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+}
+
+.close-icon {
+    cursor: pointer;
+    height:20px;
+    width:20px;
+    color:$grey-200;
+}
+
+// entry point
+
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 600px;
+    // margin-bottom: $sp-base;
+    span,td {
+        color:$grey-50;
+    }
+    .action-delete {
+        color:$error-300;
+    }
+}
+
+.entry-point-container {
+    display: flex;
+    column-gap: $sp-lg;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    .active {
+        color:$primary-500;
+    }
+}
+.entry-point {
+    
+    &:hover {
+        color:$primary-500;
+    }
+}
+
+.table-header {
+    th {
+        border:none;
+        background-color: $grey-925;
+       div {
+        
+        color:$grey-25;
+            letter-spacing: 1.5px;
+       }
+    }
+}
+
+.entry-point {
+    cursor: pointer;
+    display: flex;
+
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    column-gap: $sp-sm;
+}
+
+.skeleton-container {
+    padding:$sp-md;
+    row-gap: $sp-md;
+}
+
+.skeleton {
+    height:50px;
+}

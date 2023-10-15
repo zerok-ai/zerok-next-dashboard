@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
 import useStatus from "hooks/useStatus";
 import { useForm } from "react-hook-form";
+import { showSnackbar } from "redux/snackbar";
+import { useDispatch } from "redux/store";
 import { INVITE_USER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
 import z from "zod";
@@ -46,6 +48,7 @@ const InviteUserForm = ({ onFinish }: InviteUserFormProps) => {
     resolver: zodResolver(InviteUserFormSchema),
   });
   const { status, setStatus } = useStatus();
+  const dispatch = useDispatch();
   const onSubmit = async (values: InviteUserFormSchemaType) => {
     try {
       setStatus({ loading: true, error: null });
@@ -60,6 +63,12 @@ const InviteUserForm = ({ onFinish }: InviteUserFormProps) => {
         loading: false,
         error: "Could not invite user, please try again",
       });
+      dispatch(
+        showSnackbar({
+          message: "Could not invite user",
+          type: "error",
+        })
+      );
     } finally {
       setStatus((old) => ({ ...old, loading: false }));
     }

@@ -6,18 +6,15 @@ import { Fragment } from "react";
 
 const Login = () => {
   return (
-    <div>
-      {/* Head / Meta tags */}
-      <Fragment>
-        <Head>
-          <title>ZeroK Dashboard | Login</title>
-        </Head>
-      </Fragment>
-      {/* Auth login form */}
+    <Fragment>
+      <Head>
+        <title>ZeroK Dashboard | Login</title>
+      </Head>
+      {/* Login Form */}
       <AuthFormCard title="Login">
         <LoginForm />
       </AuthFormCard>
-    </div>
+    </Fragment>
   );
 };
 

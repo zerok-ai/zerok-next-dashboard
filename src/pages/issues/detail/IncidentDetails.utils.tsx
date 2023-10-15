@@ -56,7 +56,7 @@ export const IssueMetadata = () => {
           if (data) setMetadata(data);
         })
         .catch((err) => {
-          console.log({ err });
+          console.error({ err });
         });
     }
   }, [issue, selectedCluster]);
@@ -66,21 +66,23 @@ export const IssueMetadata = () => {
     return (
       <div className={styles["incident-metadata-container"]}>
         <Tooltip
-          title={`Last seen: ${getFormattedTime(metadata.last_seen)}`}
+          title={`${getFormattedTime(metadata.last_seen)}`}
           placement="bottom"
           arrow
         >
-          <span>{getRelativeTime(metadata.last_seen)}</span>
+          <span>Last collected - {getRelativeTime(metadata.last_seen)}</span>
         </Tooltip>
         |
         <span className={styles["incident-time-container"]}>
           <AiOutlineClockCircle />{" "}
           <Tooltip
-            title={`First seen: ${getFormattedTime(metadata.first_seen)}`}
+            title={`${getFormattedTime(metadata.first_seen)}`}
             placement="bottom"
             arrow
           >
-            <span>{getRelativeTime(metadata.first_seen)}</span>
+            <span>
+              First collected - {getRelativeTime(metadata.first_seen)}
+            </span>
           </Tooltip>
         </span>
       </div>
@@ -94,7 +96,6 @@ export const IssueMetadata = () => {
         showBreadcrumb={true}
         title={trimString(getTitleFromIssue(issue.issue_title), 80)}
         showRange={false}
-        align="right"
         showRefresh={false}
         bottomRow={<IssueTimes />}
       />

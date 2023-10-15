@@ -1,14 +1,25 @@
-import { FormHelperText, IconButton, MenuItem, Select } from "@mui/material";
+import {
+  Divider,
+  FormHelperText,
+  IconButton,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import cx from "classnames";
 import { nanoid } from "nanoid";
 import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash } from "react-icons/hi";
-import { type SPAN_PROTOCOLS_TYPE } from "utils/types";
+import { type ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
+import {
+  type AttributeProtocolType,
+  type AttributeStateType,
+} from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
 import {
-  getPropertyByType,
+  getAttributeSelectOptions,
+  getFlattenedAttributes,
   type ProbeFormType,
 } from "../ProbeCreateForm.utils";
 
@@ -18,15 +29,19 @@ interface GroupBySelectProps {
   services: Array<{
     label: string;
     value: string;
-    protocol: SPAN_PROTOCOLS_TYPE;
+    protocol: (typeof ATTRIBUTE_PROTOCOLS)[number] | "";
     rootOnly?: boolean;
   }>;
+  attributes: AttributeStateType | null;
+  disabled: boolean;
 }
 
 const GroupBySelect = ({
   form,
   services,
   currentGroupByKey,
+  attributes,
+  disabled = false,
 }: GroupBySelectProps) => {
   const { setValue, getValues, formState } = form;
   const { cards, groupBy } = getValues();
@@ -36,17 +51,21 @@ const GroupBySelect = ({
   const values = getValues(`groupBy.${currentGroupByIndex}`);
   const emptyCard =
     cards.filter((card) => card.rootProperty !== "").length === 0;
-  const cardProperties = getPropertyByType(
-    services.find((s, idx) => {
-      return s.value === values.service;
-    })?.protocol ?? null
-  );
 
   const errors = formState.errors.groupBy?.[currentGroupByIndex] ?? {};
   const isFirstIndex = currentGroupByIndex === 0;
 
+  const protocol = values.protocol.toUpperCase() as AttributeProtocolType;
+
   const updateValue = (key: "property" | "service", value: string) => {
     setValue(`groupBy.${currentGroupByIndex}.${key}`, value);
+    if (key === "service") {
+      const service = services.find((s) => s.value === value);
+      setValue(`groupBy.${currentGroupByIndex}.protocol`, service!.protocol);
+    } else {
+      const attribute = attributeOptions.find((a) => a.id === value);
+      setValue(`groupBy.${currentGroupByIndex}.executor`, attribute!.executor);
+    }
   };
 
   const deleteGroupBy = () => {
@@ -63,7 +82,9 @@ const GroupBySelect = ({
             errors[key] && styles["error-text"]
           )}
         >
-          {errors[key] ? `Please select a ${key} to group by` : `Service name`}
+          {errors[key]
+            ? `Please select a ${key} to group by`
+            : `Group by ${key}`}
         </FormHelperText>
       );
     } else {
@@ -78,6 +99,30 @@ const GroupBySelect = ({
       );
     }
   };
+
+  const existingExecutors = cards
+    .map((card) => card.conditions.map((condition) => condition.executor))
+    .flat()
+    .filter((e) => !!e);
+
+  const attributeOptions = getFlattenedAttributes(attributes, protocol).filter(
+    (at) =>
+      existingExecutors.includes(at.executor) &&
+      (at.data_type === "string" || at.input === "select")
+  );
+
+  const attributeSelectOptions = getAttributeSelectOptions(
+    attributes,
+    protocol
+  ).filter((at) => {
+    if (at.type === "divider") {
+      return true;
+    }
+    return (
+      existingExecutors.includes(at.executor) &&
+      (at.data_type === "string" || at.input === "select")
+    );
+  });
   return (
     <div
       className={cx(
@@ -87,7 +132,7 @@ const GroupBySelect = ({
     >
       <div className={styles["group-by-select-container"]}>
         <Select
-          disabled={emptyCard}
+          disabled={emptyCard || disabled}
           defaultValue={""}
           fullWidth
           value={values.service ?? ""}
@@ -99,7 +144,11 @@ const GroupBySelect = ({
           }}
         >
           {cards.map((card, idx) => {
-            const service = services.find((s) => s.value === card.rootProperty);
+            const service = services.find(
+              (s) =>
+                s.value === card.rootProperty ||
+                s.value === card.rootProperty.toLowerCase()
+            );
             const label = service?.label;
             return (
               <MenuItem
@@ -117,6 +166,7 @@ const GroupBySelect = ({
       <div className={styles["group-by-select-container"]}>
         <Select
           defaultValue=""
+          value={values.property ?? ""}
           fullWidth
           variant="outlined"
           name="group-property"
@@ -125,24 +175,23 @@ const GroupBySelect = ({
           }}
           placeholder="Start typing..."
           className={styles["group-by-select"]}
-          disabled={values.service === null}
+          disabled={values.service === null || disabled}
         >
-          {cardProperties.length > 0 &&
-            cardProperties.map((pr) => {
+          {attributeSelectOptions.map((attr) => {
+            if (attr.type === "divider") {
+              return <Divider key={nanoid()} />;
+            } else {
               return (
-                <MenuItem
-                  value={pr.value}
-                  key={nanoid()}
-                  className={styles["menu-item"]}
-                >
-                  {pr.label}
+                <MenuItem value={attr.id} key={attr.id}>
+                  {attr.field}
                 </MenuItem>
               );
-            })}
+            }
+          })}
         </Select>
         {renderHelperText("property")}
       </div>
-      {!isFirstIndex && (
+      {!isFirstIndex && !disabled && (
         <IconButton
           size="small"
           className={styles["delete-group-by-button"]}

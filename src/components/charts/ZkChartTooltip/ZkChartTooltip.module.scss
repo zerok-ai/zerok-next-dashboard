@@ -1,0 +1,35 @@
+@import "styles/variables.module.scss";
+.custom-tooltip {
+    background-color: $grey-925;
+    border:1px solid $grey-900;
+    border-radius: $sp-base;
+    min-width: 150px;
+}
+
+.label {
+    font-weight: 500;
+    border-bottom: 1px solid $grey-900;
+    padding:$sp-base $sp-sm;
+    color:$grey-100;
+}
+
+.tooltip-list {
+    padding:0;
+    margin:0;
+    list-style: none;
+}
+
+.tooltip-list-item-label {
+    color:$grey-100;
+}
+
+.tooltip-list-item-value {
+    color:$grey-25;
+}
+
+.tooltip-list-item {
+    display: flex;
+    column-gap: $sp-base;
+    padding:0 $sp-sm;
+    margin:$sp-base 0;
+}

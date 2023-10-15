@@ -1,0 +1,81 @@
+@import "styles/variables.module.scss";
+@import 'styles/mixins';
+.container {
+    height:100%;
+    border-radius: $sp-sm;
+    border:1px solid $grey-800;
+}
+
+.header {
+    @include card-header;
+}
+
+.groups {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-lg;
+    padding:$sp-md;
+    padding-bottom: $sp-xxl;
+    
+    :global(.Mui-expanded){
+        margin:0;
+    }
+    :global(.MuiAccordionSummary-content){
+        margin: 0;
+        margin-bottom: $sp-base;
+    }
+    :global(.MuiAccordionSummary-content:last-child){
+        margin-bottom:0;
+    }
+}
+
+.group-card-container {
+    padding-bottom: $sp-lg;
+    border-bottom: 1px solid $grey-900;
+}
+
+.group-card {
+    cursor: pointer;
+    border:1px solid $grey-900;
+    border-radius: $sp-sm;
+    padding: $sp-sm;
+    border-radius: $sp-sm;
+    display: grid;
+    grid-template-columns: 1.3fr repeat(4,1fr);
+    background-color: $grey-925;
+    div, span {
+        color:$grey-100;
+    }
+}
+.accordion {
+    border:none;
+    height:100%;
+}
+
+
+.accordion-summary {
+    background-color: $bg-dark;
+    margin:0 !important;
+    padding-left: $sp-base;
+    justify-content: space-between;
+    width:100%;
+    min-height: 0px !important;
+    padding:0;
+    border-bottom: 1px solid $grey-700;
+    
+}
+
+.accordion-details {
+    border:none;
+    padding: $sp-sm ;
+    // border-left: 1px solid $grey-700;
+    background-color: $bg-dark;
+}
+
+.accordion-summary-content {
+    margin-left: $sp-sm;
+    color:$grey-25;
+    &:hover {
+        color:$primary-500;
+    }
+}

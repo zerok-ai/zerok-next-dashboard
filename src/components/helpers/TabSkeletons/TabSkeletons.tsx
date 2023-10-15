@@ -1,5 +1,5 @@
 import { Skeleton } from "@mui/material";
-import CustomSkeleton from "components/CustomSkeleton";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 
 import styles from "./TabSkeletons.module.scss";
 

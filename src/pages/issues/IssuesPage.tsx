@@ -1,17 +1,17 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import CustomSkeleton from "components/CustomSkeleton";
+import { type ColumnSort } from "@tanstack/react-table";
 import PageHeader from "components/helpers/PageHeader";
+import PrivateRoute from "components/helpers/PrivateRoute";
+import TableFilter from "components/helpers/TableFilter";
 import PageLayout from "components/layouts/PageLayout";
-import PrivateRoute from "components/PrivateRoute";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
-import Head from "next/head";
+import { useTrigger } from "hooks/useTrigger";
 import { useRouter } from "next/router";
 import queryString from "query-string";
-import { Fragment, useEffect, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
@@ -20,21 +20,27 @@ import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail } from "utils/types";
 
 import styles from "./IssuesPage.module.scss";
-import { getIssueColumns } from "./IssuesPage.utils";
+import { getIssueColumns, ISSUE_SORT_OPTIONS } from "./IssuesPage.utils";
 
 interface IssuesDataType {
   issues: IssueDetail[];
   total_records: number;
 }
 
+const DEFAULT_SORT: ColumnSort = {
+  id: ISSUE_SORT_OPTIONS[0].value.split(":")[0],
+  desc: ISSUE_SORT_OPTIONS[0].value.split(":")[1] === "desc",
+};
+
 const IssuesPage = () => {
-  const { selectedCluster, renderTrigger } = useSelector(clusterSelector);
+  const { selectedCluster } = useSelector(clusterSelector);
 
   // const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
 
   const {
     data,
     fetchData: fetchIssues,
+    error,
     setData,
   } = useFetch<IssuesDataType>("", null);
 
@@ -43,6 +49,9 @@ const IssuesPage = () => {
   const { query } = router;
   const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
+
+  const { trigger, changeTrigger } = useTrigger();
+  const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
 
   useEffect(() => {
     if (selectedCluster) {
@@ -60,7 +69,7 @@ const IssuesPage = () => {
         `${params.length ? `&${params}` : ""}`;
       fetchIssues(endpoint);
     }
-  }, [selectedCluster, router.query, renderTrigger]);
+  }, [selectedCluster, router.query, trigger]);
 
   // @TODO - add types for filters here
   const services =
@@ -71,12 +80,6 @@ const IssuesPage = () => {
   const columns = useMemo(() => {
     return getIssueColumns();
   }, [data?.issues]);
-
-  const table = useReactTable<IssueDetail>({
-    columns,
-    data: data?.issues ?? [],
-    getCoreRowModel: getCoreRowModel(),
-  });
 
   const removeService = (label: string) => {
     if (services != null) {
@@ -94,55 +97,67 @@ const IssuesPage = () => {
     }
   };
 
+  const leftExtras = useMemo(() => {
+    return [
+      <TableFilter
+        key={"table-filter"}
+        options={ISSUE_SORT_OPTIONS}
+        sortBy={sortBy[0]}
+        onChange={(value) => {
+          setSortBy([value]);
+        }}
+      />,
+    ];
+  }, [sortBy]);
+
   return (
-    <div>
-      <Fragment>
-        <Head>
-          <title>ZeroK Dashboard | Issues</title>
-        </Head>
-      </Fragment>
+    <Fragment>
       <PageHeader
+        htmlTitle="Issues"
         title="Issues"
         showRange={true}
         showRefresh={true}
-        // extras={[<ServicesFilter serviceList={serviceList} key={nanoid()} />]}
+        leftExtras={leftExtras}
+        onRefresh={changeTrigger}
       />
       {/* Rendering filters */}
-      <div className={styles["active-filters"]}>
-        {services !== null &&
-          services.length > 0 &&
-          services.map((sv) => {
-            return (
-              <TagX
-                label={sv}
-                onClose={removeService}
-                closable={true}
-                key={nanoid()}
-              />
-            );
-          })}
-      </div>
+      {services && (
+        <div className={styles["active-filters"]}>
+          {services !== null &&
+            services.length > 0 &&
+            services.map((sv) => {
+              return (
+                <TagX
+                  label={sv}
+                  onClose={removeService}
+                  closable={true}
+                  key={nanoid()}
+                />
+              );
+            })}
+        </div>
+      )}
       <div className={styles["page-content"]}>
+        {error && <p>Error fetching issues. Please try again later.</p>}
         {/* @TODO - add error state here */}
-        {selectedCluster !== null && data?.issues ? (
-          <TableX table={table} data={data?.issues ?? []} />
-        ) : (
-          <CustomSkeleton
-            containerClass={styles["skeleton-container"]}
-            skeletonClass={styles.skeleton}
-            len={10}
+        {selectedCluster && !error && (
+          <TableX
+            data={data?.issues ?? null}
+            columns={columns}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
           />
         )}
       </div>
       {data?.issues && (
-        <div className={styles["pagination-container"]}>
+        <footer className={styles["pagination-container"]}>
           <PaginationX
             totalItems={data.total_records}
             itemsPerPage={ISSUES_PAGE_SIZE}
           />
-        </div>
+        </footer>
       )}
-    </div>
+    </Fragment>
   );
 };
 

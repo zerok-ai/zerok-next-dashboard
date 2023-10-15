@@ -1,14 +1,9 @@
 @import "styles/variables.module.scss";
-.container {
-    h3 {
-        margin-bottom: $sp-base * 5;
-    }
-}
 
 .issue-path {
     display: flex;
-    column-gap: $sp-base * 2;
-    margin:$sp-base * 2 0;
+    column-gap: $sp-sm;
+    margin:$sp-sm 0;
     align-items: center;
 }
 
@@ -25,7 +20,7 @@
 
 .issue-path-container {
     display: flex;
-    column-gap: $sp-base * 2;
+    column-gap: $sp-sm;
 }
 
 .issue-title-container {
@@ -53,22 +48,23 @@
 // FILTER BADGES
 .active-filters {
     display: flex;
-    column-gap: $sp-base * 2;
-    margin-bottom: $sp-base * 4;
+    column-gap: $sp-sm;
+    margin-bottom: $sp-lg;
 }
 
 // content
 .page-content {
-    height:72vh;
+    min-height:70vh;
     overflow: auto;
-    border-bottom:1px solid $grey-900;
-    border-radius: $sp-base * 2;
+    // border-bottom:1px solid $grey-900;
+    border-radius: $sp-sm;
+    margin-bottom: $sp-lg;
 }
 
 .pagination-container {
     display: flex;
     justify-content: center;
-    margin-top: $sp-base * 6;
+    margin-top: $sp-base;
 }
 
 .issue-title-container {
@@ -79,10 +75,10 @@
 .source {
     display: flex;
     align-items: center;
-    column-gap: $sp-base;
+    column-gap: $sp-md;
     >img {
-        height: $sp-base * 6;
-        width:$sp-base * 6;
+        height: $sp-xxl;
+        width:$sp-xxl;
     }
     span {
         color:$grey-50;

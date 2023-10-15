@@ -3,16 +3,17 @@ import { Button } from "@mui/material";
 // redux
 import { nanoid } from "@reduxjs/toolkit";
 // custom
-import HealthCards from "components/HealthCards";
+import HealthCards from "components/health-page/HealthCards";
+import ServiceMapPage from "components/health-page/ServiceMapPage";
+import MapToggle from "components/helpers/MapToggle";
 import PageHeader from "components/helpers/PageHeader";
 import PageWrapper from "components/helpers/PageWrapper";
-import MapToggle from "components/MapToggle";
-import SearchBar from "components/SearchBar";
-import ServiceMapPage from "components/ServiceMapPage";
+import SearchBar from "components/helpers/SearchBar";
 // hooks
 import { useToggle } from "hooks/useToggle";
+import { useTrigger } from "hooks/useTrigger";
 // react
-import { useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 // icons
 import { HiPlus } from "react-icons/hi";
 // redux
@@ -31,6 +32,9 @@ const Home = () => {
   const healthyCluster = selectedCluster
     ? status === CLUSTER_STATES.HEALTHY
     : true;
+  const { trigger: cardTrigger, changeTrigger: changeCardTrigger } =
+    useTrigger();
+  const { trigger: mapTrigger, changeTrigger: changeMapTrigger } = useTrigger();
   const MapFilterButton = useMemo(() => {
     return (
       <Button
@@ -53,7 +57,7 @@ const Home = () => {
         }}
         key="search-bar"
         inputState={cardFilter}
-        placeholder="Filter by service name"
+        placeholder="Search by service name"
       />
     );
   }, [cardFilter]);
@@ -76,22 +80,26 @@ const Home = () => {
   }, [isHealthMap, cardFilter]);
 
   return (
-    <div>
+    <Fragment>
       <PageHeader
-        title="Health"
+        title="Services"
         showRange={true}
         showRefresh={true}
-        extras={healthyCluster ? getExtras() : []}
+        leftExtras={healthyCluster ? getExtras() : []}
+        onRefresh={() => {
+          isHealthMap ? changeMapTrigger() : changeCardTrigger();
+        }}
       />
       {isHealthMap ? (
         <ServiceMapPage
           toggleDrawer={toggleMapFilter}
           isFilterOpen={isMapFilterOpen}
+          trigger={mapTrigger}
         />
       ) : (
-        <HealthCards filter={cardFilter} />
+        <HealthCards filter={cardFilter} trigger={cardTrigger} />
       )}
-    </div>
+    </Fragment>
   );
 };
 

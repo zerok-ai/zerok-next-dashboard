@@ -10,11 +10,11 @@ export const BREADCRUMB_ROUTES: Record<
   "/issues/detail": {
     crumbs: [
       {
-        name: "Incidents",
+        name: "Issues",
         path: "/issues",
       },
       {
-        name: "Incident Detail",
+        name: "Issue Details",
         path: "issues/detail",
       },
     ],
@@ -28,6 +28,62 @@ export const BREADCRUMB_ROUTES: Record<
       {
         name: "New Probe",
         path: "probes/create",
+      },
+    ],
+  },
+  "/probes/view": {
+    crumbs: [
+      {
+        name: "Probes",
+        path: "/probes",
+      },
+      {
+        name: "View Probe",
+        path: "/probes/view",
+      },
+    ],
+  },
+  "/integrations/prometheus/list": {
+    crumbs: [
+      {
+        name: "Integrations",
+        path: "/integrations",
+      },
+      {
+        name: "Prometheus",
+        path: "/integrations/prometheus/list",
+      },
+    ],
+  },
+  "/integrations/prometheus/edit": {
+    crumbs: [
+      {
+        name: "Integrations",
+        path: "/integrations",
+      },
+      {
+        name: "Prometheus",
+        path: "/integrations/prometheus/list",
+      },
+      {
+        name: "Edit integration",
+        path: "/integrations/prometheus/edit",
+      },
+    ],
+  },
+  "/integrations/prometheus/create": {
+    crumbs: [
+      {
+        name: "Integrations",
+        path: "/integrations",
+      },
+      {
+        name: "Prometheus",
+        path: "/integrations/prometheus/list",
+      },
+      {
+        name: "Add new data source",
+        path: "/integrations/prometheus/create",
       },
     ],
   },

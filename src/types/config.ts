@@ -1,4 +1,6 @@
-export type FontFamily = `'Karla', sans-serif` | `'Public Sans', sans-serif`;
+export type FontFamily =
+  | `'Noto Sans', sans-serif`
+  | `'Public Sans', sans-serif`;
 export type PresetColor =
   | "default"
   | "theme1"

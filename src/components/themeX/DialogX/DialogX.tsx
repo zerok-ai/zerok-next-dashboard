@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Button,
   Dialog,
@@ -14,6 +15,7 @@ interface DialogXProps {
   isOpen: boolean;
   successText?: string;
   cancelText?: string;
+  loading?: boolean;
   onClose: () => void;
   onSuccess: () => void;
   onCancel: () => void;
@@ -24,6 +26,7 @@ const DialogX = ({
   onSuccess,
   onCancel,
   isOpen,
+  loading,
   onClose,
   children,
   successText = "Delete",
@@ -36,9 +39,14 @@ const DialogX = ({
         {children}
       </DialogContentText>
       <DialogActions className={styles["dialog-actions"]}>
-        <Button color="primary" onClick={onSuccess} variant="contained">
+        <LoadingButton
+          color="primary"
+          onClick={onSuccess}
+          loading={loading}
+          variant="contained"
+        >
           {successText ?? "Delete"}
-        </Button>
+        </LoadingButton>
         <Button color="secondary" onClick={onCancel}>
           {cancelText ?? "Cancel"}
         </Button>
