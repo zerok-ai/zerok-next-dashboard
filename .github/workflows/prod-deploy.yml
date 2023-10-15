@@ -1,4 +1,4 @@
-name: prod-release - to be CHANGED
+name: production
 on:
   push:
     tags: #r/<CLUSTER-NAME>/<DOCKER-TAG-OR-VERSION>
@@ -9,27 +9,30 @@ on:
         description: 'Docker Image Tag'
         required: true
         default: 'dev'
+      GKE_CLUSTER:
+        description: 'Cluster Name'
+        required: true
+        default: 'devcloud01'
       
 env:
   NS: ${{ vars.NS }}
   DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
+  GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
   GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
   GKE_ZONE : ${{ vars.GKE_ZONE }}
   DOCKER_REG: ${{ vars.DOCKER_REG }}
+  PROJECT_ID:  ${{ vars.PROJECT_ID }}
   DOCKER_REPO:  ${{ vars.DOCKER_REPO }}
   APP_NAME:  ${{ vars.APP_NAME }}
   DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
-  HOST_NAME: ${{ vars.HOST_NAME }}
-  PROJECT_ID: ${{ vars.PROJECT_ID }}
-  DEPLOYMENT_CLUSTER: ${{ vars.DEPLOYMENT_CLUSTER }}
   BUILD_AND_PUSH: true
   DEPLOY: true
 
 jobs:
   init:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-prod-init.yml@main
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-dev-init.yml@main
     with:
-      ENVIRONMENT: ${{ github.event.inputs.ENV }}
+      GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
       GIT_TAG: ${{ github.ref }}
       DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
 
@@ -53,92 +56,29 @@ jobs:
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "DOMAIN_NAME=$DOMAIN_NAME"
-          echo "HOST_NAME=$HOST_NAME"
 
   ##############
   build-and-push:
-    needs: init
-    runs-on: zk-self-hosted
-    env:
-      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@main
+    with:
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-    environment:
-      name: ${{ needs.init.outputs.ENVIRONMENT }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Download dependencies
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: yarn
-
-      - name: Build
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: yarn build
-
-      - name: Uploading Helm Charts (for deploy)
-        uses: actions/upload-artifact@v3
-        if: ${{ env.DEPLOY == 'true' }}
-        with:
-          name: helm-charts
-          path: |
-            helm-charts
-
-      - name: Docker build
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker build  --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" .
-
-      - name: Docker Tag
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA" "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$VERSION"
-
-      - name: Docker push
-        if: ${{ env.BUILD_AND_PUSH == 'true' }}
-        run: |-
-          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$GITHUB_SHA"
-          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME:$VERSION"
+      DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
+      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+      MAKE_TARGET: "default"
+    secrets:
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
+    needs: init
 
   deploy:
-    needs: [ init,build-and-push ]
-    env:
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-deploy.yml@main
+    with:
+      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
-      ENV: ${{ needs.init.outputs.ENVIRONMENT }}
-    environment:
-      name: ${{ needs.init.outputs.ENVIRONMENT }}
-    runs-on: zk-self-hosted
-    steps:
-
-      - id: 'auth'
-        if: ${{ env.DEPLOY == 'true' }}
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: '${{ env.GKE_SA_KEY }}'
-
-      - id: 'get-credentials'
-        if: ${{ env.DEPLOY == 'true' }}
-        uses: 'google-github-actions/get-gke-credentials@v1'
-        with:
-          cluster_name: '${{ env.DEPLOYMENT_CLUSTER }}'
-          location: '${{ env.GKE_ZONE }}'
-
-      - uses: actions/download-artifact@v3
-        if: ${{ env.DEPLOY == 'true' }}
-        with:
-          name: helm-charts
-
-      - name: Deploy
-        if: ${{ env.DEPLOY == 'true' }}
-        run: |-
-          helm --install  \
-          --set=image.repository=$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$APP_NAME \
-          --set=image.tag=$GITHUB_SHA \
-          --set=global.host="$HOST_NAME.$DOMAIN_NAME" \
-          --set=global.domain=$DOMAIN_NAME \
-          upgrade $APP_NAME \
-           -f ./helm-charts/$ENV.yaml ./helm-charts/ \
-           --create-namespace \
-           --namespace $NS
+      MIGRATION_VERSION: ${{ needs.init.outputs.VERSION }}
+      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
+      HELM_ARGS: "--recreate-pods"
+    secrets:
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
+    needs: [init,build-and-push]
