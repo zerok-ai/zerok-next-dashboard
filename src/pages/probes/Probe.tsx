@@ -39,6 +39,7 @@ import {
   UPDATE_PROBE_STATUS_ENDPOINT,
 } from "utils/scenarios/endpoints";
 import { type ScenarioDetailType } from "utils/scenarios/types";
+import { sendError } from "utils/sentry";
 import { PROBE_SORT_OPTIONS } from "utils/tables/sort";
 
 import styles from "./Probe.module.scss";
@@ -80,7 +81,8 @@ const Probe = () => {
       // setTotalScenarios(rdata.data.payload.total_rows);
       setScenarios(rdata.data.payload.scenarios);
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
+      sendError(err);
     } finally {
       resetSelectedProbe();
     }
@@ -148,7 +150,8 @@ const Probe = () => {
           type: "error",
         })
       );
-      console.log({ err });
+      console.error({ err });
+      sendError(err);
     } finally {
       getData();
     }

@@ -66,7 +66,7 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
     return (
       <CodeBlock
         code={(val as string | boolean).toString()}
-        allowCopy
+        allowCopy={false}
         color="light"
       />
     );
@@ -86,8 +86,8 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
       />
     );
   } catch (err) {
-    console.log({ err });
-    return <CodeBlock code={val as string} allowCopy color="light" />;
+    console.error({ err });
+    return <CodeBlock code={val as string} allowCopy={false} color="light" />;
   }
 };
 

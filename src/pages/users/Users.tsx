@@ -25,6 +25,7 @@ import { useDispatch } from "redux/store";
 // utils
 import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
 import raxios from "utils/raxios";
+import { sendError } from "utils/sentry";
 // types
 import { type UserDetail } from "utils/types";
 
@@ -103,7 +104,8 @@ const Users = () => {
         })
       );
     } catch (err) {
-      console.log({ err });
+      sendError(err);
+      console.error({ err });
       dispatch(
         showSnackbar({
           message: "Could not send user invite",

@@ -24,6 +24,7 @@ import {
   type PrometheusListType,
 } from "utils/integrations/types";
 import raxios from "utils/raxios";
+import { sendError } from "utils/sentry";
 
 import styles from "./PrometheusForm.module.scss";
 import {
@@ -132,7 +133,8 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
         router.push("/integrations/prometheus/list");
       }
     } catch (err) {
-      console.log({ err });
+      sendError(err);
+      console.error({ err });
       setStatus((old) => {
         return {
           ...old,

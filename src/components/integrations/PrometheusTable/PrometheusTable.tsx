@@ -21,6 +21,7 @@ import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import { type PrometheusListType } from "utils/integrations/types";
 import raxios from "utils/raxios";
+import { sendError } from "utils/sentry";
 
 import styles from "./PrometheusTable.module.scss";
 import { PROM_SORT_OPTIONS } from "./PrometheusTable.utils";
@@ -208,7 +209,8 @@ const PrometheusTable = () => {
         })
       );
     } catch (err) {
-      console.log({ err });
+      sendError(err);
+      console.error({ err });
       dispatch(
         showSnackbar({
           message: `Failed to update status`,

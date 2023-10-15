@@ -56,7 +56,7 @@ export const IssueMetadata = () => {
           if (data) setMetadata(data);
         })
         .catch((err) => {
-          console.log({ err });
+          console.error({ err });
         });
     }
   }, [issue, selectedCluster]);

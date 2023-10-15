@@ -25,7 +25,7 @@ export const useFetch = <T>(
       if (transformer != null) setData(transformer(rdata, data as T));
       else setData(rdata);
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       setError(true);
       setErrorData(err);
       sendError(err);
