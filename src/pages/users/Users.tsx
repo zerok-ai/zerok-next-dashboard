@@ -186,6 +186,9 @@ const Users = () => {
                 onClick={() => {
                   setDeletingUser(info.row.original);
                 }}
+                color="secondary"
+                className={styles["delete-button"]}
+                // size="small"
               >
                 <AiOutlineDelete />
               </IconButton>

@@ -1,4 +1,5 @@
-import { Button, IconButton } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { IconButton } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import cx from "classnames";
 import CustomSkeleton from "components/custom/CustomSkeleton";
@@ -11,9 +12,10 @@ import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
 import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
+import { useTrigger } from "hooks/useTrigger";
 import { nanoid } from "nanoid";
 import Head from "next/head";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HiOutlineKey, HiOutlineTrash } from "react-icons/hi2";
 import { showSnackbar } from "redux/snackbar";
 import { useDispatch } from "redux/store";
@@ -50,8 +52,11 @@ const ApiKeys = () => {
     addToggle
   );
   const dispatch = useDispatch();
+  const { trigger, changeTrigger } = useTrigger();
 
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
+
+  const [createLoading, setCreateLoading] = useState(false);
 
   const getApiKeyFromId = async (id: string, visibility: boolean) => {
     if (!apiKeys) return;
@@ -90,6 +95,7 @@ const ApiKeys = () => {
           type: "success",
         })
       );
+      fetchData(APIKEYS_ENDPOINT);
     } catch (err) {
       dispatch(
         showSnackbar({
@@ -102,6 +108,7 @@ const ApiKeys = () => {
   };
 
   const createApiKey = async () => {
+    setCreateLoading(true);
     try {
       await raxios.get(APIKEY_CREATE_ENDPOINT);
       fetchData(APIKEYS_ENDPOINT);
@@ -118,10 +125,16 @@ const ApiKeys = () => {
           type: "error",
         })
       );
+    } finally {
+      setCreateLoading(false);
     }
   };
 
   const colHelper = createColumnHelper<ApiKeyDetailWithToggle>();
+
+  useEffect(() => {
+    fetchData(APIKEYS_ENDPOINT);
+  }, [trigger]);
 
   const columns = useMemo(() => {
     return [
@@ -186,17 +199,19 @@ const ApiKeys = () => {
         <PageHeader
           title="API Keys"
           showRange={false}
-          showRefresh={false}
+          showRefresh={true}
+          onRefresh={changeTrigger}
           rightExtras={[
-            <Button
+            <LoadingButton
               color="primary"
               variant="contained"
               className={styles["key-button"]}
               onClick={createApiKey}
               key={nanoid()}
+              loading={createLoading}
             >
               <HiOutlineKey className={styles["key-icon"]} /> Create new API key
-            </Button>,
+            </LoadingButton>,
           ]}
         />
       </div>

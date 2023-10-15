@@ -109,12 +109,14 @@ const ConditionRow = ({
         `cards.${cardIndex}.conditions.${conditionIndex}.operator`,
         value as string
       );
-      setValue(`cards.${cardIndex}.conditions.${conditionIndex}.value`, "");
+
       if (value === "exists" || value === "not_exists") {
         setValue(
           `cards.${cardIndex}.conditions.${conditionIndex}.value`,
           value
         );
+      } else {
+        setValue(`cards.${cardIndex}.conditions.${conditionIndex}.value`, "");
       }
     }
   };

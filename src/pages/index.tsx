@@ -83,7 +83,7 @@ const Home = () => {
     <Fragment>
       <PageHeader
         title="Services"
-        showRange={isHealthMap}
+        showRange={true}
         showRefresh={true}
         leftExtras={healthyCluster ? getExtras() : []}
         onRefresh={() => {

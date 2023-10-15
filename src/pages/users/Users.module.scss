@@ -17,6 +17,7 @@
 .actions-container {
     display: flex;
     column-gap: $sp-md;
+    align-items: flex-end;
 }
 
 .user-button {
@@ -30,4 +31,11 @@
 
 .resend-button {
     padding:$sp-base $sp-md;
+}
+
+.delete-button {
+    color:$white;
+    border:1px solid $grey-600;
+    height:32px;
+    width:32px;
 }
