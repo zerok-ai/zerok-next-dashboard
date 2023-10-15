@@ -1,7 +1,7 @@
 @import "styles/variables.module.scss";
 @import "styles/mixins";
 .container {
-    overflow-y: hidden;
+    overflow-y: auto;
     position: relative;
     border:1px solid $grey-800;
     border-radius:$sp-base  / 2;
@@ -56,7 +56,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 600px;
+    flex:1;
+    // overflow-y: auto;
     // margin-bottom: $sp-base;
     span,td {
         color:$grey-50;
@@ -103,10 +104,13 @@
 }
 
 .pagination-container {
+    flex:1;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     column-gap: $sp-sm;
+    margin-top: $sp-xl;
+    margin-bottom: $sp-lg;
 }
 
 .skeleton-container {
