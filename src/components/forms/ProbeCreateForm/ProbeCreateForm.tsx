@@ -185,7 +185,6 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
       setAttributes((prev) => ({ ...prev, ...attrMap }));
     } catch (error) {
       sendError(error);
-      console.error({ error });
     }
   };
 
@@ -252,7 +251,6 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         })
       );
     } catch (err) {
-      console.error({ err });
       setStatus({
         loading: false,
         error: "Something went wrong",

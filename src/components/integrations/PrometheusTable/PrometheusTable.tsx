@@ -210,7 +210,6 @@ const PrometheusTable = () => {
       );
     } catch (err) {
       sendError(err);
-      console.error({ err });
       dispatch(
         showSnackbar({
           message: `Failed to update status`,

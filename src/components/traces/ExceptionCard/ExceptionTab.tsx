@@ -37,7 +37,6 @@ const ExceptionTab = ({ errors }: ExceptionTabProps) => {
       setErrorData(rdata.data.payload.errors);
     } catch (err) {
       sendError(err);
-      console.error({ err });
     }
   };
 
