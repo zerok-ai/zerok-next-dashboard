@@ -13,6 +13,8 @@ import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineX } from "react-icons/hi";
 import { ATTRIBUTE_SUPPORTED_FORMATS } from "utils/probes/constants";
 import {
+  type AttributeProtocolType,
+  type AttributeStateType,
   type AttributeSupportedType,
   type AttributeType,
 } from "utils/probes/types";
@@ -22,6 +24,7 @@ import { type ConditionOperatorType } from "../ProbeCreateForm.types";
 import {
   type ConditionRowType,
   CONDITIONS,
+  getAttributeSelectOptions,
   getInputTypeByDatatype,
   getOperatorByType,
   type ProbeFormType,
@@ -29,7 +32,7 @@ import {
 import JoiningSelect from "./JoiningSelect";
 
 interface ConditionRowProps {
-  attributeOptions: AttributeType[];
+  attributes: AttributeStateType | null;
   form: UseFormReturn<ProbeFormType, any, undefined>;
   currentCardKey: string;
   resetGroupBy: () => void;
@@ -39,7 +42,7 @@ interface ConditionRowProps {
 }
 
 const ConditionRow = ({
-  attributeOptions,
+  attributes,
   disabled = false,
   form,
   currentCardKey,
@@ -55,7 +58,7 @@ const ConditionRow = ({
   const cards = getValues("cards");
   const cardIndex = cards.findIndex((c) => c.key === currentCardKey);
   const currentCard = cards[cardIndex];
-  const { rootProperty, conditions } = currentCard;
+  const { rootProperty, conditions, protocol } = currentCard;
   const [jsonPathEnabled, , setJsonpathEnabled] = useToggle(false);
   const [attributeFormat, setAttributeFormat] = useState<
     AttributeSupportedType | ""
@@ -73,10 +76,20 @@ const ConditionRow = ({
       return {};
     }
   };
+  const attributeOptions =
+    attributes && protocol && attributes[protocol]
+      ? [
+          ...attributes[protocol].map((at) => {
+            return [...at.attribute_list];
+          }),
+          ...attributes.GENERAL.map((at) => [...at.attribute_list]),
+        ].flat()
+      : [];
   const updateProperty = (value: string) => {
     const attribute = attributeOptions.find((at) => at.id === value);
-    const datatype = attribute!.data_type;
-    const executor = attribute!.executor;
+    if (!attribute) return;
+    const datatype = attribute.data_type;
+    const executor = attribute.executor;
     setValue(`cards.${cardIndex}.conditions.${conditionIndex}.property`, value);
     setValue(
       `cards.${cardIndex}.conditions.${conditionIndex}.datatype`,
@@ -173,7 +186,6 @@ const ConditionRow = ({
   const errors = getConditionErrors(cardIndex);
   const hideValueField =
     condition.operator === "exists" || condition.operator === "not_exists";
-
   const renderOperatorSelect = (
     list: ConditionOperatorType[],
     type: "all" | "data"
@@ -272,7 +284,13 @@ const ConditionRow = ({
             updateProperty(value.target.value);
           }}
         >
-          {attributeOptions.map((at) => {
+          {getAttributeSelectOptions(
+            attributes,
+            protocol as AttributeProtocolType
+          ).map((at) => {
+            if (at.type === "divider") {
+              return <Divider key={nanoid()} />;
+            }
             return (
               <MenuItem value={at.id} key={at.id}>
                 {at.field}

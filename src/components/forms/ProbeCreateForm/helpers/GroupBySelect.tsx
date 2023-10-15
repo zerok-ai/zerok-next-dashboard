@@ -1,5 +1,12 @@
-import { FormHelperText, IconButton, MenuItem, Select } from "@mui/material";
+import {
+  Divider,
+  FormHelperText,
+  IconButton,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import cx from "classnames";
+import { nanoid } from "nanoid";
 import React from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { HiOutlineTrash } from "react-icons/hi";
@@ -10,7 +17,11 @@ import {
 } from "utils/probes/types";
 
 import styles from "../ProbeCreateForm.module.scss";
-import { type ProbeFormType } from "../ProbeCreateForm.utils";
+import {
+  getAttributeSelectOptions,
+  getFlattenedAttributes,
+  type ProbeFormType,
+} from "../ProbeCreateForm.utils";
 
 interface GroupBySelectProps {
   form: UseFormReturn<ProbeFormType, any, undefined>;
@@ -93,19 +104,25 @@ const GroupBySelect = ({
     .map((card) => card.conditions.map((condition) => condition.executor))
     .flat()
     .filter((e) => !!e);
-  const attributeOptions =
-    attributes && protocol && attributes[protocol]
-      ? [
-          ...attributes[protocol].map((attr) => {
-            return attr.attribute_list.filter((a) =>
-              (a.input === "string" || a.input === "select") && !disabled
-                ? existingExecutors.includes(a.executor)
-                : true
-            );
-          }),
-          ...attributes.GENERAL.map((at) => [...at.attribute_list]),
-        ].flat()
-      : [];
+
+  const attributeOptions = getFlattenedAttributes(attributes, protocol).filter(
+    (at) =>
+      existingExecutors.includes(at.executor) &&
+      (at.data_type === "string" || at.input === "select")
+  );
+
+  const attributeSelectOptions = getAttributeSelectOptions(
+    attributes,
+    protocol
+  ).filter((at) => {
+    if (at.type === "divider") {
+      return true;
+    }
+    return (
+      existingExecutors.includes(at.executor) &&
+      (at.data_type === "string" || at.input === "select")
+    );
+  });
   return (
     <div
       className={cx(
@@ -160,12 +177,16 @@ const GroupBySelect = ({
           className={styles["group-by-select"]}
           disabled={values.service === null || disabled}
         >
-          {attributeOptions.map((attr) => {
-            return (
-              <MenuItem value={attr.id} key={attr.id}>
-                {attr.field}
-              </MenuItem>
-            );
+          {attributeSelectOptions.map((attr) => {
+            if (attr.type === "divider") {
+              return <Divider key={nanoid()} />;
+            } else {
+              return (
+                <MenuItem value={attr.id} key={attr.id}>
+                  {attr.field}
+                </MenuItem>
+              );
+            }
           })}
         </Select>
         {renderHelperText("property")}
