@@ -1,13 +1,16 @@
 @import "styles/variables.module.scss";
 @import "styles/mixins";
 .container {
-    overflow-y: auto;
+    // overflow-y: auto;
     position: relative;
     border:1px solid $grey-800;
     border-radius:$sp-base  / 2;
     width:700px;
-    min-height: calc(100vh - 60px - 160px);
+    height: calc(100vh - 60px - 160px);
     z-index: 2;
+    @media only screen and (max-width: $bp-desktop) {
+        overflow: scroll;
+     }
 }
 
 .backdrop {
@@ -57,7 +60,7 @@
     flex-direction: column;
     justify-content: space-between;
     flex:1;
-    min-height: 600px;
+    
     // overflow-y: auto;
     // margin-bottom: $sp-base;
     span,td {
@@ -66,6 +69,7 @@
     .action-delete {
         color:$error-300;
     }
+    
 }
 
 .entry-point-container {
@@ -111,7 +115,6 @@
     align-items: flex-end;
     column-gap: $sp-sm;
     margin-top: $sp-xl;
-    margin-bottom: $sp-lg;
 }
 
 .skeleton-container {
