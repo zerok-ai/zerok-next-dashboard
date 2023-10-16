@@ -1,12 +1,10 @@
 import cx from "classnames";
-import { toNumber } from "lodash";
 import Link from "next/link";
 import {
   convertNanoToMilliSeconds,
   getFormattedServiceName,
   getNamespace,
   getNumberFromReqThroughput,
-  roundToTwoDecimals,
 } from "utils/functions";
 import { type ServiceDetail } from "utils/types";
 
@@ -52,14 +50,14 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           <span className={cx("label-small", styles["item-label"])}>Req/s</span>
           <p>{reqPerSecond}</p>
         </div>
-        <div className={styles["stat-item"]}>
+        {/* <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>
             Error/s
           </span>
           <p>
             {roundToTwoDecimals(toNumber(service.http_error_rate_in)) || "0"}
           </p>
-        </div>
+        </div> */}
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>
             Avg. latency
@@ -68,10 +66,6 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
             {convertNanoToMilliSeconds(service.http_latency_in.p50) || "NA ms"}
           </p>
         </div>
-      </div>
-
-      {/* percentile container */}
-      <div className={styles["percentile-container"]}>
         <div className={styles["stat-item"]}>
           <span className={cx("label-small", styles["item-label"])}>P75</span>
           <p>{convertNanoToMilliSeconds(service.http_latency_in.p75)}</p>
@@ -85,6 +79,8 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           <p>{convertNanoToMilliSeconds(service.http_latency_in.p99)}</p>
         </div>
       </div>
+
+      {/* percentile container */}
     </div>
   );
 };
