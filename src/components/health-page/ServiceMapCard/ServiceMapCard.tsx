@@ -38,10 +38,6 @@ export const ServiceMapCard = ({
       value: getNumberFromReqThroughput(service.request_throughput),
     },
     {
-      label: "Errors",
-      value: Math.ceil(service.error_rate),
-    },
-    {
       label: "Avg. Latency",
       value: convertNanoToMilliSeconds(service.latency_p50),
     },
