@@ -9,6 +9,7 @@ const UserProfilePicture = ({ name }: UserProfilePictureProps) => {
     ? name
         .split(" ")
         .map((word) => {
+          if (!word) return "";
           return word[0].toLocaleUpperCase();
         })
         .join("")
