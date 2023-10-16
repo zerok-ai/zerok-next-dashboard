@@ -32,10 +32,15 @@ import { type UserDetail } from "utils/types";
 // styles
 import styles from "./Users.module.scss";
 
+const filterUsers = (users: UserDetail[]) => {
+  return users.filter((user) => user.name.trim().length > 0);
+};
+
 const Users = () => {
   const { data: users, fetchData } = useFetch<UserDetail[]>(
     "users",
-    GET_USERS_ENDPOINT
+    GET_USERS_ENDPOINT,
+    filterUsers
   );
 
   const { trigger, changeTrigger } = useTrigger();
