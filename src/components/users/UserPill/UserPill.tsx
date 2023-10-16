@@ -2,12 +2,7 @@ import { Divider, Menu, MenuItem } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { HiOutlineLogout } from "react-icons/hi";
-import {
-  HiOutlineDocumentMagnifyingGlass,
-  HiOutlineKey,
-  HiOutlineUser,
-  HiOutlineUsers,
-} from "react-icons/hi2";
+import { HiOutlineKey, HiOutlineUser, HiOutlineUsers } from "react-icons/hi2";
 
 import styles from "./UserPill.module.scss";
 
@@ -36,14 +31,14 @@ const UserPill = () => {
           zIndex: 1000,
         }}
       >
-        <Link href="/api-keys">
+        {/* <Link href="/api-keys">
           <MenuItem className={styles["menu-item"]}>
             <HiOutlineDocumentMagnifyingGlass
               className={styles["menu-item-icon"]}
             />
             <p>API Documentation</p>
           </MenuItem>
-        </Link>
+        </Link> */}
         <Link href="/api-keys">
           <MenuItem className={styles["menu-item"]}>
             <HiOutlineKey className={styles["menu-item-icon"]} />

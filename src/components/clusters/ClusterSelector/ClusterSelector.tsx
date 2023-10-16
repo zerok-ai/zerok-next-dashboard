@@ -127,8 +127,8 @@ const ClusterSelector = () => {
           value={""}
         >
           {" "}
-          <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Add an
-          Open Telemetry integration
+          <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Install
+          ZeroK on your cluster
         </MenuItem>
       </Select>
 
