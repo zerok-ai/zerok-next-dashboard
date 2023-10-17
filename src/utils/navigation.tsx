@@ -1,5 +1,6 @@
-import { HiLightningBolt } from "react-icons/hi";
+import { HiLightningBolt, HiOutlineShieldCheck } from "react-icons/hi";
 
+// import { HiShieldCheck } from "react-icons/hi2";
 import { ICON_BASE_PATH, ICONS } from "./images";
 import { type DrawerNavItemType } from "./types";
 const HealthNormal = () => {
@@ -61,6 +62,12 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
     path: "/integrations",
     type: "single",
     highlightIcon: <IntegrationsHighlight />,
+  },
+  {
+    reactIcon: (cls: string) => <HiOutlineShieldCheck className={cls} />,
+    label: "Data Privacy",
+    path: "/data-privacy",
+    type: "single",
   },
 ];
 
