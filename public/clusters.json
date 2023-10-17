@@ -1,0 +1,30 @@
+{
+    "payload": {
+        "clusters": [
+            {
+                "name": "gke_zerok-dev_us-central1-a_armtest01",
+                "id": "d7a9ace7-c3be-49b6-957b-b8ff5b69f03f",
+                "nickname": "gke:armtest01",
+                "status": "CS_HEALTHY"
+            },
+            {
+                "name": "gke_zerok-dev_us-west1-b_devclient04",
+                "id": "f14c39ad-8796-40a4-8460-b5411b10c1df",
+                "nickname": "gke:devclient04",
+                "status": "CS_HEALTHY"
+            },
+            {
+                "name": "gke_zerok-dev_us-west1-b_devclient05",
+                "id": "800e1371-4d02-4b8b-b5d1-f7c2057a12f2",
+                "nickname": "gke:devclient05",
+                "status": "CS_DEGRADED"
+            },
+            {
+                "name": "arn:aws:eks:us-east-2:301129966109:cluster/eks-devclient02",
+                "id": "b705ddc9-b143-44d5-b5e4-f88548f9ddeb",
+                "nickname": "eks:eks-devclient02",
+                "status": "CS_DISCONNECTED"
+            }
+        ]
+    }
+}

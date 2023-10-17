@@ -72,7 +72,10 @@ export const clusterSlice = createSlice({
           // if there is no saved cluster, select the first healthy cluster
           if (action.payload.length > 1) {
             const healthyCluster = action.payload.find((c: ClusterType) => {
-              return c.status === CLUSTER_STATES.HEALTHY;
+              return (
+                c.status === CLUSTER_STATES.HEALTHY ||
+                c.status === CLUSTER_STATES.DEGRADED
+              );
             });
             if (healthyCluster) {
               state.selectedCluster = healthyCluster.id;

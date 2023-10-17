@@ -43,7 +43,11 @@ const ClusterSelector = () => {
   }, [empty]);
 
   useEffect(() => {
-    if (status.length && status !== CLUSTER_STATES.HEALTHY) {
+    if (
+      status.length &&
+      status !== CLUSTER_STATES.HEALTHY &&
+      status !== CLUSTER_STATES.DEGRADED
+    ) {
       setIsDefaultOpen(true);
     }
     setIsDefaultOpen(false);
@@ -108,7 +112,8 @@ const ClusterSelector = () => {
                 >
                   <span
                     className={cx(
-                      cl.status === CLUSTER_STATES.HEALTHY
+                      cl.status === CLUSTER_STATES.HEALTHY ||
+                        cl.status === CLUSTER_STATES.DEGRADED
                         ? styles.healthy
                         : styles.unhealthy,
                       styles["status-icon"]
