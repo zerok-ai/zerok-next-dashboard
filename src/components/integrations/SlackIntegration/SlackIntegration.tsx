@@ -2,16 +2,23 @@ import { Button } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import PageHeader from "components/helpers/PageHeader";
 import TableX from "components/themeX/TableX";
+import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
+import { useEffect } from "react";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime } from "utils/dateHelpers";
 import { BRAND_LOGOS } from "utils/images";
+import { GET_SLACK_WORKSPACE_ENDPOINT } from "utils/integrations/endpoints";
 import { type SlackListType } from "utils/integrations/types";
 
 import styles from "./SlackIntegration.module.scss";
 
 const SlackIntegration = () => {
   const helper = createColumnHelper<SlackListType>();
+  const { fetchData: fetchWorkspace } = useFetch("");
+  useEffect(() => {
+    fetchWorkspace(GET_SLACK_WORKSPACE_ENDPOINT);
+  }, []);
   const data = [
     {
       name: "ZeroKelvin",
