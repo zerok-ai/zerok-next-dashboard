@@ -387,9 +387,6 @@ export const buildProbeBody = (
               condition.operator === "not_exists"
             ) {
               condition.value = "";
-              condition.datatype = "";
-              // @ts-expect-error ignore this
-              attribute!.input = "";
             }
             let jsonPath = {};
             if (
@@ -407,7 +404,7 @@ export const buildProbeBody = (
               input: attribute!.input,
               operator: condition.operator,
               value: condition.value,
-              datatype: inputMap[condition.datatype],
+              datatype: inputMap[condition.datatype] ?? attribute!.data_type,
               ...jsonPath,
             };
           }),
