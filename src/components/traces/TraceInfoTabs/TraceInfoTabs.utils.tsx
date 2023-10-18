@@ -86,7 +86,6 @@ const renderJSONorString = (val: GenericObject | string | boolean) => {
       />
     );
   } catch (err) {
-    console.error({ err });
     return <CodeBlock code={val as string} allowCopy={false} color="light" />;
   }
 };

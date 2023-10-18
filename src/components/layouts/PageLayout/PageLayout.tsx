@@ -34,6 +34,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
   const blockRoute =
     status.length &&
     status !== CLUSTER_STATES.HEALTHY &&
+    status !== CLUSTER_STATES.DEGRADED &&
     CLUSTER_BLOCKED_ROUTES.includes(router.pathname);
 
   const renderChildren = () => {

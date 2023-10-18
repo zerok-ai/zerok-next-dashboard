@@ -10,11 +10,7 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
 // import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
-import {
-  type SpanRawData,
-  type SpanRawDataResponse,
-  type SpanResponse,
-} from "utils/types";
+import { type SpanRawDataResponse, type SpanResponse } from "utils/types";
 
 import styles from "./TraceInfoTabs.module.scss";
 import { DEFAULT_TABS, getTabs } from "./TraceInfoTabs.utils";
@@ -60,7 +56,7 @@ const TraceInfoTabs = ({
     if (tab && tab.render) {
       const span = allSpans[selectedSpan];
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      return tab.render(span, {} as SpanRawData);
+      return tab.render(span, rawData);
     }
     // if (tab && tab.render) {
     //   return (

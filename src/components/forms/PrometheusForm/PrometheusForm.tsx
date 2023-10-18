@@ -134,7 +134,6 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
       }
     } catch (err) {
       sendError(err);
-      console.error({ err });
       setStatus((old) => {
         return {
           ...old,
