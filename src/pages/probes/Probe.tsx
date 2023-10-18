@@ -81,7 +81,6 @@ const Probe = () => {
       // setTotalScenarios(rdata.data.payload.total_rows);
       setScenarios(rdata.data.payload.scenarios);
     } catch (err) {
-      console.error({ err });
       sendError(err);
     } finally {
       resetSelectedProbe();
@@ -150,7 +149,6 @@ const Probe = () => {
           type: "error",
         })
       );
-      console.error({ err });
       sendError(err);
     } finally {
       getData();

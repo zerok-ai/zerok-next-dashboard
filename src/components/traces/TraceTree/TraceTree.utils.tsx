@@ -216,7 +216,7 @@ export const AccordionLabel = ({
               setSelectedSpan(span.span_id);
             }}
           >
-            {isModalOpen ? service : trimString(service, 30)}
+            {isModalOpen ? service : trimString(service, 25)}
           </span>
         </TooltipX>
         {spanName}

@@ -25,6 +25,7 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
     disabledText,
     // helperText,
     disableManage,
+    disableAddNew,
   } = integration;
   const dispatch = useDispatch();
   const router = useRouter();
@@ -80,11 +81,9 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
             </div>
           )}
           {/* New */}
-          {integrated && (
+          {integrated && !disableAddNew && (
             <Button
-              // variant={"normal"}
               color={"primary"}
-              // size="small"
               className={styles["action-button"]}
               onClick={() => {
                 if (!triggerClusterModal) {

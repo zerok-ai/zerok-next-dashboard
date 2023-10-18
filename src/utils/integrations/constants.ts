@@ -55,6 +55,8 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     url: "https://ebpf.io/",
     integrated: true,
     logo: BRAND_LOGOS.EBPF,
+    disableAddNew: true,
+    disableManage: true,
     category: "Data sources",
     dummy: true,
     disabledText: "Disabled",
