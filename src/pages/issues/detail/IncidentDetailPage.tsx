@@ -5,9 +5,11 @@ import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import SpanCards from "components/SpanCards";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { resetChat } from "redux/chat";
-import { useDispatch } from "redux/store";
+import { changeSelectedCluster } from "redux/cluster";
+import { useDispatch, useSelector } from "redux/store";
 
 // import { type SpanResponse } from "utils/types";
 import styles from "./IncidentDetailPage.module.scss";
@@ -21,6 +23,16 @@ const IncidentDetailPage = () => {
       dispatch(resetChat());
     };
   }, []);
+  const { clusters } = useSelector((state) => state.cluster);
+  const router = useRouter();
+  const {
+    query: { cluster_id },
+  } = router;
+  useEffect(() => {
+    if (cluster_id && clusters.length > 0) {
+      dispatch(changeSelectedCluster({ id: cluster_id }));
+    }
+  }, [cluster_id, clusters]);
   return (
     <Fragment>
       <Head>

@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import PageHeader from "components/helpers/PageHeader";
 import TableX from "components/themeX/TableX";
@@ -132,10 +132,10 @@ const SlackIntegration = () => {
             {/* Title */}
             <h4>Workspaces</h4>
           </div>
-          <Button variant="contained" color="secondary" size="medium">
+          {/* <Button variant="contained" color="secondary" size="medium">
             {" "}
             Integration Guide
-          </Button>
+          </Button> */}
         </div>
         {/* content */}
         <div className={styles.content}>
