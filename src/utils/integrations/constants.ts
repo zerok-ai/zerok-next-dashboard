@@ -60,8 +60,6 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     category: "Data sources",
     dummy: true,
     disabledText: "Disabled",
-    disableAddNew: true,
-    disableManage: true,
     tags: ["All", "Data sources"],
     helperText: "Please contact ZeroK support for more details",
     // triggerClusterModal: true,
