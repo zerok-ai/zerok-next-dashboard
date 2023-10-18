@@ -1,0 +1,54 @@
+@import "styles/variables.module.scss";
+.container {
+}
+
+.card-container {
+    width:1040px;
+    border:1px solid $grey-800;
+    height:400px;
+    border-radius: $sp-md;
+    padding: $sp-xxl;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: $sp-sm;
+    color:$white;
+    font-weight: 400;
+    border-bottom: 1px solid $grey-800;
+    padding-bottom: $sp-lg;
+    .header-left {
+        display: flex;
+        align-items: center;
+        column-gap: $sp-md;
+    }
+    // width:50%;
+    h4 {
+        color:$white;
+    }
+    img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.content {
+    padding:$sp-lg 0;
+    p {
+        font-weight: 500;
+    line-height: $default-line-height;
+    }
+}
+
+.table {
+    margin:$sp-xl 0;
+}
+
+.disconnect-btn {
+    background-color: $error-500;
+}
