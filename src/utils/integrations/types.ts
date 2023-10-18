@@ -43,8 +43,29 @@ export interface PrometheusListType extends PrometheusBaseType {
   metric_server: boolean;
 }
 
-export interface SlackListType {
-  id: string;
-  name: string;
-  created_at: string;
-}
+export type SlackInstallType = "INSTALLED" | "PENDING" | "DISABLED";
+export type SlackListType =
+  | {
+      status: "INSTALLED";
+      slack_workspace: string;
+      created_at: string | null;
+      updated_at: string | null;
+      org_id: string;
+      user_id: string;
+    }
+  | {
+      status: "PENDING";
+      slack_workspace: string;
+      created_at: string | null;
+      updated_at: string | null;
+      org_id: string;
+      user_id: string;
+    }
+  | {
+      status: "DISABLED";
+      slack_workspace: string;
+      created_at: string | null;
+      updated_at: string | null;
+      org_id: string;
+      user_id: string;
+    };

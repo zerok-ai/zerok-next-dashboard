@@ -24,6 +24,8 @@ interface TableXProps<T extends object> {
   onSortingChange?: OnChangeFn<SortingState>;
   onRowClick?: (row: T) => void;
   borderRadius?: boolean;
+  skeletonCount?: number;
+  noDataMessage?: string;
 }
 
 const TableX = <T extends object>({
@@ -36,6 +38,8 @@ const TableX = <T extends object>({
   onSortingChange,
   bodyClassName,
   borderRadius = true,
+  skeletonCount = 10,
+  noDataMessage = "No data",
 }: TableXProps<T>) => {
   const table = useReactTable({
     columns,
@@ -49,7 +53,7 @@ const TableX = <T extends object>({
     },
   });
   if (!data) {
-    return <CustomSkeleton len={12} />;
+    return <CustomSkeleton len={skeletonCount} />;
   }
   return (
     <div className={`table ${borderRadius ? `table-w-br` : ``}`}>
@@ -111,7 +115,7 @@ const TableX = <T extends object>({
             })
           ) : (
             <tr>
-              <td className={styles["no-data"]}>No data</td>
+              <td className={styles["no-data"]}>{noDataMessage}</td>
             </tr>
           )}
         </tbody>
