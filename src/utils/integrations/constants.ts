@@ -32,6 +32,7 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     integrated: true,
     tags: ["All", "Communication"],
     disabledText: "Coming soon",
+    disableAddNew: true,
   },
   {
     name: "otel",
@@ -52,11 +53,13 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     description:
       "Integrate ZeroK with eBPF agent to fetch request/response payload data.",
     url: "https://ebpf.io/",
-    integrated: false,
+    integrated: true,
     logo: BRAND_LOGOS.EBPF,
     category: "Data sources",
     dummy: true,
     disabledText: "Disabled",
+    disableAddNew: true,
+    disableManage: true,
     tags: ["All", "Data sources"],
     helperText: "Please contact ZeroK support for more details",
     // triggerClusterModal: true,
