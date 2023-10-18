@@ -17,7 +17,7 @@ const ClusterCreateModal = () => {
         dispatch(closeClusterModal());
       }}
       keepMounted={true}
-      title="Integrate with Open Telemetry"
+      title="Install ZeroK on your cluster"
     >
       {" "}
       <CreateClusterForm />

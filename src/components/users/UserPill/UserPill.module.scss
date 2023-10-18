@@ -9,6 +9,7 @@
     color:$grey-50;
     // border-radius: 50%;
     display: flex;
+  
     justify-content: center;
     align-items: center;
     border:1px solid $grey-800;
@@ -24,6 +25,7 @@
 
 .menu {
     margin-top: $sp-base;
+   
     :global(.MuiMenu-paper){
         width:220px;
         border:1px solid $grey-800;

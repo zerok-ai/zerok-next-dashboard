@@ -14,6 +14,7 @@ import { getTitleFromIssue } from "utils/issues/functions";
 import raxios from "utils/raxios";
 import { GET_SCENARIO_DETAILS_ENDPOINT } from "utils/scenarios/endpoints";
 import { type ScenarioDetail } from "utils/scenarios/types";
+import { sendError } from "utils/sentry";
 import { type IssueDetail } from "utils/types";
 
 import styles from "./IncidentDetailPage.module.scss";
@@ -56,7 +57,7 @@ export const IssueMetadata = () => {
           if (data) setMetadata(data);
         })
         .catch((err) => {
-          console.error({ err });
+          sendError(err);
         });
     }
   }, [issue, selectedCluster]);

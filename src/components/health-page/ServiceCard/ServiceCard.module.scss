@@ -31,9 +31,10 @@
     color:$white;
 }
 
-.stat-container, .percentile-container {
+.stat-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    row-gap: $sp-xl;
     p {
         color:$white;
     }

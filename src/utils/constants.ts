@@ -24,6 +24,7 @@ export const SPACE_TOKEN = 4;
 
 export const CLUSTER_STATES = {
   HEALTHY: "CS_HEALTHY",
+  DEGRADED: "CS_DEGRADED",
 };
 
 export const DEFAULT_COL_WIDTH = 80;
