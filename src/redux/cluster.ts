@@ -45,6 +45,17 @@ export const clusterSlice = createSlice({
     closeClusterModal: (state) => {
       state.isClusterModalOpen = false;
     },
+    changeSelectedCluster: (state, { payload: { id } }) => {
+      if (id !== state.selectedCluster) {
+        const cluster = state.clusters.find((c) => c.id === id);
+        console.log({ cluster, id });
+        if (cluster) {
+          state.selectedCluster = id;
+          state.status = cluster.status;
+          setClusterToLocalStorage(cluster.id);
+        }
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -102,7 +113,11 @@ export const clusterSlice = createSlice({
 export const clusterSelector = (state: RootState): ClusterReduxType =>
   state.cluster;
 
-export const { setSelectedCluster, openClusterModal, closeClusterModal } =
-  clusterSlice.actions;
+export const {
+  setSelectedCluster,
+  openClusterModal,
+  closeClusterModal,
+  changeSelectedCluster,
+} = clusterSlice.actions;
 
 export default clusterSlice.reducer;
