@@ -136,4 +136,5 @@ export interface ChatReduxType {
   chatLoading: boolean;
   historyLoading: boolean;
   pastEventCount: number | null;
+  likelyCauseError?: boolean;
 }

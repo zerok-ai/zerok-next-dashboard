@@ -20,7 +20,7 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
   const [incidentId, setIncidentId] = useState<null | string>(null);
   const [spans, setSpans] = useState<null | SpanDetail>(null);
   const [isTraceTableVisible, toggleTraceTable] = useToggle(false);
-  const { likelyCause } = useSelector(chatSelector);
+  const { likelyCause, likelyCauseError } = useSelector(chatSelector);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +40,12 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
       setIncidentId(null);
     }
   }, [likelyCause, router.query.trace]);
+
+  useEffect(() => {
+    if (likelyCauseError) {
+      setIncidentId(router.query.latest as string);
+    }
+  }, [likelyCauseError]);
   return (
     <div className={styles["detail-container"]}>
       <div className={styles["cards-container"]}>
