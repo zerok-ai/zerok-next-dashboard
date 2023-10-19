@@ -1,6 +1,7 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PrometheusTable from "components/integrations/PrometheusTable";
+import SlackIntegration from "components/integrations/SlackIntegration";
 import PageLayout from "components/layouts/PageLayout";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ import styles from "./IntegrationsListPage.module.scss";
 
 const PAGE_MAP: GenericObject = {
   prometheus: <PrometheusTable />,
+  slack: <SlackIntegration />,
 };
 
 const IntegrationsListPage = () => {

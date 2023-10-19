@@ -81,7 +81,6 @@ const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
     chatTrace: likelyCause?.incidentId ?? null,
     currentTrace: incidentId as string,
   });
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.backdrop} role="dialog" onClick={onClose}></div>
