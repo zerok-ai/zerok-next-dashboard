@@ -194,7 +194,7 @@ const TraceTree = ({
       const noSourceOrDestination = !span.destination && !span.source;
       const isGRPC = span.protocol === "GRPC";
       const isHTTP = span.protocol === "HTTP";
-      if (noSourceOrDestination && isHTTP && !isTopRoot) {
+      if ((noSourceOrDestination && isHTTP && !isTopRoot) || !span.protocol) {
         return nextRender();
       }
       if (isGRPC && !span.route) {
