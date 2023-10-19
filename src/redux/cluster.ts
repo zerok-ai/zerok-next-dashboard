@@ -48,7 +48,6 @@ export const clusterSlice = createSlice({
     changeSelectedCluster: (state, { payload: { id } }) => {
       if (id !== state.selectedCluster) {
         const cluster = state.clusters.find((c) => c.id === id);
-        console.log({ cluster, id });
         if (cluster) {
           state.selectedCluster = id;
           state.status = cluster.status;
