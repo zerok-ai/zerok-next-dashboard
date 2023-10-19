@@ -4,16 +4,17 @@ import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import Head from "next/head";
 import { showSnackbar } from "redux/snackbar";
-import { useDispatch } from "redux/store";
+import { useDispatch, useSelector } from "redux/store";
 import raxios from "utils/raxios";
 
 import styles from "./GptClearPage.module.scss";
 
 const GptClearPage = () => {
   const dispatch = useDispatch();
+  const { selectedCluster } = useSelector((state) => state.cluster);
   const clearReporting = async () => {
     try {
-      await raxios.post("/v1/c/gpt/clearReporting");
+      await raxios.post(`/v1/c/${selectedCluster!}/gpt/clearReporting`);
       dispatch(showSnackbar({ message: "Reporting cleared", type: "success" }));
     } catch (err) {
       dispatch(
@@ -24,7 +25,7 @@ const GptClearPage = () => {
 
   const clearIssueData = async () => {
     try {
-      await raxios.post("/v1/c/gpt/clearIssueData");
+      await raxios.post(`/v1/c/${selectedCluster!}/gpt/clearIssueData`);
       dispatch(
         showSnackbar({ message: "Issue data cleared", type: "success" })
       );
@@ -37,7 +38,7 @@ const GptClearPage = () => {
 
   const triggerTask = async () => {
     try {
-      await raxios.post("/v1/c/gpt/triggerTask");
+      await raxios.post(`/v1/c/${selectedCluster!}/gpt/triggerTask`);
       dispatch(showSnackbar({ message: "Task triggered", type: "success" }));
     } catch (err) {
       dispatch(
