@@ -14,7 +14,7 @@ interface JoiningSelectProps {
   }>;
   buttonMode: boolean;
   placeholder?: string;
-  color: "blue" | "purple";
+  color?: "blue" | "purple";
   value?: string;
   onSelect: ((value: string) => void) | null;
   loading?: boolean;
@@ -24,7 +24,6 @@ interface JoiningSelectProps {
 const JoiningSelect = ({
   list,
   buttonMode,
-  color,
   value,
   onSelect,
   loading,

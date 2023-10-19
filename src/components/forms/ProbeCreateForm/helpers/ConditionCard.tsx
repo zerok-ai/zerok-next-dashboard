@@ -65,12 +65,20 @@ const ConditionCard = ({
     <div className={styles["condition-card"]}>
       <div className={styles["root-condition-container"]}>
         <div className={styles["root-condition-selects"]}>
+          {currentCardIndex > 0 && (
+            <JoiningSelect
+              list={services}
+              value="And"
+              onSelect={null}
+              buttonMode={true}
+              disabled={disabled}
+            />
+          )}
           <JoiningSelect
             disabled={disabled}
             loading={loadingServices}
             buttonMode={false}
             list={getServicesForRootProperty()}
-            color="blue"
             value={rootProperty.length ? rootProperty : "Service"}
             onSelect={(value) => {
               const service = services.find((s) => s.value === value);
