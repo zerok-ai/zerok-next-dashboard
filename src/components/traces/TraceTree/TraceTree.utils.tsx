@@ -31,7 +31,9 @@ export const buildSpanTree = (
 
   if (childrenSpan.length > 0) {
     parentSpan.children = childrenSpan;
-    if (parentSpan.destination) {
+    const isGRPC = parentSpan.protocol === "GRPC";
+
+    if (parentSpan.destination || (isGRPC && parentSpan.route)) {
       ++level;
     }
     childrenSpan.map((span) => {
@@ -148,7 +150,10 @@ export const checkForVisibleChildren = (span: SpanDetail) => {
     });
   };
   getAllChildren(span);
-  return children.some((child) => child.destination);
+  return children.some((child) => {
+    const isGRPC = child.protocol === "GRPC";
+    return child.destination || (isGRPC && child.route);
+  });
 };
 
 export const getWidthByLevel = (
@@ -182,11 +187,16 @@ export const AccordionLabel = ({
   highlight,
   isModalOpen,
 }: AccordionLabelProps) => {
-  const name = isTopRoot
-    ? span.source.length
-      ? span.source
-      : "Unknown"
-    : span.destination;
+  const getSpanLink = () => {
+    if (isTopRoot) {
+      return span.source.length ? span.source : "Unknown";
+    }
+    if (span.protocol === "GRPC") {
+      return span.route;
+    }
+    return span.destination;
+  };
+  const name = getSpanLink();
   const service = name.includes("/") ? name.split("/")[1] : name;
   const spanName = getSpanName(span);
   const width = getWidthByLevel(
@@ -195,6 +205,9 @@ export const AccordionLabel = ({
     isModalOpen,
     isTopRoot
   );
+  const getCharacterCountFromLevel = () => {
+    return 60 - (span.level ?? 0) * 2;
+  };
   return (
     <div className={styles["accordion-summary-content"]}>
       <p
@@ -216,7 +229,9 @@ export const AccordionLabel = ({
               setSelectedSpan(span.span_id);
             }}
           >
-            {isModalOpen ? service : trimString(service, 25)}
+            {isModalOpen
+              ? service
+              : trimString(service, getCharacterCountFromLevel())}
           </span>
         </TooltipX>
         {spanName}
