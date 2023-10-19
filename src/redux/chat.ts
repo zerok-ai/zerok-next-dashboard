@@ -340,6 +340,7 @@ export const chatSlice = createSlice({
       .addCase(fetchLikelyCause.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.likelyCauseError = false;
       })
       .addCase(fetchLikelyCause.fulfilled, (state, { payload }) => {
         const { issueId, incidentId, inference } = payload;
@@ -360,6 +361,7 @@ export const chatSlice = createSlice({
       .addCase(fetchLikelyCause.rejected, (state) => {
         state.loading = false;
         state.error = true;
+        state.likelyCauseError = true;
       })
       // queries
       .addCase(fetchQueryResponse.fulfilled, (state, { payload }) => {
