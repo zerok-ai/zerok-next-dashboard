@@ -1,17 +1,21 @@
 import { Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { HiEllipsisHorizontal } from "react-icons/hi2";
-import { type TableActionListType } from "utils/generic/types";
+import { TABLE_ACTION_LABELS } from "utils/tables/constants";
+import {
+  type TableActionPropType,
+  type TableActionType,
+} from "utils/tables/types";
 
 import styles from "./TableActions.module.scss";
 
 interface TableActionsProps<T> {
-  list: Array<TableActionListType<T>>;
+  list: TableActionPropType<T>;
   data: T;
 }
 
 const TableActions = <T,>({ list, data }: TableActionsProps<T>) => {
-  if (!list || !list.length) return null;
+  if (!list || !Object.keys(list).length) return null;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,7 +52,10 @@ const TableActions = <T,>({ list, data }: TableActionsProps<T>) => {
           "aria-labelledby": "icon-button",
         }}
       >
-        {list.map((item, index) => {
+        {Object.keys(list).map((key, index) => {
+          const item = list[key as TableActionType];
+          if (!item) return null;
+          const label = TABLE_ACTION_LABELS[key as TableActionType];
           return (
             <MenuItem
               key={index}
@@ -58,7 +65,7 @@ const TableActions = <T,>({ list, data }: TableActionsProps<T>) => {
                 closeMenu();
               }}
             >
-              {item.label}
+              {label}
             </MenuItem>
           );
         })}

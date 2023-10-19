@@ -1,14 +1,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import TableActions from "components/TableActions";
+import TableActions from "components/helpers/TableActions";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { type ObfuscationRuleType } from "utils/data/types";
 import { getFormattedTime } from "utils/dateHelpers";
-import { type TableActionListType } from "utils/generic/types";
+import { type TableActionPropType } from "utils/tables/types";
 
 export const getObfuscationColumns = ({
   actions,
 }: {
-  actions: Array<TableActionListType<ObfuscationRuleType>>;
+  actions: TableActionPropType<ObfuscationRuleType>;
 }) => {
   const helper = createColumnHelper<ObfuscationRuleType>();
   const columns = [
@@ -46,3 +46,40 @@ export const getObfuscationColumns = ({
   ];
   return columns;
 };
+
+export const data: ObfuscationRuleType[] = [
+  {
+    name: "test",
+    analyzer: {
+      pattern: "test",
+      type: "regex",
+    },
+    enabled: true,
+    created_by: "test",
+    updated_at: "test",
+    created_at: "test",
+    anonymizer: {
+      operator: "replace",
+      params: {
+        new_value: "test",
+      },
+    },
+  },
+  {
+    name: "test 2",
+    analyzer: {
+      pattern: "test",
+      type: "regex",
+    },
+    enabled: true,
+    created_by: "test 2",
+    updated_at: "test",
+    created_at: "test",
+    anonymizer: {
+      operator: "replace",
+      params: {
+        new_value: "test 2",
+      },
+    },
+  },
+];

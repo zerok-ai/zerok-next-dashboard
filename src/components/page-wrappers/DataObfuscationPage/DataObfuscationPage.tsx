@@ -4,15 +4,14 @@ import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import TableX from "components/themeX/TableX";
 import Head from "next/head";
-import { Fragment, useState } from "react";
-import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
+import { useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi2";
 import { DATA_OBFUSCATION_TABS } from "utils/data/constants";
 import { type ObfuscationRuleType } from "utils/data/types";
-import { type TableActionListType } from "utils/generic/types";
+import { type TableActionPropType } from "utils/tables/types";
 
 import styles from "./DataObfuscationPage.module.scss";
-import { getObfuscationColumns } from "./DataObfuscationPage.utils";
+import { data, getObfuscationColumns } from "./DataObfuscationPage.utils";
 
 const DataObfuscationPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>(
@@ -22,70 +21,23 @@ const DataObfuscationPage = () => {
     setSelectedTab(newValue);
   };
 
-  const columnActions: Array<TableActionListType<ObfuscationRuleType>> = [
-    {
-      label: (
-        <Fragment>
-          <HiOutlinePencil /> Edit rule
-        </Fragment>
-      ),
-      onClick: (data) => {
-        // console.log({ data });
-      },
-    },
-    {
-      label: (
-        <Fragment>
-          <HiOutlineTrash /> Delete rule
-        </Fragment>
-      ),
-      onClick: (data) => {
-        // console.log({ data });
-      },
-    },
-  ];
-  const columns = getObfuscationColumns({ actions: columnActions });
-  // const data: ObfuscationRuleType[] = [
-  //   {
-  //     name: "test",
-  //     analyzer: {
-  //       pattern: "test",
-  //       type: "regex",
-  //     },
-  //     enabled: true,
-  //     created_by: "test",
-  //     updated_at: "test",
-  //     created_at: "test",
-  //     anonymizer: {
-  //       operator: "replace",
-  //       params: {
-  //         new_value: "test",
-  //       },
-  //     },
-  //   },
-  //   {
-  //     name: "test 2",
-  //     analyzer: {
-  //       pattern: "test",
-  //       type: "regex",
-  //     },
-  //     enabled: true,
-  //     created_by: "test 2",
-  //     updated_at: "test",
-  //     created_at: "test",
-  //     anonymizer: {
-  //       operator: "replace",
-  //       params: {
-  //         new_value: "test 2",
-  //       },
-  //     },
-  //   },
-  // ];
+  const editRule = (row: ObfuscationRuleType) => {
+    console.log({ row });
+  };
 
+  const columnActions: TableActionPropType<ObfuscationRuleType> = {
+    edit: {
+      onClick: editRule,
+    },
+    delete: {
+      onClick: editRule,
+    },
+  };
+  const columns = getObfuscationColumns({ actions: columnActions });
   const renderTabContent = () => {
     switch (selectedTab) {
       case "rules":
-        return <TableX columns={columns} data={[]} />;
+        return <TableX columns={columns} data={data} />;
     }
   };
   return (
