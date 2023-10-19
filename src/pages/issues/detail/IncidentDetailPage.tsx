@@ -53,6 +53,7 @@ const IncidentDetailPage = () => {
             lockScroll={(val) => {
               setIsScrollLocked(val);
             }}
+            isScrollLocked={isScrollLocked}
           />
         </section>
       </div>

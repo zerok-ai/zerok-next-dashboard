@@ -14,9 +14,10 @@ import styles from "./SpanCards.module.scss";
 
 interface SpanCardsProps {
   lockScroll: (val: boolean) => void;
+  isScrollLocked: boolean;
 }
 
-const SpanCards = ({ lockScroll }: SpanCardsProps) => {
+const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
   const [incidentId, setIncidentId] = useState<null | string>(null);
   const [spans, setSpans] = useState<null | SpanDetail>(null);
   const [isTraceTableVisible, toggleTraceTable] = useToggle(false);
@@ -43,11 +44,18 @@ const SpanCards = ({ lockScroll }: SpanCardsProps) => {
 
   useEffect(() => {
     if (likelyCauseError) {
-      setIncidentId(router.query.latest as string);
+      setIncidentId(
+        (router.query.latest as string) ?? (router.query.trace as string)
+      );
     }
   }, [likelyCauseError]);
   return (
-    <div className={styles["detail-container"]}>
+    <div
+      className={cx(
+        styles["detail-container"],
+        isScrollLocked && styles.locked
+      )}
+    >
       <div className={styles["cards-container"]}>
         <section className={cx(styles["tree-container"])}>
           <TraceTree

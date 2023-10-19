@@ -2,6 +2,10 @@
 .detail-container {
     position: relative;
     overflow: auto;
+    height:100%;
+}
+.locked {
+    overflow: hidden !important;
 }
 .cards-container {
     display: flex;
