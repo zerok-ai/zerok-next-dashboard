@@ -95,7 +95,7 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
   if (podsError) {
     const message = podsErrorData?.response?.data?.error?.info?.error;
     const renderMessage = () => {
-      if (message.includes("No metric server found")) {
+      if (message && message.includes("No metric server found")) {
         return (
           <span>
             K8s metrics data is not being sent to the Prometheus instance you
@@ -107,8 +107,10 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
       } else if (!message) {
         return (
           <span>
-            Something went wrong while fetching pod details, please try again
-            later or contact support.
+            K8s metrics data is not being sent to the Prometheus instance you
+            have integrated ZeroK with. Please{" "}
+            <Link href="/integrations/prometheus/list">integrate ZeroK</Link>{" "}
+            with the Prometheus instance which contains K8s metrics
           </span>
         );
       } else {

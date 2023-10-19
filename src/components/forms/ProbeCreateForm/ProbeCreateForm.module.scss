@@ -115,9 +115,6 @@
 
 .json-path-enabled {
     justify-content: space-between;
-    .condition-item-container {
-        // justify-content: space-between !important;
-    }
     .all-operators {
         align-self: flex-start;
     }
@@ -202,6 +199,8 @@
     align-items: center;
     justify-content: space-between;
     min-width:40px;
+    column-gap: $sp-sm;
+    padding:$sp-base $sp-sm;
 }
 .joining-select-menu {
     min-width:200px;

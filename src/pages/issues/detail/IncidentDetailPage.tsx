@@ -7,6 +7,7 @@ import SpanCards from "components/SpanCards";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
+import { resetChat } from "redux/chat";
 import { changeSelectedCluster } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
 
@@ -17,6 +18,11 @@ import { IssueMetadata } from "./IncidentDetails.utils";
 const IncidentDetailPage = () => {
   const [isScrollLocked, setIsScrollLocked] = useState(false);
   const dispatch = useDispatch();
+  useEffect(() => {
+    return () => {
+      dispatch(resetChat());
+    };
+  }, []);
   const { clusters } = useSelector((state) => state.cluster);
   const router = useRouter();
   const {
@@ -27,12 +33,6 @@ const IncidentDetailPage = () => {
       dispatch(changeSelectedCluster({ id: cluster_id }));
     }
   }, [cluster_id, clusters]);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(resetChat());
-  //   };
-  // }, []);
   return (
     <Fragment>
       <Head>
@@ -53,6 +53,7 @@ const IncidentDetailPage = () => {
             lockScroll={(val) => {
               setIsScrollLocked(val);
             }}
+            isScrollLocked={isScrollLocked}
           />
         </section>
       </div>
