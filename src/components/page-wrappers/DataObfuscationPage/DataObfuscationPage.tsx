@@ -1,12 +1,18 @@
 import { Button, Tab, Tabs } from "@mui/material";
+import RegexRuleForm from "components/forms/RegexRuleForm";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
+import DrawerX from "components/themeX/DrawerX";
 import TableX from "components/themeX/TableX";
+import { useToggle } from "hooks/useToggle";
 import Head from "next/head";
 import { useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi2";
-import { DATA_OBFUSCATION_TABS } from "utils/data/constants";
+import {
+  DATA_OBFUSCATION_TABS,
+  REGEX_DRAWER_WIDTH,
+} from "utils/data/constants";
 import { type ObfuscationRuleType } from "utils/data/types";
 import { type TableActionPropType } from "utils/tables/types";
 
@@ -17,6 +23,8 @@ const DataObfuscationPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>(
     DATA_OBFUSCATION_TABS[0].value
   );
+  const [regexDrawerOpen, toggleRegexDrawer] = useToggle(false);
+  // const [whitelistDrawerOpen, toggleWhitelistDrawer] = useToggle(false);
   const changeTab = (e: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
   };
@@ -60,7 +68,7 @@ const DataObfuscationPage = () => {
         <Button variant="contained" color="secondary">
           Whitelist
         </Button>
-        <Button variant="contained">
+        <Button variant="contained" onClick={toggleRegexDrawer}>
           <HiOutlinePlus className={styles["btn-icon"]} /> Create a new rule
         </Button>
       </div>
@@ -74,6 +82,22 @@ const DataObfuscationPage = () => {
       <div className={styles["tab-content"]} role="tabpanel">
         {renderTabContent()}
       </div>
+
+      {/* Regex form */}
+
+      <DrawerX
+        onClose={toggleRegexDrawer}
+        title="Data Obfuscation Rules"
+        width={REGEX_DRAWER_WIDTH}
+        open={regexDrawerOpen}
+      >
+        <div className={styles["regex-form-container"]}>
+          <RegexRuleForm
+            onFinish={toggleRegexDrawer}
+            onClose={toggleRegexDrawer}
+          />
+        </div>
+      </DrawerX>
     </div>
   );
 };
