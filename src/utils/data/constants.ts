@@ -13,3 +13,5 @@ export const DATA_OBFUSCATION_TABS: Array<{
     value: "whitelist",
   },
 ];
+
+export const REGEX_DRAWER_WIDTH = 700;

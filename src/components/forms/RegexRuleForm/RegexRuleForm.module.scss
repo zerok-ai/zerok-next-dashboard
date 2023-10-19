@@ -1,0 +1,20 @@
+@import "styles/variables.module.scss";
+.form {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-xxl;
+    justify-content: center;
+    height:100%;
+    margin-top: - 2 * $sp-xxxl;
+    h4 {
+        margin:0;
+    }
+    legend {
+        display: none;
+    }
+    fieldset {
+        display: flex; 
+        flex-direction: column;
+        row-gap: $sp-md;
+    }
+}
