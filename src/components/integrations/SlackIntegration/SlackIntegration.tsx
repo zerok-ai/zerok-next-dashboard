@@ -67,7 +67,7 @@ const SlackIntegration = () => {
   const columns = [
     helper.accessor("slack_workspace", {
       header: "Workspace",
-      size: DEFAULT_COL_WIDTH * 3,
+      size: DEFAULT_COL_WIDTH * 2,
     }),
     helper.accessor("created_at", {
       header: "Created",
