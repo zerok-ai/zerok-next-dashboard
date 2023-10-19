@@ -39,7 +39,7 @@ export const IGNORED_SERVICES_PREFIXES = [
 
 export const HTTP_METHODS = ["GET", "POST", "DELETE", "PUT", "PATCH"] as const;
 
-export const SPAN_PROTOCOLS = ["http", "mysql"] as const;
+export const SPAN_PROTOCOLS = ["http", "mysql", "HTTP", "GRPC"] as const;
 
 export const NODE_WIDTH = 220;
 
