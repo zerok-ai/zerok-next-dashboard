@@ -238,7 +238,6 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         selectedCluster as string
       );
       await raxios.post(endpoint, body);
-
       setStatus({
         loading: false,
         error: null,
@@ -251,6 +250,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         })
       );
     } catch (err) {
+      console.log({ err });
       setStatus({
         loading: false,
         error: "Something went wrong",
