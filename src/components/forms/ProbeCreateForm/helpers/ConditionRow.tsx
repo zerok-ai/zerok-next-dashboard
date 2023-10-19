@@ -58,7 +58,8 @@ const ConditionRow = ({
   const cards = getValues("cards");
   const cardIndex = cards.findIndex((c) => c.key === currentCardKey);
   const currentCard = cards[cardIndex];
-  const { rootProperty, conditions, protocol } = currentCard;
+  const { rootProperty, conditions } = currentCard;
+  const protocol = currentCard.protocol.toUpperCase() as AttributeProtocolType;
   const [jsonPathEnabled, , setJsonpathEnabled] = useToggle(false);
   const [attributeFormat, setAttributeFormat] = useState<
     AttributeSupportedType | ""
@@ -284,10 +285,7 @@ const ConditionRow = ({
             updateProperty(value.target.value);
           }}
         >
-          {getAttributeSelectOptions(
-            attributes,
-            protocol as AttributeProtocolType
-          ).map((at) => {
+          {getAttributeSelectOptions(attributes, protocol).map((at) => {
             if (at.type === "divider") {
               return <Divider key={nanoid()} />;
             }
