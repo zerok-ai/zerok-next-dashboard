@@ -25,7 +25,7 @@ const GptClearPage = () => {
 
   const clearIssueData = async () => {
     try {
-      await raxios.post(`/v1/c/${selectedCluster!}/gpt/clearIssueData`);
+      await raxios.post(`/v1/c/${selectedCluster!}/gpt/clearAllIssueData`);
       dispatch(
         showSnackbar({ message: "Issue data cleared", type: "success" })
       );
