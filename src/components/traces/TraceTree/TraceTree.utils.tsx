@@ -129,11 +129,11 @@ export const spanTransformer = (spanData: SpanResponse) => {
 export const TOP_BORDER_COLOR = "#506D86";
 
 export const COLORS = [
-  "rgba(30, 123, 194, 0.7)",
-  "rgba(155, 138, 251, 0.7)",
-  "rgba(253, 176, 34, 0.7)",
-  "rgba(89, 37, 220, 0.7)",
-  "rgba(57, 216, 150, 0.7)",
+  "rgba(30, 123, 194, 0.3)",
+  "rgba(155, 138, 251, 0.3)",
+  "rgba(253, 176, 34, 0.3)",
+  "rgba(89, 37, 220, 0.3)",
+  "rgba(57, 216, 150, 0.3)",
 ];
 
 export const checkForVisibleChildren = (span: SpanDetail) => {
