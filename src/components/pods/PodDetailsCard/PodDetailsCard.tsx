@@ -95,7 +95,7 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
   if (podsError) {
     const message = podsErrorData?.response?.data?.error?.info?.error;
     const renderMessage = () => {
-      if (message.includes("No metric server found")) {
+      if (message && message.includes("No metric server found")) {
         return (
           <span>
             K8s metrics data is not being sent to the Prometheus instance you
