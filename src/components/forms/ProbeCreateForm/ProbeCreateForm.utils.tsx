@@ -354,7 +354,7 @@ export const buildProbeBody = (
       executorWorkload[condition.executor!].push(condition);
     });
     Object.keys(executorWorkload).forEach((executor) => {
-      const { protocol } = card;
+      const protocol = card.protocol.toUpperCase() as AttributeProtocolType;
       const attributeOptions =
         attributes && protocol && attributes[protocol]
           ? [

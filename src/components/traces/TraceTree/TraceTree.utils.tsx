@@ -189,6 +189,9 @@ export const AccordionLabel = ({
 }: AccordionLabelProps) => {
   const getSpanLink = () => {
     if (isTopRoot) {
+      if (span.protocol === "GRPC") {
+        return span.route ?? "Unknown";
+      }
       return span.source.length ? span.source : "Unknown";
     }
     if (span.protocol === "GRPC") {
@@ -266,12 +269,20 @@ export const SpanLatencyTimeline = ({
     "milliseconds"
   );
   const timelineDisplacement = (timelineStart / referenceTime.totalTime) * 100;
+  console.log({
+    timelineWidth,
+    reference: referenceTime.startTime,
+    span: span.start_time,
+    timelineDisplacement,
+  });
   return (
     <div className={styles.timeline}>
       <p
         style={{
           width: `${timelineWidth}%`,
-          marginLeft: `${timelineDisplacement}%`,
+          marginLeft: `${
+            timelineDisplacement >= 0 ? timelineDisplacement : 0
+          }%`,
         }}
       ></p>
     </div>
