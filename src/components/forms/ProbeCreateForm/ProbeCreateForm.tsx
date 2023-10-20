@@ -54,6 +54,12 @@ const ALL_PROTOCOL_SERVICES: Array<{
     protocol: "HTTP",
     rootOnly: true,
   },
+  {
+    label: "All gRPC services",
+    value: "*/*_grpc",
+    protocol: "GRPC",
+    rootOnly: true,
+  },
 ];
 
 const formatServices = (
@@ -261,6 +267,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
       });
     }
   };
+
   const handleEditSubmit = () => {
     router.push("/probes");
   };

@@ -23,6 +23,7 @@ export interface TabKeyType {
   value: string;
   customRender?: () => React.ReactNode;
   fullWidth?: boolean;
+  optional?: boolean;
 }
 
 export const renderListOfKeyValue = (list: TabKeyType[]) => {
@@ -30,6 +31,9 @@ export const renderListOfKeyValue = (list: TabKeyType[]) => {
     <div className={styles["key-value-container"]}>
       {list.map((key) => {
         const renderKey = key.customRender ? key.customRender() : key.value;
+        if (key.optional && !key.value) {
+          return null;
+        }
         return (
           <div
             className={cx(
@@ -106,10 +110,12 @@ export const DEFAULT_TABS = [
         {
           label: "Source",
           value: metadata.source,
+          optional: true,
         },
         {
           label: "Destination",
           value: metadata.destination,
+          optional: true,
         },
         {
           label: "Latency",
@@ -130,6 +136,7 @@ export const DEFAULT_TABS = [
         {
           label: "Status",
           value: metadata.status,
+          optional: true,
         },
       ];
       return renderListOfKeyValue(KEYS);
