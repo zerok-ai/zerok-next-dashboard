@@ -269,12 +269,7 @@ export const SpanLatencyTimeline = ({
     "milliseconds"
   );
   const timelineDisplacement = (timelineStart / referenceTime.totalTime) * 100;
-  console.log({
-    timelineWidth,
-    reference: referenceTime.startTime,
-    span: span.start_time,
-    timelineDisplacement,
-  });
+
   return (
     <div className={styles.timeline}>
       <p
