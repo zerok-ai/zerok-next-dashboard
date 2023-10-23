@@ -15,7 +15,7 @@ export type SPAN_PROTOCOLS_TYPE = (typeof SPAN_PROTOCOLS)[number];
 export interface DrawerNavItemType {
   icon?: ReactNode;
   label: string;
-  path: string;
+  path: string[];
   highlightIcon?: ReactNode;
   reactIcon?: (className: string) => React.ReactNode;
   type: "single" | "group";

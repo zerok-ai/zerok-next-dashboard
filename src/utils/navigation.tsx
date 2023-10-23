@@ -2,13 +2,13 @@ import { HiLightningBolt } from "react-icons/hi";
 
 import { ICON_BASE_PATH, ICONS } from "./images";
 import { type DrawerNavItemType } from "./types";
-const HealthNormal = () => {
-  return <img src={`${ICON_BASE_PATH}/${ICONS["chart-up"]}`} />;
-};
+// const HealthNormal = () => {
+//   return <img src={`${ICON_BASE_PATH}/${ICONS["chart-up"]}`} />;
+// };
 
-const HealthHighlight = () => {
-  return <img src={`${ICON_BASE_PATH}/chart-up_highlight.svg`} />;
-};
+// const HealthHighlight = () => {
+//   return <img src={`${ICON_BASE_PATH}/chart-up_highlight.svg`} />;
+// };
 
 const ProbeNormal = () => {
   return <img src={`${ICON_BASE_PATH}/${ICONS.plate}`} />;
@@ -27,13 +27,13 @@ const IntegrationsHighlight = () => {
 };
 
 export const NAV_LINKS_1: DrawerNavItemType[] = [
-  {
-    icon: <HealthNormal />,
-    highlightIcon: <HealthHighlight />,
-    label: "Services",
-    path: "/",
-    type: "single",
-  },
+  // {
+  //   icon: <HealthNormal />,
+  //   highlightIcon: <HealthHighlight />,
+  //   label: "Services",
+  //   path: "/",
+  //   type: "single",
+  // },
   // {
   //   icon: `${ICONS.plate}`,
   //   label: "Classify",
@@ -42,14 +42,14 @@ export const NAV_LINKS_1: DrawerNavItemType[] = [
   {
     reactIcon: (cls: string) => <HiLightningBolt className={cls} />,
     label: "Issues",
-    path: "/issues",
+    path: ["/", "/issues"],
     type: "single",
   },
   {
     icon: <ProbeNormal />,
     highlightIcon: <ProbeHighlight />,
     label: "Probes",
-    path: "/probes",
+    path: ["/probes"],
     type: "single",
   },
 ];
@@ -58,7 +58,7 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
   {
     icon: <IntegrationsNormal />,
     label: "Integrations",
-    path: "/integrations",
+    path: ["/integrations"],
     type: "single",
     highlightIcon: <IntegrationsHighlight />,
   },
