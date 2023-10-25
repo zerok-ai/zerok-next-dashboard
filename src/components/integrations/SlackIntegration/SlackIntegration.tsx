@@ -50,8 +50,13 @@ const SlackIntegration = () => {
     setEnableStatus({ loading: true, error: null });
     try {
       const rdata = await raxios.post(INITIATE_SLACK_WORKSPACE_ENDPOINT);
-      window.location = rdata.request.responseURL;
-      fetchWorkspace(GET_SLACK_WORKSPACE_ENDPOINT);
+      const { url } = rdata.data.payload;
+      if (!url) {
+        throw new Error("No url found");
+      }
+      window.location.href = url;
+      // window.location = rdata.request.responseURL;
+      // fetchWorkspace(GET_SLACK_WORKSPACE_ENDPOINT);
     } catch (err) {
       console.log({ err });
       setEnableStatus((old) => ({
