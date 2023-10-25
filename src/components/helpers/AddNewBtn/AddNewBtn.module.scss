@@ -1,0 +1,8 @@
+@import "styles/variables.module.scss";
+.container {
+}
+.add-btn {
+    display: flex;
+    column-gap: $sp-sm;
+    align-items: center;
+}

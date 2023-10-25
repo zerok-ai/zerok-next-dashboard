@@ -3,7 +3,7 @@ import TooltipX from "components/themeX/TooltipX";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "redux/store";
 import { type DrawerNavItemType } from "utils/types";
 
@@ -36,10 +36,10 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const LinkWrapper = ({ children }: { children: React.ReactElement }) => {
     return isMinimized ? (
       <TooltipX title={nav.label} placement="right" arrow={true}>
-        {children}
+        <Link href={nav.path[0]}>{children}</Link>
       </TooltipX>
     ) : (
-      <Fragment>{children}</Fragment>
+      <Link href={nav.path[0]}>{children}</Link>
     );
   };
   return (
