@@ -23,6 +23,7 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
     integrated,
     triggerClusterModal,
     disabledText,
+    mandatory,
     // helperText,
     disableManage,
     disableAddNew,
@@ -49,7 +50,14 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
       <div className={styles.header}>
         <div className={styles["name-container"]}>
           <h5>{label}</h5>
-          <ChipX label={<ChipLabel />} upperCase={false} color={"secondary"} />
+          <div className={styles["badge-container"]}>
+            <ChipX
+              label={<ChipLabel />}
+              upperCase={false}
+              color={"secondary"}
+            />
+            {mandatory && <ChipX label={"Mandatory"} upperCase={false} />}
+          </div>
         </div>
         <div className={styles["logo-container"]}>
           <img src={logo} alt={name} />

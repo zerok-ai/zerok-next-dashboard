@@ -9,6 +9,7 @@ export type IntegrationAppType = (typeof INTEGRATION_APPS)[number];
 
 export interface IntegrationListType {
   name: IntegrationAppType;
+  mandatory?: boolean;
   label: string;
   description: string;
   url: string;
