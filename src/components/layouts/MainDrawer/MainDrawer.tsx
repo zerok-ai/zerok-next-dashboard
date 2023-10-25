@@ -43,7 +43,7 @@ const MainDrawer = () => {
         const isHomeRoute = router.pathname === "/";
         const activeLink = isHomeRoute
           ? nav.path.includes(router.pathname)
-          : nav.path.includes(router.pathname.split("/")[1]);
+          : nav.path.some((p) => p.includes(router.pathname.split("/")[1]));
         return (
           <NavigationItem nav={nav} key={nav.path[0]} active={activeLink} />
         );
