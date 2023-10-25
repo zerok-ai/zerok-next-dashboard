@@ -51,7 +51,7 @@ const RegexRuleForm = ({ onFinish, onClose }: RegexRuleFormProps) => {
 
       {/* regex input */}
       <fieldset>
-        <FormLabel htmlFor="name">Rule Name</FormLabel>
+        <FormLabel htmlFor="name">Rule Pattern</FormLabel>
         <div>
           <OutlinedInput
             id="pattern"
