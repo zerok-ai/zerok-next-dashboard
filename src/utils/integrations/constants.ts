@@ -13,16 +13,6 @@ export const INTEGRATION_APPS = [
 
 export const INTEGRATION_LIST: IntegrationListType[] = [
   {
-    name: "prometheus",
-    label: "Prometheus",
-    description: "Integrate with Prometheus to connect K8s metrics to ZeroK.",
-    url: "https://prometheus.io/",
-    logo: BRAND_LOGOS.PROMETHEUS,
-    category: "Data sources",
-    integrated: true,
-    tags: ["All", "Data sources"],
-  },
-  {
     name: "slack",
     label: "Slack",
     description: "Integrate with Slack to send notifications to your team.",
@@ -34,6 +24,17 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     disabledText: "Coming soon",
     disableAddNew: true,
   },
+  {
+    name: "prometheus",
+    label: "Prometheus",
+    description: "Integrate with Prometheus to connect K8s metrics to ZeroK.",
+    url: "https://prometheus.io/",
+    logo: BRAND_LOGOS.PROMETHEUS,
+    category: "Data sources",
+    integrated: true,
+    tags: ["All", "Data sources"],
+  },
+
   {
     name: "otel",
     label: "Open Telemetry",

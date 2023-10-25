@@ -1,45 +1,29 @@
 @import "styles/variables.module.scss";
 .container {
-    background-color: $bg-dark;
-    border:1px solid $grey-800;
-    border-radius: $sp-sm;
-    width: 400px;
-    height:240px;
-    padding:$sp-lg;
-    background-color: $grey-925;
+   display: grid;
+   grid-template-columns: 60px 8fr 2.5fr;
+   width:1040px;
+   background-color: $grey-925;
+   padding:$sp-md $sp-md;
+   border:1px solid $grey-800;
+   border-radius: $sp-sm;
+   align-items: flex-end;
+}
+.content {
+    flex:1;
     display: flex;
     flex-direction: column;
-    h6 {
-        font-weight: 400;
-        color:$grey-25;
+    h5 {
+        // margin-bottom: $sp-base;
+    }
+    p {
+        font-size: $font-md;
     }
 }
 
-
-.header {
+.content-top-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: $sp-base *2;
-    
-    border-bottom: 1px solid $grey-800;
-}
-
-.content {
-    padding:$sp-sm;
-    flex:1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    row-gap: $sp-base;
-}
-
-.name-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    row-gap: $sp-base;
-    flex:1;
+    column-gap: $sp-md;
 }
 
 .badge-container {
@@ -48,16 +32,19 @@
 }
 
 .logo-container {
-    width:36px;
-    height:36px;
+    width:48px;
+    height:48px;
+    margin-right: $sp-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     > img {
-        width:100%;
-        height:100%;
+        width:36px;
+        height:36px;
     }
 }
 
 .actions {
-    margin-top: $sp-32;
     display: flex;
     column-gap: $sp-md;
 }

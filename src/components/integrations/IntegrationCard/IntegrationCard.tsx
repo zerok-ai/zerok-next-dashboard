@@ -47,8 +47,13 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
   };
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles["name-container"]}>
+      {/* image / logo */}
+      <div className={styles["logo-container"]}>
+        <img src={logo} alt={name} />
+      </div>
+      {/* content */}
+      <div className={styles.content}>
+        <div className={styles["content-top-row"]}>
           <h5>{label}</h5>
           <div className={styles["badge-container"]}>
             <ChipX
@@ -59,53 +64,48 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
             {mandatory && <ChipX label={"Mandatory"} upperCase={false} />}
           </div>
         </div>
-        <div className={styles["logo-container"]}>
-          <img src={logo} alt={name} />
-        </div>
+        <p className={styles.description}>{description}</p>
       </div>
-      <div className={styles.content}>
-        <p>
-          {description} <br />
-        </p>
-        <div className={styles.actions}>
-          {!disableManage && (
-            <div>
-              <Button
-                onClick={() => {
-                  handleRoute("list");
-                }}
-                disabled={!integrated}
-                variant={"contained"}
-                color={!integrated ? "primary" : "secondary"}
-                // size="small"
-                className={styles["action-button"]}
-              >
-                {integrated && (
-                  <HiOutlineCog6Tooth className={styles["action-icon"]} />
-                )}
-                {integrated ? "Manage" : disabledText}
-              </Button>
-              {/* {helperText && <small>{helperText}</small>} */}
-            </div>
-          )}
-          {/* New */}
-          {integrated && !disableAddNew && (
+      {/* actions */}
+      <div className={styles.actions}>
+        {!disableManage && (
+          <div>
             <Button
-              color={"primary"}
-              className={styles["action-button"]}
               onClick={() => {
-                if (!triggerClusterModal) {
-                  handleRoute("create");
-                } else {
-                  dispatch(openClusterModal());
-                }
+                handleRoute("list");
               }}
+              disabled={!integrated}
+              variant={"contained"}
+              color={!integrated ? "primary" : "secondary"}
+              size="small"
+              className={styles["action-button"]}
             >
-              <HiOutlinePlus className={styles["action-icon"]} />
-              {"Add new"}
+              {integrated && (
+                <HiOutlineCog6Tooth className={styles["action-icon"]} />
+              )}
+              {integrated ? "Manage" : disabledText}
             </Button>
-          )}
-        </div>
+            {/* {helperText && <small>{helperText}</small>} */}
+          </div>
+        )}
+        {/* New */}
+        {integrated && !disableAddNew && (
+          <Button
+            color={"primary"}
+            size="small"
+            className={styles["action-button"]}
+            onClick={() => {
+              if (!triggerClusterModal) {
+                handleRoute("create");
+              } else {
+                dispatch(openClusterModal());
+              }
+            }}
+          >
+            <HiOutlinePlus className={styles["action-icon"]} />
+            {"Add new"}
+          </Button>
+        )}
       </div>
     </div>
   );

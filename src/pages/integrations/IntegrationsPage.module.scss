@@ -17,11 +17,5 @@
 .tab-content {
     padding:$sp-lg 0;
     display: grid;
-    column-gap: $sp-lg;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
     row-gap: $sp-lg;
-    justify-content: flex-start;
-    @media only screen and (max-width: $bp-desktop) {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
 }
