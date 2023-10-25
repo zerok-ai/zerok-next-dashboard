@@ -127,13 +127,13 @@ const ClusterSelector = () => {
         <MenuItem
           className={styles["new-cluster-item"]}
           onClick={() => {
-            dispatch(openClusterModal());
+            router.push("/integrations");
           }}
           value={""}
         >
           {" "}
-          <AiOutlinePlus className={styles["new-cluster-item-icon"]} /> Install
-          ZeroK on your cluster
+          <AiOutlinePlus className={styles["new-cluster-item-icon"]} />{" "}
+          Integrate ZeroK
         </MenuItem>
       </Select>
 

@@ -1,8 +1,9 @@
 import cx from "classnames";
+import TooltipX from "components/themeX/TooltipX";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "redux/store";
 import { type DrawerNavItemType } from "utils/types";
 
@@ -31,22 +32,14 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
       setIsNavOpen(true);
     }
   }, [isDrawerMinimized]);
-
-  const LinkWrapper = ({ children }: { children: React.ReactNode }) => {
-    return isGroup ? (
-      <div
-        role="button"
-        onClick={() => {
-          // dispatch(toggleDrawer());
-          if (nav.children) {
-            router.push(nav.children[0].path);
-          }
-        }}
-      >
+  const isMinimized = isDrawerMinimized && !isNavOpen;
+  const LinkWrapper = ({ children }: { children: React.ReactElement }) => {
+    return isMinimized ? (
+      <TooltipX title={nav.label} placement="right" arrow={true}>
         {children}
-      </div>
+      </TooltipX>
     ) : (
-      <Link href={nav.path[0]}>{children}</Link>
+      <Fragment>{children}</Fragment>
     );
   };
   return (
