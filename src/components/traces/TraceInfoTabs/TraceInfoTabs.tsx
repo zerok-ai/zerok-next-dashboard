@@ -49,7 +49,7 @@ const TraceInfoTabs = ({
     return <TabSkeletons />;
   }
 
-  const tabs = getTabs("http");
+  const tabs = getTabs(rawData.protocol);
 
   const renderTab = () => {
     const tab = tabs.find((t) => t.value === activeTab);

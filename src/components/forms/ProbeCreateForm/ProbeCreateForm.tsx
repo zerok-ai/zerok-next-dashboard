@@ -54,6 +54,12 @@ const ALL_PROTOCOL_SERVICES: Array<{
     protocol: "HTTP",
     rootOnly: true,
   },
+  {
+    label: "All gRPC services",
+    value: "*/*_grpc",
+    protocol: "GRPC",
+    rootOnly: true,
+  },
 ];
 
 const formatServices = (
@@ -238,7 +244,6 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         selectedCluster as string
       );
       await raxios.post(endpoint, body);
-
       setStatus({
         loading: false,
         error: null,
@@ -251,6 +256,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         })
       );
     } catch (err) {
+      console.log({ err });
       setStatus({
         loading: false,
         error: "Something went wrong",
@@ -261,6 +267,7 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
       });
     }
   };
+
   const handleEditSubmit = () => {
     router.push("/probes");
   };

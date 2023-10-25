@@ -46,7 +46,7 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
         {children}
       </div>
     ) : (
-      <Link href={nav.path}>{children}</Link>
+      <Link href={nav.path[0]}>{children}</Link>
     );
   };
   return (

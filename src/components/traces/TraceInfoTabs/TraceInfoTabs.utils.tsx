@@ -23,6 +23,7 @@ export interface TabKeyType {
   value: string;
   customRender?: () => React.ReactNode;
   fullWidth?: boolean;
+  optional?: boolean;
 }
 
 export const renderListOfKeyValue = (list: TabKeyType[]) => {
@@ -30,6 +31,9 @@ export const renderListOfKeyValue = (list: TabKeyType[]) => {
     <div className={styles["key-value-container"]}>
       {list.map((key) => {
         const renderKey = key.customRender ? key.customRender() : key.value;
+        if (key.optional && !key.value) {
+          return null;
+        }
         return (
           <div
             className={cx(
@@ -106,10 +110,12 @@ export const DEFAULT_TABS = [
         {
           label: "Source",
           value: metadata.source,
+          optional: true,
         },
         {
           label: "Destination",
           value: metadata.destination,
+          optional: true,
         },
         {
           label: "Latency",
@@ -130,6 +136,7 @@ export const DEFAULT_TABS = [
         {
           label: "Status",
           value: metadata.status,
+          optional: true,
         },
       ];
       return renderListOfKeyValue(KEYS);
@@ -158,6 +165,78 @@ export const HTTP_TABS = [
   },
   {
     label: "Request body",
+    value: "request_body",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const KEYS = [
+        {
+          label: "Request body",
+          value: rawData.req_body as string,
+          fullWidth: true,
+          customRender: () => {
+            return renderJSONorString(rawData.req_body);
+          },
+        },
+      ];
+      return renderListOfKeyValue(KEYS);
+    },
+  },
+  {
+    label: "Response headers",
+    value: "response_headers",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const KEYS = [
+        {
+          label: "Response headers",
+          value: rawData.resp_headers as string,
+          fullWidth: true,
+          customRender: () => {
+            return renderJSONorString(rawData.resp_headers);
+          },
+        },
+      ];
+      return renderListOfKeyValue(KEYS);
+    },
+  },
+  {
+    label: "Response body",
+    value: "response_body",
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const KEYS = [
+        {
+          label: "Response body",
+          fullWidth: true,
+          value: rawData.resp_body as string,
+          customRender: () => {
+            return renderJSONorString(rawData.resp_body);
+          },
+        },
+      ];
+      return renderListOfKeyValue(KEYS);
+    },
+  },
+];
+
+export const GRPC_TABS = [
+  {
+    label: "Metadata",
+    value: "request_header",
+
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
+      const KEYS = [
+        {
+          label: "Request headers",
+          fullWidth: true,
+          value: rawData.req_headers as string,
+          customRender: () => {
+            return renderJSONorString(rawData.req_headers);
+          },
+        },
+      ];
+      return renderListOfKeyValue(KEYS);
+    },
+  },
+  {
+    label: "Message",
     value: "request_body",
     render: (metadata: SpanDetail, rawData: SpanRawData) => {
       const KEYS = [
@@ -240,9 +319,14 @@ export const getTabs = (
 }> => {
   switch (protocol) {
     case "http":
+    case "HTTP":
       return [...DEFAULT_TABS, ...HTTP_TABS];
     case "mysql":
+    case "MYSQL":
       return [...DEFAULT_TABS, ...MYSQL_TABS];
+    case "grpc":
+    case "GRPC":
+      return [...DEFAULT_TABS, ...GRPC_TABS];
     default:
       return DEFAULT_TABS;
   }
