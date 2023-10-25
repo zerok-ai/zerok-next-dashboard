@@ -33,7 +33,7 @@ const TimeSelector = ({ handlePush = true, onChange }: TimeSelectorProps) => {
 
   return (
     <div className={styles.container}>
-      <Tooltip placement="top" arrow title="Time range">
+      <Tooltip placement="top" arrow={false} title="Time range">
         <Select
           value={time}
           name="time-selector"

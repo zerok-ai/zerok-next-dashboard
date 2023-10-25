@@ -11,6 +11,7 @@ export default function Tooltip(theme: Theme) {
         tooltip: {
           backgroundColor: cssVars.grey900,
           color: cssVars.grey50,
+          border: `1px solid ${cssVars.grey700}`,
         },
         arrow: {
           color: cssVars.grey900,

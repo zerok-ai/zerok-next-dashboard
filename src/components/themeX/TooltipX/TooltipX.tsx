@@ -19,7 +19,7 @@ const TooltipX = ({
     <Tooltip
       disableFocusListener={!!disabled}
       placement={placement}
-      arrow={arrow}
+      arrow={false}
       title={title}
     >
       {children}

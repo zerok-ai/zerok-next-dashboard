@@ -1,5 +1,6 @@
 import { Divider } from "@mui/material";
 import NavigationItem from "components/helpers/NavigationItem";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import { useSelector } from "redux/store";
@@ -28,7 +29,9 @@ const MainDrawer = () => {
     return (
       <div className={styles["header-container"]}>
         <div className={styles["logo-container"]}>
-          {isDrawerMinimized ? minimizedLogo : maximizedLogo}
+          <Link href="/">
+            {isDrawerMinimized ? minimizedLogo : maximizedLogo}
+          </Link>
         </div>
       </div>
     );
