@@ -10,7 +10,7 @@ import { type ApiKeyType } from "utils/types";
 
 import styles from "./CreateClusterForm.module.scss";
 
-const INSTALL_STEP = 0;
+const INSTALL_STEP = 1;
 
 const CreateClusterForm = () => {
   const [apiKey, setApiKey] = useState<ApiKeyType | null>(null);
@@ -40,6 +40,20 @@ const CreateClusterForm = () => {
     description: () => JSX.Element;
   }> = useMemo(() => {
     return [
+      {
+        label: "Install ZeroK CLI (zkctl)",
+        description: () => {
+          return (
+            <div className={cx(styles["step-2"])}>
+              <p>Install / update zkctl by running the following command:</p>
+              <CodeBlock
+                code={`bash -c "$(curl -fsSL https://dl.zerok.ai/cli/install.sh)"`}
+                allowCopy
+              />
+            </div>
+          );
+        },
+      },
       {
         label: "Install ZeroK on your cluster",
         description: () => {

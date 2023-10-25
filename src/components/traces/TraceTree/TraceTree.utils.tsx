@@ -31,7 +31,9 @@ export const buildSpanTree = (
 
   if (childrenSpan.length > 0) {
     parentSpan.children = childrenSpan;
-    if (parentSpan.destination) {
+    const isGRPC = parentSpan.protocol === "GRPC";
+
+    if (parentSpan.destination || (isGRPC && parentSpan.route)) {
       ++level;
     }
     childrenSpan.map((span) => {
@@ -127,11 +129,11 @@ export const spanTransformer = (spanData: SpanResponse) => {
 export const TOP_BORDER_COLOR = "#506D86";
 
 export const COLORS = [
-  "rgba(30, 123, 194, 0.7)",
-  "rgba(155, 138, 251, 0.7)",
-  "rgba(253, 176, 34, 0.7)",
-  "rgba(89, 37, 220, 0.7)",
-  "rgba(57, 216, 150, 0.7)",
+  "rgba(30, 123, 194, 0.3)",
+  "rgba(155, 138, 251, 0.3)",
+  "rgba(253, 176, 34, 0.3)",
+  "rgba(89, 37, 220, 0.3)",
+  "rgba(57, 216, 150, 0.3)",
 ];
 
 export const checkForVisibleChildren = (span: SpanDetail) => {
@@ -148,7 +150,10 @@ export const checkForVisibleChildren = (span: SpanDetail) => {
     });
   };
   getAllChildren(span);
-  return children.some((child) => child.destination);
+  return children.some((child) => {
+    const isGRPC = child.protocol === "GRPC";
+    return child.destination || (isGRPC && child.route);
+  });
 };
 
 export const getWidthByLevel = (
@@ -182,11 +187,19 @@ export const AccordionLabel = ({
   highlight,
   isModalOpen,
 }: AccordionLabelProps) => {
-  const name = isTopRoot
-    ? span.source.length
-      ? span.source
-      : "Unknown"
-    : span.destination;
+  const getSpanLink = () => {
+    if (isTopRoot) {
+      if (span.protocol === "GRPC") {
+        return span.route ?? "Unknown";
+      }
+      return span.source.length ? span.source : "Unknown";
+    }
+    if (span.protocol === "GRPC") {
+      return span.route;
+    }
+    return span.destination;
+  };
+  const name = getSpanLink();
   const service = name.includes("/") ? name.split("/")[1] : name;
   const spanName = getSpanName(span);
   const width = getWidthByLevel(
@@ -195,6 +208,9 @@ export const AccordionLabel = ({
     isModalOpen,
     isTopRoot
   );
+  const getCharacterCountFromLevel = () => {
+    return 60 - (span.level ?? 0) * 2;
+  };
   return (
     <div className={styles["accordion-summary-content"]}>
       <p
@@ -216,7 +232,9 @@ export const AccordionLabel = ({
               setSelectedSpan(span.span_id);
             }}
           >
-            {isModalOpen ? service : trimString(service, 25)}
+            {isModalOpen
+              ? service
+              : trimString(service, getCharacterCountFromLevel())}
           </span>
         </TooltipX>
         {spanName}
@@ -251,12 +269,15 @@ export const SpanLatencyTimeline = ({
     "milliseconds"
   );
   const timelineDisplacement = (timelineStart / referenceTime.totalTime) * 100;
+
   return (
     <div className={styles.timeline}>
       <p
         style={{
           width: `${timelineWidth}%`,
-          marginLeft: `${timelineDisplacement}%`,
+          marginLeft: `${
+            timelineDisplacement >= 0 ? timelineDisplacement : 0
+          }%`,
         }}
       ></p>
     </div>
