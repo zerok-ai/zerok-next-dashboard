@@ -66,7 +66,7 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
   {
     reactIcon: (cls: string) => <HiOutlineShieldCheck className={cls} />,
     label: "Data Privacy",
-    path: "/data-privacy",
+    path: ["/data-privacy"],
     type: "single",
   },
 ];
