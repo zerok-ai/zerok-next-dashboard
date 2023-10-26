@@ -69,24 +69,6 @@ const IntegrationCard = ({ integration, border }: IntegrationCardProps) => {
       </div>
       {/* actions */}
       <div className={styles.actions}>
-        {/* New */}
-        {integrated && !disableAddNew && (
-          <Button
-            color={"primary"}
-            size="small"
-            className={styles["action-button"]}
-            onClick={() => {
-              if (!triggerClusterModal) {
-                handleRoute("create");
-              } else {
-                dispatch(openClusterModal());
-              }
-            }}
-          >
-            <HiOutlinePlus className={styles["action-icon"]} />
-            {"Add new"}
-          </Button>
-        )}
         {!disableManage && (
           <div>
             <Button
@@ -106,6 +88,24 @@ const IntegrationCard = ({ integration, border }: IntegrationCardProps) => {
             </Button>
             {/* {helperText && <small>{helperText}</small>} */}
           </div>
+        )}
+        {/* New */}
+        {integrated && !disableAddNew && (
+          <Button
+            color={"primary"}
+            size="small"
+            className={styles["action-button"]}
+            onClick={() => {
+              if (!triggerClusterModal) {
+                handleRoute("create");
+              } else {
+                dispatch(openClusterModal());
+              }
+            }}
+          >
+            <HiOutlinePlus className={styles["action-icon"]} />
+            {"Add new"}
+          </Button>
         )}
       </div>
     </div>
