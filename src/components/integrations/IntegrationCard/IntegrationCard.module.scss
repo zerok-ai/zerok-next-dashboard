@@ -3,19 +3,19 @@
    display: grid;
    grid-template-columns: 60px 8fr 2.5fr;
    width:1040px;
-   background-color: $grey-925;
+   background-color: $bg-dark;
    padding:$sp-md $sp-md;
-   border:1px solid $grey-800;
+
    border-radius: $sp-sm;
    align-items: flex-end;
+}
+.border {
+    border:1px solid $grey-800;
 }
 .content {
     flex:1;
     display: flex;
     flex-direction: column;
-    h5 {
-        // margin-bottom: $sp-base;
-    }
     p {
         font-size: $font-md;
     }
@@ -47,6 +47,8 @@
 .actions {
     display: flex;
     column-gap: $sp-md;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
 }
 
 .action-button {

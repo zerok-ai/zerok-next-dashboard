@@ -1,4 +1,5 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
+import EBPFListTable from "components/EBPFListTable";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PrometheusTable from "components/integrations/PrometheusTable";
 import SlackIntegration from "components/integrations/SlackIntegration";
@@ -14,6 +15,7 @@ const PAGE_MAP: GenericObject = {
   prometheus: <PrometheusTable />,
   slack: <SlackIntegration />,
   otel: <OTelListTable />,
+  ebpf: <EBPFListTable />,
 };
 
 const IntegrationsListPage = () => {

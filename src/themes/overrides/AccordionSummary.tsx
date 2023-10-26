@@ -2,11 +2,12 @@
 // assets
 import { RightOutlined } from "@ant-design/icons";
 import { type Theme } from "@mui/material/styles";
+import css from "styles/variables.module.scss";
 
 // ==============================|| OVERRIDES - ALERT TITLE ||============================== //
 
 export default function AccordionSummary(theme: Theme) {
-  const { palette, spacing } = theme;
+  const { spacing } = theme;
 
   return {
     MuiAccordionSummary: {
@@ -15,9 +16,11 @@ export default function AccordionSummary(theme: Theme) {
       },
       styleOverrides: {
         root: {
-          backgroundColor: palette.secondary.lighter,
+          backgroundColor: css.grey925,
           flexDirection: "row-reverse",
           minHeight: 46,
+          border: `1px solid ${css.grey925}`,
+          borderRadius: `8px`,
         },
         expandIconWrapper: {
           "&.Mui-expanded": {

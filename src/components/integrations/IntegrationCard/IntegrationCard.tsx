@@ -12,9 +12,10 @@ import styles from "./IntegrationCard.module.scss";
 
 interface IntegrationCardProps {
   integration: IntegrationListType;
+  border: boolean;
 }
 
-const IntegrationCard = ({ integration }: IntegrationCardProps) => {
+const IntegrationCard = ({ integration, border }: IntegrationCardProps) => {
   const {
     name,
     label,
@@ -46,7 +47,7 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
     router.push(`/integrations/${name}/${page}`);
   };
   return (
-    <div className={styles.container}>
+    <div className={cx(styles.container, border && styles.border)}>
       {/* image / logo */}
       <div className={styles["logo-container"]}>
         <img src={logo} alt={name} />
@@ -68,6 +69,24 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
       </div>
       {/* actions */}
       <div className={styles.actions}>
+        {/* New */}
+        {integrated && !disableAddNew && (
+          <Button
+            color={"primary"}
+            size="small"
+            className={styles["action-button"]}
+            onClick={() => {
+              if (!triggerClusterModal) {
+                handleRoute("create");
+              } else {
+                dispatch(openClusterModal());
+              }
+            }}
+          >
+            <HiOutlinePlus className={styles["action-icon"]} />
+            {"Add new"}
+          </Button>
+        )}
         {!disableManage && (
           <div>
             <Button
@@ -87,24 +106,6 @@ const IntegrationCard = ({ integration }: IntegrationCardProps) => {
             </Button>
             {/* {helperText && <small>{helperText}</small>} */}
           </div>
-        )}
-        {/* New */}
-        {integrated && !disableAddNew && (
-          <Button
-            color={"primary"}
-            size="small"
-            className={styles["action-button"]}
-            onClick={() => {
-              if (!triggerClusterModal) {
-                handleRoute("create");
-              } else {
-                dispatch(openClusterModal());
-              }
-            }}
-          >
-            <HiOutlinePlus className={styles["action-icon"]} />
-            {"Add new"}
-          </Button>
         )}
       </div>
     </div>

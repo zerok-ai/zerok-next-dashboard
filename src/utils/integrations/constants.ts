@@ -2,7 +2,10 @@ import { BRAND_LOGOS } from "utils/images";
 
 import { type IntegrationListType } from "./types";
 
-export const INTEGRATION_CATEGORIES = ["All", "Data sources", "Communication"];
+export const INTEGRATION_CATEGORIES = [
+  "Data sources",
+  "Communication",
+] as const;
 
 export const INTEGRATION_APPS = [
   "slack",
@@ -10,6 +13,8 @@ export const INTEGRATION_APPS = [
   "otel",
   "ebpf",
 ] as const;
+
+export const INTEGRATION_DATA_SUBCATEGORIES = ["in-flight", "at-rest"];
 
 export const INTEGRATION_LIST: IntegrationListType[] = [
   {
@@ -20,7 +25,7 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     logo: BRAND_LOGOS.SLACK,
     category: "Communication",
     integrated: true,
-    tags: ["All", "Communication"],
+    tags: ["Communication"],
     disabledText: "Coming soon",
     disableAddNew: true,
   },
@@ -32,7 +37,8 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     logo: BRAND_LOGOS.PROMETHEUS,
     category: "Data sources",
     integrated: true,
-    tags: ["All", "Data sources"],
+    tags: ["Data sources"],
+    dataSubcategory: "at-rest",
   },
 
   {
@@ -44,9 +50,10 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     category: "Data sources",
     integrated: true,
     dummy: true,
-    tags: ["All", "Data sources"],
+    tags: ["Data sources"],
     triggerClusterModal: true,
     mandatory: true,
+    dataSubcategory: "in-flight",
   },
   {
     name: "ebpf",
@@ -57,12 +64,12 @@ export const INTEGRATION_LIST: IntegrationListType[] = [
     integrated: true,
     logo: BRAND_LOGOS.EBPF,
     disableAddNew: true,
-    disableManage: true,
     category: "Data sources",
     dummy: true,
     disabledText: "Disabled",
-    tags: ["All", "Data sources"],
+    tags: ["Data sources"],
     helperText: "Please contact ZeroK support for more details",
+    dataSubcategory: "in-flight",
     // triggerClusterModal: true,
   },
 ];

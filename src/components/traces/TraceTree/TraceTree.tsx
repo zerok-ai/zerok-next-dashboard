@@ -200,7 +200,6 @@ const TraceTree = ({
       if (isGRPC && !span.route) {
         return nextRender();
       }
-      console.log({ span });
       return (
         <Accordion
           key={nanoid()}
