@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
-  Divider,
   FormHelperText,
   FormLabel,
   OutlinedInput,
@@ -30,8 +29,6 @@ const RegexRuleForm = ({ onFinish, onClose }: RegexRuleFormProps) => {
   };
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-      <h4>Create a new rule</h4>
-      <Divider />
       <fieldset>
         <FormLabel htmlFor="name">Rule Name</FormLabel>
         <div>
