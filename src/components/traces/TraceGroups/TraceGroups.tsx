@@ -45,7 +45,7 @@ const TraceGroups = () => {
     return <HiChevronRight />;
   }, []);
   const getLink = (issue: IssueDetail) => {
-    return `/issues/detail?issue=${scenarioID as string}&issue_id=${
+    return `/issues/detail?scenario=${scenarioID as string}&issue_id=${
       issue.issue_hash
     }`;
   };
