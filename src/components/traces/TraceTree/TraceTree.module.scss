@@ -70,6 +70,7 @@
 .accordion {
     border:none;
     height:100%;
+    border-radius: 0;
     span {
         color:$grey-25;
     }
@@ -87,6 +88,8 @@
     width:100%;
     min-height: 0px !important;
     padding:$sp-base / 2 0;
+    border-radius: 0;
+    border: none;
     // margin-left: -$sp-base;
 }
 

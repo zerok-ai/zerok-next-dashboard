@@ -1,5 +1,7 @@
 @import "styles/variables.module.scss";
-
+.container {
+    width:1040px;
+}
 .tabs {
     display: flex;
     align-items: center;
@@ -18,4 +20,9 @@
     padding:$sp-lg 0;
     display: grid;
     row-gap: $sp-lg;
+}
+
+.accordion-title {
+    color:$white;
+    font-weight: 500;
 }

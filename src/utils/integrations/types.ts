@@ -1,11 +1,15 @@
 import {
   type INTEGRATION_APPS,
   type INTEGRATION_CATEGORIES,
+  type INTEGRATION_DATA_SUBCATEGORIES,
 } from "./constants";
 
 export type IntegrationCategoriesType = (typeof INTEGRATION_CATEGORIES)[number];
 
 export type IntegrationAppType = (typeof INTEGRATION_APPS)[number];
+
+export type IntegrationDataSubcategoryType =
+  (typeof INTEGRATION_DATA_SUBCATEGORIES)[number];
 
 export interface IntegrationListType {
   name: IntegrationAppType;
@@ -23,6 +27,7 @@ export interface IntegrationListType {
   disableManage?: boolean;
   disabledText?: string;
   helperText?: string;
+  dataSubcategory?: IntegrationDataSubcategoryType;
 }
 export interface PrometheusBaseType {
   alias: string;
