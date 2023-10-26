@@ -33,7 +33,7 @@ export const IssueMetadata = () => {
 
   // Fetch issue data on mount
   useEffect(() => {
-    if (scenarioId && selectedCluster) {
+    if (selectedCluster) {
       const endpoint = GET_ISSUE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
