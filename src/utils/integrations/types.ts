@@ -75,3 +75,19 @@ export type SlackListType =
       org_id: string;
       user_id: string;
     };
+
+export interface OtelIntegrationListType {
+  name: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  integration_status: number;
+}
+
+export interface EBPFIntegrationListType {
+  name: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  enabled: boolean;
+}
