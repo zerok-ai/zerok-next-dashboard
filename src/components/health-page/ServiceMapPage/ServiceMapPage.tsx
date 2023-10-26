@@ -86,11 +86,16 @@ const ServiceMap = ({
       ) : (
         <h6>Could not fetch service map data. Please try again later. </h6>
       )}
-      {isFilterOpen && data && (
-        <DrawerX title="Filter" onClose={toggleDrawer}>
+
+      <DrawerX
+        title="Filter"
+        onClose={toggleDrawer}
+        open={!!(isFilterOpen && data)}
+      >
+        {data && (
           <HealthMapFilterForm serviceList={data} onFinish={toggleDrawer} />
-        </DrawerX>
-      )}
+        )}
+      </DrawerX>
     </Fragment>
   );
 };

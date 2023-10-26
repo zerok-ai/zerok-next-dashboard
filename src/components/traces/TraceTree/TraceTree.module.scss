@@ -95,7 +95,6 @@
 
 .accordion-summary-content {
     display: flex;
-
 }
 .last-child {
     margin:$sp-base 0;
@@ -126,6 +125,7 @@
 }
 .accordion-details {
     border:none;
+    border-left: 1px solid $grey-700;
     padding:0 $sp-sm;
     padding-right: 0;
     background-color: $bg-dark;

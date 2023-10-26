@@ -25,7 +25,7 @@ export const IssueMetadata = () => {
   const [metadata, setMetadata] = useState<null | ScenarioDetail>(null);
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
-  const scenarioId = router.query.issue;
+  const scenarioId = router.query.scenario;
   const issueId = router.query.issue_id;
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
 
@@ -33,7 +33,7 @@ export const IssueMetadata = () => {
 
   // Fetch issue data on mount
   useEffect(() => {
-    if (scenarioId && selectedCluster) {
+    if (selectedCluster) {
       const endpoint = GET_ISSUE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster

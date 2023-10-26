@@ -48,7 +48,7 @@ interface TraceTableProps {
 const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
-  const scenario = router.query.issue;
+  const scenario = router.query.scenario;
   const issue_id = router.query.issue_id;
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
   const { likelyCause } = useSelector(chatSelector);

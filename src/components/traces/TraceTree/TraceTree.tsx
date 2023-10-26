@@ -154,6 +154,7 @@ const TraceTree = ({
           <AccordionSummary
             className={styles["accordion-summary"]}
             expandIcon={AccordionIcon}
+            style={{ borderLeft: `1px solid ${borderColor}` }}
           >
             {children}
           </AccordionSummary>
@@ -227,10 +228,7 @@ const TraceTree = ({
               )}
             </Fragment>
           </WrapperElement>
-          <AccordionDetails
-            className={styles["accordion-details"]}
-            style={{ borderLeft: `1px solid ${borderColor}` }}
-          >
+          <AccordionDetails className={styles["accordion-details"]}>
             {nextRender()}
           </AccordionDetails>
         </Accordion>
