@@ -1,5 +1,6 @@
 import { Divider } from "@mui/material";
 import NavigationItem from "components/helpers/NavigationItem";
+import UserNavItem from "components/users/UserNavItem";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
@@ -59,12 +60,15 @@ const MainDrawer = () => {
       className={styles.container}
       sx={{ width: cssVars.mainDrawerWidth }}
     >
-      <div>
+      <div className={styles.container}>
         {<DrawerHeader />}
         <nav className={styles["navigation-container"]}>
           {renderLinks(NAV_LINKS_1)}
           <Divider />
           {renderLinks(NAV_LINKS_2)}
+        </nav>
+        <nav className={styles["user-nav-container"]}>
+          <UserNavItem />
         </nav>
       </div>
     </StyledMainDrawer>
