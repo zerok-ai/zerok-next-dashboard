@@ -1,5 +1,8 @@
 @import "styles/variables.module.scss";
 .container {
+  height:100%;
+  display: flex;
+  flex-direction: column;
   :global(.MuiDrawer-paper) {
     border-right: 1px solid $grey-700;
   }
@@ -25,4 +28,9 @@
   display: flex;
   flex-direction: column;
   row-gap: $sp-sm;
+  flex:1;
+}
+
+.user-nav-container {
+  // align-self: flex-end;
 }

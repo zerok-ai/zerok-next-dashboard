@@ -74,3 +74,21 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
 export const PATH_TO_LABEL = {
   incidents: "Incidents",
 };
+
+export const USER_NAV_LINKS = [
+  {
+    label: "API Keys",
+    path: "/api-keys",
+  },
+  {
+    label: "Users",
+    path: "/users",
+  },
+  {
+    type: "divider",
+  },
+  {
+    label: "Logout",
+    path: "/logout",
+  },
+];
