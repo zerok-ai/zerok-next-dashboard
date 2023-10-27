@@ -1,9 +1,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import TableActions from "components/helpers/TableActions";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
-import { type ObfuscationRuleType } from "utils/data/types";
+import {
+  type DefaultRegexRuleType,
+  type ObfuscationRuleType,
+} from "utils/data/types";
 import { getFormattedTime } from "utils/dateHelpers";
 import { type TableActionPropType } from "utils/tables/types";
+
+import styles from "./DataObfuscationPage.module.scss";
 
 export const getObfuscationColumns = ({
   actions,
@@ -83,3 +88,30 @@ export const data: ObfuscationRuleType[] = [
     },
   },
 ];
+
+const rhelper = createColumnHelper<DefaultRegexRuleType>();
+
+export const getRuleColumns = ({
+  onRuleClick,
+}: {
+  onRuleClick: (row: DefaultRegexRuleType) => void;
+}) => {
+  return [
+    rhelper.accessor("name", {
+      header: "Name",
+      size: DEFAULT_COL_WIDTH * 2,
+      cell: (info) => {
+        return (
+          <span
+            onClick={() => {
+              onRuleClick(info.row.original);
+            }}
+            className={styles["rule-name"]}
+          >
+            {info.getValue()}
+          </span>
+        );
+      },
+    }),
+  ];
+};
