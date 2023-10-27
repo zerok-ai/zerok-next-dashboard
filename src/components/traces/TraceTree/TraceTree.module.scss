@@ -105,6 +105,7 @@
     cursor: pointer;
     z-index:1000;
     line-height: 20px;
+    font-weight: 500;
     padding-top: $sp-base / 2;
     margin-left: $sp-sm;
     &:hover {
@@ -114,8 +115,13 @@
 
 .accordion-label-container {
     display: flex;
-    column-gap: $sp-lg;
+    column-gap: $sp-sm;
+    .operation-name {
+        color:$grey-300;
+    }
+    
 }
+
 
 .latency {
     color:$grey-200;
