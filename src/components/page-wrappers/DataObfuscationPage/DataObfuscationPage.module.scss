@@ -4,6 +4,12 @@
     :global(.MuiTabs-flexContainer) {
         border-bottom: 1px solid $grey-800;
     }
+    section {
+        margin:$sp-xl 0;
+    }
+    hr {
+        margin:$sp-lg 0;
+    }
 }
 
 .text {
@@ -44,4 +50,51 @@
     padding:$sp-xxxl;
     width:100%;
     height:100%;    // justify-content: center;
+}
+
+.rule-table {
+    margin:$sp-xxl 0;
+    height:400px;
+    overflow-y: auto;
+}
+
+.rule-name {
+    transition:all 0.2s ease;
+    &:hover {
+        cursor: pointer;
+        color:$primary-500;
+    }
+}
+
+.modal {
+    width:700px;
+    
+}
+
+.rule-container {
+    width:1040px;
+    max-height:400px;
+    overflow-y: auto;
+    display: flex;
+    row-gap: $sp-lg;
+    padding:$sp-lg;
+    flex-direction: column;
+    &::-webkit-scrollbar-thumb {
+        background-color: $grey-925;
+        border-radius: 8px;
+        border:5px solid $grey-900 !important;
+    }
+}
+
+.rule-item-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: $sp-sm;
+    margin-bottom: $sp-md;
+}
+
+.rule-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    
 }

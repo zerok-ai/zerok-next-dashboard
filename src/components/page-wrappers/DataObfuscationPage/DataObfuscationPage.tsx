@@ -1,11 +1,14 @@
-import { Button, Tab, Tabs } from "@mui/material";
+import { Button, Divider, Tab, Tabs } from "@mui/material";
 import RegexRuleForm from "components/forms/RegexRuleForm";
+import CodeBlock from "components/helpers/CodeBlock";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import DrawerX from "components/themeX/DrawerX";
+import ModalX from "components/themeX/ModalX";
 import TableX from "components/themeX/TableX";
 import { useToggle } from "hooks/useToggle";
+import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi2";
@@ -13,17 +16,27 @@ import {
   DATA_OBFUSCATION_TABS,
   REGEX_DRAWER_WIDTH,
 } from "utils/data/constants";
-import { type ObfuscationRuleType } from "utils/data/types";
+import { DEFAULT_RULES } from "utils/data/piiRules";
+import {
+  type DefaultRegexRuleType,
+  type ObfuscationRuleType,
+} from "utils/data/types";
 import { type TableActionPropType } from "utils/tables/types";
 
 import styles from "./DataObfuscationPage.module.scss";
-import { data, getObfuscationColumns } from "./DataObfuscationPage.utils";
+import {
+  // data,
+  getObfuscationColumns,
+  getRuleColumns,
+} from "./DataObfuscationPage.utils";
 
 const DataObfuscationPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>(
     DATA_OBFUSCATION_TABS[0].value
   );
   const [regexDrawerOpen, toggleRegexDrawer] = useToggle(false);
+  const [selectedDefaultRule, setSelectedDefaultRule] =
+    useState<DefaultRegexRuleType | null>(null);
   // const [whitelistDrawerOpen, toggleWhitelistDrawer] = useToggle(false);
   const changeTab = (e: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
@@ -41,13 +54,24 @@ const DataObfuscationPage = () => {
       onClick: editRule,
     },
   };
+  const onRuleClick = (row: DefaultRegexRuleType) => {
+    setSelectedDefaultRule(row);
+  };
+  const resetDefaultRule = () => {
+    setSelectedDefaultRule(null);
+  };
+  const ruleColumns = getRuleColumns({ onRuleClick });
   const columns = getObfuscationColumns({ actions: columnActions });
   const renderTabContent = () => {
     switch (selectedTab) {
-      case "rules":
-        return <TableX columns={columns} data={data} />;
+      case "custom":
+        return <TableX columns={columns} data={[]} noDataMessage="No data." />;
+      case "default":
+        /* @ts-expect-error idk why */
+        return <TableX columns={ruleColumns} data={DEFAULT_RULES} />;
     }
   };
+
   return (
     <div className={styles.container}>
       <PageHeader
@@ -98,6 +122,33 @@ const DataObfuscationPage = () => {
           />
         </div>
       </DrawerX>
+
+      {/* Rule display */}
+      {selectedDefaultRule && (
+        <ModalX
+          isOpen={!!selectedDefaultRule}
+          onClose={resetDefaultRule}
+          title={selectedDefaultRule.name ?? "Default rule"}
+        >
+          <div className={styles["rule-container"]}>
+            {selectedDefaultRule.patterns.map((p) => {
+              return (
+                <div className={styles["rule-item-container"]} key={nanoid()}>
+                  <div className={styles["rule-item"]}>
+                    <p>Name:</p>
+                    <p>{p.name}</p>
+                  </div>
+                  <div className={styles["rule-item"]}>
+                    <p>Pattern:</p>
+                    <CodeBlock code={p.regex} allowCopy={true} color="dark" />
+                  </div>
+                  <Divider />
+                </div>
+              );
+            })}
+          </div>
+        </ModalX>
+      )}
     </div>
   );
 };
