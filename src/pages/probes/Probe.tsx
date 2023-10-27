@@ -11,6 +11,7 @@ import DialogX from "components/themeX/DialogX";
 // import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
+import ValidClusterWrapper from "components/ValidClusterWrapper";
 import { useTrigger } from "hooks/useTrigger";
 import Head from "next/head";
 import Link from "next/link";
@@ -389,40 +390,42 @@ const Probe = () => {
         onRefresh={changeTrigger}
         // alignExtras="right"
       />
-      <DialogX
-        isOpen={!!(selectedProbe && selectedProbe.deleting)}
-        title="Delete Probe"
-        successText="Delete"
-        cancelText="Cancel"
-        onClose={() => {
-          resetSelectedProbe();
-        }}
-        onSuccess={handleDelete}
-        onCancel={() => {
-          resetSelectedProbe();
-        }}
-      >
-        <span>Are you sure you want to delete this probe?</span> <br />
-        <em>This action cannot be undone.</em>
-      </DialogX>
-      <div className={styles.table}>
-        {scenarios ? (
-          <TableX
-            data={scenarios ?? null}
-            columns={columns}
-            sortBy={sortBy}
-            onSortingChange={setSortBy}
-          />
-        ) : (
-          <CustomSkeleton len={8} />
-        )}
-      </div>
-      {/* <div className={styles.pagination}>
+      <ValidClusterWrapper>
+        <DialogX
+          isOpen={!!(selectedProbe && selectedProbe.deleting)}
+          title="Delete Probe"
+          successText="Delete"
+          cancelText="Cancel"
+          onClose={() => {
+            resetSelectedProbe();
+          }}
+          onSuccess={handleDelete}
+          onCancel={() => {
+            resetSelectedProbe();
+          }}
+        >
+          <span>Are you sure you want to delete this probe?</span> <br />
+          <em>This action cannot be undone.</em>
+        </DialogX>
+        <div className={styles.table}>
+          {scenarios ? (
+            <TableX
+              data={scenarios ?? null}
+              columns={columns}
+              sortBy={sortBy}
+              onSortingChange={setSortBy}
+            />
+          ) : (
+            <CustomSkeleton len={8} />
+          )}
+        </div>
+        {/* <div className={styles.pagination}>
         <PaginationX
           totalItems={totalScenarios ?? PROBE_PAGE_SIZE}
           itemsPerPage={PROBE_PAGE_SIZE}
         />
       </div> */}
+      </ValidClusterWrapper>
     </div>
   );
 };

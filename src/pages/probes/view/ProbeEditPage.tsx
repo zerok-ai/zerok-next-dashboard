@@ -3,6 +3,7 @@ import ProbeCreateForm from "components/forms/ProbeCreateForm";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
+import ValidClusterWrapper from "components/ValidClusterWrapper";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -60,7 +61,9 @@ const ProbeEditPage = () => {
         showBreadcrumb
       />
       {probe ? (
-        <ProbeCreateForm edit={scenarioToProbeForm(probe)} />
+        <ValidClusterWrapper>
+          <ProbeCreateForm edit={scenarioToProbeForm(probe)} />
+        </ValidClusterWrapper>
       ) : (
         <CustomSkeleton len={10} />
       )}

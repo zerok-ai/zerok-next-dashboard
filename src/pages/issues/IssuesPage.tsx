@@ -7,6 +7,7 @@ import PageLayout from "components/layouts/PageLayout";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TagX from "components/themeX/TagX";
+import ValidClusterWrapper from "components/ValidClusterWrapper";
 import { useFetch } from "hooks/useFetch";
 import { useTrigger } from "hooks/useTrigger";
 import { useRouter } from "next/router";
@@ -120,43 +121,45 @@ const IssuesPage = () => {
         leftExtras={leftExtras}
         onRefresh={changeTrigger}
       />
-      {/* Rendering filters */}
-      {services && (
-        <div className={styles["active-filters"]}>
-          {services !== null &&
-            services.length > 0 &&
-            services.map((sv) => {
-              return (
-                <TagX
-                  label={sv}
-                  onClose={removeService}
-                  closable={true}
-                  key={nanoid()}
-                />
-              );
-            })}
-        </div>
-      )}
-      <div className={styles["page-content"]}>
-        {error && <p>Error fetching issues. Please try again later.</p>}
-        {/* @TODO - add error state here */}
-        {selectedCluster && !error && (
-          <TableX
-            data={data?.issues ?? null}
-            columns={columns}
-            sortBy={sortBy}
-            onSortingChange={setSortBy}
-          />
+      <ValidClusterWrapper>
+        {/* Rendering filters */}
+        {services && (
+          <div className={styles["active-filters"]}>
+            {services !== null &&
+              services.length > 0 &&
+              services.map((sv) => {
+                return (
+                  <TagX
+                    label={sv}
+                    onClose={removeService}
+                    closable={true}
+                    key={nanoid()}
+                  />
+                );
+              })}
+          </div>
         )}
-      </div>
-      {data?.issues && (
-        <footer className={styles["pagination-container"]}>
-          <PaginationX
-            totalItems={data.total_records}
-            itemsPerPage={ISSUES_PAGE_SIZE}
-          />
-        </footer>
-      )}
+        <div className={styles["page-content"]}>
+          {error && <p>Error fetching issues. Please try again later.</p>}
+          {/* @TODO - add error state here */}
+          {selectedCluster && !error && (
+            <TableX
+              data={data?.issues ?? null}
+              columns={columns}
+              sortBy={sortBy}
+              onSortingChange={setSortBy}
+            />
+          )}
+        </div>
+        {data?.issues && (
+          <footer className={styles["pagination-container"]}>
+            <PaginationX
+              totalItems={data.total_records}
+              itemsPerPage={ISSUES_PAGE_SIZE}
+            />
+          </footer>
+        )}
+      </ValidClusterWrapper>
     </Fragment>
   );
 };

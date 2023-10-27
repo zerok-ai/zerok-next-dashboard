@@ -81,7 +81,22 @@ const ClusterSelector = () => {
           className={styles.select}
           renderValue={(value) => {
             const label = clusters.find((cl) => cl.id === value)?.name;
-            return <span>{label}</span>;
+            const cl = clusters.find((cl) => cl.id === value);
+            if (!cl) return <span>Select a cluster</span>;
+            return (
+              <span className={styles["select-display"]}>
+                <span
+                  className={cx(
+                    cl.status === CLUSTER_STATES.HEALTHY ||
+                      cl.status === CLUSTER_STATES.DEGRADED
+                      ? styles.healthy
+                      : styles.unhealthy,
+                    styles["status-icon"]
+                  )}
+                ></span>
+                {label}
+              </span>
+            );
           }}
           onChange={(val) => {
             if (val !== null && val.target && val.target.value) {

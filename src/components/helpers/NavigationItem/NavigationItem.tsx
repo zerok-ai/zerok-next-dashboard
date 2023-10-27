@@ -27,7 +27,6 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const imgSrc = !active
     ? `${ICON_BASE_PATH}/${nav.img}`
     : `${ICON_BASE_PATH}/${nav.img.split(".")[0]}_active.svg`;
-  console.log({ imgSrc });
   useEffect(() => {
     if (isDrawerMinimized && isNavOpen) {
       setIsNavOpen(false);

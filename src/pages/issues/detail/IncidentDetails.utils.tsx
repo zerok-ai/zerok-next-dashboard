@@ -1,5 +1,6 @@
-import { Skeleton, Tooltip } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import PageHeader from "components/helpers/PageHeader";
+import TooltipX from "components/themeX/TooltipX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ export const IssueMetadata = () => {
   const { data: issue, fetchData: fetchIssue } = useFetch<IssueDetail>("issue");
   const [metadata, setMetadata] = useState<null | ScenarioDetail>(null);
   const router = useRouter();
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, clusters } = useSelector(clusterSelector);
   const scenarioId = router.query.scenario;
   const issueId = router.query.issue_id;
   const range = router.query.range ?? DEFAULT_TIME_RANGE;
@@ -61,30 +62,32 @@ export const IssueMetadata = () => {
         });
     }
   }, [issue, selectedCluster]);
-
+  const cluster = clusters.find((c) => c.id === selectedCluster);
   const IssueTimes = () => {
     if (!metadata) return null;
     return (
       <div className={styles["incident-metadata-container"]}>
-        <Tooltip
+        <TooltipX title="Cluster" placement="bottom">
+          <span>{cluster?.name}</span>
+        </TooltipX>
+        |
+        <TooltipX
           title={`${getFormattedTime(metadata.last_seen)}`}
           placement="bottom"
-          arrow
         >
           <span>Last collected - {getRelativeTime(metadata.last_seen)}</span>
-        </Tooltip>
+        </TooltipX>
         |
         <span className={styles["incident-time-container"]}>
           <AiOutlineClockCircle />{" "}
-          <Tooltip
+          <TooltipX
             title={`${getFormattedTime(metadata.first_seen)}`}
             placement="bottom"
-            arrow
           >
             <span>
               First collected - {getRelativeTime(metadata.first_seen)}
             </span>
-          </Tooltip>
+          </TooltipX>
         </span>
       </div>
     );
