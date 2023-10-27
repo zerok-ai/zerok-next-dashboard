@@ -36,6 +36,15 @@
   // }
 }
 
+.select-display {
+  display: flex;
+  align-items: center;
+  column-gap: $sp-sm;
+  .healthy, .unhealthy {
+    opacity: 0.6;
+  }
+}
+
 .select-icon {
   color: $white;
   font-size: $font-lg;
@@ -69,6 +78,7 @@
   height:10px;
   border-radius: 16px;
   border:1px solid $grey-500;
+  display: inline-block;
 }
 
 .healthy {
