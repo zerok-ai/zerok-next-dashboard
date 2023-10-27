@@ -10,7 +10,7 @@ interface TooltipXProps {
 
 const TooltipX = ({
   placement = "top",
-  arrow = true,
+  arrow = false,
   title,
   children,
   disabled = false,
@@ -19,8 +19,18 @@ const TooltipX = ({
     <Tooltip
       disableFocusListener={!!disabled}
       placement={placement}
-      arrow={false}
+      arrow={arrow}
       title={title}
+      PopperProps={{
+        modifiers: [
+          {
+            name: "offset",
+            options: {
+              offset: [0, -5],
+            },
+          },
+        ],
+      }}
     >
       {children}
     </Tooltip>

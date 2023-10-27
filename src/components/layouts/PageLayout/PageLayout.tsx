@@ -1,11 +1,9 @@
 import cx from "classnames";
-import ClusterSelector from "components/clusters/ClusterSelector";
 import ErrorBoundary from "components/ErrorBoundary";
 import DrawerToggleButton from "components/helpers/DrawerToggleButton";
 import UnderConstruction from "components/helpers/UnderConstruction";
 import MainDrawer from "components/layouts/MainDrawer";
 import ZkSnackbar from "components/themeX/ZkSnackbar";
-import UserPill from "components/users/UserPill";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
@@ -84,11 +82,8 @@ const PageLayout = ({ children }: PageLayoutProps) => {
         <header className={styles["header-container"]}>
           <div className={styles["header-left"]}>
             <DrawerToggleButton />
-            <ClusterSelector />
           </div>
-          <div className={styles["header-right"]}>
-            <UserPill />
-          </div>
+          <div className={styles["header-right"]}>{/* <UserPill /> */}</div>
         </header>
         <main
           className={`${styles["page-content"]} hidden-scroll`}

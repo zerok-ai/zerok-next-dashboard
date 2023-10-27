@@ -1,4 +1,5 @@
-import { MenuItem, Select, Tooltip } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
+import TooltipX from "components/themeX/TooltipX";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -33,7 +34,7 @@ const TimeSelector = ({ handlePush = true, onChange }: TimeSelectorProps) => {
 
   return (
     <div className={styles.container}>
-      <Tooltip placement="top" arrow={false} title="Time range">
+      <TooltipX placement="top" arrow={false} title="Time range">
         <Select
           value={time}
           name="time-selector"
@@ -65,7 +66,7 @@ const TimeSelector = ({ handlePush = true, onChange }: TimeSelectorProps) => {
             );
           })}
         </Select>
-      </Tooltip>
+      </TooltipX>
     </div>
   );
 };
