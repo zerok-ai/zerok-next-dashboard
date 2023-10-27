@@ -46,7 +46,6 @@ const UserNavItem = () => {
         }}
         style={{
           left: `${isMinimized ? 55 : 250}px`,
-          top: "-12px",
         }}
       >
         {USER_NAV_LINKS.map((u) => {

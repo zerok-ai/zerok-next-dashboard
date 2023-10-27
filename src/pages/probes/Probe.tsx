@@ -1,6 +1,7 @@
 import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
 import { createColumnHelper, type SortingState } from "@tanstack/react-table";
 import cx from "classnames";
+import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
@@ -11,7 +12,6 @@ import DialogX from "components/themeX/DialogX";
 // import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
-import ValidClusterWrapper from "components/ValidClusterWrapper";
 import { useTrigger } from "hooks/useTrigger";
 import Head from "next/head";
 import Link from "next/link";
