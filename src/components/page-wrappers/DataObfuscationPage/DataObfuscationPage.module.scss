@@ -1,0 +1,47 @@
+@import "styles/variables.module.scss";
+.container {
+    width:1040px;
+    :global(.MuiTabs-flexContainer) {
+        border-bottom: 1px solid $grey-800;
+    }
+}
+
+.text {
+    margin-bottom: $sp-xxxl;
+}
+.tabs {
+    padding: 0;
+    
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-start;
+    column-gap: $sp-lg;
+    margin-bottom: $sp-xl;
+    button {
+        text-transform: none;
+        display: flex;
+        align-items: center;
+        column-gap: $sp-sm;
+    }
+}
+
+.btn-icon {
+    font-size: $font-lg;
+    color:$white;
+}
+
+.divider {
+    margin: $sp-xxxl 0;
+}
+
+.tab-content {
+    margin-top: $sp-xxl;
+}
+
+.regex-form-container {
+    padding:$sp-xxxl;
+    width:100%;
+    height:100%;    // justify-content: center;
+}
