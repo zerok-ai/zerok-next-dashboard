@@ -1,8 +1,8 @@
+import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import ProbeCreateForm from "components/forms/ProbeCreateForm";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
-import ValidClusterWrapper from "components/ValidClusterWrapper";
 import Head from "next/head";
 import { Fragment } from "react";
 

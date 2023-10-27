@@ -6,9 +6,8 @@ import { Fragment } from "react";
 import { useSelector } from "redux/store";
 import { type OtelIntegrationListType } from "utils/integrations/types";
 
+import styles from "./OTelListTable.module.scss";
 import { OTEL_COLUMNS } from "./OTelListTable.utils";
-
-// import styles from "./OTelListTable.module.scss";
 
 const OTelListTable = () => {
   const { clusters } = useSelector((state) => state.cluster);
@@ -28,6 +27,7 @@ const OTelListTable = () => {
         showBreadcrumb={true}
         showRange={false}
         htmlTitle="OpenTelemetry Integrations"
+        showClusterSelector={false}
         rightExtras={[
           <AddNewBtn
             key={"new-otel"}
@@ -38,7 +38,9 @@ const OTelListTable = () => {
           />,
         ]}
       />
-      <TableX data={data} columns={columns} />
+      <div className={styles.table}>
+        <TableX columns={columns} data={data} />
+      </div>
     </Fragment>
   );
 };

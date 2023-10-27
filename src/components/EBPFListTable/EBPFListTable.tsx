@@ -6,6 +6,7 @@ import { useSelector } from "redux/store";
 import { type EBPFIntegrationListType } from "utils/integrations/types";
 import { type TableActionPropType } from "utils/tables/types";
 
+import styles from "./EBPFListTable.module.scss";
 import { getEBPFColumns } from "./EBPFListTable.utils";
 
 const EBPFListTable = () => {
@@ -36,8 +37,11 @@ const EBPFListTable = () => {
         showBreadcrumb={true}
         showRange={false}
         htmlTitle="EBPF Integrations"
+        showClusterSelector={false}
       />
-      <TableX columns={columns} data={data} />
+      <div className={styles.table}>
+        <TableX columns={columns} data={data} />
+      </div>
     </Fragment>
   );
 };

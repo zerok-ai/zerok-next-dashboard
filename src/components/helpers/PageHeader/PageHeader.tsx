@@ -18,6 +18,7 @@ interface PageHeaderProps {
   rightExtras?: React.ReactNode[];
   htmlTitle?: string;
   loading?: boolean;
+  showClusterSelector?: boolean;
   onRefresh?: () => void;
 }
 
@@ -31,6 +32,7 @@ const PageHeader = ({
   htmlTitle,
   loading,
   onRefresh,
+  showClusterSelector = true,
   showBreadcrumb = false,
 }: PageHeaderProps) => {
   const checkForExtras = () => {
@@ -66,7 +68,7 @@ const PageHeader = ({
             </div>
 
             <div className={cx(styles["right-extras"])}>
-              <ClusterSelector />
+              {showClusterSelector && <ClusterSelector />}
               {rightExtras &&
                 rightExtras.map((el) => {
                   return el;
