@@ -1,6 +1,7 @@
 import { Skeleton } from "@mui/material";
 import cx from "classnames";
 import ClusterRefreshButton from "components/clusters/ClusterRefreshButton";
+import ClusterSelector from "components/clusters/ClusterSelector";
 import TimeSelector from "components/helpers/TimeSelector";
 import BreadcrumbX from "components/themeX/BreadcrumbX";
 import Head from "next/head";
@@ -63,13 +64,14 @@ const PageHeader = ({
                   return ex;
                 })}
             </div>
-            {rightExtras && (
-              <div className={cx(styles["right-extras"])}>
-                {rightExtras.map((el) => {
+
+            <div className={cx(styles["right-extras"])}>
+              <ClusterSelector />
+              {rightExtras &&
+                rightExtras.map((el) => {
                   return el;
                 })}
-              </div>
-            )}
+            </div>
           </div>
         )}
       </header>

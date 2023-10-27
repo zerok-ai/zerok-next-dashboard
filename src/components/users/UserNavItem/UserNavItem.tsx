@@ -1,7 +1,8 @@
 import { Divider, Menu, MenuItem } from "@mui/material";
 import cx from "classnames";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useSelector } from "redux/store";
 import { ICON_BASE_PATH } from "utils/images";
 import { USER_NAV_LINKS } from "utils/navigation";
@@ -12,6 +13,10 @@ const UserNavItem = () => {
   const drawer = useSelector((state) => state.drawer);
   const isMinimized = drawer.isDrawerMinimized;
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const router = useRouter();
+  useEffect(() => {
+    setAnchorEl(null);
+  }, [router]);
   return (
     <div className={styles.wrapper}>
       <Divider />
@@ -38,6 +43,10 @@ const UserNavItem = () => {
         transformOrigin={{
           vertical: "top",
           horizontal: "left",
+        }}
+        style={{
+          left: `${isMinimized ? 55 : 250}px`,
+          top: "-12px",
         }}
       >
         {USER_NAV_LINKS.map((u) => {

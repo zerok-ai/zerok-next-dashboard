@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "redux/store";
+import { ICON_BASE_PATH } from "utils/images";
 import { type DrawerNavItemType } from "utils/types";
 
 import styles from "./NavigationItem.module.scss";
@@ -23,7 +24,10 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
   // };
 
   const isGroup = nav.type === "group";
-
+  const imgSrc = !active
+    ? `${ICON_BASE_PATH}/${nav.img}`
+    : `${ICON_BASE_PATH}/${nav.img.split(".")[0]}_active.svg`;
+  console.log({ imgSrc });
   useEffect(() => {
     if (isDrawerMinimized && isNavOpen) {
       setIsNavOpen(false);
@@ -32,7 +36,7 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
       setIsNavOpen(true);
     }
   }, [isDrawerMinimized]);
-  const isMinimized = isDrawerMinimized && !isNavOpen;
+  const isMinimized = isDrawerMinimized;
   const LinkWrapper = ({ children }: { children: React.ReactElement }) => {
     return isMinimized ? (
       <TooltipX title={nav.label} placement="right" arrow={true}>
@@ -42,6 +46,7 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
       <Link href={nav.path[0]}>{children}</Link>
     );
   };
+
   return (
     <LinkWrapper>
       <div
@@ -53,16 +58,9 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
       >
         <div className={styles["nav-item"]}>
           <div className={styles["icon-container"]}>
-            {!nav.reactIcon ? (
-              !active ? (
-                nav.icon
-              ) : (
-                nav.highlightIcon
-              )
-            ) : (
-              <span>{nav.reactIcon(styles["react-icon"])}</span>
-            )}
+            <img src={imgSrc} alt={nav.label} />
           </div>
+
           <p
             className={styles["link-label"]}
             role={isGroup ? "button" : "link"}

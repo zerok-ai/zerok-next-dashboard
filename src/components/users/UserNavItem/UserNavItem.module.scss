@@ -1,6 +1,7 @@
 @import "styles/variables.module.scss";
 .container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 28px 1fr;
     padding:$sp-md $sp-lg;
     margin:$sp-sm 0;
     column-gap: $sp-md;
@@ -14,9 +15,9 @@
     // width:60px;
     display: flex;
     align-items: center;
+    width:30px;
     > img {
         width: 24px;
-        height: 24px;
     }
 }
 
@@ -24,6 +25,7 @@
 .minimized {
     p {
         opacity: 0;
+        font-weight: 500;
     }
 }
 .minimized {
