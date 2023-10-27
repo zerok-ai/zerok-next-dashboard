@@ -87,7 +87,7 @@ const DataObfuscationPage = () => {
 
       <DrawerX
         onClose={toggleRegexDrawer}
-        title="Data Obfuscation Rules"
+        title="Create a new rule"
         width={REGEX_DRAWER_WIDTH}
         open={regexDrawerOpen}
       >
