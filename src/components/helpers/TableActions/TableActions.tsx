@@ -1,6 +1,7 @@
 import { Menu, MenuItem } from "@mui/material";
+import cx from "classnames";
 import { useState } from "react";
-import { HiEllipsisHorizontal } from "react-icons/hi2";
+import { HiEllipsisVertical } from "react-icons/hi2";
 import { TABLE_ACTION_LABELS } from "utils/tables/constants";
 import {
   type TableActionPropType,
@@ -25,14 +26,14 @@ const TableActions = <T,>({ list, data }: TableActionsProps<T>) => {
   };
   return (
     <div
-      className={styles.container}
+      className={cx(styles.container, !!anchorEl && styles.clicked)}
       role="button"
       onClick={(e) => {
         if (anchorEl) return;
         openMenu(e);
       }}
     >
-      <HiEllipsisHorizontal className={styles.icon} />
+      <HiEllipsisVertical className={cx(styles.icon)} />
       <Menu
         id="table-actions-menu"
         anchorEl={anchorEl}
