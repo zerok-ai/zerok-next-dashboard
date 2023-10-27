@@ -1,0 +1,42 @@
+@import "styles/variables.module.scss";
+@import "styles/mixins.scss";
+.container {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    padding:$sp-md $sp-lg;
+    margin:$sp-sm 0;
+    column-gap: $sp-md;
+    &:hover {
+        background-color: $grey-900;
+    }
+    transition: all 0.2s ease;
+    cursor: pointer;
+    
+}
+
+.user-icon-container {
+    // width:60px;
+    display: flex;
+    align-items: center;
+    width:30px;
+    > img {
+        width: 24px;
+    }
+}
+
+
+.minimized {
+    p {
+        opacity: 0;
+        @include label-large;
+    }
+}
+.menu {
+    :global(.MuiMenu-paper){
+        border:1px solid $grey-800;
+    }
+    ul {
+        width:250px;
+        
+    }
+}

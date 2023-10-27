@@ -1,5 +1,6 @@
-import { Button, IconButton, Skeleton, Switch } from "@mui/material";
+import { IconButton, Skeleton, Switch } from "@mui/material";
 import { type ColumnSort, createColumnHelper } from "@tanstack/react-table";
+import AddNewBtn from "components/helpers/AddNewBtn";
 import PageHeader from "components/helpers/PageHeader";
 import TableFilter from "components/helpers/TableFilter";
 import ChipX from "components/themeX/ChipX";
@@ -11,7 +12,6 @@ import { useTrigger } from "hooks/useTrigger";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineTrash, HiWrenchScrewdriver } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
 import { showSnackbar } from "redux/snackbar";
@@ -252,6 +252,9 @@ const PrometheusTable = () => {
       setSelectedIntegration(null);
     }
   };
+  const handleNewClick = () => {
+    router.push("/integrations/prometheus/create");
+  };
   return (
     <div>
       <PageHeader
@@ -272,16 +275,11 @@ const PrometheusTable = () => {
           />,
         ]}
         rightExtras={[
-          <Button
-            key="add-btn"
-            variant="contained"
-            className={styles["add-btn"]}
-            onClick={() => {
-              router.push(`/integrations/${name as string}/create`);
-            }}
-          >
-            <HiOutlinePlus /> Add data source
-          </Button>,
+          <AddNewBtn
+            text="Add new data source"
+            key="prom-new"
+            onClick={handleNewClick}
+          />,
         ]}
       />
       {selectedIntegration?.action === "delete" && (

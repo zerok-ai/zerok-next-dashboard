@@ -1,19 +1,87 @@
-import { Tab, Tabs } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Divider,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import cx from "classnames";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import IntegrationCard from "components/integrations/IntegrationCard";
 import PageLayout from "components/layouts/PageLayout";
-import { useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   INTEGRATION_CATEGORIES,
   INTEGRATION_LIST,
 } from "utils/integrations/constants";
+import { type IntegrationCategoriesType } from "utils/integrations/types";
 
 import styles from "./IntegrationsPage.module.scss";
 
 const IntegrationsPage = () => {
-  const [selectedTab, setSelectedTab] = useState(INTEGRATION_CATEGORIES[0]);
+  const [selectedTab, setSelectedTab] = useState<IntegrationCategoriesType>(
+    INTEGRATION_CATEGORIES[0]
+  );
+  const atRestList = useMemo(() => {
+    return INTEGRATION_LIST.filter((integration) => {
+      return integration.dataSubcategory === "at-rest";
+    });
+  }, []);
+  const inFlightList = useMemo(() => {
+    return INTEGRATION_LIST.filter((integration) => {
+      return integration.dataSubcategory === "in-flight";
+    });
+  }, []);
+  const accordions = useMemo(() => {
+    return [
+      {
+        title: "At rest data",
+        list: atRestList,
+      },
+      {
+        title: "In-flight data",
+        list: inFlightList,
+      },
+    ];
+  }, []);
+  const renderTabContent = () => {
+    if (selectedTab === "Communication") {
+      const list = INTEGRATION_LIST.filter((integration) =>
+        integration.tags.includes("Communication")
+      );
+      return list.map((integration) => {
+        return (
+          <IntegrationCard
+            key={integration.name}
+            integration={integration}
+            border={true}
+          />
+        );
+      });
+    } else {
+      return accordions.map((accordion, idx) => {
+        return (
+          <Accordion key={accordion.title} defaultExpanded>
+            <AccordionSummary>
+              <h6 className={styles["accordion-title"]}>{accordion.title}</h6>
+            </AccordionSummary>
+            <AccordionDetails>
+              {accordion.list.map((integration, idx) => {
+                return (
+                  <Fragment key={integration.name}>
+                    <IntegrationCard integration={integration} border={false} />
+                    {idx < accordion.list.length - 1 && <Divider />}
+                  </Fragment>
+                );
+              })}
+            </AccordionDetails>
+          </Accordion>
+        );
+      });
+    }
+  };
   return (
     <div className={styles.container}>
       <PageHeader
@@ -47,18 +115,7 @@ const IntegrationsPage = () => {
             );
           })}
         </Tabs>
-        <div className={styles["tab-content"]}>
-          {INTEGRATION_LIST.filter((integration) =>
-            integration.tags.includes(selectedTab)
-          ).map((integration) => {
-            return (
-              <IntegrationCard
-                key={integration.name}
-                integration={integration}
-              />
-            );
-          })}
-        </div>
+        <div className={styles["tab-content"]}>{renderTabContent()}</div>
       </div>
     </div>
   );

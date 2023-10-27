@@ -14,6 +14,9 @@
       color:$grey-25;
     }
   }
+  :global(.MuiOutlinedInput-notchedOutline ){
+    border-color: $grey-700;
+}
 }
 
 .menu-header {
@@ -33,8 +36,16 @@
   // }
 }
 
-.minimized {
-  padding: $sp-base;
+.select-display {
+  display: flex;
+  align-items: center;
+  column-gap: $sp-sm;
+  .unhealthy {
+    opacity: 0.8;
+  }
+  .healthy {
+    background-color: $primary-500;
+  }
 }
 
 .select-icon {
@@ -70,6 +81,7 @@
   height:10px;
   border-radius: 16px;
   border:1px solid $grey-500;
+  display: inline-block;
 }
 
 .healthy {

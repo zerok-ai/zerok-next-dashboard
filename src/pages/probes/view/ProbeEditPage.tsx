@@ -1,3 +1,4 @@
+import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ProbeCreateForm from "components/forms/ProbeCreateForm";
 import PageHeader from "components/helpers/PageHeader";
@@ -60,7 +61,9 @@ const ProbeEditPage = () => {
         showBreadcrumb
       />
       {probe ? (
-        <ProbeCreateForm edit={scenarioToProbeForm(probe)} />
+        <ValidClusterWrapper>
+          <ProbeCreateForm edit={scenarioToProbeForm(probe)} />
+        </ValidClusterWrapper>
       ) : (
         <CustomSkeleton len={10} />
       )}

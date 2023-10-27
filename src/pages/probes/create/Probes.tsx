@@ -1,3 +1,4 @@
+import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import ProbeCreateForm from "components/forms/ProbeCreateForm";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
@@ -14,7 +15,9 @@ const Probes = () => {
         showRefresh={false}
         showBreadcrumb
       />
-      <ProbeCreateForm edit={false} />
+      <ValidClusterWrapper>
+        <ProbeCreateForm edit={false} />
+      </ValidClusterWrapper>
     </Fragment>
   );
 };

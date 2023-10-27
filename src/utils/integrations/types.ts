@@ -1,14 +1,19 @@
 import {
   type INTEGRATION_APPS,
   type INTEGRATION_CATEGORIES,
+  type INTEGRATION_DATA_SUBCATEGORIES,
 } from "./constants";
 
 export type IntegrationCategoriesType = (typeof INTEGRATION_CATEGORIES)[number];
 
 export type IntegrationAppType = (typeof INTEGRATION_APPS)[number];
 
+export type IntegrationDataSubcategoryType =
+  (typeof INTEGRATION_DATA_SUBCATEGORIES)[number];
+
 export interface IntegrationListType {
   name: IntegrationAppType;
+  mandatory?: boolean;
   label: string;
   description: string;
   url: string;
@@ -22,6 +27,7 @@ export interface IntegrationListType {
   disableManage?: boolean;
   disabledText?: string;
   helperText?: string;
+  dataSubcategory?: IntegrationDataSubcategoryType;
 }
 export interface PrometheusBaseType {
   alias: string;
@@ -69,3 +75,19 @@ export type SlackListType =
       org_id: string;
       user_id: string;
     };
+
+export interface OtelIntegrationListType {
+  name: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  integration_status: number;
+}
+
+export interface EBPFIntegrationListType {
+  name: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  enabled: boolean;
+}
