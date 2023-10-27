@@ -130,6 +130,8 @@ export interface SpanDetail {
   highlightException?: string | null;
   totalTime?: number;
   errors?: SpanErrorDetail[] | string;
+  span_name: string;
+  service_name: string;
 }
 
 export type SpanResponse = Record<string, SpanDetail>;

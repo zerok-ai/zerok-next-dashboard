@@ -31,11 +31,8 @@ export const buildSpanTree = (
 
   if (childrenSpan.length > 0) {
     parentSpan.children = childrenSpan;
-    const isGRPC = parentSpan.protocol === "GRPC";
-
-    if (parentSpan.destination || (isGRPC && parentSpan.route)) {
-      ++level;
-    }
+    // const isGRPC = parentSpan.protocol === "GRPC";
+    ++level;
     childrenSpan.map((span) => {
       span.level = level;
       return buildSpanTree(spans, span, level);
@@ -187,21 +184,22 @@ export const AccordionLabel = ({
   highlight,
   isModalOpen,
 }: AccordionLabelProps) => {
-  const getSpanLink = () => {
-    if (isTopRoot) {
-      if (span.protocol === "GRPC") {
-        return span.route ?? "Unknown";
-      }
-      return span.source.length ? span.source : "Unknown";
-    }
-    if (span.protocol === "GRPC") {
-      return span.route;
-    }
-    return span.destination;
-  };
-  const name = getSpanLink();
-  const service = name.includes("/") ? name.split("/")[1] : name;
-  const spanName = getSpanName(span);
+  // const getSpanLink = () => {
+  //   if (isTopRoot) {
+  //     if (span.protocol === "GRPC") {
+  //       return span.route ?? "Unknown";
+  //     }
+  //     return span.source.length ? span.source : "Unknown";
+  //   }
+  //   if (span.protocol === "GRPC") {
+  //     return span.route;
+  //   }
+  //   return span.destination;
+  // };
+  // const name = getSpanLink();
+  // const service = name.includes("/") ? name.split("/")[1] : name;
+  const spanService = span.service_name ?? "Unknown";
+  const operationName = span.span_name ?? "";
   const width = getWidthByLevel(
     span.level ?? 0,
     isLastChild,
@@ -209,7 +207,7 @@ export const AccordionLabel = ({
     isTopRoot
   );
   const getCharacterCountFromLevel = () => {
-    return 60 - (span.level ?? 0) * 2;
+    return 35 - (span.level ?? 0) * 2;
   };
   return (
     <div className={styles["accordion-summary-content"]}>
@@ -220,7 +218,7 @@ export const AccordionLabel = ({
           minWidth: width,
         }}
       >
-        <TooltipX title={name}>
+        <TooltipX title={`${spanService} | ${operationName}`}>
           <span
             className={cx(
               styles["accordion-label"],
@@ -232,12 +230,15 @@ export const AccordionLabel = ({
               setSelectedSpan(span.span_id);
             }}
           >
-            {isModalOpen
-              ? service
-              : trimString(service, getCharacterCountFromLevel())}
+            {spanService}
           </span>
         </TooltipX>
-        {spanName}
+        |
+        <span className={styles["operation-name"]}>
+          {isModalOpen
+            ? operationName
+            : trimString(operationName, getCharacterCountFromLevel())}
+        </span>
       </p>
     </div>
   );

@@ -191,16 +191,6 @@ const TraceTree = ({
           });
         }
       };
-      const noSourceOrDestination = !span.destination;
-      const isGRPC = span.protocol === "GRPC";
-      const isHTTP = span.protocol === "HTTP";
-      if ((noSourceOrDestination && isHTTP && !isTopRoot) || !span.protocol) {
-        return nextRender();
-      }
-      if (isGRPC && !span.route) {
-        return nextRender();
-      }
-      console.log({ span });
       return (
         <Accordion
           key={nanoid()}
