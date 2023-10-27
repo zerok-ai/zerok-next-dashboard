@@ -4,21 +4,26 @@
     display: flex;
     flex-direction: column;
     row-gap: $sp-base;
+    cursor: pointer;
 }
 .nav-item {
-    display: flex;
-    padding: $sp-md $sp-xl;
-    align-items: center;
+    display: grid;
+    padding: $sp-md $sp-lg;
+    grid-template-columns: 28px 1fr;
     column-gap: $sp-md;
-    transition: all 0.2s ease;
-    cursor: pointer;
     &:hover {
         background-color: $grey-900;
     }
 }
 
 .icon-container {
-    @include logo-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:28px;
+    > img {
+        width:24px;
+    }
 }
 
 .link-label {

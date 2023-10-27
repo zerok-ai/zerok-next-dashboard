@@ -10,7 +10,7 @@ interface ClusterRefreshButtonProps {
 
 const ClusterRefreshButton = ({ onRefresh }: ClusterRefreshButtonProps) => {
   return (
-    <TooltipX title="Refresh data">
+    <TooltipX title="Refresh data" arrow={false}>
       <IconButton
         className={styles.container}
         size="large"

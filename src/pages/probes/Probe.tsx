@@ -1,6 +1,7 @@
 import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
 import { createColumnHelper, type SortingState } from "@tanstack/react-table";
 import cx from "classnames";
+import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
@@ -389,40 +390,42 @@ const Probe = () => {
         onRefresh={changeTrigger}
         // alignExtras="right"
       />
-      <DialogX
-        isOpen={!!(selectedProbe && selectedProbe.deleting)}
-        title="Delete Probe"
-        successText="Delete"
-        cancelText="Cancel"
-        onClose={() => {
-          resetSelectedProbe();
-        }}
-        onSuccess={handleDelete}
-        onCancel={() => {
-          resetSelectedProbe();
-        }}
-      >
-        <span>Are you sure you want to delete this probe?</span> <br />
-        <em>This action cannot be undone.</em>
-      </DialogX>
-      <div className={styles.table}>
-        {scenarios ? (
-          <TableX
-            data={scenarios ?? null}
-            columns={columns}
-            sortBy={sortBy}
-            onSortingChange={setSortBy}
-          />
-        ) : (
-          <CustomSkeleton len={8} />
-        )}
-      </div>
-      {/* <div className={styles.pagination}>
+      <ValidClusterWrapper>
+        <DialogX
+          isOpen={!!(selectedProbe && selectedProbe.deleting)}
+          title="Delete Probe"
+          successText="Delete"
+          cancelText="Cancel"
+          onClose={() => {
+            resetSelectedProbe();
+          }}
+          onSuccess={handleDelete}
+          onCancel={() => {
+            resetSelectedProbe();
+          }}
+        >
+          <span>Are you sure you want to delete this probe?</span> <br />
+          <em>This action cannot be undone.</em>
+        </DialogX>
+        <div className={styles.table}>
+          {scenarios ? (
+            <TableX
+              data={scenarios ?? null}
+              columns={columns}
+              sortBy={sortBy}
+              onSortingChange={setSortBy}
+            />
+          ) : (
+            <CustomSkeleton len={8} />
+          )}
+        </div>
+        {/* <div className={styles.pagination}>
         <PaginationX
           totalItems={totalScenarios ?? PROBE_PAGE_SIZE}
           itemsPerPage={PROBE_PAGE_SIZE}
         />
       </div> */}
+      </ValidClusterWrapper>
     </div>
   );
 };

@@ -62,8 +62,20 @@ export const BREADCRUMB_ROUTES: Record<
         path: "/integrations",
       },
       {
-        name: "Slack",
+        name: "Slack workspaces",
         path: "/integrations/slack/list",
+      },
+    ],
+  },
+  "/integrations/otel/list": {
+    crumbs: [
+      {
+        name: "Integrations",
+        path: "/integrations",
+      },
+      {
+        name: "OTel integrations",
+        path: "/integrations/otel/list",
       },
     ],
   },
