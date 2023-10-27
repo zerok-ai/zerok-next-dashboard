@@ -1,3 +1,4 @@
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "redux/store";
 
@@ -8,10 +9,12 @@ interface ValidClusterWrapperProps {
 }
 
 const ValidClusterWrapper = ({ children }: ValidClusterWrapperProps) => {
-  const { selectedCluster, clusters } = useSelector((state) => state.cluster);
+  const { selectedCluster, clusters, initialized } = useSelector(
+    (state) => state.cluster
+  );
   const [errorText, setErrorText] = useState<null | string>(null);
   useEffect(() => {
-    if (!clusters.length) {
+    if (initialized && !clusters.length) {
       setErrorText("Please add a cluster to continue.");
       return;
     }
@@ -30,6 +33,7 @@ const ValidClusterWrapper = ({ children }: ValidClusterWrapperProps) => {
       setErrorText(null);
     }
   }, [selectedCluster]);
+  if (!initialized) return <CustomSkeleton len={10} />;
   return (
     <Fragment>
       {errorText ? (

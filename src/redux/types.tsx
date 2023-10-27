@@ -29,6 +29,7 @@ export interface ClusterType {
 export interface ClusterReduxType {
   loading: boolean;
   empty: boolean;
+  initialized: boolean;
   error: boolean;
   clusters: ClusterType[];
   status: string;

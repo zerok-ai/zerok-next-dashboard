@@ -14,6 +14,7 @@ const initialState: ClusterReduxType = {
   loading: false,
   clusters: [],
   empty: false,
+  initialized: false,
   error: false,
   selectedCluster: "",
   status: "",
@@ -65,6 +66,7 @@ export const clusterSlice = createSlice({
       .addCase(getClusters.fulfilled, (state, action) => {
         state.clusters = action.payload;
         state.loading = false;
+        state.initialized = true;
         if (action.payload.length > 0) {
           state.empty = false;
           const localCluster = getClusterFromLocalStorage();
@@ -104,6 +106,7 @@ export const clusterSlice = createSlice({
         state.loading = false;
         state.error = true;
         state.status = "";
+        state.initialized = true;
       });
   },
 });

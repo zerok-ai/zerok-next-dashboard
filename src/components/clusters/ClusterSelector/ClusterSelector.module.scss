@@ -40,8 +40,11 @@
   display: flex;
   align-items: center;
   column-gap: $sp-sm;
-  .healthy, .unhealthy {
-    opacity: 0.6;
+  .unhealthy {
+    opacity: 0.8;
+  }
+  .healthy {
+    background-color: $primary-500;
   }
 }
 
