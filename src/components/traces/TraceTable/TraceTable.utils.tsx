@@ -24,6 +24,9 @@ export const getTraceColumns = ({
       size: DEFAULT_COL_WIDTH * 1.5,
       enableSorting: false,
       cell: (info) => {
+        const spanService = info.row.original.entry_service ?? "Unknown";
+        const spanPath = info.row.original.entry_path ?? "";
+        const spanName = `${spanService} ${spanPath ? `| ${spanPath}` : ""}`;
         return (
           <div className={styles["entry-point-container"]}>
             <span
@@ -32,7 +35,7 @@ export const getTraceColumns = ({
                 currentTrace === info.row.original.incident_id && styles.active
               )}
             >
-              {trimString(info.getValue(), 25)}{" "}
+              {trimString(spanName, 30)}{" "}
             </span>
             {/* {chatTrace === info.row.original.incident_id && (
               <ChipX label="Inferred" color="primary" upperCase={false} />
