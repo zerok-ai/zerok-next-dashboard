@@ -1,7 +1,7 @@
 @import "styles/variables.module.scss";
 .container {
    display: grid;
-   grid-template-columns: 60px 8fr 2.5fr;
+   grid-template-columns: 60px 8fr 3fr;
    width:1040px;
    background-color: $bg-dark;
    padding:$sp-md $sp-md;

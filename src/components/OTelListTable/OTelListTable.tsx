@@ -3,7 +3,8 @@ import PageHeader from "components/helpers/PageHeader";
 import TableX from "components/themeX/TableX";
 import dayjs from "dayjs";
 import { Fragment } from "react";
-import { useSelector } from "redux/store";
+import { openClusterModal } from "redux/cluster";
+import { useDispatch, useSelector } from "redux/store";
 import { type OtelIntegrationListType } from "utils/integrations/types";
 
 import styles from "./OTelListTable.module.scss";
@@ -12,6 +13,7 @@ import { OTEL_COLUMNS } from "./OTelListTable.utils";
 const OTelListTable = () => {
   const { clusters } = useSelector((state) => state.cluster);
   const columns = OTEL_COLUMNS;
+  const dispatch = useDispatch();
   const data: OtelIntegrationListType[] = clusters.map((cluster) => ({
     name: cluster.name,
     created_at: dayjs().toString(),
@@ -33,7 +35,7 @@ const OTelListTable = () => {
             key={"new-otel"}
             text="Add new integration"
             onClick={() => {
-              console.log("Add new integration");
+              dispatch(openClusterModal());
             }}
           />,
         ]}

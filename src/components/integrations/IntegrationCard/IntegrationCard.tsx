@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import cx from "classnames";
+import AddNewBtn from "components/helpers/AddNewBtn";
 import ChipX from "components/themeX/ChipX";
 import { useRouter } from "next/router";
-import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineCog6Tooth } from "react-icons/hi2";
 import { openClusterModal } from "redux/cluster";
 import { useDispatch } from "redux/store";
@@ -45,6 +45,14 @@ const IntegrationCard = ({ integration, border }: IntegrationCardProps) => {
   };
   const handleRoute = (page: string) => {
     router.push(`/integrations/${name}/${page}`);
+  };
+
+  const handleNewClick = () => {
+    if (triggerClusterModal) {
+      dispatch(openClusterModal());
+    } else {
+      handleRoute("create");
+    }
   };
   return (
     <div className={cx(styles.container, border && styles.border)}>
@@ -91,21 +99,12 @@ const IntegrationCard = ({ integration, border }: IntegrationCardProps) => {
         )}
         {/* New */}
         {integrated && !disableAddNew && (
-          <Button
-            color={"primary"}
+          <AddNewBtn
+            text="Add new"
+            onClick={handleNewClick}
+            variant="text"
             size="small"
-            className={styles["action-button"]}
-            onClick={() => {
-              if (!triggerClusterModal) {
-                handleRoute("create");
-              } else {
-                dispatch(openClusterModal());
-              }
-            }}
-          >
-            <HiOutlinePlus className={styles["action-icon"]} />
-            {"Add new"}
-          </Button>
+          />
         )}
       </div>
     </div>

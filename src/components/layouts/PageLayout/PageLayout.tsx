@@ -1,4 +1,5 @@
 import cx from "classnames";
+import ClusterCreateModal from "components/clusters/ClusterCreateModal";
 import ErrorBoundary from "components/ErrorBoundary";
 import DrawerToggleButton from "components/helpers/DrawerToggleButton";
 import MainDrawer from "components/layouts/MainDrawer";
@@ -9,9 +10,13 @@ import { useSelector } from "redux/store";
 import styles from "./PageLayout.module.scss";
 interface PageLayoutProps {
   children: React.ReactNode;
+  showClusterModal?: boolean;
 }
 
-const PageLayout = ({ children }: PageLayoutProps) => {
+const PageLayout = ({
+  children,
+  showClusterModal = false,
+}: PageLayoutProps) => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
 
   return (
@@ -39,6 +44,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
           <ZkSnackbar />
           <ErrorBoundary>{children}</ErrorBoundary>
         </main>
+        {showClusterModal && <ClusterCreateModal />}
       </div>
     </div>
   );

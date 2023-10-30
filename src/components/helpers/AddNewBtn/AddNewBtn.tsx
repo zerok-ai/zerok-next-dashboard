@@ -6,15 +6,23 @@ import styles from "./AddNewBtn.module.scss";
 interface AddNewBtnProps {
   text: string;
   onClick: () => void;
+  variant?: "contained" | "outlined" | "text";
+  size?: "small" | "medium" | "large";
 }
 
-const AddNewBtn = ({ text, onClick }: AddNewBtnProps) => {
+const AddNewBtn = ({
+  text,
+  onClick,
+  variant = "contained",
+  size = "medium",
+}: AddNewBtnProps) => {
   return (
     <Button
       key="add-btn"
-      variant="contained"
+      variant={variant}
       className={styles["add-btn"]}
       onClick={onClick}
+      size={size}
     >
       <HiOutlinePlus /> {text}
     </Button>

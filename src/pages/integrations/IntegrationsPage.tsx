@@ -124,7 +124,7 @@ const IntegrationsPage = () => {
 IntegrationsPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
-      <PageLayout>{page}</PageLayout>
+      <PageLayout showClusterModal={true}>{page}</PageLayout>
     </PrivateRoute>
   );
 };

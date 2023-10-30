@@ -1,6 +1,5 @@
 import { Divider, IconButton, MenuItem, Select, Skeleton } from "@mui/material";
 import cx from "classnames";
-import ClusterCreateModal from "components/clusters/ClusterCreateModal";
 import TooltipX from "components/themeX/TooltipX";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -155,7 +154,6 @@ const ClusterSelector = () => {
         </Select>
 
         {/* Modal */}
-        <ClusterCreateModal />
       </fieldset>
     </TooltipX>
   );
