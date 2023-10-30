@@ -67,7 +67,6 @@ const DataObfuscationPage = () => {
       case "custom":
         return <TableX columns={columns} data={[]} noDataMessage="No data." />;
       case "default":
-        /* @ts-expect-error idk why */
         return <TableX columns={ruleColumns} data={DEFAULT_RULES} />;
     }
   };

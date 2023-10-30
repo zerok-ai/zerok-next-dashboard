@@ -205,6 +205,7 @@ export const DEFAULT_RULES = [
   {
     name: " SpacyRecognizer ",
     supported_entities: ["DATE_TIME", "NRP", "LOCATION", "PERSON"],
+    patterns: [],
   },
   {
     name: " UsBankRecognizer ",
@@ -220,6 +221,7 @@ export const DEFAULT_RULES = [
   {
     name: " PhoneRecognizer ",
     supported_entities: ["PHONE_NUMBER"],
+    patterns: [],
   },
   {
     name: " UsLicenseRecognizer ",
