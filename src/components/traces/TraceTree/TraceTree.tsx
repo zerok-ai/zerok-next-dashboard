@@ -321,7 +321,8 @@ const TraceTree = ({
         <div
           className={cx(
             styles.tree,
-            isModalOpen ? styles.expanded : styles.collapsed
+            isModalOpen ? styles.expanded : styles.collapsed,
+            spans && selectedSpan && styles["lock-scroll"]
           )}
           id="trace-tree-container"
           onClick={(e) => {
