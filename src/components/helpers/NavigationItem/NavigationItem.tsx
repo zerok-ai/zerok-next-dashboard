@@ -36,30 +36,29 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
     }
   }, [isDrawerMinimized]);
   const isMinimized = isDrawerMinimized;
-  const LinkWrapper = ({ children }: { children: React.ReactElement }) => {
-    return isMinimized ? (
-      <TooltipX title={nav.label} placement="right" arrow={true}>
-        <Link href={nav.path[0]}>{children}</Link>
-      </TooltipX>
-    ) : (
-      <Link href={nav.path[0]}>{children}</Link>
-    );
-  };
 
   return (
-    <LinkWrapper>
+    <TooltipX
+      title={nav.label}
+      placement="right"
+      arrow={false}
+      disabled={!isMinimized}
+    >
       <div
         className={cx(
           styles.container,
           active && styles.active,
           isDrawerMinimized && styles.minimized
         )}
+        role="link"
+        onClick={() => {
+          router.push(nav.path[0]);
+        }}
       >
         <div className={styles["nav-item"]}>
           <div className={styles["icon-container"]}>
             <img src={imgSrc} alt={nav.label} />
           </div>
-
           <p
             className={styles["link-label"]}
             role={isGroup ? "button" : "link"}
@@ -92,7 +91,7 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
           </nav>
         )}
       </div>
-    </LinkWrapper>
+    </TooltipX>
   );
 };
 

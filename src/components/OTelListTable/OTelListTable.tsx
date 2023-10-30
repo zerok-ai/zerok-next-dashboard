@@ -30,7 +30,7 @@ const OTelListTable = () => {
         showRange={false}
         htmlTitle="OpenTelemetry Integrations"
         showClusterSelector={false}
-        rightExtras={[
+        leftExtras={[
           <AddNewBtn
             key={"new-otel"}
             text="Add new integration"

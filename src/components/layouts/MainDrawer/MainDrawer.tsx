@@ -52,6 +52,7 @@ const MainDrawer = () => {
     },
     [router]
   );
+
   return (
     <StyledMainDrawer
       open={isDrawerMinimized}
