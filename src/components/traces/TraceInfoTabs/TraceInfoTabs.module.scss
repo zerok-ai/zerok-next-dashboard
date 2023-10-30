@@ -1,5 +1,6 @@
 @import "styles/variables.module.scss";
 .container {
+// overflow-y: hidden;
 }
 
 
@@ -9,6 +10,8 @@
     row-gap: $sp-lg;
     padding:$sp-lg 0;
     justify-content: flex-start;
+    max-height: 40px;
+    
 }
 
 .key-value-row {
@@ -26,4 +29,19 @@
 
 .full-width {
     grid-template-columns: 1fr ;
+}
+
+.span-attr-row {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    padding:$sp-sm;
+    border-bottom: 1px solid $grey-900;
+}
+
+.span-attr-key {
+    color:$grey-300;
+}
+
+.span-attr-value {
+    color:$grey-25;
 }

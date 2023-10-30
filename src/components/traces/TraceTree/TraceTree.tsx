@@ -67,6 +67,7 @@ const TraceTree = ({
   } = useFetch<SpanResponse>("spans", null, spanTransformer);
   const { selectedCluster } = useSelector(clusterSelector);
   // const [debugMode, toggleDebugMode] = useToggle(false);
+  console.log({ spans });
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
 

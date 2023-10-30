@@ -39,3 +39,5 @@ export const GET_SERVICE_PODS_ENDPOINT = `/v1/u/cluster/{cluster_id}/pod/list?st
 export const GET_POD_DETAILS_ENDPOINT = `/v1/u/cluster/{cluster_id}/pod/details?st={range}&ns={namespace}&pod_name={pod_name}`;
 
 export const GET_ERROR_DETAILS_ENDPOINT = `/v1/c/{cluster_id}/axon/issue/error`;
+
+export const GET_SPAN_TAGS_ENDPOINT = `/v1/c/{cluster_id}/axon/issue/{issue_id}/incident/{incident_id}/span/{span_id}/tags`;

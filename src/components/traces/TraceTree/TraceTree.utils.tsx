@@ -78,7 +78,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
   const errorSet = new Set();
   topKeys.forEach((key) => {
     const span = spanData[key];
-    formattedSpans[key] = { ...span };
+
     // check for exceptions span
     if (span.errors && span.errors.length > 0) {
       try {
@@ -98,6 +98,29 @@ export const spanTransformer = (spanData: SpanResponse) => {
         span.errors = [];
       }
     }
+    console.log("HERE");
+    span.all_attributes = {};
+    if (span.resource_attributes) {
+      span.all_attributes = {
+        ...span.resource_attributes,
+        ...span.all_attributes,
+      };
+    }
+    if (span.span_attributes) {
+      span.all_attributes = { ...span.span_attributes, ...span.all_attributes };
+    }
+    if (span.scope_attributes) {
+      span.all_attributes = {
+        ...span.scope_attributes,
+        ...span.all_attributes,
+      };
+    }
+    console.log({ span }, Object.keys(span.all_attributes));
+    formattedSpans[key] = { ...span };
+    // if (Object.keys(span.all_attributes).length === 0) {
+    //   console.log("in delete");
+    //   delete span.all_attributes;
+    // }
     return true;
   });
   // get the total spanlength in milliseconds

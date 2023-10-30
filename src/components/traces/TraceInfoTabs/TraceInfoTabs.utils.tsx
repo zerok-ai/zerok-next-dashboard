@@ -149,6 +149,26 @@ export const DEFAULT_TABS = [
   },
 ];
 
+export const SPAN_ATTRIBUTE_TABS = [
+  {
+    label: "Span Attributes",
+    value: "span_attributes",
+    render: (metadata: SpanDetail) => {
+      const keys = Object.keys(metadata.all_attributes!);
+      return keys.map((key) => {
+        return (
+          <div className={cx(styles["span-attr-row"])} key={nanoid()}>
+            {<div className={styles["span-attr-key"]}>{key}:</div>}
+            <div className={styles["span-attr-value"]}>
+              {metadata.all_attributes![key]}
+            </div>
+          </div>
+        );
+      });
+    },
+  },
+];
+
 export const HTTP_TABS = [
   {
     label: "Request headers",

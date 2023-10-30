@@ -132,6 +132,10 @@ export interface SpanDetail {
   errors?: SpanErrorDetail[] | string;
   span_name: string;
   service_name: string;
+  span_attributes?: GenericObject;
+  resource_attributes?: GenericObject;
+  scope_attributes?: GenericObject;
+  all_attributes?: GenericObject;
 }
 
 export type SpanResponse = Record<string, SpanDetail>;

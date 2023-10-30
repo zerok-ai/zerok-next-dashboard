@@ -1,19 +1,20 @@
 import { Tab, Tabs } from "@mui/material";
 import TabSkeletons from "components/helpers/TabSkeletons";
 import { useFetch } from "hooks/useFetch";
-// import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-// import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
-// import { GET_SPAN_RAWDATA_ENDPOINT } from "utils/endpoints";
 import { type SpanRawDataResponse, type SpanResponse } from "utils/types";
 
 import styles from "./TraceInfoTabs.module.scss";
-import { DEFAULT_TABS, getTabs } from "./TraceInfoTabs.utils";
+import {
+  DEFAULT_TABS,
+  getTabs,
+  SPAN_ATTRIBUTE_TABS,
+} from "./TraceInfoTabs.utils";
 
 interface TraceInfoTabsProps {
   selectedSpan: string;
@@ -44,12 +45,17 @@ const TraceInfoTabs = ({
       fetchRawData(endpoint);
     }
   }, [selectedSpan, incidentId]);
+  // useEffect(() => {
+  //   if(selectedSpan){
+  //     fetchSpanTags
+  //   }
+  // },[selectedSpan])
   const rawData = rawResponse ? rawResponse[selectedSpan] : null;
   if (!rawResponse || !rawData) {
     return <TabSkeletons />;
   }
 
-  const tabs = getTabs(rawData.protocol);
+  let tabs = getTabs(rawData.protocol);
 
   const renderTab = () => {
     const tab = tabs.find((t) => t.value === activeTab);
@@ -58,17 +64,13 @@ const TraceInfoTabs = ({
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       return tab.render(span, rawData);
     }
-    // if (tab && tab.render) {
-    //   return (
-    //     <p>
-    //       This feature is disabled for this organisation. Please contact ZeroK
-    //       to know more.
-    //     </p>
-    //   );
-    // }
     return null;
   };
 
+  const span = allSpans[selectedSpan];
+  if (span.all_attributes) {
+    tabs = [...tabs, ...SPAN_ATTRIBUTE_TABS];
+  }
   return (
     <div className={styles.container}>
       <Tabs
