@@ -1,15 +1,13 @@
 @import "styles/variables.module.scss";
 .container {
-    height:0;
+  overflow: hidden;
 }
 
 
 
 .drawer {
     z-index: 1;
-    height:100%;
-    overflow-y: auto;
-    
+
     :global(.MuiPaper-root){
         padding:$sp-xl;
         border-left: 2px solid $grey-700;

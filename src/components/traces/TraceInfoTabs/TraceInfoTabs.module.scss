@@ -1,6 +1,6 @@
 @import "styles/variables.module.scss";
 .container {
-// overflow-y: hidden;
+overflow-y: hidden;
 }
 
 
@@ -10,8 +10,6 @@
     row-gap: $sp-lg;
     padding:$sp-lg 0;
     justify-content: flex-start;
-    max-height: 40px;
-    
 }
 
 .key-value-row {
