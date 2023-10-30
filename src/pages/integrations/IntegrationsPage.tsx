@@ -37,12 +37,12 @@ const IntegrationsPage = () => {
   const accordions = useMemo(() => {
     return [
       {
-        title: "At rest data",
-        list: atRestList,
-      },
-      {
         title: "In-flight data",
         list: inFlightList,
+      },
+      {
+        title: "At rest data",
+        list: atRestList,
       },
     ];
   }, []);
