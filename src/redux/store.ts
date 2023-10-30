@@ -10,6 +10,7 @@ import authReducer from "./authSlice";
 import chatReducer from "./chat";
 import clusterReducer from "./cluster";
 import drawerReducer from "./drawer";
+import flagReducer from "./flags";
 import incidentListReducer from "./incidentList";
 import snackbarSlice from "./snackbar";
 
@@ -20,6 +21,7 @@ const reducers = {
   cluster: clusterReducer,
   incidentList: incidentListReducer,
   snackbar: snackbarSlice,
+  flag: flagReducer,
 };
 
 const store = configureStore({

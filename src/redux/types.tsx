@@ -1,4 +1,5 @@
 import { type CHAT_EVENTS } from "utils/gpt/constants";
+import { type GenericObject } from "utils/types";
 
 export interface UserProfileType {
   id: string;
@@ -139,3 +140,5 @@ export interface ChatReduxType {
   pastEventCount: number | null;
   likelyCauseError?: boolean;
 }
+
+export type FlagReduxType = GenericObject;

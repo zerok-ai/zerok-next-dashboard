@@ -14,9 +14,10 @@ import "styles/mui-overrides.scss"
 
 import { type NextPage } from "next";
 import type { AppProps } from "next/app";
-import { type ReactElement } from "react";
+import { type ReactElement, useEffect } from "react";
 // third-party
 import { Provider } from "react-redux";
+import { fetchAllFlags } from "redux/flags";
 import store from "redux/store";
 import ThemeCustomization from "themes";
 
@@ -32,6 +33,9 @@ interface Props {
 
 const App = ({ Component, pageProps }: AppProps & Props) => {
   const getLayout = Component.getLayout ?? ((page: any) => page);
+  useEffect(() => {
+    store.dispatch(fetchAllFlags());
+  }, []);
   return (
     <Provider store={store}>
       <ThemeCustomization>
