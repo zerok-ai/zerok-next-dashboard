@@ -203,8 +203,12 @@ export const AccordionLabel = ({
   // };
   // const name = getSpanLink();
   // const service = name.includes("/") ? name.split("/")[1] : name;
-  const spanService = span.service_name ?? "Unknown";
-  const operationName = span.span_name ?? "";
+  const spanService =
+    span.service_name && span.service_name.length
+      ? span.service_name
+      : "Unknown";
+  const operationName =
+    span.span_name && span.span_name.length ? ` | ${span.span_name}` : "";
   const width = getWidthByLevel(
     span.level ?? 0,
     isLastChild,
@@ -223,7 +227,7 @@ export const AccordionLabel = ({
           minWidth: width,
         }}
       >
-        <TooltipX title={`${spanService} | ${operationName}`}>
+        <TooltipX title={`${spanService} ${operationName}`}>
           <span
             className={cx(
               styles["accordion-label"],
@@ -238,7 +242,7 @@ export const AccordionLabel = ({
             {spanService}
           </span>
         </TooltipX>
-        |
+
         <span className={styles["operation-name"]}>
           {isModalOpen
             ? operationName
