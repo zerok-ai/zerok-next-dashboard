@@ -12,7 +12,7 @@ zerokGlanceDashboard:
         cpu: 500m
         memory: 128Mi
 image:
-  repo: "zerok-glance-dashboard"
+  repo: "zerok-next-dashboard"
   tag: "latest"
   imagePullPolicy: Always
 global:
