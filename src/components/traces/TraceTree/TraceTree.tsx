@@ -39,7 +39,7 @@ import styles from "./TraceTree.module.scss";
 import {
   AccordionLabel,
   buildSpanTree,
-  checkForVisibleChildren,
+  // checkForVisibleChildren,
   COLORS,
   getRootSpan,
   SpanLatency,
@@ -144,9 +144,9 @@ const TraceTree = ({
       isLastChild: boolean = false
     ) => {
       const highlight = !!span.errors && span.errors.length > 0;
-      const hasVisibleChildren = checkForVisibleChildren(span);
+      // const hasVisibleChildren = checkForVisibleChildren(span);
       const WrapperElement = ({ children }: { children: React.ReactNode }) => {
-        return isLastChild || !hasVisibleChildren ? (
+        return isLastChild ? (
           <div className={cx(styles["last-child"])} role="button">
             {children}
           </div>
@@ -203,7 +203,7 @@ const TraceTree = ({
               <AccordionLabel
                 span={span}
                 highlight={highlight}
-                isLastChild={isLastChild || !hasVisibleChildren}
+                isLastChild={isLastChild}
                 isTopRoot={isTopRoot}
                 setSelectedSpan={setSelectedSpan}
                 isModalOpen={isModalOpen}

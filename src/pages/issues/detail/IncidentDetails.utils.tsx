@@ -1,5 +1,6 @@
 import { Skeleton, Tooltip } from "@mui/material";
 import PageHeader from "components/helpers/PageHeader";
+import TooltipX from "components/themeX/TooltipX";
 import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -18,7 +19,7 @@ export const IssueMetadata = () => {
   // const { data: issue, fetchData } = useFetch<IssueDetail>("issue");
   const { data: issue, fetchData: fetchIssue } = useFetch<IssueDetail>("issue");
   const router = useRouter();
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, clusters } = useSelector(clusterSelector);
   const issueId = router.query.issue_id;
 
   // const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
@@ -36,8 +37,13 @@ export const IssueMetadata = () => {
 
   const IssueTimes = () => {
     if (!issue) return null;
+    const cluster = clusters.find((c) => c.id === selectedCluster);
     return (
       <div className={styles["incident-metadata-container"]}>
+        <TooltipX title="Cluster" placement="bottom">
+          <span>{cluster!.name}</span>
+        </TooltipX>
+        |
         <AiOutlineClockCircle />{" "}
         <Tooltip
           title={`${getFormattedTime(issue.last_seen)}`}
