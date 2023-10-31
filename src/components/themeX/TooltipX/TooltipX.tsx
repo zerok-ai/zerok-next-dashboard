@@ -15,6 +15,9 @@ const TooltipX = ({
   children,
   disabled = false,
 }: TooltipXProps) => {
+  if (disabled) {
+    return children;
+  }
   return (
     <Tooltip
       disableFocusListener={!!disabled}

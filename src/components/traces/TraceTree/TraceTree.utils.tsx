@@ -1,6 +1,10 @@
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import cx from "classnames";
 import TooltipX from "components/themeX/TooltipX";
 import dayjs from "dayjs";
+import { nanoid } from "nanoid";
+import { Fragment, useMemo, useState } from "react";
+import { HiChevronRight } from "react-icons/hi";
 import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds, trimString } from "utils/functions";
@@ -72,7 +76,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
   const topKeys = Object.keys(spanData);
   const rootSpan = getRootSpan(spanData);
   if (!rootSpan) {
-    return {};
+    return spanData;
   }
   const errors: SpanErrorDetail[] = [];
   const errorSet = new Set();
@@ -98,7 +102,6 @@ export const spanTransformer = (spanData: SpanResponse) => {
         span.errors = [];
       }
     }
-    console.log("HERE");
     span.all_attributes = {};
     if (span.resource_attributes) {
       span.all_attributes = {
@@ -115,7 +118,6 @@ export const spanTransformer = (spanData: SpanResponse) => {
         ...span.all_attributes,
       };
     }
-    console.log({ span }, Object.keys(span.all_attributes));
     formattedSpans[key] = { ...span };
     // if (Object.keys(span.all_attributes).length === 0) {
     //   console.log("in delete");
@@ -212,20 +214,6 @@ export const AccordionLabel = ({
   highlight,
   isModalOpen,
 }: AccordionLabelProps) => {
-  // const getSpanLink = () => {
-  //   if (isTopRoot) {
-  //     if (span.protocol === "GRPC") {
-  //       return span.route ?? "Unknown";
-  //     }
-  //     return span.source.length ? span.source : "Unknown";
-  //   }
-  //   if (span.protocol === "GRPC") {
-  //     return span.route;
-  //   }
-  //   return span.destination;
-  // };
-  // const name = getSpanLink();
-  // const service = name.includes("/") ? name.split("/")[1] : name;
   const spanService =
     span.service_name && span.service_name.length
       ? span.service_name
@@ -250,7 +238,12 @@ export const AccordionLabel = ({
           minWidth: width,
         }}
       >
-        <TooltipX title={`${spanService} ${operationName}`}>
+        <TooltipX
+          title={`${spanService} ${operationName}`}
+          disabled={isModalOpen}
+          placement="right"
+          arrow={false}
+        >
           <span
             className={cx(
               styles["accordion-label"],
@@ -309,7 +302,9 @@ export const SpanLatencyTimeline = ({
         style={{
           width: `${timelineWidth}%`,
           marginLeft: `${
-            timelineDisplacement >= 0 ? timelineDisplacement : 0
+            timelineDisplacement >= 0 && timelineDisplacement <= 100
+              ? timelineDisplacement
+              : 0
           }%`,
         }}
       ></p>
@@ -373,4 +368,124 @@ export const getSpanName = (span: SpanDetail) => {
       </span>
     );
   }
+};
+
+export const SpanAccordion = ({
+  span,
+  isLastChild,
+  isTopRoot,
+  setSelectedSpan,
+  referenceTime,
+  isModalOpen,
+}: {
+  span: SpanDetail;
+  isLastChild: boolean;
+  isTopRoot: boolean;
+  setSelectedSpan: (spanId: string) => void;
+  referenceTime: {
+    startTime: string;
+    totalTime: number;
+  };
+  isModalOpen: boolean;
+}) => {
+  const [expanded, setExpanded] = useState(true);
+  const highlight = !!span.errors && span.errors.length > 0;
+  const AccordionIcon = useMemo(() => {
+    return (
+      <HiChevronRight
+        className={styles["expand-icon"]}
+        onClick={() => {
+          setExpanded(!expanded);
+        }}
+      />
+    );
+  }, [expanded]);
+  // const hasVisibleChildren = checkForVisibleChildren(span);
+  const WrapperElement = ({ children }: { children: React.ReactNode }) => {
+    return isLastChild ? (
+      <div className={cx(styles["last-child"])} role="button">
+        {children}
+      </div>
+    ) : (
+      <AccordionSummary
+        className={styles["accordion-summary"]}
+        expandIcon={AccordionIcon}
+        style={{ borderLeft: `1px solid ${borderColor}` }}
+      >
+        {children}
+      </AccordionSummary>
+    );
+  };
+  const level = span.level ?? 0;
+  const colorsLength = COLORS.length - 1;
+  const borderColor = isTopRoot
+    ? TOP_BORDER_COLOR
+    : COLORS[level % colorsLength];
+
+  const defaultExpanded = isTopRoot
+    ? true
+    : span.children && span.children.length > 0;
+
+  const shouldRenderLatency =
+    !isTopRoot || (isTopRoot && !span.destination && !span.source);
+
+  const nextRender = (): null | React.ReactNode => {
+    if (isTopRoot) {
+      return (
+        <SpanAccordion
+          span={span}
+          isTopRoot={false}
+          isLastChild={!span.children || span.children.length === 0}
+          setSelectedSpan={setSelectedSpan}
+          referenceTime={referenceTime}
+          isModalOpen={isModalOpen}
+        />
+      );
+    } else {
+      return span.children?.map((child) => {
+        const hasChildren = child.children && child.children.length > 0;
+        return (
+          <SpanAccordion
+            span={child}
+            key={span.span_id}
+            isLastChild={!hasChildren}
+            isTopRoot={false}
+            setSelectedSpan={setSelectedSpan}
+            referenceTime={referenceTime}
+            isModalOpen={isModalOpen}
+          />
+        );
+      });
+    }
+  };
+  return (
+    <Accordion
+      key={nanoid()}
+      defaultExpanded={defaultExpanded}
+      className={styles.accordion}
+      expanded={expanded}
+    >
+      <WrapperElement>
+        <Fragment>
+          <AccordionLabel
+            span={span}
+            highlight={highlight}
+            isLastChild={isLastChild}
+            isTopRoot={isTopRoot}
+            setSelectedSpan={setSelectedSpan}
+            isModalOpen={isModalOpen}
+          />
+          {shouldRenderLatency && (
+            <Fragment>
+              <SpanLatency latency={span.latency} />
+              <SpanLatencyTimeline span={span} referenceTime={referenceTime} />
+            </Fragment>
+          )}
+        </Fragment>
+      </WrapperElement>
+      <AccordionDetails className={styles["accordion-details"]}>
+        {nextRender()}
+      </AccordionDetails>
+    </Accordion>
+  );
 };
