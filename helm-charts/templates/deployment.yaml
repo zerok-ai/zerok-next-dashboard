@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "zerok-next-dashboard"
+  name: "zerok-glance-dashboard"
   labels:
   {{- include "helm-charts.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.zerokNextDashboard.replicas }}
+  replicas: {{ .Values.zerokGlanceDashboard.replicas }}
   selector:
     matchLabels:
-      app: "zerok-next-dashboard"
+      app: "zerok-glance-dashboard"
     {{- include "helm-charts.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: "zerok-next-dashboard"
+        app: "zerok-glance-dashboard"
       {{- include "helm-charts.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -22,8 +22,8 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: "{{ index .Values.global.dockerBase}}/{{ index .Values.image.repo}}:{{ index .Values.image.tag}}"
         imagePullPolicy: {{ .Values.image.imagePullPolicy }}
-        name: "zerok-next-dashboard"
+        name: "zerok-glance-dashboard"
         ports:
         - containerPort: 80
-        resources: {{- toYaml .Values.zerokNextDashboard.zerokNextDashboard.resources |
+        resources: {{- toYaml .Values.zerokGlanceDashboard.zerokGlanceDashboard.resources |
           nindent 10 }}

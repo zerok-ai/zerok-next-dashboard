@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: 'zerok-next-dashboard'
+  name: 'zerok-glance-dashboard'
   labels:
   {{- include "helm-charts.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.zerokNextDashboard.type }}
+  type: {{ .Values.zerokGlanceDashboard.type }}
   selector:
-    app: 'zerok-next-dashboard'
+    app: 'zerok-glance-dashboard'
   {{- include "helm-charts.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.zerokNextDashboard.ports | toYaml | nindent 2 -}}
+	{{- .Values.zerokGlanceDashboard.ports | toYaml | nindent 2 -}}
