@@ -13,6 +13,7 @@ export const useFetch = <T>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [initialFetchDone, setInitialFetchDone] = useState(false);
   const [errorData, setErrorData] = useState<any>(null); // @TODO - add type here
   const fetchData = async (endpoint: string) => {
     try {
@@ -30,11 +31,20 @@ export const useFetch = <T>(
       sendError(err);
     } finally {
       setLoading(false);
+      setInitialFetchDone(true);
     }
   };
 
   useEffect(() => {
     if (url !== null && url !== undefined) fetchData(url);
   }, [url]);
-  return { data, loading, error, fetchData, setData, errorData };
+  return {
+    data,
+    loading,
+    error,
+    fetchData,
+    setData,
+    errorData,
+    initialFetchDone,
+  };
 };

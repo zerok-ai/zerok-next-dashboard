@@ -50,8 +50,10 @@ const TraceTree = ({
     data: spans,
     fetchData: fetchSpans,
     setData: setSpans,
+    initialFetchDone,
   } = useFetch<SpanResponse>("spans", null, spanTransformer);
   const { selectedCluster } = useSelector(clusterSelector);
+  const [spanCustomError, setSpanCustomError] = useState<null | boolean>(null);
   // const [debugMode, toggleDebugMode] = useToggle(false);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
@@ -101,7 +103,13 @@ const TraceTree = ({
         toggleListMode(true);
       }
     }
-  }, [spans]);
+    if (spans && Object.keys(spans).length === 0) {
+      setSpanCustomError(true);
+    }
+    if (!spans && initialFetchDone) {
+      setSpanCustomError(true);
+    }
+  }, [spans, initialFetchDone]);
 
   useEffect(() => {
     if (spanTree) {
@@ -113,7 +121,7 @@ const TraceTree = ({
         startTime: spanTree.start_time,
       });
     }
-    if (spans && listMode) {
+    if (spans && listMode && !spanCustomError) {
       const startTime = getEarliestSpan(spans);
       const totalTime = getSpanTotalTime(spans, startTime);
       setReferenceTime({
@@ -121,7 +129,7 @@ const TraceTree = ({
         totalTime,
       });
     }
-  }, [spanTree, spans, listMode]);
+  }, [spanTree, spans, listMode, spanCustomError]);
 
   useEffect(() => {
     if (!isModalOpen && selectedSpan) {
@@ -278,48 +286,54 @@ const TraceTree = ({
           </div>
         </div>
 
-        <div
-          className={cx(
-            styles.tree,
-            isModalOpen ? styles.expanded : styles.collapsed,
-            spans && selectedSpan && styles["lock-scroll"]
-          )}
-          id="trace-tree-container"
-          onClick={(e) => {
-            if (!isModalOpen) {
-              toggleModal();
-            }
-          }}
-        >
-          {listMode && isAlertOpen && (
-            <Alert
-              severity="warning"
-              className={styles.alert}
-              // onClose={toggleAlert}
-            >
-              This trace seems to have incomplete / invalid spans.
-            </Alert>
-          )}
-          {renderSpanTree()}
-          {selectedSpan && (
-            <span
-              className={styles["close-button"]}
-              onClick={resetSpan}
-              role="button"
-            >
-              <HiOutlineX className={styles["close-icon"]} />
-            </span>
-          )}
-          {spans && selectedSpan && (
-            <TraceInfoDrawer
-              incidentId={incidentId}
-              selectedSpan={selectedSpan}
-              onClose={resetSpan}
-              anchorContainer="trace-tree-container"
-              allSpans={spans}
-            />
-          )}
-        </div>
+        {spanCustomError ? (
+          <h6 className={styles["custom-error-text"]}>
+            Could not fetch spans.
+          </h6>
+        ) : (
+          <div
+            className={cx(
+              styles.tree,
+              isModalOpen ? styles.expanded : styles.collapsed,
+              spans && selectedSpan && styles["lock-scroll"]
+            )}
+            id="trace-tree-container"
+            onClick={(e) => {
+              if (!isModalOpen) {
+                toggleModal();
+              }
+            }}
+          >
+            {listMode && isAlertOpen && (
+              <Alert
+                severity="warning"
+                className={styles.alert}
+                // onClose={toggleAlert}
+              >
+                This trace seems to have incomplete / invalid spans.
+              </Alert>
+            )}
+            {renderSpanTree()}
+            {selectedSpan && (
+              <span
+                className={styles["close-button"]}
+                onClick={resetSpan}
+                role="button"
+              >
+                <HiOutlineX className={styles["close-icon"]} />
+              </span>
+            )}
+            {spans && selectedSpan && (
+              <TraceInfoDrawer
+                incidentId={incidentId}
+                selectedSpan={selectedSpan}
+                onClose={resetSpan}
+                anchorContainer="trace-tree-container"
+                allSpans={spans}
+              />
+            )}
+          </div>
+        )}
       </div>
     </Wrapper>
   );
