@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { posthog } from "utils/posthog.ts/init";
+import { type GenericObject } from "utils/types";
 
 import { type RootState } from "./store";
 import { type FlagReduxType } from "./types";
@@ -13,7 +14,20 @@ export const fetchAllFlags = createAsyncThunk(
   "flags/fetchAllFlags",
   async () => {
     try {
-      const flags = await posthog.getAllFlagsAndPayloads("default");
+      const { featureFlagPayloads, featureFlags } =
+        await posthog.getAllFlagsAndPayloads("default");
+      const flags: GenericObject = {};
+      Object.keys(featureFlagPayloads).forEach((key) => {
+        flags[key] = {
+          enabled: featureFlags[key],
+          payload: featureFlagPayloads[key] ?? null,
+        };
+      });
+      console.log(
+        { featureFlags, featureFlagPayloads },
+        posthog.isFeatureEnabled("issuesPageTitle", "some"),
+        posthog.getFeatureFlagPayload("issuesPageTitle", "some")
+      );
       return flags;
     } catch (err: unknown) {
       throw new Error((err as Error).message);

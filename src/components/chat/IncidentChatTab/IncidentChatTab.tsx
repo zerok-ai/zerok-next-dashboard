@@ -5,6 +5,7 @@ import ChatDisabledCard from "components/chat/ChatDisabledCard";
 import GptInferenceBox from "components/chat/GptInferenceBox";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
+import { useFlags, useFlagsmith } from "flagsmith/react";
 import { useToggle } from "hooks/useToggle";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -40,7 +41,8 @@ import { UserInputField } from "./IncidentChatTab.utils";
 
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
-  const [enableChat] = useToggle(true);
+  const isChatEnabled = useFlags(["zkchat"]);
+  const [enableChat] = useToggle(isChatEnabled.zkchat.enabled);
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -61,6 +63,9 @@ const IncidentChatTab = () => {
     router.query.latest ??
     null;
   const [width, setWidth] = useState(450);
+
+  const flagsmith = useFlagsmith();
+  console.log({ flagsmith }, flagsmith.getAllFlags());
   useEffect(() => {
     if (selectedCluster && issueId && enableChat) {
       dispatch(
@@ -71,6 +76,7 @@ const IncidentChatTab = () => {
       );
     }
   }, [selectedCluster]);
+  console.log({ enableChat });
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
