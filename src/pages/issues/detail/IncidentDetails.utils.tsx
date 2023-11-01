@@ -33,17 +33,20 @@ export const IssueMetadata = () => {
       ).replace("{issue_id}", issueId as string);
       fetchIssue(endpoint);
     }
-  }, [issueId, selectedCluster]);
+  }, [selectedCluster]);
+
+  const cluster = clusters.find((c) => c.id === selectedCluster);
 
   const IssueTimes = () => {
     if (!issue) return null;
-    const cluster = clusters.find((c) => c.id === selectedCluster);
     return (
       <div className={styles["incident-metadata-container"]}>
-        <TooltipX title="Cluster" placement="bottom">
-          <span>{cluster!.name}</span>
-        </TooltipX>
-        |
+        <TooltipX
+          title={`Cluster`}
+          placement="bottom"
+          arrow>
+            <span>{cluster!.name}</span>
+          </TooltipX>
         <AiOutlineClockCircle />{" "}
         <Tooltip
           title={`${getFormattedTime(issue.last_seen)}`}
