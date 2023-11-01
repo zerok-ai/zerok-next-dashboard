@@ -103,6 +103,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           password,
         },
         level,
+        metric_server,
       };
       if (edit && defaultValues) {
         const integ = defaultValues.find((i) => i.id === router.query.id);
@@ -118,6 +119,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           deleted,
           metric_server,
         };
+
         await raxios.post(endpoint, body);
         router.push("/integrations/prometheus/list");
         dispatch(
