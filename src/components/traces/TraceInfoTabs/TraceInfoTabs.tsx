@@ -1,10 +1,8 @@
 import { Tab, Tabs } from "@mui/material";
 import TabSkeletons from "components/helpers/TabSkeletons";
 import { useFetch } from "hooks/useFetch";
-// import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-// import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -17,7 +15,11 @@ import {
 } from "utils/types";
 
 import styles from "./TraceInfoTabs.module.scss";
-import { DEFAULT_TABS, getTabs } from "./TraceInfoTabs.utils";
+import {
+  DEFAULT_TABS,
+  getTabs,
+  SPAN_ATTRIBUTE_TABS,
+} from "./TraceInfoTabs.utils";
 
 interface TraceInfoTabsProps {
   selectedSpan: string;
@@ -51,12 +53,17 @@ const TraceInfoTabs = ({
       fetchRawData(endpoint);
     }
   }, [selectedSpan, incidentId]);
+  // useEffect(() => {
+  //   if(selectedSpan){
+  //     fetchSpanTags
+  //   }
+  // },[selectedSpan])
   const rawData = rawResponse ? rawResponse[selectedSpan] : null;
   if (!rawResponse && !rawDataError) {
     return <TabSkeletons />;
   }
 
-  const tabs = getTabs(allSpans[selectedSpan].protocol);
+  let tabs = getTabs(allSpans[selectedSpan].protocol);
 
   const renderTab = () => {
     if (rawDataError) {
@@ -84,6 +91,10 @@ const TraceInfoTabs = ({
     return null;
   };
 
+  const span = allSpans[selectedSpan];
+  if (span.all_attributes) {
+    tabs = [...tabs, ...SPAN_ATTRIBUTE_TABS];
+  }
   return (
     <div className={styles.container}>
       <Tabs
