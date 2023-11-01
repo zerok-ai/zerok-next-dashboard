@@ -12,6 +12,7 @@ import DialogX from "components/themeX/DialogX";
 // import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
+import { useFlags } from "flagsmith/react";
 import { useTrigger } from "hooks/useTrigger";
 import Head from "next/head";
 import Link from "next/link";
@@ -64,6 +65,8 @@ const Probe = () => {
   const router = useRouter();
   const page = router.query.page ?? "1";
   const { trigger, changeTrigger } = useTrigger();
+  const pageTitle =
+    useFlags(["probespagetitle"]).probespagetitle.value ?? "Probes";
   const resetSelectedProbe = () => {
     setSelectedProbe(null);
   };
@@ -382,7 +385,7 @@ const Probe = () => {
   return (
     <div className={styles.container}>
       <PageHeader
-        title="Probes"
+        title={pageTitle as string}
         showRange={false}
         showRefresh
         leftExtras={leftExtras}
