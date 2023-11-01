@@ -98,6 +98,7 @@ export interface SpanErrorDetail {
   span_id?: string;
   source?: string;
   destination?: string;
+  service: string;
 }
 export interface SpanDetail {
   source: string;
@@ -128,6 +129,10 @@ export interface SpanDetail {
   errors?: SpanErrorDetail[] | string;
   span_name: string;
   service_name: string;
+  all_attributes?: GenericObject;
+  resource_attributes?: GenericObject;
+  span_attributes?: GenericObject;
+  scope_attributes?: GenericObject;
 }
 
 export type SpanResponse = Record<string, SpanDetail>;

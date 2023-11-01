@@ -40,6 +40,7 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
     fetchData: fetchPods,
     errorData: podsErrorData,
     error: podsError,
+    initialFetchDone: podsInitialFetchDone,
   } = useFetch<PodInfoType[]>("pods_info");
   const {
     data: podDetails,
@@ -50,6 +51,7 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
     data: containers,
     fetchData: fetchContainers,
     setData: setContainers,
+    initialFetchDone: containersInitialFetchDone,
   } = useFetch<ContainerInfoType[]>("container_info");
 
   const [selectedTab, setSelectedTab] = useState(POD_TABS[0].value);
@@ -134,21 +136,33 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
     );
   }
   const renderTabContent = () => {
-    if (!pods?.length || !podDetails) return <CustomSkeleton len={8} />;
-    const pod = pods.find((p) => p.pod === selectedPod);
-    if (!pod) return <CustomSkeleton len={8} />;
-    switch (selectedTab) {
-      case POD_METADATA:
-        return <PodMetadata pod={pod} />;
-      case POD_METRICS:
-        return (
-          <div className={styles["metrics-container"]}>
-            <PodChart pod={podDetails} dataKey="cpu_usage" />
-            <PodChart pod={podDetails} dataKey="mem_usage" />
-          </div>
-        );
-      case POD_CONTAINERS:
-        return <ContainerMetadata containers={containers} />;
+    if (!pods && !podsInitialFetchDone) return <CustomSkeleton len={8} />;
+    if ((!pods && podsInitialFetchDone) || (pods && pods.length === 0)) {
+      return <div>No pods found.</div>;
+    }
+    if (pods) {
+      const pod = pods.find((p) => p.pod === selectedPod);
+      if (!pod) {
+        return <div>Invalid pod selected.</div>;
+      }
+      switch (selectedTab) {
+        case POD_METADATA:
+          return <PodMetadata pod={pod} />;
+        case POD_METRICS:
+          return (
+            <div className={styles["metrics-container"]}>
+              <PodChart pod={podDetails} dataKey="cpu_usage" />
+              <PodChart pod={podDetails} dataKey="mem_usage" />
+            </div>
+          );
+        case POD_CONTAINERS:
+          return (
+            <ContainerMetadata
+              containers={containers}
+              initialFetchDone={containersInitialFetchDone}
+            />
+          );
+      }
     }
   };
   const WrapperElement = ({ children }: { children: React.ReactElement }) => {
@@ -184,15 +198,27 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
                   setSelectedPod(e.target.value);
                 }
               }}
+              displayEmpty={true}
+              renderValue={(value) => {
+                if ((pods && !pods.length) || (!pods && podsInitialFetchDone)) {
+                  return "No pods found";
+                } else {
+                  const pod = pods?.find((p) => p.pod === value);
+                  return pod?.pod;
+                }
+              }}
             >
-              {pods &&
+              {pods && pods.length > 0 ? (
                 pods.map((p) => {
                   return (
                     <MenuItem value={p.pod} key={nanoid()}>
                       {p.pod}
                     </MenuItem>
                   );
-                })}
+                })
+              ) : (
+                <MenuItem disabled>No pods.</MenuItem>
+              )}
             </Select>
             <ExpandIcon
               isExpanded={isExpanded}
