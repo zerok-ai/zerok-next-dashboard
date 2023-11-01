@@ -447,7 +447,7 @@ export const SpanAccordion = ({
         return (
           <SpanAccordion
             span={child}
-            key={span.span_id}
+            key={nanoid()}
             isLastChild={!hasChildren}
             isTopRoot={false}
             setSelectedSpan={setSelectedSpan}

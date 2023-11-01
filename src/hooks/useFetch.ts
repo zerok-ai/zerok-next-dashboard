@@ -38,6 +38,10 @@ export const useFetch = <T>(
   useEffect(() => {
     if (url !== null && url !== undefined) fetchData(url);
   }, [url]);
+
+  const resetInitialFetch = () => {
+    setInitialFetchDone(false);
+  };
   return {
     data,
     loading,
@@ -46,5 +50,6 @@ export const useFetch = <T>(
     setData,
     errorData,
     initialFetchDone,
+    resetInitialFetch,
   };
 };
