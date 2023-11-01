@@ -8,6 +8,11 @@
     width:100%;
     background-color: $bg-dark;
     z-index: 2;
+    min-height: 350px;
+}
+
+.custom-error-text {
+    margin:$sp-lg;
 }
 
 .alert {
