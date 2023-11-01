@@ -5,6 +5,7 @@ import Head from "next/head";
 import { Fragment } from "react";
 
 const Login = () => {
+  console.log("glancy boi");
   return (
     <Fragment>
       <Head>
