@@ -51,6 +51,7 @@ const TraceTree = ({
     fetchData: fetchSpans,
     setData: setSpans,
     initialFetchDone,
+    resetInitialFetch,
   } = useFetch<SpanResponse>("spans", null, spanTransformer);
   const { selectedCluster } = useSelector(clusterSelector);
   const [spanCustomError, setSpanCustomError] = useState<null | boolean>(null);
@@ -77,6 +78,7 @@ const TraceTree = ({
   useEffect(() => {
     if (selectedCluster && incidentId) {
       setSpans(null);
+      resetInitialFetch();
       setSpanTree(null);
       setSelectedSpan(null);
       updateSpans(null);
@@ -103,13 +105,19 @@ const TraceTree = ({
         toggleListMode(true);
       }
     }
-    if (spans && Object.keys(spans).length === 0) {
+    if (initialFetchDone && spans && Object.keys(spans).length === 0) {
       setSpanCustomError(true);
     }
     if (!spans && initialFetchDone) {
       setSpanCustomError(true);
     }
   }, [spans, initialFetchDone]);
+
+  useEffect(() => {
+    if (spans && Object.keys(spans).length > 0 && spanCustomError) {
+      setSpanCustomError(false);
+    }
+  }, [spans, spanCustomError]);
 
   useEffect(() => {
     if (spanTree) {
