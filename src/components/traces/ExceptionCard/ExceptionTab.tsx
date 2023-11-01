@@ -163,13 +163,7 @@ const ExceptionTab = ({ errors }: ExceptionTabProps) => {
           }}
         >
           {errors.map((er, idx) => {
-            return (
-              <Tab
-                label={er.source ? er.source : `Error ${idx + 1}`}
-                key={er.hash}
-                value={er.hash}
-              />
-            );
+            return <Tab label={er.service} key={er.hash} value={er.hash} />;
           })}
         </Tabs>
         <div className={styles["tab-content"]}>{renderTab()}</div>

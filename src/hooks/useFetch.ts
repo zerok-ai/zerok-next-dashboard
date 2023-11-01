@@ -17,6 +17,7 @@ export const useFetch = <T>(
   const [errorData, setErrorData] = useState<any>(null); // @TODO - add type here
   const fetchData = async (endpoint: string) => {
     try {
+      setInitialFetchDone(false);
       setLoading(true);
       setError(false);
       setErrorData(null);
