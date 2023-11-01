@@ -95,6 +95,7 @@ export const spanTransformer = (spanData: SpanResponse) => {
               span_id: span.span_id,
               source: span.source,
               destination: span.destination,
+              service: span.service_name ?? "Unknown",
             });
           }
         });

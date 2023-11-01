@@ -102,6 +102,7 @@ export interface SpanErrorDetail {
   span_id?: string;
   source?: string;
   destination?: string;
+  service: string;
 }
 export interface SpanDetail {
   source: string;
