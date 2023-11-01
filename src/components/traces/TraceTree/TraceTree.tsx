@@ -1,27 +1,14 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  IconButton,
-  Modal,
-} from "@mui/material";
+import { Alert, Button, IconButton, Modal } from "@mui/material";
 import cx from "classnames";
 import CustomSkeleton from "components/custom/CustomSkeleton";
+import TooltipX from "components/themeX/TooltipX";
 import TraceInfoDrawer from "components/traces/TraceInfoDrawer";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
+import { Fragment, type ReactElement, useEffect, useState } from "react";
 import {
-  Fragment,
-  type ReactElement,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  HiChevronRight,
   HiOutlineArrowsExpand,
   HiOutlineMenu,
   HiOutlineX,
@@ -32,20 +19,19 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { convertNanoToMilliSeconds } from "utils/functions";
+import { getEarliestSpan, getSpanTotalTime } from "utils/spans/functions";
 // import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
 import styles from "./TraceTree.module.scss";
 import {
-  AccordionLabel,
   buildSpanTree,
   // checkForVisibleChildren,
-  COLORS,
   getRootSpan,
+  SpanAccordion,
   SpanLatency,
   SpanLatencyTimeline,
   spanTransformer,
-  TOP_BORDER_COLOR,
 } from "./TraceTree.utils";
 
 interface TraceTreeProps {
@@ -64,11 +50,15 @@ const TraceTree = ({
     data: spans,
     fetchData: fetchSpans,
     setData: setSpans,
+    initialFetchDone,
+    resetInitialFetch,
   } = useFetch<SpanResponse>("spans", null, spanTransformer);
   const { selectedCluster } = useSelector(clusterSelector);
+  const [spanCustomError, setSpanCustomError] = useState<null | boolean>(null);
   // const [debugMode, toggleDebugMode] = useToggle(false);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
+  const [listMode, , toggleListMode] = useToggle(false);
 
   // const dispatch = useDispatch();
 
@@ -83,9 +73,12 @@ const TraceTree = ({
 
   const [isModalOpen, toggleModal] = useToggle(false);
 
+  const [isAlertOpen] = useToggle(true);
+
   useEffect(() => {
     if (selectedCluster && incidentId) {
       setSpans(null);
+      resetInitialFetch();
       setSpanTree(null);
       setSelectedSpan(null);
       updateSpans(null);
@@ -96,6 +89,7 @@ const TraceTree = ({
         .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId);
       // // const endpoint = `/fake_spans.json`;
+      // fetchSpans("/spans.json");
       fetchSpans(endpoint);
     }
   }, [selectedCluster, incidentId]);
@@ -103,14 +97,27 @@ const TraceTree = ({
   useEffect(() => {
     if (spans) {
       const root = getRootSpan(spans);
-
       if (root) {
         const spanTree = buildSpanTree(spans, spans[root]);
         setSpanTree(spanTree);
         updateSpans(spanTree);
+      } else {
+        toggleListMode(true);
       }
     }
-  }, [spans]);
+    if (initialFetchDone && spans && Object.keys(spans).length === 0) {
+      setSpanCustomError(true);
+    }
+    if (!spans && initialFetchDone) {
+      setSpanCustomError(true);
+    }
+  }, [spans, initialFetchDone]);
+
+  useEffect(() => {
+    if (spans && Object.keys(spans).length > 0 && spanCustomError) {
+      setSpanCustomError(false);
+    }
+  }, [spans, spanCustomError]);
 
   useEffect(() => {
     if (spanTree) {
@@ -122,7 +129,15 @@ const TraceTree = ({
         startTime: spanTree.start_time,
       });
     }
-  }, [spanTree]);
+    if (spans && listMode && !spanCustomError) {
+      const startTime = getEarliestSpan(spans);
+      const totalTime = getSpanTotalTime(spans, startTime);
+      setReferenceTime({
+        startTime,
+        totalTime,
+      });
+    }
+  }, [spanTree, spans, listMode, spanCustomError]);
 
   useEffect(() => {
     if (!isModalOpen && selectedSpan) {
@@ -130,102 +145,64 @@ const TraceTree = ({
     }
   }, [isModalOpen]);
 
-  const AccordionIcon = useMemo(() => {
-    return <HiChevronRight className={styles["expand-icon"]} />;
-  }, []);
   const renderSpanTree = () => {
-    if (!spanTree || !referenceTime) {
+    if ((!spanTree && !listMode) || !referenceTime) {
       return <CustomSkeleton len={8} />;
     }
 
-    const renderSpan = (
-      span: SpanDetail,
-      isTopRoot: boolean = false,
-      isLastChild: boolean = false
-    ) => {
-      const highlight = !!span.errors && span.errors.length > 0;
-      // const hasVisibleChildren = checkForVisibleChildren(span);
-      const WrapperElement = ({ children }: { children: React.ReactNode }) => {
-        return isLastChild ? (
-          <div className={cx(styles["last-child"])} role="button">
-            {children}
+    if (listMode && spans) {
+      return Object.keys(spans).map((id) => {
+        const span = spans[id];
+        const spanService =
+          span.service_name && span.service_name.length
+            ? span.service_name
+            : "Unknown";
+        const operationName =
+          span.span_name && span.span_name.length ? ` | ${span.span_name}` : "";
+        return (
+          <div className={styles["list-span-container"]} key={nanoid()}>
+            <p className={styles["accordion-label-container"]}>
+              <TooltipX
+                title={`${spanService} ${operationName}`}
+                placement="right"
+                disabled={isModalOpen}
+                arrow={false}
+              >
+                <span
+                  className={cx(styles["accordion-label"])}
+                  role="button"
+                  id="span-label"
+                  onClick={() => {
+                    setSelectedSpan(span.span_id);
+                  }}
+                >
+                  {spanService}
+                </span>
+              </TooltipX>
+
+              <span className={styles["operation-name"]}>{operationName}</span>
+            </p>
+            <div className={styles["list-span-latency"]}>
+              <SpanLatency latency={span.latency} />
+              <SpanLatencyTimeline span={span} referenceTime={referenceTime} />
+            </div>
           </div>
-        ) : (
-          <AccordionSummary
-            className={styles["accordion-summary"]}
-            expandIcon={AccordionIcon}
-            style={{ borderLeft: `1px solid ${borderColor}` }}
-          >
-            {children}
-          </AccordionSummary>
         );
-      };
-      const level = span.level ?? 0;
-      const colorsLength = COLORS.length - 1;
-      const borderColor = isTopRoot
-        ? TOP_BORDER_COLOR
-        : COLORS[level % colorsLength];
+      });
+    }
 
-      const defaultExpanded = isTopRoot
-        ? true
-        : span.children && span.children.length > 0;
-
-      const shouldRenderLatency =
-        !isTopRoot || (isTopRoot && !span.destination && !span.source);
-
-      const nextRender = (): null | React.ReactNode => {
-        if (isTopRoot) {
-          return renderSpan(
-            span,
-            false,
-            !span.children || span.children.length === 0
-          );
-        } else {
-          return span.children?.map((child) => {
-            const hasChildren = child.children && child.children.length > 0;
-            if (
-              child.source.includes("zk-client") ||
-              child.destination.includes("zk-client")
-            ) {
-              return null;
-            } else return renderSpan(child, false, !hasChildren);
-          });
-        }
-      };
+    if (spanTree && referenceTime) {
       return (
-        <Accordion
-          key={nanoid()}
-          defaultExpanded={defaultExpanded}
-          className={styles.accordion}
-        >
-          <WrapperElement>
-            <Fragment>
-              <AccordionLabel
-                span={span}
-                highlight={highlight}
-                isLastChild={isLastChild}
-                isTopRoot={isTopRoot}
-                setSelectedSpan={setSelectedSpan}
-                isModalOpen={isModalOpen}
-              />
-              {shouldRenderLatency && (
-                <Fragment>
-                  <SpanLatency latency={span.latency} />
-                  <SpanLatencyTimeline
-                    span={span}
-                    referenceTime={referenceTime}
-                  />
-                </Fragment>
-              )}
-            </Fragment>
-          </WrapperElement>
-          <AccordionDetails className={styles["accordion-details"]}>
-            {nextRender()}
-          </AccordionDetails>
-        </Accordion>
+        <SpanAccordion
+          span={spanTree}
+          referenceTime={referenceTime}
+          isLastChild={false}
+          isTopRoot={true}
+          isModalOpen={isModalOpen}
+          setSelectedSpan={setSelectedSpan}
+        />
       );
-    };
-    return renderSpan(spanTree, true);
+    }
   };
 
   const resetSpan = () => {
@@ -317,38 +294,54 @@ const TraceTree = ({
           </div>
         </div>
 
-        <div
-          className={cx(
-            styles.tree,
-            isModalOpen ? styles.expanded : styles.collapsed
-          )}
-          id="trace-tree-container"
-          onClick={(e) => {
-            if (!isModalOpen) {
-              toggleModal();
-            }
-          }}
-        >
-          {renderSpanTree()}
-          {selectedSpan && (
-            <span
-              className={styles["close-button"]}
-              onClick={resetSpan}
-              role="button"
-            >
-              <HiOutlineX className={styles["close-icon"]} />
-            </span>
-          )}
-          {spans && selectedSpan && (
-            <TraceInfoDrawer
-              incidentId={incidentId}
-              selectedSpan={selectedSpan}
-              onClose={resetSpan}
-              anchorContainer="trace-tree-container"
-              allSpans={spans}
-            />
-          )}
-        </div>
+        {spanCustomError ? (
+          <h6 className={styles["custom-error-text"]}>
+            Could not fetch spans.
+          </h6>
+        ) : (
+          <div
+            className={cx(
+              styles.tree,
+              isModalOpen ? styles.expanded : styles.collapsed,
+              spans && selectedSpan && styles["lock-scroll"]
+            )}
+            id="trace-tree-container"
+            onClick={(e) => {
+              if (!isModalOpen) {
+                toggleModal();
+              }
+            }}
+          >
+            {listMode && isAlertOpen && (
+              <Alert
+                severity="warning"
+                className={styles.alert}
+                // onClose={toggleAlert}
+              >
+                This trace seems to have incomplete / invalid spans.
+              </Alert>
+            )}
+            {renderSpanTree()}
+            {selectedSpan && (
+              <span
+                className={styles["close-button"]}
+                onClick={resetSpan}
+                role="button"
+              >
+                <HiOutlineX className={styles["close-icon"]} />
+              </span>
+            )}
+            {spans && selectedSpan && (
+              <TraceInfoDrawer
+                incidentId={incidentId}
+                selectedSpan={selectedSpan}
+                onClose={resetSpan}
+                anchorContainer="trace-tree-container"
+                allSpans={spans}
+              />
+            )}
+          </div>
+        )}
       </div>
     </Wrapper>
   );

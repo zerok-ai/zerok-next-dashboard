@@ -38,6 +38,7 @@ export interface PrometheusBaseType {
     username: string;
   };
   level: "ORG" | "CLUSTER";
+  metric_server: boolean;
 }
 export interface PrometheusListType extends PrometheusBaseType {
   id: string;
