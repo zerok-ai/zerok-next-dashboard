@@ -81,14 +81,6 @@ const TraceInfoTabs = ({
       }
       return <p>No data.</p>;
     }
-    // if (tab && tab.render) {
-    //   return (
-    //     <p>
-    //       This feature is disabled for this organisation. Please contact ZeroK
-    //       to know more.
-    //     </p>
-    //   );
-    // }
     return null;
   };
 
