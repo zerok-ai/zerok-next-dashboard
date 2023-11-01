@@ -1,0 +1,32 @@
+{
+    "debug": {
+        "rawResponse": {
+            "container_info": [
+                {
+                    "app_kubernetes_io_component": "metrics",
+                    "app_kubernetes_io_instance": "prometheus",
+                    "app_kubernetes_io_managed_by": "Helm",
+                    "app_kubernetes_io_name": "kube-state-metrics",
+                    "app_kubernetes_io_part_of": "kube-state-metrics",
+                    "app_kubernetes_io_version": "2.10.0",
+                    "container": "inventory",
+                    "container_id": "containerd://135f5125add305613333a224bacf4b54444e7ff517a2fd76dc16b442586b87ba",
+                    "helm_sh_chart": "kube-state-metrics-5.13.0",
+                    "image": "us-west1-docker.pkg.dev/zerok-dev/sofa-shop/inventory:configurable",
+                    "image_id": "us-west1-docker.pkg.dev/zerok-dev/sofa-shop/inventory@sha256:86a45ec8cebdc8da23fe1caec5da525f29befb54b683ba1420ee1e5c925e5100",
+                    "image_spec": "us-west1-docker.pkg.dev/zerok-dev/sofa-shop/inventory:configurable",
+                    "instance": "10.72.1.164:8080",
+                    "job": "kubernetes-service-endpoints",
+                    "namespace": "sofa-shop-mysql",
+                    "node": "gke-democlient01-default-pool-451f4ffb-fp62",
+                    "pod": "inventory-599c47b767-jwlbt",
+                    "service": "prometheus-kube-state-metrics",
+                    "uid": "0f67eb40-c981-4db9-9676-031abe858e1b"
+                }
+            ]
+        }
+    },
+    "payload": {
+        "container_info": []
+    }
+}
