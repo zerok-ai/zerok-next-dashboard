@@ -245,7 +245,10 @@ export const AccordionLabel = ({
       >
         <TooltipX
           title={spanTitle}
-          disabled={isModalOpen && spanTitle.length < 80}
+          disabled={
+            (isModalOpen && spanTitle.length < 80) ||
+            (!isModalOpen && spanTitle.length < 45)
+          }
           placement="right"
           arrow={false}
         >
