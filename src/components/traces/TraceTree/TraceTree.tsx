@@ -200,6 +200,7 @@ const TraceTree = ({
           isTopRoot={true}
           isModalOpen={isModalOpen}
           setSelectedSpan={setSelectedSpan}
+          selectedSpan={selectedSpan}
         />
       );
     }

@@ -4,10 +4,11 @@ import TooltipX from "components/themeX/TooltipX";
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 import { Fragment, useMemo, useState } from "react";
-import { HiChevronRight, HiOutlineInformationCircle } from "react-icons/hi";
-import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
+import { HiChevronRight } from "react-icons/hi";
+// import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds, trimString } from "utils/functions";
+import { ICON_BASE_PATH } from "utils/images";
 import {
   type SpanDetail,
   type SpanErrorDetail,
@@ -196,7 +197,7 @@ export const getWidthByLevel = (
   const defaultWidth = expand ? 700 : 450;
   const width = defaultWidth - level * 9;
   if (isTopRoot) {
-    return `${width + 8}px`;
+    return `${width}px`;
   }
   return leaf ? `${width + 10}px` : `${width}px`;
 };
@@ -208,6 +209,7 @@ interface AccordionLabelProps {
   isTopRoot: boolean;
   setSelectedSpan: (spanId: string) => void;
   isModalOpen: boolean;
+  selectedSpan: string | null;
 }
 
 export const AccordionLabel = ({
@@ -217,6 +219,7 @@ export const AccordionLabel = ({
   setSelectedSpan,
   highlight,
   isModalOpen,
+  selectedSpan,
 }: AccordionLabelProps) => {
   const spanService =
     span.service_name && span.service_name.length
@@ -230,12 +233,20 @@ export const AccordionLabel = ({
     isModalOpen,
     isTopRoot
   );
+  const selected = selectedSpan === span.span_id;
   const getCharacterCountFromLevel = () => {
     return 40 - (span.level ?? 0) * 2;
   };
   const spanTitle = `${spanService} ${operationName}`;
   return (
-    <div className={styles["accordion-summary-content"]}>
+    <div
+      className={styles["accordion-summary-content"]}
+      role="button"
+      id="span-label"
+      onClick={() => {
+        setSelectedSpan(span.span_id);
+      }}
+    >
       <p
         className={styles["accordion-label-container"]}
         style={{
@@ -255,13 +266,10 @@ export const AccordionLabel = ({
           <span
             className={cx(
               styles["accordion-label"],
-              highlight && !isTopRoot && styles["exception-parent"]
+              highlight && styles["exception-parent"],
+              selected && styles["selected-span"],
+              styles["span-service"]
             )}
-            role="button"
-            id="span-label"
-            onClick={() => {
-              setSelectedSpan(span.span_id);
-            }}
           >
             {spanService}
           </span>
@@ -275,7 +283,7 @@ export const AccordionLabel = ({
 
         {span.has_raw_data !== false && (
           // <span className={styles["raw-data-icon"]}></span>
-          <HiOutlineInformationCircle className={styles["raw-data-icon"]} />
+          <img src={`${ICON_BASE_PATH}/wrench.svg`} />
         )}
       </p>
     </div>
@@ -325,64 +333,6 @@ export const SpanLatencyTimeline = ({
   );
 };
 
-export const getSpanName = (span: SpanDetail) => {
-  const { protocol, kind, method, route } = span;
-  const DefaultSpanName = () => {
-    return (
-      <span className={styles["span-name"]}>
-        <span
-          className={styles["span-method"]}
-          style={{
-            backgroundColor: HTTP_METHOD_COLORS[method],
-          }}
-        >
-          {method}
-        </span>
-      </span>
-    );
-  };
-  if (protocol === "http") {
-    switch (kind) {
-      case "SERVER":
-        if (route) {
-          return (
-            <span className={styles["span-name"]}>
-              <span
-                className={styles["span-method"]}
-                style={{
-                  backgroundColor: HTTP_METHOD_COLORS[method],
-                }}
-              >
-                {method}
-              </span>{" "}
-              |<span className={styles["span-route"]}>{route}</span>
-            </span>
-          );
-        }
-        return <DefaultSpanName />;
-      case "CLIENT":
-        return <DefaultSpanName />;
-      default:
-        return <DefaultSpanName />;
-    }
-  } else if (protocol === "mysql") {
-    return (
-      <span className={styles["span-name"]}>
-        <span
-          className={styles["span-method"]}
-          style={{
-            backgroundColor: MYSQL_COLOR,
-          }}
-        >
-          {protocol}
-        </span>
-        {method && `|`}
-        {method && <span className={styles["span-route"]}>{method}</span>}
-      </span>
-    );
-  }
-};
-
 export const SpanAccordion = ({
   span,
   isLastChild,
@@ -390,6 +340,7 @@ export const SpanAccordion = ({
   setSelectedSpan,
   referenceTime,
   isModalOpen,
+  selectedSpan,
 }: {
   span: SpanDetail;
   isLastChild: boolean;
@@ -400,6 +351,7 @@ export const SpanAccordion = ({
     totalTime: number;
   };
   isModalOpen: boolean;
+  selectedSpan: string | null;
 }) => {
   const [expanded, setExpanded] = useState(true);
   const highlight = !!span.errors && span.errors.length > 0;
@@ -439,37 +391,24 @@ export const SpanAccordion = ({
     ? true
     : span.children && span.children.length > 0;
 
-  const shouldRenderLatency =
-    !isTopRoot || (isTopRoot && !span.destination && !span.source);
+  const shouldRenderLatency = true;
 
   const nextRender = (): null | React.ReactNode => {
-    if (isTopRoot) {
+    return span.children?.map((child) => {
+      const hasChildren = child.children && child.children.length > 0;
       return (
         <SpanAccordion
-          span={span}
+          span={child}
+          key={nanoid()}
+          isLastChild={!hasChildren}
           isTopRoot={false}
-          isLastChild={!span.children || span.children.length === 0}
           setSelectedSpan={setSelectedSpan}
           referenceTime={referenceTime}
           isModalOpen={isModalOpen}
+          selectedSpan={selectedSpan}
         />
       );
-    } else {
-      return span.children?.map((child) => {
-        const hasChildren = child.children && child.children.length > 0;
-        return (
-          <SpanAccordion
-            span={child}
-            key={nanoid()}
-            isLastChild={!hasChildren}
-            isTopRoot={false}
-            setSelectedSpan={setSelectedSpan}
-            referenceTime={referenceTime}
-            isModalOpen={isModalOpen}
-          />
-        );
-      });
-    }
+    });
   };
   return (
     <Accordion
@@ -483,6 +422,7 @@ export const SpanAccordion = ({
           <AccordionLabel
             span={span}
             highlight={highlight}
+            selectedSpan={selectedSpan}
             isLastChild={isLastChild}
             isTopRoot={isTopRoot}
             setSelectedSpan={setSelectedSpan}
