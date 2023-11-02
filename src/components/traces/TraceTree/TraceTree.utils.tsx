@@ -4,7 +4,7 @@ import TooltipX from "components/themeX/TooltipX";
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 import { Fragment, useMemo, useState } from "react";
-import { HiChevronRight } from "react-icons/hi";
+import { HiChevronRight, HiOutlineInformationCircle } from "react-icons/hi";
 import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
 import { convertNanoToMilliSeconds, trimString } from "utils/functions";
@@ -119,6 +119,9 @@ export const spanTransformer = (spanData: SpanResponse) => {
         ...span.all_attributes,
       };
     }
+    if (Object.keys(span.all_attributes).length === 0) {
+      delete span.all_attributes;
+    }
     formattedSpans[key] = { ...span };
     // if (Object.keys(span.all_attributes).length === 0) {
     //   console.log("in delete");
@@ -228,8 +231,9 @@ export const AccordionLabel = ({
     isTopRoot
   );
   const getCharacterCountFromLevel = () => {
-    return 35 - (span.level ?? 0) * 2;
+    return 40 - (span.level ?? 0) * 2;
   };
+  const spanTitle = `${spanService} ${operationName}`;
   return (
     <div className={styles["accordion-summary-content"]}>
       <p
@@ -240,8 +244,8 @@ export const AccordionLabel = ({
         }}
       >
         <TooltipX
-          title={`${spanService} ${operationName}`}
-          disabled={isModalOpen}
+          title={spanTitle}
+          disabled={isModalOpen && spanTitle.length < 80}
           placement="right"
           arrow={false}
         >
@@ -262,9 +266,14 @@ export const AccordionLabel = ({
 
         <span className={styles["operation-name"]}>
           {isModalOpen
-            ? operationName
+            ? trimString(operationName, 70)
             : trimString(operationName, getCharacterCountFromLevel())}
         </span>
+
+        {span.has_raw_data !== false && (
+          // <span className={styles["raw-data-icon"]}></span>
+          <HiOutlineInformationCircle className={styles["raw-data-icon"]} />
+        )}
       </p>
     </div>
   );

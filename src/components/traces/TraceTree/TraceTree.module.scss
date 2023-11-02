@@ -144,6 +144,7 @@
 .accordion-label-container {
     display: flex;
     column-gap: $sp-sm;
+    align-items: center;
     .operation-name {
         color:$grey-300;
     }
@@ -270,4 +271,12 @@
     display: flex;
     align-items: center;
     column-gap: $sp-base * 2;
+}
+
+.raw-data-icon {
+    // width:8px;
+    // height: 8px;
+    color: $primary-500;
+    border-radius: 50%;
+    font-size: $font-lg;
 }
