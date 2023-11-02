@@ -248,7 +248,10 @@ export const AccordionLabel = ({
       }}
     >
       <p
-        className={styles["accordion-label-container"]}
+        className={cx(
+          styles["accordion-label-container"],
+          selected && styles["selected-span"]
+        )}
         style={{
           width,
           minWidth: width,
@@ -267,7 +270,7 @@ export const AccordionLabel = ({
             className={cx(
               styles["accordion-label"],
               highlight && styles["exception-parent"],
-              selected && styles["selected-span"],
+
               styles["span-service"]
             )}
           >
@@ -281,7 +284,7 @@ export const AccordionLabel = ({
             : trimString(operationName, getCharacterCountFromLevel())}
         </span>
 
-        {span.has_raw_data !== false && (
+        {span.has_raw_data !== false && span.has_raw_data !== undefined && (
           // <span className={styles["raw-data-icon"]}></span>
           <img
             src={`${ICON_BASE_PATH}/wrench.svg`}
