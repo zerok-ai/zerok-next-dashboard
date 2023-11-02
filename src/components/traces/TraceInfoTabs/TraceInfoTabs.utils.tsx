@@ -350,7 +350,8 @@ export const getTabs = (
   const { protocol } = span;
   const tabs = [...DEFAULT_TABS];
 
-  if (span.has_raw_data !== false) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
+  if (span.has_raw_data !== undefined && span.has_raw_data !== false) {
     switch (protocol) {
       case "http":
       case "HTTP":
@@ -365,7 +366,7 @@ export const getTabs = (
         tabs.push(...GRPC_TABS);
         break;
       default:
-        return tabs;
+        break;
     }
   }
   if (span.all_attributes) {
