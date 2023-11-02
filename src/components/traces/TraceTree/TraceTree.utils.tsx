@@ -7,7 +7,7 @@ import { Fragment, useMemo, useState } from "react";
 import { HiChevronRight } from "react-icons/hi";
 // import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
-import { convertNanoToMilliSeconds, trimString } from "utils/functions";
+import { convertNanoToMilliSeconds } from "utils/functions";
 import { ICON_BASE_PATH } from "utils/images";
 import {
   type SpanDetail,
@@ -233,9 +233,6 @@ export const AccordionLabel = ({
     isModalOpen,
     isTopRoot
   );
-  const getCharacterCountFromLevel = () => {
-    return 40 - (span.level ?? 0) * 2;
-  };
   const spanTitle = `${spanService} ${operationName}`;
   return (
     <div
@@ -246,7 +243,7 @@ export const AccordionLabel = ({
         setSelectedSpan(span.span_id);
       }}
     >
-      <p
+      <div
         className={cx(styles["accordion-label-container"])}
         style={{
           width,
@@ -256,37 +253,40 @@ export const AccordionLabel = ({
         <TooltipX
           title={spanTitle}
           disabled={
-            (isModalOpen && spanTitle.length < 80) ||
-            (!isModalOpen && spanTitle.length < 45)
+            (isModalOpen && spanTitle.length < 40) ||
+            (!isModalOpen && spanTitle.length < 25)
           }
-          placement="right"
+          placement="bottom"
           arrow={false}
         >
-          <span
+          <p
             className={cx(
               styles["accordion-label"],
-              highlight && styles["exception-parent"],
-              styles["span-service"]
+              highlight && styles["exception-parent"]
             )}
           >
-            {spanService}
-          </span>
+            <span
+              className={cx(
+                highlight && styles["exception-parent"],
+                styles["span-service"]
+              )}
+            >
+              {spanService}
+            </span>
+            <span className={styles["operation-name"]}>
+              {operationName}
+              {span.has_raw_data !== false &&
+                span.has_raw_data !== undefined && (
+                  // <span className={styles["raw-data-icon"]}></span>
+                  <img
+                    src={`${ICON_BASE_PATH}/wrench.svg`}
+                    className={styles["raw-data-icon"]}
+                  />
+                )}
+            </span>
+          </p>
         </TooltipX>
-
-        <span className={styles["operation-name"]}>
-          {isModalOpen
-            ? trimString(operationName, 70)
-            : trimString(operationName, getCharacterCountFromLevel())}
-        </span>
-
-        {span.has_raw_data !== false && span.has_raw_data !== undefined && (
-          // <span className={styles["raw-data-icon"]}></span>
-          <img
-            src={`${ICON_BASE_PATH}/wrench.svg`}
-            className={styles["raw-data-icon"]}
-          />
-        )}
-      </p>
+      </div>
     </div>
   );
 };
