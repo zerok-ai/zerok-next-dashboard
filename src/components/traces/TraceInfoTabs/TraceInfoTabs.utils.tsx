@@ -4,6 +4,7 @@ import SQLRawTable from "components/helpers/SQLRawTable";
 import ChipX from "components/themeX/ChipX";
 import { nanoid } from "nanoid";
 import dynamic from "next/dynamic";
+import { Fragment } from "react";
 import { getFormattedTime } from "utils/dateHelpers";
 import {
   convertNanoToMilliSeconds,
@@ -98,7 +99,7 @@ export const DEFAULT_TABS = [
   {
     label: "Overview",
     value: "overview",
-    render: (metadata: SpanDetail) => {
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
       const KEYS = [
         {
           label: "Protocol",
@@ -153,18 +154,22 @@ export const SPAN_ATTRIBUTE_TABS = [
   {
     label: "Span Attributes",
     value: "span_attributes",
-    render: (metadata: SpanDetail) => {
+    render: (metadata: SpanDetail, rawData: SpanRawData) => {
       const keys = Object.keys(metadata.all_attributes!);
-      return keys.map((key) => {
-        return (
-          <div className={cx(styles["span-attr-row"])} key={nanoid()}>
-            {<div className={styles["span-attr-key"]}>{key}:</div>}
-            <div className={styles["span-attr-value"]}>
-              {metadata.all_attributes![key]}
-            </div>
-          </div>
-        );
-      });
+      return (
+        <Fragment>
+          {keys.map((key) => {
+            return (
+              <div className={cx(styles["span-attr-row"])} key={nanoid()}>
+                {<div className={styles["span-attr-key"]}>{key}:</div>}
+                <div className={styles["span-attr-value"]}>
+                  {metadata.all_attributes![key]}
+                </div>
+              </div>
+            );
+          })}
+        </Fragment>
+      );
     },
   },
 ];
@@ -336,23 +341,35 @@ export const MYSQL_TABS = [
 ];
 
 export const getTabs = (
-  protocol: string
+  span: SpanDetail
 ): Array<{
   label: string;
   value: string;
-  render?: (metadata: SpanDetail, rawData: SpanRawData) => React.ReactNode;
+  render?: (metadata: SpanDetail, rawData: SpanRawData) => JSX.Element;
 }> => {
-  switch (protocol) {
-    case "http":
-    case "HTTP":
-      return [...DEFAULT_TABS, ...HTTP_TABS];
-    case "mysql":
-    case "MYSQL":
-      return [...DEFAULT_TABS, ...MYSQL_TABS];
-    case "grpc":
-    case "GRPC":
-      return [...DEFAULT_TABS, ...GRPC_TABS];
-    default:
-      return DEFAULT_TABS;
+  const { protocol } = span;
+  const tabs = [...DEFAULT_TABS];
+
+  if (span.has_raw_data !== false) {
+    switch (protocol) {
+      case "http":
+      case "HTTP":
+        tabs.push(...HTTP_TABS);
+        break;
+      case "mysql":
+      case "MYSQL":
+        tabs.push(...MYSQL_TABS);
+        break;
+      case "grpc":
+      case "GRPC":
+        tabs.push(...GRPC_TABS);
+        break;
+      default:
+        return tabs;
+    }
   }
+  if (span.all_attributes) {
+    tabs.push(...SPAN_ATTRIBUTE_TABS);
+  }
+  return tabs;
 };
