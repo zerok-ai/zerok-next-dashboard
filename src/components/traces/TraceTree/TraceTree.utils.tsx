@@ -233,7 +233,6 @@ export const AccordionLabel = ({
     isModalOpen,
     isTopRoot
   );
-  const selected = selectedSpan === span.span_id;
   const getCharacterCountFromLevel = () => {
     return 40 - (span.level ?? 0) * 2;
   };
@@ -248,10 +247,7 @@ export const AccordionLabel = ({
       }}
     >
       <p
-        className={cx(
-          styles["accordion-label-container"],
-          selected && styles["selected-span"]
-        )}
+        className={cx(styles["accordion-label-container"])}
         style={{
           width,
           minWidth: width,
@@ -373,13 +369,23 @@ export const SpanAccordion = ({
   }, [expanded]);
   // const hasVisibleChildren = checkForVisibleChildren(span);
   const WrapperElement = ({ children }: { children: React.ReactNode }) => {
+    const selected = selectedSpan === span.span_id;
     return isLastChild ? (
-      <div className={cx(styles["last-child"])} role="button">
+      <div
+        className={cx(
+          styles["last-child"],
+          selected && styles["selected-span"]
+        )}
+        role="button"
+      >
         {children}
       </div>
     ) : (
       <AccordionSummary
-        className={styles["accordion-summary"]}
+        className={cx(
+          styles["accordion-summary"],
+          selected && styles["selected-span"]
+        )}
         expandIcon={AccordionIcon}
         style={{ borderLeft: `1px solid ${borderColor}` }}
       >
