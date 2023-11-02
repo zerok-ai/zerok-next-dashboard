@@ -283,7 +283,10 @@ export const AccordionLabel = ({
 
         {span.has_raw_data !== false && (
           // <span className={styles["raw-data-icon"]}></span>
-          <img src={`${ICON_BASE_PATH}/wrench.svg`} />
+          <img
+            src={`${ICON_BASE_PATH}/wrench.svg`}
+            className={styles["raw-data-icon"]}
+          />
         )}
       </p>
     </div>
