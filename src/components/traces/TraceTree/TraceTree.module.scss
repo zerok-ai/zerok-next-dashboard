@@ -120,6 +120,9 @@
     border-radius: 0;
     border: none;
     cursor: pointer;
+    &:hover {
+        background-color: $grey-900;
+    }
     // margin-left: -$sp-base;
 }
 
@@ -129,6 +132,11 @@
 .last-child {
     margin:$sp-base 0;
     margin-left: - $sp-base;
+
+    height:32px;
+    &:hover {
+        background-color: $grey-900;
+    }
 }
 
 
@@ -204,7 +212,7 @@
 }
 
 .selected-span {
-   background-color: $grey-700;
+   background-color: $grey-900;
    border-radius: $sp-xs / 2;
 }
 
