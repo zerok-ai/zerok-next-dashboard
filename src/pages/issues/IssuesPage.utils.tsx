@@ -24,7 +24,7 @@ export const getIssueColumns = () => {
         return (
           <div className={styles["issue-container"]}>
             <Link
-              href={`/issues/detail?issue_id=${issue_hash}&scenario=${scenario_id}&trace=${incidents[0]}`}
+              href={`/issues/detail?issue_id=${issue_hash}&latest=${incidents[0]}&scenario=${scenario_id}`}
               className={"hover-link"}
             >
               <span className={styles["issue-title-container"]}>{title}</span>
