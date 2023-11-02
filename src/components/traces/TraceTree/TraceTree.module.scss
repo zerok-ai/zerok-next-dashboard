@@ -119,6 +119,7 @@
     padding:$sp-base / 2 0;
     border-radius: 0;
     border: none;
+    cursor: pointer;
     // margin-left: -$sp-base;
 }
 
@@ -173,7 +174,7 @@
     right: 920px;
     // cursor: pointer;
     z-index: 500;
-    background-color: $grey-700;
+    background-color: $grey-800;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,10 +199,13 @@
     display: flex;
     align-items: center;
     position: relative;
-    .selected-span {
-        color:$primary-500;
-    }
+    
     // padding:$sp-base / 2 0;
+}
+
+.selected-span {
+   background-color: $grey-700;
+   border-radius: $sp-xs / 2;
 }
 
 .last-child {
