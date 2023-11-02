@@ -116,6 +116,7 @@ export interface SpanDetail {
   span_id: string;
   path: string;
   children?: SpanDetail[];
+  has_raw_data?: boolean;
   start_time: string;
   timestamp?: string;
   level?: number;

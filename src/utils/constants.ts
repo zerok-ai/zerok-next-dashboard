@@ -42,8 +42,10 @@ export const HTTP_METHODS = ["GET", "POST", "DELETE", "PUT", "PATCH"] as const;
 export const SPAN_PROTOCOLS = [
   "http",
   "mysql",
+  "MYSQL",
   "HTTP",
   "GRPC",
+  "grpc",
   "UNKNOWN",
 ] as const;
 
