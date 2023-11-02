@@ -41,12 +41,10 @@ export const IssueMetadata = () => {
     if (!issue) return null;
     return (
       <div className={styles["incident-metadata-container"]}>
-        <TooltipX
-          title={`Cluster`}
-          placement="bottom"
-          arrow>
-            <span>{cluster!.name}</span>
-          </TooltipX>
+        <TooltipX title={`Cluster`} placement="bottom" arrow>
+          <span>{cluster!.name}</span>
+        </TooltipX>
+        |
         <AiOutlineClockCircle />{" "}
         <Tooltip
           title={`${getFormattedTime(issue.last_seen)}`}
