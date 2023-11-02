@@ -266,7 +266,6 @@ export const AccordionLabel = ({
             className={cx(
               styles["accordion-label"],
               highlight && styles["exception-parent"],
-
               styles["span-service"]
             )}
           >
