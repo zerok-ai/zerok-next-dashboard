@@ -51,8 +51,9 @@
 .exception-parent {
     color:$error-500 !important;
 }
-.collapsed {
-    cursor: pointer;
+
+.expanded {
+    padding:$sp-lg;
 }
 
 
@@ -130,7 +131,6 @@
 
 .accordion-label {
     color:$grey-25;
-    cursor: pointer;
     z-index:1000;
     line-height: 20px;
     font-weight: 500;
@@ -145,6 +145,7 @@
     display: flex;
     column-gap: $sp-sm;
     align-items: center;
+    cursor: pointer;
     .operation-name {
         color:$grey-300;
     }
@@ -168,7 +169,7 @@
     position: absolute;
     top: $sp-md;
     right: 920px;
-    cursor: pointer;
+    // cursor: pointer;
     z-index: 500;
     background-color: $grey-700;
     display: flex;
@@ -195,6 +196,9 @@
     display: flex;
     align-items: center;
     position: relative;
+    .selected-span {
+        color:$primary-500;
+    }
     // padding:$sp-base / 2 0;
 }
 
@@ -274,9 +278,9 @@
 }
 
 .raw-data-icon {
-    // width:8px;
-    // height: 8px;
-    color: $primary-500;
-    border-radius: 50%;
-    font-size: $font-lg;
+   width:$sp-sm;
+   height: $sp-sm;
 }
+
+
+
