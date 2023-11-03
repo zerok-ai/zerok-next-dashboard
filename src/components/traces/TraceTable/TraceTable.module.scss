@@ -3,9 +3,9 @@
 .container {
     // overflow-y: auto;
     position: relative;
-    border:1px solid $grey-800;
-    border-radius:$sp-base  / 2;
+    border-radius:$sp-base;
     width:700px;
+    min-height:calc(100vh - $header-height - $sp-base * 40);
     // min-height:100%;
     z-index: 2;
     padding-bottom: $sp-xxl;
@@ -44,6 +44,12 @@
     column-gap: $sp-base * 2;
 }
 
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .close-icon {
     cursor: pointer;
     height:20px;
@@ -58,7 +64,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex:1;
     width:100%;
     overflow-y: auto;
     span,td {
@@ -107,12 +112,11 @@
 }
 
 .pagination-container {
-    flex:1;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     column-gap: $sp-sm;
-    margin-top: $sp-xl;
+    margin: $sp-xl 0;
 }
 
 .skeleton-container {
@@ -122,4 +126,17 @@
 
 .skeleton {
     height:50px;
+}
+
+
+.drawer {
+    :global(.MuiPaper-root){
+        height:calc(100vh - $header-height - $sp-base * 40);
+        border:1px solid $grey-800;
+        
+            &::-webkit-scrollbar {
+              display: none;
+            }
+
+    }
 }

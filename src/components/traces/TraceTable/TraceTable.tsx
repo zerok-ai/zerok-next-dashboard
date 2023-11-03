@@ -48,7 +48,7 @@ interface TraceTableProps {
 const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
-  const scenario = router.query.issue;
+  const scenario = router.query.scenario;
   const issue_id = router.query.issue_id;
   const range = (router.query.range as string) ?? DEFAULT_TIME_RANGE;
   const { likelyCause } = useSelector(chatSelector);
@@ -122,26 +122,28 @@ const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
               <HiOutlineX className={styles["close-icon"]} onClick={onClose} />
             </div>
           </div>
-          <div className={styles["table-container"]}>
-            <TableX
-              columns={columns}
-              sortBy={sortBy}
-              onSortingChange={setSortBy}
-              data={traces?.trace_det_list ?? null}
-              headerClassName={styles["table-header"]}
-              rowClassName={cx(styles["table-row"])}
-              bodyClassName={styles["table-body"]}
-              onRowClick={(row) => {
-                onClose();
-                const query = router.query;
-                delete query.latest;
-                query.trace = row.incident_id;
-                router.push({
-                  pathname: router.pathname,
-                  query,
-                });
-              }}
-            />
+          <div className={styles.content}>
+            <div className={styles["table-container"]}>
+              <TableX
+                columns={columns}
+                sortBy={sortBy}
+                onSortingChange={setSortBy}
+                data={traces?.trace_det_list ?? null}
+                headerClassName={styles["table-header"]}
+                rowClassName={cx(styles["table-row"])}
+                bodyClassName={styles["table-body"]}
+                onRowClick={(row) => {
+                  onClose();
+                  const query = router.query;
+                  delete query.latest;
+                  query.trace = row.incident_id;
+                  router.push({
+                    pathname: router.pathname,
+                    query,
+                  });
+                }}
+              />
+            </div>
             <div className={styles["pagination-container"]}>
               <PaginationX
                 itemsPerPage={TRACES_PAGE_SIZE}

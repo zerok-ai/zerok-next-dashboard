@@ -14,7 +14,7 @@ const GptLikelyCauseBox = () => {
   const { likelyCause, queries, typing, likelyCauseError } =
     useSelector(chatSelector);
   const text =
-    likelyCause?.response?.summary ?? likelyCause?.response?.data ?? null;
+    likelyCause?.response?.data ?? likelyCause?.response?.summary ?? null;
   const router = useRouter();
   const dispatch = useDispatch();
 

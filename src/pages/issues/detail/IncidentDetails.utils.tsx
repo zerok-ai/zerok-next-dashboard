@@ -26,27 +26,26 @@ export const IssueMetadata = () => {
 
   // Fetch issue data on mount
   useEffect(() => {
-    if (issueId && selectedCluster) {
+    if (router.isReady && issueId && selectedCluster) {
       const endpoint = GET_ISSUE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       ).replace("{issue_id}", issueId as string);
       fetchIssue(endpoint);
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, issueId, router]);
 
   const cluster = clusters.find((c) => c.id === selectedCluster);
+  console.log({ issueId, selectedCluster, clusters, issue });
 
   const IssueTimes = () => {
     if (!issue) return null;
     return (
       <div className={styles["incident-metadata-container"]}>
-        <TooltipX
-          title={`Cluster`}
-          placement="bottom"
-          arrow>
-            <span>{cluster!.name}</span>
-          </TooltipX>
+        <TooltipX title={`Cluster`} placement="bottom" arrow>
+          <span>{cluster!.name}</span>
+        </TooltipX>
+        |
         <AiOutlineClockCircle />{" "}
         <Tooltip
           title={`${getFormattedTime(issue.last_seen)}`}

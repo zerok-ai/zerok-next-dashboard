@@ -63,8 +63,7 @@ const TraceInfoTabs = ({
     return <TabSkeletons />;
   }
 
-  let tabs = getTabs(allSpans[selectedSpan].protocol);
-
+  const tabs = getTabs(allSpans[selectedSpan]);
   const renderTab = () => {
     if (rawDataError) {
       return (
@@ -77,12 +76,14 @@ const TraceInfoTabs = ({
     const tab = tabs.find((t) => t.value === activeTab);
     if (tab && tab.render) {
       const span = allSpans[selectedSpan];
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       if (rawData) {
         return tab.render(span, rawData);
       }
 
-      if (!rawData && tab.value === DEFAULT_TABS[0].value) {
+      if (
+        (!rawData && tab.value === DEFAULT_TABS[0].value) ||
+        (tab.value === SPAN_ATTRIBUTE_TABS[0].value && span.all_attributes)
+      ) {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         return tab.render(span, {} as SpanRawData);
       }
@@ -91,10 +92,6 @@ const TraceInfoTabs = ({
     return null;
   };
 
-  const span = allSpans[selectedSpan];
-  if (span.all_attributes) {
-    tabs = [...tabs, ...SPAN_ATTRIBUTE_TABS];
-  }
   return (
     <div className={styles.container}>
       <Tabs
