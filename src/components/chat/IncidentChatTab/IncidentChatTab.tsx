@@ -6,28 +6,30 @@ import GptInferenceBox from "components/chat/GptInferenceBox";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
+import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineHistory } from "react-icons/ai";
 import { HiChevronRight } from "react-icons/hi";
 import {
-  addInvalidCard,
   addTagCard,
   chatSelector,
-  fetchLikelyCause,
   // fetchLikelyCause,
-  fetchNewInference,
+} from "redux/chat/chatSlice";
+import {
+  fetchLikelyCause,
   fetchPastEvents,
-  fetchQueryResponse,
-  postContextEvent,
-} from "redux/chat";
+  postChatQuery,
+  postNewChatEvent,
+} from "redux/chat/chatThunks";
+import {
+  type ChatEventInferenceType,
+  type ChatEventQueryType,
+  type ChatEventTagType,
+} from "redux/chat/chatTypes";
 import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
-import {
-  type ChatInferenceEventType,
-  type ChatQueryEventType,
-} from "redux/types";
 import { CHAT_EVENTS, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 
@@ -50,14 +52,13 @@ const IncidentChatTab = () => {
     likelyCause,
     queries,
     contextIncident,
-    eventLoading,
-    historyLoading,
+    loading,
     history,
-    pastEventCount,
+    historyCount,
   } = useSelector(chatSelector);
   const incidentId =
     router.query.trace ??
-    likelyCause?.incidentId ??
+    likelyCause.event?.incidentId ??
     router.query.latest ??
     null;
   const [width, setWidth] = useState(450);
@@ -71,33 +72,30 @@ const IncidentChatTab = () => {
       );
     }
   }, [selectedCluster, issueId, enableChat]);
+
+  console.log({ queries, contextIncident, likelyCause });
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
     }
     if (selectedCluster) {
-      if (
-        (val === `/${CHAT_EVENTS.CONTEXT_SWITCH}` ||
-          val === `/${CHAT_EVENTS.INFERENCE}`) &&
-        !incidentId
-      ) {
-        dispatch(addInvalidCard("Please select an incident first"));
-        return;
-      }
       if (val === `/${CHAT_EVENTS.CONTEXT_SWITCH}`) {
         dispatch(
-          postContextEvent({
+          postNewChatEvent({
             selectedCluster,
             issueId: issueId as string,
-            incidentId: incidentId as string,
+            incidentId: contextIncident as string,
+            type: CHAT_EVENTS.CONTEXT_SWITCH,
+            newIncident: (router.query.trace ?? router.query.latest) as string,
           })
         );
       } else if (val === `/${CHAT_EVENTS.INFERENCE}`) {
         dispatch(
-          fetchNewInference({
+          postNewChatEvent({
             selectedCluster,
             issueId: issueId as string,
             incidentId: incidentId as string,
+            type: CHAT_EVENTS.INFERENCE,
           })
         );
       } else if (val === `/${CHAT_EVENTS.POSTMORTEM}`) {
@@ -106,10 +104,12 @@ const IncidentChatTab = () => {
         dispatch(addTagCard(val));
       } else {
         dispatch(
-          fetchQueryResponse({
+          postChatQuery({
             selectedCluster,
             query: val,
             issueId: issueId as string,
+            uid: nanoid(),
+            incidentId: incidentId as string,
           })
         );
       }
@@ -135,7 +135,7 @@ const IncidentChatTab = () => {
                 variant="text"
                 color="primary"
                 disabled={
-                  pastEventCount !== null && history.length === pastEventCount
+                  historyCount !== null && history.length === historyCount
                 }
                 onClick={() => {
                   dispatch(
@@ -192,24 +192,26 @@ const IncidentChatTab = () => {
                 );
               }
               if (type === CHAT_EVENTS.QUERY) {
+                const qr = qa as ChatEventQueryType;
                 return (
-                  <Fragment key={qa.id}>
-                    <ChatEventCard text={qa.event.query} />
-                    <AIChatBox query={qa as ChatQueryEventType} />
+                  <Fragment key={qr.id}>
+                    <ChatEventCard text={qr.event.query} />
+                    <AIChatBox query={qa as ChatEventQueryType} />
                   </Fragment>
                 );
               }
               if (type === CHAT_EVENTS.INFERENCE) {
                 return (
                   <Fragment key={qa.id}>
-                    <GptInferenceBox query={qa as ChatInferenceEventType} />
+                    <GptInferenceBox query={qa as ChatEventInferenceType} />
                   </Fragment>
                 );
               }
               if (type === CHAT_EVENTS.TAG) {
+                const ev = qa as ChatEventTagType;
                 return (
                   <Fragment key={qa.id}>
-                    <ChatTagCard tag={qa.event.tag} />
+                    <ChatTagCard tag={ev.event.tag} />
                   </Fragment>
                 );
               }
@@ -249,8 +251,8 @@ const IncidentChatTab = () => {
             <div className={styles["chat-box-container"]}>
               <div className={styles["text-container"]}>
                 {renderChat()}
-                {historyLoading && <CustomSkeleton len={8} />}
-                {eventLoading && <ChatEventCard loading={true} />}
+                {loading === CHAT_EVENTS.HISTORY && <CustomSkeleton len={8} />}
+                {loading && <ChatEventCard loading={true} />}
                 <div ref={bottomRef} className={styles.bottom}></div>
               </div>
             </div>

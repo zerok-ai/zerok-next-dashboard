@@ -14,6 +14,7 @@ export const CHAT_EVENTS = {
   INVALID: "INVALID" as const,
   TAG: "TAG" as const,
   POSTMORTEM: "POSTMORTEM" as const,
+  HISTORY: "HISTORY" as const,
 };
 
 export const CHAT_EVENT_ENUM = [
@@ -23,6 +24,8 @@ export const CHAT_EVENT_ENUM = [
   CHAT_EVENTS.LIKELY_CAUSE,
   CHAT_EVENTS.INVALID,
   CHAT_EVENTS.TAG,
+  CHAT_EVENTS.POSTMORTEM,
+  CHAT_EVENTS.HISTORY,
 ] as const;
 
 export const CHAT_COMMANDS: ChatCommandType[] = [

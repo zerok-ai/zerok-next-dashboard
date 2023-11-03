@@ -4,17 +4,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { chatSelector, stopTyping } from "redux/chat";
+import { chatSelector, stopTyping } from "redux/chat/chatSlice";
+import { type ChatEventQueryType } from "redux/chat/chatTypes";
 import { useDispatch, useSelector } from "redux/store";
-import { type ChatQueryEventType } from "redux/types";
-import { getFormattedTime } from "utils/dateHelpers";
+// import { getFormattedTime } from "utils/dateHelpers";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
 import styles from "./ChatBoxDisplay.module.scss";
 
 interface ChatBoxDisplayProps {
-  query: ChatQueryEventType;
+  query: ChatEventQueryType;
 }
 
 const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
@@ -32,6 +32,7 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
       behavior: "smooth",
     });
   };
+  const { error, loading } = query;
   const text = query?.event.response ?? null;
   const queryIndex = queries.findIndex((q) => q.id === query.id);
   const animate = query.typing && queryIndex === queries.length - 1;
@@ -41,7 +42,7 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
         <img src={ZEROK_MINIMAL_LOGO_LIGHT} alt="chatbox-logo" />
       </div>
 
-      {text ? (
+      {!error && text ? (
         <div className={styles["text-container"]}>
           {animate ? (
             <TypeAnimation
@@ -69,18 +70,24 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
                 {query.incidentId}
               </Link>
             </span>
-            <span>
+            {/* <span>
               {query.created_at && getFormattedTime(query.created_at)}
-            </span>
+            </span> */}
           </div>
           <div ref={bottomRef}></div>
         </div>
-      ) : (
+      ) : loading && !error ? (
         <CustomSkeleton
           containerClass={styles["skeleton-container"]}
           skeletonClass={styles.skeleton}
           len={1}
         />
+      ) : (
+        error && (
+          <p>
+            Could not fetch a response, please try again or contact support.
+          </p>
+        )
       )}
     </div>
   );
