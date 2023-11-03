@@ -1,6 +1,7 @@
 import { MenuItem, Select } from "@mui/material";
 import ZkChartTooltip from "components/charts/ZkChartTooltip";
 import CustomSkeleton from "components/custom/CustomSkeleton";
+import EmptyChart from "components/EmptyChart";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -90,7 +91,15 @@ export const PodChart = ({
     );
   }
   const dataset = pod[dataKey];
-  if (Object.keys(dataset).length === 0) return <p>No data.</p>;
+  if (Object.keys(dataset).length === 0) {
+    return (
+      <EmptyChart
+        label={dataKey === "cpu_usage" ? "CPU Usage" : "Memory Usage"}
+        height={300}
+        width={"99%"}
+      />
+    );
+  }
   const getChartData = (): [GenericObject[], string[]] => {
     const series: GenericObject[] = [];
     const keys = Object.keys(dataset);
