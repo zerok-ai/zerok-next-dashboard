@@ -36,7 +36,6 @@ export const IssueMetadata = () => {
   }, [selectedCluster, issueId, router]);
 
   const cluster = clusters.find((c) => c.id === selectedCluster);
-  console.log({ issueId, selectedCluster, clusters, issue });
 
   const IssueTimes = () => {
     if (!issue) return null;
