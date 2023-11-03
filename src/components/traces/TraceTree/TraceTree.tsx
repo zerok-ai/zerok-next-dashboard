@@ -14,12 +14,12 @@ import {
   HiOutlineX,
 } from "react-icons/hi";
 import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
-import { fetchNewInference } from "redux/chat";
-// import { fetchNewInference } from "redux/chat";
+import { postNewChatEvent } from "redux/chat/chatThunks";
 import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { convertNanoToMilliSeconds } from "utils/functions";
+import { CHAT_EVENTS } from "utils/gpt/constants";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { getEarliestSpan, getSpanTotalTime } from "utils/spans/functions";
 // import { ICON_BASE_PATH, ICONS } from "utils/images";
@@ -250,10 +250,11 @@ const TraceTree = ({
               className={styles["synth-btn"]}
               onClick={() => {
                 dispatch(
-                  fetchNewInference({
+                  postNewChatEvent({
                     incidentId: incidentId as string,
                     issueId: issueId as string,
                     selectedCluster: selectedCluster as string,
+                    type: CHAT_EVENTS.INFERENCE,
                   })
                 );
               }}

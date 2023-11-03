@@ -9,7 +9,7 @@ import { useFetch } from "hooks/useFetch";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
-import { chatSelector } from "redux/chat";
+import { chatSelector } from "redux/chat/chatSlice";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
@@ -78,7 +78,7 @@ const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
   }, [selectedCluster, page]);
 
   const columns = getTraceColumns({
-    chatTrace: likelyCause?.incidentId ?? null,
+    chatTrace: likelyCause.event?.incidentId ?? null,
     currentTrace: incidentId as string,
   });
   return (
