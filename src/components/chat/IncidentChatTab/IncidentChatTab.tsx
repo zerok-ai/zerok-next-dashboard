@@ -70,7 +70,7 @@ const IncidentChatTab = () => {
         })
       );
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, issueId, enableChat]);
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
@@ -100,6 +100,8 @@ const IncidentChatTab = () => {
             incidentId: incidentId as string,
           })
         );
+      } else if (val === `/${CHAT_EVENTS.POSTMORTEM}`) {
+        console.log({ val });
       } else if (val.includes(`${CHAT_TAG_CHARACTER}`)) {
         dispatch(addTagCard(val));
       } else {

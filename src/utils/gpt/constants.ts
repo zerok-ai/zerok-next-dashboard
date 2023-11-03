@@ -13,6 +13,7 @@ export const CHAT_EVENTS = {
   LIKELY_CAUSE: "LIKELY_CAUSE" as const,
   INVALID: "INVALID" as const,
   TAG: "TAG" as const,
+  POSTMORTEM: "POSTMORTEM" as const,
 };
 
 export const CHAT_EVENT_ENUM = [
@@ -35,6 +36,11 @@ export const CHAT_COMMANDS: ChatCommandType[] = [
     label: "Infer",
     subtitle: "Analyse this request",
     value: `/${CHAT_EVENTS.INFERENCE}`,
+  },
+  {
+    label: "Generate Postmortem",
+    subtitle: "Automatically generate a postmortem of this issue",
+    value: `/${CHAT_EVENTS.POSTMORTEM}`,
   },
 ];
 
