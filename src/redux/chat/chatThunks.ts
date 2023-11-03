@@ -149,7 +149,11 @@ export const fetchPastEvents = createAsyncThunk(
       .replace("{issue_hash}", issueId)
       .replace("{offset}", state.chat.history.length.toString());
     const rdata = await raxios.get(endpoint);
-    return rdata.data.payload as {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return {
+      historyCount: rdata.data.payload.total_count,
+      events: rdata.data.payload.events,
+    } as {
       historyCount: number;
       events: ChatEventType[];
     };

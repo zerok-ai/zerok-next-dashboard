@@ -73,7 +73,7 @@ const IncidentChatTab = () => {
     }
   }, [selectedCluster, issueId, enableChat]);
 
-  console.log({ queries, contextIncident, likelyCause });
+  console.log({ queries, contextIncident, likelyCause, history, historyCount });
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
@@ -146,7 +146,7 @@ const IncidentChatTab = () => {
                   );
                 }}
               >
-                <AiOutlineHistory /> Get older conversations
+                <AiOutlineHistory />
               </Button>
               <GptLikelyCauseBox />
             </div>
@@ -252,7 +252,7 @@ const IncidentChatTab = () => {
               <div className={styles["text-container"]}>
                 {renderChat()}
                 {loading === CHAT_EVENTS.HISTORY && <CustomSkeleton len={8} />}
-                {loading && <ChatEventCard loading={true} />}
+                {loading && <CustomSkeleton len={1} />}
                 <div ref={bottomRef} className={styles.bottom}></div>
               </div>
             </div>
