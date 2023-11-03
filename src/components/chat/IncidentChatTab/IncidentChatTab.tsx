@@ -70,7 +70,7 @@ const IncidentChatTab = () => {
         })
       );
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, issueId, enableChat]);
   const handleInputSubmit = async (val: string) => {
     if (!enableChat) {
       return;
