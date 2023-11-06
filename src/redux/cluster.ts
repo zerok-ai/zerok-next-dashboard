@@ -70,6 +70,7 @@ export const clusterSlice = createSlice({
         if (action.payload.length > 0) {
           state.empty = false;
           const localCluster = getClusterFromLocalStorage();
+
           // check if the saved cluster is in the list of clusters
           if (localCluster) {
             const cluster = action.payload.find((c: ClusterType) => {
@@ -78,7 +79,6 @@ export const clusterSlice = createSlice({
             if (cluster) {
               state.selectedCluster = cluster.id;
               state.status = cluster.status;
-              return;
             }
           }
           // if there is no saved cluster, select the first healthy cluster
@@ -92,16 +92,17 @@ export const clusterSlice = createSlice({
             if (healthyCluster) {
               state.selectedCluster = healthyCluster.id;
               state.status = healthyCluster.status;
-              return;
+            } else {
+              // Just set the first cluster as selected
+              state.selectedCluster = action.payload[0].id;
+              state.status = action.payload[0].status;
             }
           }
-          state.selectedCluster = action.payload[0].id;
-          state.status = action.payload[0].status;
-          state.initialized = true;
         } else {
           state.empty = true;
           state.selectedCluster = null;
         }
+        state.initialized = true;
       })
       .addCase(getClusters.rejected, (state, action) => {
         state.loading = false;
