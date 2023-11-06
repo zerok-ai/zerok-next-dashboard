@@ -2,9 +2,9 @@ import { Button } from "@mui/material";
 import TooltipX from "components/themeX/TooltipX";
 import { AiOutlineHistory } from "react-icons/ai";
 import { chatSelector } from "redux/chat/chatSlice";
-import { fetchPastEvents } from "redux/chat/chatThunks";
 import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
+import { fetchPastEvents } from "redux/thunks/chat";
 
 import styles from "./ChatPastEventsBtn.module.scss";
 
