@@ -201,6 +201,7 @@ const ApiKeys = () => {
           showRange={false}
           showRefresh={true}
           onRefresh={changeTrigger}
+          showClusterSelector={false}
           rightExtras={[
             <LoadingButton
               color="primary"

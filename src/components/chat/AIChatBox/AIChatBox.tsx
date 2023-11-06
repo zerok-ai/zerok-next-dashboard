@@ -1,4 +1,3 @@
-// import cssVars from "styles/variables.module.scss";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,14 +6,14 @@ import { TypeAnimation } from "react-type-animation";
 import { chatSelector, stopTyping } from "redux/chat/chatSlice";
 import { type ChatEventQueryType } from "redux/chat/chatTypes";
 import { useDispatch, useSelector } from "redux/store";
-// import { getFormattedTime } from "utils/dateHelpers";
+import { getFormattedTime } from "utils/dateHelpers";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 
 import styles from "./ChatBoxDisplay.module.scss";
 
 interface ChatBoxDisplayProps {
-  query: ChatEventQueryType;
+  query: ChatEventQueryType & { created_at?: string };
 }
 
 const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
@@ -70,9 +69,9 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
                 {query.incidentId}
               </Link>
             </span>
-            {/* <span>
+            <span>
               {query.created_at && getFormattedTime(query.created_at)}
-            </span> */}
+            </span>
           </div>
           <div ref={bottomRef}></div>
         </div>

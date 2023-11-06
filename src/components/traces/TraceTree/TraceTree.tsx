@@ -14,9 +14,9 @@ import {
   HiOutlineX,
 } from "react-icons/hi";
 import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
-import { postNewChatEvent } from "redux/chat/chatThunks";
 import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
+import { postNewChatEvent } from "redux/thunks/chat";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { convertNanoToMilliSeconds } from "utils/functions";
 import { CHAT_EVENTS } from "utils/gpt/constants";
@@ -251,7 +251,7 @@ const TraceTree = ({
               onClick={() => {
                 dispatch(
                   postNewChatEvent({
-                    incidentId: incidentId as string,
+                    incidentId: (router.query.latest as string) ?? incidentId,
                     issueId: issueId as string,
                     selectedCluster: selectedCluster as string,
                     type: CHAT_EVENTS.INFERENCE,

@@ -39,6 +39,7 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
     data: pods,
     fetchData: fetchPods,
     errorData: podsErrorData,
+    setData: setPods,
     error: podsError,
     initialFetchDone: podsInitialFetchDone,
   } = useFetch<PodInfoType[]>("pods_info");
@@ -61,6 +62,7 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
   useEffect(() => {
     if (incidentId && selectedCluster) {
+      setPods(null);
       setPodDetails(null);
       setContainers(null);
       setSelectedPod("");

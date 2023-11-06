@@ -66,7 +66,7 @@ export const clusterSlice = createSlice({
       .addCase(getClusters.fulfilled, (state, action) => {
         state.clusters = action.payload;
         state.loading = false;
-        state.initialized = true;
+
         if (action.payload.length > 0) {
           state.empty = false;
           const localCluster = getClusterFromLocalStorage();
@@ -97,6 +97,7 @@ export const clusterSlice = createSlice({
           }
           state.selectedCluster = action.payload[0].id;
           state.status = action.payload[0].status;
+          state.initialized = true;
         } else {
           state.empty = true;
           state.selectedCluster = null;
