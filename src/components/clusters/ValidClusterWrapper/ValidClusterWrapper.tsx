@@ -13,6 +13,7 @@ const ValidClusterWrapper = ({ children }: ValidClusterWrapperProps) => {
     (state) => state.cluster
   );
   const [errorText, setErrorText] = useState<null | string>(null);
+  console.log({ initialized });
   useEffect(() => {
     if (initialized && !clusters.length) {
       setErrorText("Please add a cluster to continue.");
@@ -32,7 +33,7 @@ const ValidClusterWrapper = ({ children }: ValidClusterWrapperProps) => {
     } else {
       setErrorText(null);
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, initialized]);
   if (!initialized) return <CustomSkeleton len={10} />;
   return (
     <Fragment>
