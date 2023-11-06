@@ -2,7 +2,7 @@ import {
   type ActionReducerMapBuilder,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import { type AuthType } from "redux/types";
+import { type AuthType } from "redux/auth/authTypes";
 import { LOGOUT_ENDPOINT } from "utils/auth/endpoints";
 import { removeToken } from "utils/auth/functions";
 import raxios from "utils/raxios";

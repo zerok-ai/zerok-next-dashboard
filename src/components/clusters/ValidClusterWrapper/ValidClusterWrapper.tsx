@@ -13,7 +13,6 @@ const ValidClusterWrapper = ({ children }: ValidClusterWrapperProps) => {
     (state) => state.cluster
   );
   const [errorText, setErrorText] = useState<null | string>(null);
-  console.log({ initialized });
   useEffect(() => {
     if (initialized && !clusters.length) {
       setErrorText("Please add a cluster to continue.");
