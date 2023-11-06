@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginUserBuilder, logoutUserBuilder } from "redux/thunks/auth";
 import { setRaxiosLocalToken } from "utils/auth/functions";
-import { DEFAULT_USER_PROFILE } from "utils/constants";
 
 import { type RootState } from "../store";
-import { type AuthType } from "../types";
+import { type AuthType } from "./authTypes";
 
 const initialState: AuthType = {
   token: null,
@@ -21,7 +20,9 @@ export const authSlice = createSlice({
     tokenLogin: (state, { payload }: { payload: { token: string } }) => {
       state.token = payload.token;
       state.isLoggedIn = true;
-      state.user = DEFAULT_USER_PROFILE;
+      if (!state.user) {
+        state.user = null;
+      }
       state.loading = false;
       setRaxiosLocalToken(payload.token);
     },

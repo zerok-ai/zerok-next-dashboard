@@ -1,13 +1,4 @@
-import { type UserProfileType } from "redux/types";
-
 export const TOKEN_NAME = "token";
-
-export const DEFAULT_USER_PROFILE: UserProfileType = {
-  id: "1",
-  email: "kelvin.z@zerok.ai",
-  name: "Kelvin Z",
-  role: "UI/UX Designer",
-};
 
 export const HTTP_ERROR_CODES = {
   EXPIRED: 419,
