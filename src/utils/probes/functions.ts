@@ -5,15 +5,15 @@ import {
   type ProbeFormType,
 } from "components/forms/ProbeCreateForm/ProbeCreateForm.utils";
 import { nanoid } from "nanoid";
-import { type ScenarioDetailType } from "utils/scenarios/types";
+import { type ScenarioDetail } from "utils/scenarios/types";
 
-export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
+export const scenarioToProbeForm = (scenario: ScenarioDetail) => {
   const cards: ConditionCardType[] = [];
   const groupBy: GroupByType[] = [];
   // build cards
-  const workloads = Object.keys(scenario.scenario.workloads);
+  const workloads = Object.keys(scenario.workloads);
   workloads.forEach((workloadId) => {
-    const workload = scenario.scenario.workloads[workloadId];
+    const workload = scenario.workloads[workloadId];
     const rules = workload.rule.rules;
     const conditions: ConditionRowType[] = [];
     rules.forEach((rule) => {
@@ -40,9 +40,9 @@ export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
     });
   });
 
-  scenario.scenario.group_by.forEach((group) => {
+  scenario.group_by.forEach((group) => {
     const { title, workload_id } = group;
-    const workload = scenario.scenario.workloads[workload_id];
+    const workload = scenario.workloads[workload_id];
     let service = workload.service;
     if (workload.service.includes("*/*")) {
       service = `${workload.service}_${workload.protocol}`;
@@ -55,8 +55,8 @@ export const scenarioToProbeForm = (scenario: ScenarioDetailType) => {
       executor: workload.executor,
     });
   });
-  const title = scenario.scenario.scenario_title;
-  const sample = scenario.scenario.rate_limit[0];
+  const title = scenario.scenario_title;
+  const sample = scenario.rate_limit[0];
   const sampling: ProbeFormType["sampling"] = {
     samples: sample.bucket_max_size,
     duration: parseInt(

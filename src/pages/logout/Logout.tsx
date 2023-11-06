@@ -3,8 +3,8 @@ import AuthLayout from "components/layouts/AuthLayout";
 import Head from "next/head";
 import Link from "next/link";
 import { Fragment, useEffect } from "react";
-import { logoutUser } from "redux/authSlice";
 import { useDispatch } from "redux/store";
+import { logoutUser } from "redux/thunks/auth";
 
 const Logout = () => {
   const dispatch = useDispatch();

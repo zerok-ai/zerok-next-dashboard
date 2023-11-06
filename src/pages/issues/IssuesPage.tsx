@@ -110,7 +110,7 @@ const IssuesPage = () => {
       />,
     ];
   }, [sortBy]);
-
+  console.log({ error, data, selectedCluster });
   return (
     <Fragment>
       <PageHeader
@@ -141,10 +141,9 @@ const IssuesPage = () => {
         )}
         <div className={styles["page-content"]}>
           {error && <p>Error fetching issues. Please try again later.</p>}
-          {/* @TODO - add error state here */}
           {selectedCluster && !error && (
             <TableX
-              data={data?.issues ?? null}
+              data={data ? data.issues : null}
               columns={columns}
               sortBy={sortBy}
               onSortingChange={setSortBy}

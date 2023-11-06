@@ -6,7 +6,7 @@ import {
 } from "react-redux";
 
 // slices
-import authReducer from "./authSlice";
+import authReducer from "./auth/authSlice";
 import chatReducer from "./chat/chatSlice";
 import clusterReducer from "./cluster";
 import drawerReducer from "./drawer";

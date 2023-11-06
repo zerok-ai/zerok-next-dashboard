@@ -1,18 +1,3 @@
-export interface UserProfileType {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-}
-
-export interface AuthType {
-  user: null | UserProfileType;
-  token: null | string;
-  isLoggedIn: boolean;
-  loading: boolean;
-  error: null | string;
-}
-
 export interface DrawerReduxType {
   isDrawerMinimized: boolean;
   activeLink: string | null;
