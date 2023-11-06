@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import cx from "classnames";
 import AIChatBox from "components/chat/AIChatBox";
 import ChatDisabledCard from "components/chat/ChatDisabledCard";
@@ -7,10 +6,15 @@ import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { AiOutlineHistory } from "react-icons/ai";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { HiChevronRight } from "react-icons/hi";
 import {
   addTagCard,
@@ -19,11 +23,11 @@ import {
 } from "redux/chat/chatSlice";
 import {
   fetchLikelyCause,
-  fetchPastEvents,
   postChatQuery,
   postNewChatEvent,
 } from "redux/chat/chatThunks";
 import {
+  type ChatEventContextSwitchType,
   type ChatEventInferenceType,
   type ChatEventQueryType,
   type ChatEventTagType,
@@ -31,14 +35,14 @@ import {
 import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
 import { CHAT_EVENTS, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
-import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 
 import ChatEventCard from "../ChatEventCard";
+import ChatPastEventsBtn from "../ChatPastEventsBtn";
 import ChatTagCard from "../ChatTagCard";
 import ChatToggleBanner from "../ChatToggleBanner";
 import GptLikelyCauseBox from "../GptLikelyCauseBox";
 import styles from "./IncidentChatTab.module.scss";
-import { UserInputField } from "./IncidentChatTab.utils";
+import { ContextEventText, UserInputField } from "./IncidentChatTab.utils";
 
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
@@ -116,6 +120,10 @@ const IncidentChatTab = () => {
     }
   };
 
+  const pastEventsButton = useMemo(() => {
+    return <ChatPastEventsBtn issueId={issueId as string} />;
+  }, [issueId]);
+
   const renderChat = useCallback(() => {
     if (!enableChat) {
       return (
@@ -131,91 +139,52 @@ const IncidentChatTab = () => {
         <Fragment>
           <div className={styles["text-boxes"]}>
             <div className={styles["likely-cause-container"]}>
-              <Button
-                variant="text"
-                color="primary"
-                disabled={
-                  historyCount !== null && history.length === historyCount
-                }
-                onClick={() => {
-                  dispatch(
-                    fetchPastEvents({
-                      selectedCluster: selectedCluster as string,
-                      issueId: issueId as string,
-                    })
-                  );
-                }}
-              >
-                <AiOutlineHistory />
-              </Button>
+              {pastEventsButton}
               <GptLikelyCauseBox />
             </div>
 
             {queries.map((qa, idx) => {
               const { type } = qa.event;
-              if (type === CHAT_EVENTS.INVALID) {
-                return (
-                  <ChatEventCard
-                    text="Please select a request to continue."
-                    key={qa.id}
-                  />
-                );
-              }
-              if (type === CHAT_EVENTS.CONTEXT_SWITCH) {
-                const DisplayText = () => {
+              switch (type) {
+                case CHAT_EVENTS.CONTEXT_SWITCH: {
+                  const cx = qa as ChatEventContextSwitchType;
                   return (
-                    <span>
-                      Chat context changed from the{" "}
-                      <Link
-                        href={getSpanPageLinkFromIncident(
-                          contextIncident!,
-                          router
-                        )}
-                      >
-                        old request
-                      </Link>{" "}
-                      to the{" "}
-                      <Link
-                        href={getSpanPageLinkFromIncident(
-                          incidentId as string,
-                          router
-                        )}
-                      >
-                        current
-                      </Link>{" "}
-                      request
-                    </span>
+                    <ChatEventCard
+                      component={
+                        <ContextEventText event={cx.event} router={router} />
+                      }
+                      key={qa.id}
+                    />
                   );
-                };
-                return (
-                  <ChatEventCard render={() => <DisplayText />} key={qa.id} />
-                );
+                }
+                case CHAT_EVENTS.QUERY: {
+                  const qr = qa as ChatEventQueryType;
+                  return (
+                    <Fragment key={qr.id}>
+                      <ChatEventCard text={qr.event.query} />
+                      <AIChatBox query={qa as ChatEventQueryType} />
+                    </Fragment>
+                  );
+                }
+
+                case CHAT_EVENTS.INFERENCE: {
+                  return (
+                    <Fragment key={qa.id}>
+                      <GptInferenceBox query={qa as ChatEventInferenceType} />
+                    </Fragment>
+                  );
+                }
+                case CHAT_EVENTS.TAG: {
+                  const ev = qa as ChatEventTagType;
+                  return (
+                    <Fragment key={qa.id}>
+                      <ChatTagCard tag={ev.event.tag} />
+                    </Fragment>
+                  );
+                }
+                default:
+                  return null;
               }
-              if (type === CHAT_EVENTS.QUERY) {
-                const qr = qa as ChatEventQueryType;
-                return (
-                  <Fragment key={qr.id}>
-                    <ChatEventCard text={qr.event.query} />
-                    <AIChatBox query={qa as ChatEventQueryType} />
-                  </Fragment>
-                );
-              }
-              if (type === CHAT_EVENTS.INFERENCE) {
-                return (
-                  <Fragment key={qa.id}>
-                    <GptInferenceBox query={qa as ChatEventInferenceType} />
-                  </Fragment>
-                );
-              }
-              if (type === CHAT_EVENTS.TAG) {
-                const ev = qa as ChatEventTagType;
-                return (
-                  <Fragment key={qa.id}>
-                    <ChatTagCard tag={ev.event.tag} />
-                  </Fragment>
-                );
-              }
-              return null;
             })}
           </div>
         </Fragment>

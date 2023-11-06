@@ -1,8 +1,15 @@
 import { OutlinedInput } from "@mui/material";
 import ChatCommandMenu from "components/chat/ChatCommandMenu";
 import { useToggle } from "hooks/useToggle";
+import Link from "next/link";
+import { type NextRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { CHAT_COMMAND_CHARACTER, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
+import { type ChatEventContextSwitchType } from "redux/chat/chatTypes";
+import {
+  CHAT_COMMAND_CHARACTER,
+  CHAT_TAG_CHARACTER,
+} from "utils/gpt/constants";
+import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 
 import styles from "./IncidentChatTab.module.scss";
@@ -118,5 +125,27 @@ export const UserInputField = ({
         }
       />
     </form>
+  );
+};
+
+export const ContextEventText = ({
+  event,
+  router,
+}: {
+  event: ChatEventContextSwitchType["event"];
+  router: NextRouter;
+}) => {
+  const { oldIncident, newIncident } = event;
+  return (
+    <span>
+      Switched context from{" "}
+      <Link href={getSpanPageLinkFromIncident(oldIncident, router)}>
+        the old request
+      </Link>{" "}
+      to{" "}
+      <Link href={getSpanPageLinkFromIncident(newIncident, router)}>
+        this request
+      </Link>
+    </span>
   );
 };
