@@ -14,6 +14,11 @@ export const useFetch = <T>(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [initialFetchDone, setInitialFetchDone] = useState(false);
+
+  const updateData = (newData: T | null) => {
+    setData(newData);
+    setInitialFetchDone(false);
+  };
   const [errorData, setErrorData] = useState<any>(null); // @TODO - add type here
   const fetchData = async (endpoint: string) => {
     try {
@@ -48,7 +53,7 @@ export const useFetch = <T>(
     loading,
     error,
     fetchData,
-    setData,
+    setData: updateData,
     errorData,
     initialFetchDone,
     resetInitialFetch,

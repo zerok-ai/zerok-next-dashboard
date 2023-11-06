@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { chatSelector, stopLikelyCauseTyping } from "redux/chat";
+import { chatSelector, stopTyping } from "redux/chat/chatSlice";
 import { useDispatch, useSelector } from "redux/store";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
@@ -11,18 +11,26 @@ import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import styles from "./GptLikelyCauseBox.module.scss";
 
 const GptLikelyCauseBox = () => {
-  const { likelyCause, queries, typing, likelyCauseError } =
-    useSelector(chatSelector);
-  const text =
-    likelyCause?.response?.data ?? likelyCause?.response?.summary ?? null;
+  const { likelyCause, queries } = useSelector(chatSelector);
+  const { event, error, typing, loading } = likelyCause;
+  const text = event?.inference.data ?? event?.inference.summary ?? null;
   const router = useRouter();
   const dispatch = useDispatch();
+  const incidentId = event?.incidentId ?? null;
 
   const renderText = () => {
-    if (likelyCauseError) {
+    if (error) {
       return "Couldn't fetch the likely cause for this incident. Please try again later or contact support.";
+    } else if (loading || !text) {
+      return (
+        <CustomSkeleton
+          containerClass={styles["skeleton-container"]}
+          skeletonClass={styles.skeleton}
+          len={1}
+        />
+      );
     } else {
-      return text ? (
+      return (
         <Fragment>
           {typing && queries.length === 0 ? (
             <TypeAnimation
@@ -30,7 +38,7 @@ const GptLikelyCauseBox = () => {
               sequence={[
                 text,
                 () => {
-                  dispatch(stopLikelyCauseTyping());
+                  dispatch(stopTyping(likelyCause.id));
                 },
               ]}
               repeat={0}
@@ -44,21 +52,12 @@ const GptLikelyCauseBox = () => {
           <div className={styles.footer}>
             Based on request{" "}
             <Link
-              href={getSpanPageLinkFromIncident(
-                likelyCause?.incidentId as string,
-                router
-              )}
+              href={getSpanPageLinkFromIncident(incidentId as string, router)}
             >
-              {likelyCause?.incidentId}
+              {incidentId}
             </Link>
           </div>
         </Fragment>
-      ) : (
-        <CustomSkeleton
-          containerClass={styles["skeleton-container"]}
-          skeletonClass={styles.skeleton}
-          len={1}
-        />
       );
     }
   };

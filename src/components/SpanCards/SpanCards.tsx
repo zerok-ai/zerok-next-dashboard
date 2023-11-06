@@ -6,7 +6,7 @@ import TraceTree from "components/traces/TraceTree";
 import { useToggle } from "hooks/useToggle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { chatSelector } from "redux/chat";
+import { chatSelector } from "redux/chat/chatSlice";
 import { useSelector } from "redux/store";
 import { type SpanDetail, type SpanErrorDetail } from "utils/types";
 
@@ -21,7 +21,7 @@ const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
   const [incidentId, setIncidentId] = useState<null | string>(null);
   const [spans, setSpans] = useState<null | SpanDetail>(null);
   const [isTraceTableVisible, toggleTraceTable] = useToggle(false);
-  const { likelyCause, likelyCauseError } = useSelector(chatSelector);
+  const { likelyCause } = useSelector(chatSelector);
   const router = useRouter();
 
   useEffect(() => {
@@ -35,20 +35,20 @@ const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
   useEffect(() => {
     if (router.query.trace) {
       setIncidentId(router.query.trace as string);
-    } else if (likelyCause) {
-      setIncidentId(likelyCause.incidentId);
+    } else if (likelyCause.event) {
+      setIncidentId(likelyCause.event.incidentId);
     } else {
       setIncidentId(null);
     }
   }, [likelyCause, router.query.trace]);
 
   useEffect(() => {
-    if (likelyCauseError) {
+    if (likelyCause.error) {
       setIncidentId(
         (router.query.latest as string) ?? (router.query.trace as string)
       );
     }
-  }, [likelyCauseError]);
+  }, [likelyCause.error]);
   return (
     <div
       className={cx(

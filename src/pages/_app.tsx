@@ -14,6 +14,7 @@ import "styles/mui-overrides.scss"
 
 import { type NextPage } from "next";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { type ReactElement } from "react";
 // third-party
 import { Provider } from "react-redux";
@@ -34,6 +35,12 @@ const App = ({ Component, pageProps }: AppProps & Props) => {
   const getLayout = Component.getLayout ?? ((page: any) => page);
   return (
     <Provider store={store}>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no"
+        />
+      </Head>
       <ThemeCustomization>
         {getLayout(<Component {...pageProps} />)}
       </ThemeCustomization>

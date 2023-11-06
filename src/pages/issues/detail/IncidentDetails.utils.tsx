@@ -41,7 +41,7 @@ export const IssueMetadata = () => {
     if (!issue) return null;
     return (
       <div className={styles["incident-metadata-container"]}>
-        <TooltipX title={`Cluster`} placement="bottom" arrow>
+        <TooltipX title={`Cluster`} placement="bottom" arrow={false}>
           <span>{cluster!.name}</span>
         </TooltipX>
         |
@@ -49,7 +49,7 @@ export const IssueMetadata = () => {
         <Tooltip
           title={`${getFormattedTime(issue.last_seen)}`}
           placement="bottom"
-          arrow
+          arrow={false}
         >
           <span>Last collected - {getRelativeTime(issue.last_seen)}</span>
         </Tooltip>
@@ -58,7 +58,7 @@ export const IssueMetadata = () => {
           <Tooltip
             title={`${getFormattedTime(issue.first_seen)}`}
             placement="bottom"
-            arrow
+            arrow={false}
           >
             <span>First collected - {getRelativeTime(issue.first_seen)}</span>
           </Tooltip>

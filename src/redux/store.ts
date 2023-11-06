@@ -7,7 +7,7 @@ import {
 
 // slices
 import authReducer from "./authSlice";
-import chatReducer from "./chat";
+import chatReducer from "./chat/chatSlice";
 import clusterReducer from "./cluster";
 import drawerReducer from "./drawer";
 import incidentListReducer from "./incidentList";
