@@ -33,7 +33,7 @@ export const UserInputField = ({
       return;
     }
     if (userInput[0] === CHAT_TAG_CHARACTER && userInput.length === 1) {
-      setMenuOpen(true);
+      // setMenuOpen(true);
       return;
     }
     if (userInput.length === 0) {
