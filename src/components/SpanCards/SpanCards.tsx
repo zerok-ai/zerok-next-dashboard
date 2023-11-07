@@ -37,8 +37,8 @@ const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
       setIncidentId(router.query.trace as string);
     } else if (likelyCause.event) {
       setIncidentId(likelyCause.event.incidentId);
-    } else {
-      setIncidentId(null);
+    } else if (router.query.latest) {
+      setIncidentId(router.query.latest as string);
     }
   }, [likelyCause, router.query.trace]);
 

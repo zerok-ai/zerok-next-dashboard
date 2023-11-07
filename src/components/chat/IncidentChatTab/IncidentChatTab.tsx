@@ -4,7 +4,6 @@ import ChatDisabledCard from "components/chat/ChatDisabledCard";
 import GptInferenceBox from "components/chat/GptInferenceBox";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
-import { useFlags } from "flagsmith/react";
 import { useToggle } from "hooks/useToggle";
 import { useZkFlag } from "hooks/useZkFlag";
 import { nanoid } from "nanoid";
@@ -49,9 +48,8 @@ import { ContextEventText, UserInputField } from "./IncidentChatTab.utils";
 
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
-  const isChatEnabled = useFlags(["zkchat"]);
-  const config = useZkFlag("zkchat", "org", "gpt");
-  const [enableChat] = useToggle(isChatEnabled.zkchat.enabled);
+  const isChatEnabled = useZkFlag("org", "gpt", "zkchat");
+  const [enableChat] = useToggle(isChatEnabled.enabled);
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -65,7 +63,6 @@ const IncidentChatTab = () => {
     router.query.latest ??
     null;
   const [width, setWidth] = useState(450);
-  console.log({ config });
   useEffect(() => {
     if (selectedCluster && issueId && enableChat) {
       dispatch(
@@ -211,10 +208,12 @@ const IncidentChatTab = () => {
           <Fragment>
             <div className={styles["chat-box-container"]}>
               <div className={styles["text-container"]}>
-                <div className={styles["likely-cause-container"]}>
-                  {pastEventsButton}
-                  <GptLikelyCauseBox />
-                </div>
+                {pastEventsButton}
+                {enableChat && (
+                  <div className={styles["likely-cause-container"]}>
+                    <GptLikelyCauseBox />
+                  </div>
+                )}
                 <div className={styles["text-boxes"]}>{renderChat()}</div>
                 {loading === CHAT_EVENTS.HISTORY && <CustomSkeleton len={8} />}
                 {loading && <CustomSkeleton len={1} />}

@@ -1,5 +1,6 @@
 import { useFlagsmith } from "flagsmith/react";
 import { useSelector } from "redux/store";
+import { ZK_DEFAULT_ALL_FLAGS } from "utils/flags/constants";
 import {
   type ZkFlagConfigType,
   type ZkFlagFeatureType,
@@ -9,17 +10,17 @@ export const useZkFlag = <
   U extends ZkFlagFeatureType,
   T extends keyof ZkFlagConfigType[U]
 >(
-  flagName: T,
   level: "org" | "cluster",
-  feature: U
+  feature: U,
+  flagName: T
 ) => {
   const flagsmith = useFlagsmith();
   const allFlags = flagsmith.getAllFlags();
+  console.log({ allFlags });
   const { user } = useSelector((state) => state.auth);
   const { selectedCluster } = useSelector((state) => state.cluster);
-  console.log({ user, selectedCluster });
   if (!user || !user.org_id || (level === "cluster" && !selectedCluster)) {
-    return null;
+    return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
   }
 
   const accessor = level === "org" ? user.org_id : (selectedCluster as string);
@@ -30,7 +31,8 @@ export const useZkFlag = <
     });
     const featureConfig = config[feature];
     const flag = featureConfig[flagName];
-    console.log({ featureConfig, flag });
     return flag;
+  } else {
+    return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
   }
 };
