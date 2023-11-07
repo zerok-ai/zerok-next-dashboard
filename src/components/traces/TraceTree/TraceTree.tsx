@@ -14,11 +14,13 @@ import {
   HiOutlineX,
 } from "react-icons/hi";
 import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
-// import { fetchNewInference } from "redux/chat";
 import { clusterSelector } from "redux/cluster";
-import { useSelector } from "redux/store";
+import { useDispatch, useSelector } from "redux/store";
+import { postNewChatEvent } from "redux/thunks/chat";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { convertNanoToMilliSeconds } from "utils/functions";
+import { CHAT_EVENTS } from "utils/gpt/constants";
+import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { getEarliestSpan, getSpanTotalTime } from "utils/spans/functions";
 // import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { type SpanDetail, type SpanResponse } from "utils/types";
@@ -53,6 +55,7 @@ const TraceTree = ({
     initialFetchDone,
     resetInitialFetch,
   } = useFetch<SpanResponse>("spans", null, spanTransformer);
+  const dispatch = useDispatch();
   const { selectedCluster } = useSelector(clusterSelector);
   const [spanCustomError, setSpanCustomError] = useState<null | boolean>(null);
   // const [debugMode, toggleDebugMode] = useToggle(false);
@@ -200,6 +203,7 @@ const TraceTree = ({
           isTopRoot={true}
           isModalOpen={isModalOpen}
           setSelectedSpan={setSelectedSpan}
+          selectedSpan={selectedSpan}
         />
       );
     }
@@ -240,23 +244,24 @@ const TraceTree = ({
         <div className={styles.header}>
           <h5>
             Spans
-            {/* <Button
+            <Button
               variant="contained"
               size="extraSmall"
               className={styles["synth-btn"]}
               onClick={() => {
                 dispatch(
-                  fetchNewInference({
-                    incidentId: trace as string,
+                  postNewChatEvent({
+                    incidentId: (router.query.latest as string) ?? incidentId,
                     issueId: issueId as string,
                     selectedCluster: selectedCluster as string,
+                    type: CHAT_EVENTS.INFERENCE,
                   })
                 );
               }}
             >
               Synthesis request{" "}
               <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} />
-            </Button> */}
+            </Button>
           </h5>
           <div className={styles["header-actions"]}>
             {!isModalOpen && (

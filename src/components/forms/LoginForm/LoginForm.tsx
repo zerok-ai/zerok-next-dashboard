@@ -8,8 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { loginUser } from "redux/authSlice";
 import { useDispatch, useSelector } from "redux/store";
+import { loginUser } from "redux/thunks/auth";
 import { z } from "zod";
 
 import styles from "./LoginForm.module.scss";

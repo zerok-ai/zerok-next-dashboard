@@ -1,0 +1,11 @@
+@import "styles/variables.module.scss";
+
+.container {
+    align-self: flex-end;
+}
+
+
+.icon {
+    color:$grey-100;
+    font-size: $font-md;
+}

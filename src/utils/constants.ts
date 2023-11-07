@@ -1,13 +1,4 @@
-import { type UserProfileType } from "redux/types";
-
 export const TOKEN_NAME = "token";
-
-export const DEFAULT_USER_PROFILE: UserProfileType = {
-  id: "1",
-  email: "kelvin.z@zerok.ai",
-  name: "Kelvin Z",
-  role: "UI/UX Designer",
-};
 
 export const HTTP_ERROR_CODES = {
   EXPIRED: 419,
@@ -42,8 +33,10 @@ export const HTTP_METHODS = ["GET", "POST", "DELETE", "PUT", "PATCH"] as const;
 export const SPAN_PROTOCOLS = [
   "http",
   "mysql",
+  "MYSQL",
   "HTTP",
   "GRPC",
+  "grpc",
   "UNKNOWN",
 ] as const;
 

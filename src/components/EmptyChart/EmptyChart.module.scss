@@ -1,0 +1,17 @@
+@import "styles/variables.module.scss";
+.container {
+    position: relative;
+    p {
+        text-align: center;
+        margin-top: $sp-md;
+    }
+}
+
+.empty-text {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color:$grey-300;
+    font-size: $font-md;
+}

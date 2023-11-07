@@ -3,9 +3,9 @@ import CustomSkeleton from "components/custom/CustomSkeleton";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { TypeAnimation } from "react-type-animation";
-import { chatSelector, stopTyping } from "redux/chat";
+import { chatSelector, stopTyping } from "redux/chat/chatSlice";
+import { type ChatEventInferenceType } from "redux/chat/chatTypes";
 import { useDispatch, useSelector } from "redux/store";
-import { type ChatInferenceEventType } from "redux/types";
 import { getFormattedTime } from "utils/dateHelpers";
 import { getSpanPageLinkFromIncident } from "utils/gpt/functions";
 import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
@@ -13,7 +13,9 @@ import { ZEROK_MINIMAL_LOGO_LIGHT } from "utils/images";
 import styles from "./GptInferenceBox.module.scss";
 
 interface GptInferenceBoxProps {
-  query: ChatInferenceEventType;
+  query: ChatEventInferenceType & {
+    created_at?: string;
+  };
 }
 
 const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
@@ -57,10 +59,7 @@ const GptInferenceBox = ({ query }: GptInferenceBoxProps) => {
             <span>
               Based on request{" "}
               <Link
-                href={getSpanPageLinkFromIncident(
-                  query.incidentId as string,
-                  router
-                )}
+                href={getSpanPageLinkFromIncident(query.incidentId, router)}
               >
                 {query.incidentId}
               </Link>

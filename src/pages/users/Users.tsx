@@ -225,6 +225,7 @@ const Users = () => {
         showRefresh={true}
         onRefresh={changeTrigger}
         rightExtras={[<AddUserButton key={"add-btn"} />]}
+        showClusterSelector={false}
       />
       <div className={styles["table-container"]}>
         <TableX columns={columns} data={users ?? null} />

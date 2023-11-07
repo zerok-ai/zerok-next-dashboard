@@ -1,6 +1,6 @@
 import axios from "axios";
-import { logoutUser } from "redux/authSlice";
 import store from "redux/store";
+import { logoutUser } from "redux/thunks/auth";
 
 import { HTTP_ERROR_CODES } from "./constants";
 

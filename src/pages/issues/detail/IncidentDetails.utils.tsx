@@ -26,14 +26,14 @@ export const IssueMetadata = () => {
 
   // Fetch issue data on mount
   useEffect(() => {
-    if (issueId && selectedCluster) {
+    if (router.isReady && issueId && selectedCluster) {
       const endpoint = GET_ISSUE_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
       ).replace("{issue_id}", issueId as string);
       fetchIssue(endpoint);
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, issueId, router]);
 
   const cluster = clusters.find((c) => c.id === selectedCluster);
 
@@ -41,17 +41,15 @@ export const IssueMetadata = () => {
     if (!issue) return null;
     return (
       <div className={styles["incident-metadata-container"]}>
-        <TooltipX
-          title={`Cluster`}
-          placement="bottom"
-          arrow>
-            <span>{cluster!.name}</span>
-          </TooltipX>
+        <TooltipX title={`Cluster`} placement="bottom" arrow={false}>
+          <span>{cluster!.name}</span>
+        </TooltipX>
+        |
         <AiOutlineClockCircle />{" "}
         <Tooltip
           title={`${getFormattedTime(issue.last_seen)}`}
           placement="bottom"
-          arrow
+          arrow={false}
         >
           <span>Last collected - {getRelativeTime(issue.last_seen)}</span>
         </Tooltip>
@@ -60,7 +58,7 @@ export const IssueMetadata = () => {
           <Tooltip
             title={`${getFormattedTime(issue.first_seen)}`}
             placement="bottom"
-            arrow
+            arrow={false}
           >
             <span>First collected - {getRelativeTime(issue.first_seen)}</span>
           </Tooltip>

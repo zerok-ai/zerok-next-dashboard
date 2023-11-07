@@ -9,7 +9,6 @@ export const getEarliestSpan = (spans: SpanResponse) => {
     const espan = spans[earliestSpan];
     const earliestSpanStartTime = new Date(espan.start_time).getTime();
     const spanStartTime = new Date(span.start_time).getTime();
-    // console.log({ earliestSpanStartTime, spanStartTime });
     if (spanStartTime < earliestSpanStartTime) {
       earliestSpan = key;
     }

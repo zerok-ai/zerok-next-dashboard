@@ -1,6 +1,7 @@
 import { MenuItem, Select } from "@mui/material";
 import ZkChartTooltip from "components/charts/ZkChartTooltip";
 import CustomSkeleton from "components/custom/CustomSkeleton";
+import EmptyChart from "components/EmptyChart";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -57,7 +58,9 @@ const lineChartColors: string[] = [
 ];
 
 export const PodMetadata = ({ pod }: { pod: PodInfoType }) => {
-  if (!pod) return null;
+  if (!pod || Object.keys(pod).length === 0) {
+    return <p>No info found.</p>;
+  }
   const keys = Object.keys(pod);
   return (
     <div className={styles["pod-metadata"]}>
@@ -82,11 +85,22 @@ export const PodChart = ({
   pod: PodDetailResponseType | null;
   dataKey: "cpu_usage" | "mem_usage";
 }) => {
-  if (!pod) {
-    return <CustomSkeleton len={8} />;
+  if (!pod || !pod[dataKey]) {
+    return (
+      <p>Could not fetch metrics, please try again later or contact support.</p>
+    );
+  }
+  const dataset = pod[dataKey];
+  if (Object.keys(dataset).length === 0) {
+    return (
+      <EmptyChart
+        label={dataKey === "cpu_usage" ? "CPU Usage" : "Memory Usage"}
+        height={300}
+        width={"99%"}
+      />
+    );
   }
   const getChartData = (): [GenericObject[], string[]] => {
-    const dataset = pod[dataKey];
     const series: GenericObject[] = [];
     const keys = Object.keys(dataset);
     const timestamps = dataset[keys[0]].time_stamp;
@@ -180,8 +194,10 @@ export const PodChart = ({
 
 export const ContainerMetadata = ({
   containers,
+  initialFetchDone,
 }: {
   containers: ContainerInfoType[] | null;
+  initialFetchDone: boolean;
 }) => {
   const [selectedContainer, setSelectedContainer] = useState<string>("");
   const keys = useMemo(() => {
@@ -192,11 +208,16 @@ export const ContainerMetadata = ({
       setSelectedContainer(containers[0].container_id);
     }
   }, [containers]);
-
-  if (!containers) return <CustomSkeleton len={8} />;
+  if (!containers && !initialFetchDone) return <CustomSkeleton len={8} />;
+  if (
+    (!containers && initialFetchDone) ||
+    (containers && Object.keys(containers).length === 0 && initialFetchDone)
+  ) {
+    return <div>No containers found.</div>;
+  }
 
   const renderMetadata = () => {
-    const container = containers.find(
+    const container = containers!.find(
       (c) => c.container_id === selectedContainer
     );
     if (!container) {

@@ -3,14 +3,14 @@ import { Skeleton } from "@mui/material";
 import styles from "./ChatEventCard.module.scss";
 
 interface ChatEventCardProps {
-  render?: () => React.ReactElement;
+  component?: React.ReactElement;
   text?: string;
   loading?: boolean;
 }
 
 const ChatEventCard = ({
   text,
-  render,
+  component,
   loading = false,
 }: ChatEventCardProps) => {
   return (
@@ -22,7 +22,7 @@ const ChatEventCard = ({
         />
       </div>
       {text && <p className={styles["chat-event-text"]}>{text}</p>}
-      {render && render()}
+      {component && component}
       {loading && <Skeleton variant="rectangular" width={"100%"} height={20} />}
     </div>
   );
