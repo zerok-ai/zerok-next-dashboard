@@ -1,4 +1,6 @@
-import { type CHAT_EVENTS } from "./constants";
+import { type ZkFlagBaseType } from "utils/flags/types";
+
+import { type CHAT_EVENTS, type ZK_GPT_FLAGS } from "./constants";
 
 export interface ChatCommandType {
   label: string;
@@ -48,4 +50,10 @@ export interface ChatEventInferenceResponseType
       anamolies: string | null;
     };
   };
+}
+
+export type ZkGPTFlagNames = (typeof ZK_GPT_FLAGS)[number];
+
+export interface ZkFlagGPTConfig {
+  gpt: Record<ZkGPTFlagNames, ZkFlagBaseType<string>>;
 }

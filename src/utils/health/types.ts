@@ -1,3 +1,5 @@
+import { type ZK_SERVICE_PAGE_FLAGS } from "./constants";
+
 export interface ServiceMapDetail {
   responder_pod: string;
   requestor_pod: string;
@@ -14,3 +16,5 @@ export interface ServiceMapDetail {
   outbound_throughput: number;
   throughput_total: number;
 }
+
+export type ZkServicePageFlagNames = (typeof ZK_SERVICE_PAGE_FLAGS)[number];
