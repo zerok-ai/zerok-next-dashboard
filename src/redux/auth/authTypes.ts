@@ -1,11 +1,9 @@
 export interface LoginAPIResponse {
-  authToken: {
-    UserDetails: {
-      email: string;
-      first_name: string;
-      last_name: string;
-      org_id: string;
-    };
+  UserDetails: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    org_id: string;
   };
 }
 

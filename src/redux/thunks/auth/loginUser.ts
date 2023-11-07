@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk(
       }
     );
     return {
-      profile: rdata.data.payload.authToken.UserDetails,
+      profile: rdata.data.payload.UserDetails,
       token: rdata.headers.token,
     };
   }
