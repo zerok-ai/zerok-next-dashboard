@@ -13,6 +13,8 @@ export const CHAT_EVENTS = {
   LIKELY_CAUSE: "LIKELY_CAUSE" as const,
   INVALID: "INVALID" as const,
   TAG: "TAG" as const,
+  POSTMORTEM: "POSTMORTEM" as const,
+  HISTORY: "HISTORY" as const,
 };
 
 export const CHAT_EVENT_ENUM = [
@@ -22,6 +24,8 @@ export const CHAT_EVENT_ENUM = [
   CHAT_EVENTS.LIKELY_CAUSE,
   CHAT_EVENTS.INVALID,
   CHAT_EVENTS.TAG,
+  CHAT_EVENTS.POSTMORTEM,
+  CHAT_EVENTS.HISTORY,
 ] as const;
 
 export const CHAT_COMMANDS: ChatCommandType[] = [
@@ -35,6 +39,11 @@ export const CHAT_COMMANDS: ChatCommandType[] = [
     label: "Infer",
     subtitle: "Analyse this request",
     value: `/${CHAT_EVENTS.INFERENCE}`,
+  },
+  {
+    label: "Generate Postmortem",
+    subtitle: "Automatically generate a postmortem of this issue",
+    value: `/${CHAT_EVENTS.POSTMORTEM}`,
   },
 ];
 

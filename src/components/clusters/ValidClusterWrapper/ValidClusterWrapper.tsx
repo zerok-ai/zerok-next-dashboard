@@ -32,7 +32,7 @@ const ValidClusterWrapper = ({ children }: ValidClusterWrapperProps) => {
     } else {
       setErrorText(null);
     }
-  }, [selectedCluster]);
+  }, [selectedCluster, initialized]);
   if (!initialized) return <CustomSkeleton len={10} />;
   return (
     <Fragment>

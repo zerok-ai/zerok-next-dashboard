@@ -1,7 +1,7 @@
 import PageSkeleton from "components/helpers/PageSkeleton";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { tokenLogin } from "redux/authSlice";
+import { tokenLogin } from "redux/auth/authSlice";
 import { clusterSelector, getClusters } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
 import { getLocalToken } from "utils/functions";

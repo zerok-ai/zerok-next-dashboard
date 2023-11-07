@@ -98,6 +98,7 @@ export interface SpanErrorDetail {
   span_id?: string;
   source?: string;
   destination?: string;
+  service: string;
 }
 export interface SpanDetail {
   source: string;
@@ -115,6 +116,7 @@ export interface SpanDetail {
   span_id: string;
   path: string;
   children?: SpanDetail[];
+  has_raw_data?: boolean;
   start_time: string;
   timestamp?: string;
   level?: number;

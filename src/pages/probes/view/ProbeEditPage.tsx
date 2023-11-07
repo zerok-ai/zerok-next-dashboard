@@ -7,55 +7,39 @@ import PageLayout from "components/layouts/PageLayout";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { clusterSelector } from "redux/cluster";
 import { scenarioToProbeForm } from "utils/probes/functions";
-import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
-import { LIST_SCENARIOS_ENDPOINT } from "utils/scenarios/endpoints";
-import { type ScenarioDetailType } from "utils/scenarios/types";
+import { GET_SCENARIO_ENDPOINT } from "utils/scenarios/endpoints";
+import { type ScenarioDetail } from "utils/scenarios/types";
 
 import styles from "./ProbeEditPage.module.scss";
 
 const ProbeEditPage = () => {
-  const { data: probes, fetchData: fetchProbes } =
-    useFetch<ScenarioDetailType[]>("scenarios");
-  const [probe, setProbe] = useState<ScenarioDetailType | null>(null);
+  const { data: probe, fetchData: fetchProbe } =
+    useFetch<ScenarioDetail>("scenario");
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   useEffect(() => {
     const { id } = router.query;
     if (router.isReady && selectedCluster && id) {
-      const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
+      const endpoint = GET_SCENARIO_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
-      )
-        .replace("{limit}", PROBE_PAGE_SIZE.toString())
-        .replace("{offset}", "0".replace("{cluster_id}", selectedCluster));
-      fetchProbes(endpoint);
+      ).replace("{scenario_id}", id as string);
+      fetchProbe(endpoint);
     }
     if (router.isReady && !id) {
       router.push("/probes");
     }
   }, [router, selectedCluster]);
 
-  useEffect(() => {
-    if (probes?.length) {
-      const { id } = router.query;
-      const probe = probes.find((probe) => probe.scenario.scenario_id === id);
-      if (probe) {
-        setProbe(probe);
-      } else {
-        router.push("/probes");
-      }
-    }
-  }, [probes]);
-
   return (
     <div className={styles.container}>
       <PageHeader
         showRange={false}
-        title={probe?.scenario.scenario_title ?? ""}
+        title={probe?.scenario_title ?? ""}
         loading={!probe}
         showRefresh={false}
         showBreadcrumb
