@@ -17,6 +17,7 @@ export const useZkFlag = <
   const allFlags = flagsmith.getAllFlags();
   const { user } = useSelector((state) => state.auth);
   const { selectedCluster } = useSelector((state) => state.cluster);
+  console.log({ user, selectedCluster });
   if (!user || !user.org_id || (level === "cluster" && !selectedCluster)) {
     return null;
   }
@@ -27,8 +28,9 @@ export const useZkFlag = <
     const config = flagsmith.getValue<ZkFlagConfigType>(accessor, {
       json: true,
     });
-    // const featureConfig = config[feature];
-    // const flag = featureConfig[flagName];
-    return config;
+    const featureConfig = config[feature];
+    const flag = featureConfig[flagName];
+    console.log({ featureConfig, flag });
+    return flag;
   }
 };

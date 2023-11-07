@@ -4,7 +4,7 @@ import {
 } from "@reduxjs/toolkit";
 import { type AuthType } from "redux/auth/authTypes";
 import { LOGOUT_ENDPOINT } from "utils/auth/endpoints";
-import { removeToken } from "utils/auth/functions";
+import { removeLocalUser } from "utils/auth/functions";
 import raxios from "utils/raxios";
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
@@ -22,12 +22,12 @@ export const logoutUserBuilder = (
       state.token = null;
       state.isLoggedIn = false;
       state.user = null;
-      removeToken();
+      removeLocalUser();
     })
     .addCase(logoutUser.rejected, (state) => {
       state.token = null;
       state.isLoggedIn = false;
       state.user = null;
-      removeToken();
+      removeLocalUser();
     });
 };
