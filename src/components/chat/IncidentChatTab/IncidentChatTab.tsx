@@ -4,8 +4,9 @@ import ChatDisabledCard from "components/chat/ChatDisabledCard";
 import GptInferenceBox from "components/chat/GptInferenceBox";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
-import { useFlags, useFlagsmith } from "flagsmith/react";
+import { useFlags } from "flagsmith/react";
 import { useToggle } from "hooks/useToggle";
+import { useZkFlag } from "hooks/useZkFlag";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import {
@@ -48,28 +49,22 @@ import { ContextEventText, UserInputField } from "./IncidentChatTab.utils";
 const IncidentChatTab = () => {
   const { selectedCluster } = useSelector(clusterSelector);
   const isChatEnabled = useFlags(["zkchat"]);
+  const config = useZkFlag("zkchat", "org", "gpt");
   const [enableChat] = useToggle(isChatEnabled.zkchat.enabled);
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const dispatch = useDispatch();
   const router = useRouter();
   const { issue_id: issueId } = router.query;
   const bottomRef = useRef<HTMLDivElement>(null);
-  const {
-    likelyCause,
-    queries,
-    contextIncident,
-    loading,
-
-  } = useSelector(chatSelector);
+  const { likelyCause, queries, contextIncident, loading } =
+    useSelector(chatSelector);
   const incidentId =
     router.query.trace ??
     likelyCause.event?.incidentId ??
     router.query.latest ??
     null;
   const [width, setWidth] = useState(450);
-
-  const flagsmith = useFlagsmith();
-  console.log({ flagsmith }, flagsmith.getAllFlags());
+  console.log({ config });
   useEffect(() => {
     if (selectedCluster && issueId && enableChat) {
       dispatch(

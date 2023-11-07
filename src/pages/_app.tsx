@@ -17,10 +17,9 @@ import { FlagsmithProvider } from "flagsmith/react";
 import { type IState } from "flagsmith/types";
 import { type NextPage } from "next";
 import type { AppProps } from "next/app";
-import { type ReactElement, useEffect, useRef } from "react";
+import { type ReactElement, useRef } from "react";
 // third-party
 import { Provider } from "react-redux";
-import { fetchAllFlags } from "redux/flags";
 import store from "redux/store";
 import ThemeCustomization from "themes";
 
@@ -38,10 +37,6 @@ interface Props {
 const App = ({ Component, pageProps, flagsmithState }: AppProps & Props) => {
   const flagsmithRef = useRef(createFlagsmithInstance());
   const getLayout = Component.getLayout ?? ((page: any) => page);
-  useEffect(() => {
-    store.dispatch(fetchAllFlags());
-  }, []);
-  console.log("flagsmithState", flagsmithState);
   return (
     <Provider store={store}>
       <FlagsmithProvider
@@ -60,7 +55,7 @@ App.getInitialProps = async () => {
   const flagsmithSSR = createFlagsmithInstance();
   await flagsmithSSR.init({
     // fetches flags on the server
-    environmentID: "kmsMJCggsCntiP926zJa5X",
+    environmentID: "PmRM6jgToFoj7FZPvfqJQp",
     cacheFlags: false, // optionaly specify the identity of the user to get their specific flags
   });
 

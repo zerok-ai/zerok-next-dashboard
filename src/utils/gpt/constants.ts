@@ -96,3 +96,5 @@ export const SLACK_ITEMS: GenericObject = [
     label: "Nikhil",
   },
 ];
+
+export const ZK_GPT_FLAGS = ["zkchat"] as const;

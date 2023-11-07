@@ -110,7 +110,7 @@ const IssuesPage = () => {
       />,
     ];
   }, [sortBy]);
-  console.log({ error, data, selectedCluster });
+
   return (
     <Fragment>
       <PageHeader
