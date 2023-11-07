@@ -103,6 +103,8 @@ const ConditionRow = ({
       executor
     );
     resetGroupBy();
+    setJsonpathEnabled(false);
+    setAttributeFormat("");
   };
 
   const updateOperator = (
@@ -165,9 +167,14 @@ const ConditionRow = ({
   });
   const allOperators = getOperatorByType(
     condition.datatype,
-    property?.supported_formats ?? []
+    property?.supported_formats ?? [],
+    condition.executor
   );
-  const dataOperators = getOperatorByType(condition.datatype, []);
+  const dataOperators = getOperatorByType(
+    condition.datatype,
+    [],
+    condition.executor
+  );
   const valueType = property?.input ?? "input";
   const helpText = "";
   const isJsonKeyAttribute =
@@ -187,6 +194,7 @@ const ConditionRow = ({
   const errors = getConditionErrors(cardIndex);
   const hideValueField =
     condition.operator === "exists" || condition.operator === "not_exists";
+
   const renderOperatorSelect = (
     list: ConditionOperatorType[],
     type: "all" | "data"
