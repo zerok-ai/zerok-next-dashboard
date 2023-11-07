@@ -4,7 +4,11 @@ import {
 } from "@reduxjs/toolkit";
 import { type AuthType, type LoginAPIResponse } from "redux/auth/authTypes";
 import { LOGIN_ENDPOINT } from "utils/auth/endpoints";
-import { removeToken, setRaxiosLocalToken } from "utils/auth/functions";
+import {
+  removeLocalProfile,
+  setLocalProfile,
+  setRaxiosLocalToken,
+} from "utils/auth/functions";
 import { maskPassword } from "utils/functions";
 import { type APIResponse } from "utils/generic/types";
 import raxios from "utils/raxios";
@@ -44,10 +48,11 @@ export const loginUserBuilder = (
       state.user = profile;
       state.isLoggedIn = true;
       setRaxiosLocalToken(token);
+      setLocalProfile(profile);
     })
     .addCase(loginUser.rejected, (state) => {
       state.error = "Could not log in user, please try again.";
       state.loading = false;
-      removeToken();
+      removeLocalProfile();
     });
 };

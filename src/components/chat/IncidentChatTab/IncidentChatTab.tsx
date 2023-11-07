@@ -4,6 +4,7 @@ import ChatDisabledCard from "components/chat/ChatDisabledCard";
 import GptInferenceBox from "components/chat/GptInferenceBox";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
+// import { useFlags } from "flagsmith/react";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
@@ -36,6 +37,7 @@ import {
 } from "redux/thunks/chat";
 import { CHAT_EVENTS, CHAT_TAG_CHARACTER } from "utils/gpt/constants";
 
+// import { GPT_FLAGS } from "utils/gpt/flags";
 import ChatEventCard from "../ChatEventCard";
 import ChatPastEventsBtn from "../ChatPastEventsBtn";
 import ChatTagCard from "../ChatTagCard";
@@ -52,13 +54,8 @@ const IncidentChatTab = () => {
   const router = useRouter();
   const { issue_id: issueId } = router.query;
   const bottomRef = useRef<HTMLDivElement>(null);
-  const {
-    likelyCause,
-    queries,
-    contextIncident,
-    loading,
-
-  } = useSelector(chatSelector);
+  const { likelyCause, queries, contextIncident, loading } =
+    useSelector(chatSelector);
   const incidentId =
     router.query.trace ??
     likelyCause.event?.incidentId ??

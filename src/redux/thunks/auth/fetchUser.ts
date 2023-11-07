@@ -4,15 +4,18 @@ import {
 } from "@reduxjs/toolkit";
 import { type AuthType, type LoginAPIResponse } from "redux/auth/authTypes";
 import { LOGIN_ENDPOINT } from "utils/auth/endpoints";
-import { removeToken, setRaxiosLocalToken } from "utils/auth/functions";
+import { removeLocalUser, setRaxiosLocalToken } from "utils/auth/functions";
+import { type APIResponse } from "utils/generic/types";
 import raxios from "utils/raxios";
 
 export const fetchUser = createAsyncThunk(
   "auth/fetchUser",
   async (values: { token: string }) => {
-    const rdata = await raxios.get<LoginAPIResponse>(LOGIN_ENDPOINT);
+    const rdata = await raxios.get<APIResponse<LoginAPIResponse>>(
+      LOGIN_ENDPOINT
+    );
     return {
-      profile: rdata.data.debug.authToken.UserDetails,
+      profile: rdata.data.payload.UserDetails,
       token: rdata.headers.token,
     };
   }
@@ -38,6 +41,6 @@ export const loginUserBuilder = (
     .addCase(fetchUser.rejected, (state) => {
       state.error = "Could not log in user, please try again.";
       state.loading = false;
-      removeToken();
+      removeLocalUser();
     });
 };
