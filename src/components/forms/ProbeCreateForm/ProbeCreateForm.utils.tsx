@@ -4,6 +4,7 @@ import {
   type ATTRIBUTE_PROTOCOLS,
 } from "utils/probes/constants";
 import {
+  type AttributeExecutorType,
   type AttributeProtocolType,
   type AttributeStateType,
   type AttributeSupportedType,
@@ -139,6 +140,33 @@ export const STRING_OPERATORS = [
   },
 ];
 
+export const EBPF_STRING_OPERATORS = [
+  {
+    label: "is equal to",
+    value: "equal",
+  },
+  {
+    label: "is not equal to",
+    value: "not_equal",
+  },
+  {
+    label: "exists",
+    value: "exists",
+  },
+  {
+    label: "not exists",
+    value: "not_exists",
+  },
+  {
+    label: "in",
+    value: "in",
+  },
+  {
+    label: "not in",
+    value: "not_in",
+  },
+];
+
 export const NUMBER_OPERATORS = [
   {
     label: "exists",
@@ -162,7 +190,7 @@ export const NUMBER_OPERATORS = [
   },
   {
     label: "is less than or equal to",
-    value: "less_than_or_equal_to",
+    value: "less_than_equal",
   },
   {
     label: "is greater than",
@@ -170,7 +198,7 @@ export const NUMBER_OPERATORS = [
   },
   {
     label: "is greater than or equal to",
-    value: "greater_than_or_equal_to",
+    value: "greater_than_equal",
   },
 ];
 
@@ -197,7 +225,8 @@ export const BOOLEAN_VALUES = ["true", "false"];
 
 export const getOperatorByType = (
   type: string,
-  supported_formats: AttributeSupportedType[]
+  supported_formats: AttributeSupportedType[],
+  executor?: AttributeExecutorType
 ): ConditionOperatorType[] => {
   if (!type || !type.length) return STRING_OPERATORS;
   switch (type) {
@@ -210,6 +239,8 @@ export const getOperatorByType = (
     case "double":
       return NUMBER_OPERATORS;
     case "string": {
+      const stringOperators =
+        executor === "EBPF" ? EBPF_STRING_OPERATORS : STRING_OPERATORS;
       if (supported_formats.includes("JSON")) {
         const operators: ConditionOperatorType[] = [
           {
@@ -225,13 +256,11 @@ export const getOperatorByType = (
             title: "Operators",
             disabled: true,
           },
-          ...STRING_OPERATORS,
+          ...stringOperators,
         ];
         return operators;
       }
-      return STRING_OPERATORS.filter(
-        (op) => !["in", "not_in"].includes(op.value)
-      );
+      return stringOperators;
     }
   }
   return STRING_OPERATORS;
