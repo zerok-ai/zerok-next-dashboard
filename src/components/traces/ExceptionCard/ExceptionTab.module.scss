@@ -4,13 +4,11 @@
 .header {
     width:100%;
     @include card-header;
-    
-}
-.content {
 }
 .container {
     position: relative;  
-    height:400px;
+    height:350px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     row-gap: $sp-lg;

@@ -95,3 +95,11 @@
   row-gap: $sp-xl;
   margin-bottom: $sp-sm;  
 }
+
+@mixin hide-scroll {
+  // scrollbars 
+
+  &::-webkit-scrollbar {
+    width:0px;
+  }
+}
