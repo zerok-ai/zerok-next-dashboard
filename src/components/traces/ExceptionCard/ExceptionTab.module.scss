@@ -2,19 +2,12 @@
 @import "styles/mixins";
 
 .header {
-    width:100%;
     @include card-header;
 }
 .container {
-    position: relative;  
-    height:350px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+    height: 350px;
     row-gap: $sp-lg;
-    border:1px solid $grey-800;
-    border-radius: $sp-sm;
-// column-gap: $sp-xxl;
+    @include details-card-outline;
 }
 
 .tabs {
