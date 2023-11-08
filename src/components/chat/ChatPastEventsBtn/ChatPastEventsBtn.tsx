@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
+import cx from "classnames";
 import TooltipX from "components/themeX/TooltipX";
 import { AiOutlineHistory } from "react-icons/ai";
 import { chatSelector } from "redux/chat/chatSlice";
@@ -37,15 +38,17 @@ const ChatPastEventsBtn = ({ issueId }: ChatPastEventsBtnProps) => {
       placement="left"
     >
       <div className={styles.container}>
-        <Button
+        <IconButton
           color="secondary"
           size="medium"
-          disabled={historyCount !== null && history.length === historyCount}
+          disabled={disabled}
           onClick={onClick}
           className={styles.button}
         >
-          <AiOutlineHistory className={styles.icon} />
-        </Button>
+          <AiOutlineHistory
+            className={cx(styles.icon, disabled && styles.disabled)}
+          />
+        </IconButton>
       </div>
     </TooltipX>
   );
