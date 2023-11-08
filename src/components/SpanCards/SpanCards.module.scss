@@ -4,6 +4,7 @@
     overflow: auto;
     height: 100%;
     @include hide-scroll;
+    position: relative;
 }
 // disallow scrolling when table is open
 .locked {
