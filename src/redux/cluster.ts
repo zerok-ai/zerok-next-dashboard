@@ -70,7 +70,6 @@ export const clusterSlice = createSlice({
         if (action.payload.length > 0) {
           state.empty = false;
           const localCluster = getClusterFromLocalStorage();
-          console.log({ localCluster });
           // check if the saved cluster is in the list of clusters
           if (localCluster) {
             const cluster = action.payload.find((c: ClusterType) => {
@@ -79,6 +78,9 @@ export const clusterSlice = createSlice({
             if (cluster) {
               state.selectedCluster = cluster.id;
               state.status = cluster.status;
+            } else {
+              state.selectedCluster = action.payload[0].id;
+              state.status = action.payload[0].status;
             }
           } else if (action.payload.length > 1) {
             const healthyCluster = action.payload.find((c: ClusterType) => {
