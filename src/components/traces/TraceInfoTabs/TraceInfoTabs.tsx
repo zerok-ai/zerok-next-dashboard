@@ -38,7 +38,7 @@ const TraceInfoTabs = ({
     error: rawDataError,
   } = useFetch<SpanRawDataResponse>("span_raw_data_details", null);
   const router = useRouter();
-  const { issue } = router.query;
+  const { issue_id } = router.query;
   const { selectedCluster } = useSelector(clusterSelector);
   const [activeTab, setActiveTab] = useState(DEFAULT_TABS[0].value);
   useEffect(() => {
@@ -47,7 +47,7 @@ const TraceInfoTabs = ({
         "{cluster_id}",
         selectedCluster
       )
-        .replace("{issue_id}", issue as string)
+        .replace("{issue_id}", issue_id as string)
         .replace("{incident_id}", incidentId)
         .replace("{span_id}", selectedSpan);
       fetchRawData(endpoint);

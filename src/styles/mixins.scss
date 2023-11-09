@@ -95,3 +95,24 @@
   row-gap: $sp-xl;
   margin-bottom: $sp-sm;  
 }
+
+@mixin hide-scroll {
+  // scrollbars 
+
+  &::-webkit-scrollbar {
+    width:0px;
+  }
+}
+
+
+
+// details page
+@mixin details-card-outline {
+  border-radius: $sp-sm;
+  border:1px solid $grey-800;
+  background-color: $bg-dark;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;  
+}
