@@ -41,8 +41,10 @@ const TraceInfoTabs = ({
   const { issue } = router.query;
   const { selectedCluster } = useSelector(clusterSelector);
   const [activeTab, setActiveTab] = useState(DEFAULT_TABS[0].value);
+  const span = allSpans[selectedSpan];
+  const hasRawData = span && span.has_raw_data;
   useEffect(() => {
-    if (selectedCluster && selectedSpan && incidentId) {
+    if (selectedCluster && selectedSpan && incidentId && hasRawData) {
       const endpoint = GET_SPAN_RAWDATA_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster
@@ -52,14 +54,9 @@ const TraceInfoTabs = ({
         .replace("{span_id}", selectedSpan);
       fetchRawData(endpoint);
     }
-  }, [selectedSpan, incidentId]);
-  // useEffect(() => {
-  //   if(selectedSpan){
-  //     fetchSpanTags
-  //   }
-  // },[selectedSpan])
+  }, [selectedSpan, incidentId, hasRawData, selectedCluster]);
   const rawData = rawResponse ? rawResponse[selectedSpan] : null;
-  if (!rawResponse && !rawDataError) {
+  if (hasRawData && !rawResponse && !rawDataError) {
     return <TabSkeletons />;
   }
 
