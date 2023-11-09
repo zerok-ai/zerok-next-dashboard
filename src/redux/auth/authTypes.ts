@@ -1,9 +1,10 @@
 export interface LoginAPIResponse {
-  UserDetails: {
+  userDetails: {
     email: string;
     first_name: string;
     last_name: string;
     org_id: string;
+    org_name: string;
   };
 }
 
@@ -12,6 +13,7 @@ export interface UserProfileType {
   email: string;
   first_name: string;
   last_name: string;
+  org_name: string;
 }
 
 export interface AuthType {

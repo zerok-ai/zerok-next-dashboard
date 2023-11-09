@@ -1,6 +1,7 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "redux/store";
+import { isClusterHealthy } from "utils/generic/functions";
 
 import styles from "./ValidClusterWrapper.module.scss";
 
@@ -12,36 +13,32 @@ const ValidClusterWrapper = ({ children }: ValidClusterWrapperProps) => {
   const { selectedCluster, clusters, initialized } = useSelector(
     (state) => state.cluster
   );
-  const [errorText, setErrorText] = useState<null | string>(null);
+  const [error, setError] = useState<null | string>(null);
   useEffect(() => {
     if (initialized && !clusters.length) {
-      setErrorText("Please add a cluster to continue.");
+      setError("Please add a cluster to continue.");
       return;
     }
     const cluster = clusters.find((c) => c.id === selectedCluster);
-    if (
-      cluster &&
-      cluster.status !== "CS_HEALTHY" &&
-      cluster.status !== "CS_DEGRADED"
-    ) {
-      setErrorText("Please select a healthy cluster to fetch data.");
-      return;
-    }
-    if (clusters.length && !selectedCluster) {
-      setErrorText("Please select a cluster to continue.");
+    if (cluster && !isClusterHealthy(cluster)) {
+      setError("Please select a healthy cluster to fetch data.");
+    } else if (clusters.length && !selectedCluster) {
+      setError("Please select a cluster to continue.");
     } else {
-      setErrorText(null);
+      setError(null);
     }
-  }, [selectedCluster, initialized]);
+  }, [selectedCluster, clusters, initialized]);
   if (!initialized) return <CustomSkeleton len={10} />;
+  const cluster = clusters.find((c) => c.id === selectedCluster);
+  const healthyCluster = cluster && isClusterHealthy(cluster);
   return (
     <Fragment>
-      {errorText ? (
-        <div className={styles.container}>
-          <h5>{errorText}</h5>
-        </div>
-      ) : (
+      {!error && healthyCluster ? (
         children
+      ) : (
+        <div className={styles.container}>
+          <h5>{error}</h5>
+        </div>
       )}
     </Fragment>
   );

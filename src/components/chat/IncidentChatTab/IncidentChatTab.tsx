@@ -5,7 +5,6 @@ import GptInferenceBox from "components/chat/GptInferenceBox";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ResizableChatBox from "components/ResizableChatBox";
 import { useToggle } from "hooks/useToggle";
-import { useZkFlag } from "hooks/useZkFlag";
 import { useRouter } from "next/router";
 import {
   Fragment,
@@ -44,10 +43,13 @@ import GptLikelyCauseBox from "../GptLikelyCauseBox";
 import styles from "./IncidentChatTab.module.scss";
 import { ChatMinimizedIcon, ContextEventText } from "./IncidentChatTab.utils";
 
-const IncidentChatTab = () => {
+interface IncidentChatTabProps {
+  enabled: boolean;
+}
+
+const IncidentChatTab = ({ enabled }: IncidentChatTabProps) => {
   const { selectedCluster } = useSelector(clusterSelector);
-  const isChatEnabled = useZkFlag("org", "gpt", "zkchat");
-  const [enableChat] = useToggle(isChatEnabled.enabled);
+  const enableChat = enabled;
   const [chatMinimized, toggleChatMinimized] = useToggle(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -77,9 +79,7 @@ const IncidentChatTab = () => {
 
   const renderChat = useCallback(() => {
     if (!enableChat) {
-      return (
-        <ChatDisabledCard text="This feature is disabled for your organisation. Please contact ZeroK support for more details." />
-      );
+      return <ChatDisabledCard />;
     } else {
       if (bottomRef.current) {
         bottomRef.current.scrollIntoView({
@@ -157,14 +157,16 @@ const IncidentChatTab = () => {
         {!chatMinimized ? (
           <div className={styles["chat-container"]}>
             <div className={styles["chat-events-container"]}>
-              {enableChat && <Fragment>
-                <div className={styles["chat-past-event-btn"]}>
-                {pastEventsButton}
-              </div>
-              <div className={styles["likely-cause-container"]}>
-                <GptLikelyCauseBox />
-              </div>
-              </Fragment>}
+              {enableChat && (
+                <Fragment>
+                  <div className={styles["chat-past-event-btn"]}>
+                    {pastEventsButton}
+                  </div>
+                  <div className={styles["likely-cause-container"]}>
+                    <GptLikelyCauseBox />
+                  </div>
+                </Fragment>
+              )}
               {loading === CHAT_EVENTS.HISTORY && <CustomSkeleton len={5} />}
               <div className={styles["chat-events"]}>{renderChat()}</div>
               {loading && <CustomSkeleton len={1} />}
