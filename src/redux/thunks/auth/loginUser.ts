@@ -25,10 +25,16 @@ export const loginUser = createAsyncThunk(
         password: encrypted,
       }
     );
-    return {
-      profile: rdata.data.payload.UserDetails,
-      token: rdata.headers.token,
-    };
+    if (rdata.data.payload) {
+      return {
+        profile: rdata.data.payload.UserDetails,
+        token: rdata.headers.token,
+      };
+    } else {
+      return {
+        token: rdata.headers.token,
+      };
+    }
   }
 );
 
@@ -45,10 +51,12 @@ export const loginUserBuilder = (
       const token = payload.token;
       state.token = token;
       state.loading = false;
-      state.user = profile;
       state.isLoggedIn = true;
       setRaxiosLocalToken(token);
-      setLocalProfile(profile);
+      if (profile) {
+        state.user = profile;
+        setLocalProfile(profile);
+      }
     })
     .addCase(loginUser.rejected, (state) => {
       state.error = "Could not log in user, please try again.";

@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { type AuthType, type LoginAPIResponse } from "redux/auth/authTypes";
-import { LOGIN_ENDPOINT } from "utils/auth/endpoints";
+import { USER_DETAILS_ENDPOINT } from "utils/auth/endpoints";
 import { removeLocalUser, setRaxiosLocalToken } from "utils/auth/functions";
 import { type APIResponse } from "utils/generic/types";
 import raxios from "utils/raxios";
@@ -12,7 +12,7 @@ export const fetchUser = createAsyncThunk(
   "auth/fetchUser",
   async (values: { token: string }) => {
     const rdata = await raxios.get<APIResponse<LoginAPIResponse>>(
-      LOGIN_ENDPOINT
+      USER_DETAILS_ENDPOINT
     );
     return {
       profile: rdata.data.payload.UserDetails,

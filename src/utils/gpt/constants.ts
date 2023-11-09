@@ -97,4 +97,5 @@ export const SLACK_ITEMS: GenericObject = [
   },
 ];
 
-export const ZK_GPT_FLAGS = ["zkchat"] as const;
+export const ZKCHAT_MINIMIZED_WIDTH = 64;
+export const ZKCHAT_DEFAULT_WIDTH = 500;
