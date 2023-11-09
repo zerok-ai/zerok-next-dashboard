@@ -7,7 +7,7 @@ export interface ClusterType {
   name: string;
   id: string;
   nickname: string;
-  status: string;
+  status: "CS_HEALTHY" | "CS_DEGRADED" | "CS_UNHEALTHY" | "CS_UNKNOWN";
 }
 export interface ClusterReduxType {
   loading: boolean;

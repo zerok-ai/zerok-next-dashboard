@@ -16,16 +16,15 @@ export const useZkFlag = <
 ) => {
   const flagsmith = useFlagsmith();
   const allFlags = flagsmith.getAllFlags();
-  console.log({ allFlags });
   const { user } = useSelector((state) => state.auth);
   const { selectedCluster } = useSelector((state) => state.cluster);
-  if (!user || !user.org_id || (level === "cluster" && !selectedCluster)) {
+  if (!user || !user.org_name || (level === "cluster" && !selectedCluster)) {
     return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
   }
-
-  const accessor = level === "org" ? user.org_id : (selectedCluster as string);
+  const accessor =
+    level === "org" ? user.org_name : (selectedCluster as string);
   const configFlag = allFlags[accessor];
-  if (configFlag.enabled) {
+  if (configFlag && configFlag.enabled) {
     const config = flagsmith.getValue<ZkFlagConfigType>(accessor, {
       json: true,
     });

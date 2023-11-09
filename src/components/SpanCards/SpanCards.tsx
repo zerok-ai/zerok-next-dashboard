@@ -12,7 +12,11 @@ import { type SpanDetail, type SpanErrorDetail } from "utils/types";
 
 import styles from "./SpanCards.module.scss";
 
-const SpanCards = () => {
+interface SpanCardsProps {
+  chatEnabled: boolean;
+}
+
+const SpanCards = ({ chatEnabled }: SpanCardsProps) => {
   const [incidentId, setIncidentId] = useState<null | string>(null);
   const [isScrollLocked, setIsScrollLocked] = useState(false);
   const [spans, setSpans] = useState<null | SpanDetail>(null);
@@ -31,10 +35,10 @@ const SpanCards = () => {
   useEffect(() => {
     if (router.query.trace) {
       setIncidentId(router.query.trace as string);
+    } else if (!chatEnabled) {
+      setIncidentId(router.query.latest as string);
     } else if (likelyCause.event) {
       setIncidentId(likelyCause.event.incidentId);
-    } else if (router.query.latest) {
-      setIncidentId(router.query.latest as string);
     } else {
       setIncidentId(null);
     }
@@ -74,6 +78,8 @@ const SpanCards = () => {
           <PodDetailsCard incidentId={incidentId} />
         </section>
       </div>
+
+      {/* TRACE TABLE */}
       {isTraceTableVisible && (
         <TraceTable
           visible={isTraceTableVisible}

@@ -3,6 +3,7 @@ import IncidentChatTab from "components/chat/IncidentChatTab";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import SpanCards from "components/SpanCards";
+import { useZkFlag } from "hooks/useZkFlag";
 import { useRouter } from "next/router";
 import { Fragment, useEffect } from "react";
 import { resetChat } from "redux/chat/chatSlice";
@@ -15,6 +16,8 @@ import styles from "./IssueDetailPage.module.scss";
 const IssueDetailPage = () => {
   const dispatch = useDispatch();
 
+  const zkChatEnabled = useZkFlag("org", "gpt", "zkchat");
+
   // reset chat on navigating away from this page so that the history is not persisted
   useEffect(() => {
     return () => {
@@ -22,7 +25,7 @@ const IssueDetailPage = () => {
     };
   }, []);
 
-  const { clusters, selectedCluster } = useSelector((state) => state.cluster);
+  const { clusters } = useSelector((state) => state.cluster);
   const router = useRouter();
   const {
     query: { cluster_id },
@@ -35,8 +38,6 @@ const IssueDetailPage = () => {
     }
   }, [cluster_id, clusters]);
 
-  console.log({ selectedCluster });
-
   return (
     <Fragment>
       {/* Title, times and metadata */}
@@ -44,7 +45,7 @@ const IssueDetailPage = () => {
       {/* content */}
       <div className={styles["content-container"]}>
         <section className={styles["chat-section"]}>
-          <IncidentChatTab />
+          <IncidentChatTab enabled={zkChatEnabled.enabled} />
         </section>
         <section
           className={cx(
@@ -52,7 +53,7 @@ const IssueDetailPage = () => {
             // isScrollLocked && styles["lock-scroll"]
           )}
         >
-          <SpanCards />
+          <SpanCards chatEnabled={zkChatEnabled.enabled} />
         </section>
       </div>
     </Fragment>
