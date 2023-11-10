@@ -48,8 +48,8 @@ jobs:
         run: |
           CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
           echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
-          FLAG_ENV="$CLUSTERNAME_CAPITAL"_"FLAG_ENV"
-          echo "FLAG_ENV="$FLAG_ENV" >> $GITHUB_OUTPUT
+          FLAG_ENV=${CLUSTERNAME_CAPITAL}_FLAG_ENV
+          echo 'FLAG_ENV='"$FLAG_ENV"' >> $GITHUB_OUTPUT'
           echo "$FLAG_ENV"
 
   ##############
