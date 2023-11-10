@@ -36,7 +36,7 @@ jobs:
       GIT_TAG: ${{ github.ref }}
       DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
   
-  get-flag-env:
+  get-flag-id:
       needs: init
       runs-on: zk-self-hosted
       env:
@@ -48,21 +48,23 @@ jobs:
           run: |
             CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
             echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
-            FLAG_ENV=${CLUSTERNAME_CAPITAL}_FLAG_ENV
-            echo 'FLAG_ENV='"$FLAG_ENV"' >> $GITHUB_OUTPUT'
-            echo "FLAG_ENV set in this step: $FLAG_ENV"  # Debugging line
-            echo "$FLAG_ENV"
+            FLAG_ID=${CLUSTERNAME_CAPITAL}_FLAG_ID
+            echo 'FLAG_ID='"$FLAG_ID"' >> $GITHUB_OUTPUT'
+            echo "FLAG_ID set in this step: $FLAG_ID"  # Debugging line
+            echo "$FLAG_ID"
+      outputs:
+        FLAG_ID: ${{ steps.get-flag-env.outputs.FLAG_ID }}
       
 
   ##############
   print-envs:
-    needs: [init, get-flag-env]
+    needs: [init, get-flag-id]
     runs-on: zk-self-hosted
     env:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      FLAG_ENV: ${{ needs.get-flag-env.outputs.FLAG_ENV }}
+      FLAG_ID: ${{ needs.get-flag-env.outputs.FLAG_ID }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -76,20 +78,21 @@ jobs:
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "DOMAIN_NAME=$DOMAIN_NAME"
-          echo "FLAG_ENV=$FLAG_ENV"
+          echo "FLAG_ID=$FLAG_ID"
 
   ##############
   build-and-push:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@main
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@feature-flag-action
     with:
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
       DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
       MAKE_TARGET: "default"
+      FLAG_ID: ${{ needs.get-flag-id.outputs.FLAG_ID }}
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
-    needs: [init, get-flag-env]
+    needs: [init, get-flag-id]
 
   deploy:
     uses: zerok-ai/zk-git-actions/.github/workflows/zk-deploy.yml@main
@@ -102,4 +105,4 @@ jobs:
       HELM_ARGS: "--recreate-pods"
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
-    needs: [init, get-flag-env, build-and-push]
+    needs: [init, get-flag-id, build-and-push]
