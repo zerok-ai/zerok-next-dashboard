@@ -65,7 +65,7 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      FLAG_ID: ${{ needs.get-flag-env.outputs.FLAG_ID }}
+      FLAG_ID: ${{ needs.get-flag-id.outputs.FLAG_ID }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
