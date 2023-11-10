@@ -39,6 +39,8 @@ jobs:
   get-flag-id:
       needs: init
       runs-on: zk-self-hosted
+      outputs:
+        FLAG_ID: ${{ steps.extractFlagId.outputs.FLAG_ID }}
       env:
         CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       environment:
@@ -53,10 +55,6 @@ jobs:
             echo 'FLAG_ID='"$FLAG_ID"' >> $GITHUB_OUTPUT'
             echo "FLAG_ID set in this step: $FLAG_ID"  # Debugging line
             echo "$FLAG_ID"
-      outputs:
-        FLAG_ID: ${{ steps.extractFlagId.outputs.FLAG_ID }}
-      
-
   ##############
   print-envs:
     needs: [init, get-flag-id]
