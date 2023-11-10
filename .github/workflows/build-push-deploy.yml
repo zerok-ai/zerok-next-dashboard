@@ -52,7 +52,7 @@ jobs:
             CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
             echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
             FLAG_ID=${CLUSTERNAME_CAPITAL}_FLAG_ID
-            echo 'FLAG_ID='"$FLAG_ID"' >> $GITHUB_OUTPUT'
+            echo FLAG_ID=$FLAG_ID >> $GITHUB_OUTPUT
             echo "FLAG_ID set in this step: $FLAG_ID"  # Debugging line
             echo "$FLAG_ID"
   ##############
