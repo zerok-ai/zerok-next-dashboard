@@ -37,20 +37,20 @@ jobs:
       DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
   
   get-flag-env:
-        needs: init
-        runs-on: zk-self-hosted
-        env:
-          CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
-        environment:
-          name: ${{ needs.init.outputs.ENVIRONMENT }}
-        steps:
-          - name: Get flag env for cloud
-            run: |
-              CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
-              echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
-              FLAG_ENV=${CLUSTERNAME_CAPITAL}_FLAG_ENV
-              echo 'FLAG_ENV='"$FLAG_ENV"' >> $GITHUB_OUTPUT'
-              echo "$FLAG_ENV"
+      needs: init
+      runs-on: zk-self-hosted
+      env:
+        CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
+      environment:
+        name: ${{ needs.init.outputs.ENVIRONMENT }}
+      steps:
+        - name: Get flag env for cloud
+          run: |
+            CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
+            echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
+            FLAG_ENV=${CLUSTERNAME_CAPITAL}_FLAG_ENV
+            echo 'FLAG_ENV='"$FLAG_ENV"' >> $GITHUB_OUTPUT'
+            echo "$FLAG_ENV"
       
 
   ##############
