@@ -8,6 +8,6 @@ default: yarn-install-and-build
 .PHONY: yarn-install-and-build
 yarn-install-and-build:
 	touch .env
-	echo "FLAG_ENV=${FLAG_ENV}" >> .env
+	echo "FLAG_ID=${FLAG_ID}" >> .env
 	yarn install
 	yarn build
