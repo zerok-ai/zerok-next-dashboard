@@ -50,6 +50,7 @@ jobs:
             echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
             FLAG_ENV=${CLUSTERNAME_CAPITAL}_FLAG_ENV
             echo 'FLAG_ENV='"$FLAG_ENV"' >> $GITHUB_OUTPUT'
+            echo "FLAG_ENV set in this step: $FLAG_ENV"  # Debugging line
             echo "$FLAG_ENV"
       
 
