@@ -45,6 +45,7 @@ jobs:
         name: ${{ needs.init.outputs.ENVIRONMENT }}
       steps:
         - name: Get flag env for cloud
+          id: extractFlagId
           run: |
             CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
             echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
@@ -53,7 +54,7 @@ jobs:
             echo "FLAG_ID set in this step: $FLAG_ID"  # Debugging line
             echo "$FLAG_ID"
       outputs:
-        FLAG_ID: ${{ steps.get-flag-env.outputs.FLAG_ID }}
+        FLAG_ID: ${{ steps.extractFlagId.outputs.FLAG_ID }}
       
 
   ##############

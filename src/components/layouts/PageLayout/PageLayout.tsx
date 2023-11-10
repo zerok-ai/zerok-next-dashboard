@@ -18,7 +18,7 @@ const PageLayout = ({
   showClusterModal = false,
 }: PageLayoutProps) => {
   const { isDrawerMinimized } = useSelector(drawerSelector);
-  console.log(process.env.FLAG_ENV)
+  console.log({ isDrawerMinimized }, process.env.FLAG_ID, "HEEY");
   return (
     <div className={styles.container}>
       <aside className={styles["drawer-container"]}>
