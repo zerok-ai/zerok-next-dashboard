@@ -35,14 +35,32 @@ jobs:
       GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
       GIT_TAG: ${{ github.ref }}
       DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
-
-  print-envs:
+  
+  get-flag-env:
     needs: init
+    runs-on: zk-self-hosted
+    env:
+      CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
+    environment:
+      name: ${{ needs.init.outputs.ENVIRONMENT }}
+    steps:
+      - name: Get flag env for cloud
+        run: |
+          CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
+          echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
+          FLAG_ENV="$CLUSTERNAME_CAPITAL"_"FLAG_ENV"
+          echo "FLAG_ENV="$FLAG_ENV" >> $GITHUB_OUTPUT
+          echo "$FLAG_ENV"
+
+  ##############
+  print-envs:
+    needs: [init, get-flag-env]
     runs-on: zk-self-hosted
     env:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
+      FLAG_ENV: ${{ needs.get-flag-env.outputs.FLAG_ENV }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -56,6 +74,7 @@ jobs:
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "DOMAIN_NAME=$DOMAIN_NAME"
+          echo "FLAG_ENV=$FLAG_ENV"
 
   ##############
   build-and-push:
@@ -65,10 +84,11 @@ jobs:
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
       DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
+      FLAG_ENV: ${{ needs.get-flag-env.outputs.FLAG_ENV }}
       MAKE_TARGET: "default"
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
-    needs: init
+    needs: [init, get-flag-env]
 
   deploy:
     uses: zerok-ai/zk-git-actions/.github/workflows/zk-deploy.yml@main
@@ -81,4 +101,4 @@ jobs:
       HELM_ARGS: "--recreate-pods"
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
-    needs: [init,build-and-push]
+    needs: [init, get-flag-env, build-and-push]
