@@ -55,7 +55,7 @@ App.getInitialProps = async () => {
   const flagsmithSSR = createFlagsmithInstance();
   await flagsmithSSR.init({
     // fetches flags on the server
-    environmentID: "PmRM6jgToFoj7FZPvfqJQp",
+    environmentID: process.env.FLAG_ID || "process failed",
     cacheFlags: false, // optionaly specify the identity of the user to get their specific flags
   });
 
