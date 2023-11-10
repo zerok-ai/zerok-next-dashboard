@@ -88,7 +88,7 @@ jobs:
       DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
       MAKE_TARGET: "default"
-      FLAG_ID: ${{ needs.get-flag-id.outputs.FLAG_ID }}
+      FLAG_ID_VAR: ${{ needs.get-flag-id.outputs.FLAG_ID }}
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
     needs: [init, get-flag-id]
