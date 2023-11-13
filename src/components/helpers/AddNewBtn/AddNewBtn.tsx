@@ -5,7 +5,7 @@ import styles from "./AddNewBtn.module.scss";
 
 interface AddNewBtnProps {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
   variant?: "contained" | "outlined" | "text";
   size?: "small" | "medium" | "large";
 }

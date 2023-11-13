@@ -77,11 +77,11 @@ h6 {
 
 a {
   text-decoration: none;
-  color:$primary-500;
+  color:$grey-50;
   transition: all 0.1s ease;
   display:inline-block;
   &:hover {
-    color:$primary-400;
+    color:$primary-500;
   }
 }
 

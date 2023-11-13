@@ -8,9 +8,6 @@
     border-radius: $sp-xl;
     cursor: pointer;
     align-items: center;
-    
-    // border-radius: 100px;
-    // padding:$sp-md 0;
     &:hover {
         background-color: $grey-900;
     }
@@ -28,24 +25,38 @@
 
 .menu {
     :global(.MuiMenu-paper){
+       
         margin-left: $sp-md;
+        border-radius: $sp-base;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.32), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+    }
+    ul {
+        background-color: $grey-900;
+        padding:0;
+        // remove border for last child
+        li:last-child {
+            border-bottom:none;
+        }
     }
 }
 
 .menu-item {
-    width:130px;
-    padding:$sp-xs $sp-lg;
+    width:170px;
+    padding:$sp-md;
     display: flex;
     align-items: center;
     column-gap: $sp-md;
     color:$grey-100;
+    border-bottom: 1px solid $grey-700;
     svg {
         color:$grey-400;
         width:20px;
     }
-    span {
-        font-weight: 500;
-        color:$grey-50;
+    span,p,div {
+        font-weight: 400;
+        letter-spacing: 0.4px;
+        color:$grey-200;
+        font-size: $font-md;
     }
 }
 

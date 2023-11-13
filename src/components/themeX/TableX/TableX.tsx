@@ -102,7 +102,9 @@ const TableX = <T extends object>({
                     <td
                       className={cx("table-td table-body-td")}
                       key={cell.id}
-                      style={{ width: cell.column.getSize() }}
+                      style={{
+                        width: cell.column.getSize(),
+                      }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

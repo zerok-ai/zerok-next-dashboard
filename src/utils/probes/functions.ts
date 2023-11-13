@@ -73,3 +73,17 @@ export const scenarioToProbeForm = (scenario: ScenarioDetail) => {
   };
   return form;
 };
+
+export const getServiceListFromScenario = (scenario: ScenarioDetail) => {
+  const workloads = Object.keys(scenario.workloads);
+  const services: string[] = [];
+  workloads.forEach((workloadId) => {
+    const workload = scenario.workloads[workloadId];
+    let service = workload.service;
+    if (workload.service.includes("*/*")) {
+      service = `All ${workload.protocol} services`;
+    }
+    services.push(service);
+  });
+  return services;
+};
