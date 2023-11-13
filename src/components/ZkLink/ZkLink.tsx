@@ -1,3 +1,4 @@
+import cx from "classnames";
 import Link from "next/link";
 
 import styles from "./ZkLink.module.scss";
@@ -10,9 +11,9 @@ interface ZkLinkProps {
 
 const ZkLink = ({ href, children, highlight = false }: ZkLinkProps) => {
   return (
-    <Link href={href} className={styles.link}>
-      {children}
-    </Link>
+    <span className={cx(styles.link, highlight && styles.highlight)}>
+      <Link href={href}>{children}</Link>
+    </span>
   );
 };
 

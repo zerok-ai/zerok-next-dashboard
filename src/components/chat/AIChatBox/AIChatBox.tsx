@@ -1,5 +1,5 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
-import Link from "next/link";
+import ZkLink from "components/ZkLink";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
@@ -63,11 +63,12 @@ const AIChatBox = ({ query }: ChatBoxDisplayProps) => {
           <div className={styles.footer}>
             <span>
               Based on request{" "}
-              <Link
+              <ZkLink
                 href={getSpanPageLinkFromIncident(query.incidentId!, router)}
+                highlight
               >
                 {query.incidentId}
-              </Link>
+              </ZkLink>
             </span>
             <span>
               {query.created_at && getFormattedTime(query.created_at)}

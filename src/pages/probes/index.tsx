@@ -1,3 +1,3 @@
-import ProbesListPage from "components/ProbesListPage";
+import ProbesListPage from "components/page-wrappers/ProbesListPage";
 
 export default ProbesListPage;

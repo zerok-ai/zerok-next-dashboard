@@ -1,10 +1,10 @@
 import { Switch } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
+import cx from "classnames";
 import TableActions from "components/helpers/TableActions";
 import ChipX from "components/themeX/ChipX";
 import TooltipX from "components/themeX/TooltipX";
 import ZkLink from "components/ZkLink";
-import { useRouter } from "next/router";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   getFormattedTimeFromEpoc,
@@ -29,20 +29,32 @@ export const probeListColumns = ({
   onUpdateProbeStatus,
   onDeleteProbe,
 }: ProbeListColumnArgs) => {
-  const router = useRouter();
   return [
     helper.accessor("scenario.scenario_title", {
       header: "Name",
       size: DEFAULT_COL_WIDTH * 3,
       cell: (info) => {
+        const row = info.row.original;
+        const {
+          scenario: { scenario_id, scenario_type },
+        } = row;
+        const isDisabled = !!row.disabled_at;
         return (
-          <div className={styles["scenario-title-container"]}>
-            <ZkLink
-              href={`/probes/view?id=${info.row.original.scenario.scenario_id}`}
-            >
-              {info.getValue()}
-            </ZkLink>
-            {info.row.original.scenario.scenario_type === "SYSTEM" && (
+          <div
+            className={cx(
+              styles["scenario-title-container"],
+              isDisabled && styles.disabled
+            )}
+          >
+            <div className={styles["scenario-title"]}>
+              <ZkLink href={`/probes/view?id=${scenario_id}`}>
+                {info.getValue()}
+              </ZkLink>
+              {isDisabled && (
+                <ChipX label="Disabled" upperCase={true} color="disabled" />
+              )}
+            </div>
+            {scenario_type === "SYSTEM" && (
               <ChipX label="System" upperCase={false} />
             )}
           </div>
@@ -64,7 +76,7 @@ export const probeListColumns = ({
     }),
     helper.accessor("created_at", {
       header: "Created at",
-      size: DEFAULT_COL_WIDTH * 0.7,
+      size: DEFAULT_COL_WIDTH * 1,
       cell: (info) => {
         return (
           <TooltipX title={getFormattedTimeFromEpoc(info.getValue()) as string}>
@@ -114,7 +126,7 @@ export const probeListColumns = ({
           {
             element: <span>Delete</span>,
             onClick: () => {
-              router.push(`/probes/view?id=${row.scenario.scenario_id}`);
+              onDeleteProbe(row.scenario.scenario_id);
             },
           },
         ];

@@ -98,3 +98,15 @@
     grid-template-columns: 80px 1fr;
     
 }
+
+.action-item {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-md;
+    justify-content: space-between;
+    width:100%;
+}
+
+.switch {
+    margin:0;
+}

@@ -6,14 +6,21 @@ import styles from "./ChipX.module.scss";
 interface ChipXProps {
   label: string | React.ReactNode;
   upperCase?: boolean;
-  color?: "primary" | "secondary" | "error" | "success" | "warning";
+  color?:
+    | "primary"
+    | "secondary"
+    | "error"
+    | "success"
+    | "warning"
+    | "default"
+    | "disabled";
   size?: "small" | "medium";
 }
 
 const ChipX = ({
   label,
   upperCase = true,
-  color = "secondary",
+  color = "default",
   size = "medium",
 }: ChipXProps) => {
   return (

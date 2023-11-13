@@ -3,12 +3,21 @@
     span {
         color:$grey-50;
     }
+    .disabled {
+        color:$grey-400;
+    }
 }
 
 .scenario-title-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: $sp-md;
+}
+
+.scenario-title {
+    display: flex;
+    align-items: center;
     column-gap: $sp-md;
 }
 
@@ -38,9 +47,7 @@
     justify-content:center;
 }
 
-.disabled {
-    color:$grey-200 !important;
-}
+
 
 .action-item {
     width:100%;

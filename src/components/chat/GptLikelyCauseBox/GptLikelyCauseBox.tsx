@@ -1,5 +1,5 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
-import Link from "next/link";
+import ZkLink from "components/ZkLink";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 import { TypeAnimation } from "react-type-animation";
@@ -51,11 +51,12 @@ const GptLikelyCauseBox = () => {
           )}
           <div className={styles.footer}>
             Based on request{" "}
-            <Link
+            <ZkLink
               href={getSpanPageLinkFromIncident(incidentId as string, router)}
+              highlight
             >
               {incidentId}
-            </Link>
+            </ZkLink>
           </div>
         </Fragment>
       );
