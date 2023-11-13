@@ -1,3 +1,3 @@
-import Probe from "./Probe";
+import ProbesListPage from "components/ProbesListPage";
 
-export default Probe;
+export default ProbesListPage;

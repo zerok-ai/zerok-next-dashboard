@@ -1,22 +1,20 @@
 import { Menu, MenuItem } from "@mui/material";
 import cx from "classnames";
+import ZkSpinner from "components/ZkTableSpinner";
+import { nanoid } from "nanoid";
 import { useState } from "react";
 import { HiEllipsisVertical } from "react-icons/hi2";
-import { TABLE_ACTION_LABELS } from "utils/tables/constants";
-import {
-  type TableActionPropType,
-  type TableActionType,
-} from "utils/tables/types";
+import { type TableActionItem } from "utils/tables/types";
 
 import styles from "./TableActions.module.scss";
 
-interface TableActionsProps<T> {
-  list: TableActionPropType<T>;
-  data: T;
+interface TableActionsProps {
+  list: TableActionItem[];
+  loading: boolean;
 }
 
-const TableActions = <T,>({ list, data }: TableActionsProps<T>) => {
-  if (!list || !Object.keys(list).length) return null;
+const TableActions = ({ list, loading }: TableActionsProps) => {
+  if (!list || !list.length) return null;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -24,6 +22,9 @@ const TableActions = <T,>({ list, data }: TableActionsProps<T>) => {
   const closeMenu = () => {
     setAnchorEl(null);
   };
+  if (loading) {
+    return <ZkSpinner />;
+  }
   return (
     <div
       className={cx(styles.container, !!anchorEl && styles.clicked)}
@@ -53,20 +54,14 @@ const TableActions = <T,>({ list, data }: TableActionsProps<T>) => {
           "aria-labelledby": "icon-button",
         }}
       >
-        {Object.keys(list).map((key, index) => {
-          const item = list[key as TableActionType];
-          if (!item) return null;
-          const label = TABLE_ACTION_LABELS[key as TableActionType];
+        {list.map((item) => {
           return (
             <MenuItem
-              key={index}
+              onClick={item.onClick}
+              key={nanoid()}
               className={styles["menu-item"]}
-              onClick={() => {
-                item.onClick(data);
-                closeMenu();
-              }}
             >
-              {label}
+              {item.element}
             </MenuItem>
           );
         })}

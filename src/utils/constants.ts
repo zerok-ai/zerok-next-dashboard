@@ -18,7 +18,7 @@ export const CLUSTER_STATES = {
   DEGRADED: "CS_DEGRADED",
 };
 
-export const DEFAULT_COL_WIDTH = 80;
+export const DEFAULT_COL_WIDTH = 120;
 
 export const IGNORED_SERVICES_PREFIXES = [
   "pl",
