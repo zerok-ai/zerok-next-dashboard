@@ -4,8 +4,9 @@ import {
 } from "@reduxjs/toolkit";
 import { type AuthType, type LoginAPIResponse } from "redux/auth/authTypes";
 import { LOGIN_ENDPOINT } from "utils/auth/endpoints";
-import { removeToken, setRaxiosLocalToken } from "utils/auth/functions";
+import { removeLocalUser, setRaxiosLocalToken } from "utils/auth/functions";
 import { maskPassword } from "utils/functions";
+import { type APIResponse } from "utils/generic/types";
 import raxios from "utils/raxios";
 
 export const loginUser = createAsyncThunk(
@@ -13,12 +14,14 @@ export const loginUser = createAsyncThunk(
   async (values: { email: string; password: string }) => {
     const { email, password } = values;
     const encrypted = maskPassword(password);
-    const rdata = await raxios.post<LoginAPIResponse>(LOGIN_ENDPOINT, {
-      email,
-      password: encrypted,
-    });
+    const rdata = await raxios.post<APIResponse<LoginAPIResponse>>(
+      LOGIN_ENDPOINT,
+      {
+        email,
+        password: encrypted,
+      }
+    );
     return {
-      profile: rdata.data.debug.authToken.UserDetails,
       token: rdata.headers.token,
     };
   }
@@ -33,17 +36,14 @@ export const loginUserBuilder = (
       state.error = null;
     })
     .addCase(loginUser.fulfilled, (state, { payload }) => {
-      const profile = payload.profile;
-      const token = payload.token;
-      state.token = token;
+      state.token = payload.token;
       state.loading = false;
-      state.user = profile;
-      state.isLoggedIn = true;
-      setRaxiosLocalToken(token);
+      state.isLoggedIn = false;
+      setRaxiosLocalToken(payload.token);
     })
     .addCase(loginUser.rejected, (state) => {
       state.error = "Could not log in user, please try again.";
       state.loading = false;
-      removeToken();
+      removeLocalUser();
     });
 };

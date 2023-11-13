@@ -1,9 +1,10 @@
 import PageSkeleton from "components/helpers/PageSkeleton";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { tokenLogin } from "redux/auth/authSlice";
 import { clusterSelector, getClusters } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
+import { fetchUserDetails } from "redux/thunks/auth/fetchUserDetails";
+import { setRaxiosLocalToken } from "utils/auth/functions";
 import { getLocalToken } from "utils/functions";
 
 interface PrivateRouteProps {
@@ -27,8 +28,11 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();
-    if (localToken) {
-      dispatch(tokenLogin({ token: localToken }));
+    if (localToken && !isLoggedIn && !auth.loading) {
+      // if local token exists, fetch user details
+      // this will also set the token in the redux store on success and accordingly set the isAuthorized state
+      setRaxiosLocalToken(localToken);
+      dispatch(fetchUserDetails({ token: localToken }));
       return;
     }
 

@@ -1,3 +1,3 @@
-import IncidentDetailPage from "./IncidentDetailPage";
+import IssueDetailPage from "components/page-wrappers/IssueDetailPage";
 
-export default IncidentDetailPage;
+export default IssueDetailPage;

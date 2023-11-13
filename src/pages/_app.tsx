@@ -12,10 +12,12 @@ import "styles/utils.scss";
 import "styles/tables.scss";
 import "styles/mui-overrides.scss"
 
+import { createFlagsmithInstance } from "flagsmith/isomorphic";
+import { FlagsmithProvider } from "flagsmith/react";
+import { type IState } from "flagsmith/types";
 import { type NextPage } from "next";
 import type { AppProps } from "next/app";
-import Head from "next/head";
-import { type ReactElement } from "react";
+import { type ReactElement, useRef } from "react";
 // third-party
 import { Provider } from "react-redux";
 import store from "redux/store";
@@ -29,23 +31,35 @@ type LayoutProps = NextPage & {
 interface Props {
   Component: LayoutProps;
   pageProps: any;
+  flagsmithState: IState;
 }
 
-const App = ({ Component, pageProps }: AppProps & Props) => {
+const App = ({ Component, pageProps, flagsmithState }: AppProps & Props) => {
+  const flagsmithRef = useRef(createFlagsmithInstance());
   const getLayout = Component.getLayout ?? ((page: any) => page);
   return (
     <Provider store={store}>
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, user-scalable=no"
-        />
-      </Head>
-      <ThemeCustomization>
-        {getLayout(<Component {...pageProps} />)}
-      </ThemeCustomization>
+      <FlagsmithProvider
+        flagsmith={flagsmithRef.current}
+        serverState={flagsmithState}
+      >
+        <ThemeCustomization>
+          {getLayout(<Component {...pageProps} />)}
+        </ThemeCustomization>
+      </FlagsmithProvider>
     </Provider>
   );
+};
+
+App.getInitialProps = async () => {
+  const flagsmithSSR = createFlagsmithInstance();
+  await flagsmithSSR.init({
+    // fetches flags on the server
+    environmentID: "PmRM6jgToFoj7FZPvfqJQp",
+    cacheFlags: false, // optionaly specify the identity of the user to get their specific flags
+  });
+
+  return { flagsmithState: flagsmithSSR.getState() };
 };
 
 export default App;

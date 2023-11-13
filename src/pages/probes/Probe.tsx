@@ -1,7 +1,6 @@
 import { Button, IconButton, Skeleton, Switch, Tooltip } from "@mui/material";
 import { createColumnHelper, type SortingState } from "@tanstack/react-table";
 import cx from "classnames";
-import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
@@ -12,6 +11,7 @@ import DialogX from "components/themeX/DialogX";
 // import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import TooltipX from "components/themeX/TooltipX";
+import { useFlags } from "flagsmith/react";
 import { useTrigger } from "hooks/useTrigger";
 import Head from "next/head";
 import Link from "next/link";
@@ -64,6 +64,8 @@ const Probe = () => {
   const router = useRouter();
   const page = router.query.page ?? "1";
   const { trigger, changeTrigger } = useTrigger();
+  const pageTitle =
+    useFlags(["probespagetitle"]).probespagetitle.value ?? "Probes";
   const resetSelectedProbe = () => {
     setSelectedProbe(null);
   };
@@ -382,7 +384,7 @@ const Probe = () => {
   return (
     <div className={styles.container}>
       <PageHeader
-        title="Probes"
+        title={pageTitle as string}
         showRange={false}
         showRefresh
         leftExtras={leftExtras}
@@ -390,42 +392,40 @@ const Probe = () => {
         onRefresh={changeTrigger}
         // alignExtras="right"
       />
-      <ValidClusterWrapper>
-        <DialogX
-          isOpen={!!(selectedProbe && selectedProbe.deleting)}
-          title="Delete Probe"
-          successText="Delete"
-          cancelText="Cancel"
-          onClose={() => {
-            resetSelectedProbe();
-          }}
-          onSuccess={handleDelete}
-          onCancel={() => {
-            resetSelectedProbe();
-          }}
-        >
-          <span>Are you sure you want to delete this probe?</span> <br />
-          <em>This action cannot be undone.</em>
-        </DialogX>
-        <div className={styles.table}>
-          {scenarios ? (
-            <TableX
-              data={scenarios ?? null}
-              columns={columns}
-              sortBy={sortBy}
-              onSortingChange={setSortBy}
-            />
-          ) : (
-            <CustomSkeleton len={8} />
-          )}
-        </div>
-        {/* <div className={styles.pagination}>
+      <DialogX
+        isOpen={!!(selectedProbe && selectedProbe.deleting)}
+        title="Delete Probe"
+        successText="Delete"
+        cancelText="Cancel"
+        onClose={() => {
+          resetSelectedProbe();
+        }}
+        onSuccess={handleDelete}
+        onCancel={() => {
+          resetSelectedProbe();
+        }}
+      >
+        <span>Are you sure you want to delete this probe?</span> <br />
+        <em>This action cannot be undone.</em>
+      </DialogX>
+      <div className={styles.table}>
+        {scenarios ? (
+          <TableX
+            data={scenarios ?? null}
+            columns={columns}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
+          />
+        ) : (
+          <CustomSkeleton len={8} />
+        )}
+      </div>
+      {/* <div className={styles.pagination}>
         <PaginationX
           totalItems={totalScenarios ?? PROBE_PAGE_SIZE}
           itemsPerPage={PROBE_PAGE_SIZE}
         />
       </div> */}
-      </ValidClusterWrapper>
     </div>
   );
 };

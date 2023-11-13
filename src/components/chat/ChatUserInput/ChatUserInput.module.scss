@@ -1,0 +1,21 @@
+@import "styles/variables.module.scss";
+.container {
+    flex:1;
+    padding:$sp-xl;
+    padding-top: $sp-md;
+}
+
+.chat-input {
+    background-color: $grey-925;
+    // border:1px solid $grey-600;
+    ::placeholder {
+        color:$grey-200 !important;
+    }  
+}
+
+.send-icon {
+    display: flex;
+    align-items: center;
+    margin-right: $sp-base * 1.5;
+    // cursor: pointer;
+}

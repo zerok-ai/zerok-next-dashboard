@@ -1,67 +1,66 @@
-"use client";
 import cx from "classnames";
 import IncidentChatTab from "components/chat/IncidentChatTab";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import SpanCards from "components/SpanCards";
-import Head from "next/head";
+import { useZkFlag } from "hooks/useZkFlag";
 import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import { resetChat } from "redux/chat/chatSlice";
 import { changeSelectedCluster } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
 
-// import { type SpanResponse } from "utils/types";
-import styles from "./IncidentDetailPage.module.scss";
-import { IssueMetadata } from "./IncidentDetails.utils";
+import IssueMetadata from "./helpers/IssueDetailPageHeader";
+import styles from "./IssueDetailPage.module.scss";
 
-const IncidentDetailPage = () => {
-  const [isScrollLocked, setIsScrollLocked] = useState(false);
+const IssueDetailPage = () => {
   const dispatch = useDispatch();
+
+  const zkChatEnabled = useZkFlag("org", "gpt", "zkchat");
+
+  // reset chat on navigating away from this page so that the history is not persisted
   useEffect(() => {
     return () => {
       dispatch(resetChat());
     };
   }, []);
+
   const { clusters } = useSelector((state) => state.cluster);
   const router = useRouter();
   const {
     query: { cluster_id },
   } = router;
+
+  // for slack integration - fetch and set the cluster id if present & different from the current one
   useEffect(() => {
     if (cluster_id && clusters.length > 0) {
       dispatch(changeSelectedCluster({ id: cluster_id }));
     }
   }, [cluster_id, clusters]);
+
   return (
     <Fragment>
-      <Head>
-        <title>ZeroK Dashboard | Incident Detail</title>
-      </Head>
+      {/* Title, times and metadata */}
       <IssueMetadata />
+      {/* content */}
       <div className={styles["content-container"]}>
-        <section className={styles["chat-container"]}>
-          <IncidentChatTab />
+        <section className={styles["chat-section"]}>
+          <IncidentChatTab enabled={zkChatEnabled.enabled} />
         </section>
         <section
           className={cx(
-            styles["detail-container"],
-            isScrollLocked && styles["lock-scroll"]
+            styles["cards-section"]
+            // isScrollLocked && styles["lock-scroll"]
           )}
         >
-          <SpanCards
-            lockScroll={(val) => {
-              setIsScrollLocked(val);
-            }}
-            isScrollLocked={isScrollLocked}
-          />
+          <SpanCards chatEnabled={zkChatEnabled.enabled} />
         </section>
       </div>
     </Fragment>
   );
 };
 
-IncidentDetailPage.getLayout = function getLayout(page: React.ReactNode) {
+IssueDetailPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
     <PrivateRoute>
       <PageLayout>{page}</PageLayout>
@@ -69,4 +68,4 @@ IncidentDetailPage.getLayout = function getLayout(page: React.ReactNode) {
   );
 };
 
-export default IncidentDetailPage;
+export default IssueDetailPage;

@@ -336,7 +336,7 @@ const TraceTree = ({
                 <HiOutlineX className={styles["close-icon"]} />
               </span>
             )}
-            {spans && selectedSpan && (
+            {spans && selectedSpan && isModalOpen && (
               <TraceInfoDrawer
                 incidentId={incidentId}
                 selectedSpan={selectedSpan}

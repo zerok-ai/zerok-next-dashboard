@@ -13,12 +13,12 @@ import { type SpanDetail, type SpanErrorDetail } from "utils/types";
 import styles from "./SpanCards.module.scss";
 
 interface SpanCardsProps {
-  lockScroll: (val: boolean) => void;
-  isScrollLocked: boolean;
+  chatEnabled: boolean;
 }
 
-const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
+const SpanCards = ({ chatEnabled }: SpanCardsProps) => {
   const [incidentId, setIncidentId] = useState<null | string>(null);
+  const [isScrollLocked, setIsScrollLocked] = useState(false);
   const [spans, setSpans] = useState<null | SpanDetail>(null);
   const [isTraceTableVisible, toggleTraceTable] = useToggle(false);
   const { likelyCause } = useSelector(chatSelector);
@@ -26,15 +26,17 @@ const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
 
   useEffect(() => {
     if (isTraceTableVisible) {
-      lockScroll(true);
+      setIsScrollLocked(true);
     } else {
-      lockScroll(false);
+      setIsScrollLocked(false);
     }
   }, [isTraceTableVisible]);
 
   useEffect(() => {
     if (router.query.trace) {
       setIncidentId(router.query.trace as string);
+    } else if (!chatEnabled) {
+      setIncidentId(router.query.latest as string);
     } else if (likelyCause.event) {
       setIncidentId(likelyCause.event.incidentId);
     } else {
@@ -49,15 +51,12 @@ const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
       );
     }
   }, [likelyCause.error]);
+
   return (
-    <div
-      className={cx(
-        styles["detail-container"],
-        isScrollLocked && styles.locked
-      )}
-    >
+    <div className={cx(styles.container, isScrollLocked && styles.locked)}>
       <div className={styles["cards-container"]}>
-        <section className={cx(styles["tree-container"])}>
+        {/* TRACE TREE */}
+        <section className={cx(styles["tree-container"], styles.card)}>
           <TraceTree
             updateSpans={(spans: SpanDetail | null) => {
               setSpans(spans);
@@ -66,15 +65,21 @@ const SpanCards = ({ lockScroll, isScrollLocked }: SpanCardsProps) => {
             incidentId={incidentId}
           />
         </section>
+
+        {/* EXCEPTION CARD */}
         {spans?.errors && spans?.errors.length > 0 && (
-          <div className={styles["exception-container"]}>
+          <section className={cx(styles["exception-container"], styles.card)}>
             <ExceptionTab errors={spans.errors as SpanErrorDetail[]} />
-          </div>
+          </section>
         )}
-        <section className={styles["pod-container"]}>
+
+        {/* POD CARD */}
+        <section className={cx(styles["pod-container"], styles.card)}>
           <PodDetailsCard incidentId={incidentId} />
         </section>
       </div>
+
+      {/* TRACE TABLE */}
       {isTraceTableVisible && (
         <TraceTable
           visible={isTraceTableVisible}

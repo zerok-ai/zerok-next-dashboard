@@ -6,7 +6,7 @@ export const setRaxiosLocalToken = (token: string): void => {
   setRaxiosHeader(token);
 };
 
-export const removeToken = (): void => {
+export const removeLocalUser = (): void => {
   deleteLocalToken();
   removeRaxiosHeader();
 };

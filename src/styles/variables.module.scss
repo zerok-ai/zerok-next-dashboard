@@ -123,6 +123,9 @@ $main-drawer-width-full:260px;
 $main-drawer-width-mini:60px;
 $header-width:60px;
 
+// page-heights
+$full-page-height:calc(100vh - $header-height - $sp-base * 40);
+
 
 :export{
     primary100:$primary-100;
