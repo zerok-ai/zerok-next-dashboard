@@ -7,5 +7,7 @@ default: yarn-install-and-build
 # Install dependencies and build the Next.js application
 .PHONY: yarn-install-and-build
 yarn-install-and-build:
+	touch .env
+	echo "NEXT_PUBLIC_FLAG_ID=${FLAG_ID}" >> .env
 	yarn install
 	yarn build
