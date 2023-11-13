@@ -1,10 +1,9 @@
-import CustomSkeleton from "components/custom/CustomSkeleton";
+import { type SortingState } from "@tanstack/react-table";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
-import { useTrigger } from "hooks/useTrigger";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -20,10 +19,16 @@ import {
 } from "utils/scenarios/endpoints";
 import { type ScenarioDetailType } from "utils/scenarios/types";
 import { sendError } from "utils/sentry";
+import { PROBE_SORT_OPTIONS } from "utils/tables/constants";
 
 import ProbesListPageHeader from "./helpers/ProbesListPageHeader";
 import styles from "./ProbesListPage.module.scss";
 import { probeListColumns } from "./ProbesListPage.utils";
+
+export const DEFAULT_SORT = {
+  id: PROBE_SORT_OPTIONS[0].value.split(":")[0],
+  desc: PROBE_SORT_OPTIONS[0].value.split(":")[1] === "desc",
+};
 
 const Probe = () => {
   const { selectedCluster } = useSelector(clusterSelector);
@@ -36,16 +41,17 @@ const Probe = () => {
   } = useFetch<ScenarioDetailType[]>("scenarios");
   const [selectedProbe, setSelectedProbe] = useState<null | {
     scenario_id: string;
-    action: "update" | "delete";
+    action: "update" | "delete" | "deleting";
   }>(null);
+  const [sortBy, setSortBy] = useState<SortingState>([DEFAULT_SORT]);
   const router = useRouter();
   const page = router.query.page ?? "1";
-  const { trigger } = useTrigger();
   const resetSelectedProbe = () => {
     setSelectedProbe(null);
   };
 
   const getScenarios = async () => {
+    setScenarios(null);
     const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
       "{limit}",
       PROBE_PAGE_SIZE.toString()
@@ -63,7 +69,7 @@ const Probe = () => {
       setScenarios(null);
       getScenarios();
     }
-  }, [selectedCluster, router, trigger]);
+  }, [selectedCluster, router]);
 
   const handleSwitchChange = async (scenario: ScenarioDetailType) => {
     const scenario_id = scenario.scenario.scenario_id;
@@ -99,6 +105,7 @@ const Probe = () => {
   const handleDelete = async () => {
     if (!selectedProbe || selectedProbe.action !== "delete") return;
     const scenario_id = selectedProbe.scenario_id;
+    setSelectedProbe({ scenario_id, action: "deleting" });
     try {
       const endpoint = DELETE_PROBE_ENDPOINT.replace(
         "{cluster_id}",
@@ -121,6 +128,7 @@ const Probe = () => {
       sendError(err);
     } finally {
       getScenarios();
+      resetSelectedProbe();
     }
   };
 
@@ -147,14 +155,19 @@ const Probe = () => {
         <em>This action cannot be undone.</em>
       </DialogX>
       {/* Headers and sort */}
-      <ProbesListPageHeader />
+      <ProbesListPageHeader
+        onRefresh={getScenarios}
+        sort={sortBy}
+        updateSort={setSortBy}
+      />
       {!scenariosError ? (
         <div className={styles.table}>
-          {scenarios ? (
-            <TableX data={scenarios ?? null} columns={columns} />
-          ) : (
-            <CustomSkeleton len={8} />
-          )}
+          <TableX
+            data={scenarios ?? null}
+            columns={columns}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
+          />
         </div>
       ) : (
         <p>Could not fetch scenarios, please try again later.</p>

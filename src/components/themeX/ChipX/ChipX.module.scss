@@ -13,6 +13,9 @@
     text-transform: capitalize;
     line-height: 16px;
 }
+.default {
+    background-color: $grey-925;
+}
 .upper {
     text-transform: uppercase;
 }
@@ -21,8 +24,9 @@
     font-size: smaller;
 }
 
+
 .secondary {
-    background-color: $grey-925;
+    background-color: $grey-800;
 }
 
 .primary {
@@ -37,4 +41,9 @@
 
 .warning {
     border:1px solid $warning-700;
+}
+
+.disabled {
+    background-color: $grey-700;
+    color:$grey-400;
 }

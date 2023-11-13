@@ -1,4 +1,3 @@
-import { nanoid } from "@reduxjs/toolkit";
 import { type ColumnSort } from "@tanstack/react-table";
 import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import PageHeader from "components/helpers/PageHeader";
@@ -7,11 +6,11 @@ import TableFilter from "components/helpers/TableFilter";
 import PageLayout from "components/layouts/PageLayout";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
-import TagX from "components/themeX/TagX";
+// import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
-import { useTrigger } from "hooks/useTrigger";
+// import { useTrigger } from "hooks/useTrigger";
 import { useRouter } from "next/router";
-import queryString from "query-string";
+// import queryString from "query-string";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -20,8 +19,8 @@ import { LIST_ISSUES_ENDPOINT } from "utils/endpoints";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail } from "utils/types";
 
-import styles from "./IssuesPage.module.scss";
-import { getIssueColumns, ISSUE_SORT_OPTIONS } from "./IssuesPage.utils";
+import styles from "./IssuesListPage.module.scss";
+import { getIssueColumns, ISSUE_SORT_OPTIONS } from "./IssuesListPage.utils";
 
 interface IssuesDataType {
   issues: IssueDetail[];
@@ -36,8 +35,6 @@ const DEFAULT_SORT: ColumnSort = {
 const IssuesPage = () => {
   const { selectedCluster } = useSelector(clusterSelector);
 
-  // const [scenarios, setScenarios] = useState<ScenarioDetail[] | null>(null);
-
   const {
     data,
     fetchData: fetchIssues,
@@ -50,53 +47,56 @@ const IssuesPage = () => {
   const { query } = router;
   const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
-
-  const { trigger, changeTrigger } = useTrigger();
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
+
+  const getIssues = async () => {
+    setData(null);
+    // const filter = services && services.length > 0 ? services.join(",") : "";
+    // const serviceFilter = filter.length > 0 ? { services: filter } : {};
+    // const params = queryString.stringify({
+    //   ...serviceFilter,
+    // });
+    const endpoint = LIST_ISSUES_ENDPOINT.replace(
+      "{cluster_id}",
+      selectedCluster!
+    )
+      .replace("{range}", range as string)
+      .replace("{limit}", ISSUES_PAGE_SIZE.toString())
+      .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString());
+    fetchIssues(endpoint);
+  };
 
   useEffect(() => {
     if (selectedCluster) {
-      setData(null);
-      const filter = services && services.length > 0 ? services.join(",") : "";
-      const serviceFilter = filter.length > 0 ? { services: filter } : {};
-      const params = queryString.stringify({
-        ...serviceFilter,
-      });
-      const endpoint =
-        LIST_ISSUES_ENDPOINT.replace("{cluster_id}", selectedCluster)
-          .replace("{range}", range as string)
-          .replace("{limit}", ISSUES_PAGE_SIZE.toString())
-          .replace("{offset}", ((page - 1) * ISSUES_PAGE_SIZE).toString()) +
-        `${params.length ? `&${params}` : ""}`;
-      fetchIssues(endpoint);
+      getIssues();
     }
-  }, [selectedCluster, router.query, trigger]);
+  }, [selectedCluster, router.query]);
 
   // @TODO - add types for filters here
-  const services =
-    query.services && query.services?.length > 0
-      ? decodeURIComponent(query.services as string).split(",")
-      : null;
+  // const services =
+  //   query.services && query.services?.length > 0
+  //     ? decodeURIComponent(query.services as string).split(",")
+  //     : null;
 
   const columns = useMemo(() => {
     return getIssueColumns();
   }, [data?.issues]);
 
-  const removeService = (label: string) => {
-    if (services != null) {
-      const filtered = services.filter((sv) => sv !== label);
-      const newQuery = { ...query };
-      if (filtered.length > 0) {
-        newQuery.services = filtered.join(",");
-      } else delete newQuery.services;
-      router.push({
-        pathname: "/issues",
-        query: {
-          ...newQuery,
-        },
-      });
-    }
-  };
+  // const removeService = (label: string) => {
+  //   if (services != null) {
+  //     const filtered = services.filter((sv) => sv !== label);
+  //     const newQuery = { ...query };
+  //     if (filtered.length > 0) {
+  //       newQuery.services = filtered.join(",");
+  //     } else delete newQuery.services;
+  //     router.push({
+  //       pathname: "/issues",
+  //       query: {
+  //         ...newQuery,
+  //       },
+  //     });
+  //   }
+  // };
 
   const leftExtras = useMemo(() => {
     return [
@@ -119,10 +119,10 @@ const IssuesPage = () => {
         showRange={true}
         showRefresh={true}
         leftExtras={leftExtras}
-        onRefresh={changeTrigger}
+        onRefresh={getIssues}
       />
       <ValidClusterWrapper>
-        {/* Rendering filters */}
+        {/* Rendering filters
         {services && (
           <div className={styles["active-filters"]}>
             {services !== null &&
@@ -138,7 +138,7 @@ const IssuesPage = () => {
                 );
               })}
           </div>
-        )}
+        )} */}
         <div className={styles["page-content"]}>
           {error && <p>Error fetching issues. Please try again later.</p>}
           {selectedCluster && !error && (

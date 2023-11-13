@@ -1,10 +1,10 @@
 import { MenuItem, Modal, Select, Tab, Tabs } from "@mui/material";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ExpandIcon from "components/helpers/ExpandIcon";
+import ZkLink from "components/ZkLink";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
-import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -104,7 +104,9 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
           <span>
             K8s metrics data is not being sent to the Prometheus instance you
             have integrated ZeroK with. Please{" "}
-            <Link href="/integrations/prometheus/list">integrate ZeroK</Link>{" "}
+            <ZkLink href="/integrations/prometheus/list" highlight>
+              integrate ZeroK
+            </ZkLink>{" "}
             with the Prometheus instance which contains K8s metrics
           </span>
         );
@@ -113,7 +115,9 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
           <span>
             K8s metrics data is not being sent to the Prometheus instance you
             have integrated ZeroK with. Please{" "}
-            <Link href="/integrations/prometheus/list">integrate ZeroK</Link>{" "}
+            <ZkLink href="/integrations/prometheus/list" highlight={true}>
+              integrate ZeroK
+            </ZkLink>{" "}
             with the Prometheus instance which contains K8s metrics
           </span>
         );
@@ -121,9 +125,9 @@ const PodDetailsCard = ({ incidentId }: PodDetailsCardProps) => {
         return (
           <span>
             Please{" "}
-            <Link href="/integrations/prometheus/list">
+            <ZkLink href="/integrations/prometheus/list" highlight={true}>
               integrate ZeroK with Prometheus
-            </Link>{" "}
+            </ZkLink>{" "}
             to automatically query pod metrics and events with the Prometheus
             instance which contains K8s metrics
           </span>

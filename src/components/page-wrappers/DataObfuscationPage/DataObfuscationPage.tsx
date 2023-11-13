@@ -21,10 +21,10 @@ import {
   type DefaultRegexRuleType,
   type ObfuscationRuleType,
 } from "utils/data/types";
-import { type TableActionPropType } from "utils/tables/types";
 
 import styles from "./DataObfuscationPage.module.scss";
 import {
+  data,
   // data,
   getObfuscationColumns,
   getRuleColumns,
@@ -45,15 +45,6 @@ const DataObfuscationPage = () => {
   const editRule = (row: ObfuscationRuleType) => {
     console.log({ row });
   };
-
-  const columnActions: TableActionPropType<ObfuscationRuleType> = {
-    edit: {
-      onClick: editRule,
-    },
-    delete: {
-      onClick: editRule,
-    },
-  };
   const onRuleClick = (row: DefaultRegexRuleType) => {
     setSelectedDefaultRule(row);
   };
@@ -61,11 +52,16 @@ const DataObfuscationPage = () => {
     setSelectedDefaultRule(null);
   };
   const ruleColumns = getRuleColumns({ onRuleClick });
-  const columns = getObfuscationColumns({ actions: columnActions });
+  const columns = getObfuscationColumns({
+    onEdit: editRule,
+    onUpdate: editRule,
+  });
   const renderTabContent = () => {
     switch (selectedTab) {
       case "custom":
-        return <TableX columns={columns} data={[]} noDataMessage="No data." />;
+        return (
+          <TableX columns={columns} data={data} noDataMessage="No data." />
+        );
       case "default":
         return <TableX columns={ruleColumns} data={DEFAULT_RULES} />;
     }

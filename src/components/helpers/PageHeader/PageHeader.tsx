@@ -42,6 +42,8 @@ const PageHeader = ({
     return false;
   };
 
+  console.log({ onRefresh }, "title");
+
   return (
     <div className={cx(styles.container)}>
       {htmlTitle && (
@@ -60,7 +62,14 @@ const PageHeader = ({
           <div className={styles["top-row-extras"]}>
             <div className={cx(styles["left-extras"])}>
               {showRange && <TimeSelector />}
-              {showRefresh && <ClusterRefreshButton onRefresh={onRefresh} />}
+              {showRefresh && (
+                <ClusterRefreshButton
+                  onRefresh={() => {
+                    console.log({ onRefresh });
+                    onRefresh?.();
+                  }}
+                />
+              )}
               {leftExtras &&
                 leftExtras.map((ex) => {
                   return ex;

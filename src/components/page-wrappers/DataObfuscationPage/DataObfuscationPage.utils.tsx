@@ -1,3 +1,4 @@
+import { Switch } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableActions from "components/helpers/TableActions";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
@@ -6,14 +7,16 @@ import {
   type ObfuscationRuleType,
 } from "utils/data/types";
 import { getFormattedTime } from "utils/dateHelpers";
-import { type TableActionPropType } from "utils/tables/types";
+import { type TableActionItem } from "utils/tables/types";
 
 import styles from "./DataObfuscationPage.module.scss";
 
 export const getObfuscationColumns = ({
-  actions,
+  onEdit,
+  onUpdate,
 }: {
-  actions: TableActionPropType<ObfuscationRuleType>;
+  onEdit: (row: ObfuscationRuleType) => void;
+  onUpdate: (row: ObfuscationRuleType) => void;
 }) => {
   const helper = createColumnHelper<ObfuscationRuleType>();
   const columns = [
@@ -40,12 +43,35 @@ export const getObfuscationColumns = ({
       id: "actions",
       size: DEFAULT_COL_WIDTH / 2,
       cell: (info) => {
-        return (
-          <TableActions<ObfuscationRuleType>
-            list={actions}
-            data={info.row.original}
-          />
-        );
+        const row = info.row.original;
+        const { enabled } = row;
+        const actions: TableActionItem[] = [
+          {
+            element: <span>Edit</span>,
+            onClick: () => {
+              onEdit(row);
+            },
+          },
+          {
+            element: (
+              <div className={styles["action-item"]}>
+                {enabled ? "Disable" : "Enable"}
+                <Switch
+                  defaultChecked={enabled}
+                  className={styles.switch}
+                  size="medium"
+                  onChange={() => {
+                    onUpdate(row);
+                  }}
+                />
+              </div>
+            ),
+            onClick: () => {
+              onUpdate(row);
+            },
+          },
+        ];
+        return <TableActions list={actions} loading={false} />;
       },
     }),
   ];

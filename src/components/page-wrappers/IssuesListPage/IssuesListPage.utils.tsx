@@ -1,6 +1,7 @@
 import { Tooltip } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
-import Link from "next/link";
+import TooltipX from "components/themeX/TooltipX";
+import ZkLink from "components/ZkLink";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { trimString } from "utils/functions";
@@ -8,7 +9,7 @@ import { getTitleFromIssue } from "utils/issues/functions";
 import { type TableSortOptions } from "utils/tables/types";
 import { type IssueDetail } from "utils/types";
 
-import styles from "./IssuesPage.module.scss";
+import styles from "./IssuesListPage.module.scss";
 
 const helper = createColumnHelper<IssueDetail>();
 
@@ -20,16 +21,12 @@ export const getIssueColumns = () => {
       cell: (info) => {
         const { issue_title, issue_hash, scenario_id, incidents } =
           info.row.original;
-        const title = trimString(getTitleFromIssue(issue_title), 100);
+        const title = getTitleFromIssue(issue_title);
+        const route = `/issues/detail?issue_id=${issue_hash}&latest=${incidents[0]}&scenario=${scenario_id}`;
         return (
-          <div className={styles["issue-container"]}>
-            <Link
-              href={`/issues/detail?issue_id=${issue_hash}&latest=${incidents[0]}&scenario=${scenario_id}`}
-              className={"hover-link"}
-            >
-              <span className={styles["issue-title-container"]}>{title}</span>
-            </Link>
-          </div>
+          <TooltipX title={title} disabled={title.length < 100}>
+            <ZkLink href={route}>{trimString(title, 100)}</ZkLink>
+          </TooltipX>
         );
       },
     }),
@@ -87,6 +84,3 @@ export const ISSUE_SORT_OPTIONS: TableSortOptions[] = [
     sort: "asc",
   },
 ];
-
-const Dummy = () => <span>hey</span>;
-export default Dummy;

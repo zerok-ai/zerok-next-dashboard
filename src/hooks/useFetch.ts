@@ -42,7 +42,9 @@ export const useFetch = <T>(
   };
 
   useEffect(() => {
-    if (url !== null && url !== undefined) fetchData(url);
+    if (url !== null && url !== undefined) {
+      fetchData(url);
+    }
   }, [url]);
 
   const resetInitialFetch = () => {

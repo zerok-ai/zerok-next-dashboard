@@ -15,19 +15,3 @@ export interface TableActionItem {
   onClick: () => void;
   element: ReactElement;
 }
-
-export type TableActionPropType<T> = {
-  [x in TableActionType]?: {
-    onClick: (data: T) => void;
-  };
-};
-
-export interface TableColumnItems<T> {
-  header: string;
-  columnType: "accessor" | "display";
-  accessor?: keyof T | null;
-  renderType?: "link" | "date";
-  size: number;
-  customClassName?: string;
-  customRender: (data: T) => ReactElement;
-};

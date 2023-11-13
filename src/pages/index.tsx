@@ -1,3 +1,3 @@
-import IssuesPage from "./issues/IssuesPage";
+import IssuesPage from "./issues";
 
 export default IssuesPage;
