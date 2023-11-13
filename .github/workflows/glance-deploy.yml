@@ -23,7 +23,7 @@ env:
   DOCKER_REG: ${{ vars.DOCKER_REG }}
   PROJECT_ID:  ${{ vars.PROJECT_ID }}
   DOCKER_REPO:  ${{ vars.DOCKER_REPO }}
-  APP_NAME:  ${{ vars.APP_NAME }}
+  APP_NAME:  "zerok-glance-dashboard"
   DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
   BUILD_AND_PUSH: true
   DEPLOY: true
