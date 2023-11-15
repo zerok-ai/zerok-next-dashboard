@@ -1,6 +1,5 @@
 @import "styles/variables.module.scss";
 .container {
-    width:1040px;
     :global(.MuiTabs-flexContainer) {
         border-bottom: 1px solid $grey-800;
     }
@@ -14,6 +13,7 @@
 
 .text {
     margin-bottom: $sp-xxxl;
+    width:1040px;
 }
 .tabs {
     padding: 0;
@@ -56,6 +56,18 @@
     margin:$sp-xxl 0;
     height:400px;
     overflow-y: auto;
+}
+
+.name-container {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-sm;
+}
+
+.disabled {
+    span {
+        color:$grey-400;
+    }
 }
 
 .rule-name {

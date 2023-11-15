@@ -15,6 +15,9 @@
     fieldset {
         display: flex; 
         flex-direction: column;
-        row-gap: $sp-md;
+        row-gap: $sp-sm;
+    }
+    p {
+        margin:0;
     }
 }
