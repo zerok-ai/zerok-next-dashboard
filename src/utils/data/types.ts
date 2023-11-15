@@ -1,6 +1,6 @@
 import { z } from "zod";
-
 export interface ObfuscationRuleType {
+  id: string;
   name: string;
   analyzer: {
     type: "regex";
@@ -23,6 +23,7 @@ export type ObfuscationTabType = "rules" | "whitelist" | "default" | "custom";
 export const RegexFormSchema = z.object({
   name: z.string().min(1, "Rule name cannot be empty"),
   pattern: z.string().min(1, "Pattern cannot be empty"),
+  replacement: z.string().min(1, "Replacement cannot be empty"),
 });
 export type RegexFormSchemaType = z.infer<typeof RegexFormSchema>;
 

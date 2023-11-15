@@ -7,7 +7,7 @@ import PageLayout from "components/layouts/PageLayout";
 import DrawerX from "components/themeX/DrawerX";
 import ModalX from "components/themeX/ModalX";
 import TableX from "components/themeX/TableX";
-import { useToggle } from "hooks/useToggle";
+import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useState } from "react";
@@ -16,16 +16,20 @@ import {
   DATA_OBFUSCATION_TABS,
   REGEX_DRAWER_WIDTH,
 } from "utils/data/constants";
+import {
+  LIST_OBFUSCATION_RULE_ENDPOINT,
+  UPDATE_OBFUSCATION_RULE_ENDPOINT,
+} from "utils/data/endpoint";
 import { DEFAULT_RULES } from "utils/data/piiRules";
 import {
   type DefaultRegexRuleType,
   type ObfuscationRuleType,
 } from "utils/data/types";
+import { dispatchSnackbar } from "utils/generic/functions";
+import raxios from "utils/raxios";
 
 import styles from "./DataObfuscationPage.module.scss";
 import {
-  data,
-  // data,
   getObfuscationColumns,
   getRuleColumns,
 } from "./DataObfuscationPage.utils";
@@ -34,16 +38,55 @@ const DataObfuscationPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>(
     DATA_OBFUSCATION_TABS[0].value
   );
-  const [regexDrawerOpen, toggleRegexDrawer] = useToggle(false);
+  const [drawerMode, setDrawerMode] = useState<"create" | "edit" | null>(null);
+  const [selectedRule, setSelectedRule] = useState<ObfuscationRuleType | null>(
+    null
+  );
   const [selectedDefaultRule, setSelectedDefaultRule] =
     useState<DefaultRegexRuleType | null>(null);
+
+  const {
+    data: rules,
+    fetchData: fetchRules,
+    error: rulesError,
+  } = useFetch<ObfuscationRuleType[]>(
+    "obfuscations",
+    LIST_OBFUSCATION_RULE_ENDPOINT
+  );
   // const [whitelistDrawerOpen, toggleWhitelistDrawer] = useToggle(false);
   const changeTab = (e: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
   };
 
   const editRule = (row: ObfuscationRuleType) => {
-    console.log({ row });
+    setSelectedRule(row);
+    setDrawerMode("edit");
+  };
+  const updateRuleStatus = async (row: ObfuscationRuleType) => {
+    const { id, enabled, name, analyzer, anonymizer } = row;
+    setSelectedRule(row);
+    try {
+      const endpoint = UPDATE_OBFUSCATION_RULE_ENDPOINT.replace(
+        "{obfuscation_id}",
+        id
+      );
+      const body = {
+        name,
+        analyzer,
+        anonymizer,
+        enabled: !enabled,
+      };
+      await raxios.put(endpoint, body);
+      dispatchSnackbar(
+        "success",
+        `Rule ${name} ${enabled ? "disabled" : "enabled"}`
+      );
+      fetchRules(LIST_OBFUSCATION_RULE_ENDPOINT);
+    } catch (err) {
+      dispatchSnackbar("error", "Could not update rule, please try again");
+    } finally {
+      setSelectedRule(null);
+    }
   };
   const onRuleClick = (row: DefaultRegexRuleType) => {
     setSelectedDefaultRule(row);
@@ -54,17 +97,41 @@ const DataObfuscationPage = () => {
   const ruleColumns = getRuleColumns({ onRuleClick });
   const columns = getObfuscationColumns({
     onEdit: editRule,
-    onUpdate: editRule,
+    onUpdate: updateRuleStatus,
+    selectedRule,
   });
   const renderTabContent = () => {
     switch (selectedTab) {
-      case "custom":
-        return (
-          <TableX columns={columns} data={data} noDataMessage="No data." />
-        );
+      case "custom": {
+        if (rulesError) {
+          return (
+            <p>Could not fetch rules, please try again or contact support.</p>
+          );
+        } else {
+          return (
+            <TableX
+              columns={columns}
+              data={rules ?? []}
+              noDataMessage="No data."
+            />
+          );
+        }
+      }
       case "default":
         return <TableX columns={ruleColumns} data={DEFAULT_RULES} />;
     }
+  };
+
+  const toggleCreateDrawer = () => {
+    if (drawerMode === "create") {
+      setDrawerMode(null);
+    } else setDrawerMode("create");
+  };
+
+  const closeDrawer = () => {
+    fetchRules(LIST_OBFUSCATION_RULE_ENDPOINT);
+    setDrawerMode(null);
+    setSelectedRule(null);
   };
 
   return (
@@ -87,7 +154,7 @@ const DataObfuscationPage = () => {
         <Button variant="contained" color="secondary">
           Whitelist
         </Button>
-        <Button variant="contained" onClick={toggleRegexDrawer}>
+        <Button variant="contained" onClick={toggleCreateDrawer}>
           <HiOutlinePlus className={styles["btn-icon"]} /> Create a new rule
         </Button>
       </div>
@@ -105,15 +172,17 @@ const DataObfuscationPage = () => {
       {/* Regex form */}
 
       <DrawerX
-        onClose={toggleRegexDrawer}
-        title="Create a new rule"
+        onClose={closeDrawer}
+        title={drawerMode === "edit" ? "Edit rule" : "Create a new rule"}
         width={REGEX_DRAWER_WIDTH}
-        open={regexDrawerOpen}
+        open={!!drawerMode}
       >
         <div className={styles["regex-form-container"]}>
           <RegexRuleForm
-            onFinish={toggleRegexDrawer}
-            onClose={toggleRegexDrawer}
+            onFinish={closeDrawer}
+            onClose={closeDrawer}
+            editMode={drawerMode === "edit"}
+            selectedRule={selectedRule}
           />
         </div>
       </DrawerX>
