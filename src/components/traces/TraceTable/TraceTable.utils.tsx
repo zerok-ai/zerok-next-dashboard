@@ -61,9 +61,6 @@ export const getTraceColumns = ({
     helper.accessor("incident_collection_time", {
       header: "TIMESTAMP",
       enableSorting: true,
-      // sortingFn: (a: string, b: string) => {
-      //   return dayjs(a).unix() - dayjs(b).unix();
-      // },
       size: DEFAULT_COL_WIDTH,
       cell: (info) => {
         return <span>{getFormattedTime(info.getValue())}</span>;

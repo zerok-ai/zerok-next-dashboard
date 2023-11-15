@@ -1,6 +1,6 @@
-import { Switch } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import cx from "classnames";
+import EnableDisableTableAction from "components/EnableDisableTableAction";
 import TableActions from "components/helpers/TableActions";
 import ChipX from "components/themeX/ChipX";
 import TooltipX from "components/themeX/TooltipX";
@@ -109,16 +109,7 @@ export const probeListColumns = ({
         if (row.scenario.scenario_type === "SYSTEM") return null;
         const actions: TableActionItem[] = [
           {
-            element: (
-              <div className={styles["action-item"]}>
-                <span>{isEnabled ? "Disable" : "Enable"}</span>
-                <Switch
-                  size="medium"
-                  defaultChecked={isEnabled}
-                  className={styles.switch}
-                />
-              </div>
-            ),
+            element: <EnableDisableTableAction isEnabled={isEnabled} />,
             onClick: () => {
               onUpdateProbeStatus(row);
             },

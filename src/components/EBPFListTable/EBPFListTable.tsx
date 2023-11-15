@@ -4,27 +4,21 @@ import dayjs from "dayjs";
 import { Fragment } from "react";
 import { useSelector } from "redux/store";
 import { type EBPFIntegrationListType } from "utils/integrations/types";
-import { type TableActionPropType } from "utils/tables/types";
 
 import styles from "./EBPFListTable.module.scss";
 import { getEBPFColumns } from "./EBPFListTable.utils";
 
 const EBPFListTable = () => {
   const { clusters } = useSelector((state) => state.cluster);
-  const disableEBPF = () => {
+  const disableEBPF = (row: EBPFIntegrationListType) => {
     console.log("disableEBPF");
   };
-  const columnActions: TableActionPropType<EBPFIntegrationListType> = {
-    disable: {
-      onClick: disableEBPF,
-    },
-  };
-  const columns = getEBPFColumns({ actions: columnActions });
+  const columns = getEBPFColumns({ onUpdate: disableEBPF });
   const data: EBPFIntegrationListType[] = clusters.map((cl) => {
     return {
       name: cl.name,
       created_at: dayjs().toString(),
-      created_by: "thalapathy vijay",
+      created_by: "ZeroK user",
       updated_at: dayjs().toString(),
       enabled: true,
     };

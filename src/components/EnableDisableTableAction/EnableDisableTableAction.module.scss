@@ -1,0 +1,12 @@
+@import "styles/variables.module.scss";
+.action-item {
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: $sp-md;
+}
+
+.switch {
+    margin:0;
+}

@@ -1,13 +1,12 @@
 import { LoadingButton } from "@mui/lab";
-// import { Button } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import PageHeader from "components/helpers/PageHeader";
+import TableTimeCell from "components/TableTimeCell";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
 import { useEffect } from "react";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
-import { getFormattedTime } from "utils/dateHelpers";
 import { BRAND_LOGOS } from "utils/images";
 import {
   DISABLE_SLACK_WORKSPACE_ENDPOINT,
@@ -77,28 +76,12 @@ const SlackIntegration = () => {
     helper.accessor("created_at", {
       header: "Created",
       size: DEFAULT_COL_WIDTH * 2,
-      cell: (cell) => {
-        return (
-          <span>
-            {getFormattedTime(
-              cell.row.original.created_at ?? Date.now().toString()
-            )}
-          </span>
-        );
-      },
+      cell: (cell) => <TableTimeCell time={cell.getValue() ?? Date.now()} />,
     }),
     helper.accessor("updated_at", {
       header: "Updated",
       size: DEFAULT_COL_WIDTH * 2,
-      cell: (cell) => {
-        return (
-          <span>
-            {getFormattedTime(
-              cell.row.original.updated_at ?? Date.now().toString()
-            )}
-          </span>
-        );
-      },
+      cell: (cell) => <TableTimeCell time={cell.getValue() ?? Date.now()} />,
     }),
     helper.display({
       id: "actions",
@@ -137,10 +120,6 @@ const SlackIntegration = () => {
             {/* Title */}
             <h4>Workspaces</h4>
           </div>
-          {/* <Button variant="contained" color="secondary" size="medium">
-            {" "}
-            Integration Guide
-          </Button> */}
         </div>
         {/* content */}
         <div className={styles.content}>
