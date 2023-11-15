@@ -47,16 +47,8 @@
     justify-content:center;
 }
 
-
-
-.action-item {
-    width:100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    column-gap: $sp-md;
-}
-
-.switch {
-    margin:0;
+.disabled {
+    span,p,div {
+        color:$grey-400;
+    }
 }

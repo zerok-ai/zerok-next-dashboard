@@ -1,10 +1,10 @@
-import { LoadingButton } from "@mui/lab";
-import { Button, Chip, IconButton } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 // custom
 import InviteUserForm from "components/forms/InviteUserForm";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
+import TableActions from "components/helpers/TableActions";
 import PageLayout from "components/layouts/PageLayout";
 import DialogX from "components/themeX/DialogX";
 import ModalX from "components/themeX/ModalX";
@@ -12,20 +12,20 @@ import TableX from "components/themeX/TableX";
 import UserProfilePicture from "components/users/UserProfilePicture";
 // hooks
 import { useFetch } from "hooks/useFetch";
-import useStatus from "hooks/useStatus";
 import { useTrigger } from "hooks/useTrigger";
 // next
 import Head from "next/head";
 // react
 import { useEffect, useState } from "react";
 // react-icons
-import { AiOutlineDelete, AiOutlineUserAdd } from "react-icons/ai";
-import { showSnackbar } from "redux/snackbar";
-import { useDispatch } from "redux/store";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { DEFAULT_COL_WIDTH } from "utils/constants";
 // utils
 import { GET_USERS_ENDPOINT, INVITE_USER_ENDPOINT } from "utils/endpoints";
+import { dispatchSnackbar } from "utils/generic/functions";
 import raxios from "utils/raxios";
 import { sendError } from "utils/sentry";
+import { type TableActionItem } from "utils/tables/types";
 // types
 import { type UserDetail } from "utils/types";
 
@@ -45,8 +45,6 @@ const Users = () => {
 
   const { trigger, changeTrigger } = useTrigger();
 
-  const dispatch = useDispatch();
-
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<null | UserDetail>(null);
   const [invitingUser, setInvitingUser] = useState<null | UserDetail>(null);
@@ -55,8 +53,6 @@ const Users = () => {
   };
   const colHelper = createColumnHelper<UserDetail>();
 
-  const { setStatus } = useStatus();
-
   useEffect(() => {
     fetchData(GET_USERS_ENDPOINT);
   }, [trigger]);
@@ -64,27 +60,12 @@ const Users = () => {
   const deleteUser = async () => {
     const endpoint = GET_USERS_ENDPOINT + `/${deletingUser!.id}`;
     try {
-      setStatus({ loading: true, error: null });
       await raxios.delete(endpoint);
       clearDeletingUser();
       fetchData(GET_USERS_ENDPOINT);
-      dispatch(
-        showSnackbar({
-          message: "Deleted user successfully",
-          type: "success",
-        })
-      );
+      dispatchSnackbar("success", "Deleted user successfully");
     } catch (err) {
-      setStatus({
-        loading: false,
-        error: "Could not delete user, please try again",
-      });
-      dispatch(
-        showSnackbar({
-          message: "Could not delete user",
-          type: "error",
-        })
-      );
+      dispatchSnackbar("error", "Could not delete user");
     } finally {
       clearDeletingUser();
     }
@@ -102,23 +83,12 @@ const Users = () => {
         familyName: lastName,
         email,
       });
-      dispatch(
-        showSnackbar({
-          message: "User invite sent successfully",
-          type: "success",
-        })
-      );
+      dispatchSnackbar("success", "User invite sent successfully");
     } catch (err) {
       sendError(err);
-      dispatch(
-        showSnackbar({
-          message: "Could not send user invite",
-          type: "error",
-        })
-      );
+      dispatchSnackbar("error", "Could not send user invite");
     } finally {
       setInvitingUser(null);
-      setStatus((old) => ({ ...old, loading: false }));
     }
   };
 
@@ -129,6 +99,7 @@ const Users = () => {
   const columns = [
     colHelper.accessor("name", {
       header: "Member",
+      size: DEFAULT_COL_WIDTH * 5,
       cell: (info) => {
         const type = info.getValue().trim();
         return (
@@ -169,38 +140,28 @@ const Users = () => {
         );
       },
     }),
-    colHelper.accessor("id", {
-      header: "Actions",
+    colHelper.display({
+      id: "actions",
+      size: DEFAULT_COL_WIDTH / 3,
       cell: (info) => {
-        const isAdmin = info.row.original.email.includes("admin");
-        return (
-          <div className={styles["actions-container"]}>
-            <LoadingButton
-              variant="contained"
-              size="small"
-              color="secondary"
-              onClick={async () => {
-                await inviteUser(info.row.original);
-              }}
-              className={styles["resend-button"]}
-              loading={invitingUser?.id === info.row.original.id}
-            >
-              Resend Invite
-            </LoadingButton>
-            {!isAdmin && (
-              <IconButton
-                onClick={() => {
-                  setDeletingUser(info.row.original);
-                }}
-                color="secondary"
-                className={styles["delete-button"]}
-                // size="small"
-              >
-                <AiOutlineDelete />
-              </IconButton>
-            )}
-          </div>
-        );
+        const actions: TableActionItem[] = [
+          {
+            element: <span>Resend Invite</span>,
+            onClick: () => {
+              inviteUser(info.row.original);
+            },
+          },
+          {
+            element: <span>Delete User</span>,
+            onClick: () => {
+              setDeletingUser(info.row.original);
+            },
+          },
+        ];
+        const loading =
+          deletingUser === info.row.original ||
+          invitingUser === info.row.original;
+        return <TableActions list={actions} loading={loading} />;
       },
     }),
   ];

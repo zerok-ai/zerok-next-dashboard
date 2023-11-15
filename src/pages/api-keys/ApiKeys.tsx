@@ -1,11 +1,10 @@
 import { LoadingButton } from "@mui/lab";
-import { IconButton } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
-import cx from "classnames";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import CodeBlock from "components/helpers/CodeBlock";
 import PageHeader from "components/helpers/PageHeader";
 import PrivateRoute from "components/helpers/PrivateRoute";
+import TableActions from "components/helpers/TableActions";
 import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
 import PageLayout from "components/layouts/PageLayout";
 import DialogX from "components/themeX/DialogX";
@@ -16,16 +15,16 @@ import { useTrigger } from "hooks/useTrigger";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
-import { HiOutlineKey, HiOutlineTrash } from "react-icons/hi2";
-import { showSnackbar } from "redux/snackbar";
-import { useDispatch } from "redux/store";
+import { HiOutlineKey } from "react-icons/hi2";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   APIKEY_CREATE_ENDPOINT,
   APIKEY_ID_ENDPOINT,
   APIKEYS_ENDPOINT,
 } from "utils/endpoints";
+import { dispatchSnackbar } from "utils/generic/functions";
 import raxios from "utils/raxios";
+import { type TableActionItem } from "utils/tables/types";
 import { type ApiKeyDetail } from "utils/types";
 
 import styles from "./ApiKeys.module.scss";
@@ -51,7 +50,6 @@ const ApiKeys = () => {
     APIKEYS_ENDPOINT,
     addToggle
   );
-  const dispatch = useDispatch();
   const { trigger, changeTrigger } = useTrigger();
 
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
@@ -79,6 +77,7 @@ const ApiKeys = () => {
         })
       );
     } catch (err) {
+      dispatchSnackbar("error", "Could not fetch API key");
       // @TODO - error handling
     }
   };
@@ -89,20 +88,10 @@ const ApiKeys = () => {
         APIKEY_ID_ENDPOINT.replace("{id}", deletingKey as string)
       );
       setDeletingKey(null);
-      dispatch(
-        showSnackbar({
-          message: "API key deleted successfully",
-          type: "success",
-        })
-      );
+      dispatchSnackbar("success", "API key deleted successfully");
       fetchData(APIKEYS_ENDPOINT);
     } catch (err) {
-      dispatch(
-        showSnackbar({
-          message: "Could not delete API key",
-          type: "error",
-        })
-      );
+      dispatchSnackbar("error", "Could not delete API key");
       // @TODO - error handling
     }
   };
@@ -112,19 +101,9 @@ const ApiKeys = () => {
     try {
       await raxios.get(APIKEY_CREATE_ENDPOINT);
       fetchData(APIKEYS_ENDPOINT);
-      dispatch(
-        showSnackbar({
-          message: "API key created successfully",
-          type: "success",
-        })
-      );
+      dispatchSnackbar("success", "API key created successfully");
     } catch (err) {
-      dispatch(
-        showSnackbar({
-          message: "Could not create API key",
-          type: "error",
-        })
-      );
+      dispatchSnackbar("error", "Could not create API key");
     } finally {
       setCreateLoading(false);
     }
@@ -140,54 +119,56 @@ const ApiKeys = () => {
     return [
       colHelper.accessor("id", {
         header: "ID",
-        size: DEFAULT_COL_WIDTH * 3,
+        size: DEFAULT_COL_WIDTH * 2,
       }),
       colHelper.accessor("key", {
         header: "API Key",
         size: DEFAULT_COL_WIDTH * 3,
         cell: (info) => {
+          const row = info.row.original;
           const key = info.getValue();
+          const { visible, id } = row;
           return (
-            <CodeBlock
-              allowCopy={key !== null}
-              code={key && info.row.original.visible ? key : "*".repeat(16)}
-              copyText={key as string}
-              color="light"
-            />
-          );
-        },
-      }),
-      colHelper.accessor("visible", {
-        header: "Actions",
-        size: DEFAULT_COL_WIDTH * 1,
-        cell: (info) => {
-          const isVisible = info.getValue();
-          const keyId = info.row.original.id;
-          return (
-            <div className={cx(styles["api-icons-container"])}>
+            <div className={styles["key-code-container"]}>
+              <CodeBlock
+                allowCopy={key !== null}
+                code={key && visible ? key : "*".repeat(16)}
+                copyText={key as string}
+                color="light"
+              />
               <VisibilityToggleButton
-                isVisibleDefault={isVisible}
+                isVisibleDefault={visible}
                 name="toggle API key visibility"
+                customClassName={styles["visibility-toggle"]}
                 onChange={(vis: boolean) => {
-                  getApiKeyFromId(keyId, vis);
+                  getApiKeyFromId(id, vis);
                 }}
               />
-              <IconButton
-                onClick={() => {
-                  setDeletingKey(keyId);
-                }}
-                className={styles["delete-button"]}
-              >
-                <HiOutlineTrash />
-              </IconButton>
             </div>
           );
         },
       }),
       colHelper.accessor("createdAtMs", {
-        header: "Created At",
+        header: "Created at",
+        size: DEFAULT_COL_WIDTH * 1.2,
         cell: (info) => {
           return dayjs(info.getValue()).format("dddd, DD MMM YYYY HH:mm:ss A");
+        },
+      }),
+      colHelper.display({
+        id: "actions",
+        size: DEFAULT_COL_WIDTH / 3,
+        cell: (info) => {
+          const row = info.row.original;
+          const actions: TableActionItem[] = [
+            {
+              element: <span>Delete</span>,
+              onClick: () => {
+                setDeletingKey(row.id);
+              },
+            },
+          ];
+          return <TableActions list={actions} loading={false} />;
         },
       }),
     ];

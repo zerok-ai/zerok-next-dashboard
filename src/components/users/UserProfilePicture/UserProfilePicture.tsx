@@ -8,6 +8,7 @@ const UserProfilePicture = ({ name }: UserProfilePictureProps) => {
   const displayString = name.trim()
     ? name
         .split(" ")
+        .slice(0, 2)
         .map((word) => {
           if (!word) return "";
           return word[0].toLocaleUpperCase();

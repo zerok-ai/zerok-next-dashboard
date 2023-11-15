@@ -22,3 +22,17 @@
   @include remove-icon-btn-styles;
   color: $grey-500;
 }
+
+.key-code-container {
+  display: grid;
+  align-items: center;
+  column-gap: $sp-lg;
+  grid-template-columns: 9.5fr 0.5fr;
+}
+
+.visibility-toggle {
+  color:$grey-400;
+  &:hover {
+    background-color: $grey-925;
+  }
+}

@@ -1,9 +1,8 @@
-import { Tooltip } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
+import TableTimeCell from "components/TableTimeCell";
 import TooltipX from "components/themeX/TooltipX";
 import ZkLink from "components/ZkLink";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
-import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
 import { trimString } from "utils/functions";
 import { getTitleFromIssue } from "utils/issues/functions";
 import { type TableSortOptions } from "utils/tables/types";
@@ -44,30 +43,12 @@ export const getIssueColumns = () => {
     helper.accessor("last_seen", {
       header: "Last collected",
       size: DEFAULT_COL_WIDTH * 2.4,
-      cell: (info) => {
-        const { last_seen } = info.row.original;
-        return (
-          <div className={styles["issue-time-container"]}>
-            <Tooltip title={getFormattedTime(last_seen)} placement="top" arrow>
-              <span>{last_seen ? getRelativeTime(last_seen) : "Never"}</span>
-            </Tooltip>
-          </div>
-        );
-      },
+      cell: (info) => <TableTimeCell time={info.getValue()} />,
     }),
     helper.accessor("first_seen", {
       header: "First collected",
       size: DEFAULT_COL_WIDTH * 1.5,
-      cell: (info) => {
-        const { first_seen } = info.row.original;
-        return (
-          <div className={styles["issue-time-container"]}>
-            <Tooltip title={getFormattedTime(first_seen)} placement="top" arrow>
-              <span>{first_seen ? getRelativeTime(first_seen) : "Never"}</span>
-            </Tooltip>
-          </div>
-        );
-      },
+      cell: (info) => <TableTimeCell time={info.getValue()} />,
     }),
   ];
 };

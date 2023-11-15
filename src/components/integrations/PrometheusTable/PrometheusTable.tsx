@@ -1,30 +1,26 @@
-import { IconButton, Skeleton, Switch } from "@mui/material";
-import { type ColumnSort, createColumnHelper } from "@tanstack/react-table";
+import { type ColumnSort } from "@tanstack/react-table";
 import AddNewBtn from "components/helpers/AddNewBtn";
 import PageHeader from "components/helpers/PageHeader";
 import TableFilter from "components/helpers/TableFilter";
-import ChipX from "components/themeX/ChipX";
-import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
-import TooltipX from "components/themeX/TooltipX";
+import ZkLink from "components/ZkLink";
 import { useFetch } from "hooks/useFetch";
 import { useTrigger } from "hooks/useTrigger";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { HiOutlineTrash, HiWrenchScrewdriver } from "react-icons/hi2";
 import { clusterSelector } from "redux/cluster";
-import { showSnackbar } from "redux/snackbar";
-import { useDispatch, useSelector } from "redux/store";
-import { DEFAULT_COL_WIDTH } from "utils/constants";
-import { getFormattedTime, getRelativeTime } from "utils/dateHelpers";
+import { useSelector } from "redux/store";
+import { dispatchSnackbar } from "utils/generic/functions";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import { type PrometheusListType } from "utils/integrations/types";
 import raxios from "utils/raxios";
 import { sendError } from "utils/sentry";
 
 import styles from "./PrometheusTable.module.scss";
-import { PROM_SORT_OPTIONS } from "./PrometheusTable.utils";
+import {
+  getPromColumns,
+  PROM_SORT_OPTIONS,
+  PromDeleteDialog,
+} from "./PrometheusTable.utils";
 
 const DEFAULT_SORT = {
   id: PROM_SORT_OPTIONS[0].value.split(":")[0],
@@ -39,11 +35,8 @@ const PrometheusTable = () => {
   const { trigger, changeTrigger } = useTrigger();
   const [selectedIntegration, setSelectedIntegration] = useState<{
     id: string;
-    action: "disable" | "delete";
+    action: "update" | "delete" | "deleting";
   } | null>(null);
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { name } = router.query;
 
   const getData = () => {
     setData(null);
@@ -64,128 +57,12 @@ const PrometheusTable = () => {
       setSelectedIntegration(null);
     }
   }, [selectedCluster, trigger, error]);
-  const helper = createColumnHelper<PrometheusListType>();
-  const columns = [
-    helper.accessor("alias", {
-      header: "Name",
-      size: DEFAULT_COL_WIDTH * 3,
-      cell: (cell) => {
-        if (cell.row.original.id === selectedIntegration?.id) {
-          return <Skeleton variant="text" width={"100%"} />;
-        }
-        return (
-          <Link
-            href={`/integrations/prometheus/edit?id=${cell.row.original.id}`}
-          >
-            <span className={styles["int-title"]}>
-              {cell.getValue()}
-              {cell.row.original.disabled && <ChipX label="Disabled" />}
-            </span>
-          </Link>
-        );
-      },
-    }),
-    helper.accessor("url", {
-      header: "Host",
-      size: DEFAULT_COL_WIDTH * 6,
-      cell: (cell) => {
-        if (cell.row.original.id === selectedIntegration?.id) {
-          return <Skeleton variant="text" width={"100%"} />;
-        }
-        return <span>{cell.getValue()}</span>;
-      },
-    }),
-    helper.accessor("level", {
-      header: "Level",
-      size: DEFAULT_COL_WIDTH,
-      cell: (cell) => {
-        if (cell.row.original.id === selectedIntegration?.id) {
-          return <Skeleton variant="text" width={"100%"} />;
-        }
-        return <ChipX label={cell.getValue()} />;
-      },
-    }),
-    helper.accessor("created_at", {
-      header: "Created",
-      cell: (cell) => {
-        if (cell.row.original.id === selectedIntegration?.id) {
-          return <Skeleton variant="text" width={"100%"} />;
-        }
-        return (
-          <TooltipX title={getFormattedTime(cell.getValue())}>
-            <span>{getRelativeTime(cell.getValue())}</span>
-          </TooltipX>
-        );
-      },
-    }),
-    helper.accessor("updated_at", {
-      header: "Updated",
-      cell: (cell) => {
-        if (cell.row.original.id === selectedIntegration?.id) {
-          return <Skeleton variant="text" width={"100%"} />;
-        }
-        return (
-          <TooltipX title={getFormattedTime(cell.getValue())}>
-            <span>{getRelativeTime(cell.getValue())}</span>
-          </TooltipX>
-        );
-      },
-    }),
-    helper.display({
-      header: "Actions",
-      cell: (row) => {
-        if (row.row.original.id === selectedIntegration?.id) {
-          return <Skeleton width="100%" />;
-        }
-        return (
-          <div className={styles.actions}>
-            <TooltipX
-              title={`${
-                row.row.original.disabled ? "Enable" : "Disable"
-              } Integration`}
-            >
-              <Switch
-                checked={!row.row.original.disabled}
-                size="small"
-                className={styles["action-switch"]}
-                onChange={(e, checked) => {
-                  handleSwitch(row.row.original.id, checked);
-                }}
-              />
-            </TooltipX>
-            <TooltipX title="Edit integration">
-              <Link
-                href={`/integrations/${name as string}/edit?id=${
-                  row.row.original.id
-                }`}
-              >
-                <IconButton size="small">
-                  <HiWrenchScrewdriver className={styles["action-icon"]} />
-                </IconButton>
-              </Link>
-            </TooltipX>
-            <TooltipX title="Delete integration">
-              <IconButton
-                size="small"
-                onClick={() => {
-                  setSelectedIntegration({
-                    id: row.row.original.id,
-                    action: "delete",
-                  });
-                }}
-              >
-                <HiOutlineTrash className={styles["action-icon"]} />
-              </IconButton>
-            </TooltipX>
-          </div>
-        );
-      },
-    }),
-  ];
-  const handleSwitch = async (id: string, enabled: boolean) => {
+
+  const handleUpdate = async (row: PrometheusListType) => {
+    const { id, disabled } = row;
     setSelectedIntegration({
       id,
-      action: "disable",
+      action: "update",
     });
     const integ = data!.find((i) => i.id === id);
     try {
@@ -196,32 +73,29 @@ const PrometheusTable = () => {
         ),
         {
           ...integ,
-          disabled: !enabled,
+          disabled: !disabled,
         }
       );
       getData();
-      dispatch(
-        showSnackbar({
-          message: `Data source ${
-            enabled ? "enabled" : "disabled"
-          } successfully`,
-          type: "success",
-        })
+      dispatchSnackbar(
+        "success",
+        `Data source ${disabled ? "enabled" : "disabled"} successfully`
       );
     } catch (err) {
       sendError(err);
-      dispatch(
-        showSnackbar({
-          message: `Failed to update status`,
-          type: "error",
-        })
-      );
+      dispatchSnackbar("error", "Failed to update status");
     } finally {
       setSelectedIntegration(null);
     }
   };
   const handleDelete = async () => {
-    if (!selectedIntegration || selectedIntegration.action !== "delete") return;
+    if (!selectedIntegration || selectedIntegration.action !== "delete") {
+      return;
+    }
+    setSelectedIntegration({
+      id: selectedIntegration.id,
+      action: "deleting",
+    });
     const integ = data!.find((i) => i.id === selectedIntegration.id);
     try {
       await raxios.post(
@@ -235,26 +109,29 @@ const PrometheusTable = () => {
         }
       );
       getData();
-      dispatch(
-        showSnackbar({
-          message: `Data source deleted successfully`,
-          type: "success",
-        })
-      );
+      dispatchSnackbar("success", "Data source deleted successfully");
     } catch (err) {
-      dispatch(
-        showSnackbar({
-          message: `Could not delete data source`,
-          type: "error",
-        })
-      );
+      sendError(err);
+      dispatchSnackbar("error", "Failed to delete data source");
     } finally {
       setSelectedIntegration(null);
     }
   };
-  const handleNewClick = () => {
-    router.push("/integrations/prometheus/create");
+  const clearSelectedIntegration = () => {
+    setSelectedIntegration(null);
   };
+
+  const columns = getPromColumns({
+    onUpdate: handleUpdate,
+    onDelete: (row) => {
+      setSelectedIntegration({
+        id: row.id,
+        action: "delete",
+      });
+    },
+    selectedIntegration: selectedIntegration?.id ?? null,
+  });
+
   return (
     <div>
       <PageHeader
@@ -275,32 +152,16 @@ const PrometheusTable = () => {
           />,
         ]}
         rightExtras={[
-          <AddNewBtn
-            text="Add new data source"
-            key="prom-new"
-            onClick={handleNewClick}
-          />,
+          <ZkLink href="/integrations/prometheus/create" key="new-prom">
+            <AddNewBtn text="Add new data source" key="prom-new" />
+          </ZkLink>,
         ]}
       />
       {selectedIntegration?.action === "delete" && (
-        <DialogX
-          isOpen={
-            !!selectedIntegration && selectedIntegration.action === "delete"
-          }
-          title="Delete Probe"
-          successText="Delete"
-          cancelText="Cancel"
-          onClose={() => {
-            setSelectedIntegration(null);
-          }}
+        <PromDeleteDialog
+          onClose={clearSelectedIntegration}
           onSuccess={handleDelete}
-          onCancel={() => {
-            setSelectedIntegration(null);
-          }}
-        >
-          <span>Are you sure you want to delete this integration?</span> <br />
-          <em>This action cannot be undone.</em>
-        </DialogX>
+        />
       )}
       <div className={styles.table}>
         <TableX
