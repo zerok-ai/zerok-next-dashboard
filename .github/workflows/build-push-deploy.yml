@@ -36,11 +36,11 @@ jobs:
       GIT_TAG: ${{ github.ref }}
       DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
   
-  get-flag-id:
+  get-flagsmith-id:
       needs: init
       runs-on: zk-self-hosted
       outputs:
-        FLAG_ID: ${{ steps.extractFlagId.outputs.FLAG_ID }}
+        FLAGSMITH_ID: ${{ steps.extractFlagId.outputs.FLAGSMITH_ID }}
       env:
         CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       environment:
@@ -51,19 +51,19 @@ jobs:
           run: |
             CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
             echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
-            FLAG_ID=${CLUSTERNAME_CAPITAL}_FLAG_ID
-            echo FLAG_ID=$FLAG_ID >> $GITHUB_OUTPUT
-            echo "FLAG_ID set in this step: $FLAG_ID"  # Debugging line
-            echo "$FLAG_ID"
+            FLAGSMITH_ID=${CLUSTERNAME_CAPITAL}_FLAGSMITH_ID
+            echo FLAGSMITH_ID=$FLAGSMITH_ID >> $GITHUB_OUTPUT
+            echo "FLAGSMITH_ID set in this step: $FLAGSMITH_ID"  # Debugging line
+            echo "$FLAGSMITH_ID"
   ##############
   print-envs:
-    needs: [init, get-flag-id]
+    needs: [init, get-flagsmith-id]
     runs-on: zk-self-hosted
     env:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      FLAG_ID: ${{ needs.get-flag-id.outputs.FLAG_ID }}
+      FLAGSMITH_ID: ${{ needs.get-flag-id.outputs.FLAGSMITH_ID }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -77,7 +77,7 @@ jobs:
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "DOMAIN_NAME=$DOMAIN_NAME"
-          echo "FLAG_ID=$FLAG_ID"
+          echo "FLAGSMITH_ID=$FLAGSMITH_ID"
 
   ##############
   build-and-push:
@@ -88,10 +88,10 @@ jobs:
       DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
       MAKE_TARGET: "default"
-      FLAG_ID_VAR: ${{ needs.get-flag-id.outputs.FLAG_ID }}
+      FLAGSMITH_ID_VAR: ${{ needs.get-flag-id.outputs.FLAGSMITH_ID }}
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
-    needs: [init, get-flag-id]
+    needs: [init, get-flagsmith-id]
 
   deploy:
     uses: zerok-ai/zk-git-actions/.github/workflows/zk-deploy.yml@main
@@ -104,4 +104,4 @@ jobs:
       HELM_ARGS: "--recreate-pods"
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
-    needs: [init, get-flag-id, build-and-push]
+    needs: [init, get-flagsmith-id, build-and-push]
