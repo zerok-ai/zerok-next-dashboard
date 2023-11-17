@@ -81,7 +81,7 @@ jobs:
 
   ##############
   build-and-push:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@feature-flag-action
+    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@main
     with:
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
