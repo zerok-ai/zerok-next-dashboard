@@ -1,5 +1,5 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
-import ZkLink from "components/ZkLink";
+import ZkLink from "components/themeX/ZkLink";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";

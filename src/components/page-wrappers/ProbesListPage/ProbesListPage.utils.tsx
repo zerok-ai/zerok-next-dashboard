@@ -4,7 +4,7 @@ import EnableDisableTableAction from "components/EnableDisableTableAction";
 import TableActions from "components/helpers/TableActions";
 import ChipX from "components/themeX/ChipX";
 import TooltipX from "components/themeX/TooltipX";
-import ZkLink from "components/ZkLink";
+import ZkLink from "components/themeX/ZkLink";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import {
   getFormattedTimeFromEpoc,

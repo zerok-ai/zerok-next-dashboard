@@ -4,7 +4,7 @@ import TableActions from "components/helpers/TableActions";
 import TableTimeCell from "components/TableTimeCell";
 import ChipX from "components/themeX/ChipX";
 import DialogX from "components/themeX/DialogX";
-import ZkLink from "components/ZkLink";
+import ZkLink from "components/themeX/ZkLink";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { type PrometheusListType } from "utils/integrations/types";
 import {

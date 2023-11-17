@@ -1,10 +1,10 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
-import EBPFListTable from "components/EBPFListTable";
 import PrivateRoute from "components/helpers/PrivateRoute";
+import EBPFListTable from "components/integrations/EBPFListTable";
+import OTelListTable from "components/integrations/OTelListTable";
 import PrometheusTable from "components/integrations/PrometheusTable";
 import SlackIntegration from "components/integrations/SlackIntegration";
 import PageLayout from "components/layouts/PageLayout";
-import OTelListTable from "components/OTelListTable";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { type GenericObject } from "utils/types";

@@ -1,7 +1,7 @@
 import { MenuItem, Modal, Select, Tab, Tabs } from "@mui/material";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import ExpandIcon from "components/helpers/ExpandIcon";
-import ZkLink from "components/ZkLink";
+import ZkLink from "components/themeX/ZkLink";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { nanoid } from "nanoid";
