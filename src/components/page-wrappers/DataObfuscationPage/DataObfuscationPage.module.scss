@@ -44,6 +44,13 @@
 
 .tab-content {
     margin-top: $sp-xxl;
+    min-height: 450px;
+}
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .regex-form-container {

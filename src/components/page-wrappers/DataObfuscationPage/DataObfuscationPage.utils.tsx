@@ -54,14 +54,10 @@ export const getObfuscationColumns = ({
       header: "Pattern",
       size: DEFAULT_COL_WIDTH * 4,
     }),
-    helper.accessor("created_by", {
-      header: "Created by",
-      size: DEFAULT_COL_WIDTH * 1.2,
-    }),
     helper.accessor("updated_at", {
       header: "Last updated",
       size: DEFAULT_COL_WIDTH * 1.2,
-      cell: (info) => <TableTimeCell time={info.getValue()} />,
+      cell: (info) => <TableTimeCell time={info.getValue()} epoch />,
     }),
     helper.display({
       id: "actions",
