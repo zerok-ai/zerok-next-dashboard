@@ -17,6 +17,11 @@ export interface ObfuscationRuleType {
   enabled: boolean;
 }
 
+export interface ObfuscationRuleResponseType {
+  total_rows: number;
+  obfuscations: ObfuscationRuleType[];
+}
+
 export type ObfuscationTabType = "rules" | "whitelist" | "default" | "custom";
 
 export const RegexFormSchema = z.object({
