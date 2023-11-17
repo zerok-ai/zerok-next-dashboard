@@ -42,6 +42,8 @@ const IssuesPage = () => {
     setData,
   } = useFetch<IssuesDataType>("", null);
 
+  const [totalItems, setTotalItems] = useState<number | null>(0);
+
   const router = useRouter();
 
   const { query } = router;
@@ -71,6 +73,12 @@ const IssuesPage = () => {
       getIssues();
     }
   }, [selectedCluster, router.query]);
+
+  useEffect(() => {
+    if (data) {
+      setTotalItems(data.total_records);
+    }
+  }, [data]);
 
   // @TODO - add types for filters here
   // const services =
@@ -150,14 +158,13 @@ const IssuesPage = () => {
             />
           )}
         </div>
-        {data?.issues && (
-          <footer className={styles["pagination-container"]}>
-            <PaginationX
-              totalItems={data.total_records}
-              itemsPerPage={ISSUES_PAGE_SIZE}
-            />
-          </footer>
-        )}
+
+        <footer className={styles["pagination-container"]}>
+          <PaginationX
+            totalItems={totalItems ?? 0}
+            itemsPerPage={ISSUES_PAGE_SIZE}
+          />
+        </footer>
       </ValidClusterWrapper>
     </Fragment>
   );

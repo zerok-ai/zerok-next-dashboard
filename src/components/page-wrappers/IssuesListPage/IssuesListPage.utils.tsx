@@ -16,7 +16,7 @@ export const getIssueColumns = () => {
   return [
     helper.accessor("issue_title", {
       header: "Issue",
-      size: DEFAULT_COL_WIDTH * 8,
+      size: DEFAULT_COL_WIDTH * 6,
       cell: (info) => {
         const { issue_title, issue_hash, scenario_id, incidents } =
           info.row.original;
@@ -42,12 +42,12 @@ export const getIssueColumns = () => {
     }),
     helper.accessor("last_seen", {
       header: "Last collected",
-      size: DEFAULT_COL_WIDTH * 2.4,
+      size: DEFAULT_COL_WIDTH * 1.2,
       cell: (info) => <TableTimeCell time={info.getValue()} />,
     }),
     helper.accessor("first_seen", {
       header: "First collected",
-      size: DEFAULT_COL_WIDTH * 1.5,
+      size: DEFAULT_COL_WIDTH * 1.2,
       cell: (info) => <TableTimeCell time={info.getValue()} />,
     }),
   ];
