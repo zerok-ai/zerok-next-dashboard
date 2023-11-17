@@ -3,7 +3,7 @@ import AddNewBtn from "components/helpers/AddNewBtn";
 import PageHeader from "components/helpers/PageHeader";
 import TableFilter from "components/helpers/TableFilter";
 import TableX from "components/themeX/TableX";
-import ZkLink from "components/ZkLink";
+import ZkLink from "components/themeX/ZkLink";
 import { useFetch } from "hooks/useFetch";
 import { useTrigger } from "hooks/useTrigger";
 import { useEffect, useState } from "react";

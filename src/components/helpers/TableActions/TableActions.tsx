@@ -1,6 +1,6 @@
 import { Menu, MenuItem } from "@mui/material";
 import cx from "classnames";
-import ZkSpinner from "components/ZkTableSpinner";
+import ZkSpinner from "components/themeX/ZkTableSpinner";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { HiEllipsisVertical } from "react-icons/hi2";

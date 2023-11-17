@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import TableTimeCell from "components/TableTimeCell";
 import TooltipX from "components/themeX/TooltipX";
-import ZkLink from "components/ZkLink";
+import ZkLink from "components/themeX/ZkLink";
 import { DEFAULT_COL_WIDTH } from "utils/constants";
 import { trimString } from "utils/functions";
 import { getTitleFromIssue } from "utils/issues/functions";
