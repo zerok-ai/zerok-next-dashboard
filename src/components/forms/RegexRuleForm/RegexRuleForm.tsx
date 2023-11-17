@@ -103,7 +103,7 @@ const RegexRuleForm = ({
     } catch (e) {
       setStatus({
         loading: false,
-        error: "Could not create rule, please try again",
+        error: "Could not create rule, please check your regex and try again.",
       });
     }
   };
@@ -133,6 +133,8 @@ const RegexRuleForm = ({
       <LoadingButton variant="contained" type="submit" loading={status.loading}>
         Create{" "}
       </LoadingButton>
+
+      {<p className={styles["error-text"]}>{status.error && status.error}</p>}
     </form>
   );
 };

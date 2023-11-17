@@ -12,9 +12,8 @@ export interface ObfuscationRuleType {
       new_value: string;
     };
   };
-  created_at: string;
-  updated_at: string;
-  created_by: string;
+  created_at: number;
+  updated_at: number;
   enabled: boolean;
 }
 

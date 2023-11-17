@@ -6,13 +6,16 @@ import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import DrawerX from "components/themeX/DrawerX";
 import ModalX from "components/themeX/ModalX";
+import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
 import { nanoid } from "nanoid";
 import Head from "next/head";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { HiOutlinePlus } from "react-icons/hi2";
 import {
+  DATA_OBFUSCATION_TABLE_PAGE_SIZE,
   DATA_OBFUSCATION_TABS,
   REGEX_DRAWER_WIDTH,
 } from "utils/data/constants";
@@ -44,16 +47,32 @@ const DataObfuscationPage = () => {
   );
   const [selectedDefaultRule, setSelectedDefaultRule] =
     useState<DefaultRegexRuleType | null>(null);
+  const router = useRouter();
 
   const {
     data: rules,
     fetchData: fetchRules,
+    setData: setRules,
     error: rulesError,
-  } = useFetch<ObfuscationRuleType[]>(
-    "obfuscations",
-    LIST_OBFUSCATION_RULE_ENDPOINT
-  );
-  // const [whitelistDrawerOpen, toggleWhitelistDrawer] = useToggle(false);
+  } = useFetch<ObfuscationRuleType[]>("obfuscations");
+
+  const getRules = async () => {
+    setRules(null);
+    const page = parseInt(router.query.page as string) || 1;
+    const offset = (page - 1) * DATA_OBFUSCATION_TABLE_PAGE_SIZE;
+    const endpoint =
+      LIST_OBFUSCATION_RULE_ENDPOINT +
+      `?offset=${offset}&limit=${DATA_OBFUSCATION_TABLE_PAGE_SIZE}`;
+    fetchRules(endpoint);
+  };
+
+  useEffect(() => {
+    if (router.isReady) {
+      setRules(null);
+      getRules();
+    }
+  }, [router]);
+
   const changeTab = (e: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
   };
@@ -81,7 +100,7 @@ const DataObfuscationPage = () => {
         "success",
         `Rule ${name} ${enabled ? "disabled" : "enabled"}`
       );
-      fetchRules(LIST_OBFUSCATION_RULE_ENDPOINT);
+      getRules();
     } catch (err) {
       dispatchSnackbar("error", "Could not update rule, please try again");
     } finally {
@@ -109,11 +128,7 @@ const DataObfuscationPage = () => {
           );
         } else {
           return (
-            <TableX
-              columns={columns}
-              data={rules ?? []}
-              noDataMessage="No data."
-            />
+            <TableX columns={columns} data={rules} noDataMessage="No data." />
           );
         }
       }
@@ -167,6 +182,13 @@ const DataObfuscationPage = () => {
       {/* Tab content */}
       <div className={styles["tab-content"]} role="tabpanel">
         {renderTabContent()}
+      </div>
+
+      <div className={styles["pagination-container"]}>
+        <PaginationX
+          totalItems={DATA_OBFUSCATION_TABLE_PAGE_SIZE * 3}
+          itemsPerPage={DATA_OBFUSCATION_TABLE_PAGE_SIZE}
+        />
       </div>
 
       {/* Regex form */}
