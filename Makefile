@@ -8,6 +8,6 @@ default: yarn-install-and-build
 .PHONY: yarn-install-and-build
 yarn-install-and-build:
 	touch .env
-	echo "NEXT_PUBLIC_FLAG_ID=${FLAGSMITH_ID}" >> .env
+	echo "NEXT_PUBLIC_FLAGSMITH_ID=${FLAGSMITH_ID}" >> .env
 	yarn install
 	yarn build
