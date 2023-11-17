@@ -60,6 +60,7 @@ const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
     fetchData: fetchTraces,
     setData: setTraces,
   } = useFetch<TracesStateDetail>("", null, transformTraces);
+  const [totalItems, setTotalItems] = useState(0);
   useEffect(() => {
     if (selectedCluster && scenario && issue_id) {
       setTraces(null);
@@ -76,6 +77,12 @@ const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
       fetchTraces(endpoint);
     }
   }, [selectedCluster, page]);
+
+  useEffect(() => {
+    if (traces) {
+      setTotalItems(traces.total_records);
+    }
+  }, [traces]);
 
   const columns = getTraceColumns({
     chatTrace: likelyCause.event?.incidentId ?? null,
@@ -147,7 +154,7 @@ const TraceTable = ({ onClose, incidentId }: TraceTableProps) => {
             <div className={styles["pagination-container"]}>
               <PaginationX
                 itemsPerPage={TRACES_PAGE_SIZE}
-                totalItems={traces?.total_records ?? TRACES_PAGE_SIZE}
+                totalItems={totalItems}
                 externalCurrentPage={page}
                 onJump={(page: number) => {
                   setPage(page);
