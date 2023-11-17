@@ -26,6 +26,7 @@ import {
 import { DEFAULT_RULES } from "utils/data/piiRules";
 import {
   type DefaultRegexRuleType,
+  type ObfuscationRuleResponseType,
   type ObfuscationRuleType,
 } from "utils/data/types";
 import { dispatchSnackbar } from "utils/generic/functions";
@@ -54,10 +55,11 @@ const DataObfuscationPage = () => {
     fetchData: fetchRules,
     setData: setRules,
     error: rulesError,
-  } = useFetch<ObfuscationRuleType[]>("obfuscations");
+  } = useFetch<ObfuscationRuleResponseType>("");
+
+  const [totalItems, setTotalItems] = useState<number | null>(null);
 
   const getRules = async () => {
-    setRules(null);
     const page = parseInt(router.query.page as string) || 1;
     const offset = (page - 1) * DATA_OBFUSCATION_TABLE_PAGE_SIZE;
     const endpoint =
@@ -72,6 +74,12 @@ const DataObfuscationPage = () => {
       getRules();
     }
   }, [router]);
+
+  useEffect(() => {
+    if (rules) {
+      setTotalItems(rules.total_rows);
+    }
+  }, [rules]);
 
   const changeTab = (e: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
@@ -128,7 +136,11 @@ const DataObfuscationPage = () => {
           );
         } else {
           return (
-            <TableX columns={columns} data={rules} noDataMessage="No data." />
+            <TableX
+              columns={columns}
+              data={rules?.obfuscations ?? null}
+              noDataMessage="No data."
+            />
           );
         }
       }
@@ -144,7 +156,7 @@ const DataObfuscationPage = () => {
   };
 
   const closeDrawer = () => {
-    fetchRules(LIST_OBFUSCATION_RULE_ENDPOINT);
+    getRules();
     setDrawerMode(null);
     setSelectedRule(null);
   };
@@ -186,7 +198,7 @@ const DataObfuscationPage = () => {
 
       <div className={styles["pagination-container"]}>
         <PaginationX
-          totalItems={DATA_OBFUSCATION_TABLE_PAGE_SIZE * 3}
+          totalItems={totalItems ?? 0}
           itemsPerPage={DATA_OBFUSCATION_TABLE_PAGE_SIZE}
         />
       </div>
