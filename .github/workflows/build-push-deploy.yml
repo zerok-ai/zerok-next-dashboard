@@ -63,7 +63,7 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      FLAGSMITH_ID: ${{ needs.get-flag-id.outputs.FLAGSMITH_ID }}
+      FLAGSMITH_ID: ${{ needs.get-flagsmith-id.outputs.FLAGSMITH_ID }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -88,7 +88,7 @@ jobs:
       DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
       PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
       MAKE_TARGET: "default"
-      FLAGSMITH_ID_VAR: ${{ needs.get-flag-id.outputs.FLAGSMITH_ID }}
+      FLAGSMITH_ID_VAR: ${{ needs.get-flagsmith-id.outputs.FLAGSMITH_ID }}
     secrets:
       GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
     needs: [init, get-flagsmith-id]
