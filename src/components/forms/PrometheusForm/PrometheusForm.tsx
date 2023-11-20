@@ -157,10 +157,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   }
   const values = watch();
   const isTestDisabled = () => {
-    if (
-      (values.url && !values.username && !values.password) ||
-      (values.url && values.password && values.username)
-    ) {
+    if (values.url && values.name) {
       return false;
     }
     return true;
