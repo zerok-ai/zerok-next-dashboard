@@ -24,8 +24,6 @@ const ClusterSelector = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const isRootPath = router.pathname.split("/").length === 1;
-
   const [isDefaultOpen, setIsDefaultOpen] = useState(false);
 
   const CLUSTER_BLOCKED_ROUTES = [
@@ -100,11 +98,6 @@ const ClusterSelector = () => {
           onChange={(val) => {
             if (val !== null && val.target && val.target.value) {
               dispatch(setSelectedCluster({ id: null }));
-              if (!isRootPath) {
-                router.push(`/${router.pathname.split("/")[1]}`);
-              } else {
-                router.reload();
-              }
               dispatch(setSelectedCluster({ id: val.target.value }));
             }
           }}

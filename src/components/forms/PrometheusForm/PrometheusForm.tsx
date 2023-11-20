@@ -26,6 +26,7 @@ import {
 import raxios from "utils/raxios";
 import { sendError } from "utils/sentry";
 
+import PromTestButton from "./helpers/PromTestButton";
 import styles from "./PrometheusForm.module.scss";
 import {
   FormItem,
@@ -154,6 +155,16 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   if (edit && !defaultValues) {
     return <CustomSkeleton len={10} />;
   }
+  const values = watch();
+  const isTestDisabled = () => {
+    if (
+      (values.url && !values.username && !values.password) ||
+      (values.url && values.password && values.username)
+    ) {
+      return false;
+    }
+    return true;
+  };
   return (
     <div>
       <PageHeader
@@ -273,14 +284,17 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           </div>
         </div>
         <div className={styles.divider}></div>
-        <LoadingButton
-          loading={status.loading}
-          type="submit"
-          variant="contained"
-          className={styles.button}
-        >
-          {edit ? `Done` : `Add data source`}
-        </LoadingButton>
+        <div className={styles.buttons}>
+          <PromTestButton disabled={isTestDisabled()} form={watch()} />
+          <LoadingButton
+            loading={status.loading}
+            type="submit"
+            variant="contained"
+            className={styles.button}
+          >
+            {edit ? `Done` : `Add data source`}
+          </LoadingButton>
+        </div>
       </form>
     </div>
   );

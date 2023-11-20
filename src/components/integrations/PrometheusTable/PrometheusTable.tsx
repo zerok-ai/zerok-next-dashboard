@@ -10,7 +10,10 @@ import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { dispatchSnackbar } from "utils/generic/functions";
-import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
+import {
+  CREATE_INTEGRATION_ENDPOINT,
+  TEST_SAVED_PROM_CONNECTION_ENDPOINT,
+} from "utils/integrations/endpoints";
 import { type PrometheusListType } from "utils/integrations/types";
 import raxios from "utils/raxios";
 import { sendError } from "utils/sentry";
@@ -35,7 +38,7 @@ const PrometheusTable = () => {
   const { trigger, changeTrigger } = useTrigger();
   const [selectedIntegration, setSelectedIntegration] = useState<{
     id: string;
-    action: "update" | "delete" | "deleting";
+    action: "update" | "delete" | "deleting" | "testing";
   } | null>(null);
 
   const getData = () => {
@@ -120,6 +123,24 @@ const PrometheusTable = () => {
   const clearSelectedIntegration = () => {
     setSelectedIntegration(null);
   };
+  const handleTestConnection = async (row: PrometheusListType) => {
+    setSelectedIntegration({
+      id: row.id,
+      action: "testing",
+    });
+    try {
+      const endpoint = TEST_SAVED_PROM_CONNECTION_ENDPOINT.replace(
+        "{cluster_id}",
+        selectedCluster!
+      ).replace("{integration_id}", row.id);
+      await raxios.get(endpoint);
+      dispatchSnackbar("success", "Connection test successful.");
+    } catch {
+      dispatchSnackbar("error", "Connection test failed.");
+    } finally {
+      setSelectedIntegration(null);
+    }
+  };
 
   const columns = getPromColumns({
     onUpdate: handleUpdate,
@@ -129,6 +150,7 @@ const PrometheusTable = () => {
         action: "delete",
       });
     },
+    onTest: handleTestConnection,
     selectedIntegration: selectedIntegration?.id ?? null,
   });
 

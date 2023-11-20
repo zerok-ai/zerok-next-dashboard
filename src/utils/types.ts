@@ -29,6 +29,7 @@ export interface DrawerNavItemType {
 export interface useStatusType {
   loading: boolean;
   error: null | string;
+  state?: "success" | "error" | "warning" | null;
 }
 
 export interface ApiKeyHidden {
