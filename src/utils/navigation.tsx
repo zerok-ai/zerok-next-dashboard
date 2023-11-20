@@ -27,6 +27,10 @@ export const NAV_LINKS_2: DrawerNavItemType[] = [
     path: ["/data-privacy"],
     type: "single",
     img: "data_privacy.svg",
+    flag: {
+      feature: "dataprivacy",
+      flagName: "obfuscation",
+    },
   },
 ];
 

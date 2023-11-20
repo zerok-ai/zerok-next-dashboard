@@ -1,6 +1,7 @@
 import { Divider } from "@mui/material";
 import NavigationItem from "components/helpers/NavigationItem";
 import UserNavItem from "components/users/UserNavItem";
+import { useFlagsmith } from "flagsmith/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
@@ -26,7 +27,9 @@ const MainDrawer = () => {
     const maximizedLogo = useMemo(() => {
       return <img src={ZEROK_DRAWER_LOGO} alt="zerok_logo" />;
     }, []);
-
+    const flags = useFlagsmith();
+    const allFlags = flags.getAllFlags();
+    console.log({ allFlags });
     return (
       <div className={styles["header-container"]}>
         <div className={styles["logo-container"]}>

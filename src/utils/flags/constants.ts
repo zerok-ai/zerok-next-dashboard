@@ -10,10 +10,10 @@ export const ZK_DEFAULT_ALL_FLAGS: ZkAllFlagsType = {
           "This feature has been disabled for your organisation, please contact ZeroK support for more information.",
       },
     },
-    servicepage: {
-      showservicepage: {
+    dataprivacy: {
+      obfuscation: {
         enabled: false,
-        value: "showservicepage",
+        value: "obfuscation",
         disabledText:
           "This feature has been disabled for your organisation, please contact ZeroK support for more information.",
       },

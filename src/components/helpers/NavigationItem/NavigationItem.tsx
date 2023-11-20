@@ -1,5 +1,6 @@
 import cx from "classnames";
 import TooltipX from "components/themeX/TooltipX";
+import { useZkFlag } from "hooks/useZkFlag";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -19,9 +20,15 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const { isDrawerMinimized } = drawer;
   const [isNavOpen, setIsNavOpen] = useState(true);
   const router = useRouter();
-  // const toggleNav = () => {
-  //   setIsNavOpen((prev) => !prev);
-  // };
+  if (nav.flag) {
+    const showNavItem = useZkFlag(
+      "org",
+      nav.flag.feature,
+      // @ts-expect-error typescript jugaad
+      nav.flag.flagName
+    ).enabled;
+    if (!showNavItem) return null;
+  }
 
   const isGroup = nav.type === "group";
   const imgSrc = !active

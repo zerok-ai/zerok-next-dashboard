@@ -1,5 +1,5 @@
+import { type ZkDataPrivacyFlagNames } from "utils/data/types";
 import { type ZkGPTFlagNames } from "utils/gpt/types";
-import { type ZkServicePageFlagNames } from "utils/health/types";
 
 export interface ZkFlagBaseType<T> {
   enabled: boolean;
@@ -10,7 +10,7 @@ export interface ZkFlagBaseType<T> {
 
 export interface ZkFlagConfigType {
   gpt: Record<ZkGPTFlagNames, ZkFlagBaseType<string>>;
-  servicepage: Record<ZkServicePageFlagNames, ZkFlagBaseType<string>>;
+  dataprivacy: Record<ZkDataPrivacyFlagNames, ZkFlagBaseType<string>>;
 }
 
 export type ZkFlagFeatureType = keyof ZkFlagConfigType;

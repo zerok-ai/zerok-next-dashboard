@@ -1,4 +1,6 @@
 import { z } from "zod";
+
+import { type DATA_PRIVACY_FLAGS } from "./constants";
 export interface ObfuscationRuleType {
   id: string;
   name: string;
@@ -40,3 +42,5 @@ export interface DefaultRegexRuleType {
     score: number;
   }>;
 }
+
+export type ZkDataPrivacyFlagNames = (typeof DATA_PRIVACY_FLAGS)[number];
