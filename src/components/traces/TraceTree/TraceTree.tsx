@@ -5,6 +5,7 @@ import TooltipX from "components/themeX/TooltipX";
 import TraceInfoDrawer from "components/traces/TraceInfoDrawer";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
+import { useZkFlag } from "hooks/useZkFlag";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { Fragment, type ReactElement, useEffect, useState } from "react";
@@ -62,6 +63,8 @@ const TraceTree = ({
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
   const [listMode, , toggleListMode] = useToggle(false);
+
+  const chatEnabled = useZkFlag("org", "gpt", "zkchat").enabled;
 
   // const dispatch = useDispatch();
 
@@ -244,24 +247,26 @@ const TraceTree = ({
         <div className={styles.header}>
           <h5>
             Spans
-            <Button
-              variant="contained"
-              size="extraSmall"
-              className={styles["synth-btn"]}
-              onClick={() => {
-                dispatch(
-                  postNewChatEvent({
-                    incidentId: (router.query.latest as string) ?? incidentId,
-                    issueId: issueId as string,
-                    selectedCluster: selectedCluster as string,
-                    type: CHAT_EVENTS.INFERENCE,
-                  })
-                );
-              }}
-            >
-              Synthesis request{" "}
-              <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} />
-            </Button>
+            {chatEnabled && (
+              <Button
+                variant="contained"
+                size="extraSmall"
+                className={styles["synth-btn"]}
+                onClick={() => {
+                  dispatch(
+                    postNewChatEvent({
+                      incidentId: (router.query.latest as string) ?? incidentId,
+                      issueId: issueId as string,
+                      selectedCluster: selectedCluster as string,
+                      type: CHAT_EVENTS.INFERENCE,
+                    })
+                  );
+                }}
+              >
+                Synthesis request{" "}
+                <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} />
+              </Button>
+            )}
           </h5>
           <div className={styles["header-actions"]}>
             {!isModalOpen && (
