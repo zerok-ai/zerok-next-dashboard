@@ -166,11 +166,14 @@
 
 .close-button {
     position: absolute;
+    cursor: pointer;
     top: $sp-md;
     right: 920px;
     // cursor: pointer;
-    z-index: 500;
-    background-color: $grey-800;
+    z-index: 5000;
+    background-color: $grey-900;
+    border:1px solid $grey-700;
+    border-right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -284,8 +287,6 @@
    height: 20px;
 }
 
-
-
 .accordion-label {
     color:$grey-25;
     z-index:1000;
@@ -307,16 +308,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width:100%;
+    width:fit-content;
     display: block;
     width:fit-content;
-    max-width: 170px;
 }
-.expanded {
-    .span-service, .operation-name {
-        max-width: 280px;
-    }
-}
+
 
 .operation-name {
     display: flex;

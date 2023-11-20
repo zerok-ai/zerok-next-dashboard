@@ -8,6 +8,7 @@ import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 // import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
+import { useZkFlag } from "hooks/useZkFlag";
 // import { useTrigger } from "hooks/useTrigger";
 import { useRouter } from "next/router";
 // import queryString from "query-string";
@@ -50,7 +51,7 @@ const IssuesPage = () => {
   const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
-
+  const zkChatEnabled = useZkFlag("org", "gpt", "zkchat").enabled;
   const getIssues = async () => {
     setData(null);
     // const filter = services && services.length > 0 ? services.join(",") : "";
@@ -87,8 +88,8 @@ const IssuesPage = () => {
   //     : null;
 
   const columns = useMemo(() => {
-    return getIssueColumns();
-  }, [data?.issues]);
+    return getIssueColumns(zkChatEnabled);
+  }, [data?.issues, zkChatEnabled]);
 
   // const removeService = (label: string) => {
   //   if (services != null) {

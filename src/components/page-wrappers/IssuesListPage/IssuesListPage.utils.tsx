@@ -12,7 +12,7 @@ import styles from "./IssuesListPage.module.scss";
 
 const helper = createColumnHelper<IssueDetail>();
 
-export const getIssueColumns = () => {
+export const getIssueColumns = (zkChatEnabled: boolean) => {
   return [
     helper.accessor("issue_title", {
       header: "Issue",
@@ -20,8 +20,9 @@ export const getIssueColumns = () => {
       cell: (info) => {
         const { issue_title, issue_hash, scenario_id, incidents } =
           info.row.original;
+        const incidentString = zkChatEnabled ? "latest" : "trace";
         const title = getTitleFromIssue(issue_title);
-        const route = `/issues/detail?issue_id=${issue_hash}&latest=${incidents[0]}&scenario=${scenario_id}`;
+        const route = `/issues/detail?issue_id=${issue_hash}&${incidentString}=${incidents[0]}&scenario=${scenario_id}`;
         return (
           <TooltipX title={title} disabled={title.length < 100}>
             <ZkLink href={route}>{trimString(title, 100)}</ZkLink>
