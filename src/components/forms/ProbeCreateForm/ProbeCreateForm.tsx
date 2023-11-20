@@ -13,7 +13,10 @@ import { useDispatch, useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
-import { ATTRIBUTE_PROTOCOLS } from "utils/probes/constants";
+import {
+  ATTRIBUTE_EXECUTORS,
+  ATTRIBUTE_PROTOCOLS,
+} from "utils/probes/constants";
 import { PROBE_ATTRIBUTES_ENDPOINT } from "utils/probes/endpoints";
 import {
   type AttributeProtocolType,
@@ -169,12 +172,14 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
       const attrList: AttributeResponseType[] =
         res.data.payload.attributes_list;
       attrList.map((attr) => {
-        attr.attribute_details = attr.attribute_details.map((attr) => {
-          attr.attribute_list = attr.attribute_list.filter((a) => {
-            return a.field && a.input && a.id;
+        attr.attribute_details = attr.attribute_details
+          .filter((attr) => ATTRIBUTE_EXECUTORS.includes(attr.executor))
+          .map((attr) => {
+            attr.attribute_list = attr.attribute_list.filter((a) => {
+              return a.field && a.input && a.id;
+            });
+            return attr;
           });
-          return attr;
-        });
         attr.attribute_details = attr.attribute_details.map((attr) => {
           attr.attribute_list = attr.attribute_list.map((a) => {
             return { ...a, executor: attr.executor };

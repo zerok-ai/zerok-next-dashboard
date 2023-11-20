@@ -240,6 +240,7 @@ export const getOperatorByType = (
       return NUMBER_OPERATORS;
     case "string": {
       const stringOperators =
+         // @ts-expect-error temporary
         executor === "EBPF" ? EBPF_STRING_OPERATORS : STRING_OPERATORS;
       if (supported_formats.includes("JSON")) {
         const operators: ConditionOperatorType[] = [
