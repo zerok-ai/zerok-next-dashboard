@@ -17,12 +17,12 @@ import styles from "./PrometheusTable.module.scss";
 export const PROM_SORT_OPTIONS: TableSortOptions[] = [
   {
     label: "Created last",
-    value: "created_at:desc",
+    value: "updated_at:desc",
     sort: "desc",
   },
   {
     label: "Created first",
-    value: "created_at:asc",
+    value: "updated_at:asc",
     sort: "asc",
   },
 
@@ -52,17 +52,19 @@ export const renderPromTitle = (row: PrometheusListType) => {
 export const getPromColumns = ({
   onUpdate,
   onDelete,
+  onTest,
   selectedIntegration,
 }: {
   onUpdate: (row: PrometheusListType) => void;
   onDelete: (row: PrometheusListType) => void;
+  onTest: (row: PrometheusListType) => void;
   selectedIntegration: string | null;
 }) => {
   const helper = createColumnHelper<PrometheusListType>();
   const columns = [
     helper.accessor("alias", {
       header: "Name",
-      size: DEFAULT_COL_WIDTH * 3,
+      size: DEFAULT_COL_WIDTH * 2,
       cell: (cell) => {
         return renderPromTitle(cell.row.original);
       },
@@ -78,16 +80,14 @@ export const getPromColumns = ({
         return <ChipX label={cell.getValue()} />;
       },
     }),
-    helper.accessor("created_at", {
-      header: "Created",
-      cell: (cell) => <TableTimeCell time={cell.getValue()} epoch={false} />,
-    }),
     helper.accessor("updated_at", {
-      header: "Updated",
+      header: "Last updated",
+      size: DEFAULT_COL_WIDTH,
       cell: (cell) => <TableTimeCell time={cell.getValue()} epoch={false} />,
     }),
     helper.display({
-      header: "Actions",
+      id: "actions",
+      size: DEFAULT_COL_WIDTH / 2,
       cell: (cell) => {
         const row = cell.row.original;
         const actions: TableActionItem[] = [
@@ -101,6 +101,12 @@ export const getPromColumns = ({
             element: <span>Delete</span>,
             onClick: () => {
               onDelete(row);
+            },
+          },
+          {
+            element: <span>Test connection</span>,
+            onClick: () => {
+              onTest(row);
             },
           },
         ];

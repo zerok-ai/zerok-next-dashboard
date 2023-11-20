@@ -89,3 +89,9 @@
     display: flex;
     column-gap: $sp-md;
 }
+
+.buttons {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-md;
+}
