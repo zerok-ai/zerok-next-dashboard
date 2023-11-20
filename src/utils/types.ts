@@ -1,4 +1,5 @@
 import { type HTTP_METHODS, type SPAN_PROTOCOLS } from "./constants";
+import { type ZkFlagFeatureType } from "./flags/types";
 import { type AttributeProtocolType } from "./probes/types";
 
 export interface ChildrenType {
@@ -20,6 +21,10 @@ export interface DrawerNavItemType {
     path: string;
   }>;
   openOnClick?: boolean;
+  flag?: {
+    feature: ZkFlagFeatureType;
+    flagName: string;
+  };
 }
 export interface useStatusType {
   loading: boolean;

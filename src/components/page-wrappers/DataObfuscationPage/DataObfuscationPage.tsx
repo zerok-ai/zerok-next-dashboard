@@ -9,6 +9,7 @@ import ModalX from "components/themeX/ModalX";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import { useFetch } from "hooks/useFetch";
+import { useZkFlag } from "hooks/useZkFlag";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -49,6 +50,13 @@ const DataObfuscationPage = () => {
   const [selectedDefaultRule, setSelectedDefaultRule] =
     useState<DefaultRegexRuleType | null>(null);
   const router = useRouter();
+  const isPageEnabled = useZkFlag("org", "dataprivacy", "obfuscation").enabled;
+
+  useEffect(() => {
+    if (router.isReady && !isPageEnabled) {
+      router.push("/");
+    }
+  }, [isPageEnabled, router]);
 
   const {
     data: rules,
