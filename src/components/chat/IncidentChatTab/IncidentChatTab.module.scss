@@ -22,12 +22,7 @@
     overflow-y: auto;
     display: grid;
     grid-template-rows: 9.5fr 1fr;
-
     row-gap: $sp-lg;
-    @media screen and (max-width: ($bp-desktop)) {
-        padding:$sp-md;
-        padding-bottom: 0;
-    }
 }
 
 .chat-events-container {

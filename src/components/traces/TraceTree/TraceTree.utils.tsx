@@ -7,7 +7,7 @@ import { Fragment, useMemo, useState } from "react";
 import { HiChevronRight } from "react-icons/hi";
 // import { HTTP_METHOD_COLORS, MYSQL_COLOR } from "utils/constants";
 import { formatDuration } from "utils/dateHelpers";
-import { convertNanoToMilliSeconds } from "utils/functions";
+import { convertNanoToMilliSeconds, trimString } from "utils/functions";
 import { ICON_BASE_PATH } from "utils/images";
 import {
   type SpanDetail,
@@ -219,7 +219,6 @@ export const AccordionLabel = ({
   setSelectedSpan,
   highlight,
   isModalOpen,
-  selectedSpan,
 }: AccordionLabelProps) => {
   const spanService =
     span.service_name && span.service_name.length
@@ -234,6 +233,13 @@ export const AccordionLabel = ({
     isTopRoot
   );
   const spanTitle = `${spanService} ${operationName}`;
+  const totalCharacterWidth = isModalOpen ? 80 : 50;
+  const trimmedSpanTitle = trimString(spanService, totalCharacterWidth / 2);
+  const trimmedOperationName = trimString(
+    operationName,
+    totalCharacterWidth - trimmedSpanTitle.length
+  );
+
   return (
     <div
       className={styles["accordion-summary-content"]}
@@ -253,8 +259,9 @@ export const AccordionLabel = ({
         <TooltipX
           title={spanTitle}
           disabled={
-            (isModalOpen && spanTitle.length < 40) ||
-            (!isModalOpen && spanTitle.length < 25)
+            spanTitle.length <= totalCharacterWidth ||
+            !spanTitle ||
+            !spanTitle.length
           }
           placement="bottom"
           arrow={false}
@@ -271,19 +278,18 @@ export const AccordionLabel = ({
                 styles["span-service"]
               )}
             >
-              {spanService}
+              {trimmedSpanTitle}
             </span>
             <span className={styles["operation-name"]}>
-              {operationName}
-              {span.has_raw_data !== false &&
-                span.has_raw_data !== undefined && (
-                  // <span className={styles["raw-data-icon"]}></span>
-                  <img
-                    src={`${ICON_BASE_PATH}/wrench.svg`}
-                    className={styles["raw-data-icon"]}
-                  />
-                )}
+              {trimmedOperationName}
             </span>
+            {span.has_raw_data !== false && span.has_raw_data !== undefined && (
+              // <span className={styles["raw-data-icon"]}></span>
+              <img
+                src={`${ICON_BASE_PATH}/wrench.svg`}
+                className={styles["raw-data-icon"]}
+              />
+            )}
           </p>
         </TooltipX>
       </div>
