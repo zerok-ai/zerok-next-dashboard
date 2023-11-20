@@ -133,16 +133,17 @@ const PrometheusTable = () => {
         "{cluster_id}",
         selectedCluster!
       ).replace("{prom_id}", row.id);
-      const rdata = await raxios.get(endpoint);
-      const status = rdata.data.payload.status;
-      if (status > 199 && status < 300) {
-        dispatchSnackbar("success", "Connection successful.");
-      } else {
-        dispatchSnackbar(
-          "error",
-          "Connection failed, please check the connection parameters and try again."
-        );
-      }
+      await raxios.get(endpoint);
+     dispatchSnackbar("success", "Connection successful.");
+      // const status = rdata.data.payload.status;
+      // if (status > 199 && status < 300) {
+      //   dispatchSnackbar("success", "Connection successful.");
+      // } else {
+      //   dispatchSnackbar(
+      //     "error",
+      //     "Connection failed, please check the connection parameters and try again."
+      //   );
+      // }
     } catch {
       dispatchSnackbar("error", "Connection test failed.");
     } finally {
