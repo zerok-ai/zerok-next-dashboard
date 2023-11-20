@@ -132,7 +132,7 @@ const PrometheusTable = () => {
       const endpoint = TEST_SAVED_PROM_CONNECTION_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster!
-      ).replace("{integration_id}", row.id);
+      ).replace("{prom_id}", row.id);
       await raxios.get(endpoint);
       dispatchSnackbar("success", "Connection test successful.");
     } catch {
