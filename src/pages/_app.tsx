@@ -22,6 +22,7 @@ import { type ReactElement, useRef } from "react";
 import { Provider } from "react-redux";
 import store from "redux/store";
 import ThemeCustomization from "themes";
+import { DEFAULT_FLAGSMITH_ID } from "utils/flags/constants";
 
 // types
 type LayoutProps = NextPage & {
@@ -55,7 +56,8 @@ App.getInitialProps = async () => {
   const flagsmithSSR = createFlagsmithInstance();
   await flagsmithSSR.init({
     // fetches flags on the server
-    environmentID: process.env.NEXT_PUBLIC_FLAGSMITH_ID || "failed", // optionaly specify the identity of the user to get their specific flags
+    environmentID: process.env.NEXT_PUBLIC_FLAGSMITH_ID || DEFAULT_FLAGSMITH_ID,
+    cacheFlags: false, // optionaly specify the identity of the user to get their specific flags
   });
 
   return { flagsmithState: flagsmithSSR.getState() };

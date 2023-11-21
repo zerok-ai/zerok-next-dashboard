@@ -20,6 +20,14 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const { isDrawerMinimized } = drawer;
   const [isNavOpen, setIsNavOpen] = useState(true);
   const router = useRouter();
+  useEffect(() => {
+    if (isDrawerMinimized && isNavOpen) {
+      setIsNavOpen(false);
+    }
+    if (!isDrawerMinimized && !isNavOpen) {
+      setIsNavOpen(true);
+    }
+  }, [isDrawerMinimized]);
   if (nav.flag) {
     const showNavItem = useZkFlag(
       "org",
@@ -34,14 +42,7 @@ const NavigationItem = ({ nav, active }: NavigationItemType) => {
   const imgSrc = !active
     ? `${ICON_BASE_PATH}/${nav.img}`
     : `${ICON_BASE_PATH}/${nav.img.split(".")[0]}_active.svg`;
-  useEffect(() => {
-    if (isDrawerMinimized && isNavOpen) {
-      setIsNavOpen(false);
-    }
-    if (!isDrawerMinimized && !isNavOpen) {
-      setIsNavOpen(true);
-    }
-  }, [isDrawerMinimized]);
+
   const isMinimized = isDrawerMinimized;
 
   return (

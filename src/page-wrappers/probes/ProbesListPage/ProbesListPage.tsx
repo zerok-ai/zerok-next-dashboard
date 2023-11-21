@@ -1,4 +1,5 @@
 import { type SortingState } from "@tanstack/react-table";
+import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
 import DialogX from "components/themeX/DialogX";
@@ -10,6 +11,7 @@ import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { showSnackbar } from "redux/snackbar";
 import { useDispatch, useSelector } from "redux/store";
+import { isClusterHealthy } from "utils/generic/functions";
 import raxios from "utils/raxios";
 import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
 import {
@@ -31,7 +33,7 @@ export const DEFAULT_SORT = {
 };
 
 const Probe = () => {
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, clusters } = useSelector(clusterSelector);
   const dispatch = useDispatch();
   const {
     data: scenarios,
@@ -66,8 +68,11 @@ const Probe = () => {
 
   useEffect(() => {
     if (selectedCluster) {
-      setScenarios(null);
-      getScenarios();
+      const cluster = clusters.find((c) => c.id === selectedCluster);
+      if (cluster && isClusterHealthy(cluster)) {
+        setScenarios(null);
+        getScenarios();
+      }
     }
   }, [selectedCluster, router]);
 
@@ -161,14 +166,16 @@ const Probe = () => {
         updateSort={setSortBy}
       />
       {!scenariosError ? (
-        <div className={styles.table}>
-          <TableX
-            data={scenarios ?? null}
-            columns={columns}
-            sortBy={sortBy}
-            onSortingChange={setSortBy}
-          />
-        </div>
+        <ValidClusterWrapper>
+          <div className={styles.table}>
+            <TableX
+              data={scenarios ?? null}
+              columns={columns}
+              sortBy={sortBy}
+              onSortingChange={setSortBy}
+            />
+          </div>
+        </ValidClusterWrapper>
       ) : (
         <p>Could not fetch scenarios, please try again later.</p>
       )}

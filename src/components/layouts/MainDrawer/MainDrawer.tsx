@@ -14,7 +14,7 @@ import styles from "./MainDrawer.module.scss";
 import { StyledMainDrawer } from "./MainDrawer.utils";
 
 const MainDrawer = () => {
-  const drawer = useSelector((state) => state.drawer);
+  const { drawer, auth } = useSelector((state) => state);
   const { isDrawerMinimized } = drawer;
 
   const router = useRouter();
@@ -50,7 +50,7 @@ const MainDrawer = () => {
         );
       });
     },
-    [router]
+    [router, auth]
   );
 
   return (
