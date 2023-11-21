@@ -17,7 +17,7 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { LIST_ISSUES_ENDPOINT } from "utils/endpoints";
-// import { isClusterHealthy } from "utils/generic/functions";
+import { isClusterHealthy } from "utils/generic/functions";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail } from "utils/types";
 
@@ -73,8 +73,7 @@ const IssuesPage = () => {
   useEffect(() => {
     if (selectedCluster) {
       const cluster = clusters.find((c) => c.id === selectedCluster);
-      console.log({ cluster });
-      if (cluster) {
+      if (cluster && isClusterHealthy(cluster)) {
         getIssues();
       }
     }

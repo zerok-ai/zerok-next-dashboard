@@ -23,7 +23,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // check the local storage
     const localToken = getLocalToken();
     // check if token exists and user is logged in
-    if (isLoggedIn && token) {
+    if (isLoggedIn && token && auth.user) {
       setIsAuthorized(true);
       if (!selectedCluster || !initialized) {
         dispatch(getClusters());
