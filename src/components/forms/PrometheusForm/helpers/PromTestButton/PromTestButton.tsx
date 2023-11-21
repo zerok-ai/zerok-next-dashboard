@@ -38,7 +38,6 @@ const PromTestButton = ({ form, disabled }: PromTestButtonProps) => {
         selectedCluster!
       );
       const rdata = await raxios.post(endpoint, body);
-      console.log({ rdata });
       const status = rdata.data.payload.status;
       if (status > 199 && status < 300) {
         dispatchSnackbar("success", "Connection successful.");

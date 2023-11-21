@@ -124,10 +124,6 @@ export const spanTransformer = (spanData: SpanResponse) => {
       delete span.all_attributes;
     }
     formattedSpans[key] = { ...span };
-    // if (Object.keys(span.all_attributes).length === 0) {
-    //   console.log("in delete");
-    //   delete span.all_attributes;
-    // }
     return true;
   });
   // get the total spanlength in milliseconds
@@ -233,7 +229,7 @@ export const AccordionLabel = ({
     isTopRoot
   );
   const spanTitle = `${spanService} ${operationName}`;
-  const totalCharacterWidth = isModalOpen ? 80 : 50;
+  const totalCharacterWidth = isModalOpen ? 80 : 40;
   const trimmedSpanTitle = trimString(spanService, totalCharacterWidth / 2);
   const trimmedOperationName = trimString(
     operationName,

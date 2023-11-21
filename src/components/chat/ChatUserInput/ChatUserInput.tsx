@@ -97,7 +97,7 @@ const ChatUserInput = ({
           })
         );
       } else if (val === `/${CHAT_EVENTS.POSTMORTEM}`) {
-        console.log({ val });
+        console.log("val");
       } else if (val.includes(`${CHAT_TAG_CHARACTER}`)) {
         dispatch(addTagCard(val));
       } else {

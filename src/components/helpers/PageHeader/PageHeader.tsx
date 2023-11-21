@@ -42,8 +42,6 @@ const PageHeader = ({
     return false;
   };
 
-  console.log({ onRefresh }, "title");
-
   return (
     <div className={cx(styles.container)}>
       {htmlTitle && (
@@ -65,7 +63,6 @@ const PageHeader = ({
               {showRefresh && (
                 <ClusterRefreshButton
                   onRefresh={() => {
-                    console.log({ onRefresh });
                     onRefresh?.();
                   }}
                 />

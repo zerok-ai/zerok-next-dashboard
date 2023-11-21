@@ -127,5 +127,3 @@ export const probeListColumns = ({
     }),
   ];
 };
-
-console.log(probeListColumns);

@@ -34,7 +34,6 @@ const SlackIntegration = () => {
       await raxios.post(DISABLE_SLACK_WORKSPACE_ENDPOINT);
       fetchWorkspace(GET_SLACK_WORKSPACE_ENDPOINT);
     } catch (err) {
-      console.log({ err });
       setDisableStatus((old) => ({
         ...old,
         error:
@@ -57,7 +56,6 @@ const SlackIntegration = () => {
       // window.location = rdata.request.responseURL;
       // fetchWorkspace(GET_SLACK_WORKSPACE_ENDPOINT);
     } catch (err) {
-      console.log({ err });
       setEnableStatus((old) => ({
         ...old,
         error:
