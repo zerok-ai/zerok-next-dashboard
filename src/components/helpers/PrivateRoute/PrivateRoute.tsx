@@ -15,7 +15,7 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const auth = useSelector((state) => state.auth);
   const [isAuthorized, setIsAuthorized] = useState(auth.isLoggedIn);
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, initialized } = useSelector(clusterSelector);
   const { isLoggedIn, token } = auth;
   const dispatch = useDispatch();
   const router = useRouter();
@@ -23,6 +23,9 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // check if token exists and user is logged in
     if (isLoggedIn && token) {
       setIsAuthorized(true);
+      if (!selectedCluster || !initialized) {
+        dispatch(getClusters());
+      }
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();
@@ -52,13 +55,6 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
       router.push("/login");
     }
   }, [auth.error]);
-
-  useEffect(() => {
-    console.log({ selectedCluster });
-    if (!selectedCluster) {
-      dispatch(getClusters());
-    }
-  }, [selectedCluster]);
 
   if (!isAuthorized) {
     return <PageSkeleton />;
