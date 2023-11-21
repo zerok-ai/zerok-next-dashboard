@@ -23,9 +23,6 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // check if token exists and user is logged in
     if (isLoggedIn && token) {
       setIsAuthorized(true);
-      if (!selectedCluster) {
-        dispatch(getClusters());
-      }
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();
@@ -55,6 +52,13 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
       router.push("/login");
     }
   }, [auth.error]);
+
+  useEffect(() => {
+    console.log({ selectedCluster });
+    if (!selectedCluster) {
+      dispatch(getClusters());
+    }
+  }, [selectedCluster]);
 
   if (!isAuthorized) {
     return <PageSkeleton />;
