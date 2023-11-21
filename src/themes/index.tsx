@@ -7,8 +7,7 @@ import {
   ThemeProvider,
   type TypographyVariantsOptions,
 } from "@mui/material/styles";
-// project import
-import useConfig from "hooks/useConfig";
+import defaultConfig from "config";
 import { type ReactElement, type ReactNode, useMemo } from "react";
 // types
 import { type CustomShadowProps } from "types/theme";
@@ -28,7 +27,7 @@ interface ThemeCustomizationProps {
 export default function ThemeCustomization({
   children,
 }: ThemeCustomizationProps): ReactElement {
-  const { themeDirection, mode, presetColor, fontFamily } = useConfig();
+  const { themeDirection, mode, presetColor, fontFamily } = defaultConfig;
 
   const theme: Theme = useMemo<Theme>(
     () => Palette(mode, presetColor),
