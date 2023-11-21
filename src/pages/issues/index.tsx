@@ -1,3 +1,3 @@
-import IssuesListPage from "components/page-wrappers/IssuesListPage";
+import IssuesListPage from "page-wrappers/IssuesListPage";
 
 export default IssuesListPage;

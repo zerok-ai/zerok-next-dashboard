@@ -1,7 +1,7 @@
 import PrivateRoute from "components/helpers/PrivateRoute";
 import PageLayout from "components/layouts/PageLayout";
-import DataObfuscationPage from "components/page-wrappers/DataObfuscationPage";
 import Head from "next/head";
+import DataObfuscationPage from "page-wrappers/DataObfuscationPage";
 
 const DataPrivacyPage = () => {
   return <DataObfuscationPage />;

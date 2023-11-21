@@ -1,3 +1,3 @@
-import IssueDetailPage from "components/page-wrappers/IssueDetailPage";
+import IssueDetailPage from "page-wrappers/IssueDetailPage";
 
 export default IssueDetailPage;
