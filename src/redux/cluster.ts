@@ -46,6 +46,9 @@ export const clusterSlice = createSlice({
     closeClusterModal: (state) => {
       state.isClusterModalOpen = false;
     },
+    resetClusterState: () => {
+      return initialState;
+    },
     changeSelectedCluster: (state, { payload: { id } }) => {
       if (id !== state.selectedCluster) {
         const cluster = state.clusters.find((c) => c.id === id);
@@ -122,6 +125,7 @@ export const {
   openClusterModal,
   closeClusterModal,
   changeSelectedCluster,
+  resetClusterState,
 } = clusterSlice.actions;
 
 export default clusterSlice.reducer;
