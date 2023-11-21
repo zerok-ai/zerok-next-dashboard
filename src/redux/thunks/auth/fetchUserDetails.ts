@@ -38,7 +38,7 @@ export const fetchUserDetailsBuilder = (
     })
     .addCase(fetchUserDetails.rejected, (state) => {
       state.token = null;
-      state.error = "Could not authenticate user";
+      state.error = null;
       state.loading = false;
       removeLocalUser();
     });
