@@ -9,6 +9,6 @@ export interface TraceMetadataDetail {
   entry_path: string;
   entry_service: string;
   incident_id: string;
-  incident_collection_time: string;
+  incident_root_span_time: string;
   action: (typeof HTTP_METHODS)[number];
 }

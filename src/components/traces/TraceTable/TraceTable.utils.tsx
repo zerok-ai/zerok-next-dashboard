@@ -58,7 +58,7 @@ export const getTraceColumns = ({
         );
       },
     }),
-    helper.accessor("incident_collection_time", {
+    helper.accessor("incident_root_span_time", {
       header: "TIMESTAMP",
       enableSorting: true,
       size: DEFAULT_COL_WIDTH,
@@ -72,12 +72,12 @@ export const getTraceColumns = ({
 export const INCIDENT_COL_FILTERS: TableSortOptions[] = [
   {
     label: "Latest first",
-    value: "incident_collection_time:desc",
+    value: "incident_root_span_time:desc",
     sort: "desc",
   },
   {
     label: "Earliest first",
-    value: "incident_collection_time:asc",
+    value: "incident_root_span_time:asc",
     sort: "asc",
   },
   {
