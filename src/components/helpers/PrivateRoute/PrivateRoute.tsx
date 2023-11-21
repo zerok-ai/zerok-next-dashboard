@@ -20,25 +20,20 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
+    // check the local storage
+    const localToken = getLocalToken();
     // check if token exists and user is logged in
     if (isLoggedIn && token) {
       setIsAuthorized(true);
       if (!selectedCluster || !initialized) {
         dispatch(getClusters());
       }
-    }
-    // if user isn't present, check the local storage
-    const localToken = getLocalToken();
-    if (localToken && !auth.user) {
+    } else if (localToken && !auth.user) {
       // if local token exists, fetch user details
       // this will also set the token in the redux store on success and accordingly set the isAuthorized state if not already set
       setRaxiosLocalToken(localToken);
       dispatch(fetchUserDetails({ token: localToken }));
-      return;
-    }
-
-    // if not logged in AND no local token, push user to login screen.
-    if (!token && !localToken) {
+    } else if (!token && !localToken) {
       if (
         !router.asPath.includes("logout") &&
         !router.asPath.includes("integration")

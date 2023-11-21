@@ -20,3 +20,5 @@ export const ZK_DEFAULT_ALL_FLAGS: ZkAllFlagsType = {
     },
   },
 };
+
+export const DEFAULT_FLAGSMITH_ID = "RQR3vnXBgyp7Warwpm4xrg";
