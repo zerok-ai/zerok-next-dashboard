@@ -1,4 +1,5 @@
 import axios from "axios";
+import { resetClusterState } from "redux/cluster";
 import store from "redux/store";
 import { logoutUser } from "redux/thunks/auth";
 
@@ -24,6 +25,7 @@ raxios.interceptors.response.use(
       !responseUrl.includes("logout")
     ) {
       await store.dispatch(logoutUser());
+      store.dispatch(resetClusterState());
       await Promise.resolve();
       return;
     }
@@ -50,4 +52,8 @@ export const setRaxiosHeader = (token: string): boolean => {
 export const removeRaxiosHeader = (): boolean => {
   delete raxios.defaults.headers.common.Authorization;
   return true;
+};
+
+export const removeCluster = () => {
+  localStorage.removeItem("zk-cluster");
 };

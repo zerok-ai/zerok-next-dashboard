@@ -23,7 +23,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // check if token exists and user is logged in
     if (isLoggedIn && token) {
       setIsAuthorized(true);
-      if (!selectedCluster || !selectedCluster.length) {
+      if (!selectedCluster) {
         dispatch(getClusters());
       }
     }
