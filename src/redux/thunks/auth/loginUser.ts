@@ -38,7 +38,7 @@ export const loginUserBuilder = (
     .addCase(loginUser.fulfilled, (state, { payload }) => {
       state.token = payload.token;
       state.loading = false;
-      state.isLoggedIn = false;
+      state.isLoggedIn = true;
       setRaxiosLocalToken(payload.token);
     })
     .addCase(loginUser.rejected, (state) => {
