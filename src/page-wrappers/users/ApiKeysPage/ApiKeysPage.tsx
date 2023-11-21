@@ -27,7 +27,7 @@ import raxios from "utils/raxios";
 import { type TableActionItem } from "utils/tables/types";
 import { type ApiKeyDetail } from "utils/types";
 
-import styles from "./ApiKeys.module.scss";
+import styles from "./ApiKeysPage.module.scss";
 
 type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 

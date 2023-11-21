@@ -30,7 +30,7 @@ import { type TableActionItem } from "utils/tables/types";
 import { type UserDetail } from "utils/types";
 
 // styles
-import styles from "./Users.module.scss";
+import styles from "./UsersListPage.module.scss";
 
 const filterUsers = (users: UserDetail[]) => {
   return users.filter((user) => user.name.trim().length > 0);
