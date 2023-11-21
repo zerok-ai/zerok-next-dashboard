@@ -46,7 +46,7 @@ const LoginForm = () => {
 
   // if user logged in, redirect to home page
   useEffect(() => {
-    if (auth.token) {
+    if (auth.isLoggedIn && auth.token) {
       const redirect = localStorage.getItem("redirect");
       if (redirect) {
         router.push(redirect);

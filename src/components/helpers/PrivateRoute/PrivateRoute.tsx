@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "redux/store";
 import { fetchUserDetails } from "redux/thunks/auth/fetchUserDetails";
 import { setRaxiosLocalToken } from "utils/auth/functions";
 import { getLocalToken } from "utils/functions";
+import { dispatchSnackbar } from "utils/generic/functions";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -28,9 +29,9 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     }
     // if user isn't present, check the local storage
     const localToken = getLocalToken();
-    if (localToken && !isLoggedIn && !auth.loading) {
+    if (localToken && !auth.user) {
       // if local token exists, fetch user details
-      // this will also set the token in the redux store on success and accordingly set the isAuthorized state
+      // this will also set the token in the redux store on success and accordingly set the isAuthorized state if not already set
       setRaxiosLocalToken(localToken);
       dispatch(fetchUserDetails({ token: localToken }));
       return;
@@ -50,6 +51,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   useEffect(() => {
     if (auth.error) {
+      dispatchSnackbar("error", auth.error);
       router.push("/login");
     }
   }, [auth.error]);
