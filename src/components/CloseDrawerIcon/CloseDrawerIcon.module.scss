@@ -1,0 +1,22 @@
+@import "styles/variables.module.scss";
+.close-button {
+    cursor: pointer;
+    // cursor: pointer;
+    z-index: 5000;
+    background-color: $grey-900;
+    border:1px solid $grey-700;
+    border-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:24px;
+    width:24px;
+    border-radius: $sp-base;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.close-icon {
+    color:$grey-300;
+    font-size: $font-lg;
+}

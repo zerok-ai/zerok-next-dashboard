@@ -1,39 +1,30 @@
-import { Alert, Button, IconButton, Modal } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import cx from "classnames";
+import CloseDrawerIcon from "components/CloseDrawerIcon";
 import CustomSkeleton from "components/custom/CustomSkeleton";
-import TooltipX from "components/themeX/TooltipX";
+import ExpandIcon from "components/helpers/ExpandIcon";
 import TraceInfoDrawer from "components/traces/TraceInfoDrawer";
 import { useFetch } from "hooks/useFetch";
 import { useToggle } from "hooks/useToggle";
 import { useZkFlag } from "hooks/useZkFlag";
-import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { Fragment, type ReactElement, useEffect, useState } from "react";
-import {
-  HiOutlineArrowsExpand,
-  HiOutlineMenu,
-  HiOutlineX,
-} from "react-icons/hi";
-import { HiOutlineArrowsPointingIn } from "react-icons/hi2";
+import { useEffect, useMemo, useState } from "react";
+import { HiOutlineMenu } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
-import { useDispatch, useSelector } from "redux/store";
-import { postNewChatEvent } from "redux/thunks/chat";
+import { useSelector } from "redux/store";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
 import { convertNanoToMilliSeconds } from "utils/functions";
-import { CHAT_EVENTS } from "utils/gpt/constants";
-import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { getEarliestSpan, getSpanTotalTime } from "utils/spans/functions";
-// import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { type SpanDetail, type SpanResponse } from "utils/types";
 
+import SpanTreeList from "./helpers/SpanTreeList";
+import SynthesizeIncidentButton from "./helpers/SynthesizeIncidentButton";
+import TreeWrapper from "./helpers/TreeWrapper";
 import styles from "./TraceTree.module.scss";
 import {
   buildSpanTree,
-  // checkForVisibleChildren,
   getRootSpan,
   SpanAccordion,
-  SpanLatency,
-  SpanLatencyTimeline,
   spanTransformer,
 } from "./TraceTree.utils";
 
@@ -56,17 +47,13 @@ const TraceTree = ({
     initialFetchDone,
     resetInitialFetch,
   } = useFetch<SpanResponse>("spans", null, spanTransformer);
-  const dispatch = useDispatch();
   const { selectedCluster } = useSelector(clusterSelector);
   const [spanCustomError, setSpanCustomError] = useState<null | boolean>(null);
-  // const [debugMode, toggleDebugMode] = useToggle(false);
 
   const [spanTree, setSpanTree] = useState<SpanDetail | null>(null);
   const [listMode, , toggleListMode] = useToggle(false);
 
   const chatEnabled = useZkFlag("org", "gpt", "zkchat").enabled;
-
-  // const dispatch = useDispatch();
 
   const [referenceTime, setReferenceTime] = useState<null | {
     totalTime: number;
@@ -78,8 +65,6 @@ const TraceTree = ({
   const [selectedSpan, setSelectedSpan] = useState<string | null>(null);
 
   const [isModalOpen, toggleModal] = useToggle(false);
-
-  const [isAlertOpen] = useToggle(true);
 
   useEffect(() => {
     if (selectedCluster && incidentId) {
@@ -151,52 +136,24 @@ const TraceTree = ({
     }
   }, [isModalOpen]);
 
+  const loadingSkeletons = useMemo(() => {
+    return <CustomSkeleton len={8} />;
+  }, []);
+
   const renderSpanTree = () => {
     if ((!spanTree && !listMode) || !referenceTime) {
-      return <CustomSkeleton len={8} />;
+      return loadingSkeletons;
     }
-
     if (listMode && spans) {
-      return Object.keys(spans).map((id) => {
-        const span = spans[id];
-        const spanService =
-          span.service_name && span.service_name.length
-            ? span.service_name
-            : "Unknown";
-        const operationName =
-          span.span_name && span.span_name.length ? ` | ${span.span_name}` : "";
-        return (
-          <div className={styles["list-span-container"]} key={nanoid()}>
-            <p className={styles["accordion-label-container"]}>
-              <TooltipX
-                title={`${spanService} ${operationName}`}
-                placement="right"
-                disabled={isModalOpen}
-                arrow={false}
-              >
-                <span
-                  className={cx(styles["accordion-label"])}
-                  role="button"
-                  id="span-label"
-                  onClick={() => {
-                    setSelectedSpan(span.span_id);
-                  }}
-                >
-                  {spanService}
-                </span>
-              </TooltipX>
-
-              <span className={styles["operation-name"]}>{operationName}</span>
-            </p>
-            <div className={styles["list-span-latency"]}>
-              <SpanLatency latency={span.latency} />
-              <SpanLatencyTimeline span={span} referenceTime={referenceTime} />
-            </div>
-          </div>
-        );
-      });
+      return (
+        <SpanTreeList
+          spans={spans}
+          onClick={setSelectedSpan}
+          isModalOpen={isModalOpen}
+          referenceTime={referenceTime}
+        />
+      );
     }
-
     if (spanTree && referenceTime) {
       return (
         <SpanAccordion
@@ -216,91 +173,51 @@ const TraceTree = ({
     setSelectedSpan(null);
   };
 
-  const Wrapper = ({ children }: { children: ReactElement }) => {
-    if (isModalOpen) {
-      return (
-        <Modal
-          open={true}
-          onClose={toggleModal}
-          keepMounted={true}
-          className={styles.modal}
-          hideBackdrop={true}
-        >
-          <Fragment>
-            <div
-              className={styles.backdrop}
-              role="presentation"
-              onClick={toggleModal}
-            ></div>
-            {children}
-          </Fragment>
-        </Modal>
-      );
-    } else {
-      return <Fragment>{children}</Fragment>;
-    }
-  };
+  const expandIcon = useMemo(() => {
+    return (
+      <ExpandIcon isExpanded={isModalOpen} toggleExpansion={toggleModal} />
+    );
+  }, [isModalOpen]);
+
+  const listModeAlert = useMemo(() => {
+    return (
+      <Alert severity="warning" className={styles.alert}>
+        This trace seems to have incomplete / invalid spans.
+      </Alert>
+    );
+  }, []);
+
+  const allRequestsButton = useMemo(() => {
+    return (
+      <Button
+        className={styles["trace-btn"]}
+        color="secondary"
+        variant="outlined"
+        size="small"
+        onClick={toggleTraceTable}
+      >
+        All requests <HiOutlineMenu />
+      </Button>
+    );
+  }, []);
 
   return (
-    <Wrapper>
+    <TreeWrapper onModalClose={toggleModal} isModalOpen={isModalOpen}>
       <div className={styles.container}>
         <div className={styles.header}>
           <h5>
             Spans
-            {chatEnabled && (
-              <Button
-                variant="contained"
-                size="extraSmall"
-                className={styles["synth-btn"]}
-                onClick={() => {
-                  dispatch(
-                    postNewChatEvent({
-                      incidentId: (router.query.latest as string) ?? incidentId,
-                      issueId: issueId as string,
-                      selectedCluster: selectedCluster as string,
-                      type: CHAT_EVENTS.INFERENCE,
-                    })
-                  );
-                }}
-              >
-                Synthesis request{" "}
-                <img src={`${ICON_BASE_PATH}/${ICONS["ai-magic"]}`} />
-              </Button>
-            )}
+            <SynthesizeIncidentButton
+              incidentId={incidentId!}
+              selectedCluster={selectedCluster!}
+              isChatEnabled={chatEnabled}
+              router={router}
+              issueId={issueId as string}
+            />
           </h5>
           <div className={styles["header-actions"]}>
-            {!isModalOpen && (
-              <Button
-                className={styles["trace-btn"]}
-                color="secondary"
-                variant="outlined"
-                size="small"
-                onClick={toggleTraceTable}
-              >
-                All requests <HiOutlineMenu />
-              </Button>
-            )}
-            <IconButton
-              size="small"
-              className={
-                isModalOpen ? styles["expanded-btn"] : styles["expand-btn"]
-              }
-              onClick={toggleModal}
-            >
-              {isModalOpen ? (
-                <HiOutlineArrowsPointingIn className={styles["expand-icon"]} />
-              ) : (
-                <HiOutlineArrowsExpand className={styles["expand-icon"]} />
-              )}
-            </IconButton>
-
-            {/* <IconButton
-              size="small"
-              className={styles["expand-btn"]}
-              onClick={toggleDebugMode}
-            >
-              <HiOutlineBugAnt className={styles["expand-icon"]} />
-            </IconButton> */}
+            {!isModalOpen && allRequestsButton}
+            {expandIcon}
           </div>
         </div>
 
@@ -322,25 +239,18 @@ const TraceTree = ({
               }
             }}
           >
-            {listMode && isAlertOpen && (
-              <Alert
-                severity="warning"
-                className={styles.alert}
-                // onClose={toggleAlert}
-              >
-                This trace seems to have incomplete / invalid spans.
-              </Alert>
-            )}
+            {/* SHOW ALERT ON INVALID SPANS */}
+            {listMode && listModeAlert}
+            {/* RENDER SPAN TREE */}
             {renderSpanTree()}
+            {/* CLOSE ICON */}
             {selectedSpan && (
-              <span
-                className={styles["close-button"]}
+              <CloseDrawerIcon
                 onClick={resetSpan}
-                role="button"
-              >
-                <HiOutlineX className={styles["close-icon"]} />
-              </span>
+                customClassName={styles.close}
+              />
             )}
+            {/* SPAN DATA */}
             {spans && selectedSpan && isModalOpen && (
               <TraceInfoDrawer
                 incidentId={incidentId}
@@ -353,7 +263,7 @@ const TraceTree = ({
           </div>
         )}
       </div>
-    </Wrapper>
+    </TreeWrapper>
   );
 };
 

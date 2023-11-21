@@ -1,6 +1,8 @@
 @import "styles/variables.module.scss";
 @import "styles/mixins";
 
+
+// CONTAINER
 .container {
     @include details-card-outline;
     .collapsed {
@@ -9,16 +11,13 @@
     z-index: 2;position: relative;
     width:100%;
 }
-
 .custom-error-text {
     margin:$sp-lg;
 }
-
 .alert {
     background-color: rgba($warning-700,0.2);
     margin:$sp-md 0;
 }
-
 .header {
     @include card-header;
     h5 {
@@ -26,43 +25,25 @@
         column-gap: $sp-base * 4;
     }
 }
-.synth-btn {
-    display: flex;
-    align-items: center;
-    column-gap: $sp-base * 2;
-    font-size: $font-sm;
-    img {
-        width:16px;
-        height:16px;
-    }
-}
 .header-actions {
     display: flex;
     align-items: center;
     column-gap: $sp-base * 2;
 }
-.expand-icon {
-    font-size: $font-lg + 2;
-}
-.expanded-btn {
-    background-color: $primary-500 !important;
-}
-.exception-parent {
-    color:$error-500 !important;
-}
-
 .expanded {
     padding:$sp-lg;
-    width:100%;
+}
+.lock-scroll {
+    overflow: hidden;
 }
 
 
+// TREE
 .tree {
     flex:1;
     padding:$sp-base $sp-sm;
     overflow-y: auto;
     position: relative;
-    // margin-bottom: $sp-lg;
     :global(.Mui-expanded){
         margin:0;
     }
@@ -78,6 +59,7 @@
 
 }
 
+// LIST MODE
 .list-span-container {
     display: grid;
     grid-template-columns: 4fr 6fr;
@@ -88,13 +70,8 @@
     align-items: center;
     column-gap: $sp-base;
 }
-.expanded {
-    padding:$sp-lg;
-}
-.lock-scroll {
-    overflow: hidden;
-}
 
+// accordion
 .accordion {
     border:none;
     border-radius: 0;
@@ -121,7 +98,6 @@
     &:hover {
         background-color: $grey-900;
     }
-    // margin-left: -$sp-base;
 }
 
 .accordion-summary-content {
@@ -136,9 +112,6 @@
         background-color: $grey-900;
     }
 }
-
-
-
 
 .accordion-label-container {
     display: flex;
@@ -164,30 +137,13 @@
     background-color: $bg-dark;
 }
 
-.close-button {
+.close {
     position: absolute;
-    cursor: pointer;
     top: $sp-md;
     right: 920px;
-    // cursor: pointer;
-    z-index: 5000;
-    background-color: $grey-900;
-    border:1px solid $grey-700;
-    border-right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height:24px;
-    width:24px;
-    border-radius: $sp-base;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
 }
 
-.close-icon {
-    color:$grey-300;
-    font-size: $font-lg;
-}
+
 
 .accordion-row {
     display:grid;
@@ -222,29 +178,6 @@
         height:$sp-base;
         background-color: #569CD7;
     }
-}
-
-
-.modal {
-    display: flex;
-    margin-top: 10vh;
-    width:92vw;
-    margin:10vh auto;
-    // height:300px;
-    height:70vh;
-
-}
-
-.backdrop {
-    position: fixed;
-    top:0;
-    left:0;
-    right:0;
-    overflow: hidden;
-    height:100vh;
-    width:100vw;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 1;
 }
 
 .span-name {

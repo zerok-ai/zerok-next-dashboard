@@ -309,8 +309,11 @@ export const SpanLatencyTimeline = ({
   referenceTime: {
     startTime: string;
     totalTime: number;
-  };
+  } | null;
 }) => {
+  if (!referenceTime) {
+    return null;
+  }
   const latency = convertNanoToMilliSeconds(span.latency, false) as number;
   // const spanStartTime = new Date(span.time).getTime();
   const timelineWidth = (latency / referenceTime.totalTime) * 100;

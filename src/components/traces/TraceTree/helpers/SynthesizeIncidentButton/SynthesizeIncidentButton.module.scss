@@ -1,0 +1,11 @@
+@import "styles/variables.module.scss";
+.synth-btn {
+    display: flex;
+    align-items: center;
+    column-gap: $sp-base * 2;
+    font-size: $font-sm;
+    img {
+        width:16px;
+        height:16px;
+    }
+}
