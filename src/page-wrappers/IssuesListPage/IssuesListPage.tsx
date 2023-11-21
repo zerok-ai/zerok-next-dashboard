@@ -17,6 +17,7 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
 import { LIST_ISSUES_ENDPOINT } from "utils/endpoints";
+// import { isClusterHealthy } from "utils/generic/functions";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail } from "utils/types";
 
@@ -34,7 +35,7 @@ const DEFAULT_SORT: ColumnSort = {
 };
 
 const IssuesPage = () => {
-  const { selectedCluster } = useSelector(clusterSelector);
+  const { selectedCluster, clusters } = useSelector(clusterSelector);
 
   const {
     data,
@@ -71,7 +72,11 @@ const IssuesPage = () => {
 
   useEffect(() => {
     if (selectedCluster) {
-      getIssues();
+      const cluster = clusters.find((c) => c.id === selectedCluster);
+      console.log({ cluster });
+      if (cluster) {
+        getIssues();
+      }
     }
   }, [selectedCluster, router.query]);
 
