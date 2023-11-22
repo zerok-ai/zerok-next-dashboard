@@ -44,10 +44,7 @@ const PromTestButton = ({ form, disabled }: PromTestButtonProps) => {
         isSuccess ? "Connection successful" : "Connection failed"
       );
     } catch (err) {
-      dispatchSnackbar(
-        "error",
-        "Connection failed, please check the connection parameters and try again."
-      );
+      dispatchSnackbar("error", "Connection test failed.");
     } finally {
       setStatus({
         loading: false,
