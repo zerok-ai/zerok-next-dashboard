@@ -19,7 +19,7 @@ import { clusterSelector } from "redux/cluster";
 import { useDispatch, useSelector } from "redux/store";
 import { postNewChatEvent } from "redux/thunks/chat";
 import { LIST_SPANS_ENDPOINT } from "utils/endpoints";
-import { convertNanoToMilliSeconds } from "utils/functions";
+import { convertNanoToMilliSeconds, trimString } from "utils/functions";
 import { CHAT_EVENTS } from "utils/gpt/constants";
 import { ICON_BASE_PATH, ICONS } from "utils/images";
 import { getEarliestSpan, getSpanTotalTime } from "utils/spans/functions";
@@ -165,28 +165,47 @@ const TraceTree = ({
             : "Unknown";
         const operationName =
           span.span_name && span.span_name.length ? ` | ${span.span_name}` : "";
+        const width = isModalOpen ? 700 : 550;
+        const spanTitle = `${spanService} ${operationName}`;
+        const totalCharacterWidth = isModalOpen ? 100 : 60;
+        const trimmedSpanTitle = trimString(
+          spanService,
+          totalCharacterWidth / 2
+        );
+        const trimmedOperationName = trimString(
+          operationName,
+          totalCharacterWidth - trimmedSpanTitle.length
+        );
         return (
-          <div className={styles["list-span-container"]} key={nanoid()}>
-            <p className={styles["accordion-label-container"]}>
+          <div
+            className={cx(
+              styles["list-span-container"],
+              selectedSpan === id && styles["selected-list-span"]
+            )}
+            key={nanoid()}
+          >
+            <p
+              className={styles["accordion-label-container"]}
+              style={{ width }}
+              onClick={() => {
+                setSelectedSpan(id);
+              }}
+            >
               <TooltipX
-                title={`${spanService} ${operationName}`}
+                title={spanTitle}
                 placement="right"
-                disabled={isModalOpen}
+                disabled={spanTitle.length < totalCharacterWidth}
                 arrow={false}
               >
-                <span
-                  className={cx(styles["accordion-label"])}
-                  role="button"
-                  id="span-label"
-                  onClick={() => {
-                    setSelectedSpan(span.span_id);
-                  }}
-                >
-                  {spanService}
-                </span>
+                <Fragment>
+                  <span className={cx(styles["span-service"])}>
+                    {trimmedSpanTitle}
+                  </span>
+                  <span className={styles["operation-name"]}>
+                    {trimmedOperationName}
+                  </span>
+                </Fragment>
               </TooltipX>
-
-              <span className={styles["operation-name"]}>{operationName}</span>
             </p>
             <div className={styles["list-span-latency"]}>
               <SpanLatency latency={span.latency} />

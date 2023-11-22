@@ -81,6 +81,17 @@
 .list-span-container {
     display: grid;
     grid-template-columns: 4fr 6fr;
+    padding:$sp-base;
+    &:hover {
+        background-color: $grey-900;
+    }
+    .span-service {
+        margin:0;
+    }
+}
+
+.selected-list-span {
+    background-color: $grey-900;
 }
 
 .list-span-latency {
