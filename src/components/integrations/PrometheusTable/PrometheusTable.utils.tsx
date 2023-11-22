@@ -82,7 +82,7 @@ export const getPromColumns = ({
     }),
     helper.accessor("updated_at", {
       header: "Last updated",
-      size: DEFAULT_COL_WIDTH,
+      size: DEFAULT_COL_WIDTH * 1.2,
       cell: (cell) => <TableTimeCell time={cell.getValue()} epoch={false} />,
     }),
     helper.display({

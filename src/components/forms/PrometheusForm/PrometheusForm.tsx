@@ -16,8 +16,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { clusterSelector } from "redux/cluster";
-import { showSnackbar } from "redux/snackbar";
-import { useDispatch, useSelector } from "redux/store";
+import { useSelector } from "redux/store";
+import { dispatchSnackbar } from "utils/generic/functions";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import {
   type PrometheusBaseType,
@@ -41,7 +41,6 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   const { data: defaultValues, fetchData } =
     useFetch<PrometheusListType[]>("integrations");
   const { status, setStatus } = useStatus();
-  const dispatch = useDispatch();
   const {
     formState: { errors },
     register,
@@ -120,19 +119,23 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           deleted,
           metric_server,
         };
-
-        await raxios.post(endpoint, body);
-        router.push("/integrations/prometheus/list");
-        dispatch(
-          showSnackbar({
-            message: `Data source ${
-              edit ? "updated" : "created"
-            } successfully.`,
-            type: "success",
-          })
+        const rdata = await raxios.post(endpoint, edit ? body : common);
+        const success = rdata.data.payload.status === "success";
+        dispatchSnackbar(
+          success ? "success" : "error",
+          success
+            ? "Data source updated"
+            : "Data source updated but connection failed"
         );
       } else if (!edit) {
-        await raxios.post(endpoint, common);
+        const rdata = await raxios.post(endpoint, common);
+        const success = rdata.data.payload.status === "success";
+        dispatchSnackbar(
+          success ? "success" : "error",
+          success
+            ? "Data source created"
+            : "Data source created but connection failed"
+        );
         router.push("/integrations/prometheus/list");
       }
     } catch (err) {
@@ -248,7 +251,11 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
                 Use this data source as a metrics server:
               </label>
               <RadioGroup
-                value={watch("metric_server") ? "true" : "false"}
+                value={
+                  values.metric_server !== undefined
+                    ? values.metric_server.toString()
+                    : ""
+                }
                 onChange={(e) => {
                   setValue(
                     "metric_server",
