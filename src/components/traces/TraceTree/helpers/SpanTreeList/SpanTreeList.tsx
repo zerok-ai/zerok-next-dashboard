@@ -33,8 +33,13 @@ const SpanTreeList = ({
             : "Unknown";
         const operationName =
           span.span_name && span.span_name.length ? ` | ${span.span_name}` : "";
+        const width = isModalOpen ? 700 : 550;
         return (
-          <div className={styles["list-span-container"]} key={nanoid()}>
+          <div
+            className={styles["list-span-container"]}
+            key={nanoid()}
+            style={{ width }}
+          >
             <p className={styles["accordion-label-container"]}>
               <TooltipX
                 title={`${spanService} ${operationName}`}
