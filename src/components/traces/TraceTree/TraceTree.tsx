@@ -79,7 +79,7 @@ const TraceTree = ({
       )
         .replace("{issue_id}", issueId as string)
         .replace("{incident_id}", incidentId);
-      // // const endpoint = `/fake_spans.json`;
+      // const endpoint = `/fake_spans.json`;
       // fetchSpans("/spans.json");
       fetchSpans(endpoint);
     }
@@ -151,6 +151,7 @@ const TraceTree = ({
           onClick={setSelectedSpan}
           isModalOpen={isModalOpen}
           referenceTime={referenceTime}
+          selectedSpan={selectedSpan}
         />
       );
     }

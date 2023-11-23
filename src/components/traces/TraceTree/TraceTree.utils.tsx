@@ -75,15 +75,27 @@ export const findNearestVisibleParent = (
 export const spanTransformer = (spanData: SpanResponse) => {
   const formattedSpans: SpanResponse = {};
   const topKeys = Object.keys(spanData);
+  topKeys.forEach((key) => {
+    const span = spanData[key];
+    const allAttributes = {
+      ...span.resource_attributes,
+      ...span.span_attributes,
+      ...span.scope_attributes,
+    };
+    if (Object.keys(allAttributes).length !== 0) {
+      span.all_attributes = allAttributes;
+    }
+    formattedSpans[key] = { ...span };
+    return true;
+  });
   const rootSpan = getRootSpan(spanData);
   if (!rootSpan) {
-    return spanData;
+    return formattedSpans;
   }
   const errors: SpanErrorDetail[] = [];
   const errorSet = new Set();
   topKeys.forEach((key) => {
     const span = spanData[key];
-    formattedSpans[key] = { ...span };
     // check for exceptions span
     if (span.errors && span.errors.length > 0) {
       try {
@@ -100,28 +112,10 @@ export const spanTransformer = (spanData: SpanResponse) => {
             });
           }
         });
+        span.errors = errors;
       } catch (err) {
         span.errors = [];
       }
-    }
-    span.all_attributes = {};
-    if (span.resource_attributes) {
-      span.all_attributes = {
-        ...span.resource_attributes,
-        ...span.all_attributes,
-      };
-    }
-    if (span.span_attributes) {
-      span.all_attributes = { ...span.span_attributes, ...span.all_attributes };
-    }
-    if (span.scope_attributes) {
-      span.all_attributes = {
-        ...span.scope_attributes,
-        ...span.all_attributes,
-      };
-    }
-    if (Object.keys(span.all_attributes).length === 0) {
-      delete span.all_attributes;
     }
     formattedSpans[key] = { ...span };
     return true;

@@ -63,6 +63,22 @@
 .list-span-container {
     display: grid;
     grid-template-columns: 4fr 6fr;
+    padding: $sp-base;
+    margin:$sp-base 0;
+    &:hover {
+        background-color: $grey-900;
+    }
+    
+    .span-service {
+        color:$white;
+        font-weight: 500;
+        margin-right: 0;
+    }
+}
+
+.selected-list-span {
+    background-color: $grey-900;
+
 }
 
 .list-span-latency {
@@ -126,7 +142,7 @@
 
 
 .latency {
-    color:$grey-200;
+    color:$grey-50;
     width:100px;
 }
 .accordion-details {
