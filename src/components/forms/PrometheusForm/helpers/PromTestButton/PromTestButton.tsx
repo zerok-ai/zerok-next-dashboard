@@ -3,7 +3,9 @@ import useStatus from "hooks/useStatus";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { dispatchSnackbar } from "utils/generic/functions";
+import { type APIResponse } from "utils/generic/types";
 import { TEST_UNSAVED_PROM_CONNECTION_ENDPOINT } from "utils/integrations/endpoints";
+import { type IntegrationStatusResponseType } from "utils/integrations/types";
 import raxios from "utils/raxios";
 
 import { type PromFormSchemaType } from "../../PrometheusForm.utils";
@@ -37,8 +39,11 @@ const PromTestButton = ({ form, disabled }: PromTestButtonProps) => {
         "{cluster_id}",
         selectedCluster!
       );
-      const rdata = await raxios.post(endpoint, body);
-      const isSuccess = rdata.data.payload.status === "success";
+      const rdata = await raxios.post<
+        APIResponse<IntegrationStatusResponseType>
+      >(endpoint, body);
+      const isSuccess =
+        rdata.data.payload.integration_status.connection_status === "success";
       dispatchSnackbar(
         isSuccess ? "success" : "error",
         isSuccess ? "Connection successful" : "Connection failed"

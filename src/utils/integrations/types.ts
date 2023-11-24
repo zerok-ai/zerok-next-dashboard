@@ -38,7 +38,6 @@ export interface PrometheusBaseType {
     username: string;
   };
   level: "ORG" | "CLUSTER";
-  metric_server: boolean;
 }
 export interface PrometheusListType extends PrometheusBaseType {
   id: string;
@@ -47,7 +46,7 @@ export interface PrometheusListType extends PrometheusBaseType {
   updated_at: string;
   deleted: boolean;
   disabled: boolean;
-  metric_server: boolean;
+  metric_server?: boolean;
 }
 
 export type SlackInstallType = "INSTALLED" | "PENDING" | "DISABLED";
@@ -91,4 +90,17 @@ export interface EBPFIntegrationListType {
   created_at: string;
   updated_at: string;
   enabled: boolean;
+}
+
+export interface IntegrationStatusResponseType {
+  integration_status: {
+    connection_message: string;
+    connection_status: "success" | "failed";
+    has_metric_server: boolean;
+  };
+}
+
+export interface IntegrationUpsertResponseType
+  extends IntegrationStatusResponseType {
+  integration_id: string;
 }

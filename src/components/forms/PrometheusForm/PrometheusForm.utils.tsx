@@ -19,7 +19,6 @@ export const PromFormSchema = z.object({
   username: z.string(),
   password: z.string(),
   level: z.enum([...PROMETHEUS_LEVELS]),
-  metric_server: z.boolean(),
 });
 
 export type PromFormSchemaType = z.infer<typeof PromFormSchema>;
