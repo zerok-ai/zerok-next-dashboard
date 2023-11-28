@@ -16,8 +16,8 @@ export const PromFormSchema = z.object({
       /^(https?:\/\/)?[a-zA-Z0-9.-]+(:\d+)?(\/[\w/.-]*)?$/,
       "Please enter a valid URL"
     ),
-  username: z.string(),
-  password: z.string(),
+  username: z.string().nullable().optional(),
+  password: z.string().nullable().optional(),
   level: z.enum([...PROMETHEUS_LEVELS]),
 });
 

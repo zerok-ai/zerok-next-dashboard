@@ -49,6 +49,15 @@
     }
     
 }
+
+.auth-switch {
+    border: 1px solid $grey-800;
+    border-radius: $sp-base;
+    width:70px;
+    display: flex;
+    justify-content: center;
+}
+
 .form-helper {
     font-size: $font-sm - 1;
     color:$grey-400;

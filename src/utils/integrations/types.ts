@@ -34,8 +34,8 @@ export interface PrometheusBaseType {
   type: "PROMETHEUS";
   url: string;
   authentication: {
-    password: string;
-    username: string;
+    password: string | null;
+    username: string | null;
   };
   level: "ORG" | "CLUSTER";
 }
