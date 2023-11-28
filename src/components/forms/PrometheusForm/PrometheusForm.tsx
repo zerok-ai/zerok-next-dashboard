@@ -1,10 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
-import { FormHelperText, MenuItem, Select } from "@mui/material";
+import { FormHelperText, MenuItem, Select, Switch } from "@mui/material";
+import cx from "classnames";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import { useFetch } from "hooks/useFetch";
 import useStatus from "hooks/useStatus";
+import { useToggle } from "hooks/useToggle";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -12,7 +14,10 @@ import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { dispatchSnackbar } from "utils/generic/functions";
 import { type APIResponse } from "utils/generic/types";
-import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
+import {
+  CREATE_INTEGRATION_ENDPOINT,
+  GET_INTEGRATION_ENDPOINT,
+} from "utils/integrations/endpoints";
 import {
   type IntegrationUpsertResponseType,
   type PrometheusBaseType,
@@ -33,9 +38,12 @@ import {
 const PrometheusForm = ({ edit }: { edit: boolean }) => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
-  const { data: defaultValues, fetchData } =
-    useFetch<PrometheusListType[]>("integrations");
+  const { data: defaultValues, fetchData } = useFetch<PrometheusListType>("");
   const { status, setStatus } = useStatus();
+  const basicToggleDefaultValue = !!(edit && defaultValues?.authentication);
+  const [isBasicAuthEnabled, toggleBasicAuth] = useToggle(
+    basicToggleDefaultValue
+  );
   const {
     formState: { errors },
     register,
@@ -51,10 +59,10 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   });
   useEffect(() => {
     const getInitialValues = async () => {
-      const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
+      const endpoint = GET_INTEGRATION_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string
-      );
+      ).replace("{integration_id}", router.query.id as string);
       fetchData(endpoint);
     };
     if (edit && selectedCluster) {
@@ -64,18 +72,33 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
 
   useEffect(() => {
     if (edit && defaultValues) {
-      const integ = defaultValues.find((i) => i.id === router.query.id);
+      const integ = defaultValues;
       if (integ) {
+        const { username, password } = integ.authentication
+          ? integ.authentication
+          : { username: null, password: null };
         reset({
           url: integ.url,
-          username: integ.authentication.username,
-          password: integ.authentication.password,
+          username,
+          password,
           level: integ.level,
           name: integ.alias,
         });
       }
     }
   }, [defaultValues]);
+
+  const toggleBasicAuthDisplay = () => {
+    if (!isBasicAuthEnabled) {
+      toggleBasicAuth();
+      setValue("username", "");
+      setValue("password", "");
+    } else {
+      toggleBasicAuth();
+      setValue("username", null);
+      setValue("password", null);
+    }
+  };
 
   const onSubmit = async (values: PromFormSchemaType) => {
     setStatus({
@@ -93,15 +116,14 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
         type: "PROMETHEUS",
         url,
         authentication: {
-          username,
-          password,
+          username: isBasicAuthEnabled ? username ?? "" : null,
+          password: isBasicAuthEnabled ? password ?? "" : null,
         },
         level,
       };
       if (edit && defaultValues) {
-        const integ = defaultValues.find((i) => i.id === router.query.id);
         const { id, cluster_id, created_at, updated_at, disabled, deleted } =
-          integ as PrometheusListType;
+          defaultValues;
         const body: PrometheusListType = {
           ...common,
           id,
@@ -122,7 +144,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
             ? "Data source updated"
             : "Data source updated but connection failed"
         );
-        if (success) router.push("/integrations/prometheus/list");
+        // if (success) router.push("/integrations/prometheus/list");
       } else if (!edit) {
         const rdata = await raxios.post(endpoint, common);
         const success = rdata.data.payload.status === "success";
@@ -132,7 +154,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
             ? "Data source created"
             : "Data source created but connection failed"
         );
-        router.push("/integrations/prometheus/list");
+        // router.push("/integrations/prometheus/list");
       }
     } catch (err) {
       sendError(err);
@@ -188,25 +210,41 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           helperText={"The full URL of the server, ex: http://localhost:8080"}
         />
         <div className={styles.divider}></div>
-        <h5>Basic Auth:</h5>
-        {/* Username */}
         <div className={styles["form-group-container"]}>
-          <FormItem
-            errors={errors}
-            id={"username"}
-            label={"Username"}
-            register={register}
-            helperText={"The username for basic auth."}
-          />
-          {/* Pasword */}
-          <FormItem
-            errors={errors}
-            id={"password"}
-            label={"Password"}
-            register={register}
-            helperText={"The password for basic auth."}
-          />
+          <div className={styles["form-item-container"]}>
+            <div className={cx(styles["form-group"])}>
+              <label htmlFor={"basic-auth"}>Basic auth</label>
+              <div className={styles["auth-switch"]}>
+                <Switch
+                  onChange={toggleBasicAuthDisplay}
+                  id="basic-auth"
+                  name="basic-auth"
+                  defaultChecked={isBasicAuthEnabled}
+                />
+              </div>
+            </div>
+          </div>
         </div>
+        {/* Username */}
+        {isBasicAuthEnabled && (
+          <div className={styles["form-group-container"]}>
+            <FormItem
+              errors={errors}
+              id={"username"}
+              label={"Username"}
+              register={register}
+              helperText={"The username for basic auth."}
+            />
+            {/* Pasword */}
+            <FormItem
+              errors={errors}
+              id={"password"}
+              label={"Password"}
+              register={register}
+              helperText={"The password for basic auth."}
+            />
+          </div>
+        )}
         {/* Org switch */}
         <div className={styles.divider}></div>
         <div className={styles["form-group-container"]}>
