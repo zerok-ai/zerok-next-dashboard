@@ -10,11 +10,15 @@ import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { dispatchSnackbar } from "utils/generic/functions";
+import { type APIResponse } from "utils/generic/types";
 import {
   CREATE_INTEGRATION_ENDPOINT,
   TEST_SAVED_PROM_CONNECTION_ENDPOINT,
 } from "utils/integrations/endpoints";
-import { type PrometheusListType } from "utils/integrations/types";
+import {
+  type IntegrationStatusResponseType,
+  type PrometheusListType,
+} from "utils/integrations/types";
 import raxios from "utils/raxios";
 import { sendError } from "utils/sentry";
 
@@ -133,13 +137,17 @@ const PrometheusTable = () => {
         "{cluster_id}",
         selectedCluster!
       ).replace("{prom_id}", row.id);
-     const rdata = await raxios.get(endpoint);
-     const isSuccess = rdata.data.payload.status === "success";
-
-     dispatchSnackbar(
-       isSuccess ? "success" : "error",
-       isSuccess ? "Connection successful." : "Connection test failed."
-     );
+      const rdata = await raxios.get<
+        APIResponse<IntegrationStatusResponseType>
+      >(endpoint);
+      const status = rdata.data.payload.integration_status;
+      const isSuccess = status.connection_status === "success";
+      dispatchSnackbar(
+        isSuccess ? "success" : "error",
+        isSuccess
+          ? `Connection to metric server successful.`
+          : "Connection test failed."
+      );
     } catch {
       dispatchSnackbar("error", "Connection test failed.");
     } finally {

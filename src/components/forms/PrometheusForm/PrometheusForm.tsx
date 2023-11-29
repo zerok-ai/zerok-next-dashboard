@@ -1,13 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
-import {
-  FormControlLabel,
-  FormHelperText,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-} from "@mui/material";
+import { FormHelperText, MenuItem, Select } from "@mui/material";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
 import { useFetch } from "hooks/useFetch";
@@ -18,8 +11,10 @@ import { useForm } from "react-hook-form";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { dispatchSnackbar } from "utils/generic/functions";
+import { type APIResponse } from "utils/generic/types";
 import { CREATE_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import {
+  type IntegrationUpsertResponseType,
   type PrometheusBaseType,
   type PrometheusListType,
 } from "utils/integrations/types";
@@ -77,7 +72,6 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           password: integ.authentication.password,
           level: integ.level,
           name: integ.alias,
-          metric_server: integ.metric_server,
         });
       }
     }
@@ -89,7 +83,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
       error: null,
     });
     try {
-      const { url, username, password, level, name, metric_server } = values;
+      const { url, username, password, level, name } = values;
       const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
         "{cluster_id}",
         selectedCluster as string
@@ -103,7 +97,6 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           password,
         },
         level,
-        metric_server,
       };
       if (edit && defaultValues) {
         const integ = defaultValues.find((i) => i.id === router.query.id);
@@ -117,16 +110,19 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           updated_at,
           disabled,
           deleted,
-          metric_server,
         };
-        const rdata = await raxios.post(endpoint, edit ? body : common);
-        const success = rdata.data.payload.status === "success";
+        const rdata = await raxios.post<
+          APIResponse<IntegrationUpsertResponseType>
+        >(endpoint, edit ? body : common);
+        const success =
+          rdata.data.payload.integration_status.connection_status === "success";
         dispatchSnackbar(
           success ? "success" : "error",
           success
             ? "Data source updated"
             : "Data source updated but connection failed"
         );
+        if (success) router.push("/integrations/prometheus/list");
       } else if (!edit) {
         const rdata = await raxios.post(endpoint, common);
         const success = rdata.data.payload.status === "success";
@@ -245,7 +241,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
           </div>
 
           {/* Metric server switch */}
-          <div className={styles["form-item-container"]}>
+          {/* <div className={styles["form-item-container"]}>
             <div className={styles["text-form-group"]}>
               <label htmlFor="metric_server" className={styles["text-label"]}>
                 Use this data source as a metrics server:
@@ -285,7 +281,7 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
                 Please select an option.
               </FormHelperText>
             )}
-          </div>
+          </div> */}
         </div>
         <div className={styles.divider}></div>
         <div className={styles.buttons}>
