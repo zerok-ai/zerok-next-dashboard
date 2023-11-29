@@ -13,6 +13,7 @@ import { dispatchSnackbar } from "utils/generic/functions";
 import { type APIResponse } from "utils/generic/types";
 import {
   CREATE_INTEGRATION_ENDPOINT,
+  DELETE_INTEGRATION_ENDPOINT,
   TEST_SAVED_PROM_CONNECTION_ENDPOINT,
 } from "utils/integrations/endpoints";
 import {
@@ -103,18 +104,12 @@ const PrometheusTable = () => {
       id: selectedIntegration.id,
       action: "deleting",
     });
-    const integ = data!.find((i) => i.id === selectedIntegration.id);
+    const endpoint = DELETE_INTEGRATION_ENDPOINT.replace(
+      "{cluster_id}",
+      selectedCluster as string
+    ).replace("{integration_id}", selectedIntegration.id);
     try {
-      await raxios.post(
-        CREATE_INTEGRATION_ENDPOINT.replace(
-          "{cluster_id}",
-          selectedCluster as string
-        ),
-        {
-          ...integ,
-          deleted: true,
-        }
-      );
+      await raxios.delete(endpoint);
       getData();
       dispatchSnackbar("success", "Data source deleted successfully");
     } catch (err) {
