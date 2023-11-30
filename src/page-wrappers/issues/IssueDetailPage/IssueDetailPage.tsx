@@ -1,3 +1,4 @@
+"use client";
 import cx from "classnames";
 import IncidentChatTab from "components/chat/IncidentChatTab";
 import PrivateRoute from "components/helpers/PrivateRoute";

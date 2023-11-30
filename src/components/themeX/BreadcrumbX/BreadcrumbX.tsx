@@ -32,8 +32,8 @@ const BreadcrumbX = () => {
             );
           }
           return (
-            <Link href={breadcrumb.path} key={nanoid()}>
-              <a className={styles.link}>{breadcrumb.name}</a>
+            <Link href={breadcrumb.path} key={nanoid()} className={styles.link}>
+              {breadcrumb.name}
             </Link>
           );
         })}
