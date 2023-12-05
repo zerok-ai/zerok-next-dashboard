@@ -1,3 +1,4 @@
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 import { type ColumnSort } from "@tanstack/react-table";
 import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import PageHeader from "components/helpers/PageHeader";
@@ -47,12 +48,13 @@ const IssuesPage = () => {
   const [totalItems, setTotalItems] = useState<number | null>(0);
 
   const router = useRouter();
-
+  const { user, isLoading } = useKindeAuth();
   const { query } = router;
   const page = query.page ? parseInt(query.page as string) : 1;
   const range = query.range ?? DEFAULT_TIME_RANGE;
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
   const zkChatEnabled = useZkFlag("org", "gpt", "zkchat").enabled;
+  console.log({ user, isLoading });
   const getIssues = async () => {
     setData(null);
     // const filter = services && services.length > 0 ? services.join(",") : "";

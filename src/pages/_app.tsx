@@ -12,6 +12,7 @@ import "styles/utils.scss";
 import "styles/tables.scss";
 import "styles/mui-overrides.scss"
 
+import { KindeProvider } from "@kinde-oss/kinde-auth-nextjs";
 import { createFlagsmithInstance } from "flagsmith/isomorphic";
 import { FlagsmithProvider } from "flagsmith/react";
 import { type IState } from "flagsmith/types";
@@ -39,16 +40,18 @@ const App = ({ Component, pageProps, flagsmithState }: AppProps & Props) => {
   const flagsmithRef = useRef(createFlagsmithInstance());
   const getLayout = Component.getLayout ?? ((page: any) => page);
   return (
-    <Provider store={store}>
-      <FlagsmithProvider
-        flagsmith={flagsmithRef.current}
-        serverState={flagsmithState}
-      >
-        <ThemeCustomization>
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeCustomization>
-      </FlagsmithProvider>
-    </Provider>
+    <KindeProvider>
+      <Provider store={store}>
+        <FlagsmithProvider
+          flagsmith={flagsmithRef.current}
+          serverState={flagsmithState}
+        >
+          <ThemeCustomization>
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeCustomization>
+        </FlagsmithProvider>
+      </Provider>
+    </KindeProvider>
   );
 };
 
