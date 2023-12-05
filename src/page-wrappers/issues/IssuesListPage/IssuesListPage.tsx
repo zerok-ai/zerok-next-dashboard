@@ -1,11 +1,11 @@
 import { type ColumnSort } from "@tanstack/react-table";
 import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import PageHeader from "components/helpers/PageHeader";
-import PrivateRoute from "components/helpers/PrivateRoute";
 import TableFilter from "components/helpers/TableFilter";
 import PageLayout from "components/layouts/PageLayout";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 // import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import { useZkFlag } from "hooks/useZkFlag";
@@ -177,9 +177,9 @@ const IssuesPage = () => {
 
 IssuesPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <PrivateRoute>
+    <ZkPrivateRoute>
       <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
+    </ZkPrivateRoute>
   );
 };
 

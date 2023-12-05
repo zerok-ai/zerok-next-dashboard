@@ -12,6 +12,8 @@ import "styles/utils.scss";
 import "styles/tables.scss";
 import "styles/mui-overrides.scss"
 
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { createFlagsmithInstance } from "flagsmith/isomorphic";
 import { FlagsmithProvider } from "flagsmith/react";
 import { type IState } from "flagsmith/types";
@@ -21,6 +23,7 @@ import { type ReactElement, useRef } from "react";
 // third-party
 import { Provider } from "react-redux";
 import store from "redux/store";
+import css from "styles/variables.module.scss";
 import ThemeCustomization from "themes";
 import { DEFAULT_FLAGSMITH_ID } from "utils/flags/constants";
 
@@ -39,16 +42,25 @@ const App = ({ Component, pageProps, flagsmithState }: AppProps & Props) => {
   const flagsmithRef = useRef(createFlagsmithInstance());
   const getLayout = Component.getLayout ?? ((page: any) => page);
   return (
-    <Provider store={store}>
-      <FlagsmithProvider
-        flagsmith={flagsmithRef.current}
-        serverState={flagsmithState}
-      >
-        <ThemeCustomization>
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeCustomization>
-      </FlagsmithProvider>
-    </Provider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: css.primary500,
+        },
+      }}
+    >
+      <Provider store={store}>
+        <FlagsmithProvider
+          flagsmith={flagsmithRef.current}
+          serverState={flagsmithState}
+        >
+          <ThemeCustomization>
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeCustomization>
+        </FlagsmithProvider>
+      </Provider>
+    </ClerkProvider>
   );
 };
 
