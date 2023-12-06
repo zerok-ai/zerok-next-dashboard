@@ -14,7 +14,8 @@ import styles from "./MainDrawer.module.scss";
 import { StyledMainDrawer } from "./MainDrawer.utils";
 
 const MainDrawer = () => {
-  const { drawer, auth } = useSelector((state) => state);
+  const auth = useSelector((state) => state.auth);
+  const drawer = useSelector((state) => state.drawer);
   const { isDrawerMinimized } = drawer;
 
   const router = useRouter();

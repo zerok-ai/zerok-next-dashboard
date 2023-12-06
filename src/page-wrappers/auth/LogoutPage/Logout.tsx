@@ -1,17 +1,14 @@
+import { useClerk } from "@clerk/nextjs";
 import AuthFormCard from "components/forms/AuthFormCard";
 import AuthLayout from "components/layouts/AuthLayout";
 import Head from "next/head";
 import Link from "next/link";
 import { Fragment, useEffect } from "react";
-import { resetClusterState } from "redux/cluster";
-import { useDispatch } from "redux/store";
-import { logoutUser } from "redux/thunks/auth";
 
 const Logout = () => {
-  const dispatch = useDispatch();
+  const { signOut } = useClerk();
   useEffect(() => {
-    dispatch(logoutUser());
-    dispatch(resetClusterState());
+    signOut();
   }, []);
   return (
     <AuthFormCard title="Logout">

@@ -37,6 +37,12 @@
     }
     ul {
         width:250px;
-        
+        // row-gap: $sp-sm;
     }
+     a {
+        display: block;
+     }
+     hr {
+        margin:$sp-sm 0;
+     }
 }
