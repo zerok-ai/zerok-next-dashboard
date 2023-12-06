@@ -1,9 +1,10 @@
 @import "styles/variables.module.scss";
 @import "styles/mixins";
 .container {
+  .icon-button {
+    border: none;
+    @include remove-icon-btn-styles;
+  }
 }
 
-.icon-button {
-  color: $white;
-  @include remove-icon-btn-styles;
-}
+

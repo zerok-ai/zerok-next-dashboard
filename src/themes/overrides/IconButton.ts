@@ -10,13 +10,13 @@ export default function IconButton(theme: Theme) {
     MuiIconButton: {
       styleOverrides: {
         root: {
-          backgroundColor: cssVars.grey900,
+          backgroundColor: cssVars.bgDark,
           borderRadius: 4,
           border: `1px solid ${cssVars.grey700}`,
           padding: `${2 * SPACE_TOKEN}px ${3 * SPACE_TOKEN}`,
           "&:hover": {
-            backgroundColor: cssVars.grey900,
-            border: `1px solid ${cssVars.primary500}`,
+            backgroundColor: cssVars.bgDark,
+            border: `1px solid ${cssVars.grey300}`,
           },
         },
         sizeLarge: {

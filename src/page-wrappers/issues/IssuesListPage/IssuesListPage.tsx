@@ -1,4 +1,3 @@
-import { OrganizationSwitcher, SignOutButton } from "@clerk/nextjs";
 import { type ColumnSort } from "@tanstack/react-table";
 import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import PageHeader from "components/helpers/PageHeader";
@@ -20,7 +19,6 @@ import { isClusterHealthy } from "utils/generic/functions";
 import { ISSUES_PAGE_SIZE } from "utils/issues/constants";
 import { type IssueDetail } from "utils/types";
 
-import InvitationList from "./InviteList";
 import styles from "./IssuesListPage.module.scss";
 import { getIssueColumns, ISSUE_SORT_OPTIONS } from "./IssuesListPage.utils";
 
@@ -134,9 +132,6 @@ const IssuesPage = () => {
         leftExtras={leftExtras}
         onRefresh={getIssues}
       />
-      <OrganizationSwitcher />
-      <SignOutButton />
-      <InvitationList />
       <ValidClusterWrapper>
         {/* Rendering filters
         {services && (

@@ -4,17 +4,27 @@
     display: flex;
     column-gap: $sp-sm;
     align-items: center;
-    :global(.Mui-disabled){
-        color:$grey-500 !important;
-    }
+    
     ul {
        flex-wrap: nowrap;
+    }
+    .next-prev-btns {
+        padding:$sp-xs $sp-md; 
+        color:$grey-200 !important;
+        &:hover {
+            color:$primary-500;
+            background-color: $grey-900;
+        }
+        
+    }
+    :global(.Mui-disabled){  
+        color:$grey-700 !important;
     }
 }
 
 .pagination {
     :global(.Mui-selected){
-        background-color:$primary-500;
+        background-color:$primary-500 !important;
         color:$white !important;
     }
 
@@ -25,12 +35,3 @@
    }
 }
 
-.next-prev-btns {
-    padding:$sp-base $sp-lg;
-    color:$grey-200;
-    &:hover {
-        color:$primary-500;
-        background-color: $grey-900;
-    }
-    
-}

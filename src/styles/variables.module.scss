@@ -121,10 +121,12 @@ $max-form-width:500px;
 // component widths
 $main-drawer-width-full:260px;
 $main-drawer-width-mini:60px;
+$modal-width-mini:450px;
 $header-width:60px;
 
 // page-heights
 $full-page-height:calc(100vh - $header-height - $sp-base * 40);
+$full-table-height: calc(100vh - $header-height - $sp-base * 56);
 
 
 :export{

@@ -1,3 +1,12 @@
-import UsersPage from "page-wrappers/users/UsersListPage";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
+import ZkUsersListPage from "components/ZkUsersListPage";
 
-export default UsersPage;
+const Page = () => {
+  return (
+    <ZkPrivateRoute>
+      <ZkUsersListPage />
+    </ZkPrivateRoute>
+  );
+};
+
+export default Page;

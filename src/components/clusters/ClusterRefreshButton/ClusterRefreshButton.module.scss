@@ -1,9 +1,8 @@
 @import "styles/variables.module.scss";
 .container {
     border:1px solid $grey-700;
-    background-color: $grey-950;
     &:hover {
         border:1px solid $grey-300;
-        background-color: $grey-950;
+        background-color: $bg-dark !important;
     }
 }

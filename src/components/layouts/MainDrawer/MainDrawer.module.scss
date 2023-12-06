@@ -29,6 +29,10 @@
   flex-direction: column;
   row-gap: $sp-sm;
   flex:1;
+  hr {
+    border-color:$grey-900;
+    border-width: 1px;
+  }
 }
 
 .user-nav-container {
