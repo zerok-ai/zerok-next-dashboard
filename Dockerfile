@@ -6,6 +6,6 @@ COPY ./package.json ./package.json
 COPY ./.next/standalone ./
 COPY ./.next/static ./.next/static
 
-CMD ["node",".next/standalone/server.js"]
+CMD ["node","server.js"]
 EXPOSE 3000
 
