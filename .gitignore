@@ -50,3 +50,5 @@ out
 .DS_Store
 # Sentry Config File
 .sentryclirc
+
+next-env.d.ts
