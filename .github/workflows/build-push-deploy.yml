@@ -120,7 +120,7 @@ jobs:
 
       - name: Docker build
         run: |-
-          docker build -f ${{ inputs.DOCKER_FILE_NAME }} --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$DOCKER_IDENTIFIER/$APP_NAME:$GITHUB_SHA" .
+          docker build -f $DOCKER_FILE_NAME --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$DOCKER_IDENTIFIER/$APP_NAME:$GITHUB_SHA" .
 
       - name: Docker Tag
         run: |-
