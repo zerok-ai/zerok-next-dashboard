@@ -91,6 +91,7 @@ jobs:
       FLAGSMITH_ID: ${{ vars[format('{0}', needs.get-flagsmith-id.outputs.FLAGSMITH_KEY)] }}
       DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
+      DOCKER_FILE_NAME: "Dockerfile"
       MAKE_TARGET: "default"
     steps:
       - name: Checkout
