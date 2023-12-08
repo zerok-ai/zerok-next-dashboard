@@ -18,7 +18,9 @@ env:
   NS: ${{ vars.NS }}
   DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
   GKE_CLUSTER: ${{ github.event.inputs.GKE_CLUSTER }}
-  GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
+  GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
+  CLERK_PUBLISHABLE_KEY: ${{ vars.CLERK_PUBLISHABLE_KEY }}
+  CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
   GKE_ZONE : ${{ vars.GKE_ZONE }}
   DOCKER_REG: ${{ vars.DOCKER_REG }}
   PROJECT_ID:  ${{ vars.PROJECT_ID }}
@@ -40,7 +42,7 @@ jobs:
       needs: init
       runs-on: zk-self-hosted
       outputs:
-        FLAGSMITH_ID: ${{ steps.extractFlagId.outputs.FLAGSMITH_ID }}
+        FLAGSMITH_KEY: ${{ steps.extractFlagId.outputs.FLAGSMITH_KEY }}
       env:
         CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       environment:
@@ -51,10 +53,10 @@ jobs:
           run: |
             CLUSTERNAME_CAPITAL=$(echo "$CLUSTERNAME" | tr '[:lower:]' '[:upper:]')
             echo "CLUSTERNAME_CAPITAL=$CLUSTERNAME_CAPITAL"
-            FLAGSMITH_ID=${CLUSTERNAME_CAPITAL}_FLAGSMITH_ID
-            echo FLAGSMITH_ID=$FLAGSMITH_ID >> $GITHUB_OUTPUT
-            echo "FLAGSMITH_ID set in this step: $FLAGSMITH_ID"  # Debugging line
-            echo "$FLAGSMITH_ID"
+            FLAGSMITH_KEY=${CLUSTERNAME_CAPITAL}_FLAGSMITH_KEY
+            echo FLAGSMITH_KEY=$FLAGSMITH_KEY >> $GITHUB_OUTPUT
+            echo "FLAGSMITH_KEY set in this step: $FLAGSMITH_KEY"  # Debugging line
+            echo "$FLAGSMITH_KEY"
   ##############
   print-envs:
     needs: [init, get-flagsmith-id]
@@ -63,7 +65,7 @@ jobs:
       CLUSTERNAME: ${{ needs.init.outputs.CLUSTERNAME }}
       VERSION: ${{ needs.init.outputs.VERSION }}
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      FLAGSMITH_ID: ${{ needs.get-flagsmith-id.outputs.FLAGSMITH_ID }}
+      FLAGSMITH_KEY: ${{ needs.get-flagsmith-id.outputs.FLAGSMITH_KEY }}
     environment:
       name: ${{ needs.init.outputs.ENVIRONMENT }}
     steps:
@@ -77,21 +79,56 @@ jobs:
           echo "K8S_NAMESPACE=$NS"
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "DOMAIN_NAME=$DOMAIN_NAME"
-          echo "FLAGSMITH_ID=$FLAGSMITH_ID"
+          echo "FLAGSMITH_KEY=$FLAGSMITH_KEY"
 
   ##############
   build-and-push:
-    uses: zerok-ai/zk-git-actions/.github/workflows/zk-build-push.yml@main
-    with:
-      VERSION: ${{ needs.init.outputs.VERSION }}
-      ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
-      DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
-      PROJECT_ID: ${{ needs.init.outputs.PROJECT_ID }}
-      MAKE_TARGET: "default"
-      FLAGSMITH_ID_VAR: ${{ needs.get-flagsmith-id.outputs.FLAGSMITH_ID }}
-    secrets:
-      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
+    runs-on: zk-self-hosted
     needs: [init, get-flagsmith-id]
+    environment:
+      name: ${{ needs.init.outputs.ENVIRONMENT }}
+    env:
+      FLAGSMITH_ID: ${{ vars[format('{0}', needs.get-flagsmith-id.outputs.FLAGSMITH_KEY)] }}
+      DOCKER_IDENTIFIER: ${{ needs.init.outputs.CLUSTERNAME }}
+      VERSION: ${{ needs.init.outputs.VERSION }}
+      MAKE_TARGET: "default"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure git for private modules
+        run: git config --global url."https://$TOKEN:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Build
+        run: |
+          make ${{ inputs.MAKE_TARGET }}
+
+      - name: Test
+        run: |
+          ls
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY_DEV }}'
+
+      - name: login to docker registry
+        run: |
+          gcloud auth configure-docker $DOCKER_REG --quiet
+
+      - name: Docker build
+        run: |-
+          docker build -f ${{ inputs.DOCKER_FILE_NAME }} --tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$DOCKER_IDENTIFIER/$APP_NAME:$GITHUB_SHA" .
+
+      - name: Docker Tag
+        run: |-
+          docker tag "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$DOCKER_IDENTIFIER/$APP_NAME:$GITHUB_SHA" "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$DOCKER_IDENTIFIER/$APP_NAME:$VERSION"
+
+      - name: Docker push
+        run: |-
+          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$DOCKER_IDENTIFIER/$APP_NAME:$GITHUB_SHA"
+          docker push "$DOCKER_REG/$PROJECT_ID/$DOCKER_REPO/$DOCKER_IDENTIFIER/$APP_NAME:$VERSION"
 
   deploy:
     uses: zerok-ai/zk-git-actions/.github/workflows/zk-deploy.yml@main
@@ -103,5 +140,5 @@ jobs:
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
       HELM_ARGS: "--recreate-pods"
     secrets:
-      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
+      GKE_SA_KEY: ${{ secrets.GKE_SAx_KEY_DEV }}
     needs: [init, get-flagsmith-id, build-and-push]
