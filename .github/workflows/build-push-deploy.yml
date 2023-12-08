@@ -141,5 +141,5 @@ jobs:
       ENVIRONMENT: ${{ needs.init.outputs.ENVIRONMENT }}
       HELM_ARGS: "--recreate-pods"
     secrets:
-      GKE_SA_KEY: ${{ secrets.GKE_SAx_KEY_DEV }}
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY_DEV }}
     needs: [init, get-flagsmith-id, build-and-push]
