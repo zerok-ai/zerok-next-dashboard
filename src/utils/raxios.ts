@@ -22,7 +22,7 @@ raxios.interceptors.request.use((config) => {
   const decode = jwtDecode(token);
   const seconds = getSecondsToExpiry(decode.exp as number);
   console.log({ seconds });
-  config.headers.Authorization = `Bearer ${token}`;
+  config.headers.Token = token;
   return config;
 });
 

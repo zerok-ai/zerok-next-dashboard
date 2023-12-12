@@ -3,12 +3,11 @@ import { createColumnHelper } from "@tanstack/react-table";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import CodeBlock from "components/helpers/CodeBlock";
 import PageHeader from "components/helpers/PageHeader";
-import PrivateRoute from "components/helpers/PrivateRoute";
 import TableActions from "components/helpers/TableActions";
 import VisibilityToggleButton from "components/helpers/VisibilityToggleButton";
-import PageLayout from "components/layouts/PageLayout";
 import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 import dayjs from "dayjs";
 import { useFetch } from "hooks/useFetch";
 import { useTrigger } from "hooks/useTrigger";
@@ -227,12 +226,12 @@ const ApiKeys = () => {
 
 ApiKeys.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <PrivateRoute>
+    <ZkPrivateRoute>
       <Head>
         <title>ZeroK Dashboard | API Keys</title>
       </Head>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
+      {page}
+    </ZkPrivateRoute>
   );
 };
 
