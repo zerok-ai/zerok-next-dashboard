@@ -8,6 +8,7 @@ import "reactflow/dist/style.css";
 import "styles/react-flow.scss";
 // custom styles
 import "styles/globals.scss";
+import "styles/clerk.scss";
 import "styles/utils.scss";
 import "styles/tables.scss";
 import "styles/mui-overrides.scss"

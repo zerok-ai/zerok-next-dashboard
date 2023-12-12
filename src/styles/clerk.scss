@@ -1,0 +1,14 @@
+@import './variables.module.scss';
+.cl-card {
+    background-color: $bg-dark;
+    border-radius: $sp-md;
+    border:1px solid rgba($primary-800, 0.6);
+    font-family: "Noto Sans", sans-serif !important;
+}
+
+.cl-formFieldInput {
+    background-color: $bg-dark;
+    &:focus {
+       outline:none;
+    }
+}

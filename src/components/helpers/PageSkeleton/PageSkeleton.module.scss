@@ -2,13 +2,21 @@
 .skeleton-container {
     display: grid;
     grid-template-columns: 0.5fr 9fr;
-    height:100%;
+    height:100vh;
+    overflow: hidden;
     column-gap: $sp-xxl;
+
+.content {
+    height:95vh;
+} 
+.drawer {
+    height:100vh;
+}
+.header {
+    height:5vh;
+}
 }
 
-.drawer, .header,.content {
-    height:95vh;
-}
 
 .skeleton-content {
     display: flex;

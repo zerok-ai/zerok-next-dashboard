@@ -1,5 +1,8 @@
 @import "styles/variables.module.scss";
 @import 'styles/mixins';
 .container {
-    @include remove-icon-btn-styles;
+    border:none !important;
+    &:hover {
+        background-color: $grey-925;
+    }
 }

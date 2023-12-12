@@ -1,30 +1,59 @@
-import { RedirectToSignIn, useOrganization, useUser } from "@clerk/nextjs";
+import {
+  RedirectToSignIn,
+  useOrganization,
+  useOrganizationList,
+  useUser,
+} from "@clerk/nextjs";
 import PageSkeleton from "components/helpers/PageSkeleton";
 import PageLayout from "components/layouts/PageLayout";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { getClusters } from "redux/cluster";
+import { useDispatch, useSelector } from "redux/store";
 
 // import styles from "./ZkPrivateRoute.module.scss";
 
 interface ZkPrivateRouteProps {
   children: React.ReactNode;
+  isClusterRoute?: boolean;
 }
 
-const ZkPrivateRoute = ({ children }: ZkPrivateRouteProps) => {
-  const { isLoaded, isSignedIn } = useUser();
+const ZkPrivateRoute = ({ children, isClusterRoute }: ZkPrivateRouteProps) => {
+  const { isLoaded, isSignedIn, user } = useUser();
   const { organization } = useOrganization();
-  console.log({ organization });
-  useEffect(() => {
-    const getMembers = async () => {
-      const orgs = await organization?.getMemberships({
-        limit: 1,
-        offset: 1,
-      });
-      console.log({ orgs });
-    };
-    if (isSignedIn) {
-      getMembers();
+  const [orgLoaded, setOrgLoaded] = useState(false);
+  const { initialized, loading: clusterLoading } = useSelector(
+    (state) => state.cluster
+  );
+  const { setActive } = useOrganizationList();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const setUserOrg = async () => {
+    try {
+      const orgs = await user?.getOrganizationMemberships();
+      if (orgs && orgs.length > 0 && setActive) {
+        const org = orgs[0];
+        setActive({ organization: org.organization.id });
+      }
+    } catch (err) {
+      router.push("/logout");
     }
-  }, [isSignedIn]);
+  };
+  useEffect(() => {
+    if (isSignedIn) {
+      if (organization) {
+        setOrgLoaded(true);
+        if (isClusterRoute && !clusterLoading && !initialized) {
+          console.log("HEY");
+          dispatch(getClusters());
+        }
+      } else {
+        setOrgLoaded(false);
+        setUserOrg();
+      }
+    }
+  }, [isSignedIn, orgLoaded, organization, isClusterRoute]);
+
   if (!isLoaded) {
     return <PageSkeleton />;
   }
@@ -32,7 +61,11 @@ const ZkPrivateRoute = ({ children }: ZkPrivateRouteProps) => {
     return <RedirectToSignIn redirectUrl={window.location.href} />;
   }
 
-  return <PageLayout>{children}</PageLayout>;
+  if (isSignedIn && orgLoaded) {
+    return <PageLayout>{children}</PageLayout>;
+  }
+
+  return <PageSkeleton />;
 };
 
 export default ZkPrivateRoute;

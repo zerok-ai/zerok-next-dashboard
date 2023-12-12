@@ -10,3 +10,9 @@ export const removeLocalUser = (): void => {
   deleteLocalToken();
   removeRaxiosHeader();
 };
+
+export const getSecondsToExpiry = (exp: number) => {
+  const currentTimestamp = Math.floor(Date.now() / 1000); // Convert milliseconds to seconds
+  const secondsToExpiry = exp - currentTimestamp;
+  return secondsToExpiry;
+};

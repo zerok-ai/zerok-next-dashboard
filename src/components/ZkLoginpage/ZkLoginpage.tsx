@@ -5,7 +5,15 @@ import styles from "./ZkLoginpage.module.scss";
 const ZkLoginpage = () => {
   return (
     <div className={styles.container}>
-      <SignIn />
+      <SignIn
+        appearance={{
+          elements: {
+            footerAction: {
+              display: "none",
+            },
+          },
+        }}
+      />
     </div>
   );
 };

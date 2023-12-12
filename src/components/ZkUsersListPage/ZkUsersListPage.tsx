@@ -20,7 +20,13 @@ const ZkUsersListPage = () => {
   const [selectedTab, setSelectedTab] = useState(TABS[0].value);
   const [isInviteModalOpen, toggleInviteModal] = useToggle(false);
   const inviteButton = useMemo(() => {
-    return <AddNewBtn onClick={toggleInviteModal} text="Invite user" />;
+    return (
+      <AddNewBtn
+        onClick={toggleInviteModal}
+        text="Invite user"
+        key={"new-user"}
+      />
+    );
   }, []);
   return (
     <div>

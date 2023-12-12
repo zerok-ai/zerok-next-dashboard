@@ -4,12 +4,9 @@ import PageHeader from "components/helpers/PageHeader";
 import TableFilter from "components/helpers/TableFilter";
 import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
-// import TagX from "components/themeX/TagX";
 import { useFetch } from "hooks/useFetch";
 import { useZkFlag } from "hooks/useZkFlag";
-// import { useTrigger } from "hooks/useTrigger";
 import { useRouter } from "next/router";
-// import queryString from "query-string";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
@@ -43,7 +40,6 @@ const IssuesPage = () => {
   } = useFetch<IssuesDataType>("", null);
 
   const [totalItems, setTotalItems] = useState<number | null>(0);
-
   const router = useRouter();
 
   const { query } = router;
@@ -51,6 +47,7 @@ const IssuesPage = () => {
   const range = query.range ?? DEFAULT_TIME_RANGE;
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
   const zkChatEnabled = useZkFlag("org", "gpt", "zkchat").enabled;
+
   const getIssues = async () => {
     setData(null);
     // const filter = services && services.length > 0 ? services.join(",") : "";
@@ -92,22 +89,6 @@ const IssuesPage = () => {
   const columns = useMemo(() => {
     return getIssueColumns(zkChatEnabled);
   }, [data?.issues, zkChatEnabled]);
-
-  // const removeService = (label: string) => {
-  //   if (services != null) {
-  //     const filtered = services.filter((sv) => sv !== label);
-  //     const newQuery = { ...query };
-  //     if (filtered.length > 0) {
-  //       newQuery.services = filtered.join(",");
-  //     } else delete newQuery.services;
-  //     router.push({
-  //       pathname: "/issues",
-  //       query: {
-  //         ...newQuery,
-  //       },
-  //     });
-  //   }
-  // };
 
   const leftExtras = useMemo(() => {
     return [
@@ -161,7 +142,6 @@ const IssuesPage = () => {
             />
           )}
         </div>
-
         <footer className={styles["pagination-container"]}>
           <PaginationX
             totalItems={totalItems ?? 0}

@@ -3,7 +3,7 @@ import IssuesListPage from "page-wrappers/issues/IssuesListPage";
 
 const Page = () => {
   return (
-    <ZkPrivateRoute>
+    <ZkPrivateRoute isClusterRoute={true}>
       <IssuesListPage />
     </ZkPrivateRoute>
   );
