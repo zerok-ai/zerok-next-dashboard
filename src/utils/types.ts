@@ -40,7 +40,7 @@ export interface ApiKeyHidden {
 export interface ApiKeyDetail {
   id: string;
   createdAtMs: number;
-  key: null | string;
+  key?: string;
 }
 
 export interface UserDetail {

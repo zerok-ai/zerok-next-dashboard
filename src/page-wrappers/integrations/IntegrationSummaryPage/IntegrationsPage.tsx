@@ -8,9 +8,8 @@ import {
 } from "@mui/material";
 import cx from "classnames";
 import PageHeader from "components/helpers/PageHeader";
-import PrivateRoute from "components/helpers/PrivateRoute";
 import IntegrationCard from "components/integrations/IntegrationCard";
-import PageLayout from "components/layouts/PageLayout";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 import { Fragment, useMemo, useState } from "react";
 import {
   INTEGRATION_CATEGORIES,
@@ -122,11 +121,7 @@ const IntegrationsPage = () => {
 };
 
 IntegrationsPage.getLayout = function getLayout(page: React.ReactNode) {
-  return (
-    <PrivateRoute>
-      <PageLayout showClusterModal={true}>{page}</PageLayout>
-    </PrivateRoute>
-  );
+  return <ZkPrivateRoute>{page}</ZkPrivateRoute>;
 };
 
 export default IntegrationsPage;

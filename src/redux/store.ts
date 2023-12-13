@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { fetcher } from "fetchers/fetcherSlice";
 import {
   type TypedUseSelectorHook,
   useDispatch as useAppDispatch,
@@ -20,14 +21,14 @@ const reducers = {
   cluster: clusterReducer,
   incidentList: incidentListReducer,
   snackbar: snackbarSlice,
+  api: fetcher.reducer,
 };
-
 const store = configureStore({
   reducer: reducers,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(fetcher.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,11 +1,9 @@
 import axios from "axios";
 import Cookie from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 import { resetClusterState } from "redux/cluster";
 import store from "redux/store";
 import { logoutUser } from "redux/thunks/auth";
 
-import { getSecondsToExpiry } from "./auth/functions";
 import { HTTP_ERROR_CODES } from "./constants";
 
 // use this client for any API requests with the BASE_URL
@@ -19,9 +17,6 @@ const raxios = axios.create({
 
 raxios.interceptors.request.use((config) => {
   const token = Cookie.get("__session") as string;
-  const decode = jwtDecode(token);
-  const seconds = getSecondsToExpiry(decode.exp as number);
-  console.log({ seconds });
   config.headers.Token = token;
   return config;
 });
@@ -36,7 +31,7 @@ raxios.interceptors.response.use(
         errResponse.data.error?.kind === "SESSION_EXPIRED") &&
       !responseUrl.includes("logout")
     ) {
-      await store.dispatch(logoutUser());
+      store.dispatch(logoutUser());
       store.dispatch(resetClusterState());
       await Promise.resolve();
       return;

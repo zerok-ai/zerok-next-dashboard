@@ -1,9 +1,8 @@
 import { type SortingState } from "@tanstack/react-table";
 import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
-import PrivateRoute from "components/helpers/PrivateRoute";
-import PageLayout from "components/layouts/PageLayout";
 import DialogX from "components/themeX/DialogX";
 import TableX from "components/themeX/TableX";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 import { useFetch } from "hooks/useFetch";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -185,12 +184,12 @@ const Probe = () => {
 
 Probe.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <PrivateRoute>
+    <ZkPrivateRoute>
       <Head>
         <title>ZeroK Dashboard | Probes</title>
       </Head>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
+      {page}
+    </ZkPrivateRoute>
   );
 };
 

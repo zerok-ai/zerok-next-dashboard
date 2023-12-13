@@ -1,0 +1,9 @@
+@import "styles/variables.module.scss";
+.container {
+    width:100%;
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    align-items: center;
+    column-gap: $sp-lg;
+    justify-content: space-between;
+}

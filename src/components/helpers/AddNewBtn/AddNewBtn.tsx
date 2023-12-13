@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { HiOutlinePlus } from "react-icons/hi";
 
 import styles from "./AddNewBtn.module.scss";
@@ -8,6 +8,7 @@ interface AddNewBtnProps {
   onClick?: () => void;
   variant?: "contained" | "outlined" | "text";
   size?: "small" | "medium" | "large";
+  loading: boolean;
 }
 
 const AddNewBtn = ({
@@ -15,17 +16,19 @@ const AddNewBtn = ({
   onClick,
   variant = "contained",
   size = "medium",
+  loading = false,
 }: AddNewBtnProps) => {
   return (
-    <Button
+    <LoadingButton
       key="add-btn"
       variant={variant}
       className={styles["add-btn"]}
       onClick={onClick}
       size={size}
+      loading={loading}
     >
       <HiOutlinePlus /> {text}
-    </Button>
+    </LoadingButton>
   );
 };
 

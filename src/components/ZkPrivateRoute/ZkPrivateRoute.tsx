@@ -21,13 +21,13 @@ interface ZkPrivateRouteProps {
 const ZkPrivateRoute = ({ children, isClusterRoute }: ZkPrivateRouteProps) => {
   const { isLoaded, isSignedIn, user } = useUser();
   const { organization } = useOrganization();
-  const [orgLoaded, setOrgLoaded] = useState(false);
+  const [orgLoaded, setOrgLoaded] = useState(isSignedIn && !!organization);
+  const dispatch = useDispatch();
   const { initialized, loading: clusterLoading } = useSelector(
     (state) => state.cluster
   );
   const { setActive } = useOrganizationList();
   const router = useRouter();
-  const dispatch = useDispatch();
   const setUserOrg = async () => {
     try {
       const orgs = await user?.getOrganizationMemberships();
@@ -44,7 +44,6 @@ const ZkPrivateRoute = ({ children, isClusterRoute }: ZkPrivateRouteProps) => {
       if (organization) {
         setOrgLoaded(true);
         if (isClusterRoute && !clusterLoading && !initialized) {
-          console.log("HEY");
           dispatch(getClusters());
         }
       } else {

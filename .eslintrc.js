@@ -54,5 +54,6 @@ module.exports = {
     "@typescript-eslint/prefer-optional-chain": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/no-invalid-void-type": "off",
   },
 };

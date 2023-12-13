@@ -1,8 +1,7 @@
 import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
 import ProbeCreateForm from "components/forms/ProbeCreateForm";
 import PageHeader from "components/helpers/PageHeader";
-import PrivateRoute from "components/helpers/PrivateRoute";
-import PageLayout from "components/layouts/PageLayout";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 import Head from "next/head";
 import { Fragment } from "react";
 
@@ -24,12 +23,12 @@ const Probes = () => {
 
 Probes.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <PrivateRoute>
+    <ZkPrivateRoute>
       <Head>
         <title>ZeroK Dashboard | Create a new probe</title>
       </Head>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
+      {page}
+    </ZkPrivateRoute>
   );
 };
 

@@ -1,10 +1,9 @@
 import CustomSkeleton from "components/custom/CustomSkeleton";
-import PrivateRoute from "components/helpers/PrivateRoute";
 import EBPFListTable from "components/integrations/EBPFListTable";
 import OTelListTable from "components/integrations/OTelListTable";
 import PrometheusTable from "components/integrations/PrometheusTable";
 import SlackIntegration from "components/integrations/SlackIntegration";
-import PageLayout from "components/layouts/PageLayout";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { type GenericObject } from "utils/types";
@@ -37,11 +36,7 @@ const IntegrationsListPage = () => {
 };
 
 IntegrationsListPage.getLayout = function getLayout(page: React.ReactNode) {
-  return (
-    <PrivateRoute>
-      <PageLayout showClusterModal={true}>{page}</PageLayout>
-    </PrivateRoute>
-  );
+  return <ZkPrivateRoute>{page}</ZkPrivateRoute>;
 };
 
 export default IntegrationsListPage;
