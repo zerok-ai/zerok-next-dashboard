@@ -23,7 +23,7 @@ const Probes = () => {
 
 Probes.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <ZkPrivateRoute>
+    <ZkPrivateRoute isClusterRoute>
       <Head>
         <title>ZeroK Dashboard | Create a new probe</title>
       </Head>

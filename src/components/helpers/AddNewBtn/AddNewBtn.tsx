@@ -8,7 +8,7 @@ interface AddNewBtnProps {
   onClick?: () => void;
   variant?: "contained" | "outlined" | "text";
   size?: "small" | "medium" | "large";
-  loading: boolean;
+  loading?: boolean;
 }
 
 const AddNewBtn = ({

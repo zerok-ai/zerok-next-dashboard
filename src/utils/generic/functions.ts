@@ -19,3 +19,7 @@ export const dispatchSnackbar = (
     })
   );
 };
+
+export const getSelectedCluster = () => {
+  return store.getState().cluster.selectedCluster;
+};

@@ -64,7 +64,7 @@ export const probeListColumns = ({
     helper.display({
       id: "created_by",
       header: "Created by",
-      size: DEFAULT_COL_WIDTH / 2,
+      size: DEFAULT_COL_WIDTH,
       cell: () => {
         return (
           <div className={styles.source}>
@@ -75,8 +75,8 @@ export const probeListColumns = ({
       },
     }),
     helper.accessor("created_at", {
-      header: "Created at",
-      size: DEFAULT_COL_WIDTH * 1,
+      header: "Created",
+      size: DEFAULT_COL_WIDTH * 0.8,
       cell: (info) => {
         return (
           <TooltipX title={getFormattedTimeFromEpoc(info.getValue()) as string}>

@@ -121,7 +121,7 @@ const IntegrationsPage = () => {
 };
 
 IntegrationsPage.getLayout = function getLayout(page: React.ReactNode) {
-  return <ZkPrivateRoute>{page}</ZkPrivateRoute>;
+  return <ZkPrivateRoute includeIntegrationModal>{page}</ZkPrivateRoute>;
 };
 
 export default IntegrationsPage;

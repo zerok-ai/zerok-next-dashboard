@@ -2,6 +2,7 @@ import {
   APIKEY_CREATE_ENDPOINT,
   APIKEY_ID_ENDPOINT,
   APIKEYS_ENDPOINT,
+  TOP_APIKEY_ENDPOINT,
 } from "utils/endpoints";
 import { type ApiKeyDetail } from "utils/types";
 
@@ -55,6 +56,13 @@ const extendedApi = fetcher.injectEndpoints({
       },
       invalidatesTags: ["apikeys"],
     }),
+    getTopApiKey: build.query<ApiKeyDetail, void>({
+      query: () => {
+        return {
+          url: TOP_APIKEY_ENDPOINT,
+        };
+      },
+    }),
   }),
   overrideExisting: false,
 });
@@ -64,4 +72,5 @@ export const {
   useLazyGetApiKeyQuery,
   useCreateApiKeyMutation,
   useDeleteApiKeyMutation,
+  useLazyGetTopApiKeyQuery,
 } = extendedApi;

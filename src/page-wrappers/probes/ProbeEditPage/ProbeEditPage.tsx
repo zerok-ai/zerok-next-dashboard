@@ -53,7 +53,7 @@ const ProbeEditPage = () => {
 
 ProbeEditPage.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <ZkPrivateRoute>
+    <ZkPrivateRoute isClusterRoute>
       <Head>
         <title>ZeroK Dashboard | View Probe</title>
       </Head>

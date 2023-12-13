@@ -2,39 +2,23 @@ import { Button, Step, StepContent, StepLabel, Stepper } from "@mui/material";
 import cx from "classnames";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import CodeBlock from "components/helpers/CodeBlock";
-import useStatus from "hooks/useStatus";
+import ModalX from "components/themeX/ModalX";
+import { useLazyGetTopApiKeyQuery } from "fetchers/user/apiKeysSlice";
 import { useEffect, useMemo, useState } from "react";
-import { TOP_APIKEY_ENDPOINT } from "utils/endpoints";
-import raxios from "utils/raxios";
-import { type ApiKeyType } from "utils/types";
+import { closeClusterModal, clusterSelector } from "redux/cluster";
+import { useDispatch, useSelector } from "redux/store";
+import { dispatchSnackbar } from "utils/generic/functions";
 
 import styles from "./CreateClusterForm.module.scss";
 
 const INSTALL_STEP = 1;
 
 const CreateClusterForm = () => {
-  const [apiKey, setApiKey] = useState<ApiKeyType | null>(null);
+  const [getTopkey, { data: apiKey, isError }] = useLazyGetTopApiKeyQuery();
   const [activeStep, setActiveStep] = useState(INSTALL_STEP);
-  const { status, setStatus } = useStatus();
-  useEffect(() => {
-    const fetchKey = async () => {
-      try {
-        setStatus({ loading: true, error: null });
-        const rdata = await raxios.get(TOP_APIKEY_ENDPOINT);
-        setApiKey(rdata.data.payload.apikey);
-      } catch (err) {
-        setStatus({
-          ...status,
-          error: "Could not fetch API key, please try again",
-        });
-      } finally {
-        setStatus((old) => ({ ...old, loading: false }));
-      }
-    };
-    if (!apiKey) {
-      fetchKey();
-    }
-  }, []);
+  const { isClusterModalOpen } = useSelector(clusterSelector);
+  const dispatch = useDispatch();
+
   const FORM_STEPS: Array<{
     label: string;
     description: () => JSX.Element;
@@ -65,7 +49,7 @@ const CreateClusterForm = () => {
               </p>
               {apiKey ? (
                 <CodeBlock
-                  code={`zkctl install --apikey ${apiKey.key}`}
+                  code={`zkctl install --apikey ${apiKey.key as string}`}
                   allowCopy
                 />
               ) : (
@@ -98,53 +82,76 @@ const CreateClusterForm = () => {
     ];
   }, [apiKey]);
 
+  useEffect(() => {
+    if (isClusterModalOpen && !apiKey) {
+      getTopkey();
+    }
+  }, [isClusterModalOpen]);
+  useEffect(() => {
+    if (isError) {
+      dispatchSnackbar("error", "Could not fetch API key");
+    }
+  }, [isError]);
+  if (!isClusterModalOpen) {
+    return null;
+  }
+
   return (
-    <div className={styles.container}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {FORM_STEPS.map((step, index) => {
-          return (
-            <Step key={step.label}>
-              <StepLabel>
-                <h6 className={styles["step-label"]}>{step.label}</h6>
-              </StepLabel>
-              <StepContent>
-                <div className={styles["step-content"]}>
-                  {step.description()}
-                  <div className={styles["step-buttons"]}>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        setActiveStep((old) => old + 1);
-                      }}
-                    >
-                      {index === FORM_STEPS.length - 1 ? "Finish" : "Next"}
-                    </Button>
-                    <Button
-                      disabled={index === 0}
-                      onClick={() => {
-                        setActiveStep((old) => old - 1);
-                      }}
-                      className={styles["step-back-btn"]}
-                      color="secondary"
-                    >
-                      Go back
-                    </Button>
+    <ModalX
+      isOpen={isClusterModalOpen}
+      onClose={() => {
+        dispatch(closeClusterModal());
+      }}
+      keepMounted={true}
+      title="Install ZeroK on your cluster"
+    >
+      <div className={styles.container}>
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {FORM_STEPS.map((step, index) => {
+            return (
+              <Step key={step.label}>
+                <StepLabel>
+                  <h6 className={styles["step-label"]}>{step.label}</h6>
+                </StepLabel>
+                <StepContent>
+                  <div className={styles["step-content"]}>
+                    {step.description()}
+                    <div className={styles["step-buttons"]}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          setActiveStep((old) => old + 1);
+                        }}
+                      >
+                        {index === FORM_STEPS.length - 1 ? "Finish" : "Next"}
+                      </Button>
+                      <Button
+                        disabled={index === 0}
+                        onClick={() => {
+                          setActiveStep((old) => old - 1);
+                        }}
+                        className={styles["step-back-btn"]}
+                        color="secondary"
+                      >
+                        Go back
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </StepContent>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStep === FORM_STEPS.length && (
-        <div className={styles["step-final"]}>
-          <h6>
-            You&apos;re all set! You should be able to see your cluster on the
-            dashboard now.
-          </h6>
-        </div>
-      )}
-    </div>
+                </StepContent>
+              </Step>
+            );
+          })}
+        </Stepper>
+        {activeStep === FORM_STEPS.length && (
+          <div className={styles["step-final"]}>
+            <h6>
+              You&apos;re all set! You should be able to see your cluster on the
+              dashboard now.
+            </h6>
+          </div>
+        )}
+      </div>
+    </ModalX>
   );
 };
 

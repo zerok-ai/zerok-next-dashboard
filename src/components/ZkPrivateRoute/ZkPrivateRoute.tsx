@@ -4,6 +4,7 @@ import {
   useOrganizationList,
   useUser,
 } from "@clerk/nextjs";
+import CreateClusterForm from "components/forms/CreateClusterForm";
 import PageSkeleton from "components/helpers/PageSkeleton";
 import PageLayout from "components/layouts/PageLayout";
 import { useRouter } from "next/router";
@@ -16,9 +17,14 @@ import { useDispatch, useSelector } from "redux/store";
 interface ZkPrivateRouteProps {
   children: React.ReactNode;
   isClusterRoute?: boolean;
+  includeIntegrationModal?: boolean;
 }
 
-const ZkPrivateRoute = ({ children, isClusterRoute }: ZkPrivateRouteProps) => {
+const ZkPrivateRoute = ({
+  children,
+  isClusterRoute,
+  includeIntegrationModal = false,
+}: ZkPrivateRouteProps) => {
   const { isLoaded, isSignedIn, user } = useUser();
   const { organization } = useOrganization();
   const [orgLoaded, setOrgLoaded] = useState(isSignedIn && !!organization);
@@ -61,7 +67,12 @@ const ZkPrivateRoute = ({ children, isClusterRoute }: ZkPrivateRouteProps) => {
   }
 
   if (isSignedIn && orgLoaded) {
-    return <PageLayout>{children}</PageLayout>;
+    return (
+      <PageLayout>
+        {children}
+        {includeIntegrationModal && <CreateClusterForm />}
+      </PageLayout>
+    );
   }
 
   return <PageSkeleton />;

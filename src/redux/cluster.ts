@@ -41,6 +41,7 @@ export const clusterSlice = createSlice({
       state.status = cluster ? cluster.status : "";
     },
     openClusterModal: (state) => {
+      console.log("HEY");
       state.isClusterModalOpen = true;
     },
     closeClusterModal: (state) => {

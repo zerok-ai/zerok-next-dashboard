@@ -11,7 +11,6 @@
 .scenario-title-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     column-gap: $sp-md;
 }
 
@@ -41,14 +40,14 @@
     margin-bottom: $sp-xxl;
 }
 
-.pagination {
-    padding-top: $sp-lg;
-    display: flex;
-    justify-content:center;
-}
 
 .disabled {
     span,p,div {
         color:$grey-400;
     }
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
 }

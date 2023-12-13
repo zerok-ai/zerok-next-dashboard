@@ -1,6 +1,6 @@
 import cx from "classnames";
-import ClusterCreateModal from "components/clusters/ClusterCreateModal";
 import ErrorBoundary from "components/ErrorBoundary";
+import CreateClusterForm from "components/forms/CreateClusterForm";
 import DrawerToggleButton from "components/helpers/DrawerToggleButton";
 import MainDrawer from "components/layouts/MainDrawer";
 import ZkSnackbar from "components/themeX/ZkSnackbar";
@@ -43,7 +43,7 @@ const PageLayout = ({
           <ZkSnackbar />
           <ErrorBoundary>{children}</ErrorBoundary>
         </main>
-        {showClusterModal && <ClusterCreateModal />}
+        {showClusterModal && <CreateClusterForm />}
       </div>
     </div>
   );

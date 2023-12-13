@@ -1,25 +1,24 @@
 import { type SortingState } from "@tanstack/react-table";
 import ValidClusterWrapper from "components/clusters/ValidClusterWrapper";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import DialogX from "components/themeX/DialogX";
+import PaginationX from "components/themeX/PaginationX";
 import TableX from "components/themeX/TableX";
 import ZkPrivateRoute from "components/ZkPrivateRoute";
-import { useFetch } from "hooks/useFetch";
+import {
+  useDeleteProbeMutation,
+  useLazyGetProbesQuery,
+  useUpdateProbeMutation,
+} from "fetchers/probes/probeSlice";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
-import { showSnackbar } from "redux/snackbar";
-import { useDispatch, useSelector } from "redux/store";
-import { isClusterHealthy } from "utils/generic/functions";
-import raxios from "utils/raxios";
+import { useSelector } from "redux/store";
+import { DEFAULT_TIME_RANGE } from "utils/constants";
+import { dispatchSnackbar, isClusterHealthy } from "utils/generic/functions";
 import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
-import {
-  DELETE_PROBE_ENDPOINT,
-  LIST_SCENARIOS_ENDPOINT,
-  UPDATE_PROBE_STATUS_ENDPOINT,
-} from "utils/scenarios/endpoints";
 import { type ScenarioDetailType } from "utils/scenarios/types";
-import { sendError } from "utils/sentry";
 import { PROBE_SORT_OPTIONS } from "utils/tables/constants";
 
 import ProbesListPageHeader from "./helpers/ProbesListPageHeader";
@@ -33,13 +32,16 @@ export const DEFAULT_SORT = {
 
 const Probe = () => {
   const { selectedCluster, clusters } = useSelector(clusterSelector);
-  const dispatch = useDispatch();
-  const {
-    data: scenarios,
-    fetchData: fetchScenarios,
-    setData: setScenarios,
-    error: scenariosError,
-  } = useFetch<ScenarioDetailType[]>("scenarios");
+  // GET PROBES
+  const [getProbes, { data: probes, isError, isFetching }] =
+    useLazyGetProbesQuery();
+  // DELETE PROBE
+  const [deleteProbe, { isError: deleteError, isSuccess: deleteSuccess }] =
+    useDeleteProbeMutation();
+  // UPDATE PROBE STATUS
+  const [updateProbe, { isError: updateError, isSuccess: updateSuccess }] =
+    useUpdateProbeMutation();
+
   const [selectedProbe, setSelectedProbe] = useState<null | {
     scenario_id: string;
     action: "update" | "delete" | "deleting";
@@ -47,30 +49,26 @@ const Probe = () => {
   const [sortBy, setSortBy] = useState<SortingState>([DEFAULT_SORT]);
   const router = useRouter();
   const page = router.query.page ?? "1";
+  const range = router.query.range ?? DEFAULT_TIME_RANGE;
   const resetSelectedProbe = () => {
     setSelectedProbe(null);
   };
 
-  const getScenarios = async () => {
-    setScenarios(null);
-    const endpoint = LIST_SCENARIOS_ENDPOINT.replace(
-      "{limit}",
-      PROBE_PAGE_SIZE.toString()
-    )
-      .replace(
-        "{offset}",
-        ((parseInt(page as string) - 1) * PROBE_PAGE_SIZE).toString()
-      )
-      .replace("{cluster_id}", selectedCluster!);
-    fetchScenarios(endpoint);
+  const fetchProbes = () => {
+    const limit = PROBE_PAGE_SIZE;
+    const offset = (parseInt(page as string) - 1) * PROBE_PAGE_SIZE;
+    getProbes({
+      limit,
+      offset,
+      range: range as string,
+    });
   };
 
   useEffect(() => {
     if (selectedCluster) {
       const cluster = clusters.find((c) => c.id === selectedCluster);
       if (cluster && isClusterHealthy(cluster)) {
-        setScenarios(null);
-        getScenarios();
+        fetchProbes();
       }
     }
   }, [selectedCluster, router]);
@@ -79,61 +77,21 @@ const Probe = () => {
     const scenario_id = scenario.scenario.scenario_id;
     const isEnabled = !scenario.disabled_at;
     setSelectedProbe({ scenario_id, action: "update" });
-    try {
-      const endpoint = UPDATE_PROBE_STATUS_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster as string
-      ).replace("{scenario_id}", scenario_id);
-      await raxios.put(endpoint, {
+    updateProbe({
+      id: scenario_id,
+      body: {
         action: !isEnabled ? "enable" : "disable",
-      });
-      dispatch(
-        showSnackbar({
-          message: `Probe ${!isEnabled ? "enabled" : "disabled"} successfully`,
-          type: "success",
-        })
-      );
-    } catch (err) {
-      dispatch(
-        showSnackbar({
-          message: `Failed to ${!isEnabled ? "enable" : "disable"} probe`,
-          type: "error",
-        })
-      );
-    } finally {
-      resetSelectedProbe();
-      getScenarios();
-    }
+      },
+    });
+    resetSelectedProbe();
   };
 
   const handleDelete = async () => {
     if (!selectedProbe || selectedProbe.action !== "delete") return;
     const scenario_id = selectedProbe.scenario_id;
     setSelectedProbe({ scenario_id, action: "deleting" });
-    try {
-      const endpoint = DELETE_PROBE_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster as string
-      ).replace("{scenario_id}", scenario_id);
-      await raxios.delete(endpoint);
-      dispatch(
-        showSnackbar({
-          message: `Probe deleted successfully`,
-          type: "success",
-        })
-      );
-    } catch (err) {
-      dispatch(
-        showSnackbar({
-          message: `Failed to delete probe`,
-          type: "error",
-        })
-      );
-      sendError(err);
-    } finally {
-      getScenarios();
-      resetSelectedProbe();
-    }
+    await deleteProbe(scenario_id);
+    resetSelectedProbe();
   };
 
   const columns = probeListColumns({
@@ -144,8 +102,23 @@ const Probe = () => {
     },
   });
 
-  return (
-    <div className={styles.container}>
+  useEffect(() => {
+    if (deleteSuccess) {
+      dispatchSnackbar("success", "Probe deleted successfully");
+    }
+    if (deleteError) {
+      dispatchSnackbar("error", "Failed to delete probe");
+    }
+    if (updateSuccess) {
+      dispatchSnackbar("success", "Probe updated successfully");
+    }
+    if (updateError) {
+      dispatchSnackbar("error", "Failed to update probe");
+    }
+  }, [deleteSuccess, deleteError, updateError, updateSuccess]);
+
+  const deleteDialog = useMemo(() => {
+    return (
       <DialogX
         isOpen={!!(selectedProbe && selectedProbe.action === "delete")}
         title="Delete Probe"
@@ -158,33 +131,46 @@ const Probe = () => {
         <span>Are you sure you want to delete this probe?</span> <br />
         <em>This action cannot be undone.</em>
       </DialogX>
+    );
+  }, [selectedProbe]);
+
+  return (
+    <div className={styles.container}>
+      {deleteDialog}
       {/* Headers and sort */}
       <ProbesListPageHeader
-        onRefresh={getScenarios}
+        onRefresh={fetchProbes}
         sort={sortBy}
         updateSort={setSortBy}
       />
-      {!scenariosError ? (
-        <ValidClusterWrapper>
-          <div className={styles.table}>
+      <ValidClusterWrapper>
+        <div className={styles.table}>
+          {!isFetching ? (
             <TableX
-              data={scenarios ?? null}
+              data={probes?.scenarios ?? []}
               columns={columns}
               sortBy={sortBy}
               onSortingChange={setSortBy}
             />
-          </div>
-        </ValidClusterWrapper>
-      ) : (
-        <p>Could not fetch scenarios, please try again later.</p>
-      )}
+          ) : (
+            <CustomSkeleton len={8} />
+          )}
+        </div>
+        <div className={styles["pagination-container"]}>
+          <PaginationX
+            totalItems={probes?.total_rows ?? 0}
+            itemsPerPage={PROBE_PAGE_SIZE}
+          />
+        </div>
+      </ValidClusterWrapper>
+      {isError && <p>Could not fetch scenarios, please try again later.</p>}
     </div>
   );
 };
 
 Probe.getLayout = function getLayout(page: React.ReactNode) {
   return (
-    <ZkPrivateRoute>
+    <ZkPrivateRoute isClusterRoute={true}>
       <Head>
         <title>ZeroK Dashboard | Probes</title>
       </Head>
