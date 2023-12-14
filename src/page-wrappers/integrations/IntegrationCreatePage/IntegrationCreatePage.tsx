@@ -1,6 +1,5 @@
 import PrometheusForm from "components/forms/PrometheusForm";
-import PrivateRoute from "components/helpers/PrivateRoute";
-import PageLayout from "components/layouts/PageLayout";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 
 import styles from "./IntegrationCreatePage.module.scss";
 
@@ -13,11 +12,7 @@ const IntegrationCreatePage = () => {
 };
 
 IntegrationCreatePage.getLayout = function getLayout(page: React.ReactNode) {
-  return (
-    <PrivateRoute>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
-  );
+  return <ZkPrivateRoute isClusterRoute={true}>{page}</ZkPrivateRoute>;
 };
 
 export default IntegrationCreatePage;

@@ -7,6 +7,7 @@
     @include details-card-outline;
     .collapsed {
         max-height: 500px;
+        padding:$sp-sm $sp-md;
     }
     z-index: 2;position: relative;
     width:100%;
@@ -88,32 +89,50 @@
 }
 
 // accordion
-.accordion {
-    border:none;
-    border-radius: 0;
-    span {
-        color:$grey-25;
-    }
-}
-
 .root-accordion {
     border-left: 1px solid $grey-500 !important;
 }
 
-.accordion-summary {
-    background-color: $bg-dark;
-    margin:0 !important;
-    padding-left: $sp-base;
-    justify-content: space-between;
-    width:100%;
-    min-height: 0px !important;
-    padding:$sp-base / 2 0;
+.accordion {
+    border:none !important; 
     border-radius: 0;
-    border: none;
-    cursor: pointer;
-    &:hover {
-        background-color: $grey-900;
+    span {
+        color:$grey-25;
     }
+    .accordion-summary {
+        background-color: $bg-dark;
+        margin:0 !important;
+        padding-left: $sp-base;
+        justify-content: space-between;
+        width:100%;
+        min-height: 0px !important;
+        padding:$sp-base / 2 0;
+        border-radius: 0;
+        border: none;
+        cursor: pointer;
+        &:hover {
+            background-color: $grey-900;
+        }
+    }
+    .accordion-details {
+        border:none;
+        border-left: 1px solid $grey-700;
+        padding:0 $sp-sm;
+        padding-right: 0;
+        background-color: $bg-dark;
+    }
+
+.accordion-label-container {
+    display: flex;
+    column-gap: $sp-sm;
+    align-items: center;
+    cursor: pointer;
+    .operation-name {
+        color:$grey-300;
+    }
+    
+}
+    
 }
 
 .accordion-summary-content {
@@ -129,28 +148,11 @@
     }
 }
 
-.accordion-label-container {
-    display: flex;
-    column-gap: $sp-sm;
-    align-items: center;
-    cursor: pointer;
-    .operation-name {
-        color:$grey-300;
-    }
-    
-}
 
 
 .latency {
     color:$grey-50;
     width:100px;
-}
-.accordion-details {
-    border:none;
-    border-left: 1px solid $grey-700;
-    padding:0 $sp-sm;
-    padding-right: 0;
-    background-color: $bg-dark;
 }
 
 .close {

@@ -1,27 +1,26 @@
 import { type ColumnSort } from "@tanstack/react-table";
+import CustomSkeleton from "components/custom/CustomSkeleton";
 import AddNewBtn from "components/helpers/AddNewBtn";
 import PageHeader from "components/helpers/PageHeader";
 import TableFilter from "components/helpers/TableFilter";
 import TableX from "components/themeX/TableX";
 import ZkLink from "components/themeX/ZkLink";
-import { useFetch } from "hooks/useFetch";
-import { useTrigger } from "hooks/useTrigger";
+import {
+  useDeletePrometheusIntegrationMutation,
+  useLazyListPromIntegrationsQuery,
+  useUpdatePrometheusStatusMutation,
+} from "fetchers/integrations/prometheusSlice";
 import { useEffect, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { dispatchSnackbar } from "utils/generic/functions";
 import { type APIResponse } from "utils/generic/types";
-import {
-  CREATE_INTEGRATION_ENDPOINT,
-  DELETE_INTEGRATION_ENDPOINT,
-  TEST_SAVED_PROM_CONNECTION_ENDPOINT,
-} from "utils/integrations/endpoints";
+import { TEST_SAVED_PROM_CONNECTION_ENDPOINT } from "utils/integrations/endpoints";
 import {
   type IntegrationStatusResponseType,
   type PrometheusListType,
 } from "utils/integrations/types";
 import raxios from "utils/raxios";
-import { sendError } from "utils/sentry";
 
 import styles from "./PrometheusTable.module.scss";
 import {
@@ -36,35 +35,53 @@ const DEFAULT_SORT = {
 };
 
 const PrometheusTable = () => {
-  const { data, fetchData, error, setData } =
-    useFetch<PrometheusListType[]>("integrations");
+  // GET PROMETHEUS INTEGRATIONS
+  const [getIntegrations, { data, isFetching, isError }] =
+    useLazyListPromIntegrationsQuery();
+  // UPDATE PROMETHEUS INTEGRATION
+  const [
+    updateIntegration,
+    { isError: updateError, isSuccess: updateSuccess },
+  ] = useUpdatePrometheusStatusMutation();
+  // DELETE PROMETHEUS INTEGRATION
+  const [
+    deleteIntegration,
+    { isError: deleteError, isSuccess: deleteSuccess },
+  ] = useDeletePrometheusIntegrationMutation();
   const { selectedCluster } = useSelector(clusterSelector);
   const [sortBy, setSortBy] = useState<ColumnSort[]>([DEFAULT_SORT]);
-  const { trigger, changeTrigger } = useTrigger();
   const [selectedIntegration, setSelectedIntegration] = useState<{
     id: string;
     action: "update" | "delete" | "deleting" | "testing";
   } | null>(null);
-
   const getData = () => {
-    setData(null);
     if (selectedCluster) {
-      const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster
-      );
-      fetchData(endpoint);
+      getIntegrations();
     }
   };
-
   useEffect(() => {
-    if (selectedCluster && !error) {
+    if (selectedCluster) {
       getData();
     }
-    if (error) {
-      setSelectedIntegration(null);
+  }, [selectedCluster]);
+
+  useEffect(() => {
+    if (isError) {
+      dispatchSnackbar("error", "Failed to fetch data sources");
     }
-  }, [selectedCluster, trigger, error]);
+    if (updateError) {
+      dispatchSnackbar("error", "Failed to update data source");
+    }
+    if (updateSuccess) {
+      dispatchSnackbar("success", "Data source updated successfully");
+    }
+    if (deleteSuccess) {
+      dispatchSnackbar("success", "Data source deleted successfully");
+    }
+    if (deleteError) {
+      dispatchSnackbar("error", "Failed to delete data source");
+    }
+  }, [isError, updateError, updateSuccess, deleteError, deleteSuccess]);
 
   const handleUpdate = async (row: PrometheusListType) => {
     const { id, disabled } = row;
@@ -72,30 +89,13 @@ const PrometheusTable = () => {
       id,
       action: "update",
     });
-    const integ = data!.find((i) => i.id === id);
-    try {
-      await raxios.post(
-        CREATE_INTEGRATION_ENDPOINT.replace(
-          "{cluster_id}",
-          selectedCluster as string
-        ),
-        {
-          ...integ,
-          disabled: !disabled,
-        }
-      );
-      getData();
-      dispatchSnackbar(
-        "success",
-        `Data source ${disabled ? "enabled" : "disabled"} successfully`
-      );
-    } catch (err) {
-      sendError(err);
-      dispatchSnackbar("error", "Failed to update status");
-    } finally {
-      setSelectedIntegration(null);
-    }
+    const integ = data!.find((i) => i.id === id) as PrometheusListType;
+    await updateIntegration({
+      body: { ...integ, disabled: !disabled },
+    });
+    setSelectedIntegration(null);
   };
+
   const handleDelete = async () => {
     if (!selectedIntegration || selectedIntegration.action !== "delete") {
       return;
@@ -104,24 +104,14 @@ const PrometheusTable = () => {
       id: selectedIntegration.id,
       action: "deleting",
     });
-    const endpoint = DELETE_INTEGRATION_ENDPOINT.replace(
-      "{cluster_id}",
-      selectedCluster as string
-    ).replace("{integration_id}", selectedIntegration.id);
-    try {
-      await raxios.delete(endpoint);
-      getData();
-      dispatchSnackbar("success", "Data source deleted successfully");
-    } catch (err) {
-      sendError(err);
-      dispatchSnackbar("error", "Failed to delete data source");
-    } finally {
-      setSelectedIntegration(null);
-    }
+    await deleteIntegration(selectedIntegration.id);
+    setSelectedIntegration(null);
   };
+
   const clearSelectedIntegration = () => {
     setSelectedIntegration(null);
   };
+
   const handleTestConnection = async (row: PrometheusListType) => {
     setSelectedIntegration({
       id: row.id,
@@ -170,7 +160,9 @@ const PrometheusTable = () => {
         showRange={false}
         showRefresh={true}
         showBreadcrumb={true}
-        onRefresh={changeTrigger}
+        onRefresh={() => {
+          getData();
+        }}
         leftExtras={[
           <TableFilter
             sortBy={sortBy[0]}
@@ -194,12 +186,16 @@ const PrometheusTable = () => {
         />
       )}
       <div className={styles.table}>
-        <TableX
-          columns={columns}
-          data={data ?? null}
-          sortBy={sortBy}
-          onSortingChange={setSortBy}
-        />
+        {isFetching ? (
+          <CustomSkeleton len={8} />
+        ) : (
+          <TableX
+            columns={columns}
+            data={data ?? []}
+            sortBy={sortBy}
+            onSortingChange={setSortBy}
+          />
+        )}
       </div>
       <div className={styles.pagination}>
         {/* <PaginationX itemsPerPage={INTEGRATIONS_PAGE_SIZE} totalItems={25} /> */}

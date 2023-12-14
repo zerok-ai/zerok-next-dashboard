@@ -36,7 +36,7 @@ const IntegrationsListPage = () => {
 };
 
 IntegrationsListPage.getLayout = function getLayout(page: React.ReactNode) {
-  return <ZkPrivateRoute>{page}</ZkPrivateRoute>;
+  return <ZkPrivateRoute isClusterRoute={true}>{page}</ZkPrivateRoute>;
 };
 
 export default IntegrationsListPage;

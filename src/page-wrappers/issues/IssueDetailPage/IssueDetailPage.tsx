@@ -1,9 +1,8 @@
 "use client";
 import cx from "classnames";
 import IncidentChatTab from "components/chat/IncidentChatTab";
-import PrivateRoute from "components/helpers/PrivateRoute";
-import PageLayout from "components/layouts/PageLayout";
 import SpanCards from "components/SpanCards";
+import ZkPrivateRoute from "components/ZkPrivateRoute";
 import { useZkFlag } from "hooks/useZkFlag";
 import { useRouter } from "next/router";
 import { Fragment, useEffect } from "react";
@@ -62,11 +61,7 @@ const IssueDetailPage = () => {
 };
 
 IssueDetailPage.getLayout = function getLayout(page: React.ReactNode) {
-  return (
-    <PrivateRoute>
-      <PageLayout>{page}</PageLayout>
-    </PrivateRoute>
-  );
+  return <ZkPrivateRoute>{page}</ZkPrivateRoute>;
 };
 
 export default IssueDetailPage;
