@@ -147,14 +147,15 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
         // if (success) router.push("/integrations/prometheus/list");
       } else if (!edit) {
         const rdata = await raxios.post(endpoint, common);
-        const success = rdata.data.payload.status === "success";
+        const success =
+          rdata.data.payload.integration_status.connection_status === "success";
         dispatchSnackbar(
           success ? "success" : "error",
           success
             ? "Data source created"
             : "Data source created but connection failed"
         );
-        // router.push("/integrations/prometheus/list");
+        router.push("/integrations/prometheus/list");
       }
     } catch (err) {
       sendError(err);
