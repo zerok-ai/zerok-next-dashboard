@@ -200,6 +200,7 @@ interface AccordionLabelProps {
   setSelectedSpan: (spanId: string) => void;
   isModalOpen: boolean;
   selectedSpan: string | null;
+  errors: SpanErrorDetail[];
 }
 
 export const AccordionLabel = ({
@@ -209,6 +210,7 @@ export const AccordionLabel = ({
   setSelectedSpan,
   highlight,
   isModalOpen,
+  errors,
 }: AccordionLabelProps) => {
   const spanService =
     span.service_name && span.service_name.length
@@ -229,6 +231,7 @@ export const AccordionLabel = ({
     operationName,
     totalCharacterWidth - trimmedSpanTitle.length
   );
+  // const isError = !!errors.find((error) => error.span_id === span.span_id);
 
   return (
     <div
@@ -256,15 +259,10 @@ export const AccordionLabel = ({
           placement="bottom"
           arrow={false}
         >
-          <p
-            className={cx(
-              styles["accordion-label"],
-              highlight && styles["exception-parent"]
-            )}
-          >
+          <p className={cx(styles["accordion-label"])}>
             <span
               className={cx(
-                highlight && styles["exception-parent"],
+                highlight && styles["exception-service"],
                 styles["span-service"]
               )}
             >
@@ -402,7 +400,7 @@ export const SpanAccordion = ({
     : span.children && span.children.length > 0;
 
   const shouldRenderLatency = true;
-
+  const errors = span.errors ?? [];
   const nextRender = (): null | React.ReactNode => {
     return span.children?.map((child) => {
       const hasChildren = child.children && child.children.length > 0;
@@ -437,6 +435,7 @@ export const SpanAccordion = ({
             isTopRoot={isTopRoot}
             setSelectedSpan={setSelectedSpan}
             isModalOpen={isModalOpen}
+            errors={errors as SpanErrorDetail[]}
           />
           {shouldRenderLatency && (
             <Fragment>

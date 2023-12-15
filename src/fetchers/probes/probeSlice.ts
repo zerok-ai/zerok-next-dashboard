@@ -74,7 +74,7 @@ const extendedApi = fetcher.injectEndpoints({
         return {
           url: endpoint,
           method: "PUT",
-          body,
+          data: body,
         };
       },
       invalidatesTags: ["probes_list"],

@@ -49,8 +49,7 @@ const ZkPrivateRoute = ({
     if (isSignedIn) {
       if (organization) {
         setOrgLoaded(true);
-        console.log({ isClusterRoute, clusterLoading, initialized });
-        if (isClusterRoute && !clusterLoading && !initialized) {
+        if (!clusterLoading && !initialized) {
           dispatch(getClusters());
         }
       } else {

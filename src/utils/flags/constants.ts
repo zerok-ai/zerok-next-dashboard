@@ -4,7 +4,7 @@ export const ZK_DEFAULT_ALL_FLAGS: ZkAllFlagsType = {
   default: {
     gpt: {
       zkchat: {
-        enabled: false,
+        enabled: true,
         value: "zkchat",
         disabledText:
           "This feature has been disabled for your organisation, please contact ZeroK support for more information.",
