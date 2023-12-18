@@ -32,6 +32,7 @@ const ZkPrivateRoute = ({
   const { initialized, loading: clusterLoading } = useSelector(
     (state) => state.cluster
   );
+  console.log({ organization });
   const { setActive } = useOrganizationList();
   const router = useRouter();
   const setUserOrg = async () => {

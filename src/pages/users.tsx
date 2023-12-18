@@ -1,5 +1,5 @@
 import ZkPrivateRoute from "components/ZkPrivateRoute";
-import ZkUsersListPage from "components/ZkUsersListPage";
+import ZkUsersListPage from "page-wrappers/users/ZkUsersListPage";
 
 const Page = () => {
   return (

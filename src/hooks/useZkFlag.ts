@@ -1,3 +1,4 @@
+import { useOrganization } from "@clerk/nextjs";
 import { useFlagsmith } from "flagsmith/react";
 import { useSelector } from "redux/store";
 import { ZK_DEFAULT_ALL_FLAGS } from "utils/flags/constants";
@@ -16,14 +17,21 @@ export const useZkFlag = <
 ) => {
   const flagsmith = useFlagsmith();
   const allFlags = flagsmith.getAllFlags();
-  const { user } = useSelector((state) => state.auth);
+  const { organization } = useOrganization();
   const { selectedCluster } = useSelector((state) => state.cluster);
-  if (!user || !user.org_name || (level === "cluster" && !selectedCluster)) {
+  if (
+    !organization ||
+    !organization.id ||
+    (level === "cluster" && !selectedCluster)
+  ) {
     return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
   }
   const accessor =
-    level === "org" ? user.org_name : (selectedCluster as string);
+    level === "org"
+      ? organization.id.toLowerCase()
+      : (selectedCluster as string);
   const configFlag = allFlags[accessor];
+
   if (configFlag && configFlag.enabled) {
     const config = flagsmith.getValue<ZkFlagConfigType>(accessor, {
       json: true,

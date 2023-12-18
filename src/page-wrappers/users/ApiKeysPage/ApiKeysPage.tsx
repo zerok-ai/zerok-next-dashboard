@@ -9,9 +9,9 @@ import {
   useDeleteApiKeyMutation,
   useListApiKeysQuery,
 } from "fetchers/user/apiKeysSlice";
+import useZkStatusHandler from "hooks/useZkStatusHandler";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
-import { dispatchSnackbar } from "utils/generic/functions";
 import { type ApiKeyDetail } from "utils/types";
 
 import styles from "./ApiKeysPage.module.scss";
@@ -21,7 +21,16 @@ type ApiKeyDetailWithToggle = ApiKeyDetail & { visible: boolean };
 
 const ApiKeys = () => {
   const [apiKeys, setApiKeys] = useState<ApiKeyDetailWithToggle[] | null>(null);
+
   const { data, isError, isFetching, refetch } = useListApiKeysQuery();
+  useZkStatusHandler({
+    error: {
+      message: "Could not fetch API keys",
+      open: isError,
+    },
+  });
+
+  // CREATE
   const [
     createApiKey,
     {
@@ -30,9 +39,30 @@ const ApiKeys = () => {
       isSuccess: createSuccess,
     },
   ] = useCreateApiKeyMutation();
+  useZkStatusHandler({
+    error: {
+      message: "Could not create API key",
+      open: createError,
+    },
+    success: {
+      message: "API key created successfully",
+      open: createSuccess,
+    },
+  });
 
+  // DELETE
   const [deleteApiKey, { isError: deleteError, isSuccess: deleteSuccess }] =
     useDeleteApiKeyMutation();
+  useZkStatusHandler({
+    error: {
+      message: "Could not delete API key",
+      open: deleteError,
+    },
+    success: {
+      message: "API key deleted successfully",
+      open: deleteSuccess,
+    },
+  });
 
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
 
@@ -42,24 +72,6 @@ const ApiKeys = () => {
       setApiKeys([...data]);
     }
   }, [data]);
-
-  useEffect(() => {
-    if (isError) {
-      dispatchSnackbar("error", "Could not fetch API keys");
-    }
-    if (createError) {
-      dispatchSnackbar("error", "Could not create API key");
-    }
-    if (createSuccess) {
-      dispatchSnackbar("success", "API key created successfully");
-    }
-    if (deleteError) {
-      dispatchSnackbar("error", "Could not delete API key");
-    }
-    if (deleteSuccess) {
-      dispatchSnackbar("success", "API key deleted successfully");
-    }
-  }, [isError, createError, createSuccess, deleteError, deleteSuccess]);
 
   const columns = getApiKeyColumns(apiKeys ?? [], deletingKey, setDeletingKey);
 

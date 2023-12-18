@@ -54,6 +54,7 @@ const TraceTree = ({
   const [listMode, , toggleListMode] = useToggle(false);
 
   const chatEnabled = useZkFlag("org", "gpt", "zkchat").enabled;
+  console.log({ chatEnabled });
 
   const [referenceTime, setReferenceTime] = useState<null | {
     totalTime: number;
