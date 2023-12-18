@@ -4,27 +4,23 @@ import { FormHelperText, MenuItem, Select, Switch } from "@mui/material";
 import cx from "classnames";
 import CustomSkeleton from "components/custom/CustomSkeleton";
 import PageHeader from "components/helpers/PageHeader";
+import {
+  useCreatePrometheusIntegrationMutation,
+  useUpdatePrometheusIntegrationMutation,
+} from "fetchers/integrations/prometheusSlice";
 import { useFetch } from "hooks/useFetch";
-import useStatus from "hooks/useStatus";
 import { useToggle } from "hooks/useToggle";
+import useZkStatusHandler from "hooks/useZkStatusHandler";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
-import { dispatchSnackbar } from "utils/generic/functions";
-import { type APIResponse } from "utils/generic/types";
+import { GET_INTEGRATION_ENDPOINT } from "utils/integrations/endpoints";
 import {
-  CREATE_INTEGRATION_ENDPOINT,
-  GET_INTEGRATION_ENDPOINT,
-} from "utils/integrations/endpoints";
-import {
-  type IntegrationUpsertResponseType,
   type PrometheusBaseType,
   type PrometheusListType,
 } from "utils/integrations/types";
-import raxios from "utils/raxios";
-import { sendError } from "utils/sentry";
 
 import PromTestButton from "./helpers/PromTestButton";
 import styles from "./PrometheusForm.module.scss";
@@ -39,11 +35,55 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   const router = useRouter();
   const { selectedCluster } = useSelector(clusterSelector);
   const { data: defaultValues, fetchData } = useFetch<PrometheusListType>("");
-  const { status, setStatus } = useStatus();
   const basicToggleDefaultValue = !!(edit && defaultValues?.authentication);
   const [isBasicAuthEnabled, toggleBasicAuth] = useToggle(
     basicToggleDefaultValue
   );
+  const [
+    createIntegration,
+    {
+      isLoading: createLoading,
+      isSuccess: createSuccess,
+      isError: createError,
+    },
+  ] = useCreatePrometheusIntegrationMutation();
+
+  const [
+    updateIntegration,
+    {
+      isLoading: updateLoading,
+      isSuccess: updateSuccess,
+      isError: updateError,
+    },
+  ] = useUpdatePrometheusIntegrationMutation();
+  // create status
+  useZkStatusHandler({
+    error: {
+      open: createError,
+      message: "Failed to create Prometheus data source",
+    },
+    success: {
+      open: createSuccess,
+      message: "Data source created",
+      callback: () => {
+        router.push("/integrations/prometheus/list");
+      },
+    },
+  });
+  // update status
+  useZkStatusHandler({
+    error: {
+      open: updateError,
+      message: "Failed to update Prometheus data source",
+    },
+    success: {
+      open: updateSuccess,
+      message: "Prometheus data source updated successfully",
+      callback: () => {
+        router.push("/integrations/prometheus/list");
+      },
+    },
+  });
   const {
     formState: { errors },
     register,
@@ -101,79 +141,30 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
   };
 
   const onSubmit = async (values: PromFormSchemaType) => {
-    setStatus({
-      loading: true,
-      error: null,
-    });
-    try {
-      const { url, username, password, level, name } = values;
-      const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster as string
-      );
-      const common: PrometheusBaseType = {
-        alias: name,
-        type: "PROMETHEUS",
-        url,
-        authentication: {
-          username: isBasicAuthEnabled ? username ?? "" : null,
-          password: isBasicAuthEnabled ? password ?? "" : null,
-        },
-        level,
+    const { url, username, password, level, name } = values;
+    const common: PrometheusBaseType = {
+      alias: name,
+      type: "PROMETHEUS",
+      url,
+      authentication: {
+        username: isBasicAuthEnabled ? username ?? "" : null,
+        password: isBasicAuthEnabled ? password ?? "" : null,
+      },
+      level,
+    };
+    if (!edit) {
+      createIntegration(common);
+    } else if (edit && defaultValues) {
+      const body: PrometheusListType = {
+        ...defaultValues,
+        ...common,
       };
-      if (edit && defaultValues) {
-        const { id, cluster_id, created_at, updated_at, disabled, deleted } =
-          defaultValues;
-        const body: PrometheusListType = {
-          ...common,
-          id,
-          cluster_id,
-          created_at,
-          updated_at,
-          disabled,
-          deleted,
-        };
-        const rdata = await raxios.post<
-          APIResponse<IntegrationUpsertResponseType>
-        >(endpoint, edit ? body : common);
-        const success =
-          rdata.data.payload.integration_status.connection_status === "success";
-        dispatchSnackbar(
-          success ? "success" : "error",
-          success
-            ? "Data source updated"
-            : "Data source updated but connection failed"
-        );
-        // if (success) router.push("/integrations/prometheus/list");
-      } else if (!edit) {
-        const rdata = await raxios.post(endpoint, common);
-        const success =
-          rdata.data.payload.integration_status.connection_status === "success";
-        dispatchSnackbar(
-          success ? "success" : "error",
-          success
-            ? "Data source created"
-            : "Data source created but connection failed"
-        );
-        router.push("/integrations/prometheus/list");
-      }
-    } catch (err) {
-      sendError(err);
-      setStatus((old) => {
-        return {
-          ...old,
-          error: "Could not create integration. Please try again.",
-        };
-      });
-    } finally {
-      setStatus((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
+      updateIntegration(body);
+    } else {
+      router.push("/integrations/prometheus/list");
     }
   };
+
   if (edit && !defaultValues) {
     return <CustomSkeleton len={10} />;
   }
@@ -278,55 +269,12 @@ const PrometheusForm = ({ edit }: { edit: boolean }) => {
               Org or cluster level data source.
             </FormHelperText>
           </div>
-
-          {/* Metric server switch */}
-          {/* <div className={styles["form-item-container"]}>
-            <div className={styles["text-form-group"]}>
-              <label htmlFor="metric_server" className={styles["text-label"]}>
-                Use this data source as a metrics server:
-              </label>
-              <RadioGroup
-                value={
-                  values.metric_server !== undefined
-                    ? values.metric_server.toString()
-                    : ""
-                }
-                onChange={(e) => {
-                  setValue(
-                    "metric_server",
-                    // eslint-disable-next-line no-unneeded-ternary
-                    e.target.value === "true" ? true : false
-                  );
-                }}
-                row
-                aria-labelledby="metric-server-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-                className={styles["radio-group"]}
-              >
-                <FormControlLabel
-                  value={"true"}
-                  control={<Radio />}
-                  label="Yes"
-                />
-                <FormControlLabel
-                  value={"false"}
-                  control={<Radio />}
-                  label="No"
-                />
-              </RadioGroup>
-            </div>
-            {errors.metric_server && (
-              <FormHelperText className={styles["error-text"]}>
-                Please select an option.
-              </FormHelperText>
-            )}
-          </div> */}
         </div>
         <div className={styles.divider}></div>
         <div className={styles.buttons}>
           <PromTestButton disabled={isTestDisabled()} form={watch()} />
           <LoadingButton
-            loading={status.loading}
+            loading={createLoading ?? updateLoading}
             type="submit"
             variant="contained"
             className={styles.button}

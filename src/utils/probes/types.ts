@@ -116,3 +116,22 @@ export interface ProbeListResponseType {
   scenarios: ProbeListType[];
   total_rows: number;
 }
+
+export interface ProbeGroupByType {
+  workload_index: number;
+  title: string;
+  hash: string;
+}
+
+export interface RateLimitType {
+  bucket_max_size: number;
+  bucket_refill_size: number;
+  tick_duration: string;
+}
+export interface ProbeCreationType {
+  scenario_title: string;
+  scenario_type: "USER";
+  workloads: WorkloadType[];
+  group_by: ProbeGroupByType[];
+  rate_limit: RateLimitType[];
+}

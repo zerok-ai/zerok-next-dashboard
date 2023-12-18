@@ -5,7 +5,10 @@ import {
   DELETE_INTEGRATION_ENDPOINT,
   LIST_INTEGRATION_ENDPOINT,
 } from "utils/integrations/endpoints";
-import { type PrometheusListType } from "utils/integrations/types";
+import {
+  type PrometheusBaseType,
+  type PrometheusListType,
+} from "utils/integrations/types";
 
 interface PrometheusStatusBodyParams {
   body: PrometheusListType;
@@ -38,7 +41,8 @@ const extendedApi = fetcher.injectEndpoints({
         );
         return {
           url: endpoint,
-          body,
+          data: body,
+          method: "POST",
         };
       },
       invalidatesTags: ["prometheus_integrations"],
@@ -57,6 +61,35 @@ const extendedApi = fetcher.injectEndpoints({
       },
       invalidatesTags: ["prometheus_integrations"],
     }),
+    createPrometheusIntegration: build.mutation<void, PrometheusBaseType>({
+      query: (body) => {
+        const cluster = getSelectedCluster() as string;
+        const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
+          "{cluster_id}",
+          cluster
+        );
+        return {
+          url: endpoint,
+          data: body,
+          method: "POST",
+        };
+      },
+      invalidatesTags: ["prometheus_integrations"],
+    }),
+    updatePrometheusIntegration: build.mutation<void, PrometheusListType>({
+      query: (body) => {
+        const cluster = getSelectedCluster() as string;
+        const endpoint = CREATE_INTEGRATION_ENDPOINT.replace(
+          "{cluster_id}",
+          cluster
+        );
+        return {
+          url: endpoint,
+          data: body,
+          method: "POST",
+        };
+      },
+    }),
   }),
 });
 
@@ -64,4 +97,6 @@ export const {
   useLazyListPromIntegrationsQuery,
   useUpdatePrometheusStatusMutation,
   useDeletePrometheusIntegrationMutation,
+  useCreatePrometheusIntegrationMutation,
+  useUpdatePrometheusIntegrationMutation,
 } = extendedApi;

@@ -10,13 +10,14 @@ import {
   useLazyGetProbesQuery,
   useUpdateProbeMutation,
 } from "fetchers/probes/probeSlice";
+import useZkStatusHandler from "hooks/useZkStatusHandler";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { clusterSelector } from "redux/cluster";
 import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE } from "utils/constants";
-import { dispatchSnackbar, isClusterHealthy } from "utils/generic/functions";
+import { isClusterHealthy } from "utils/generic/functions";
 import { PROBE_PAGE_SIZE } from "utils/scenarios/constants";
 import { type ScenarioDetailType } from "utils/scenarios/types";
 import { PROBE_SORT_OPTIONS } from "utils/tables/constants";
@@ -35,12 +36,38 @@ const Probe = () => {
   // GET PROBES
   const [getProbes, { data: probes, isError, isFetching }] =
     useLazyGetProbesQuery();
+  useZkStatusHandler({
+    error: {
+      open: isError,
+      message: "Failed to fetch probes",
+    },
+  });
   // DELETE PROBE
   const [deleteProbe, { isError: deleteError, isSuccess: deleteSuccess }] =
     useDeleteProbeMutation();
+  useZkStatusHandler({
+    error: {
+      open: deleteError,
+      message: "Failed to delete probe",
+    },
+    success: {
+      open: deleteSuccess,
+      message: "Probe deleted successfully",
+    },
+  });
   // UPDATE PROBE STATUS
   const [updateProbe, { isError: updateError, isSuccess: updateSuccess }] =
     useUpdateProbeMutation();
+  useZkStatusHandler({
+    error: {
+      open: updateError,
+      message: "Failed to update probe",
+    },
+    success: {
+      open: updateSuccess,
+      message: "Probe updated successfully",
+    },
+  });
 
   const [selectedProbe, setSelectedProbe] = useState<null | {
     scenario_id: string;
@@ -101,21 +128,6 @@ const Probe = () => {
       setSelectedProbe({ scenario_id, action: "delete" });
     },
   });
-
-  useEffect(() => {
-    if (deleteSuccess) {
-      dispatchSnackbar("success", "Probe deleted successfully");
-    }
-    if (deleteError) {
-      dispatchSnackbar("error", "Failed to delete probe");
-    }
-    if (updateSuccess) {
-      dispatchSnackbar("success", "Probe updated successfully");
-    }
-    if (updateError) {
-      dispatchSnackbar("error", "Failed to update probe");
-    }
-  }, [deleteSuccess, deleteError, updateError, updateSuccess]);
 
   const deleteDialog = useMemo(() => {
     return (

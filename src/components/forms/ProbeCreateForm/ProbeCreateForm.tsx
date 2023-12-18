@@ -1,15 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
 import { Button } from "@mui/material";
+import { useCreateProbeMutation } from "fetchers/probes/probeSlice";
 import { useFetch } from "hooks/useFetch";
-import useStatus from "hooks/useStatus";
+import useZkStatusHandler from "hooks/useZkStatusHandler";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiOutlinePlus } from "react-icons/hi";
 import { clusterSelector } from "redux/cluster";
-import { showSnackbar } from "redux/snackbar";
-import { useDispatch, useSelector } from "redux/store";
+import { useSelector } from "redux/store";
 import { DEFAULT_TIME_RANGE, IGNORED_SERVICES_PREFIXES } from "utils/constants";
 import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { getFormattedServiceName, getNamespace } from "utils/functions";
@@ -24,7 +24,6 @@ import {
   type AttributeStateType,
 } from "utils/probes/types";
 import raxios from "utils/raxios";
-import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
 import { sendError } from "utils/sentry";
 
 // import raxios from "utils/raxios";
@@ -149,15 +148,35 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
     formState: { errors },
   } = probeForm;
   const { selectedCluster } = useSelector(clusterSelector);
-  const { status, setStatus } = useStatus();
+  const [
+    createProbe,
+    {
+      isLoading: createLoading,
+      isError: createError,
+      isSuccess: createSuccess,
+    },
+  ] = useCreateProbeMutation();
   const {
     data: services,
     fetchData: fetchServices,
     loading: loadingServices,
   } = useFetch<ProbeServiceType>("results", null, filterServices);
-  const dispatch = useDispatch();
   const router = useRouter();
   const [attributes, setAttributes] = useState<AttributeStateType | null>(null);
+
+  useZkStatusHandler({
+    error: {
+      open: createError,
+      message: "Could not create probe",
+    },
+    success: {
+      open: createSuccess,
+      message: "Probe created successfully",
+      callback: () => {
+        router.push("/probes");
+      },
+    },
+  });
 
   const fetchAttributesForProtocol = async (
     protocol: Array<(typeof ATTRIBUTE_PROTOCOLS)[number]>
@@ -236,41 +255,9 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
     ...ALL_PROTOCOL_SERVICES,
     ...formatServices(services ?? []),
   ];
-  const onSubmit = async () => {
-    try {
-      setStatus({
-        loading: true,
-        error: null,
-      });
-
-      const body = buildProbeBody({ ...probeForm.getValues() }, attributes!);
-      const endpoint = CREATE_PROBE_ENDPOINT.replace(
-        "{cluster_id}",
-        selectedCluster as string
-      );
-      await raxios.post(endpoint, body);
-      setStatus({
-        loading: false,
-        error: null,
-      });
-      router.push("/probes");
-      dispatch(
-        showSnackbar({
-          message: "Probe created successfully",
-          type: "success",
-        })
-      );
-    } catch (err) {
-      console.log({ err });
-      setStatus({
-        loading: false,
-        error: "Something went wrong",
-      });
-      showSnackbar({
-        message: "Something went wrong",
-        type: "error",
-      });
-    }
+  const onSubmit = () => {
+    const body = buildProbeBody({ ...probeForm.getValues() }, attributes!);
+    createProbe(body);
   };
 
   const handleEditSubmit = () => {
@@ -350,16 +337,10 @@ const ProbeCreateForm = ({ edit }: ProbeCreateFormProps) => {
         onClick={() => {
           edit ? handleEditSubmit() : handleSubmit(onSubmit);
         }}
-        loading={status.loading}
+        loading={createLoading}
       >
         {edit ? "Done" : "Submit"}
       </LoadingButton>
-      {status.error && (
-        <p className={styles["error-text"]}>
-          Could not create probe, please check the form and try again or contact
-          support.
-        </p>
-      )}
     </form>
   );
 };

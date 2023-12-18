@@ -5,9 +5,11 @@ import {
   UPDATE_PROBE_STATUS_ENDPOINT,
 } from "utils/probes/endpoints";
 import {
+  type ProbeCreationType,
   type ProbeListResponseType,
   type ProbeListType,
 } from "utils/probes/types";
+import { CREATE_PROBE_ENDPOINT } from "utils/scenarios/endpoints";
 
 import { fetcher } from "../fetcherSlice";
 
@@ -79,12 +81,25 @@ const extendedApi = fetcher.injectEndpoints({
       },
       invalidatesTags: ["probes_list"],
     }),
+    createProbe: build.mutation<void, ProbeCreationType>({
+      query: (body) => {
+        const cluster = getSelectedCluster() as string;
+        const endpoint = CREATE_PROBE_ENDPOINT.replace("{cluster_id}", cluster);
+        return {
+          url: endpoint,
+          method: "POST",
+          data: body,
+        };
+      },
+      invalidatesTags: ["probes_list"],
+    }),
   }),
-  overrideExisting: false,
+  overrideExisting: true,
 });
 
 export const {
   useLazyGetProbesQuery,
   useDeleteProbeMutation,
   useUpdateProbeMutation,
+  useCreateProbeMutation,
 } = extendedApi;
