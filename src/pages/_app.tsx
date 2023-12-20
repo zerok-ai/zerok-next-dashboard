@@ -73,8 +73,6 @@ App.getInitialProps = async () => {
     cacheFlags: false, // optionaly specify the identity of the user to get their specific flags
   });
 
-  console.log("flagsmithSSR.getState()", flagsmithSSR.getState());
-
   return { flagsmithState: flagsmithSSR.getState() };
 };
 

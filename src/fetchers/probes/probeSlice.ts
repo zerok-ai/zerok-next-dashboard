@@ -1,3 +1,5 @@
+import { DEFAULT_TIME_RANGE } from "utils/constants";
+import { LIST_SERVICES_ENDPOINT } from "utils/endpoints";
 import { getSelectedCluster } from "utils/generic/functions";
 import {
   DELETE_PROBE_ENDPOINT,
@@ -92,6 +94,32 @@ const extendedApi = fetcher.injectEndpoints({
         };
       },
       invalidatesTags: ["probes_list"],
+    }),
+    getProbeServices: build.query({
+      query: () => {
+        const cluster = getSelectedCluster() as string;
+        const endpoint = LIST_SERVICES_ENDPOINT.replace(
+          "{cluster_id}",
+          cluster
+        );
+        const range = DEFAULT_TIME_RANGE;
+        return {
+          url: endpoint,
+          params: {
+            range,
+          },
+        };
+      },
+      transformResponse: (response: {
+        scenarios: ProbeListType[];
+        total_rows: number;
+      }) => {
+        return {
+          scenarios: response.scenarios,
+          total_rows: response.total_rows,
+        };
+      },
+      providesTags: ["probes_list"],
     }),
   }),
   overrideExisting: true,

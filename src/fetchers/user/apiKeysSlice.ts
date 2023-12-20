@@ -62,9 +62,12 @@ const extendedApi = fetcher.injectEndpoints({
           url: TOP_APIKEY_ENDPOINT,
         };
       },
+      transformResponse: (response: { apikey: ApiKeyDetail }) => {
+        return response.apikey;
+      },
     }),
   }),
-  overrideExisting: false,
+  overrideExisting: true,
 });
 
 export const {
