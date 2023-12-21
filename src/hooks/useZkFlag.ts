@@ -19,27 +19,31 @@ export const useZkFlag = <
   const allFlags = flagsmith.getAllFlags();
   const { organization } = useOrganization();
   const { selectedCluster } = useSelector((state) => state.cluster);
-  if (
-    !organization ||
-    !organization.id ||
-    (level === "cluster" && !selectedCluster)
-  ) {
-    return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
-  }
-  const accessor =
-    level === "org"
-      ? organization.id.toLowerCase()
-      : (selectedCluster as string);
-  const configFlag = allFlags[accessor];
+  try {
+    if (
+      !organization ||
+      !organization.id ||
+      (level === "cluster" && !selectedCluster)
+    ) {
+      return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
+    }
+    const accessor =
+      level === "org"
+        ? organization.id.toLowerCase()
+        : (selectedCluster as string);
+    const configFlag = allFlags[accessor];
 
-  if (configFlag && configFlag.enabled) {
-    const config = flagsmith.getValue<ZkFlagConfigType>(accessor, {
-      json: true,
-    });
-    const featureConfig = config[feature];
-    const flag = featureConfig[flagName];
-    return flag;
-  } else {
+    if (configFlag && configFlag.enabled) {
+      const config = flagsmith.getValue<ZkFlagConfigType>(accessor, {
+        json: true,
+      });
+      const featureConfig = config[feature];
+      const flag = featureConfig[flagName];
+      return flag;
+    } else {
+      return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
+    }
+  } catch (err) {
     return ZK_DEFAULT_ALL_FLAGS.default[feature][flagName];
   }
 };

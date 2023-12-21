@@ -68,10 +68,15 @@ export const clusterSlice = createSlice({
         state.error = false;
       })
       .addCase(getClusters.fulfilled, (state, action) => {
-        state.clusters = action.payload;
+        state.clusters = action.payload ?? [];
         state.loading = false;
+        if (!action.payload) {
+          state.empty = true;
+          state.initialized = true;
+          return;
+        }
 
-        if (action.payload.length > 0) {
+        if (action.payload && action.payload.length > 0) {
           state.empty = false;
           const localCluster = getClusterFromLocalStorage();
           // check if the saved cluster is in the list of clusters
